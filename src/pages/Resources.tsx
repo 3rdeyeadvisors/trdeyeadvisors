@@ -38,14 +38,11 @@ const Resources = () => {
       ]
     },
     {
-      title: "Educational PDFs (Free Downloads)",
+      title: "Educational Resources",
       icon: BookOpen,
-      description: "Practical templates and guides for financial planning",
+      description: "Practical guides and templates for financial planning",
       resources: [
-        { name: "DeFi Security Guide", description: "Essential security steps before using any DeFi protocol", url: "/resources/security-guide.pdf", verified: true },
-        { name: "DeFi Budget Template", description: "Spreadsheet template for tracking DeFi investments and profits", url: "#", verified: true },
-        { name: "Credit Repair Tracker", description: "Step-by-step guide and tracker for improving credit score", url: "#", verified: true },
-        { name: "Weekly Financial Planner", description: "Simple weekly budgeting template with DeFi allocation", url: "#", verified: true }
+        { name: "DeFi Security Guide", description: "Essential security steps before using any DeFi protocol - downloadable guide", url: "/resources/security-guide.pdf", verified: true }
       ]
     },
     {
