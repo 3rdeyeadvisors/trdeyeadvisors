@@ -240,14 +240,7 @@ Think of smart contracts as **"if-then" statements** that execute automatically:
 ✅ When used properly, it's often more secure than traditional systems
 
 *Next, we'll explore the key players in the DeFi ecosystem and what they do.*`
-        },
-        resources: [
-          {
-            title: "Blockchain Explained in Simple Terms (Video)",
-            url: "https://youtube.com/watch?v=example",
-            type: "link"
-          }
-        ]
+        }
       },
       {
         id: "1-4",
@@ -482,19 +475,7 @@ With proper education, security practices, and gradual exposure, DeFi can be a v
 **Remember**: The goal isn't to avoid all risk (that's impossible), but to **understand and manage** the risks you're taking.
 
 *Congratulations! You've completed the DeFi Foundations course. You now have the knowledge to safely explore the DeFi ecosystem.*`
-        },
-        resources: [
-          {
-            title: "DeFi Risk Assessment Checklist",
-            url: "/resources/risk-checklist.pdf", 
-            type: "pdf"
-          },
-          {
-            title: "Security Best Practices Guide",
-            url: "/resources/security-guide.pdf",
-            type: "pdf"
-          }
-        ]
+        }
       }
     ]
   },
