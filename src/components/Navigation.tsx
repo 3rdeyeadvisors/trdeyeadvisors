@@ -1,11 +1,15 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Eye } from "lucide-react";
+import { Menu, X, Eye, LogIn, LogOut, User } from "lucide-react";
+import { useAuth } from "@/components/auth/AuthProvider";
+import { useToast } from "@/hooks/use-toast";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const { user, signOut } = useAuth();
+  const { toast } = useToast();
 
   const navItems = [
     { path: "/", label: "Home" },
@@ -18,6 +22,22 @@ const Navigation = () => {
   ];
 
   const isActive = (path: string) => location.pathname === path;
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      toast({
+        title: "Signed out successfully",
+        description: "You have been logged out.",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to sign out.",
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
@@ -47,6 +67,34 @@ const Navigation = () => {
                 {item.label}
               </Link>
             ))}
+            
+            {/* Auth buttons */}
+            <div className="flex items-center space-x-4">
+              {user ? (
+                <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+                    <User className="w-4 h-4" />
+                    <span>{user.email}</span>
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleSignOut}
+                    className="flex items-center space-x-2"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span>Sign Out</span>
+                  </Button>
+                </div>
+              ) : (
+                <Button asChild variant="outline" size="sm">
+                  <Link to="/auth" className="flex items-center space-x-2">
+                    <LogIn className="w-4 h-4" />
+                    <span>Sign In</span>
+                  </Link>
+                </Button>
+              )}
+            </div>
           </div>
 
           {/* Mobile menu button */}
@@ -79,6 +127,41 @@ const Navigation = () => {
                   {item.label}
                 </Link>
               ))}
+              
+              {/* Mobile Auth */}
+              <div className="pt-4 border-t border-border">
+                {user ? (
+                  <div className="space-y-3">
+                    <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+                      <User className="w-4 h-4" />
+                      <span>{user.email}</span>
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        handleSignOut();
+                        setIsOpen(false);
+                      }}
+                      className="flex items-center space-x-2 w-full"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      <span>Sign Out</span>
+                    </Button>
+                  </div>
+                ) : (
+                  <Button asChild variant="outline" size="sm" className="w-full">
+                    <Link 
+                      to="/auth" 
+                      className="flex items-center space-x-2"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      <LogIn className="w-4 h-4" />
+                      <span>Sign In</span>
+                    </Link>
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
         )}
