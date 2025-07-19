@@ -62,7 +62,7 @@ const Index = () => {
                 className="text-lg px-8 py-6 font-consciousness animate-consciousness-glow"
               >
                 <BookOpen className="w-6 h-6 mr-3" />
-                📘 Start Learning
+                Start Learning
               </Button>
             </Link>
             
@@ -74,7 +74,7 @@ const Index = () => {
                 style={{ animationDelay: "0.3s" }}
               >
                 <Wrench className="w-6 h-6 mr-3" />
-                🛠 Access Utilities
+                Access Utilities
               </Button>
             </Link>
           </div>
