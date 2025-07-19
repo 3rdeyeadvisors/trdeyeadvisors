@@ -80,6 +80,95 @@ export type Database = {
         }
         Relationships: []
       }
+      quiz_attempts: {
+        Row: {
+          answers: Json
+          completed_at: string | null
+          created_at: string
+          id: string
+          passed: boolean
+          quiz_id: string
+          score: number
+          started_at: string
+          time_taken: number | null
+          user_id: string
+        }
+        Insert: {
+          answers: Json
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          passed?: boolean
+          quiz_id: string
+          score: number
+          started_at?: string
+          time_taken?: number | null
+          user_id: string
+        }
+        Update: {
+          answers?: Json
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          passed?: boolean
+          quiz_id?: string
+          score?: number
+          started_at?: string
+          time_taken?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quiz_attempts_quiz_id_fkey"
+            columns: ["quiz_id"]
+            isOneToOne: false
+            referencedRelation: "quizzes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quizzes: {
+        Row: {
+          course_id: number
+          created_at: string
+          description: string | null
+          id: string
+          max_attempts: number | null
+          module_id: string
+          passing_score: number | null
+          questions: Json
+          time_limit: number | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          course_id: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          max_attempts?: number | null
+          module_id: string
+          passing_score?: number | null
+          questions: Json
+          time_limit?: number | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          course_id?: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          max_attempts?: number | null
+          module_id?: string
+          passing_score?: number | null
+          questions?: Json
+          time_limit?: number | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
