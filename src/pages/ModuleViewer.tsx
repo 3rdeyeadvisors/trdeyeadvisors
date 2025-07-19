@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ContentPlayer } from "@/components/course/ContentPlayer";
+import { EnhancedContentPlayer } from "@/components/course/EnhancedContentPlayer";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useProgress } from "@/components/progress/ProgressProvider";
 import { AuthModal } from "@/components/auth/AuthModal";
@@ -176,8 +176,8 @@ const ModuleViewer = () => {
           </Card>
         )}
 
-        {/* Content Player */}
-        <ContentPlayer
+        {/* Enhanced Content Player */}
+        <EnhancedContentPlayer
           courseId={course.id}
           module={currentModule}
           onComplete={handleModuleComplete}

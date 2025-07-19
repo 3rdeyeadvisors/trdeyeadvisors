@@ -8,8 +8,9 @@ import { ProgressBar } from "@/components/progress/ProgressBar";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useProgress } from "@/components/progress/ProgressProvider";
 import { AuthModal } from "@/components/auth/AuthModal";
-import { ArrowLeft, BookOpen, CheckCircle, Clock, Play } from "lucide-react";
+import { ArrowLeft, BookOpen, CheckCircle, Clock, Play, Grid3X3 } from "lucide-react";
 import { getCourseContent } from "@/data/courseContent";
+import { EnhancedModuleNavigation } from "@/components/course/EnhancedModuleNavigation";
 import { useToast } from "@/hooks/use-toast";
 
 const CourseDetail = () => {
@@ -18,6 +19,7 @@ const CourseDetail = () => {
   const { user } = useAuth();
   const { updateModuleProgress, getCourseProgress } = useProgress();
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showEnhancedNav, setShowEnhancedNav] = useState(false);
   const { toast } = useToast();
 
   const course = getCourseContent(parseInt(courseId || "0"));
@@ -146,60 +148,85 @@ const CourseDetail = () => {
           )}
         </div>
 
-        {/* Modules */}
-        <div className="space-y-4">
-          <h2 className="text-2xl font-consciousness font-semibold text-foreground mb-6">
+        {/* Module Navigation Toggle */}
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-consciousness font-semibold text-foreground">
             Course Modules
           </h2>
+          <Button
+            variant="outline"
+            onClick={() => setShowEnhancedNav(!showEnhancedNav)}
+            className="font-consciousness"
+          >
+            <Grid3X3 className="w-4 h-4 mr-2" />
+            {showEnhancedNav ? "Simple View" : "Enhanced View"}
+          </Button>
+        </div>
 
-          {course.modules.map((module, index) => {
-            const isCompleted = isModuleCompleted(index);
-            
-            return (
-              <Card
-                key={index}
-                className={`p-6 transition-all duration-300 ${
-                  isCompleted 
-                    ? "bg-primary/5 border-primary/30" 
-                    : "bg-card/60 border-border hover:border-primary/40"
-                }`}
-              >
-                <div className="flex items-start gap-4">
-                  <div className="flex items-center gap-3 min-w-0 flex-1">
-                    {user ? (
-                      <Checkbox
-                        checked={isCompleted}
-                        onCheckedChange={() => handleModuleToggle(index)}
-                        className="mt-1"
-                      />
-                    ) : (
-                      <div className="w-4 h-4 border border-border rounded mt-1" />
-                    )}
-                    
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="text-sm font-system text-muted-foreground">
-                          Module {index + 1}
-                        </span>
-                        {isCompleted && (
-                          <CheckCircle className="w-4 h-4 text-primary" />
-                        )}
+        {/* Enhanced or Simple Module Navigation */}
+        {showEnhancedNav ? (
+          <EnhancedModuleNavigation
+            courseId={course.id}
+            onModuleSelect={(moduleId) => navigate(`/courses/${courseId}/module/${moduleId}`)}
+            showProgress={true}
+            compact={false}
+          />
+        ) : (
+          <div className="space-y-4">
+            {course.modules.map((module, index) => {
+              const isCompleted = isModuleCompleted(index);
+              
+              return (
+                <Card
+                  key={index}
+                  className={`p-6 transition-all duration-300 cursor-pointer ${
+                    isCompleted 
+                      ? "bg-primary/5 border-primary/30" 
+                      : "bg-card/60 border-border hover:border-primary/40"
+                  }`}
+                  onClick={() => navigate(`/courses/${courseId}/module/${module.id}`)}
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
+                      {user ? (
+                        <div onClick={(e) => e.stopPropagation()}>
+                          <Checkbox
+                            checked={isCompleted}
+                            onCheckedChange={() => handleModuleToggle(index)}
+                            className="mt-1"
+                          />
+                        </div>
+                      ) : (
+                        <div className="w-4 h-4 border border-border rounded mt-1" />
+                      )}
+                      
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-sm font-system text-muted-foreground">
+                            Module {index + 1}
+                          </span>
+                          {isCompleted && (
+                            <CheckCircle className="w-4 h-4 text-primary" />
+                          )}
+                        </div>
+                        <h3 className={`font-consciousness font-medium ${
+                          isCompleted ? "text-primary" : "text-foreground"
+                        }`}>
+                          {module.title}
+                        </h3>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          {module.duration} minutes • {module.type}
+                        </p>
                       </div>
-                      <h3 className={`font-consciousness font-medium ${
-                        isCompleted ? "text-primary" : "text-foreground"
-                      }`}>
-                        {module.title}
-                      </h3>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        {module.duration} minutes • {module.type}
-                      </p>
+                      
+                      <Play className="w-5 h-5 text-primary" />
                     </div>
                   </div>
-                </div>
-              </Card>
-            );
-          })}
-        </div>
+                </Card>
+              );
+            })}
+          </div>
+        )}
 
         {/* Course Complete Badge */}
         {user && progress?.completion_percentage === 100 && (
