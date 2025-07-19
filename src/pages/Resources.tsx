@@ -6,58 +6,54 @@ import { ExternalLink, Wallet, BarChart3, Shield, BookOpen, Globe } from "lucide
 const Resources = () => {
   const resourceCategories = [
     {
-      title: "DeFi Wallets",
+      title: "Trusted Wallets",
       icon: Wallet,
-      description: "Secure, non-custodial wallets for DeFi interaction",
+      description: "Secure, beginner-friendly wallets for safe DeFi interaction",
       resources: [
-        { name: "MetaMask", description: "Most popular Ethereum wallet with DeFi integration", url: "#", verified: true },
-        { name: "Rainbow Wallet", description: "User-friendly wallet with DeFi portfolio tracking", url: "#", verified: true },
-        { name: "Frame", description: "Privacy-focused wallet for advanced users", url: "#", verified: false },
-        { name: "Rabby Wallet", description: "Multi-chain wallet optimized for DeFi", url: "#", verified: true }
+        { name: "MetaMask", description: "Most popular and user-friendly browser wallet for Ethereum DeFi", url: "https://metamask.io", verified: true },
+        { name: "Trust Wallet", description: "Mobile-first wallet with built-in DeFi browser and staking", url: "https://trustwallet.com", verified: true },
+        { name: "Ledger Hardware Wallet", description: "Ultimate security for storing larger amounts long-term", url: "https://ledger.com", verified: true }
       ]
     },
     {
-      title: "Exchanges & DEXs",
-      icon: Globe,
-      description: "Decentralized and centralized exchange platforms",
-      resources: [
-        { name: "Uniswap", description: "Leading decentralized exchange on Ethereum", url: "#", verified: true },
-        { name: "1inch", description: "DEX aggregator for optimal swap rates", url: "#", verified: true },
-        { name: "Curve Finance", description: "Stablecoin and low-slippage trading", url: "#", verified: true },
-        { name: "SushiSwap", description: "Community-driven DEX with additional features", url: "#", verified: false }
-      ]
-    },
-    {
-      title: "Analytics & Trackers",
+      title: "Portfolio Trackers",
       icon: BarChart3,
-      description: "Tools for tracking DeFi positions and market data",
+      description: "Track your DeFi positions across multiple chains and protocols",
       resources: [
-        { name: "DeFi Pulse", description: "Total value locked across DeFi protocols", url: "#", verified: true },
-        { name: "Zapper", description: "Portfolio tracking and DeFi position management", url: "#", verified: true },
-        { name: "DeBank", description: "Multi-chain DeFi portfolio tracker", url: "#", verified: true },
-        { name: "APY.Vision", description: "Liquidity pool analytics and IL tracking", url: "#", verified: false }
+        { name: "DeBank", description: "Clean, comprehensive multi-chain portfolio tracking", url: "https://debank.com", verified: true },
+        { name: "Zapper", description: "Portfolio management with DeFi position entry/exit tools", url: "https://zapper.fi", verified: true },
+        { name: "DeFiLlama", description: "Best source for protocol data and TVL tracking", url: "https://defillama.com", verified: true }
       ]
     },
     {
-      title: "Security Tools",
-      icon: Shield,
-      description: "Contract auditing and security verification tools",
+      title: "Beginner-Friendly DEXs",
+      icon: Globe,
+      description: "Decentralized exchanges perfect for first-time DeFi users",
       resources: [
-        { name: "Etherscan", description: "Ethereum blockchain explorer and contract verification", url: "#", verified: true },
-        { name: "CertiK", description: "Smart contract security audits and ratings", url: "#", verified: true },
-        { name: "Immunefi", description: "Bug bounty platform for DeFi protocols", url: "#", verified: true },
-        { name: "OpenZeppelin", description: "Security-focused smart contract library", url: "#", verified: true }
+        { name: "Uniswap", description: "Most trusted and liquid DEX on Ethereum", url: "https://uniswap.org", verified: true },
+        { name: "PancakeSwap", description: "Popular Binance Smart Chain DEX with lower fees", url: "https://pancakeswap.finance", verified: true },
+        { name: "1inch", description: "DEX aggregator that finds you the best swap rates", url: "https://1inch.io", verified: true }
       ]
     },
     {
-      title: "Educational PDFs",
+      title: "Educational PDFs (Free Downloads)",
       icon: BookOpen,
-      description: "Comprehensive guides and research documents",
+      description: "Practical templates and guides for financial planning",
       resources: [
-        { name: "DeFi Protocol Comparison Guide", description: "Detailed analysis of major DeFi protocols", url: "#", verified: true },
-        { name: "Smart Contract Security Checklist", description: "Step-by-step security verification process", url: "#", verified: true },
-        { name: "Yield Farming Risk Assessment", description: "Framework for evaluating farming opportunities", url: "#", verified: true },
-        { name: "Multi-Chain Strategy Guide", description: "Cross-chain DeFi opportunities and risks", url: "#", verified: false }
+        { name: "DeFi Budget Template", description: "Spreadsheet template for tracking DeFi investments and profits", url: "#", verified: true },
+        { name: "Credit Repair Tracker", description: "Step-by-step guide and tracker for improving credit score", url: "#", verified: true },
+        { name: "Weekly Financial Planner", description: "Simple weekly budgeting template with DeFi allocation", url: "#", verified: true },
+        { name: "DeFi Security Checklist", description: "Essential security steps before using any DeFi protocol", url: "#", verified: true }
+      ]
+    },
+    {
+      title: "Learning Resources",
+      icon: Shield,
+      description: "Official educational resources and deeper reading",
+      resources: [
+        { name: "CoinGecko Learn", description: "Comprehensive crypto and DeFi educational articles", url: "https://coinmarketcap.com/academy", verified: true },
+        { name: "Ethereum.org DeFi Guide", description: "Official Ethereum Foundation DeFi documentation", url: "https://ethereum.org/defi", verified: true },
+        { name: "Our Blog Articles", description: "In-depth guides and analysis from our education team", url: "/blog", verified: true }
       ]
     }
   ];

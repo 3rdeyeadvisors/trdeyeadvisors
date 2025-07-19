@@ -7,69 +7,59 @@ const Blog = () => {
   const posts = [
     {
       id: 1,
-      title: "The Psychology of DeFi: Breaking Mental Barriers to Financial Freedom",
-      excerpt: "Understanding why traditional financial programming keeps us trapped and how DeFi protocols offer a path to genuine autonomy.",
-      category: "Philosophy",
+      title: "DeFi for Beginners: The Simple Guide to Understanding the Future of Finance",
+      excerpt: "A beginner-friendly guide breaking down DeFi in plain English. Learn what it is, why it matters, and how to get started safely.",
+      category: "Education",
       readTime: "8 min read",
       date: "2024-01-15",
       featured: true
     },
     {
       id: 2,
-      title: "Yield Farming vs Traditional Savings: A Consciousness Shift",
-      excerpt: "Comparing the mindset required for traditional banking versus active DeFi participation and wealth generation.",
-      category: "Education",
+      title: "5 Common DeFi Mistakes New Investors Make (and How to Avoid Them)",
+      excerpt: "Practical tips from real experiences. Learn from others' mistakes and protect your capital from day one.",
+      category: "Security",
       readTime: "6 min read",
       date: "2024-01-12",
       featured: false
     },
     {
       id: 3,
-      title: "Smart Contract Auditing: Your First Line of Defense",
-      excerpt: "Practical steps to evaluate smart contracts before risking your capital in any DeFi protocol.",
-      category: "Security",
-      readTime: "12 min read",
+      title: "The Safest DeFi Wallets for Beginners in 2025",
+      excerpt: "Complete comparison of MetaMask, Trust Wallet, and hardware options. Which one is right for your needs?",
+      category: "Tools",
+      readTime: "10 min read",
       date: "2024-01-10",
       featured: false
     },
     {
       id: 4,
-      title: "Impermanent Loss: The Hidden Cost of Liquidity Provision",
-      excerpt: "Deep dive into impermanent loss calculations and strategies to minimize this often misunderstood risk.",
-      category: "Technical",
-      readTime: "10 min read",
+      title: "Is Yield Farming Still Worth It? What You Need to Know Before You Try",
+      excerpt: "Balanced analysis of current yield farming opportunities. Real data, not hype, to help you make informed decisions.",
+      category: "Analysis",
+      readTime: "12 min read",
       date: "2024-01-08",
       featured: false
     },
     {
       id: 5,
-      title: "Beyond Bitcoin: Understanding Layer 2 Solutions",
-      excerpt: "Exploring how Layer 2 protocols are solving scalability while maintaining the core principles of decentralization.",
-      category: "Technology",
+      title: "The Top 3 DeFi Tools Every Beginner Should Use Right Now",
+      excerpt: "Essential tools for portfolio tracking, transaction monitoring, and staying safe in DeFi. Links to our Resource Hub included.",
+      category: "Tools",
       readTime: "7 min read",
       date: "2024-01-05",
-      featured: false
-    },
-    {
-      id: 6,
-      title: "The Attention Economy vs DeFi: Reclaiming Your Focus",
-      excerpt: "How social media platforms profit from your attention and why DeFi requires a different mental approach.",
-      category: "Philosophy",
-      readTime: "5 min read",
-      date: "2024-01-03",
       featured: false
     }
   ];
 
-  const categories = ["All", "Philosophy", "Education", "Security", "Technical", "Technology"];
+  const categories = ["All", "Education", "Security", "Tools", "Analysis"];
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case "Philosophy": return "bg-accent/20 text-accent border-accent/30";
       case "Education": return "bg-awareness/20 text-awareness border-awareness/30";
       case "Security": return "bg-primary/20 text-primary border-primary/30";
-      case "Technical": return "bg-muted/20 text-muted-foreground border-border";
-      case "Technology": return "bg-secondary/40 text-secondary-foreground border-secondary";
+      case "Tools": return "bg-accent/20 text-accent border-accent/30";
+      case "Analysis": return "bg-secondary/40 text-secondary-foreground border-secondary";
       default: return "bg-muted/20 text-muted-foreground border-border";
     }
   };
