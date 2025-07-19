@@ -15,6 +15,7 @@ import Store from "./pages/Store";
 import Contact from "./pages/Contact";
 import Auth from "./pages/Auth";
 import CourseDetail from "./pages/CourseDetail";
+import ModuleViewer from "./pages/ModuleViewer";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 
@@ -34,6 +35,7 @@ const App = () => (
                 <Route path="/philosophy" element={<Philosophy />} />
                 <Route path="/courses" element={<Courses />} />
                 <Route path="/courses/:courseId" element={<CourseDetail />} />
+                <Route path="/courses/:courseId/module/:moduleId" element={<ModuleViewer />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/resources" element={<Resources />} />
                 <Route path="/store" element={<Store />} />

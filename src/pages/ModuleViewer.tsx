@@ -1,0 +1,196 @@
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { ContentPlayer } from "@/components/course/ContentPlayer";
+import { useAuth } from "@/components/auth/AuthProvider";
+import { useProgress } from "@/components/progress/ProgressProvider";
+import { AuthModal } from "@/components/auth/AuthModal";
+import { getCourseContent } from "@/data/courseContent";
+import { ArrowLeft, BookOpen, List, Play } from "lucide-react";
+
+const ModuleViewer = () => {
+  const { courseId, moduleId } = useParams();
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const { getCourseProgress } = useProgress();
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showModuleList, setShowModuleList] = useState(false);
+
+  const course = getCourseContent(parseInt(courseId || "0"));
+  const currentModuleIndex = course?.modules.findIndex(m => m.id === moduleId) ?? -1;
+  const currentModule = course?.modules[currentModuleIndex];
+
+  useEffect(() => {
+    if (!course || currentModuleIndex === -1) {
+      navigate("/courses");
+    }
+  }, [course, currentModuleIndex, navigate]);
+
+  if (!course || currentModuleIndex === -1 || !currentModule) {
+    return null;
+  }
+
+  const progress = getCourseProgress(course.id);
+  
+  const handleModuleComplete = () => {
+    // Content player handles the completion logic
+  };
+
+  const handleNext = () => {
+    if (currentModuleIndex < course.modules.length - 1) {
+      const nextModule = course.modules[currentModuleIndex + 1];
+      navigate(`/courses/${courseId}/module/${nextModule.id}`);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentModuleIndex > 0) {
+      const prevModule = course.modules[currentModuleIndex - 1];
+      navigate(`/courses/${courseId}/module/${prevModule.id}`);
+    }
+  };
+
+  const isModuleCompleted = (moduleIndex: number) => {
+    return progress?.completed_modules?.includes(moduleIndex) || false;
+  };
+
+  if (!user) {
+    return (
+      <div className="min-h-screen py-20">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <Button
+            variant="outline"
+            onClick={() => navigate(`/courses/${courseId}`)}
+            className="mb-8 font-consciousness"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Course
+          </Button>
+
+          <Card className="p-8 text-center bg-awareness/10 border-awareness/30">
+            <BookOpen className="w-16 h-16 text-awareness mx-auto mb-4" />
+            <h1 className="text-2xl font-consciousness font-bold text-foreground mb-4">
+              Sign In Required
+            </h1>
+            <p className="text-muted-foreground font-consciousness mb-6">
+              Please sign in to access course content and track your progress.
+            </p>
+            <Button
+              variant="awareness"
+              onClick={() => setShowAuthModal(true)}
+              className="font-consciousness"
+            >
+              Sign In to Continue
+            </Button>
+          </Card>
+
+          <AuthModal 
+            isOpen={showAuthModal} 
+            onClose={() => setShowAuthModal(false)} 
+          />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen py-20">
+      <div className="container mx-auto px-4">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-4">
+            <Button
+              variant="outline"
+              onClick={() => navigate(`/courses/${courseId}`)}
+              className="font-consciousness"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Course
+            </Button>
+
+            <Button
+              variant="ghost"
+              onClick={() => setShowModuleList(!showModuleList)}
+              className="font-consciousness"
+            >
+              <List className="w-4 h-4 mr-2" />
+              All Modules
+            </Button>
+          </div>
+
+          <div className="text-right">
+            <h2 className="text-lg font-consciousness font-semibold text-foreground">
+              {course.title}
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              {course.category === "free" ? "Free Course" : `${course.category} Course`}
+            </p>
+          </div>
+        </div>
+
+        {/* Module List Sidebar */}
+        {showModuleList && (
+          <Card className="mb-6 p-6">
+            <h3 className="text-lg font-consciousness font-semibold mb-4">Course Modules</h3>
+            <div className="grid md:grid-cols-2 gap-3">
+              {course.modules.map((module, index) => {
+                const isCompleted = isModuleCompleted(index);
+                const isCurrent = index === currentModuleIndex;
+                
+                return (
+                  <Button
+                    key={module.id}
+                    variant={isCurrent ? "default" : "outline"}
+                    className={`justify-start h-auto p-4 ${
+                      isCompleted ? "border-green-500 bg-green-50 hover:bg-green-100" : ""
+                    }`}
+                    onClick={() => {
+                      navigate(`/courses/${courseId}/module/${module.id}`);
+                      setShowModuleList(false);
+                    }}
+                  >
+                    <div className="flex items-start gap-3 w-full">
+                      <div className="flex items-center gap-2 min-w-0">
+                        {isCompleted ? (
+                          <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                            <span className="text-white text-xs">✓</span>
+                          </div>
+                        ) : (
+                          <div className="w-6 h-6 border-2 border-muted-foreground rounded-full flex items-center justify-center">
+                            <span className="text-xs">{index + 1}</span>
+                          </div>
+                        )}
+                        {isCurrent && <Play className="w-4 h-4 text-primary" />}
+                      </div>
+                      <div className="text-left flex-1 min-w-0">
+                        <p className="text-sm font-medium line-clamp-2">{module.title}</p>
+                        <p className="text-xs text-muted-foreground">{module.duration} min</p>
+                      </div>
+                    </div>
+                  </Button>
+                );
+              })}
+            </div>
+          </Card>
+        )}
+
+        {/* Content Player */}
+        <ContentPlayer
+          courseId={course.id}
+          module={currentModule}
+          onComplete={handleModuleComplete}
+          onNext={handleNext}
+          onPrevious={handlePrevious}
+          hasNext={currentModuleIndex < course.modules.length - 1}
+          hasPrevious={currentModuleIndex > 0}
+          currentModuleIndex={currentModuleIndex}
+          totalModules={course.modules.length}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default ModuleViewer;

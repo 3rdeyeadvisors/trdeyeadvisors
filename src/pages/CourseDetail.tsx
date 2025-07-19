@@ -8,7 +8,8 @@ import { ProgressBar } from "@/components/progress/ProgressBar";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useProgress } from "@/components/progress/ProgressProvider";
 import { AuthModal } from "@/components/auth/AuthModal";
-import { ArrowLeft, BookOpen, CheckCircle, Clock } from "lucide-react";
+import { ArrowLeft, BookOpen, CheckCircle, Clock, Play } from "lucide-react";
+import { getCourseContent } from "@/data/courseContent";
 import { useToast } from "@/hooks/use-toast";
 
 const CourseDetail = () => {
@@ -19,69 +20,7 @@ const CourseDetail = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const { toast } = useToast();
 
-  // Mock course data - in a real app, this would come from an API
-  const courses = [
-    {
-      id: 1,
-      title: "DeFi Foundations: Understanding the New Financial System",
-      description: "Complete beginner's guide from zero knowledge to confident understanding. Learn what DeFi is, why it exists, and how it works in plain English.",
-      category: "free",
-      duration: "5 modules",
-      modules: [
-        "What is DeFi? (Simple explanation with comparisons to traditional banking)",
-        "Why DeFi Exists (The problems it solves – fees, middlemen, accessibility)",
-        "The Blockchain Basics You Actually Need to Know (No tech overload)",
-        "The Key Players (Stablecoins, DEXs, lending protocols – explained simply)",
-        "Risks and Myths (Separating facts from hype)"
-      ]
-    },
-    {
-      id: 2,
-      title: "Staying Safe in DeFi: Wallets, Security, and Avoiding Scams",
-      description: "Essential security course for beginners worried about hacks or losing funds. Learn to set up wallets correctly and keep funds safe.",
-      category: "free",
-      duration: "5 modules",
-      modules: [
-        "Choosing the Right Wallet (MetaMask, Trust Wallet, or Ledger?)",
-        "Private Keys & Seed Phrases – The Rule You Can't Break",
-        "Spotting Scams and Fake Projects Before You Click",
-        "Safe Transactions – Sending, Receiving, and Testing Small First",
-        "The Beginner's Checklist for DeFi Security"
-      ]
-    },
-    {
-      id: 3,
-      title: "Earning with DeFi: Staking, Yield Farming, and Liquidity Pools Made Simple",
-      description: "Ready to earn passive income? Understand different earning methods and choose what fits your risk level.",
-      category: "paid",
-      duration: "5 modules",
-      price: "$67",
-      modules: [
-        "How People Earn with DeFi (Overview)",
-        "Staking vs Yield Farming – Which is Better for You?",
-        "What Are Liquidity Pools (Explained Without Confusion)",
-        "How to Calculate Risk vs Reward Before You Invest",
-        "Beginner-Friendly Platforms to Start With"
-      ]
-    },
-    {
-      id: 4,
-      title: "Managing Your Own DeFi Portfolio: From Beginner to Confident User",
-      description: "Learn to actively manage a small DeFi portfolio. Track, adjust, and grow your investments responsibly.",
-      category: "paid",
-      duration: "5 modules",
-      price: "$97",
-      modules: [
-        "How to Build a Starter Portfolio (Even with $100)",
-        "Tracking Your Investments (Best DeFi Portfolio Tools)",
-        "When to Reinvest vs Take Profits",
-        "Recognizing Market Trends Without Guessing",
-        "Staying Consistent: The Long-Term DeFi Mindset"
-      ]
-    }
-  ];
-
-  const course = courses.find(c => c.id === parseInt(courseId || "0"));
+  const course = getCourseContent(parseInt(courseId || "0"));
   const progress = getCourseProgress(parseInt(courseId || "0"));
 
   useEffect(() => {
@@ -146,15 +85,28 @@ const CourseDetail = () => {
             <div className="flex items-center gap-4">
               <BookOpen className="w-8 h-8 text-primary" />
               <Badge className={getCategoryColor(course.category)}>
-                {course.category === "free" ? "Free Course" : 
-                 course.category === "paid" ? `${course.price} Course` : "Course"}
+                {course.category === "free" ? "Free Course" : "Paid Course"}
               </Badge>
             </div>
             <div className="flex items-center gap-2 text-muted-foreground">
               <Clock className="w-4 h-4" />
-              <span className="font-system">{course.duration}</span>
+              <span className="font-system">{course.estimatedTime}</span>
             </div>
           </div>
+
+          {/* Start Learning Button */}
+          {user && (
+            <div className="mb-6">
+              <Button
+                onClick={() => navigate(`/courses/${courseId}/module/${course.modules[0]?.id}`)}
+                className="bg-primary hover:bg-primary/90 font-consciousness"
+                size="lg"
+              >
+                <Play className="w-5 h-5 mr-2" />
+                {progress?.completion_percentage ? "Continue Learning" : "Start Learning"}
+              </Button>
+            </div>
+          )}
 
           <h1 className="text-3xl md:text-4xl font-consciousness font-bold text-foreground mb-4">
             {course.title}
@@ -236,8 +188,11 @@ const CourseDetail = () => {
                       <h3 className={`font-consciousness font-medium ${
                         isCompleted ? "text-primary" : "text-foreground"
                       }`}>
-                        {module}
+                        {module.title}
                       </h3>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        {module.duration} minutes • {module.type}
+                      </p>
                     </div>
                   </div>
                 </div>
