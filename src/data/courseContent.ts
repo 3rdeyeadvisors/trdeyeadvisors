@@ -82,7 +82,19 @@ DeFi makes all of this possible **without** traditional financial institutions. 
 DeFi isn't trying to replace all of traditional finance overnight. It's creating an **alternative system** that's more accessible, transparent, and efficient for many financial services.
 
 *Next, we'll explore WHY DeFi exists and what problems it solves.*`
-        }
+        },
+        resources: [
+          {
+            title: "Live DeFi Market Data",
+            url: "/analytics",
+            type: "link"
+          },
+          {
+            title: "DeFi vs Traditional Finance Visual",
+            url: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800",
+            type: "link"
+          }
+        ]
       },
       {
         id: "1-2", 
@@ -240,7 +252,19 @@ Think of smart contracts as **"if-then" statements** that execute automatically:
 ✅ When used properly, it's often more secure than traditional systems
 
 *Next, we'll explore the key players in the DeFi ecosystem and what they do.*`
-        }
+        },
+        resources: [
+          {
+            title: "How Blockchain Works (Ethereum.org)",
+            url: "https://ethereum.org/en/developers/docs/intro-to-ethereum/",
+            type: "link"
+          },
+          {
+            title: "Blockchain Visualization",
+            url: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800",
+            type: "link"
+          }
+        ]
       },
       {
         id: "1-4",
@@ -475,7 +499,24 @@ With proper education, security practices, and gradual exposure, DeFi can be a v
 **Remember**: The goal isn't to avoid all risk (that's impossible), but to **understand and manage** the risks you're taking.
 
 *Congratulations! You've completed the DeFi Foundations course. You now have the knowledge to safely explore the DeFi ecosystem.*`
-        }
+        },
+        resources: [
+          {
+            title: "DeFi Risk Assessment Tools",
+            url: "/resources",
+            type: "link"
+          },
+          {
+            title: "Security Best Practices",
+            url: "/resources",
+            type: "link"
+          },
+          {
+            title: "DeFi Calculators",
+            url: "/resources#calculators",
+            type: "link"
+          }
+        ]
       }
     ]
   },
