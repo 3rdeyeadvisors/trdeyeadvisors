@@ -1,11 +1,15 @@
 import { useState } from "react";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { BookOpen, Code, Calculator, Filter } from "lucide-react";
+import { Filter, LogIn } from "lucide-react";
+import { CourseCard } from "@/components/course/CourseCard";
+import { AuthModal } from "@/components/auth/AuthModal";
+import { useAuth } from "@/components/auth/AuthProvider";
+import { BookOpen } from "lucide-react";
 
 const Courses = () => {
   const [activeFilter, setActiveFilter] = useState("all");
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const { user } = useAuth();
 
   const courses = [
     {
@@ -87,13 +91,13 @@ const Courses = () => {
     ? courses 
     : courses.filter(course => course.category === activeFilter);
 
-  const getCategoryColor = (category: string) => {
-    switch (category) {
-      case "free": return "bg-awareness/20 text-awareness border-awareness/30";
-      case "paid": return "bg-primary/20 text-primary border-primary/30";
-      case "tool": return "bg-accent/20 text-accent border-accent/30";
-      default: return "bg-muted/20 text-muted-foreground border-border";
-    }
+  const handleStartCourse = (courseId: number) => {
+    // Here you would navigate to the course detail page
+    console.log(`Starting course ${courseId}`);
+  };
+
+  const handleAuthRequired = () => {
+    setShowAuthModal(true);
   };
 
   return (
@@ -101,12 +105,30 @@ const Courses = () => {
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-consciousness font-bold text-foreground mb-4">
-            Courses & Tools
-          </h1>
+          <div className="flex items-center justify-center gap-4 mb-6">
+            <h1 className="text-4xl md:text-5xl font-consciousness font-bold text-foreground">
+              Courses & Tools
+            </h1>
+            {!user && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowAuthModal(true)}
+                className="font-consciousness"
+              >
+                <LogIn className="w-4 h-4 mr-2" />
+                Track Progress
+              </Button>
+            )}
+          </div>
           <p className="text-xl text-muted-foreground font-consciousness max-w-2xl mx-auto">
             Reprogram your understanding with our curated learning resources and practical tools
           </p>
+          {user && (
+            <p className="text-awareness font-consciousness mt-2">
+              Welcome back! Your progress is being tracked.
+            </p>
+          )}
         </div>
 
         {/* Filters */}
@@ -127,43 +149,21 @@ const Courses = () => {
         {/* Course Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredCourses.map((course, index) => (
-            <Card 
+            <CourseCard
               key={course.id}
-              className="p-6 bg-card/60 border-border hover:border-primary/40 transition-all duration-cosmic hover:shadow-consciousness group"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <div className="flex items-start justify-between mb-4">
-                <course.icon className="w-8 h-8 text-primary group-hover:text-primary-glow transition-colors" />
-                <Badge className={getCategoryColor(course.category)}>
-                  {course.category === "free" ? "Free" : 
-                   course.category === "paid" ? course.price : "Tool"}
-                </Badge>
-              </div>
-              
-              <h3 className="text-xl font-consciousness font-semibold text-foreground mb-3">
-                {course.title}
-              </h3>
-              
-              <p className="text-muted-foreground font-consciousness mb-4 leading-relaxed">
-                {course.description}
-              </p>
-              
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground font-system">
-                  {course.duration}
-                </span>
-                <Button 
-                  variant={course.category === "paid" ? "cosmic" : "awareness"}
-                  size="sm"
-                  className="font-consciousness"
-                >
-                  {course.category === "tool" ? "Launch" : "Start Learning"}
-                </Button>
-              </div>
-            </Card>
+              course={course}
+              index={index}
+              onStartCourse={handleStartCourse}
+              onAuthRequired={handleAuthRequired}
+            />
           ))}
         </div>
       </div>
+
+      <AuthModal 
+        isOpen={showAuthModal} 
+        onClose={() => setShowAuthModal(false)} 
+      />
     </div>
   );
 };
