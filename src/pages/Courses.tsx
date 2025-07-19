@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Filter, LogIn } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Filter, LogIn, Search, Star } from "lucide-react";
 import { CourseCard } from "@/components/course/CourseCard";
 import { AuthModal } from "@/components/auth/AuthModal";
 import { useAuth } from "@/components/auth/AuthProvider";
@@ -9,6 +10,7 @@ import { BookOpen } from "lucide-react";
 
 const Courses = () => {
   const [activeFilter, setActiveFilter] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
   const [showAuthModal, setShowAuthModal] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -21,6 +23,9 @@ const Courses = () => {
       category: "free",
       type: "course",
       duration: "5 modules",
+      difficulty: "Beginner",
+      rating: 4.8,
+      students: 1234,
       modules: [
         "What is DeFi? (Simple explanation with comparisons to traditional banking)",
         "Why DeFi Exists (The problems it solves – fees, middlemen, accessibility)",
@@ -37,6 +42,9 @@ const Courses = () => {
       category: "free",
       type: "course", 
       duration: "5 modules",
+      difficulty: "Beginner",
+      rating: 4.9,
+      students: 987,
       modules: [
         "Choosing the Right Wallet (MetaMask, Trust Wallet, or Ledger?)",
         "Private Keys & Seed Phrases – The Rule You Can't Break",
@@ -53,6 +61,9 @@ const Courses = () => {
       category: "paid",
       type: "course",
       duration: "5 modules",
+      difficulty: "Intermediate",
+      rating: 4.7,
+      students: 756,
       price: "$67",
       modules: [
         "How People Earn with DeFi (Overview)",
@@ -70,6 +81,9 @@ const Courses = () => {
       category: "paid",
       type: "course",
       duration: "5 modules",
+      difficulty: "Advanced",
+      rating: 4.6,
+      students: 543,
       price: "$97",
       modules: [
         "How to Build a Starter Portfolio (Even with $100)",
@@ -86,12 +100,37 @@ const Courses = () => {
     { id: "all", label: "All Resources" },
     { id: "free", label: "Free Courses" },
     { id: "paid", label: "Paid Courses" },
-    { id: "tool", label: "Tools & Trackers" }
+    { id: "beginner", label: "Beginner" },
+    { id: "intermediate", label: "Intermediate" },
+    { id: "advanced", label: "Advanced" }
   ];
 
-  const filteredCourses = activeFilter === "all" 
-    ? courses 
-    : courses.filter(course => course.category === activeFilter);
+  const getFilteredCourses = () => {
+    let filtered = courses;
+    
+    // Filter by category or difficulty
+    if (activeFilter !== "all") {
+      if (["free", "paid", "tool"].includes(activeFilter)) {
+        filtered = filtered.filter(course => course.category === activeFilter);
+      } else {
+        filtered = filtered.filter(course => 
+          course.difficulty?.toLowerCase() === activeFilter
+        );
+      }
+    }
+    
+    // Filter by search query
+    if (searchQuery.trim()) {
+      filtered = filtered.filter(course =>
+        course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        course.description.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+    
+    return filtered;
+  };
+
+  const filteredCourses = getFilteredCourses();
 
   const handleStartCourse = (courseId: number) => {
     navigate(`/courses/${courseId}`);
@@ -132,6 +171,19 @@ const Courses = () => {
           )}
         </div>
 
+        {/* Search Bar */}
+        <div className="max-w-md mx-auto mb-8">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              placeholder="Search courses..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 font-consciousness"
+            />
+          </div>
+        </div>
+
         {/* Filters */}
         <div className="flex flex-wrap justify-center gap-4 mb-12">
           {filters.map((filter) => (
@@ -148,17 +200,39 @@ const Courses = () => {
         </div>
 
         {/* Course Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredCourses.map((course, index) => (
-            <CourseCard
-              key={course.id}
-              course={course}
-              index={index}
-              onStartCourse={handleStartCourse}
-              onAuthRequired={handleAuthRequired}
-            />
-          ))}
-        </div>
+        {filteredCourses.length > 0 ? (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredCourses.map((course, index) => (
+              <CourseCard
+                key={course.id}
+                course={course}
+                index={index}
+                onStartCourse={handleStartCourse}
+                onAuthRequired={handleAuthRequired}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-12">
+            <BookOpen className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-xl font-consciousness font-semibold text-foreground mb-2">
+              No courses found
+            </h3>
+            <p className="text-muted-foreground font-consciousness mb-4">
+              Try adjusting your search or filter criteria
+            </p>
+            <Button 
+              variant="outline" 
+              onClick={() => {
+                setSearchQuery("");
+                setActiveFilter("all");
+              }}
+              className="font-consciousness"
+            >
+              Clear filters
+            </Button>
+          </div>
+        )}
       </div>
 
       <AuthModal 

@@ -15,6 +15,7 @@ import Store from "./pages/Store";
 import Contact from "./pages/Contact";
 import Auth from "./pages/Auth";
 import CourseDetail from "./pages/CourseDetail";
+import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -38,6 +39,7 @@ const App = () => (
                 <Route path="/store" element={<Store />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/auth" element={<Auth />} />
+                <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Layout>

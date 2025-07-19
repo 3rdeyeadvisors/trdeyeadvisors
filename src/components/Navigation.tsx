@@ -72,9 +72,19 @@ const Navigation = () => {
             <div className="flex items-center space-x-4">
               {user ? (
                 <div className="flex items-center space-x-3">
-                  <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                    <User className="w-4 h-4" />
-                    <span>{user.email}</span>
+                  <Button
+                    asChild
+                    variant="ghost"
+                    size="sm"
+                    className="text-muted-foreground hover:text-primary"
+                  >
+                    <Link to="/dashboard" className="flex items-center space-x-2">
+                      <User className="w-4 h-4" />
+                      <span>Dashboard</span>
+                    </Link>
+                  </Button>
+                  <div className="text-sm text-muted-foreground">
+                    {user.email}
                   </div>
                   <Button
                     variant="outline"
@@ -132,8 +142,22 @@ const Navigation = () => {
               <div className="pt-4 border-t border-border">
                 {user ? (
                   <div className="space-y-3">
-                    <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                      <User className="w-4 h-4" />
+                    <Button
+                      asChild
+                      variant="ghost"
+                      size="sm"
+                      className="w-full justify-start"
+                    >
+                      <Link 
+                        to="/dashboard" 
+                        className="flex items-center space-x-2"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        <User className="w-4 h-4" />
+                        <span>Dashboard</span>
+                      </Link>
+                    </Button>
+                    <div className="flex items-center space-x-2 text-sm text-muted-foreground px-3">
                       <span>{user.email}</span>
                     </div>
                     <Button
