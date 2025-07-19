@@ -46,21 +46,19 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
     if (!user) return;
 
     try {
-      // Temporarily disabled until types are regenerated
-      // const { data, error } = await supabase
-      //   .from('course_progress')
-      //   .select('*')
-      //   .eq('user_id', user.id);
+      const { data, error } = await supabase
+        .from('course_progress')
+        .select('*')
+        .eq('user_id', user.id);
 
-      // if (error) throw error;
+      if (error) throw error;
 
-      // const progressMap: Record<number, CourseProgress> = {};
-      // data?.forEach((progress) => {
-      //   progressMap[progress.course_id] = progress;
-      // });
+      const progressMap: Record<number, CourseProgress> = {};
+      data?.forEach((progress) => {
+        progressMap[progress.course_id] = progress;
+      });
 
-      // setCourseProgress(progressMap);
-      setCourseProgress({});
+      setCourseProgress(progressMap);
     } catch (error) {
       console.error('Error loading progress:', error);
     } finally {
@@ -89,12 +87,11 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
           started_at: existingProgress?.started_at || new Date().toISOString(),
         };
 
-        // Temporarily disabled until types are regenerated
-        // const { error } = await supabase
-        //   .from('course_progress')
-        //   .upsert(progressData);
+        const { error } = await supabase
+          .from('course_progress')
+          .upsert(progressData);
 
-        // if (error) throw error;
+        if (error) throw error;
 
         setCourseProgress(prev => ({
           ...prev,
