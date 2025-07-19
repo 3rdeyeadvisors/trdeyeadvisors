@@ -1,7 +1,8 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ExternalLink, Wallet, BarChart3, Shield, BookOpen, Globe } from "lucide-react";
+import { ExternalLink, Wallet, BarChart3, Shield, BookOpen, Globe, TrendingUp } from "lucide-react";
+import { DefiCharts } from "@/components/DefiCharts";
 import DefiCalculators from "@/components/DefiCalculators";
 import NewsletterSignup from "@/components/NewsletterSignup";
 
@@ -42,10 +43,10 @@ const Resources = () => {
       icon: BookOpen,
       description: "Practical templates and guides for financial planning",
       resources: [
+        { name: "DeFi Security Guide", description: "Essential security steps before using any DeFi protocol", url: "/resources/security-guide.pdf", verified: true },
         { name: "DeFi Budget Template", description: "Spreadsheet template for tracking DeFi investments and profits", url: "#", verified: true },
         { name: "Credit Repair Tracker", description: "Step-by-step guide and tracker for improving credit score", url: "#", verified: true },
-        { name: "Weekly Financial Planner", description: "Simple weekly budgeting template with DeFi allocation", url: "#", verified: true },
-        { name: "DeFi Security Checklist", description: "Essential security steps before using any DeFi protocol", url: "#", verified: true }
+        { name: "Weekly Financial Planner", description: "Simple weekly budgeting template with DeFi allocation", url: "#", verified: true }
       ]
     },
     {
@@ -69,9 +70,30 @@ const Resources = () => {
             Resource Hub
           </h1>
           <p className="text-xl text-muted-foreground font-consciousness max-w-2xl mx-auto">
-            Curated tools, platforms, and resources to navigate the DeFi ecosystem safely and effectively
+            Live market data, calculators, and curated resources for DeFi success
           </p>
         </div>
+
+        {/* Live Analytics Dashboard */}
+        <section className="mb-16">
+          <div className="flex items-center gap-3 mb-6">
+            <TrendingUp className="w-8 h-8 text-primary" />
+            <div>
+              <h2 className="text-2xl font-consciousness font-bold text-foreground">
+                Live DeFi Analytics
+              </h2>
+              <p className="text-muted-foreground font-consciousness">
+                Real-time market data and insights from the DeFi ecosystem
+              </p>
+            </div>
+          </div>
+          <DefiCharts />
+        </section>
+
+        {/* DeFi Calculators */}
+        <section className="mb-16">
+          <DefiCalculators />
+        </section>
 
         {/* Resource Categories */}
         <div className="space-y-12">
@@ -120,6 +142,7 @@ const Resources = () => {
                       variant="system" 
                       size="sm" 
                       className="w-full font-consciousness group-hover:border-primary/40"
+                      onClick={() => window.open(resource.url, '_blank')}
                     >
                       Access Resource
                       <ExternalLink className="w-4 h-4 ml-2" />
@@ -130,11 +153,6 @@ const Resources = () => {
             </div>
           ))}
         </div>
-
-        {/* DeFi Calculators */}
-        <section className="mb-16">
-          <DefiCalculators />
-        </section>
 
         {/* Disclaimer */}
         <Card className="mt-16 p-6 bg-secondary/40 border-border">
