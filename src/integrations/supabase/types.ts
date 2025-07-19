@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      course_progress: {
+        Row: {
+          completed_modules: number[] | null
+          completion_percentage: number | null
+          course_id: number
+          created_at: string | null
+          id: string
+          last_accessed: string | null
+          started_at: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          completed_modules?: number[] | null
+          completion_percentage?: number | null
+          course_id: number
+          created_at?: string | null
+          id?: string
+          last_accessed?: string | null
+          started_at?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          completed_modules?: number[] | null
+          completion_percentage?: number | null
+          course_id?: number
+          created_at?: string | null
+          id?: string
+          last_accessed?: string | null
+          started_at?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
