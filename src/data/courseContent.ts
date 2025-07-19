@@ -82,14 +82,7 @@ DeFi makes all of this possible **without** traditional financial institutions. 
 DeFi isn't trying to replace all of traditional finance overnight. It's creating an **alternative system** that's more accessible, transparent, and efficient for many financial services.
 
 *Next, we'll explore WHY DeFi exists and what problems it solves.*`
-        },
-        resources: [
-          {
-            title: "DeFi vs Traditional Finance Comparison Chart",
-            url: "/resources/defi-comparison.pdf",
-            type: "pdf"
-          }
-        ]
+        }
       },
       {
         id: "1-2", 
