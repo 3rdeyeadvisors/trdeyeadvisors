@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Filter, LogIn } from "lucide-react";
 import { CourseCard } from "@/components/course/CourseCard";
@@ -10,6 +11,7 @@ const Courses = () => {
   const [activeFilter, setActiveFilter] = useState("all");
   const [showAuthModal, setShowAuthModal] = useState(false);
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const courses = [
     {
@@ -92,8 +94,7 @@ const Courses = () => {
     : courses.filter(course => course.category === activeFilter);
 
   const handleStartCourse = (courseId: number) => {
-    // Here you would navigate to the course detail page
-    console.log(`Starting course ${courseId}`);
+    navigate(`/courses/${courseId}`);
   };
 
   const handleAuthRequired = () => {

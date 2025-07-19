@@ -14,6 +14,7 @@ import Resources from "./pages/Resources";
 import Store from "./pages/Store";
 import Contact from "./pages/Contact";
 import Auth from "./pages/Auth";
+import CourseDetail from "./pages/CourseDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,6 +32,7 @@ const App = () => (
                 <Route path="/" element={<Index />} />
                 <Route path="/philosophy" element={<Philosophy />} />
                 <Route path="/courses" element={<Courses />} />
+                <Route path="/courses/:courseId" element={<CourseDetail />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/resources" element={<Resources />} />
                 <Route path="/store" element={<Store />} />
