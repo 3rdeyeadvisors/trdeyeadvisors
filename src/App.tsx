@@ -18,6 +18,7 @@ import CourseDetail from "./pages/CourseDetail";
 import ModuleViewer from "./pages/ModuleViewer";
 import Dashboard from "./pages/Dashboard";
 import PdfResources from "./pages/PdfResources";
+import GeneratePdfs from "./pages/GeneratePdfs";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -39,7 +40,8 @@ const App = () => (
                 <Route path="/courses/:courseId/module/:moduleId" element={<ModuleViewer />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/resources" element={<Resources />} />
-                <Route path="/pdf-resources" element={<PdfResources />} />
+        <Route path="/pdf-resources" element={<PdfResources />} />
+        <Route path="/generate-pdfs" element={<GeneratePdfs />} />
                 <Route path="/store" element={<Store />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/auth" element={<Auth />} />
