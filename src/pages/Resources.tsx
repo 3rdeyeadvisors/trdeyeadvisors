@@ -1,8 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ExternalLink, Wallet, BarChart3, Shield, BookOpen, Globe, TrendingUp } from "lucide-react";
-import { DefiCharts } from "@/components/DefiCharts";
+import { ExternalLink, Wallet, BarChart3, Shield, BookOpen, Globe } from "lucide-react";
 import DefiCalculators from "@/components/DefiCalculators";
 import NewsletterSignup from "@/components/NewsletterSignup";
 
@@ -70,7 +69,7 @@ const Resources = () => {
             Resource Hub
           </h1>
           <p className="text-xl text-muted-foreground font-consciousness max-w-2xl mx-auto">
-            Live market data, calculators, and curated resources for DeFi success
+            Curated tools, platforms, and resources to navigate the DeFi ecosystem safely and effectively
           </p>
         </div>
 
@@ -136,21 +135,6 @@ const Resources = () => {
         {/* DeFi Calculators */}
         <section className="mb-16">
           <DefiCalculators />
-        </section>
-        {/* Live Analytics Dashboard */}
-        <section className="mb-16">
-          <div className="flex items-center gap-3 mb-6">
-            <TrendingUp className="w-8 h-8 text-primary" />
-            <div>
-              <h2 className="text-2xl font-consciousness font-bold text-foreground">
-                Live DeFi Analytics
-              </h2>
-              <p className="text-muted-foreground font-consciousness">
-                Real-time market data and insights from the DeFi ecosystem
-              </p>
-            </div>
-          </div>
-          <DefiCharts />
         </section>
 
         {/* Disclaimer */}

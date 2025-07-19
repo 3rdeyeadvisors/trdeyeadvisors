@@ -17,6 +17,7 @@ const Navigation = () => {
     { path: "/courses", label: "Courses & Tools" },
     { path: "/blog", label: "Blog & Articles" },
     { path: "/resources", label: "Resource Hub" },
+    { path: "/analytics", label: "Analytics" },
     { path: "/store", label: "Store" },
     { path: "/contact", label: "Contact" },
   ];
