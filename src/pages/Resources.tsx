@@ -74,29 +74,8 @@ const Resources = () => {
           </p>
         </div>
 
-        {/* Live Analytics Dashboard */}
-        <section className="mb-16">
-          <div className="flex items-center gap-3 mb-6">
-            <TrendingUp className="w-8 h-8 text-primary" />
-            <div>
-              <h2 className="text-2xl font-consciousness font-bold text-foreground">
-                Live DeFi Analytics
-              </h2>
-              <p className="text-muted-foreground font-consciousness">
-                Real-time market data and insights from the DeFi ecosystem
-              </p>
-            </div>
-          </div>
-          <DefiCharts />
-        </section>
-
-        {/* DeFi Calculators */}
-        <section className="mb-16">
-          <DefiCalculators />
-        </section>
-
         {/* Resource Categories */}
-        <div className="space-y-12">
+        <div className="space-y-12 mb-16">
           {resourceCategories.map((category, categoryIndex) => (
             <div key={category.title} className="space-y-6">
               {/* Category Header */}
@@ -153,6 +132,26 @@ const Resources = () => {
             </div>
           ))}
         </div>
+
+        {/* DeFi Calculators */}
+        <section className="mb-16">
+          <DefiCalculators />
+        </section>
+        {/* Live Analytics Dashboard */}
+        <section className="mb-16">
+          <div className="flex items-center gap-3 mb-6">
+            <TrendingUp className="w-8 h-8 text-primary" />
+            <div>
+              <h2 className="text-2xl font-consciousness font-bold text-foreground">
+                Live DeFi Analytics
+              </h2>
+              <p className="text-muted-foreground font-consciousness">
+                Real-time market data and insights from the DeFi ecosystem
+              </p>
+            </div>
+          </div>
+          <DefiCharts />
+        </section>
 
         {/* Disclaimer */}
         <Card className="mt-16 p-6 bg-secondary/40 border-border">
