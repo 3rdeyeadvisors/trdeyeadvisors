@@ -2,6 +2,8 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ExternalLink, Wallet, BarChart3, Shield, BookOpen, Globe } from "lucide-react";
+import DefiCalculators from "@/components/DefiCalculators";
+import NewsletterSignup from "@/components/NewsletterSignup";
 
 const Resources = () => {
   const resourceCategories = [
@@ -129,6 +131,11 @@ const Resources = () => {
           ))}
         </div>
 
+        {/* DeFi Calculators */}
+        <section className="mb-16">
+          <DefiCalculators />
+        </section>
+
         {/* Disclaimer */}
         <Card className="mt-16 p-6 bg-secondary/40 border-border">
           <div className="text-center">
@@ -142,6 +149,11 @@ const Resources = () => {
             </p>
           </div>
         </Card>
+
+        {/* Newsletter Signup */}
+        <section className="mt-16">
+          <NewsletterSignup variant="default" />
+        </section>
       </div>
     </div>
   );

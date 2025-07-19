@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { BookOpen, Wrench, Eye, Code, TrendingUp, Shield } from "lucide-react";
 import cosmicHeroBg from "@/assets/cosmic-hero-bg.jpg";
+import NewsletterSignup from "@/components/NewsletterSignup";
 
 const Index = () => {
   const features = [
@@ -146,6 +147,13 @@ const Index = () => {
               Explore Our Philosophy
             </Button>
           </Link>
+        </div>
+      </section>
+
+      {/* Newsletter Signup */}
+      <section className="py-16 bg-muted/10">
+        <div className="container mx-auto px-4">
+          <NewsletterSignup variant="cosmic" />
         </div>
       </section>
     </div>
