@@ -1,0 +1,884 @@
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
+import { 
+  ArrowLeft, 
+  ArrowRight, 
+  Calculator, 
+  TrendingUp, 
+  AlertTriangle, 
+  CheckCircle, 
+  DollarSign,
+  Percent,
+  Clock,
+  Target,
+  BarChart3,
+  PieChart,
+  LineChart,
+  Settings
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+
+const DefiCalculatorsTutorial = () => {
+  const [currentStep, setCurrentStep] = useState(1);
+  const [completedSteps, setCompletedSteps] = useState<number[]>([]);
+  
+  // Example calculator states
+  const [yieldInputs, setYieldInputs] = useState({
+    principal: 1000,
+    apy: 15,
+    compoundPeriod: 12,
+    timeframe: 365
+  });
+  
+  const [ilInputs, setIlInputs] = useState({
+    tokenA: 1000,
+    tokenB: 1000,
+    priceChangeA: 0,
+    priceChangeB: 50
+  });
+
+  const { toast } = useToast();
+
+  const totalSteps = 4;
+  const progress = (currentStep / totalSteps) * 100;
+
+  const steps = [
+    {
+      id: 1,
+      title: "Understanding DeFi Calculators",
+      icon: Calculator,
+      duration: "3 min",
+      content: {
+        overview: "Learn what DeFi calculators do and why they're essential for smart investing.",
+        calculatorTypes: [
+          {
+            name: "Yield Farming Calculator",
+            purpose: "Calculate potential returns from liquidity provision",
+            when: "Before providing liquidity to pools",
+            helps: "Estimate APY, compound returns, and optimal strategies",
+            difficulty: "Beginner",
+            icon: TrendingUp
+          },
+          {
+            name: "Impermanent Loss Calculator", 
+            purpose: "Estimate loss from token price divergence",
+            when: "Before entering LP positions",
+            helps: "Understand risks vs rewards in volatile pairs",
+            difficulty: "Intermediate",
+            icon: AlertTriangle
+          },
+          {
+            name: "Portfolio Tracker",
+            purpose: "Monitor your DeFi investments in real-time",
+            when: "After making investments",
+            helps: "Track performance and make informed decisions",
+            difficulty: "Beginner", 
+            icon: PieChart
+          }
+        ],
+        whyImportant: [
+          "Avoid costly mistakes by understanding potential outcomes",
+          "Compare different DeFi strategies objectively",
+          "Make informed decisions with real numbers",
+          "Optimize your returns through better planning",
+          "Understand risks before committing capital"
+        ]
+      }
+    },
+    {
+      id: 2,
+      title: "Yield Farming Calculator",
+      icon: TrendingUp,
+      duration: "4 min",
+      content: {
+        overview: "Master the yield farming calculator to estimate your potential DeFi returns.",
+        inputs: [
+          {
+            name: "Principal Amount",
+            description: "Initial investment amount in USD",
+            example: "$1,000",
+            tips: "Start with amounts you're comfortable risking"
+          },
+          {
+            name: "Annual Percentage Yield (APY)",
+            description: "Expected yearly return percentage",
+            example: "15%",
+            tips: "Check multiple sources for realistic APY estimates"
+          },
+          {
+            name: "Compound Period",
+            description: "How often rewards are claimed and reinvested",
+            example: "Daily (365), Weekly (52), Monthly (12)",
+            tips: "More frequent compounding = higher returns"
+          },
+          {
+            name: "Time Horizon",
+            description: "How long you plan to keep funds invested",
+            example: "30 days, 90 days, 1 year",
+            tips: "Consider gas costs for short-term positions"
+          }
+        ],
+        interpretingResults: [
+          {
+            metric: "Final Amount",
+            meaning: "Total value after the time period",
+            goodExample: "$1,150 after 1 year on $1,000",
+            badExample: "Amount less than principal (loss)"
+          },
+          {
+            metric: "Total Return",
+            meaning: "Absolute profit/loss in USD",
+            goodExample: "$150 profit",
+            badExample: "Negative return (loss)"
+          },
+          {
+            metric: "Effective APY",
+            meaning: "Actual yearly return including compounding",
+            goodExample: "15.87% (higher than quoted 15%)",
+            badExample: "Much lower than expected APY"
+          }
+        ]
+      }
+    },
+    {
+      id: 3,
+      title: "Impermanent Loss Calculator",
+      icon: AlertTriangle,
+      duration: "5 min",
+      content: {
+        overview: "Learn to calculate and understand impermanent loss - the hidden risk in liquidity providing.",
+        whatIsIL: {
+          definition: "The temporary loss of funds when providing liquidity to volatile trading pairs",
+          occurs: "When token prices diverge significantly from initial ratio",
+          reversible: "Loss becomes permanent only when you withdraw at unfavorable prices",
+          formula: "IL = 2 × √(Price_Ratio) / (1 + Price_Ratio) - 1"
+        },
+        inputs: [
+          {
+            name: "Token A Amount",
+            description: "Initial amount of first token (e.g., ETH)",
+            example: "$1,000 worth of ETH",
+            tips: "Use USD value for easier comparison"
+          },
+          {
+            name: "Token B Amount", 
+            description: "Initial amount of second token (e.g., USDC)",
+            example: "$1,000 worth of USDC",
+            tips: "50/50 split is most common for LP positions"
+          },
+          {
+            name: "Token A Price Change",
+            description: "Percentage change in Token A price",
+            example: "ETH price increases 50%",
+            tips: "Use negative values for price decreases"
+          },
+          {
+            name: "Token B Price Change",
+            description: "Percentage change in Token B price", 
+            example: "USDC stays stable (0% change)",
+            tips: "Stablecoins typically don't change much"
+          }
+        ],
+        ilScenarios: [
+          {
+            scenario: "No Price Change",
+            tokenA: "0%",
+            tokenB: "0%",
+            il: "0%",
+            meaning: "No impermanent loss - perfect scenario"
+          },
+          {
+            scenario: "Moderate Divergence",
+            tokenA: "+25%",
+            tokenB: "0%",
+            il: "-0.6%",
+            meaning: "Small loss, likely covered by fees"
+          },
+          {
+            scenario: "Significant Divergence",
+            tokenA: "+100%",
+            tokenB: "0%",
+            il: "-5.7%",
+            meaning: "Notable loss, need high APY to compensate"
+          },
+          {
+            scenario: "Extreme Divergence",
+            tokenA: "+400%",
+            tokenB: "0%",
+            il: "-20%",
+            meaning: "Major loss, very risky scenario"
+          }
+        ]
+      }
+    },
+    {
+      id: 4,
+      title: "Making Smart Decisions",
+      icon: Target,
+      duration: "3 min",
+      content: {
+        overview: "Use calculator results to make informed DeFi investment decisions.",
+        decisionFramework: [
+          {
+            question: "Is the potential reward worth the risk?",
+            considerations: [
+              "APY should significantly exceed potential IL",
+              "Consider your risk tolerance",
+              "Factor in transaction costs and gas fees",
+              "Think about opportunity cost of other investments"
+            ]
+          },
+          {
+            question: "How long should I stay in the position?",
+            considerations: [
+              "Longer periods generally reduce IL impact",
+              "More time to collect trading fees",
+              "Gas costs amortized over longer time",
+              "Monitor market conditions and exit if needed"
+            ]
+          },
+          {
+            question: "Which pools are best for my strategy?",
+            considerations: [
+              "Stable pairs (USDC/USDT) = low IL, low APY",
+              "Correlated pairs (ETH/WBTC) = medium IL, medium APY", 
+              "Volatile pairs (ETH/DOGE) = high IL, high APY",
+              "Choose based on your risk preference"
+            ]
+          }
+        ],
+        bestPractices: [
+          {
+            practice: "Start Small",
+            reason: "Learn with amounts you can afford to lose",
+            action: "Begin with $100-500 positions"
+          },
+          {
+            practice: "Diversify",
+            reason: "Don't put all funds in one pool or protocol",
+            action: "Spread across 3-5 different strategies"
+          },
+          {
+            practice: "Monitor Regularly",
+            reason: "Market conditions change rapidly in DeFi",
+            action: "Check positions weekly, be ready to exit"
+          },
+          {
+            practice: "Factor All Costs",
+            reason: "Gas fees can eat into profits significantly",
+            action: "Calculate break-even including all costs"
+          },
+          {
+            practice: "Stay Informed",
+            reason: "New risks and opportunities emerge constantly",
+            action: "Follow protocol updates, security audits"
+          }
+        ],
+        redFlags: [
+          "APY significantly higher than market rates",
+          "New protocols without established track records",
+          "Tokens with extreme price volatility",
+          "Pools with very low liquidity",
+          "Smart contracts without proper audits"
+        ]
+      }
+    }
+  ];
+
+  const currentStepData = steps.find(step => step.id === currentStep);
+
+  const handleNext = () => {
+    if (currentStep < totalSteps) {
+      setCompletedSteps(prev => [...prev, currentStep]);
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
+  const handleStepComplete = () => {
+    setCompletedSteps(prev => [...prev, currentStep]);
+    toast({
+      title: "Step completed!",
+      description: `You've completed step ${currentStep}: ${currentStepData?.title}`,
+    });
+  };
+
+  const isStepCompleted = (stepId: number) => completedSteps.includes(stepId);
+
+  // Calculator functions
+  const calculateYieldFarming = () => {
+    const { principal, apy, compoundPeriod, timeframe } = yieldInputs;
+    const periodsPerYear = compoundPeriod;
+    const yearsInvested = timeframe / 365;
+    const finalAmount = principal * Math.pow(1 + (apy / 100) / periodsPerYear, periodsPerYear * yearsInvested);
+    const totalReturn = finalAmount - principal;
+    const effectiveAPY = Math.pow(finalAmount / principal, 1 / yearsInvested) - 1;
+    
+    return {
+      finalAmount: finalAmount.toFixed(2),
+      totalReturn: totalReturn.toFixed(2),
+      effectiveAPY: (effectiveAPY * 100).toFixed(2)
+    };
+  };
+
+  const calculateImpermanentLoss = () => {
+    const { tokenA, tokenB, priceChangeA, priceChangeB } = ilInputs;
+    const priceRatioA = 1 + (priceChangeA / 100);
+    const priceRatioB = 1 + (priceChangeB / 100);
+    const priceRatio = priceRatioA / priceRatioB;
+    
+    const lpValue = 2 * Math.sqrt(priceRatio) / (1 + priceRatio);
+    const holdValue = 1;
+    const il = (lpValue - holdValue) * 100;
+    
+    const initialValue = tokenA + tokenB;
+    const ilAmount = (initialValue * il) / 100;
+    
+    return {
+      ilPercentage: il.toFixed(2),
+      ilAmount: ilAmount.toFixed(2),
+      finalLpValue: (initialValue * lpValue).toFixed(2),
+      finalHoldValue: (tokenA * priceRatioA + tokenB * priceRatioB).toFixed(2)
+    };
+  };
+
+  const yieldResults = calculateYieldFarming();
+  const ilResults = calculateImpermanentLoss();
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
+      <div className="container mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="p-2 rounded-lg bg-primary/10">
+              <Calculator className="h-6 w-6 text-primary" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold">Using DeFi Calculators</h1>
+              <p className="text-muted-foreground">Master the tools for smart DeFi investing</p>
+            </div>
+          </div>
+
+          {/* Progress */}
+          <div className="space-y-2">
+            <div className="flex justify-between text-sm">
+              <span>Step {currentStep} of {totalSteps}</span>
+              <span>{Math.round(progress)}% Complete</span>
+            </div>
+            <Progress value={progress} className="h-2" />
+          </div>
+        </div>
+
+        {/* Step Navigation */}
+        <div className="flex flex-wrap gap-2 mb-8">
+          {steps.map((step) => {
+            const StepIcon = step.icon;
+            const completed = isStepCompleted(step.id);
+            const current = step.id === currentStep;
+            
+            return (
+              <Button
+                key={step.id}
+                variant={current ? "default" : completed ? "secondary" : "outline"}
+                size="sm"
+                onClick={() => setCurrentStep(step.id)}
+                className={`flex items-center gap-2 ${completed ? "bg-green-100 text-green-700 hover:bg-green-200" : ""}`}
+              >
+                <StepIcon className="h-4 w-4" />
+                <span className="hidden sm:inline">{step.title}</span>
+                <span className="sm:hidden">{step.id}</span>
+                {completed && <CheckCircle className="h-3 w-3" />}
+              </Button>
+            );
+          })}
+        </div>
+
+        {/* Current Step Content */}
+        {currentStepData && (
+          <Card className="mb-8">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-primary/10">
+                    <currentStepData.icon className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <CardTitle>{currentStepData.title}</CardTitle>
+                    <CardDescription>
+                      Estimated time: {currentStepData.duration}
+                    </CardDescription>
+                  </div>
+                </div>
+                <Badge variant={isStepCompleted(currentStep) ? "default" : "secondary"}>
+                  {isStepCompleted(currentStep) ? "Completed" : "In Progress"}
+                </Badge>
+              </div>
+            </CardHeader>
+
+            <CardContent className="space-y-6">
+              <p className="text-muted-foreground">{currentStepData.content.overview}</p>
+
+              {/* Step 1: Understanding Calculators */}
+              {currentStep === 1 && (
+                <div className="space-y-6">
+                  <div className="grid gap-4">
+                    {currentStepData.content.calculatorTypes?.map((calc, index) => {
+                      const CalcIcon = calc.icon;
+                      return (
+                        <Card key={index}>
+                          <CardHeader className="pb-3">
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-3">
+                                <div className="p-2 rounded-lg bg-primary/10">
+                                  <CalcIcon className="h-5 w-5 text-primary" />
+                                </div>
+                                <div>
+                                  <CardTitle className="text-lg">{calc.name}</CardTitle>
+                                  <CardDescription>{calc.purpose}</CardDescription>
+                                </div>
+                              </div>
+                              <Badge variant="outline">{calc.difficulty}</Badge>
+                            </div>
+                          </CardHeader>
+                          <CardContent>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                              <div>
+                                <p className="font-medium mb-1">When to use:</p>
+                                <p className="text-muted-foreground">{calc.when}</p>
+                              </div>
+                              <div>
+                                <p className="font-medium mb-1">How it helps:</p>
+                                <p className="text-muted-foreground">{calc.helps}</p>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      );
+                    })}
+                  </div>
+
+                  <Card className="bg-blue-50 border-blue-200">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-lg text-blue-800">Why DeFi Calculators Matter</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <ul className="space-y-2 text-sm">
+                        {currentStepData.content.whyImportant?.map((reason, index) => (
+                          <li key={index} className="flex items-start gap-2">
+                            <CheckCircle className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                            <span>{reason}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                  </Card>
+                </div>
+              )}
+
+              {/* Step 2: Yield Farming Calculator */}
+              {currentStep === 2 && (
+                <div className="space-y-6">
+                  {/* Interactive Calculator */}
+                  <Card className="bg-green-50 border-green-200">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-lg text-green-800 flex items-center gap-2">
+                        <TrendingUp className="h-5 w-5" />
+                        Interactive Yield Calculator
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-4">
+                          <div>
+                            <Label htmlFor="principal">Principal Amount ($)</Label>
+                            <Input
+                              id="principal"
+                              type="number"
+                              value={yieldInputs.principal}
+                              onChange={(e) => setYieldInputs({...yieldInputs, principal: Number(e.target.value)})}
+                              className="mt-1"
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="apy">APY (%)</Label>
+                            <div className="mt-1 space-y-2">
+                              <Slider
+                                value={[yieldInputs.apy]}
+                                onValueChange={(value) => setYieldInputs({...yieldInputs, apy: value[0]})}
+                                max={100}
+                                min={1}
+                                step={0.5}
+                              />
+                              <div className="text-center text-sm text-muted-foreground">
+                                {yieldInputs.apy}% APY
+                              </div>
+                            </div>
+                          </div>
+                          <div>
+                            <Label htmlFor="compound">Compound Period (times/year)</Label>
+                            <Input
+                              id="compound"
+                              type="number"
+                              value={yieldInputs.compoundPeriod}
+                              onChange={(e) => setYieldInputs({...yieldInputs, compoundPeriod: Number(e.target.value)})}
+                              className="mt-1"
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="timeframe">Time Horizon (days)</Label>
+                            <Input
+                              id="timeframe"
+                              type="number"
+                              value={yieldInputs.timeframe}
+                              onChange={(e) => setYieldInputs({...yieldInputs, timeframe: Number(e.target.value)})}
+                              className="mt-1"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-4">
+                          <h4 className="font-semibold">Results:</h4>
+                          <div className="space-y-3">
+                            <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                              <span className="font-medium">Final Amount:</span>
+                              <span className="text-green-600 font-bold">${yieldResults.finalAmount}</span>
+                            </div>
+                            <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                              <span className="font-medium">Total Return:</span>
+                              <span className="text-green-600 font-bold">${yieldResults.totalReturn}</span>
+                            </div>
+                            <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                              <span className="font-medium">Effective APY:</span>
+                              <span className="text-green-600 font-bold">{yieldResults.effectiveAPY}%</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* Input Explanations */}
+                  <div className="space-y-3">
+                    <h3 className="font-semibold">Understanding the Inputs:</h3>
+                    <div className="grid gap-3">
+                      {currentStepData.content.inputs?.map((input, index) => (
+                        <Card key={index}>
+                          <CardContent className="p-4">
+                            <h4 className="font-medium mb-2">{input.name}</h4>
+                            <p className="text-sm text-muted-foreground mb-2">{input.description}</p>
+                            <div className="flex items-center justify-between text-sm">
+                              <span className="text-blue-600">Example: {input.example}</span>
+                              <span className="text-green-600">💡 {input.tips}</span>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Results Interpretation */}
+                  <div className="space-y-3">
+                    <h3 className="font-semibold">Interpreting Results:</h3>
+                    <div className="grid gap-3">
+                      {currentStepData.content.interpretingResults?.map((result, index) => (
+                        <Card key={index}>
+                          <CardContent className="p-4">
+                            <h4 className="font-medium mb-2">{result.metric}</h4>
+                            <p className="text-sm text-muted-foreground mb-2">{result.meaning}</p>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+                              <div className="flex items-center gap-2">
+                                <CheckCircle className="h-3 w-3 text-green-500" />
+                                <span className="text-green-600">Good: {result.goodExample}</span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <AlertTriangle className="h-3 w-3 text-red-500" />
+                                <span className="text-red-600">Bad: {result.badExample}</span>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 3: Impermanent Loss Calculator */}
+              {currentStep === 3 && (
+                <div className="space-y-6">
+                  {/* IL Explanation */}
+                  <Card className="bg-orange-50 border-orange-200">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-lg text-orange-800 flex items-center gap-2">
+                        <AlertTriangle className="h-5 w-5" />
+                        What is Impermanent Loss?
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3 text-sm">
+                      <p><strong>Definition:</strong> {currentStepData.content.whatIsIL?.definition}</p>
+                      <p><strong>When it occurs:</strong> {currentStepData.content.whatIsIL?.occurs}</p>
+                      <p><strong>Is it reversible?</strong> {currentStepData.content.whatIsIL?.reversible}</p>
+                    </CardContent>
+                  </Card>
+
+                  {/* Interactive IL Calculator */}
+                  <Card className="bg-red-50 border-red-200">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-lg text-red-800 flex items-center gap-2">
+                        <AlertTriangle className="h-5 w-5" />
+                        Interactive Impermanent Loss Calculator
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-4">
+                          <div>
+                            <Label htmlFor="tokenA">Token A Amount ($)</Label>
+                            <Input
+                              id="tokenA"
+                              type="number"
+                              value={ilInputs.tokenA}
+                              onChange={(e) => setIlInputs({...ilInputs, tokenA: Number(e.target.value)})}
+                              className="mt-1"
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="tokenB">Token B Amount ($)</Label>
+                            <Input
+                              id="tokenB"
+                              type="number"
+                              value={ilInputs.tokenB}
+                              onChange={(e) => setIlInputs({...ilInputs, tokenB: Number(e.target.value)})}
+                              className="mt-1"
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="priceChangeA">Token A Price Change (%)</Label>
+                            <div className="mt-1 space-y-2">
+                              <Slider
+                                value={[ilInputs.priceChangeA]}
+                                onValueChange={(value) => setIlInputs({...ilInputs, priceChangeA: value[0]})}
+                                max={200}
+                                min={-50}
+                                step={1}
+                              />
+                              <div className="text-center text-sm text-muted-foreground">
+                                {ilInputs.priceChangeA > 0 ? '+' : ''}{ilInputs.priceChangeA}%
+                              </div>
+                            </div>
+                          </div>
+                          <div>
+                            <Label htmlFor="priceChangeB">Token B Price Change (%)</Label>
+                            <div className="mt-1 space-y-2">
+                              <Slider
+                                value={[ilInputs.priceChangeB]}
+                                onValueChange={(value) => setIlInputs({...ilInputs, priceChangeB: value[0]})}
+                                max={200}
+                                min={-50}
+                                step={1}
+                              />
+                              <div className="text-center text-sm text-muted-foreground">
+                                {ilInputs.priceChangeB > 0 ? '+' : ''}{ilInputs.priceChangeB}%
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="space-y-4">
+                          <h4 className="font-semibold">Impermanent Loss Results:</h4>
+                          <div className="space-y-3">
+                            <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                              <span className="font-medium">IL Percentage:</span>
+                              <span className={`font-bold ${Number(ilResults.ilPercentage) < 0 ? 'text-red-600' : 'text-green-600'}`}>
+                                {ilResults.ilPercentage}%
+                              </span>
+                            </div>
+                            <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                              <span className="font-medium">IL Amount:</span>
+                              <span className={`font-bold ${Number(ilResults.ilAmount) < 0 ? 'text-red-600' : 'text-green-600'}`}>
+                                ${ilResults.ilAmount}
+                              </span>
+                            </div>
+                            <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                              <span className="font-medium">LP Position Value:</span>
+                              <span className="font-bold text-blue-600">${ilResults.finalLpValue}</span>
+                            </div>
+                            <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                              <span className="font-medium">Hold Value:</span>
+                              <span className="font-bold text-green-600">${ilResults.finalHoldValue}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* IL Scenarios */}
+                  <div className="space-y-3">
+                    <h3 className="font-semibold">Common IL Scenarios:</h3>
+                    <div className="grid gap-3">
+                      {currentStepData.content.ilScenarios?.map((scenario, index) => (
+                        <Card key={index}>
+                          <CardContent className="p-4">
+                            <div className="flex items-center justify-between mb-2">
+                              <h4 className="font-medium">{scenario.scenario}</h4>
+                              <Badge variant={Number(scenario.il.replace('%', '')) === 0 ? "default" : Number(scenario.il.replace('%', '')) > -3 ? "secondary" : "destructive"}>
+                                {scenario.il} IL
+                              </Badge>
+                            </div>
+                            <div className="grid grid-cols-3 gap-2 text-sm mb-2">
+                              <span>Token A: {scenario.tokenA}</span>
+                              <span>Token B: {scenario.tokenB}</span>
+                              <span>IL: {scenario.il}</span>
+                            </div>
+                            <p className="text-sm text-muted-foreground">{scenario.meaning}</p>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 4: Making Smart Decisions */}
+              {currentStep === 4 && (
+                <div className="space-y-6">
+                  {/* Decision Framework */}
+                  <div className="space-y-4">
+                    {currentStepData.content.decisionFramework?.map((framework, index) => (
+                      <Card key={index}>
+                        <CardHeader className="pb-3">
+                          <CardTitle className="text-lg text-primary">{framework.question}</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <ul className="space-y-2 text-sm">
+                            {framework.considerations.map((consideration, i) => (
+                              <li key={i} className="flex items-start gap-2">
+                                <Target className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+                                <span>{consideration}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+
+                  {/* Best Practices */}
+                  <div className="space-y-3">
+                    <h3 className="font-semibold">DeFi Investment Best Practices:</h3>
+                    <div className="grid gap-3">
+                      {currentStepData.content.bestPractices?.map((practice, index) => (
+                        <Card key={index}>
+                          <CardContent className="p-4">
+                            <h4 className="font-medium mb-2 text-green-700">{practice.practice}</h4>
+                            <p className="text-sm text-muted-foreground mb-2">{practice.reason}</p>
+                            <div className="flex items-center gap-2 text-sm text-blue-600">
+                              <Target className="h-3 w-3" />
+                              <span>Action: {practice.action}</span>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Red Flags */}
+                  <Alert className="border-red-200 bg-red-50">
+                    <AlertTriangle className="h-4 w-4 text-red-600" />
+                    <AlertDescription className="text-red-800">
+                      <div className="space-y-2">
+                        <p className="font-medium">Red Flags to Avoid:</p>
+                        <ul className="space-y-1 text-sm">
+                          {currentStepData.content.redFlags?.map((flag, index) => (
+                            <li key={index} className="flex items-start gap-2">
+                              <span>•</span>
+                              <span>{flag}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </AlertDescription>
+                  </Alert>
+                </div>
+              )}
+
+              {/* Step Navigation */}
+              <div className="flex items-center justify-between pt-6 border-t">
+                <Button
+                  variant="outline"
+                  onClick={handlePrevious}
+                  disabled={currentStep === 1}
+                >
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Previous
+                </Button>
+
+                <div className="flex gap-2">
+                  {!isStepCompleted(currentStep) && (
+                    <Button
+                      variant="secondary"
+                      onClick={handleStepComplete}
+                    >
+                      <CheckCircle className="h-4 w-4 mr-2" />
+                      Mark Complete
+                    </Button>
+                  )}
+                  
+                  <Button
+                    onClick={handleNext}
+                    disabled={currentStep === totalSteps}
+                  >
+                    {currentStep === totalSteps ? "Finish Tutorial" : "Next Step"}
+                    <ArrowRight className="h-4 w-4 ml-2" />
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Completion Message */}
+        {completedSteps.length === totalSteps && (
+          <Card className="bg-green-50 border-green-200">
+            <CardHeader>
+              <CardTitle className="text-green-800 flex items-center gap-2">
+                <CheckCircle className="h-6 w-6" />
+                Congratulations! Calculator Mastery Complete
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-green-700 mb-4">
+                You now know how to use DeFi calculators to make informed investment decisions! 
+                You can estimate returns, calculate risks, and choose strategies wisely.
+              </p>
+              <div className="flex gap-2">
+                <Button asChild>
+                  <a href="/tutorials">Back to Tutorials</a>
+                </Button>
+                <Button variant="outline" asChild>
+                  <a href="/courses">Apply Your Knowledge</a>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default DefiCalculatorsTutorial;

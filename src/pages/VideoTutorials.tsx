@@ -225,7 +225,7 @@ const VideoTutorials = () => {
                             const tutorialRoutes: { [key: string]: string } = {
                               "wallet-setup": "/tutorials/wallet-setup",
                               "first-dex-swap": "/tutorials/first-dex-swap",
-                              "defi-calculators": "/tutorials", // TODO: Add route
+                              "defi-calculators": "/tutorials/defi-calculators",
                               "spotting-scams": "/tutorials" // TODO: Add route
                             };
                             window.location.href = tutorialRoutes[video.id] || "/tutorials";
