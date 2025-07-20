@@ -1,9 +1,63 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ShoppingCart, Download, Package, FileText, Calculator, TrendingUp } from "lucide-react";
+import { ShoppingCart, Download, Package, FileText, Calculator, TrendingUp, CheckCircle, X } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useState, useEffect } from "react";
+import { toast } from "sonner";
 
 const Store = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [purchasedProduct, setPurchasedProduct] = useState<string>("");
+
+  // Check for success/cancel parameters on mount
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const success = urlParams.get('success');
+    const canceled = urlParams.get('canceled');
+    const product = urlParams.get('product');
+
+    if (success && product) {
+      setShowSuccessMessage(true);
+      setPurchasedProduct(decodeURIComponent(product));
+      toast.success(`Payment successful! Thank you for purchasing ${decodeURIComponent(product)}`);
+      
+      // Clean up URL parameters
+      window.history.replaceState({}, document.title, window.location.pathname);
+    } else if (canceled) {
+      toast.error("Payment was canceled");
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, []);
+
+  const handlePurchase = async (product: any) => {
+    setIsLoading(true);
+    try {
+      const priceNumber = parseInt(product.price.replace('$', ''));
+      
+      const { data, error } = await supabase.functions.invoke('create-payment', {
+        body: {
+          productId: product.id,
+          productName: product.title,
+          price: priceNumber
+        }
+      });
+
+      if (error) throw error;
+
+      // Open Stripe checkout in a new tab
+      if (data?.url) {
+        window.open(data.url, '_blank');
+      }
+    } catch (error) {
+      console.error('Error creating payment:', error);
+      toast.error('Failed to create payment session');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const digitalProducts = [
     {
       id: 1,
@@ -95,6 +149,33 @@ const Store = () => {
           </p>
         </div>
 
+        {/* Success Message */}
+        {showSuccessMessage && (
+          <Card className="mb-8 p-6 bg-green-50 border-green-200 dark:bg-green-950/20 dark:border-green-800">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <CheckCircle className="w-6 h-6 text-green-600" />
+                <div>
+                  <h3 className="text-lg font-consciousness font-semibold text-green-800 dark:text-green-200">
+                    Purchase Successful!
+                  </h3>
+                  <p className="text-green-700 dark:text-green-300 font-consciousness">
+                    Thank you for purchasing "{purchasedProduct}". You should receive your digital product via email shortly.
+                  </p>
+                </div>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowSuccessMessage(false)}
+                className="text-green-600 hover:text-green-800"
+              >
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
+          </Card>
+        )}
+
         {/* Digital Products Section */}
         <div className="mb-16">
           <div className="flex items-center gap-4 mb-8">
@@ -146,9 +227,14 @@ const Store = () => {
                     <span className="text-2xl font-consciousness font-bold text-primary">
                       {product.price}
                     </span>
-                    <Button variant="cosmic" className="font-consciousness">
+                    <Button 
+                      variant="cosmic" 
+                      className="font-consciousness"
+                      onClick={() => handlePurchase(product)}
+                      disabled={isLoading}
+                    >
                       <ShoppingCart className="w-4 h-4 mr-2" />
-                      Buy Now
+                      {isLoading ? "Processing..." : "Buy Now"}
                     </Button>
                   </div>
                 </Card>
@@ -208,9 +294,14 @@ const Store = () => {
                     <span className="text-2xl font-consciousness font-bold text-accent">
                       {product.price}
                     </span>
-                    <Button variant="awareness" className="font-consciousness">
+                    <Button 
+                      variant="awareness" 
+                      className="font-consciousness"
+                      onClick={() => handlePurchase(product)}
+                      disabled={isLoading}
+                    >
                       <ShoppingCart className="w-4 h-4 mr-2" />
-                      Buy Now
+                      {isLoading ? "Processing..." : "Buy Now"}
                     </Button>
                   </div>
                 </Card>
