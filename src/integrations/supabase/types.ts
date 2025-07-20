@@ -212,6 +212,108 @@ export type Database = {
         }
         Relationships: []
       }
+      printify_orders: {
+        Row: {
+          address_to: Json
+          created_at: string
+          delivered_at: string | null
+          external_id: string
+          id: string
+          line_items: Json
+          printify_order_id: string
+          shipped_at: string | null
+          shipping_method: number | null
+          status: string
+          total_price: number | null
+          total_shipping: number | null
+          total_tax: number | null
+          tracking_number: string | null
+          tracking_url: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          address_to: Json
+          created_at?: string
+          delivered_at?: string | null
+          external_id: string
+          id?: string
+          line_items: Json
+          printify_order_id: string
+          shipped_at?: string | null
+          shipping_method?: number | null
+          status: string
+          total_price?: number | null
+          total_shipping?: number | null
+          total_tax?: number | null
+          tracking_number?: string | null
+          tracking_url?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          address_to?: Json
+          created_at?: string
+          delivered_at?: string | null
+          external_id?: string
+          id?: string
+          line_items?: Json
+          printify_order_id?: string
+          shipped_at?: string | null
+          shipping_method?: number | null
+          status?: string
+          total_price?: number | null
+          total_shipping?: number | null
+          total_tax?: number | null
+          tracking_number?: string | null
+          tracking_url?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      printify_products: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          images: Json | null
+          is_active: boolean | null
+          printify_id: string
+          shop_id: string
+          tags: string[] | null
+          title: string
+          updated_at: string
+          variants: Json | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          images?: Json | null
+          is_active?: boolean | null
+          printify_id: string
+          shop_id: string
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          variants?: Json | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          images?: Json | null
+          is_active?: boolean | null
+          printify_id?: string
+          shop_id?: string
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          variants?: Json | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null

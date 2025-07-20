@@ -21,7 +21,7 @@ const Cart = () => {
           items: items.map(item => ({
             id: item.id,
             title: item.title,
-            price: parseFloat(item.price.replace('$', '')),
+            price: typeof item.price === 'string' ? parseFloat(item.price.replace('$', '')) : item.price,
             quantity: item.quantity
           }))
         }
@@ -143,7 +143,7 @@ const Cart = () => {
                       {item.title} × {item.quantity}
                     </span>
                     <span className="font-consciousness font-medium">
-                      ${(parseFloat(item.price.replace('$', '')) * item.quantity).toFixed(2)}
+                      ${((typeof item.price === 'string' ? parseFloat(item.price.replace('$', '')) : item.price) * item.quantity).toFixed(2)}
                     </span>
                   </div>
                 ))}

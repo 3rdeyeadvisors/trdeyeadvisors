@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@14.21.0";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -24,12 +25,30 @@ serve(async (req) => {
       apiVersion: "2023-10-16",
     });
 
+    const supabaseClient = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+      { auth: { persistSession: false } }
+    );
+
+    // Separate digital and physical (Printify) products
+    const digitalItems = items.filter((item: any) => !item.printify_id);
+    const printifyItems = items.filter((item: any) => item.printify_id);
+
+    console.log('Digital items:', digitalItems.length);
+    console.log('Printify items:', printifyItems.length);
+
     // Create line items for Stripe
     const lineItems = items.map((item: any) => ({
       price_data: {
         currency: "usd",
         product_data: {
           name: item.title,
+          metadata: {
+            type: item.type || 'digital',
+            printify_id: item.printify_id || '',
+            item_id: item.id.toString(),
+          },
         },
         unit_amount: Math.round(item.price * 100), // Convert to cents
       },
@@ -43,8 +62,12 @@ serve(async (req) => {
       automatic_tax: {
         enabled: true,
       },
-      success_url: `${req.headers.get("origin")}/cart?success=true`,
+      success_url: `${req.headers.get("origin")}/store?success=true&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${req.headers.get("origin")}/cart?canceled=true`,
+      metadata: {
+        has_printify_items: printifyItems.length > 0 ? 'true' : 'false',
+        printify_items_count: printifyItems.length.toString(),
+      },
     });
 
     return new Response(JSON.stringify({ url: session.url }), {

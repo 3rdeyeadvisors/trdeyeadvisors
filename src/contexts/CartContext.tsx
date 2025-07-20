@@ -1,12 +1,15 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 
 export interface CartItem {
-  id: number;
+  id: number | string;
   title: string;
-  price: string;
+  price: string | number;
   type: string;
   category: string;
   quantity: number;
+  printify_id?: string;
+  variants?: any[];
+  images?: any[];
 }
 
 interface CartState {
@@ -17,15 +20,15 @@ interface CartState {
 
 type CartAction =
   | { type: 'ADD_ITEM'; payload: Omit<CartItem, 'quantity'> }
-  | { type: 'REMOVE_ITEM'; payload: number }
-  | { type: 'UPDATE_QUANTITY'; payload: { id: number; quantity: number } }
+  | { type: 'REMOVE_ITEM'; payload: number | string }
+  | { type: 'UPDATE_QUANTITY'; payload: { id: number | string; quantity: number } }
   | { type: 'CLEAR_CART' }
   | { type: 'LOAD_CART'; payload: CartItem[] };
 
 interface CartContextType extends CartState {
   addItem: (item: Omit<CartItem, 'quantity'>) => void;
-  removeItem: (id: number) => void;
-  updateQuantity: (id: number, quantity: number) => void;
+  removeItem: (id: number | string) => void;
+  updateQuantity: (id: number | string, quantity: number) => void;
   clearCart: () => void;
 }
 
@@ -33,7 +36,12 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 const calculateTotal = (items: CartItem[]): number => {
   return items.reduce((total, item) => {
-    const price = parseFloat(item.price.replace('$', ''));
+    let price: number;
+    if (typeof item.price === 'string') {
+      price = parseFloat(item.price.replace('$', ''));
+    } else {
+      price = item.price;
+    }
     return total + (price * item.quantity);
   }, 0);
 };
@@ -45,11 +53,11 @@ const calculateItemCount = (items: CartItem[]): number => {
 const cartReducer = (state: CartState, action: CartAction): CartState => {
   switch (action.type) {
     case 'ADD_ITEM': {
-      const existingItem = state.items.find(item => item.id === action.payload.id);
+      const existingItem = state.items.find(item => item.id == action.payload.id);
       
       if (existingItem) {
         const updatedItems = state.items.map(item =>
-          item.id === action.payload.id
+          item.id == action.payload.id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
@@ -69,7 +77,7 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
     }
     
     case 'REMOVE_ITEM': {
-      const newItems = state.items.filter(item => item.id !== action.payload);
+      const newItems = state.items.filter(item => item.id != action.payload);
       return {
         items: newItems,
         total: calculateTotal(newItems),
@@ -79,7 +87,7 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
     
     case 'UPDATE_QUANTITY': {
       if (action.payload.quantity <= 0) {
-        const newItems = state.items.filter(item => item.id !== action.payload.id);
+        const newItems = state.items.filter(item => item.id != action.payload.id);
         return {
           items: newItems,
           total: calculateTotal(newItems),
@@ -88,7 +96,7 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
       }
       
       const updatedItems = state.items.map(item =>
-        item.id === action.payload.id
+        item.id == action.payload.id
           ? { ...item, quantity: action.payload.quantity }
           : item
       );
@@ -148,11 +156,11 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     dispatch({ type: 'ADD_ITEM', payload: item });
   };
 
-  const removeItem = (id: number) => {
+  const removeItem = (id: number | string) => {
     dispatch({ type: 'REMOVE_ITEM', payload: id });
   };
 
-  const updateQuantity = (id: number, quantity: number) => {
+  const updateQuantity = (id: number | string, quantity: number) => {
     dispatch({ type: 'UPDATE_QUANTITY', payload: { id, quantity } });
   };
 
