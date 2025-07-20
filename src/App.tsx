@@ -25,6 +25,8 @@ import DefiCalculatorsTutorial from "./pages/DefiCalculatorsTutorial";
 import SpottingScamsTutorial from "./pages/SpottingScamsTutorial";
 import CrossChainBridgingTutorial from "./pages/CrossChainBridgingTutorial";
 import AdvancedDefiProtocolsTutorial from "./pages/AdvancedDefiProtocolsTutorial";
+import PortfolioRebalancingTutorial from "./pages/PortfolioRebalancingTutorial";
+import ReadingDefiMetricsTutorial from "./pages/ReadingDefiMetricsTutorial";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -54,6 +56,8 @@ const App = () => (
                 <Route path="/tutorials/spotting-scams" element={<SpottingScamsTutorial />} />
                 <Route path="/tutorials/cross-chain-bridging" element={<CrossChainBridgingTutorial />} />
                 <Route path="/tutorials/advanced-defi-protocols" element={<AdvancedDefiProtocolsTutorial />} />
+                <Route path="/tutorials/portfolio-rebalancing" element={<PortfolioRebalancingTutorial />} />
+                <Route path="/tutorials/reading-defi-metrics" element={<ReadingDefiMetricsTutorial />} />
                 <Route path="/store" element={<Store />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/auth" element={<Auth />} />
