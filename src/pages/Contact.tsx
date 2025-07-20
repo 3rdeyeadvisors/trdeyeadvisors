@@ -22,17 +22,28 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      toast({
-        title: "Message Sent!",
-        description: "Thank you for reaching out. We'll respond within 24 hours.",
+      const response = await fetch('/functions/v1/send-contact-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
       });
-      
-      setFormData({ name: "", email: "", subject: "", message: "" });
+
+      const result = await response.json();
+
+      if (result.success) {
+        toast({
+          title: "Message Sent!",
+          description: "Thank you for reaching out. We'll respond within 24 hours.",
+        });
+        setFormData({ name: "", email: "", subject: "", message: "" });
+      } else {
+        throw new Error(result.error || 'Failed to send message');
+      }
     } catch (error) {
+      console.error('Contact form error:', error);
       toast({
         title: "Failed to Send",
         description: "Something went wrong. Please try again.",
@@ -212,7 +223,7 @@ const Contact = () => {
               <div className="space-y-3">
                 <Button variant="outline" className="w-full justify-start font-consciousness">
                   <Mail className="w-4 h-4 mr-3" />
-                  hello@3rdeyeadvisors.com
+                  support@3rdeyeadvisors.com
                 </Button>
                 
                 <Button variant="outline" className="w-full justify-start font-consciousness">

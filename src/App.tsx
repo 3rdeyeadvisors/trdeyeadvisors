@@ -36,6 +36,8 @@ import DaoParticipationTutorial from "./pages/DaoParticipationTutorial";
 import NotFound from "./pages/NotFound";
 import Profile from "./pages/Profile";
 import BlogPost from "./pages/BlogPost";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
 
 const queryClient = new QueryClient();
 
@@ -78,6 +80,8 @@ const App = () => (
                   <Route path="/auth" element={<Auth />} />
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/profile" element={<Profile />} />
+                  <Route path="/privacy" element={<PrivacyPolicy />} />
+                  <Route path="/terms" element={<TermsOfService />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </Layout>
