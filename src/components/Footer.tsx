@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Eye, Mail, Twitter, Github } from "lucide-react";
+import { Mail, Twitter, Github } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -9,7 +9,6 @@ const Footer = () => {
           {/* Brand */}
           <div className="md:col-span-1">
             <Link to="/" className="flex items-center space-x-2 mb-4">
-              <Eye className="w-6 h-6 text-primary" />
               <span className="font-consciousness font-bold text-xl">3rdeyeadvisors</span>
             </Link>
             <p className="text-sm text-muted-foreground font-consciousness leading-relaxed">
