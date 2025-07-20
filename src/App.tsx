@@ -19,6 +19,8 @@ import ModuleViewer from "./pages/ModuleViewer";
 import Dashboard from "./pages/Dashboard";
 import Analytics from "./pages/Analytics";
 import VideoTutorials from "./pages/VideoTutorials";
+import WalletSetupTutorial from "./pages/WalletSetupTutorial";
+import FirstDexSwapTutorial from "./pages/FirstDexSwapTutorial";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -42,6 +44,8 @@ const App = () => (
                 <Route path="/resources" element={<Resources />} />
                 <Route path="/analytics" element={<Analytics />} />
                 <Route path="/tutorials" element={<VideoTutorials />} />
+                <Route path="/tutorials/wallet-setup" element={<WalletSetupTutorial />} />
+                <Route path="/tutorials/first-dex-swap" element={<FirstDexSwapTutorial />} />
                 <Route path="/store" element={<Store />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/auth" element={<Auth />} />

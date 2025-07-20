@@ -222,8 +222,13 @@ const VideoTutorials = () => {
                           className="w-full group-hover:bg-primary group-hover:text-white transition-all"
                           variant="outline"
                           onClick={() => {
-                            // Navigate to specific tutorial
-                            console.log(`Opening tutorial: ${video.id}`);
+                            const tutorialRoutes: { [key: string]: string } = {
+                              "wallet-setup": "/tutorials/wallet-setup",
+                              "first-dex-swap": "/tutorials/first-dex-swap",
+                              "defi-calculators": "/tutorials", // TODO: Add route
+                              "spotting-scams": "/tutorials" // TODO: Add route
+                            };
+                            window.location.href = tutorialRoutes[video.id] || "/tutorials";
                           }}
                         >
                           <Play className="h-4 w-4 mr-2" />

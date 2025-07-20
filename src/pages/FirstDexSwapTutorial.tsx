@@ -1,0 +1,978 @@
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { 
+  ArrowLeft, 
+  ArrowRight, 
+  ArrowLeftRight, 
+  Shield, 
+  AlertTriangle, 
+  CheckCircle, 
+  Globe,
+  Search,
+  Wallet,
+  Fuel,
+  Clock,
+  DollarSign,
+  TrendingUp,
+  Eye,
+  RefreshCw
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+
+const FirstDexSwapTutorial = () => {
+  const [currentStep, setCurrentStep] = useState(1);
+  const [completedSteps, setCompletedSteps] = useState<number[]>([]);
+  const [selectedDex, setSelectedDex] = useState("uniswap");
+  const { toast } = useToast();
+
+  const totalSteps = 8;
+  const progress = (currentStep / totalSteps) * 100;
+
+  const steps = [
+    {
+      id: 1,
+      title: "Choose Your DEX",
+      icon: Globe,
+      duration: "2 min",
+      content: {
+        overview: "Select a reputable decentralized exchange. We'll use Uniswap for this tutorial.",
+        dexOptions: [
+          {
+            name: "Uniswap",
+            network: "Ethereum/Polygon",
+            fees: "0.3%",
+            difficulty: "Beginner",
+            pros: ["Most popular", "High liquidity", "User-friendly"],
+            cons: ["Can have high gas fees on Ethereum"],
+            recommended: true,
+            url: "app.uniswap.org"
+          },
+          {
+            name: "SushiSwap", 
+            network: "Multi-chain",
+            fees: "0.25%",
+            difficulty: "Beginner",
+            pros: ["Lower fees", "Multi-chain", "Good for smaller amounts"],
+            cons: ["Less liquidity than Uniswap"],
+            recommended: false,
+            url: "app.sushi.com"
+          },
+          {
+            name: "PancakeSwap",
+            network: "BNB Chain",
+            fees: "0.25%", 
+            difficulty: "Beginner",
+            pros: ["Very low fees", "Fast transactions", "Great for beginners"],
+            cons: ["Only on BNB Chain", "Different tokens"],
+            recommended: false,
+            url: "pancakeswap.finance"
+          }
+        ]
+      }
+    },
+    {
+      id: 2,
+      title: "Connect Your Wallet",
+      icon: Wallet,
+      duration: "1 min",
+      content: {
+        overview: "Safely connect your MetaMask wallet to the DEX.",
+        instructions: [
+          "Navigate to app.uniswap.org (always check the URL!)",
+          "Click 'Connect Wallet' in the top right corner",
+          "Select 'MetaMask' from the wallet options",
+          "Review the connection request in MetaMask popup",
+          "Click 'Connect' to approve the connection",
+          "Verify your wallet address appears in the interface"
+        ],
+        safetyChecks: [
+          "Verify the URL is exactly 'app.uniswap.org'",
+          "Check for the secure lock icon in your browser",
+          "Never enter your seed phrase on any website",
+          "Only connect when you intend to trade"
+        ]
+      }
+    },
+    {
+      id: 3,
+      title: "Check Your Network",
+      icon: Globe,
+      duration: "1 min",
+      content: {
+        overview: "Ensure you're on the right network for lower fees and the tokens you want.",
+        networkOptions: [
+          {
+            name: "Ethereum Mainnet",
+            symbol: "ETH",
+            fees: "High ($5-50+)",
+            speed: "15 seconds",
+            pros: ["Most tokens available", "Highest liquidity"],
+            cons: ["Very expensive for small trades"],
+            recommended: false
+          },
+          {
+            name: "Polygon",
+            symbol: "MATIC", 
+            fees: "Very Low ($0.01-0.10)",
+            speed: "2 seconds",
+            pros: ["Almost free trades", "Fast", "Many tokens"],
+            cons: ["Need MATIC for gas", "Bridging required"],
+            recommended: true
+          }
+        ],
+        switchInstructions: [
+          "Click the network name in MetaMask (top of popup)",
+          "Select 'Polygon Mainnet' from the dropdown",
+          "Wait for the network to switch",
+          "Refresh the Uniswap page if needed",
+          "Verify Uniswap shows 'Polygon' network"
+        ]
+      }
+    },
+    {
+      id: 4,
+      title: "Get Some Native Token",
+      icon: Fuel,
+      duration: "3 min",
+      content: {
+        overview: "You need native tokens (MATIC on Polygon) to pay for transaction fees.",
+        requirements: {
+          polygon: {
+            token: "MATIC",
+            amount: "0.1 - 1 MATIC",
+            cost: "$0.05 - $0.50",
+            purpose: "Gas fees for transactions"
+          }
+        },
+        howToGet: [
+          {
+            method: "Bridge from Ethereum",
+            steps: [
+              "Use the official Polygon bridge (wallet.polygon.technology)",
+              "Connect your MetaMask wallet", 
+              "Send a small amount of ETH to get MATIC",
+              "Wait 7-8 minutes for the bridge to complete"
+            ],
+            cost: "Ethereum gas fee (~$5-20)",
+            time: "7-8 minutes"
+          },
+          {
+            method: "Buy directly on exchange",
+            steps: [
+              "Buy MATIC on Coinbase, Binance, or other exchange",
+              "Withdraw to your MetaMask address on Polygon network",
+              "Double-check you're withdrawing on Polygon network"
+            ],
+            cost: "Exchange withdrawal fee (~$1-3)",
+            time: "5-10 minutes"
+          },
+          {
+            method: "Use a faucet (free)",
+            steps: [
+              "Visit a Polygon faucet website",
+              "Enter your wallet address",
+              "Complete any required verification",
+              "Receive small amount of free MATIC"
+            ],
+            cost: "Free",
+            time: "1-2 minutes"
+          }
+        ]
+      }
+    },
+    {
+      id: 5,
+      title: "Choose Your Trade",
+      icon: ArrowLeftRight,
+      duration: "2 min", 
+      content: {
+        overview: "Select the tokens you want to swap. Start small for your first trade!",
+        tradeExample: {
+          from: "USDC",
+          to: "WETH", 
+          amount: "10 USDC",
+          estimatedReceive: "~0.003 WETH",
+          fees: "~0.03 USDC (0.3%)"
+        },
+        beginnerTips: [
+          "Start with stablecoins (USDC, USDT) for predictable values",
+          "Trade small amounts first ($10-50) to learn",
+          "Avoid obscure tokens with very low liquidity",
+          "Check token addresses to avoid fake tokens"
+        ],
+        tokenSelection: [
+          "Click 'Select token' dropdown",
+          "Search for token name or paste contract address",
+          "Verify token details match what you expect",
+          "Check liquidity (higher is better)",
+          "Choose reputable tokens for first trades"
+        ]
+      }
+    },
+    {
+      id: 6,
+      title: "Review Transaction Details",
+      icon: Search,
+      duration: "3 min",
+      content: {
+        overview: "Carefully check all details before confirming. This step prevents costly mistakes!",
+        reviewChecklist: [
+          {
+            item: "Token Amounts",
+            description: "Verify you're trading the right amount",
+            redFlag: "Amount much larger than intended"
+          },
+          {
+            item: "Token Addresses", 
+            description: "Confirm tokens are real, not fake copies",
+            redFlag: "Unknown or suspicious token addresses"
+          },
+          {
+            item: "Exchange Rate",
+            description: "Compare to other exchanges (should be similar)",
+            redFlag: "Rate much worse than expected"
+          },
+          {
+            item: "Price Impact",
+            description: "Should be <1% for liquid pairs",
+            redFlag: "High price impact (>3%)"
+          },
+          {
+            item: "Minimum Received",
+            description: "Lowest amount you'll get if price moves",
+            redFlag: "Much lower than expected"
+          },
+          {
+            item: "Network Fees",
+            description: "Gas cost in native token (MATIC)",
+            redFlag: "Unusually high gas fees"
+          }
+        ],
+        settingsToCheck: [
+          {
+            setting: "Slippage Tolerance",
+            recommended: "0.5% - 1%",
+            description: "How much price can change during trade"
+          },
+          {
+            setting: "Transaction Deadline", 
+            recommended: "20 minutes",
+            description: "How long before trade expires"
+          }
+        ]
+      }
+    },
+    {
+      id: 7,
+      title: "Execute the Swap",
+      icon: RefreshCw,
+      duration: "2 min",
+      content: {
+        overview: "Complete your first DEX swap! Follow each step carefully.",
+        executionSteps: [
+          {
+            step: "Click 'Swap' button",
+            description: "This opens the confirmation dialog",
+            tip: "Double-check amounts one more time"
+          },
+          {
+            step: "Review Uniswap popup",
+            description: "Final confirmation of trade details",
+            tip: "Look for any warnings or unusual information"
+          },
+          {
+            step: "Click 'Confirm Swap'",
+            description: "This sends request to MetaMask",
+            tip: "MetaMask popup will appear"
+          },
+          {
+            step: "Review MetaMask popup",
+            description: "Check gas fee and transaction details",
+            tip: "Gas fee should match what Uniswap showed"
+          },
+          {
+            step: "Click 'Confirm' in MetaMask",
+            description: "Transaction is sent to blockchain",
+            tip: "You'll see pending transaction notification"
+          },
+          {
+            step: "Wait for confirmation",
+            description: "Usually 1-3 minutes on Polygon",
+            tip: "Don't close browser or disconnect wallet"
+          }
+        ],
+        troubleshooting: [
+          {
+            problem: "Transaction failed",
+            solutions: ["Check gas balance", "Reduce slippage", "Try again later"]
+          },
+          {
+            problem: "MetaMask not responding",
+            solutions: ["Refresh page", "Disconnect/reconnect wallet", "Check browser extensions"]
+          },
+          {
+            problem: "Price impact too high",
+            solutions: ["Trade smaller amount", "Use different token pair", "Check liquidity"]
+          }
+        ]
+      }
+    },
+    {
+      id: 8,
+      title: "Verify & Secure",
+      icon: CheckCircle,
+      duration: "2 min",
+      content: {
+        overview: "Confirm your trade was successful and secure your tokens.",
+        verificationSteps: [
+          "Check your wallet balance for new tokens",
+          "Verify transaction on Polygonscan.com", 
+          "Take a screenshot for your records",
+          "Disconnect wallet from DEX when done",
+          "Consider moving large amounts to cold storage"
+        ],
+        transactionExplorer: {
+          name: "Polygonscan",
+          url: "polygonscan.com",
+          whatToCheck: [
+            "Transaction status (Success/Failed)",
+            "Gas fees paid",
+            "Tokens transferred",
+            "Block confirmation number"
+          ]
+        },
+        securityPractices: [
+          {
+            practice: "Disconnect Wallet",
+            reason: "Reduces risk if site is compromised later",
+            how: "Click wallet icon → Disconnect"
+          },
+          {
+            practice: "Monitor Approvals",
+            reason: "DEX now has permission to spend your tokens",
+            how: "Use revoke.cash to check/revoke approvals"
+          },
+          {
+            practice: "Record Transactions",
+            reason: "Important for taxes and tracking",
+            how: "Save transaction hash and screenshot"
+          }
+        ],
+        congratulationsMessage: "🎉 Congratulations! You've completed your first DEX swap. You're now part of the DeFi revolution!"
+      }
+    }
+  ];
+
+  const currentStepData = steps.find(step => step.id === currentStep);
+
+  const handleNext = () => {
+    if (currentStep < totalSteps) {
+      setCompletedSteps(prev => [...prev, currentStep]);
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
+  const handleStepComplete = () => {
+    setCompletedSteps(prev => [...prev, currentStep]);
+    toast({
+      title: "Step completed!",
+      description: `You've completed step ${currentStep}: ${currentStepData?.title}`,
+    });
+  };
+
+  const isStepCompleted = (stepId: number) => completedSteps.includes(stepId);
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
+      <div className="container mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="p-2 rounded-lg bg-primary/10">
+              <ArrowLeftRight className="h-6 w-6 text-primary" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold">Your First DEX Swap</h1>
+              <p className="text-muted-foreground">Step-by-step guide to safe decentralized trading</p>
+            </div>
+          </div>
+
+          {/* Progress */}
+          <div className="space-y-2">
+            <div className="flex justify-between text-sm">
+              <span>Step {currentStep} of {totalSteps}</span>
+              <span>{Math.round(progress)}% Complete</span>
+            </div>
+            <Progress value={progress} className="h-2" />
+          </div>
+        </div>
+
+        {/* Step Navigation */}
+        <div className="flex flex-wrap gap-2 mb-8">
+          {steps.map((step) => {
+            const StepIcon = step.icon;
+            const completed = isStepCompleted(step.id);
+            const current = step.id === currentStep;
+            
+            return (
+              <Button
+                key={step.id}
+                variant={current ? "default" : completed ? "secondary" : "outline"}
+                size="sm"
+                onClick={() => setCurrentStep(step.id)}
+                className={`flex items-center gap-2 ${completed ? "bg-green-100 text-green-700 hover:bg-green-200" : ""}`}
+              >
+                <StepIcon className="h-4 w-4" />
+                <span className="hidden sm:inline">{step.title}</span>
+                <span className="sm:hidden">{step.id}</span>
+                {completed && <CheckCircle className="h-3 w-3" />}
+              </Button>
+            );
+          })}
+        </div>
+
+        {/* Current Step Content */}
+        {currentStepData && (
+          <Card className="mb-8">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-primary/10">
+                    <currentStepData.icon className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <CardTitle>{currentStepData.title}</CardTitle>
+                    <CardDescription>
+                      Estimated time: {currentStepData.duration}
+                    </CardDescription>
+                  </div>
+                </div>
+                <Badge variant={isStepCompleted(currentStep) ? "default" : "secondary"}>
+                  {isStepCompleted(currentStep) ? "Completed" : "In Progress"}
+                </Badge>
+              </div>
+            </CardHeader>
+
+            <CardContent className="space-y-6">
+              <p className="text-muted-foreground">{currentStepData.content.overview}</p>
+
+              {/* Step 1: Choose DEX */}
+              {currentStep === 1 && (
+                <div className="grid gap-4">
+                  {currentStepData.content.dexOptions?.map((dex, index) => (
+                    <Card key={index} className={`${dex.recommended ? "border-primary bg-primary/5" : ""}`}>
+                      <CardHeader className="pb-3">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <CardTitle className="text-lg">{dex.name}</CardTitle>
+                            <CardDescription>{dex.network} • {dex.fees} fees</CardDescription>
+                          </div>
+                          <div className="flex gap-2">
+                            <Badge variant="outline">{dex.difficulty}</Badge>
+                            {dex.recommended && <Badge>Recommended</Badge>}
+                          </div>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="grid md:grid-cols-2 gap-4 mb-3">
+                          <div>
+                            <h4 className="font-medium text-green-600 mb-2">Pros:</h4>
+                            <ul className="text-sm space-y-1">
+                              {dex.pros.map((pro, i) => (
+                                <li key={i} className="flex items-center gap-2">
+                                  <CheckCircle className="h-3 w-3 text-green-500" />
+                                  {pro}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                          <div>
+                            <h4 className="font-medium text-orange-600 mb-2">Cons:</h4>
+                            <ul className="text-sm space-y-1">
+                              {dex.cons.map((con, i) => (
+                                <li key={i} className="flex items-center gap-2">
+                                  <AlertTriangle className="h-3 w-3 text-orange-500" />
+                                  {con}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <Globe className="h-4 w-4" />
+                          <code className="bg-gray-100 px-2 py-1 rounded">{dex.url}</code>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
+
+              {/* Step 2: Connect Wallet */}
+              {currentStep === 2 && (
+                <div className="space-y-4">
+                  <div className="space-y-3">
+                    <h3 className="font-semibold">Connection Steps:</h3>
+                    <ol className="space-y-2">
+                      {currentStepData.content.instructions?.map((instruction, index) => (
+                        <li key={index} className="flex items-start gap-3">
+                          <Badge variant="outline" className="text-xs min-w-6 h-6 flex items-center justify-center">
+                            {index + 1}
+                          </Badge>
+                          <span className="text-sm">{instruction}</span>
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+
+                  <Alert className="border-orange-200 bg-orange-50">
+                    <Shield className="h-4 w-4 text-orange-600" />
+                    <AlertDescription className="text-orange-800">
+                      <div className="space-y-2">
+                        <p className="font-medium">Security Checklist:</p>
+                        <ul className="space-y-1 text-sm">
+                          {currentStepData.content.safetyChecks?.map((check, index) => (
+                            <li key={index} className="flex items-start gap-2">
+                              <CheckCircle className="h-3 w-3 text-orange-600 mt-0.5 flex-shrink-0" />
+                              <span>{check}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </AlertDescription>
+                  </Alert>
+                </div>
+              )}
+
+              {/* Step 3: Network Selection */}
+              {currentStep === 3 && (
+                <div className="space-y-4">
+                  <div className="grid gap-4">
+                    {currentStepData.content.networkOptions?.map((network, index) => (
+                      <Card key={index} className={`${network.recommended ? "border-primary bg-primary/5" : ""}`}>
+                        <CardHeader className="pb-3">
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <CardTitle className="text-lg">{network.name}</CardTitle>
+                              <CardDescription>Gas fees: {network.fees} • Speed: {network.speed}</CardDescription>
+                            </div>
+                            {network.recommended && <Badge>Recommended for beginners</Badge>}
+                          </div>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="grid md:grid-cols-2 gap-4">
+                            <div>
+                              <h4 className="font-medium text-green-600 mb-2">Pros:</h4>
+                              <ul className="text-sm space-y-1">
+                                {network.pros.map((pro, i) => (
+                                  <li key={i} className="flex items-center gap-2">
+                                    <CheckCircle className="h-3 w-3 text-green-500" />
+                                    {pro}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                            <div>
+                              <h4 className="font-medium text-orange-600 mb-2">Cons:</h4>
+                              <ul className="text-sm space-y-1">
+                                {network.cons.map((con, i) => (
+                                  <li key={i} className="flex items-center gap-2">
+                                    <AlertTriangle className="h-3 w-3 text-orange-500" />
+                                    {con}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+
+                  <Card className="bg-blue-50 border-blue-200">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-lg text-blue-800">How to Switch Networks</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <ol className="space-y-2 text-sm">
+                        {currentStepData.content.switchInstructions?.map((instruction, index) => (
+                          <li key={index} className="flex items-start gap-3">
+                            <Badge variant="outline" className="text-xs min-w-6 h-6 flex items-center justify-center">
+                              {index + 1}
+                            </Badge>
+                            <span>{instruction}</span>
+                          </li>
+                        ))}
+                      </ol>
+                    </CardContent>
+                  </Card>
+                </div>
+              )}
+
+              {/* Step 4: Get Native Token */}
+              {currentStep === 4 && (
+                <div className="space-y-4">
+                  <Card className="bg-blue-50 border-blue-200">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-lg text-blue-800 flex items-center gap-2">
+                        <Fuel className="h-5 w-5" />
+                        Gas Requirements
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <p className="font-medium">Token needed:</p>
+                          <p className="text-blue-700">{currentStepData.content.requirements?.polygon.token}</p>
+                        </div>
+                        <div>
+                          <p className="font-medium">Amount needed:</p>
+                          <p className="text-blue-700">{currentStepData.content.requirements?.polygon.amount}</p>
+                        </div>
+                        <div>
+                          <p className="font-medium">Approximate cost:</p>
+                          <p className="text-blue-700">{currentStepData.content.requirements?.polygon.cost}</p>
+                        </div>
+                        <div>
+                          <p className="font-medium">Used for:</p>
+                          <p className="text-blue-700">{currentStepData.content.requirements?.polygon.purpose}</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <div className="space-y-3">
+                    <h3 className="font-semibold">How to Get MATIC:</h3>
+                    <div className="grid gap-4">
+                      {currentStepData.content.howToGet?.map((method, index) => (
+                        <Card key={index}>
+                          <CardHeader className="pb-3">
+                            <div className="flex items-center justify-between">
+                              <CardTitle className="text-lg">{method.method}</CardTitle>
+                              <div className="flex gap-2">
+                                <Badge variant="outline">Cost: {method.cost}</Badge>
+                                <Badge variant="outline">Time: {method.time}</Badge>
+                              </div>
+                            </div>
+                          </CardHeader>
+                          <CardContent>
+                            <ol className="space-y-1 text-sm">
+                              {method.steps.map((step, i) => (
+                                <li key={i} className="flex items-start gap-3">
+                                  <Badge variant="outline" className="text-xs min-w-6 h-6 flex items-center justify-center">
+                                    {i + 1}
+                                  </Badge>
+                                  <span>{step}</span>
+                                </li>
+                              ))}
+                            </ol>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 5: Choose Trade */}
+              {currentStep === 5 && (
+                <div className="space-y-4">
+                  <Card className="bg-green-50 border-green-200">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-lg text-green-800">Example Trade</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <p className="font-medium">From:</p>
+                          <p className="text-green-700">{currentStepData.content.tradeExample?.amount}</p>
+                        </div>
+                        <div>
+                          <p className="font-medium">To:</p>
+                          <p className="text-green-700">{currentStepData.content.tradeExample?.estimatedReceive}</p>
+                        </div>
+                        <div>
+                          <p className="font-medium">Trading Fee:</p>
+                          <p className="text-green-700">{currentStepData.content.tradeExample?.fees}</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <div className="space-y-3">
+                    <h3 className="font-semibold">Token Selection Process:</h3>
+                    <ol className="space-y-2">
+                      {currentStepData.content.tokenSelection?.map((step, index) => (
+                        <li key={index} className="flex items-start gap-3">
+                          <Badge variant="outline" className="text-xs min-w-6 h-6 flex items-center justify-center">
+                            {index + 1}
+                          </Badge>
+                          <span className="text-sm">{step}</span>
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+
+                  <div className="space-y-2">
+                    <h4 className="font-medium text-blue-600">Beginner Tips:</h4>
+                    {currentStepData.content.beginnerTips?.map((tip, index) => (
+                      <div key={index} className="flex items-start gap-2 text-sm">
+                        <TrendingUp className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                        <span>{tip}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Step 6: Review Transaction */}
+              {currentStep === 6 && (
+                <div className="space-y-4">
+                  <Alert className="border-red-200 bg-red-50">
+                    <Eye className="h-4 w-4 text-red-600" />
+                    <AlertDescription className="text-red-800">
+                      <strong>CRITICAL:</strong> Always review these details carefully. Once confirmed, transactions cannot be reversed!
+                    </AlertDescription>
+                  </Alert>
+
+                  <div className="space-y-3">
+                    <h3 className="font-semibold">Pre-Transaction Checklist:</h3>
+                    <div className="space-y-3">
+                      {currentStepData.content.reviewChecklist?.map((item, index) => (
+                        <Card key={index}>
+                          <CardContent className="p-4">
+                            <div className="flex items-center justify-between mb-2">
+                              <h4 className="font-medium">{item.item}</h4>
+                              <CheckCircle className="h-4 w-4 text-green-500" />
+                            </div>
+                            <p className="text-sm text-muted-foreground mb-2">{item.description}</p>
+                            <div className="flex items-center gap-2 text-sm text-red-600">
+                              <AlertTriangle className="h-3 w-3" />
+                              <span>Red flag: {item.redFlag}</span>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="font-semibold">Settings to Verify:</h3>
+                    <div className="grid gap-3">
+                      {currentStepData.content.settingsToCheck?.map((setting, index) => (
+                        <Card key={index}>
+                          <CardContent className="p-4">
+                            <div className="flex items-center justify-between mb-2">
+                              <h4 className="font-medium">{setting.setting}</h4>
+                              <Badge variant="outline">{setting.recommended}</Badge>
+                            </div>
+                            <p className="text-sm text-muted-foreground">{setting.description}</p>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 7: Execute Swap */}
+              {currentStep === 7 && (
+                <div className="space-y-4">
+                  <div className="space-y-3">
+                    <h3 className="font-semibold">Execution Process:</h3>
+                    <div className="space-y-3">
+                      {currentStepData.content.executionSteps?.map((step, index) => (
+                        <Card key={index}>
+                          <CardContent className="p-4">
+                            <div className="flex items-start gap-3 mb-2">
+                              <Badge variant="outline" className="text-xs min-w-6 h-6 flex items-center justify-center">
+                                {index + 1}
+                              </Badge>
+                              <div className="flex-1">
+                                <h4 className="font-medium">{step.step}</h4>
+                                <p className="text-sm text-muted-foreground">{step.description}</p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2 text-sm text-blue-600 ml-9">
+                              <TrendingUp className="h-3 w-3" />
+                              <span>Tip: {step.tip}</span>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="font-semibold">Common Issues & Solutions:</h3>
+                    <div className="grid gap-3">
+                      {currentStepData.content.troubleshooting?.map((issue, index) => (
+                        <Card key={index}>
+                          <CardContent className="p-4">
+                            <h4 className="font-medium text-orange-600 mb-2">{issue.problem}</h4>
+                            <ul className="space-y-1 text-sm">
+                              {issue.solutions.map((solution, i) => (
+                                <li key={i} className="flex items-center gap-2">
+                                  <CheckCircle className="h-3 w-3 text-green-500" />
+                                  {solution}
+                                </li>
+                              ))}
+                            </ul>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 8: Verify & Secure */}
+              {currentStep === 8 && (
+                <div className="space-y-6">
+                  <div className="space-y-3">
+                    <h3 className="font-semibold">Post-Transaction Verification:</h3>
+                    <ol className="space-y-2">
+                      {currentStepData.content.verificationSteps?.map((step, index) => (
+                        <li key={index} className="flex items-start gap-3">
+                          <Badge variant="outline" className="text-xs min-w-6 h-6 flex items-center justify-center">
+                            {index + 1}
+                          </Badge>
+                          <span className="text-sm">{step}</span>
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+
+                  <Card className="bg-blue-50 border-blue-200">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-lg text-blue-800 flex items-center gap-2">
+                        <Globe className="h-5 w-5" />
+                        Transaction Explorer
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm mb-3">
+                        Visit <code className="bg-white px-2 py-1 rounded">{currentStepData.content.transactionExplorer?.url}</code> to verify your transaction.
+                      </p>
+                      <div className="space-y-2">
+                        <h4 className="font-medium">What to check:</h4>
+                        <ul className="space-y-1 text-sm">
+                          {currentStepData.content.transactionExplorer?.whatToCheck.map((item, index) => (
+                            <li key={index} className="flex items-center gap-2">
+                              <CheckCircle className="h-3 w-3 text-blue-500" />
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <div className="space-y-3">
+                    <h3 className="font-semibold">Security Best Practices:</h3>
+                    <div className="grid gap-3">
+                      {currentStepData.content.securityPractices?.map((practice, index) => (
+                        <Card key={index}>
+                          <CardContent className="p-4">
+                            <h4 className="font-medium mb-2">{practice.practice}</h4>
+                            <p className="text-sm text-muted-foreground mb-2">{practice.reason}</p>
+                            <div className="flex items-center gap-2 text-sm text-blue-600">
+                              <TrendingUp className="h-3 w-3" />
+                              <span>How: {practice.how}</span>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+
+                  <Card className="bg-green-50 border-green-200">
+                    <CardContent className="p-6 text-center">
+                      <h3 className="text-xl font-semibold text-green-800 mb-2">
+                        {currentStepData.content.congratulationsMessage}
+                      </h3>
+                      <p className="text-green-700">
+                        You now know how to safely trade on decentralized exchanges. Practice with small amounts and always prioritize security!
+                      </p>
+                    </CardContent>
+                  </Card>
+                </div>
+              )}
+
+              {/* Step Navigation */}
+              <div className="flex items-center justify-between pt-6 border-t">
+                <Button
+                  variant="outline"
+                  onClick={handlePrevious}
+                  disabled={currentStep === 1}
+                >
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Previous
+                </Button>
+
+                <div className="flex gap-2">
+                  {!isStepCompleted(currentStep) && (
+                    <Button
+                      variant="secondary"
+                      onClick={handleStepComplete}
+                    >
+                      <CheckCircle className="h-4 w-4 mr-2" />
+                      Mark Complete
+                    </Button>
+                  )}
+                  
+                  <Button
+                    onClick={handleNext}
+                    disabled={currentStep === totalSteps}
+                  >
+                    {currentStep === totalSteps ? "Finish Tutorial" : "Next Step"}
+                    <ArrowRight className="h-4 w-4 ml-2" />
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Completion Message */}
+        {completedSteps.length === totalSteps && (
+          <Card className="bg-green-50 border-green-200">
+            <CardHeader>
+              <CardTitle className="text-green-800 flex items-center gap-2">
+                <CheckCircle className="h-6 w-6" />
+                Congratulations! First DEX Swap Complete
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-green-700 mb-4">
+                You've successfully completed your first decentralized exchange trade! 
+                You're now ready to explore the exciting world of DeFi trading.
+              </p>
+              <div className="flex gap-2">
+                <Button asChild>
+                  <a href="/tutorials">Back to Tutorials</a>
+                </Button>
+                <Button variant="outline" asChild>
+                  <a href="/courses">Continue Learning</a>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default FirstDexSwapTutorial;
