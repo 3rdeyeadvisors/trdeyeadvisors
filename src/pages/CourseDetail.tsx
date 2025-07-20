@@ -11,6 +11,7 @@ import { AuthModal } from "@/components/auth/AuthModal";
 import { ArrowLeft, BookOpen, CheckCircle, Clock, Play, Grid3X3 } from "lucide-react";
 import { getCourseContent } from "@/data/courseContent";
 import { EnhancedModuleNavigation } from "@/components/course/EnhancedModuleNavigation";
+import { CommunityTabs } from "@/components/community/CommunityTabs";
 import { useToast } from "@/hooks/use-toast";
 
 const CourseDetail = () => {
@@ -240,6 +241,14 @@ const CourseDetail = () => {
             </p>
           </Card>
         )}
+
+        {/* Community Section */}
+        <div className="mt-12">
+          <h2 className="text-2xl font-consciousness font-semibold text-foreground mb-6">
+            Community
+          </h2>
+          <CommunityTabs courseId={course.id} />
+        </div>
       </div>
 
       <AuthModal 
