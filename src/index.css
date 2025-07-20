@@ -89,3 +89,63 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Enhanced Mobile Optimization */
+@layer utilities {
+  /* Mobile-first responsive spacing */
+  .mobile-padding {
+    @apply px-4 sm:px-6 md:px-8;
+  }
+  
+  /* Touch-friendly buttons */
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px];
+  }
+  
+  /* Mobile navigation improvements */
+  .mobile-nav {
+    @apply safe-area-inset;
+  }
+  
+  /* Better mobile typography */
+  .mobile-text {
+    @apply text-base leading-relaxed;
+  }
+  
+  /* Mobile-optimized cards */
+  .mobile-card {
+    @apply p-4 rounded-lg shadow-sm;
+  }
+  
+  /* Safe area handling for mobile */
+  .safe-area-inset {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 768px) {
+  /* Better mobile scrolling */
+  html {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Prevent zoom on input focus */
+  input, select, textarea {
+    font-size: 16px;
+  }
+  
+  /* Touch-friendly form elements */
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Mobile-optimized animations */
+  .animate-cosmic-pulse,
+  .animate-consciousness-glow {
+    animation-duration: 3s;
+  }
+}
