@@ -33,6 +33,7 @@ import NftDefiTutorial from "./pages/NftDefiTutorial";
 import DaoParticipationTutorial from "./pages/DaoParticipationTutorial";
 import NotFound from "./pages/NotFound";
 import Profile from "./pages/Profile";
+import BlogPost from "./pages/BlogPost";
 
 const queryClient = new QueryClient();
 
@@ -52,6 +53,7 @@ const App = () => (
                 <Route path="/courses/:courseId" element={<CourseDetail />} />
                 <Route path="/courses/:courseId/module/:moduleId" element={<ModuleViewer />} />
                 <Route path="/blog" element={<Blog />} />
+                <Route path="/blog/:id" element={<BlogPost />} />
                 <Route path="/resources" element={<Resources />} />
                 <Route path="/analytics" element={<Analytics />} />
                 <Route path="/tutorials" element={<VideoTutorials />} />

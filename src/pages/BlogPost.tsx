@@ -1,0 +1,268 @@
+import { useParams, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { ArrowLeft, Calendar, Clock, User, Share, BookOpen } from "lucide-react";
+import { getBlogPost, type BlogPost } from "@/data/blogContent";
+import { CommunityHub } from "@/components/community/CommunityHub";
+import ReactMarkdown from "react-markdown";
+
+const BlogPost = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [post, setPost] = useState<BlogPost | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const postId = parseInt(id || "0");
+    const foundPost = getBlogPost(postId);
+    
+    if (foundPost) {
+      setPost(foundPost);
+    } else {
+      // Redirect to blog if post not found
+      navigate("/blog");
+      return;
+    }
+    
+    setLoading(false);
+  }, [id, navigate]);
+
+  const getCategoryColor = (category: string) => {
+    switch (category) {
+      case "Education": return "bg-awareness/20 text-awareness border-awareness/30";
+      case "Security": return "bg-primary/20 text-primary border-primary/30";
+      case "Tools": return "bg-accent/20 text-accent border-accent/30";
+      case "Analysis": return "bg-secondary/40 text-secondary-foreground border-secondary";
+      default: return "bg-muted/20 text-muted-foreground border-border";
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen py-20">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <div className="animate-pulse space-y-6">
+            <div className="h-8 bg-muted rounded w-1/4"></div>
+            <div className="h-12 bg-muted rounded w-3/4"></div>
+            <div className="h-6 bg-muted rounded w-1/2"></div>
+            <div className="space-y-3">
+              <div className="h-4 bg-muted rounded"></div>
+              <div className="h-4 bg-muted rounded"></div>
+              <div className="h-4 bg-muted rounded w-2/3"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!post) {
+    return null;
+  }
+
+  return (
+    <div className="min-h-screen py-20">
+      <div className="container mx-auto px-4 max-w-4xl">
+        {/* Back Navigation */}
+        <Button
+          variant="ghost"
+          onClick={() => navigate("/blog")}
+          className="mb-8 hover:text-primary"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back to Blog
+        </Button>
+
+        {/* Article Header */}
+        <Card className="p-8 mb-8">
+          {/* Category and Tags */}
+          <div className="flex flex-wrap items-center gap-2 mb-6">
+            <Badge className={getCategoryColor(post.category)}>
+              {post.category}
+            </Badge>
+            {post.tags.map((tag, index) => (
+              <Badge key={index} variant="outline" className="text-xs">
+                {tag}
+              </Badge>
+            ))}
+          </div>
+
+          {/* Title */}
+          <h1 className="text-3xl md:text-4xl font-consciousness font-bold text-foreground mb-6">
+            {post.title}
+          </h1>
+
+          {/* Excerpt */}
+          <p className="text-lg text-muted-foreground font-consciousness mb-6 leading-relaxed">
+            {post.excerpt}
+          </p>
+
+          {/* Meta Information */}
+          <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <User className="w-4 h-4" />
+              <span>{post.author}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Calendar className="w-4 h-4" />
+              <span>{new Date(post.date).toLocaleDateString()}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Clock className="w-4 h-4" />
+              <span>{post.readTime}</span>
+            </div>
+            <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-primary">
+              <Share className="w-4 h-4 mr-2" />
+              Share
+            </Button>
+          </div>
+        </Card>
+
+        {/* Article Content */}
+        <Card className="p-8 mb-8">
+          <div className="prose prose-lg max-w-none">
+            <ReactMarkdown
+              components={{
+                h1: ({ children }) => (
+                  <h1 className="text-3xl font-consciousness font-bold text-foreground mb-6 mt-8">
+                    {children}
+                  </h1>
+                ),
+                h2: ({ children }) => (
+                  <h2 className="text-2xl font-consciousness font-bold text-foreground mb-4 mt-8">
+                    {children}
+                  </h2>
+                ),
+                h3: ({ children }) => (
+                  <h3 className="text-xl font-consciousness font-semibold text-foreground mb-3 mt-6">
+                    {children}
+                  </h3>
+                ),
+                h4: ({ children }) => (
+                  <h4 className="text-lg font-consciousness font-semibold text-foreground mb-2 mt-4">
+                    {children}
+                  </h4>
+                ),
+                p: ({ children }) => (
+                  <p className="text-foreground font-consciousness mb-4 leading-relaxed">
+                    {children}
+                  </p>
+                ),
+                ul: ({ children }) => (
+                  <ul className="list-disc list-inside mb-4 space-y-2 text-foreground">
+                    {children}
+                  </ul>
+                ),
+                ol: ({ children }) => (
+                  <ol className="list-decimal list-inside mb-4 space-y-2 text-foreground">
+                    {children}
+                  </ol>
+                ),
+                li: ({ children }) => (
+                  <li className="text-foreground font-consciousness">
+                    {children}
+                  </li>
+                ),
+                strong: ({ children }) => (
+                  <strong className="font-semibold text-primary">
+                    {children}
+                  </strong>
+                ),
+                blockquote: ({ children }) => (
+                  <blockquote className="border-l-4 border-primary pl-4 py-2 my-4 bg-muted/30 rounded-r">
+                    {children}
+                  </blockquote>
+                ),
+                table: ({ children }) => (
+                  <div className="overflow-x-auto my-6">
+                    <table className="w-full border-collapse border border-border">
+                      {children}
+                    </table>
+                  </div>
+                ),
+                th: ({ children }) => (
+                  <th className="border border-border bg-muted p-3 text-left font-semibold">
+                    {children}
+                  </th>
+                ),
+                td: ({ children }) => (
+                  <td className="border border-border p-3">
+                    {children}
+                  </td>
+                )
+              }}
+            >
+              {post.content}
+            </ReactMarkdown>
+          </div>
+        </Card>
+
+        {/* Call to Action */}
+        <Card className="p-6 mb-8 bg-gradient-consciousness border-primary/20">
+          <div className="text-center">
+            <BookOpen className="w-12 h-12 text-primary mx-auto mb-4" />
+            <h3 className="text-xl font-consciousness font-bold text-foreground mb-2">
+              Ready to Put This Knowledge into Practice?
+            </h3>
+            <p className="text-muted-foreground mb-4">
+              Explore our hands-on tutorials and interactive courses to master DeFi
+            </p>
+            <div className="flex gap-4 justify-center">
+              <Button variant="cosmic" onClick={() => navigate("/courses")}>
+                Browse Courses
+              </Button>
+              <Button variant="outline" onClick={() => navigate("/tutorials")}>
+                Video Tutorials
+              </Button>
+            </div>
+          </div>
+        </Card>
+
+        {/* Community Discussion */}
+        <CommunityHub
+          contentType="tutorial"
+          contentId={`blog-${post.id}`}
+          title={post.title}
+        />
+
+        {/* Related Articles */}
+        <Card className="p-6 mt-8">
+          <h3 className="text-lg font-consciousness font-bold text-foreground mb-4">
+            Continue Reading
+          </h3>
+          <div className="grid md:grid-cols-2 gap-4">
+            <Button
+              variant="outline"
+              className="justify-start p-4 h-auto"
+              onClick={() => navigate("/blog")}
+            >
+              <div className="text-left">
+                <div className="font-semibold">Browse All Articles</div>
+                <div className="text-sm text-muted-foreground">
+                  Discover more DeFi insights and guides
+                </div>
+              </div>
+            </Button>
+            <Button
+              variant="outline"
+              className="justify-start p-4 h-auto"
+              onClick={() => navigate("/resources")}
+            >
+              <div className="text-left">
+                <div className="font-semibold">DeFi Resources</div>
+                <div className="text-sm text-muted-foreground">
+                  Tools, calculators, and utilities
+                </div>
+              </div>
+            </Button>
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
+};
+
+export default BlogPost;

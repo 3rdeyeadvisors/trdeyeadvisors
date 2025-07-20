@@ -1,56 +1,15 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, ArrowRight } from "lucide-react";
+import { getBlogPosts, getBlogPostsByCategory } from "@/data/blogContent";
 
 const Blog = () => {
-  const posts = [
-    {
-      id: 1,
-      title: "DeFi for Beginners: The Simple Guide to Understanding the Future of Finance",
-      excerpt: "A beginner-friendly guide breaking down DeFi in plain English. Learn what it is, why it matters, and how to get started safely.",
-      category: "Education",
-      readTime: "8 min read",
-      date: "2024-01-15",
-      featured: true
-    },
-    {
-      id: 2,
-      title: "5 Common DeFi Mistakes New Investors Make (and How to Avoid Them)",
-      excerpt: "Practical tips from real experiences. Learn from others' mistakes and protect your capital from day one.",
-      category: "Security",
-      readTime: "6 min read",
-      date: "2024-01-12",
-      featured: false
-    },
-    {
-      id: 3,
-      title: "The Safest DeFi Wallets for Beginners in 2025",
-      excerpt: "Complete comparison of MetaMask, Trust Wallet, and hardware options. Which one is right for your needs?",
-      category: "Tools",
-      readTime: "10 min read",
-      date: "2024-01-10",
-      featured: false
-    },
-    {
-      id: 4,
-      title: "Is Yield Farming Still Worth It? What You Need to Know Before You Try",
-      excerpt: "Balanced analysis of current yield farming opportunities. Real data, not hype, to help you make informed decisions.",
-      category: "Analysis",
-      readTime: "12 min read",
-      date: "2024-01-08",
-      featured: false
-    },
-    {
-      id: 5,
-      title: "The Top 3 DeFi Tools Every Beginner Should Use Right Now",
-      excerpt: "Essential tools for portfolio tracking, transaction monitoring, and staying safe in DeFi. Links to our Resource Hub included.",
-      category: "Tools",
-      readTime: "7 min read",
-      date: "2024-01-05",
-      featured: false
-    }
-  ];
+  const navigate = useNavigate();
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const posts = getBlogPostsByCategory(selectedCategory);
 
   const categories = ["All", "Education", "Security", "Tools", "Analysis"];
 
@@ -83,10 +42,11 @@ const Blog = () => {
             <Badge 
               key={category}
               className={`px-4 py-2 cursor-pointer transition-all duration-cosmic hover:scale-105 ${
-                category === "All" 
+                category === selectedCategory 
                   ? "bg-primary/20 text-primary border-primary/30" 
                   : getCategoryColor(category)
               }`}
+              onClick={() => setSelectedCategory(category)}
             >
               {category}
             </Badge>
@@ -127,7 +87,11 @@ const Blog = () => {
                   <span className="font-system">{post.readTime}</span>
                 </div>
               </div>
-              <Button variant="cosmic" className="font-consciousness">
+              <Button 
+                variant="cosmic" 
+                className="font-consciousness"
+                onClick={() => navigate(`/blog/${post.id}`)}
+              >
                 Read Article
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
@@ -166,7 +130,12 @@ const Blog = () => {
                 </div>
               </div>
               
-              <Button variant="awareness" size="sm" className="w-full font-consciousness">
+              <Button 
+                variant="awareness" 
+                size="sm" 
+                className="w-full font-consciousness"
+                onClick={() => navigate(`/blog/${post.id}`)}
+              >
                 Read More
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
