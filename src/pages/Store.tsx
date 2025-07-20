@@ -254,7 +254,8 @@ const Store = () => {
           </div>
         </div>
 
-        {/* Merchandise Section */}
+        {/* Merchandise Section - Temporarily Hidden */}
+        {false && (
         <div>
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-4">
@@ -368,6 +369,7 @@ const Store = () => {
             </div>
           )}
         </div>
+        )}
 
         <Card className="mt-16 p-6 bg-secondary/40 border-border">
           <div className="text-center">

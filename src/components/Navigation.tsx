@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Eye, LogIn, LogOut, User, ShoppingCart } from "lucide-react";
+import { Menu, X, LogIn, LogOut, User, ShoppingCart } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/contexts/CartContext";
@@ -53,7 +53,6 @@ const Navigation = () => {
             to="/" 
             className="flex items-center space-x-2 font-consciousness font-semibold text-xl text-foreground hover:text-primary transition-colors"
           >
-            <Eye className="w-6 h-6 text-primary" />
             <span className="font-system">3rdeyeadvisors</span>
           </Link>
 
