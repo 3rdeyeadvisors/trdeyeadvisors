@@ -23,6 +23,8 @@ import WalletSetupTutorial from "./pages/WalletSetupTutorial";
 import FirstDexSwapTutorial from "./pages/FirstDexSwapTutorial";
 import DefiCalculatorsTutorial from "./pages/DefiCalculatorsTutorial";
 import SpottingScamsTutorial from "./pages/SpottingScamsTutorial";
+import CrossChainBridgingTutorial from "./pages/CrossChainBridgingTutorial";
+import AdvancedDefiProtocolsTutorial from "./pages/AdvancedDefiProtocolsTutorial";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -50,6 +52,8 @@ const App = () => (
                 <Route path="/tutorials/first-dex-swap" element={<FirstDexSwapTutorial />} />
                 <Route path="/tutorials/defi-calculators" element={<DefiCalculatorsTutorial />} />
                 <Route path="/tutorials/spotting-scams" element={<SpottingScamsTutorial />} />
+                <Route path="/tutorials/cross-chain-bridging" element={<CrossChainBridgingTutorial />} />
+                <Route path="/tutorials/advanced-defi-protocols" element={<AdvancedDefiProtocolsTutorial />} />
                 <Route path="/store" element={<Store />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/auth" element={<Auth />} />
