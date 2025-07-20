@@ -22,6 +22,7 @@ const Navigation = () => {
     { path: "/resources", label: "Resource Hub" },
     { path: "/analytics", label: "Analytics" },
     { path: "/store", label: "Store" },
+    { path: "/downloads", label: "Downloads" },
     { path: "/contact", label: "Contact" },
   ];
 

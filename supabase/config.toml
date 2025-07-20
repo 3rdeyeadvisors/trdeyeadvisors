@@ -44,5 +44,8 @@ verify_jwt = false
 [functions.sync-printify-products]
 verify_jwt = false
 
-[functions.create-printify-order]
+[functions.download-digital-product]
+verify_jwt = false
+
+[functions.upload-sample-content]
 verify_jwt = false

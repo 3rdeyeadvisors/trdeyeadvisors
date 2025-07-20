@@ -24,7 +24,8 @@ const Store = () => {
       type: "digital",
       category: "eBook",
       icon: FileText,
-      features: ["200+ pages", "12 chapters", "Case studies", "Lifetime updates"]
+      features: ["200+ pages", "12 chapters", "Case studies", "Lifetime updates"],
+      files: ["Complete DeFi eBook (PDF)", "Quick Reference Card (PDF)"]
     },
     {
       id: 2,
@@ -34,7 +35,8 @@ const Store = () => {
       type: "digital",
       category: "Template",
       icon: Calculator,
-      features: ["Multi-chain support", "Auto calculations", "Risk assessment", "Tax reporting"]
+      features: ["Multi-chain support", "Auto calculations", "Risk assessment", "Tax reporting"],
+      files: ["Portfolio Tracker (Excel)", "Setup Guide (PDF)"]
     },
     {
       id: 3,
@@ -44,7 +46,8 @@ const Store = () => {
       type: "digital",
       category: "Guide",
       icon: TrendingUp,
-      features: ["10 proven strategies", "Risk frameworks", "ROI calculators", "Video tutorials"]
+      features: ["10 proven strategies", "Risk frameworks", "ROI calculators", "Video tutorials"],
+      files: ["Strategy Guide (PDF)", "ROI Calculator (Excel)"]
     }
   ]);
 

@@ -20,6 +20,7 @@ import Auth from "./pages/Auth";
 import CourseDetail from "./pages/CourseDetail";
 import ModuleViewer from "./pages/ModuleViewer";
 import Dashboard from "./pages/Dashboard";
+import Downloads from "./pages/Downloads";
 import Analytics from "./pages/Analytics";
 import VideoTutorials from "./pages/VideoTutorials";
 import WalletSetupTutorial from "./pages/WalletSetupTutorial";
@@ -81,7 +82,7 @@ const App = () => (
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/auth" element={<Auth />} />
                   <Route path="/dashboard" element={<Dashboard />} />
-                  <Route path="/profile" element={<Profile />} />
+                  <Route path="/downloads" element={<Downloads />} />
                   <Route path="/privacy" element={<PrivacyPolicy />} />
                   <Route path="/terms" element={<TermsOfService />} />
                   <Route path="*" element={<NotFound />} />
