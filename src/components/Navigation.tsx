@@ -15,6 +15,7 @@ const Navigation = () => {
     { path: "/", label: "Home" },
     { path: "/philosophy", label: "Our Philosophy" },
     { path: "/courses", label: "Courses & Tools" },
+    { path: "/tutorials", label: "Video Tutorials" },
     { path: "/blog", label: "Blog & Articles" },
     { path: "/resources", label: "Resource Hub" },
     { path: "/analytics", label: "Analytics" },

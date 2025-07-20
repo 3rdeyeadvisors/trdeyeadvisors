@@ -18,6 +18,7 @@ import CourseDetail from "./pages/CourseDetail";
 import ModuleViewer from "./pages/ModuleViewer";
 import Dashboard from "./pages/Dashboard";
 import Analytics from "./pages/Analytics";
+import VideoTutorials from "./pages/VideoTutorials";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -40,6 +41,7 @@ const App = () => (
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/resources" element={<Resources />} />
                 <Route path="/analytics" element={<Analytics />} />
+                <Route path="/tutorials" element={<VideoTutorials />} />
                 <Route path="/store" element={<Store />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/auth" element={<Auth />} />
