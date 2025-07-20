@@ -35,6 +35,9 @@ serve(async (req) => {
         },
       ],
       mode: "payment",
+      automatic_tax: {
+        enabled: true,
+      },
       success_url: `${req.headers.get("origin")}/store?success=true&product=${encodeURIComponent(productName)}`,
       cancel_url: `${req.headers.get("origin")}/store?canceled=true`,
     });
