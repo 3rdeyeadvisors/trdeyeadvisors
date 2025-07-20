@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Eye, LogIn, LogOut, User } from "lucide-react";
+import { Menu, X, Eye, LogIn, LogOut, User, ShoppingCart } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useToast } from "@/hooks/use-toast";
+import { useCart } from "@/contexts/CartContext";
 
 const Navigation = () => {
+  const { itemCount } = useCart();
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const { user, signOut } = useAuth();
@@ -70,8 +72,18 @@ const Navigation = () => {
               </Link>
             ))}
             
-            {/* Auth buttons */}
+            {/* Cart & Auth buttons */}
             <div className="flex items-center space-x-4">
+              <Link to="/cart" className="relative">
+                <Button variant="ghost" size="icon" className="relative">
+                  <ShoppingCart className="h-5 w-5" />
+                  {itemCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                      {itemCount}
+                    </span>
+                  )}
+                </Button>
+              </Link>
               {user ? (
                 <div className="flex items-center space-x-3">
                   <Button
@@ -140,8 +152,18 @@ const Navigation = () => {
                 </Link>
               ))}
               
-              {/* Mobile Auth */}
-              <div className="pt-4 border-t border-border">
+              {/* Mobile Cart & Auth */}
+              <div className="pt-4 border-t border-border space-y-3">
+                <Link to="/cart" className="relative flex justify-center" onClick={() => setIsOpen(false)}>
+                  <Button variant="ghost" size="icon" className="relative">
+                    <ShoppingCart className="h-5 w-5" />
+                    {itemCount > 0 && (
+                      <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                        {itemCount}
+                      </span>
+                    )}
+                  </Button>
+                </Link>
                 {user ? (
                   <div className="space-y-3">
                     <Button

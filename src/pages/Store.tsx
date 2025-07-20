@@ -1,27 +1,42 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ShoppingCart, Download, Package, FileText, Calculator, TrendingUp, CheckCircle, X } from "lucide-react";
+import { ShoppingCart, Download, Package, FileText, Calculator, TrendingUp, CheckCircle, X, Plus } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import { useCart } from "@/contexts/CartContext";
 
 const Store = () => {
+  const { addItem, items } = useCart();
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [purchasedProduct, setPurchasedProduct] = useState<string>("");
+
+  const handleAddToCart = (product: any) => {
+    addItem({
+      id: product.id,
+      title: product.title,
+      price: product.price,
+      type: product.type,
+      category: product.category
+    });
+    toast.success(`${product.title} added to cart!`);
+  };
+
+  const isInCart = (productId: number) => {
+    return items.some(item => item.id === productId);
+  };
 
   // Check for success/cancel parameters on mount
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const success = urlParams.get('success');
     const canceled = urlParams.get('canceled');
-    const product = urlParams.get('product');
 
-    if (success && product) {
+    if (success) {
       setShowSuccessMessage(true);
-      setPurchasedProduct(decodeURIComponent(product));
-      toast.success(`Payment successful! Thank you for purchasing ${decodeURIComponent(product)}`);
+      toast.success("Payment successful! Thank you for your purchase!");
       
       // Clean up URL parameters
       window.history.replaceState({}, document.title, window.location.pathname);
@@ -30,33 +45,6 @@ const Store = () => {
       window.history.replaceState({}, document.title, window.location.pathname);
     }
   }, []);
-
-  const handlePurchase = async (product: any) => {
-    setIsLoading(true);
-    try {
-      const priceNumber = parseInt(product.price.replace('$', ''));
-      
-      const { data, error } = await supabase.functions.invoke('create-payment', {
-        body: {
-          productId: product.id,
-          productName: product.title,
-          price: priceNumber
-        }
-      });
-
-      if (error) throw error;
-
-      // Open Stripe checkout in a new tab
-      if (data?.url) {
-        window.open(data.url, '_blank');
-      }
-    } catch (error) {
-      console.error('Error creating payment:', error);
-      toast.error('Failed to create payment session');
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const digitalProducts = [
     {
@@ -160,7 +148,7 @@ const Store = () => {
                     Purchase Successful!
                   </h3>
                   <p className="text-green-700 dark:text-green-300 font-consciousness">
-                    Thank you for purchasing "{purchasedProduct}". You should receive your digital product via email shortly.
+                    Thank you for your purchase! Your cart has been cleared and you should receive your digital products via email shortly.
                   </p>
                 </div>
               </div>
@@ -228,13 +216,12 @@ const Store = () => {
                       {product.price}
                     </span>
                     <Button 
-                      variant="cosmic" 
+                      variant={isInCart(product.id) ? "outline" : "cosmic"}
                       className="font-consciousness"
-                      onClick={() => handlePurchase(product)}
-                      disabled={isLoading}
+                      onClick={() => handleAddToCart(product)}
                     >
-                      <ShoppingCart className="w-4 h-4 mr-2" />
-                      {isLoading ? "Processing..." : "Buy Now"}
+                      <Plus className="w-4 h-4 mr-2" />
+                      {isInCart(product.id) ? "Add Another" : "Add to Cart"}
                     </Button>
                   </div>
                 </Card>
@@ -295,13 +282,12 @@ const Store = () => {
                       {product.price}
                     </span>
                     <Button 
-                      variant="awareness" 
+                      variant={isInCart(product.id) ? "outline" : "awareness"}
                       className="font-consciousness"
-                      onClick={() => handlePurchase(product)}
-                      disabled={isLoading}
+                      onClick={() => handleAddToCart(product)}
                     >
-                      <ShoppingCart className="w-4 h-4 mr-2" />
-                      {isLoading ? "Processing..." : "Buy Now"}
+                      <Plus className="w-4 h-4 mr-2" />
+                      {isInCart(product.id) ? "Add Another" : "Add to Cart"}
                     </Button>
                   </div>
                 </Card>
