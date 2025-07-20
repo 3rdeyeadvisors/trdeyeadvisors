@@ -70,11 +70,11 @@ serve(async (req) => {
     const shops = await printifyResponse.json();
     console.log("Printify shops:", shops);
 
-    if (!shops.data || shops.data.length === 0) {
+    if (!shops || shops.length === 0) {
       throw new Error("No Printify shops found");
     }
 
-    const shopId = shops.data[0].id;
+    const shopId = shops[0].id;
     console.log("Using shop ID:", shopId);
 
     // Fetch products from the first shop
