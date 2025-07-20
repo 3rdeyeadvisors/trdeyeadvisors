@@ -226,7 +226,7 @@ const VideoTutorials = () => {
                               "wallet-setup": "/tutorials/wallet-setup",
                               "first-dex-swap": "/tutorials/first-dex-swap",
                               "defi-calculators": "/tutorials/defi-calculators",
-                              "spotting-scams": "/tutorials" // TODO: Add route
+                              "spotting-scams": "/tutorials/spotting-scams"
                             };
                             window.location.href = tutorialRoutes[video.id] || "/tutorials";
                           }}

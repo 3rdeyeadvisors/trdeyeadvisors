@@ -22,6 +22,7 @@ import VideoTutorials from "./pages/VideoTutorials";
 import WalletSetupTutorial from "./pages/WalletSetupTutorial";
 import FirstDexSwapTutorial from "./pages/FirstDexSwapTutorial";
 import DefiCalculatorsTutorial from "./pages/DefiCalculatorsTutorial";
+import SpottingScamsTutorial from "./pages/SpottingScamsTutorial";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -48,6 +49,7 @@ const App = () => (
                 <Route path="/tutorials/wallet-setup" element={<WalletSetupTutorial />} />
                 <Route path="/tutorials/first-dex-swap" element={<FirstDexSwapTutorial />} />
                 <Route path="/tutorials/defi-calculators" element={<DefiCalculatorsTutorial />} />
+                <Route path="/tutorials/spotting-scams" element={<SpottingScamsTutorial />} />
                 <Route path="/store" element={<Store />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/auth" element={<Auth />} />
