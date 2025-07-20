@@ -80,9 +80,9 @@ const Navigation = () => {
                     size="sm"
                     className="text-muted-foreground hover:text-primary"
                   >
-                    <Link to="/dashboard" className="flex items-center space-x-2">
+                    <Link to="/profile" className="flex items-center space-x-2">
                       <User className="w-4 h-4" />
-                      <span>Dashboard</span>
+                      <span>Profile</span>
                     </Link>
                   </Button>
                   <div className="text-sm text-muted-foreground">
@@ -151,12 +151,12 @@ const Navigation = () => {
                       className="w-full justify-start"
                     >
                       <Link 
-                        to="/dashboard" 
+                        to="/profile" 
                         className="flex items-center space-x-2"
                         onClick={() => setIsOpen(false)}
                       >
                         <User className="w-4 h-4" />
-                        <span>Dashboard</span>
+                        <span>Profile</span>
                       </Link>
                     </Button>
                     <div className="flex items-center space-x-2 text-sm text-muted-foreground px-3">

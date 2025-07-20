@@ -32,6 +32,7 @@ import ChartReadingTutorial from "./pages/ChartReadingTutorial";
 import NftDefiTutorial from "./pages/NftDefiTutorial";
 import DaoParticipationTutorial from "./pages/DaoParticipationTutorial";
 import NotFound from "./pages/NotFound";
+import Profile from "./pages/Profile";
 
 const queryClient = new QueryClient();
 
@@ -70,6 +71,7 @@ const App = () => (
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/profile" element={<Profile />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Layout>
