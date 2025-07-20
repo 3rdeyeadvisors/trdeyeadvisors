@@ -96,7 +96,7 @@ Formulas included:
 - Risk score calculations
 - Auto-updating price feeds (requires API connection)
 
-For support, contact: support@3rdeyeadvisors.com
+For support, contact: info@3rdeyeadvisors.com
     `.trim();
 
     // Upload sample files to storage
