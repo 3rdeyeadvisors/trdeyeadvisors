@@ -571,6 +571,10 @@ export type Database = {
         Args: { product_id: number }
         Returns: boolean
       }
+      validate_password_strength: {
+        Args: { password: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
