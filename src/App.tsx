@@ -27,6 +27,10 @@ import CrossChainBridgingTutorial from "./pages/CrossChainBridgingTutorial";
 import AdvancedDefiProtocolsTutorial from "./pages/AdvancedDefiProtocolsTutorial";
 import PortfolioRebalancingTutorial from "./pages/PortfolioRebalancingTutorial";
 import ReadingDefiMetricsTutorial from "./pages/ReadingDefiMetricsTutorial";
+import RiskAssessmentTutorial from "./pages/RiskAssessmentTutorial";
+import ChartReadingTutorial from "./pages/ChartReadingTutorial";
+import NftDefiTutorial from "./pages/NftDefiTutorial";
+import DaoParticipationTutorial from "./pages/DaoParticipationTutorial";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -58,6 +62,10 @@ const App = () => (
                 <Route path="/tutorials/advanced-defi-protocols" element={<AdvancedDefiProtocolsTutorial />} />
                 <Route path="/tutorials/portfolio-rebalancing" element={<PortfolioRebalancingTutorial />} />
                 <Route path="/tutorials/reading-defi-metrics" element={<ReadingDefiMetricsTutorial />} />
+                <Route path="/tutorials/risk-assessment" element={<RiskAssessmentTutorial />} />
+                <Route path="/tutorials/chart-reading" element={<ChartReadingTutorial />} />
+                <Route path="/tutorials/nft-defi" element={<NftDefiTutorial />} />
+                <Route path="/tutorials/dao-participation" element={<DaoParticipationTutorial />} />
                 <Route path="/store" element={<Store />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/auth" element={<Auth />} />
