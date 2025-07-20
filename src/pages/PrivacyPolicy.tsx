@@ -110,7 +110,7 @@ const PrivacyPolicy = () => {
                 If you have any questions about this Privacy Policy, please contact us at:
               </p>
               <p className="mt-2">
-                <strong>Email:</strong> support@3rdeyeadvisors.com
+                <strong>Email:</strong> info@3rdeyeadvisors.com
               </p>
             </section>
 

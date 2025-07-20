@@ -52,7 +52,7 @@ How to use:
 4. Monitor yields in the Yield Tracking sheet
 5. Assess risks using the Risk Assessment sheet
 
-For support: support@3rdeyeadvisors.com
+For support: info@3rdeyeadvisors.com
       `;
 
       // Upload files to storage

@@ -223,7 +223,7 @@ const Contact = () => {
               <div className="space-y-3">
                 <Button variant="outline" className="w-full justify-start font-consciousness">
                   <Mail className="w-4 h-4 mr-3" />
-                  support@3rdeyeadvisors.com
+                  info@3rdeyeadvisors.com
                 </Button>
                 
                 <Button variant="outline" className="w-full justify-start font-consciousness">
