@@ -22,6 +22,7 @@ import {
   Smartphone
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { CommunityHub } from "@/components/community/CommunityHub";
 
 const WalletSetupTutorial = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -667,6 +668,13 @@ const WalletSetupTutorial = () => {
             </CardContent>
           </Card>
         )}
+
+        {/* Community Hub */}
+        <CommunityHub 
+          contentType="tutorial"
+          contentId="wallet-setup"
+          title="Wallet Setup & Security Tutorial"
+        />
       </div>
     </div>
   );

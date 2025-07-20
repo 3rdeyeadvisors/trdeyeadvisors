@@ -1,0 +1,494 @@
+import { useState, useEffect } from "react";
+import { useAuth } from "@/components/auth/AuthProvider";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { useToast } from "@/hooks/use-toast";
+import { 
+  Heart, 
+  MessageSquare, 
+  Reply, 
+  MoreHorizontal, 
+  Flag,
+  Edit,
+  Trash,
+  ChevronDown,
+  ChevronUp
+} from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+
+interface Comment {
+  id: string;
+  user_id: string;
+  content: string;
+  parent_id: string | null;
+  likes_count: number;
+  is_helpful: boolean;
+  created_at: string;
+  updated_at: string;
+  profiles: {
+    display_name: string | null;
+    avatar_url: string | null;
+  } | null;
+  user_liked?: boolean;
+  replies?: Comment[];
+}
+
+interface CommentsProps {
+  contentType: 'tutorial' | 'course' | 'module';
+  contentId: string;
+  title?: string;
+}
+
+export const Comments = ({ contentType, contentId, title }: CommentsProps) => {
+  const { user } = useAuth();
+  const { toast } = useToast();
+  
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [newComment, setNewComment] = useState("");
+  const [replyingTo, setReplyingTo] = useState<string | null>(null);
+  const [replyText, setReplyText] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [expandedComments, setExpandedComments] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    loadComments();
+  }, [contentType, contentId]);
+
+  const loadComments = async () => {
+    try {
+      // Load all comments first
+      const { data: allComments, error } = await supabase
+        .from('comments')
+        .select('*')
+        .eq('content_type', contentType)
+        .eq('content_id', contentId)
+        .order('created_at', { ascending: true });
+
+      if (error) throw error;
+
+      // Then load profiles for each comment
+      const commentsWithProfiles: any[] = [];
+      if (allComments) {
+        for (const comment of allComments) {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('display_name, avatar_url')
+            .eq('user_id', comment.user_id)
+            .single();
+
+          commentsWithProfiles.push({
+            ...comment,
+            profiles: profile || null
+          });
+        }
+      }
+
+      // Check which comments the current user has liked
+      let commentsWithLikes = commentsWithProfiles;
+      if (user) {
+        const { data: userLikes, error: likesError } = await supabase
+          .from('comment_likes')
+          .select('comment_id')
+          .eq('user_id', user.id)
+          .in('comment_id', commentsWithLikes.map(c => c.id));
+
+        if (!likesError) {
+          const likedCommentIds = new Set(userLikes.map(l => l.comment_id));
+          commentsWithLikes = commentsWithLikes.map(comment => ({
+            ...comment,
+            user_liked: likedCommentIds.has(comment.id)
+          }));
+        }
+      }
+
+      // Organize comments with replies
+      const organizedComments = organizeComments(commentsWithLikes);
+      setComments(organizedComments);
+    } catch (error) {
+      console.error('Error loading comments:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load comments.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const organizeComments = (allComments: any[]): Comment[] => {
+    const commentMap = new Map();
+    const rootComments: Comment[] = [];
+
+    // First pass: create comment map
+    allComments.forEach(comment => {
+      commentMap.set(comment.id, { ...comment, replies: [] });
+    });
+
+    // Second pass: organize into tree structure
+    allComments.forEach(comment => {
+      if (comment.parent_id) {
+        const parent = commentMap.get(comment.parent_id);
+        if (parent) {
+          parent.replies.push(commentMap.get(comment.id));
+        }
+      } else {
+        rootComments.push(commentMap.get(comment.id));
+      }
+    });
+
+    return rootComments;
+  };
+
+  const handleSubmitComment = async () => {
+    if (!user) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in to comment.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!newComment.trim()) return;
+
+    setSubmitting(true);
+    try {
+      const { error } = await supabase
+        .from('comments')
+        .insert([{
+          user_id: user.id,
+          content_type: contentType,
+          content_id: contentId,
+          content: newComment.trim()
+        }]);
+
+      if (error) throw error;
+
+      setNewComment("");
+      toast({
+        title: "Comment posted",
+        description: "Your comment has been added successfully.",
+      });
+      
+      // Reload comments
+      loadComments();
+    } catch (error) {
+      console.error('Error posting comment:', error);
+      toast({
+        title: "Error",
+        description: "Failed to post comment.",
+        variant: "destructive",
+      });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleSubmitReply = async (parentId: string) => {
+    if (!user || !replyText.trim()) return;
+
+    setSubmitting(true);
+    try {
+      const { error } = await supabase
+        .from('comments')
+        .insert([{
+          user_id: user.id,
+          content_type: contentType,
+          content_id: contentId,
+          content: replyText.trim(),
+          parent_id: parentId
+        }]);
+
+      if (error) throw error;
+
+      setReplyText("");
+      setReplyingTo(null);
+      toast({
+        title: "Reply posted",
+        description: "Your reply has been added successfully.",
+      });
+      
+      // Reload comments
+      loadComments();
+    } catch (error) {
+      console.error('Error posting reply:', error);
+      toast({
+        title: "Error",
+        description: "Failed to post reply.",
+        variant: "destructive",
+      });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleLikeComment = async (commentId: string, isLiked: boolean) => {
+    if (!user) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in to like comments.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      if (isLiked) {
+        // Unlike
+        const { error } = await supabase
+          .from('comment_likes')
+          .delete()
+          .eq('user_id', user.id)
+          .eq('comment_id', commentId);
+        
+        if (error) throw error;
+      } else {
+        // Like
+        const { error } = await supabase
+          .from('comment_likes')
+          .insert([{
+            user_id: user.id,
+            comment_id: commentId
+          }]);
+        
+        if (error) throw error;
+      }
+
+      // Reload comments to update like counts
+      loadComments();
+    } catch (error) {
+      console.error('Error liking comment:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update like.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const toggleReplies = (commentId: string) => {
+    const newExpanded = new Set(expandedComments);
+    if (newExpanded.has(commentId)) {
+      newExpanded.delete(commentId);
+    } else {
+      newExpanded.add(commentId);
+    }
+    setExpandedComments(newExpanded);
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
+  const CommentItem = ({ comment, isReply = false }: { comment: Comment; isReply?: boolean }) => (
+    <div className={`${isReply ? 'ml-8 border-l-2 border-muted pl-4' : ''}`}>
+      <Card className="mb-4">
+        <CardContent className="p-4">
+          <div className="flex items-start gap-3">
+            <Avatar className="w-8 h-8">
+              <AvatarImage src={comment.profiles?.avatar_url || ""} />
+              <AvatarFallback className="bg-primary/10 text-primary text-sm">
+                {(comment.profiles?.display_name || 'U').charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="font-medium text-sm">
+                  {comment.profiles?.display_name || 'Anonymous User'}
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  {formatDate(comment.created_at)}
+                </span>
+                {comment.is_helpful && (
+                  <Badge variant="outline" className="text-xs">
+                    Helpful
+                  </Badge>
+                )}
+              </div>
+              
+              <p className="text-sm text-foreground mb-3 whitespace-pre-wrap">
+                {comment.content}
+              </p>
+              
+              <div className="flex items-center gap-4">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-xs text-muted-foreground hover:text-primary"
+                  onClick={() => handleLikeComment(comment.id, comment.user_liked || false)}
+                >
+                  <Heart className={`w-4 h-4 mr-1 ${comment.user_liked ? 'fill-red-500 text-red-500' : ''}`} />
+                  {comment.likes_count}
+                </Button>
+                
+                {!isReply && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-xs text-muted-foreground hover:text-primary"
+                    onClick={() => setReplyingTo(replyingTo === comment.id ? null : comment.id)}
+                  >
+                    <Reply className="w-4 h-4 mr-1" />
+                    Reply
+                  </Button>
+                )}
+                
+                {comment.replies && comment.replies.length > 0 && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-xs text-muted-foreground hover:text-primary"
+                    onClick={() => toggleReplies(comment.id)}
+                  >
+                    {expandedComments.has(comment.id) ? (
+                      <ChevronUp className="w-4 h-4 mr-1" />
+                    ) : (
+                      <ChevronDown className="w-4 h-4 mr-1" />
+                    )}
+                    {comment.replies.length} {comment.replies.length === 1 ? 'reply' : 'replies'}
+                  </Button>
+                )}
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+      
+      {/* Reply input */}
+      {replyingTo === comment.id && (
+        <div className="ml-11 mb-4">
+          <Textarea
+            placeholder="Write a reply..."
+            value={replyText}
+            onChange={(e) => setReplyText(e.target.value)}
+            className="mb-2"
+            rows={3}
+          />
+          <div className="flex gap-2">
+            <Button
+              size="sm"
+              onClick={() => handleSubmitReply(comment.id)}
+              disabled={submitting || !replyText.trim()}
+            >
+              {submitting ? "Posting..." : "Post Reply"}
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                setReplyingTo(null);
+                setReplyText("");
+              }}
+            >
+              Cancel
+            </Button>
+          </div>
+        </div>
+      )}
+      
+      {/* Replies */}
+      {comment.replies && expandedComments.has(comment.id) && (
+        <div className="ml-4">
+          {comment.replies.map((reply) => (
+            <CommentItem key={reply.id} comment={reply} isReply={true} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        <div className="animate-pulse">
+          <div className="h-4 bg-muted rounded w-1/4 mb-4"></div>
+          <div className="space-y-3">
+            <div className="h-20 bg-muted rounded"></div>
+            <div className="h-20 bg-muted rounded"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h3 className="text-lg font-semibold mb-4">
+          Comments {title && `for ${title}`} ({comments.length})
+        </h3>
+        
+        {/* New comment input */}
+        {user ? (
+          <Card className="mb-6">
+            <CardContent className="p-4">
+              <div className="flex items-start gap-3">
+                <Avatar className="w-8 h-8">
+                  <AvatarImage src="" />
+                  <AvatarFallback className="bg-primary/10 text-primary text-sm">
+                    {user.email?.charAt(0).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex-1">
+                  <Textarea
+                    placeholder="Share your thoughts or ask a question..."
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                    className="mb-3"
+                    rows={3}
+                  />
+                  <Button
+                    onClick={handleSubmitComment}
+                    disabled={submitting || !newComment.trim()}
+                  >
+                    {submitting ? "Posting..." : "Post Comment"}
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ) : (
+          <Card className="mb-6">
+            <CardContent className="p-4 text-center">
+              <p className="text-muted-foreground mb-3">Sign in to join the discussion</p>
+              <Button variant="outline" onClick={() => window.location.href = '/auth'}>
+                Sign In
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+        
+        {/* Comments list */}
+        {comments.length > 0 ? (
+          <div>
+            {comments.map((comment) => (
+              <CommentItem key={comment.id} comment={comment} />
+            ))}
+          </div>
+        ) : (
+          <Card>
+            <CardContent className="p-8 text-center">
+              <MessageSquare className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+              <p className="text-muted-foreground">
+                No comments yet. Be the first to share your thoughts!
+              </p>
+            </CardContent>
+          </Card>
+        )}
+      </div>
+    </div>
+  );
+};
