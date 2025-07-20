@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useCart } from "@/contexts/CartContext";
+import SEO from "@/components/SEO";
 
 const Store = () => {
   const { addItem, items } = useCart();
@@ -125,7 +126,14 @@ const Store = () => {
   };
 
   return (
-    <div className="min-h-screen py-20">
+    <>
+      <SEO 
+        title="DeFi Products & Merchandise Store"
+        description="Discover premium DeFi education products, portfolio trackers, and consciousness-inspired merchandise. Support your financial education journey with our curated collection."
+        keywords="DeFi products, cryptocurrency guides, portfolio tracker, yield farming strategies, DeFi merchandise, blockchain education"
+        url="https://3rdeyeadvisors.com/store"
+      />
+      <div className="min-h-screen py-20">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
@@ -296,7 +304,6 @@ const Store = () => {
           </div>
         </div>
 
-        {/* Payment Info */}
         <Card className="mt-16 p-6 bg-secondary/40 border-border">
           <div className="text-center">
             <h3 className="text-lg font-consciousness font-semibold text-foreground mb-3">
@@ -310,7 +317,8 @@ const Store = () => {
           </div>
         </Card>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

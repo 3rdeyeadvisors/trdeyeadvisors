@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { BookOpen, Wrench, Eye, Code, TrendingUp, Shield } from "lucide-react";
 import cosmicHeroBg from "@/assets/cosmic-hero-bg.jpg";
 import NewsletterSignup from "@/components/NewsletterSignup";
+import SEO from "@/components/SEO";
 
 const Index = () => {
   const features = [
@@ -30,7 +31,9 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen">
+    <>
+      <SEO />
+      <div className="min-h-screen">
       {/* Hero Section */}
       <section 
         className="relative min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
@@ -156,7 +159,8 @@ const Index = () => {
           <NewsletterSignup variant="cosmic" />
         </div>
       </section>
-    </div>
+      </div>
+    </>
   );
 };
 

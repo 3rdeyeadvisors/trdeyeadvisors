@@ -7,6 +7,7 @@ import { CourseCard } from "@/components/course/CourseCard";
 import { AuthModal } from "@/components/auth/AuthModal";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { BookOpen } from "lucide-react";
+import SEO from "@/components/SEO";
 
 const Courses = () => {
   const [activeFilter, setActiveFilter] = useState("all");
@@ -141,7 +142,14 @@ const Courses = () => {
   };
 
   return (
-    <div className="min-h-screen py-20">
+    <>
+      <SEO 
+        title="DeFi Courses & Education"
+        description="Learn decentralized finance with our comprehensive courses. From beginner basics to advanced DeFi strategies, start your financial consciousness journey today."
+        keywords="DeFi courses, cryptocurrency education, blockchain courses, yield farming course, DeFi beginner guide, decentralized finance training"
+        url="https://3rdeyeadvisors.com/courses"
+      />
+      <div className="min-h-screen py-20">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
@@ -233,13 +241,14 @@ const Courses = () => {
             </Button>
           </div>
         )}
-      </div>
+        </div>
 
       <AuthModal 
         isOpen={showAuthModal} 
         onClose={() => setShowAuthModal(false)} 
       />
-    </div>
+      </div>
+    </>
   );
 };
 
