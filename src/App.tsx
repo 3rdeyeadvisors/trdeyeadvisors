@@ -88,6 +88,7 @@ const App = () => (
                   <Route path="/downloads" element={<Downloads />} />
                   <Route path="/admin/upload" element={<AdminUploadContent />} />
                   <Route path="/test-downloads" element={<TestDownloads />} />
+                  <Route path="/profile" element={<Profile />} />
                   <Route path="/privacy" element={<PrivacyPolicy />} />
                   <Route path="/terms" element={<TermsOfService />} />
                   <Route path="/social-banner" element={<SocialBanner />} />

@@ -20,7 +20,7 @@ const SEO = ({
   title = "3rdeyeadvisors | DeFi Education & Financial Consciousness",
   description = "Transform your financial future with comprehensive DeFi education. Learn decentralized finance, yield farming, blockchain investing, and cryptocurrency strategies from beginner to advanced levels.",
   keywords = "DeFi education, decentralized finance, yield farming, blockchain investing, cryptocurrency courses, financial consciousness, DeFi beginner guide, crypto education, smart contracts, liquidity pools",
-  image = "/cosmic-hero-bg.jpg",
+  image = "https://zapbkuaejvzpqerkkcnc.supabase.co/storage/v1/object/public/social-banners/3ea-social-banner.webp",
   url = "https://3rdeyeadvisors.com",
   type = "website",
   article
