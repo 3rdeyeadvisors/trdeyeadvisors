@@ -58,7 +58,7 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <a href="mailto:info@3rdeyeadvisors.com" className="text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness">
+                <a href="mailto:support@3rdeyeadvisors.com" className="text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness">
                   Support Email
                 </a>
               </li>
