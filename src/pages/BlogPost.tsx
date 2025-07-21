@@ -215,7 +215,7 @@ const BlogPost = () => {
                 Browse Courses
               </Button>
               <Button variant="outline" onClick={() => navigate("/tutorials")}>
-                Video Tutorials
+                Tutorials
               </Button>
             </div>
           </div>

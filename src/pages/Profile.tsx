@@ -502,7 +502,7 @@ const Profile = () => {
                 onClick={() => navigate("/tutorials")}
               >
                 <Brain className="w-4 h-4 mr-2" />
-                Video Tutorials
+                Tutorials
               </Button>
             </div>
           </CardContent>
