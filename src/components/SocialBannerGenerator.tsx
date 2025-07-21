@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -8,6 +8,11 @@ export const SocialBannerGenerator = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const { toast } = useToast();
+
+  // Auto-generate on component mount
+  useEffect(() => {
+    generateBanner();
+  }, []);
 
   const generateBanner = async () => {
     setIsGenerating(true);
