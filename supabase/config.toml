@@ -49,3 +49,6 @@ verify_jwt = false
 
 [functions.upload-sample-content]
 verify_jwt = false
+
+[functions.generate-social-banner]
+verify_jwt = false
