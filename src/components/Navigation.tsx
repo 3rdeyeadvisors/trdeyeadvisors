@@ -51,9 +51,14 @@ const Navigation = () => {
           {/* Logo */}
           <Link 
             to="/" 
-            className="flex items-center space-x-2 font-consciousness font-semibold text-xl text-foreground hover:text-primary transition-colors"
+            className="flex items-center space-x-2 font-consciousness font-semibold text-foreground hover:text-primary transition-colors"
           >
-            <span className="font-system">3rdeyeadvisors</span>
+            <div className="flex items-center space-x-1">
+              <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary/60 rounded-full flex items-center justify-center text-primary-foreground font-bold text-sm">
+                3
+              </div>
+              <span className="font-system text-base md:text-lg whitespace-nowrap">rdeyeadvisors</span>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
