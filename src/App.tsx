@@ -42,6 +42,7 @@ import Profile from "./pages/Profile";
 import BlogPost from "./pages/BlogPost";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
+import SocialBanner from "./pages/SocialBanner";
 
 const queryClient = new QueryClient();
 
@@ -89,6 +90,7 @@ const App = () => (
                   <Route path="/test-downloads" element={<TestDownloads />} />
                   <Route path="/privacy" element={<PrivacyPolicy />} />
                   <Route path="/terms" element={<TermsOfService />} />
+                  <Route path="/social-banner" element={<SocialBanner />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </Layout>
