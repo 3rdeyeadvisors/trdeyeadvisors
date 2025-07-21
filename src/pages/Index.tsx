@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { BookOpen, Wrench, Eye, Code, TrendingUp, Shield } from "lucide-react";
 import cosmicHeroBg from "@/assets/cosmic-hero-bg.jpg";
 import NewsletterSignup from "@/components/NewsletterSignup";
+import FloatingLogo from "@/components/FloatingLogo";
 import SEO from "@/components/SEO";
 
 const Index = () => {
@@ -33,6 +34,7 @@ const Index = () => {
   return (
     <>
       <SEO />
+      <FloatingLogo />
       <div className="min-h-screen">
       {/* Hero Section */}
       <section 
