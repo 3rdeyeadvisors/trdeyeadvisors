@@ -10,22 +10,22 @@ const Logo3D = () => {
   useFrame((state) => {
     if (meshRef.current) {
       // Gentle floating movement
-      meshRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.3;
-      meshRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.3) * 0.1;
+      meshRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.2;
+      meshRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.8) * 0.1;
     }
   });
 
   return (
     <Float
-      speed={2}
-      rotationIntensity={0.5}
-      floatIntensity={0.8}
-      floatingRange={[-0.3, 0.3]}
+      speed={1.5}
+      rotationIntensity={0.3}
+      floatIntensity={1.2}
+      floatingRange={[-0.2, 0.2]}
     >
       <Text
         ref={meshRef}
-        font="https://fonts.gstatic.com/s/raleway/v14/1Ptrg8zYS_SKggPNwK4vaqI.woff"
-        fontSize={0.5}
+        font="https://fonts.gstatic.com/s/comfortaa/v30/1Ptqg8zYS_SKggPN4iEgvnHyvveLxVvao4CPNLA3.woff2"
+        fontSize={0.6}
         color="#00d4ff"
         anchorX="center"
         anchorY="middle"
@@ -34,53 +34,98 @@ const Logo3D = () => {
         3EA
         <meshStandardMaterial 
           color="#00d4ff" 
-          emissive="#0066cc" 
-          emissiveIntensity={0.3}
-          metalness={0.8}
-          roughness={0.2}
+          emissive="#0099ff" 
+          emissiveIntensity={0.4}
+          metalness={0.3}
+          roughness={0.1}
         />
       </Text>
     </Float>
   );
 };
 
-const Ship3D = () => {
-  const shipRef = useRef<THREE.Group>(null);
+const RocketShip = () => {
+  const rocketRef = useRef<THREE.Group>(null);
 
   useFrame((state) => {
-    if (shipRef.current) {
-      // Ship flying around the logo
-      const time = state.clock.elapsedTime * 0.3;
-      shipRef.current.position.x = Math.cos(time) * 2;
-      shipRef.current.position.z = Math.sin(time) * 2;
-      shipRef.current.position.y = Math.sin(time * 2) * 0.3;
-      shipRef.current.rotation.y = time + Math.PI / 2;
-      shipRef.current.rotation.z = Math.sin(time * 2) * 0.1;
+    if (rocketRef.current) {
+      // Rocket orbiting the logo in a smooth elliptical path
+      const time = state.clock.elapsedTime * 0.4;
+      rocketRef.current.position.x = Math.cos(time) * 2.5;
+      rocketRef.current.position.z = Math.sin(time) * 2.5;
+      rocketRef.current.position.y = Math.sin(time * 1.5) * 0.4;
+      
+      // Rocket points forward in its trajectory
+      rocketRef.current.rotation.y = time + Math.PI / 2;
+      rocketRef.current.rotation.z = Math.sin(time * 1.5) * 0.15;
     }
   });
 
   return (
-    <group ref={shipRef}>
-      {/* Simple ship geometry */}
-      <mesh position={[0, 0, 0]}>
-        <coneGeometry args={[0.08, 0.2, 6]} />
+    <group ref={rocketRef}>
+      {/* Rocket Body */}
+      <mesh position={[0, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
+        <cylinderGeometry args={[0.03, 0.05, 0.25, 8]} />
         <meshStandardMaterial 
-          color="#00d4ff" 
-          emissive="#0066cc" 
+          color="#ffffff" 
+          emissive="#0099ff" 
+          emissiveIntensity={0.3}
+          metalness={0.8}
+          roughness={0.2}
+        />
+      </mesh>
+      
+      {/* Rocket Nose Cone */}
+      <mesh position={[0.125, 0, 0]} rotation={[0, 0, -Math.PI / 2]}>
+        <coneGeometry args={[0.05, 0.1, 8]} />
+        <meshStandardMaterial 
+          color="#ff6b35" 
+          emissive="#ff4500" 
           emissiveIntensity={0.4}
           metalness={0.6}
           roughness={0.3}
         />
       </mesh>
-      {/* Ship trail */}
+      
+      {/* Rocket Fins */}
+      <mesh position={[-0.1, 0.03, 0]} rotation={[0, 0, Math.PI / 4]}>
+        <boxGeometry args={[0.05, 0.02, 0.08]} />
+        <meshStandardMaterial 
+          color="#00d4ff" 
+          emissive="#0066cc" 
+          emissiveIntensity={0.4}
+        />
+      </mesh>
+      <mesh position={[-0.1, -0.03, 0]} rotation={[0, 0, -Math.PI / 4]}>
+        <boxGeometry args={[0.05, 0.02, 0.08]} />
+        <meshStandardMaterial 
+          color="#00d4ff" 
+          emissive="#0066cc" 
+          emissiveIntensity={0.4}
+        />
+      </mesh>
+      
+      {/* Rocket Thruster Fire */}
       <mesh position={[-0.15, 0, 0]}>
-        <sphereGeometry args={[0.02, 8, 8]} />
+        <coneGeometry args={[0.025, 0.08, 6]} />
+        <meshStandardMaterial 
+          color="#ffaa00" 
+          emissive="#ff6600" 
+          emissiveIntensity={1.2}
+          transparent
+          opacity={0.8}
+        />
+      </mesh>
+      
+      {/* Particle Trail */}
+      <mesh position={[-0.22, 0, 0]}>
+        <sphereGeometry args={[0.015, 6, 6]} />
         <meshStandardMaterial 
           color="#ffffff" 
-          emissive="#ffffff" 
-          emissiveIntensity={0.8}
+          emissive="#ffaa00" 
+          emissiveIntensity={0.9}
           transparent
-          opacity={0.7}
+          opacity={0.6}
         />
       </mesh>
     </group>
@@ -89,26 +134,26 @@ const Ship3D = () => {
 
 export const FloatingLogo = () => {
   return (
-    <div className="fixed top-4 right-4 w-40 h-40 z-30 pointer-events-none">
+    <div className="fixed bottom-8 left-8 w-56 h-56 z-30 pointer-events-none">
       <Canvas
-        camera={{ position: [0, 0, 4], fov: 50 }}
+        camera={{ position: [0, 0, 5], fov: 45 }}
         style={{ background: 'transparent' }}
       >
-        <ambientLight intensity={0.4} />
-        <pointLight position={[5, 5, 5]} intensity={1} color="#00d4ff" />
-        <pointLight position={[-5, -5, -5]} intensity={0.3} color="#8b5cf6" />
+        <ambientLight intensity={0.3} />
+        <pointLight position={[5, 5, 5]} intensity={1.2} color="#00d4ff" />
+        <pointLight position={[-5, -5, -5]} intensity={0.4} color="#ff6b35" />
         
         <Stars
-          radius={50}
-          depth={30}
-          count={500}
-          factor={2}
+          radius={80}
+          depth={50}
+          count={300}
+          factor={3}
           saturation={0}
-          speed={0.3}
+          speed={0.2}
         />
         
         <Logo3D />
-        <Ship3D />
+        <RocketShip />
         
         <OrbitControls 
           enableZoom={false} 
