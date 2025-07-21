@@ -16,8 +16,10 @@ interface AuthModalProps {
 export const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [resetEmail, setResetEmail] = useState('');
   const [loading, setLoading] = useState(false);
-  const { signIn, signUp } = useAuth();
+  const [showResetPassword, setShowResetPassword] = useState(false);
+  const { signIn, signUp, resetPassword } = useAuth();
   const { toast } = useToast();
 
   const handleSignIn = async (e: React.FormEvent) => {
@@ -65,7 +67,7 @@ export const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
       } else {
         toast({
           title: "Account created!",
-          description: "Please check your email to verify your account.",
+          description: "Welcome! Your account is ready to use.",
         });
         onClose();
       }
@@ -80,11 +82,82 @@ export const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
     }
   };
 
+  const handleResetPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    
+    try {
+      const { error } = await resetPassword(resetEmail);
+      if (error) {
+        toast({
+          title: "Reset failed",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Reset email sent!",
+          description: "Check your email for password reset instructions.",
+        });
+        setShowResetPassword(false);
+        setResetEmail('');
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (showResetPassword) {
+    return (
+      <Dialog open={isOpen} onOpenChange={onClose}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="font-consciousness">Reset Password</DialogTitle>
+          </DialogHeader>
+          
+          <form onSubmit={handleResetPassword} className="space-y-4">
+            <div>
+              <Label htmlFor="reset-email">Email</Label>
+              <Input
+                id="reset-email"
+                type="email"
+                value={resetEmail}
+                onChange={(e) => setResetEmail(e.target.value)}
+                placeholder="Enter your email address"
+                required
+              />
+            </div>
+            <div className="flex gap-2">
+              <Button type="submit" disabled={loading} className="flex-1">
+                {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Send Reset Email
+              </Button>
+              <Button 
+                type="button" 
+                variant="outline" 
+                onClick={() => setShowResetPassword(false)}
+                className="flex-1"
+              >
+                Back to Sign In
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="font-consciousness">Welcome to DeFi Academy</DialogTitle>
+          <DialogTitle className="font-consciousness">Welcome to 3rdeyeadvisors</DialogTitle>
         </DialogHeader>
         
         <Tabs defaultValue="signin" className="w-full">
@@ -118,6 +191,14 @@ export const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Sign In
+              </Button>
+              <Button 
+                type="button" 
+                variant="ghost" 
+                className="w-full text-sm"
+                onClick={() => setShowResetPassword(true)}
+              >
+                Forgot your password?
               </Button>
             </form>
           </TabsContent>

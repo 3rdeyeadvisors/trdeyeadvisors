@@ -10,14 +10,36 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 
 const Auth = () => {
-  const { user, signIn, signUp } = useAuth();
+  const { user, signIn, signUp, resetPassword } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isPasswordReset, setIsPasswordReset] = useState(false);
+
+  // Check URL parameters
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const verified = urlParams.get('verified');
+    const reset = urlParams.get('reset');
+    
+    if (verified === 'true') {
+      toast({
+        title: "Email verified!",
+        description: "Your account has been verified successfully.",
+      });
+      // Clean up URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+    
+    if (reset === 'true') {
+      setIsPasswordReset(true);
+    }
+  }, [toast]);
 
   // Redirect if already authenticated
   useEffect(() => {
@@ -77,8 +99,8 @@ const Auth = () => {
         });
       } else {
         toast({
-          title: "Check your email!",
-          description: "We've sent you a confirmation link to complete your registration.",
+          title: "Account created!",
+          description: "Welcome! You can now start exploring our courses.",
         });
       }
     } catch (error) {
@@ -92,13 +114,92 @@ const Auth = () => {
     }
   };
 
+  const handleResetPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    
+    try {
+      const { error } = await resetPassword(email);
+      
+      if (error) {
+        toast({
+          title: "Error sending reset email",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Reset email sent!",
+          description: "Check your email for password reset instructions.",
+        });
+        setIsPasswordReset(false);
+        setEmail("");
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (isPasswordReset) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-cosmic px-4">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <CardTitle className="text-2xl font-bold">Reset Password</CardTitle>
+            <CardDescription>
+              Enter your email to receive password reset instructions
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleResetPassword} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="reset-email">Email</Label>
+                <Input
+                  id="reset-email"
+                  type="email"
+                  placeholder="your@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="flex gap-2">
+                <Button type="submit" disabled={loading} className="flex-1">
+                  {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  Send Reset Email
+                </Button>
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  onClick={() => {
+                    setIsPasswordReset(false);
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                  }}
+                  className="flex-1"
+                >
+                  Back to Sign In
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-cosmic px-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">Welcome to DeFi Mastery</CardTitle>
+          <CardTitle className="text-2xl font-bold">Welcome to 3rdeyeadvisors</CardTitle>
           <CardDescription>
-            Join our community to access exclusive courses and resources
+            Join our community to access exclusive DeFi courses and resources
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -135,6 +236,14 @@ const Auth = () => {
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Sign In
+                </Button>
+                <Button 
+                  type="button" 
+                  variant="ghost" 
+                  className="w-full text-sm"
+                  onClick={() => setIsPasswordReset(true)}
+                >
+                  Forgot your password?
                 </Button>
               </form>
             </TabsContent>
