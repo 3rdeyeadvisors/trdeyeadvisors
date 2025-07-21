@@ -51,14 +51,11 @@ const Navigation = () => {
           {/* Logo */}
           <Link 
             to="/" 
-            className="flex items-center space-x-2 font-consciousness font-bold text-foreground hover:text-primary transition-all duration-300 group"
+            className="flex items-center font-consciousness font-bold text-foreground hover:text-primary transition-all duration-300 group flex-shrink-0"
           >
-            <div className="relative">
-              <span className="text-2xl md:text-3xl font-mono tracking-wider bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent group-hover:from-accent group-hover:via-primary group-hover:to-accent transition-all duration-500">
-                3EA
-              </span>
-              <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 via-transparent to-accent/20 rounded blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </div>
+            <span className="text-lg md:text-xl font-mono tracking-tight bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent group-hover:from-accent group-hover:via-primary group-hover:to-accent transition-all duration-500">
+              3EA
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
