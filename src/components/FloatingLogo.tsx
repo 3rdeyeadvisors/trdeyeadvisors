@@ -133,11 +133,20 @@ const RocketShip = () => {
 };
 
 export const FloatingLogo = () => {
+  console.log('FloatingLogo component rendered');
+  
   return (
-    <div className="fixed bottom-8 left-8 w-56 h-56 z-30 pointer-events-none">
+    <div 
+      className="fixed bottom-8 left-8 w-56 h-56 z-30 pointer-events-none" 
+      style={{ 
+        border: '2px solid red', // Debug border to see if container is visible
+        backgroundColor: 'rgba(255, 0, 0, 0.1)' // Debug background
+      }}
+    >
       <Canvas
         camera={{ position: [0, 0, 5], fov: 45 }}
         style={{ background: 'transparent' }}
+        onCreated={() => console.log('Canvas created successfully')}
       >
         <ambientLight intensity={0.3} />
         <pointLight position={[5, 5, 5]} intensity={1.2} color="#00d4ff" />
