@@ -72,6 +72,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         ...options,
       },
     });
+    
+    // Auto-sign in after successful signup (since email confirmation is now auto-enabled)
+    if (!result.error && result.data.user) {
+      const signInResult = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      return signInResult;
+    }
+    
     return result;
   };
 
