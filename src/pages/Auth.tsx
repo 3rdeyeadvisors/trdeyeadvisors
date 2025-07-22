@@ -83,9 +83,8 @@ const Auth = () => {
     setLoading(true);
     
     try {
-      const redirectUrl = `${window.location.origin}/`;
-      
       const { error } = await signUp(email, password, {
+        emailRedirectTo: `${window.location.origin}/auth?verified=true`,
         data: {
           display_name: displayName,
         },
