@@ -123,19 +123,19 @@ const VideoTutorials = () => {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "Critical": return "bg-red-500";
-      case "High": return "bg-orange-500";
-      case "Medium": return "bg-blue-500";
-      default: return "bg-gray-500";
+      case "Critical": return "bg-red-500/90";
+      case "High": return "bg-orange-500/90";
+      case "Medium": return "bg-primary/90";
+      default: return "bg-muted-foreground/90";
     }
   };
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case "Beginner": return "text-green-600 bg-green-50";
-      case "Intermediate": return "text-yellow-600 bg-yellow-50";
-      case "Advanced": return "text-red-600 bg-red-50";
-      default: return "text-gray-600 bg-gray-50";
+      case "Beginner": return "text-awareness bg-awareness/20";
+      case "Intermediate": return "text-accent bg-accent/20";
+      case "Advanced": return "text-primary-glow bg-primary/20";
+      default: return "text-muted-foreground bg-muted/20";
     }
   };
 
@@ -169,7 +169,7 @@ const VideoTutorials = () => {
           {Object.entries(videoCategories).map(([key, category]) => (
             <TabsContent key={key} value={key}>
               <div className="mb-6">
-                <h2 className="text-2xl font-semibold mb-2">{category.title}</h2>
+                <h2 className="text-2xl font-semibold mb-2 text-card-foreground">{category.title}</h2>
                 <p className="text-muted-foreground">{category.description}</p>
               </div>
 
@@ -177,65 +177,65 @@ const VideoTutorials = () => {
                 {category.videos.map((video) => {
                   const VideoIcon = video.icon;
                   return (
-                    <Card key={video.id} className="group hover:shadow-lg transition-all duration-300 border-0 bg-white/50 backdrop-blur-sm hover:bg-white/80">
-                      <CardHeader className="pb-4">
-                        <div className="flex items-start justify-between">
-                          <div className="flex items-center gap-3">
-                            <div className="p-2 rounded-lg bg-primary/10">
-                              <VideoIcon className="h-6 w-6 text-primary" />
-                            </div>
-                            <div>
-                              <CardTitle className="text-lg group-hover:text-primary transition-colors">
-                                {video.title}
-                              </CardTitle>
-                              <div className="flex items-center gap-2 mt-1">
-                                <Badge 
-                                  variant="secondary" 
-                                  className={`text-xs ${getPriorityColor(video.priority)} text-white border-0`}
-                                >
-                                  {video.priority}
-                                </Badge>
-                                <Badge 
-                                  variant="outline" 
-                                  className={`text-xs ${getDifficultyColor(video.difficulty)} border-0`}
-                                >
-                                  {video.difficulty}
-                                </Badge>
-                              </div>
+                  <Card key={video.id} className="group hover:shadow-cosmic transition-all duration-cosmic border border-border/50 bg-card/80 backdrop-blur-sm hover:bg-card hover:border-primary/30">
+                    <CardHeader className="pb-4">
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="p-2 rounded-lg bg-primary/20 group-hover:bg-primary/30 transition-colors">
+                            <VideoIcon className="h-6 w-6 text-primary" />
+                          </div>
+                          <div>
+                            <CardTitle className="text-lg text-card-foreground group-hover:text-primary transition-colors">
+                              {video.title}
+                            </CardTitle>
+                            <div className="flex items-center gap-2 mt-1">
+                              <Badge 
+                                variant="secondary" 
+                                className={`text-xs font-medium ${getPriorityColor(video.priority)} text-white border-0`}
+                              >
+                                {video.priority}
+                              </Badge>
+                              <Badge 
+                                variant="outline" 
+                                className={`text-xs font-medium ${getDifficultyColor(video.difficulty)} border-0`}
+                              >
+                                {video.difficulty}
+                              </Badge>
                             </div>
                           </div>
                         </div>
-                      </CardHeader>
+                      </div>
+                    </CardHeader>
 
-                      <CardContent className="pt-0">
-                        <CardDescription className="mb-4 text-sm">
-                          {video.description}
-                        </CardDescription>
+                    <CardContent className="pt-0">
+                      <CardDescription className="mb-4 text-sm text-muted-foreground">
+                        {video.description}
+                      </CardDescription>
 
-                        <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
-                          <span>{video.duration}</span>
-                          <span>{video.steps} steps</span>
-                          <span>{video.course}</span>
-                        </div>
+                      <div className="flex items-center justify-between text-sm text-muted-foreground/80 mb-4 font-system">
+                        <span>{video.duration}</span>
+                        <span>{video.steps} steps</span>
+                        <span className="text-primary/80">{video.course}</span>
+                      </div>
 
-                        <Button 
-                          className="w-full group-hover:bg-primary group-hover:text-white transition-all"
-                          variant="outline"
-                          onClick={() => {
-                            const tutorialRoutes: { [key: string]: string } = {
-                              "wallet-setup": "/tutorials/wallet-setup",
-                              "first-dex-swap": "/tutorials/first-dex-swap",
-                              "defi-calculators": "/tutorials/defi-calculators",
-                              "spotting-scams": "/tutorials/spotting-scams"
-                            };
-                            window.location.href = tutorialRoutes[video.id] || "/tutorials";
-                          }}
-                        >
-                          <Play className="h-4 w-4 mr-2" />
-                          Start Tutorial
-                        </Button>
-                      </CardContent>
-                    </Card>
+                      <Button 
+                        className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-all hover:shadow-cosmic border-primary/30"
+                        variant="outline"
+                        onClick={() => {
+                          const tutorialRoutes: { [key: string]: string } = {
+                            "wallet-setup": "/tutorials/wallet-setup",
+                            "first-dex-swap": "/tutorials/first-dex-swap",
+                            "defi-calculators": "/tutorials/defi-calculators",
+                            "spotting-scams": "/tutorials/spotting-scams"
+                          };
+                          window.location.href = tutorialRoutes[video.id] || "/tutorials";
+                        }}
+                      >
+                        <Play className="h-4 w-4 mr-2" />
+                        Start Tutorial
+                      </Button>
+                    </CardContent>
+                  </Card>
                   );
                 })}
               </div>
