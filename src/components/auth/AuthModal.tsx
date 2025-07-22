@@ -223,8 +223,11 @@ export const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  minLength={6}
+                  minLength={8}
                 />
+                <p className="text-xs text-muted-foreground mt-1">
+                  Password must be at least 8 characters and include uppercase, lowercase, and a number
+                </p>
               </div>
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
