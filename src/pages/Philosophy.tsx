@@ -83,7 +83,7 @@ const Philosophy = () => {
               You are not here to follow.
             </p>
             <p className="text-xl md:text-2xl font-consciousness font-bold text-primary mt-2">
-              You are here to write.
+              You are here to rewrite.
             </p>
           </Card>
         </div>
