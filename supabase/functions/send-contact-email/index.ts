@@ -27,7 +27,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send email to info
     const supportEmailResponse = await resend.emails.send({
-      from: "3rdeyeadvisors <noreply@3rdeyeadvisors.com>",
+      from: "onboarding@resend.dev",
       to: ["info@3rdeyeadvisors.com"],
       subject: `Contact Form: ${subject}`,
       html: `
@@ -47,7 +47,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send confirmation email to user
     const userEmailResponse = await resend.emails.send({
-      from: "3rdeyeadvisors <info@3rdeyeadvisors.com>",
+      from: "onboarding@resend.dev",
       to: [email],
       subject: "We received your message!",
       html: `
