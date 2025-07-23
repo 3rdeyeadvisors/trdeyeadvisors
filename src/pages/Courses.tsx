@@ -34,7 +34,9 @@ const Courses = () => {
         "The Key Players (Stablecoins, DEXs, lending protocols – explained simply)",
         "Risks and Myths (Separating facts from hype)"
       ],
-      icon: BookOpen
+      icon: BookOpen,
+      offers: [],
+      hasCourseInstance: true
     },
     {
       id: 2,
@@ -53,7 +55,9 @@ const Courses = () => {
         "Safe Transactions – Sending, Receiving, and Testing Small First",
         "The Beginner's Checklist for DeFi Security"
       ],
-      icon: BookOpen
+      icon: BookOpen,
+      offers: [],
+      hasCourseInstance: true
     },
     {
       id: 3,
