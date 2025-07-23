@@ -82,7 +82,7 @@ const Philosophy = () => {
             <p className="text-xl md:text-2xl font-consciousness font-medium text-foreground">
               You are not here to follow.
             </p>
-            <p className="text-xl md:text-2xl font-consciousness font-bold text-primary mt-2">
+            <p className="text-xl md:text-2xl font-consciousness font-bold text-primary-glow mt-2 drop-shadow-lg">
               You are here to rewrite.
             </p>
           </Card>
