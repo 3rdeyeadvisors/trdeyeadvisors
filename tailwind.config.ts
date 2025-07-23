@@ -120,15 +120,32 @@ export default {
 					'50%': {
 						transform: 'translateY(-10px)'
 					}
+				},
+				'shooting-star': {
+					'0%': {
+						transform: 'translateX(-100px) translateY(0px) rotate(45deg)',
+						opacity: '0'
+					},
+					'10%': {
+						opacity: '1'
+					},
+					'90%': {
+						opacity: '1'
+					},
+					'100%': {
+						transform: 'translateX(calc(100vw + 100px)) translateY(-50px) rotate(45deg)',
+						opacity: '0'
+					}
 				}
 			},
-			animation: {
-				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out',
-				'cosmic-pulse': 'cosmic-pulse 3s ease-in-out infinite',
-				'consciousness-glow': 'consciousness-glow 4s ease-in-out infinite',
-				'awareness-float': 'awareness-float 6s ease-in-out infinite'
-			}
+        animation: {
+          'accordion-down': 'accordion-down 0.2s ease-out',
+          'accordion-up': 'accordion-up 0.2s ease-out',
+          'cosmic-pulse': 'cosmic-pulse 3s ease-in-out infinite',
+          'consciousness-glow': 'consciousness-glow 4s ease-in-out infinite',
+          'awareness-float': 'awareness-float 6s ease-in-out infinite',
+          'shooting-star': 'shooting-star 3s linear'
+        }
 		}
 	},
 	plugins: [require("tailwindcss-animate")],

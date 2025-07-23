@@ -1,13 +1,32 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { BookOpen, Wrench, Eye, Code, TrendingUp, Shield } from "lucide-react";
+import { BookOpen, Wrench, Eye, Code, TrendingUp, Shield, Star } from "lucide-react";
 import cosmicHeroBg from "@/assets/cosmic-hero-bg.jpg";
 import NewsletterSignup from "@/components/NewsletterSignup";
+import { useEffect, useState } from "react";
 
 import SEO from "@/components/SEO";
 
 const Index = () => {
+  const [showStar, setShowStar] = useState(false);
+
+  useEffect(() => {
+    // Start the shooting star immediately when component mounts
+    const startShootingStar = () => {
+      setShowStar(true);
+      setTimeout(() => setShowStar(false), 3000); // Hide after 3 seconds
+    };
+
+    // Initial shooting star on page load
+    startShootingStar();
+
+    // Set interval for every 15 seconds
+    const interval = setInterval(startShootingStar, 15000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   const features = [
     {
       icon: Eye,
@@ -36,6 +55,21 @@ const Index = () => {
       <SEO />
       
       <div className="min-h-screen">
+        {/* Shooting Star */}
+        {showStar && (
+          <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-50 overflow-hidden">
+            <Star 
+              className="absolute text-primary-glow animate-[shooting-star_3s_linear] opacity-90" 
+              size={32}
+              style={{
+                top: '20%',
+                left: '-10%',
+                filter: 'drop-shadow(0 0 10px hsl(var(--primary-glow))) drop-shadow(0 0 20px hsl(var(--primary)))'
+              }}
+            />
+          </div>
+        )}
+        
       {/* Hero Section */}
       <section 
         className="relative min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
