@@ -13,13 +13,16 @@ const Navigation = () => {
   const { user, signOut } = useAuth();
   const { toast } = useToast();
 
-  const navItems = [
+  const primaryNavItems = [
     { path: "/", label: "Home" },
-    { path: "/philosophy", label: "Our Philosophy" },
-    { path: "/courses", label: "Courses & Tools" },
+    { path: "/philosophy", label: "Philosophy" },
+    { path: "/courses", label: "Courses" },
     { path: "/tutorials", label: "Tutorials" },
-    { path: "/blog", label: "Blog & Articles" },
-    { path: "/resources", label: "Resource Hub" },
+    { path: "/blog", label: "Blog" },
+    { path: "/resources", label: "Resources" },
+  ];
+
+  const secondaryNavItems = [
     { path: "/analytics", label: "Analytics" },
     { path: "/store", label: "Store" },
     { path: "/downloads", label: "Downloads" },
@@ -56,14 +59,14 @@ const Navigation = () => {
           </Link>
           
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
+          <div className="hidden lg:flex items-center space-x-6">
+            {primaryNavItems.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
                 className={`text-sm font-consciousness transition-all duration-cosmic hover:text-primary ${
                   isActive(item.path)
-                    ? "text-primary font-medium border-b border-primary"
+                    ? "text-primary font-medium"
                     : "text-muted-foreground"
                 }`}
               >
@@ -71,8 +74,8 @@ const Navigation = () => {
               </Link>
             ))}
             
-            {/* Cart & Auth buttons */}
-            <div className="flex items-center space-x-4">
+            {/* Right side actions */}
+            <div className="flex items-center space-x-3">
               <Link to="/cart" className="relative">
                 <Button variant="ghost" size="icon" className="relative">
                   <ShoppingCart className="h-5 w-5" />
@@ -84,31 +87,17 @@ const Navigation = () => {
                 </Button>
               </Link>
               {user ? (
-                <div className="flex items-center space-x-3">
-                  <Button
-                    asChild
-                    variant="ghost"
-                    size="sm"
-                    className="text-muted-foreground hover:text-primary"
-                  >
-                    <Link to="/profile" className="flex items-center space-x-2">
-                      <User className="w-4 h-4" />
-                      <span>Profile</span>
-                    </Link>
-                  </Button>
-                  <div className="text-sm text-muted-foreground">
-                    {user.email}
-                  </div>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleSignOut}
-                    className="flex items-center space-x-2"
-                  >
-                    <LogOut className="w-4 h-4" />
-                    <span>Sign Out</span>
-                  </Button>
-                </div>
+                <Button
+                  asChild
+                  variant="ghost"
+                  size="sm"
+                  className="text-muted-foreground hover:text-primary"
+                >
+                  <Link to="/profile" className="flex items-center space-x-2">
+                    <User className="w-4 h-4" />
+                    <span>Profile</span>
+                  </Link>
+                </Button>
               ) : (
                 <Button asChild variant="outline" size="sm">
                   <Link to="/auth" className="flex items-center space-x-2">
@@ -121,7 +110,7 @@ const Navigation = () => {
           </div>
 
           {/* Mobile Cart & Menu */}
-          <div className="md:hidden flex items-center space-x-3">
+          <div className="lg:hidden flex items-center space-x-3">
             {/* Mobile Cart */}
             <Link to="/cart" className="relative">
               <Button variant="ghost" size="icon" className="relative">
@@ -158,9 +147,9 @@ const Navigation = () => {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden py-4 border-t border-border">
+          <div className="lg:hidden py-4 border-t border-border">
             <div className="flex flex-col space-y-4">
-              {navItems.map((item) => (
+              {[...primaryNavItems, ...secondaryNavItems].map((item) => (
                 <Link
                   key={item.path}
                   to={item.path}
@@ -243,17 +232,17 @@ const Navigation = () => {
                       <span>Sign Out</span>
                     </Button>
                   </div>
-                 ) : (
-                   <div className="space-y-3">
-                     {/* Welcome Message for Guest Users */}
-                     <div className="text-center space-y-2">
-                       <p className="text-sm font-medium">Welcome to 3rdeyeadvisors</p>
-                       <p className="text-xs text-muted-foreground">
-                         Explore our free resources or sign in to track your progress
-                       </p>
-                     </div>
-                   </div>
-                 )}
+                ) : (
+                  <div className="space-y-3">
+                    {/* Welcome Message for Guest Users */}
+                    <div className="text-center space-y-2">
+                      <p className="text-sm font-medium">Welcome to 3rdeyeadvisors</p>
+                      <p className="text-xs text-muted-foreground">
+                        Explore our free resources or sign in to track your progress
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
