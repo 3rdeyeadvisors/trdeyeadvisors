@@ -89,12 +89,12 @@ const Index = () => {
       {/* Mission Statement */}
       <section className="py-20 bg-background">
         <div className="container mx-auto px-4">
-          <Card className="p-8 bg-gradient-consciousness border-primary/20 shadow-consciousness max-w-4xl mx-auto">
+          <Card className="p-8 bg-gradient-consciousness border-primary/20 shadow-consciousness max-w-4xl mx-auto hover:shadow-[0_0_30px_hsl(var(--primary)/0.4),0_0_60px_hsl(var(--accent)/0.3)] hover:border-primary/40 transition-all duration-consciousness cursor-pointer group animate-consciousness-glow hover:animate-none">
             <div className="text-center">
-              <h2 className="text-2xl md:text-3xl font-consciousness font-bold text-foreground mb-6">
+              <h2 className="text-2xl md:text-3xl font-consciousness font-bold text-foreground mb-6 group-hover:text-primary-glow transition-colors duration-cosmic">
                 Our Mission
               </h2>
-              <p className="text-lg text-foreground/90 font-consciousness leading-relaxed drop-shadow-sm">
+              <p className="text-lg text-foreground/90 font-consciousness leading-relaxed drop-shadow-sm group-hover:text-foreground transition-colors duration-cosmic">
                 We exist to reprogram the financial consciousness of those ready to evolve beyond 
                 traditional systems. Through education, tools, and resources, we guide you toward 
                 genuine financial sovereignty in the decentralized economy. No hype. No promises. 
