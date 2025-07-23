@@ -145,61 +145,114 @@ const Navigation = () => {
               ))}
               
               {/* Mobile Cart & Auth */}
-              <div className="pt-4 border-t border-border space-y-3">
-                <Link to="/cart" className="relative flex justify-center" onClick={() => setIsOpen(false)}>
-                  <Button variant="ghost" size="icon" className="relative">
-                    <ShoppingCart className="h-5 w-5" />
-                    {itemCount > 0 && (
-                      <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                        {itemCount}
-                      </span>
-                    )}
-                  </Button>
-                </Link>
+              <div className="pt-4 border-t border-border">
                 {user ? (
-                  <div className="space-y-3">
-                    <Button
-                      asChild
-                      variant="ghost"
-                      size="sm"
-                      className="w-full justify-start"
-                    >
-                      <Link 
-                        to="/profile" 
-                        className="flex items-center space-x-2"
-                        onClick={() => setIsOpen(false)}
-                      >
-                        <User className="w-4 h-4" />
-                        <span>Profile</span>
-                      </Link>
-                    </Button>
-                    <div className="flex items-center space-x-2 text-sm text-muted-foreground px-3">
-                      <span>{user.email}</span>
+                  <div className="space-y-4">
+                    {/* User Info Card */}
+                    <div className="bg-muted/50 rounded-lg p-3">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                          <User className="w-5 h-5 text-primary" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium truncate">Welcome back!</p>
+                          <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+                        </div>
+                      </div>
                     </div>
+                    
+                    {/* Action Buttons */}
+                    <div className="grid grid-cols-2 gap-3">
+                      <Button
+                        asChild
+                        variant="outline"
+                        size="sm"
+                        className="flex items-center justify-center space-x-2"
+                      >
+                        <Link 
+                          to="/profile" 
+                          className="flex items-center space-x-2"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          <User className="w-4 h-4" />
+                          <span>Profile</span>
+                        </Link>
+                      </Button>
+                      
+                      <Button
+                        asChild
+                        variant="outline"
+                        size="sm"
+                        className="flex items-center justify-center space-x-2"
+                      >
+                        <Link to="/cart" onClick={() => setIsOpen(false)}>
+                          <div className="flex items-center space-x-2 relative">
+                            <ShoppingCart className="w-4 h-4" />
+                            <span>Cart</span>
+                            {itemCount > 0 && (
+                              <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs rounded-full h-4 w-4 flex items-center justify-center">
+                                {itemCount}
+                              </span>
+                            )}
+                          </div>
+                        </Link>
+                      </Button>
+                    </div>
+                    
                     <Button
-                      variant="outline"
+                      variant="ghost"
                       size="sm"
                       onClick={() => {
                         handleSignOut();
                         setIsOpen(false);
                       }}
-                      className="flex items-center space-x-2 w-full"
+                      className="flex items-center justify-center space-x-2 w-full text-muted-foreground hover:text-foreground"
                     >
                       <LogOut className="w-4 h-4" />
                       <span>Sign Out</span>
                     </Button>
                   </div>
                 ) : (
-                  <Button asChild variant="outline" size="sm" className="w-full">
-                    <Link 
-                      to="/auth" 
-                      className="flex items-center space-x-2"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      <LogIn className="w-4 h-4" />
-                      <span>Sign In</span>
-                    </Link>
-                  </Button>
+                  <div className="space-y-3">
+                    {/* Sign In Call to Action */}
+                    <div className="text-center space-y-2">
+                      <p className="text-sm text-muted-foreground">
+                        Sign in to access your courses and track progress
+                      </p>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-3">
+                      <Button asChild variant="default" size="sm" className="flex items-center justify-center space-x-2">
+                        <Link 
+                          to="/auth" 
+                          className="flex items-center space-x-2"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          <LogIn className="w-4 h-4" />
+                          <span>Sign In</span>
+                        </Link>
+                      </Button>
+                      
+                      <Button
+                        asChild
+                        variant="outline"
+                        size="sm"
+                        className="flex items-center justify-center space-x-2"
+                      >
+                        <Link to="/cart" onClick={() => setIsOpen(false)}>
+                          <div className="flex items-center space-x-2 relative">
+                            <ShoppingCart className="w-4 h-4" />
+                            <span>Cart</span>
+                            {itemCount > 0 && (
+                              <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs rounded-full h-4 w-4 flex items-center justify-center">
+                                {itemCount}
+                              </span>
+                            )}
+                          </div>
+                        </Link>
+                      </Button>
+                    </div>
+                  </div>
                 )}
               </div>
             </div>
