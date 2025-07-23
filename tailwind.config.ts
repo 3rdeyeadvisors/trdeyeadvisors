@@ -121,7 +121,7 @@ export default {
 						transform: 'translateY(-10px)'
 					}
 				},
-				'shooting-star': {
+				'shooting-star-1': {
 					'0%': {
 						transform: 'translateX(0px) translateY(0px) rotate(-45deg)',
 						opacity: '0'
@@ -133,7 +133,39 @@ export default {
 						opacity: '1'
 					},
 					'100%': {
-						transform: 'translateX(calc(-100vw - 200px)) translateY(calc(100vh + 200px)) rotate(-45deg)',
+						transform: 'translateX(calc(-100vw - 200px)) translateY(calc(100vh + 100px)) rotate(-45deg)',
+						opacity: '0'
+					}
+				},
+				'shooting-star-2': {
+					'0%': {
+						transform: 'translateX(0px) translateY(0px) rotate(-45deg)',
+						opacity: '0'
+					},
+					'10%': {
+						opacity: '1'
+					},
+					'90%': {
+						opacity: '1'
+					},
+					'100%': {
+						transform: 'translateX(calc(-100vw - 150px)) translateY(calc(100vh + 200px)) rotate(-45deg)',
+						opacity: '0'
+					}
+				},
+				'shooting-star-3': {
+					'0%': {
+						transform: 'translateX(0px) translateY(0px) rotate(-45deg)',
+						opacity: '0'
+					},
+					'10%': {
+						opacity: '1'
+					},
+					'90%': {
+						opacity: '1'
+					},
+					'100%': {
+						transform: 'translateX(calc(-100vw - 100px)) translateY(calc(100vh + 300px)) rotate(-45deg)',
 						opacity: '0'
 					}
 				}
@@ -141,10 +173,12 @@ export default {
         animation: {
           'accordion-down': 'accordion-down 0.2s ease-out',
           'accordion-up': 'accordion-up 0.2s ease-out',
-          'cosmic-pulse': 'cosmic-pulse 3s ease-in-out infinite',
-          'consciousness-glow': 'consciousness-glow 4s ease-in-out infinite',
-          'awareness-float': 'awareness-float 6s ease-in-out infinite',
-          'shooting-star': 'shooting-star 3s linear'
+			'cosmic-pulse': 'cosmic-pulse 3s ease-in-out infinite',
+			'consciousness-glow': 'consciousness-glow 4s ease-in-out infinite',
+			'awareness-float': 'awareness-float 6s ease-in-out infinite',
+			'shooting-star-1': 'shooting-star-1 3s linear',
+			'shooting-star-2': 'shooting-star-2 3s linear',
+			'shooting-star-3': 'shooting-star-3 3s linear'
         }
 		}
 	},

@@ -55,7 +55,7 @@ const Index = () => {
           <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-50 overflow-hidden">
             {/* First Star */}
             <div 
-              className="absolute animate-[shooting-star_3s_linear]"
+              className="absolute animate-[shooting-star-1_3s_linear]"
               style={{
                 top: '10%',
                 right: '-10%',
@@ -69,33 +69,41 @@ const Index = () => {
                   filter: 'drop-shadow(0 0 15px hsl(var(--primary-glow))) drop-shadow(0 0 30px hsl(var(--primary))) drop-shadow(0 0 45px hsl(var(--accent) / 0.3))'
                 }}
               />
-              {/* Realistic trail behind the star */}
+              {/* Realistic trail behind the star (diagonally up-right from star) */}
               <div 
-                className="absolute top-1/2 -translate-y-1/2 h-0.5"
+                className="absolute"
                 style={{ 
-                  left: '-80px',
+                  top: '-10px',
+                  right: '-10px',
                   width: '80px',
-                  background: 'linear-gradient(to left, hsl(var(--primary-glow)), hsl(var(--primary) / 0.8), hsl(var(--primary) / 0.4), hsl(var(--primary) / 0.1), transparent)',
+                  height: '2px',
+                  background: 'linear-gradient(45deg, transparent, hsl(var(--primary) / 0.1), hsl(var(--primary) / 0.4), hsl(var(--primary) / 0.8), hsl(var(--primary-glow)))',
                   filter: 'blur(0.5px)',
-                  opacity: '0.9'
+                  opacity: '0.9',
+                  transform: 'rotate(45deg)',
+                  transformOrigin: 'right center'
                 }}
               ></div>
               {/* Secondary trail for more realism */}
               <div 
-                className="absolute top-1/2 -translate-y-1/2 h-px"
+                className="absolute"
                 style={{ 
-                  left: '-120px',
+                  top: '-15px',
+                  right: '-15px',
                   width: '120px',
-                  background: 'linear-gradient(to left, hsl(var(--primary) / 0.6), hsl(var(--primary) / 0.3), hsl(var(--primary) / 0.1), transparent)',
+                  height: '1px',
+                  background: 'linear-gradient(45deg, transparent, hsl(var(--primary) / 0.1), hsl(var(--primary) / 0.3), hsl(var(--primary) / 0.6))',
                   filter: 'blur(1px)',
-                  opacity: '0.6'
+                  opacity: '0.6',
+                  transform: 'rotate(45deg)',
+                  transformOrigin: 'right center'
                 }}
               ></div>
             </div>
 
             {/* Second Star (follows 0.8s later) */}
             <div 
-              className="absolute animate-[shooting-star_3s_linear]"
+              className="absolute animate-[shooting-star-2_3s_linear]"
               style={{
                 top: '12%',
                 right: '-10%',
@@ -112,30 +120,38 @@ const Index = () => {
               />
               {/* Realistic trail */}
               <div 
-                className="absolute top-1/2 -translate-y-1/2 h-0.5"
+                className="absolute"
                 style={{ 
-                  left: '-70px',
+                  top: '-8px',
+                  right: '-8px',
                   width: '70px',
-                  background: 'linear-gradient(to left, hsl(var(--primary)), hsl(var(--primary) / 0.7), hsl(var(--primary) / 0.3), hsl(var(--primary) / 0.1), transparent)',
+                  height: '2px',
+                  background: 'linear-gradient(45deg, transparent, hsl(var(--primary) / 0.1), hsl(var(--primary) / 0.3), hsl(var(--primary) / 0.7), hsl(var(--primary)))',
                   filter: 'blur(0.5px)',
-                  opacity: '0.8'
+                  opacity: '0.8',
+                  transform: 'rotate(45deg)',
+                  transformOrigin: 'right center'
                 }}
               ></div>
               <div 
-                className="absolute top-1/2 -translate-y-1/2 h-px"
+                className="absolute"
                 style={{ 
-                  left: '-100px',
+                  top: '-12px',
+                  right: '-12px',
                   width: '100px',
-                  background: 'linear-gradient(to left, hsl(var(--primary) / 0.5), hsl(var(--primary) / 0.2), hsl(var(--primary) / 0.1), transparent)',
+                  height: '1px',
+                  background: 'linear-gradient(45deg, transparent, hsl(var(--primary) / 0.1), hsl(var(--primary) / 0.2), hsl(var(--primary) / 0.5))',
                   filter: 'blur(1px)',
-                  opacity: '0.5'
+                  opacity: '0.5',
+                  transform: 'rotate(45deg)',
+                  transformOrigin: 'right center'
                 }}
               ></div>
             </div>
 
             {/* Third Star (follows 1.6s later) */}
             <div 
-              className="absolute animate-[shooting-star_3s_linear]"
+              className="absolute animate-[shooting-star-3_3s_linear]"
               style={{
                 top: '14%',
                 right: '-10%',
@@ -152,23 +168,31 @@ const Index = () => {
               />
               {/* Realistic trail */}
               <div 
-                className="absolute top-1/2 -translate-y-1/2 h-0.5"
+                className="absolute"
                 style={{ 
-                  left: '-60px',
+                  top: '-6px',
+                  right: '-6px',
                   width: '60px',
-                  background: 'linear-gradient(to left, hsl(var(--primary-glow) / 0.8), hsl(var(--primary) / 0.6), hsl(var(--primary) / 0.3), hsl(var(--primary) / 0.1), transparent)',
+                  height: '2px',
+                  background: 'linear-gradient(45deg, transparent, hsl(var(--primary) / 0.1), hsl(var(--primary) / 0.3), hsl(var(--primary) / 0.6), hsl(var(--primary-glow) / 0.8))',
                   filter: 'blur(0.5px)',
-                  opacity: '0.7'
+                  opacity: '0.7',
+                  transform: 'rotate(45deg)',
+                  transformOrigin: 'right center'
                 }}
               ></div>
               <div 
-                className="absolute top-1/2 -translate-y-1/2 h-px"
+                className="absolute"
                 style={{ 
-                  left: '-90px',
+                  top: '-10px',
+                  right: '-10px',
                   width: '90px',
-                  background: 'linear-gradient(to left, hsl(var(--primary) / 0.4), hsl(var(--primary) / 0.2), hsl(var(--primary) / 0.1), transparent)',
+                  height: '1px',
+                  background: 'linear-gradient(45deg, transparent, hsl(var(--primary) / 0.1), hsl(var(--primary) / 0.2), hsl(var(--primary) / 0.4))',
                   filter: 'blur(1px)',
-                  opacity: '0.4'
+                  opacity: '0.4',
+                  transform: 'rotate(45deg)',
+                  transformOrigin: 'right center'
                 }}
               ></div>
             </div>
