@@ -94,7 +94,7 @@ const Index = () => {
               <h2 className="text-2xl md:text-3xl font-consciousness font-bold text-foreground mb-6">
                 Our Mission
               </h2>
-              <p className="text-lg text-muted-foreground font-consciousness leading-relaxed">
+              <p className="text-lg text-foreground/90 font-consciousness leading-relaxed drop-shadow-sm">
                 We exist to reprogram the financial consciousness of those ready to evolve beyond 
                 traditional systems. Through education, tools, and resources, we guide you toward 
                 genuine financial sovereignty in the decentralized economy. No hype. No promises. 
