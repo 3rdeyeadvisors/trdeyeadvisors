@@ -7,7 +7,7 @@ declare global {
 }
 
 // Initialize Google Analytics with your measurement ID
-export const GA_MEASUREMENT_ID = 'GA_MEASUREMENT_ID'; // Replace with your actual GA measurement ID
+export const GA_MEASUREMENT_ID = 'G-M2QLEVLMS2';
 
 // Track page views
 export const trackPageView = (url: string) => {
