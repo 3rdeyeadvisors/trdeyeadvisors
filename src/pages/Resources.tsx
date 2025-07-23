@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { ExternalLink, Wallet, BarChart3, Shield, BookOpen, Globe } from "lucide-react";
 import DefiCalculators from "@/components/DefiCalculators";
 import NewsletterSignup from "@/components/NewsletterSignup";
+import SEO from "@/components/SEO";
 
 const Resources = () => {
   const resourceCategories = [
@@ -58,7 +59,14 @@ const Resources = () => {
   ];
 
   return (
-    <div className="min-h-screen py-20">
+    <>
+      <SEO 
+        title="DeFi Resources & Tools Hub"
+        description="Curated collection of trusted DeFi tools, platforms, wallets, and educational resources. Everything you need to navigate decentralized finance safely and effectively."
+        keywords="DeFi tools, cryptocurrency resources, wallet recommendations, portfolio trackers, DeFi protocols, yield farming tools, crypto security"
+        url="https://3rdeyeadvisors.com/resources"
+      />
+      <div className="min-h-screen py-20">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
@@ -154,6 +162,7 @@ const Resources = () => {
         </section>
       </div>
     </div>
+    </>
   );
 };
 

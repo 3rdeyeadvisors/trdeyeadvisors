@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, ArrowRight } from "lucide-react";
 import { getBlogPosts, getBlogPostsByCategory } from "@/data/blogContent";
+import SEO from "@/components/SEO";
 
 const Blog = () => {
   const navigate = useNavigate();
@@ -24,7 +25,14 @@ const Blog = () => {
   };
 
   return (
-    <div className="min-h-screen py-20">
+    <>
+      <SEO 
+        title="DeFi Blog & Educational Articles"
+        description="Stay updated with the latest DeFi insights, educational content, security analysis, and cryptocurrency trends. Expert articles for beginners to advanced users."
+        keywords="DeFi blog, cryptocurrency articles, blockchain education, DeFi analysis, crypto news, yield farming insights, smart contract security"
+        url="https://3rdeyeadvisors.com/blog"
+      />
+      <div className="min-h-screen py-20">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
@@ -144,6 +152,7 @@ const Blog = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

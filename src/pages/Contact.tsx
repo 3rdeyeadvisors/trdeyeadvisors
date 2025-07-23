@@ -7,6 +7,7 @@ import { Mail, MessageSquare, Send, Globe, Twitter, Github } from "lucide-react"
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import NewsletterSignup from "@/components/NewsletterSignup";
+import SEO from "@/components/SEO";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -62,7 +63,14 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen py-20">
+    <>
+      <SEO 
+        title="Contact & About - Connect with 3rdeyeadvisors"
+        description="Get in touch with the consciousness behind 3rdeyeadvisors. Connect for DeFi education inquiries, support, or to join our mission of financial awakening."
+        keywords="contact 3rdeyeadvisors, DeFi education support, financial consciousness contact, crypto education inquiry"
+        url="https://3rdeyeadvisors.com/contact"
+      />
+      <div className="min-h-screen py-20">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-16">
@@ -262,6 +270,7 @@ const Contact = () => {
         </section>
       </div>
     </div>
+    </>
   );
 };
 

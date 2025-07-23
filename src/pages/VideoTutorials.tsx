@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Play, Shield, TrendingUp, Calculator, AlertTriangle, Wallet, ArrowLeftRight, PieChart, Target } from "lucide-react";
+import SEO from "@/components/SEO";
 
 const VideoTutorials = () => {
   const [selectedCategory, setSelectedCategory] = useState("immediate");
@@ -140,17 +141,24 @@ const VideoTutorials = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
-      <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-            Tutorials
-          </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Step-by-step guides to master DeFi safely and effectively
-          </p>
-        </div>
+    <>
+      <SEO 
+        title="Video Tutorials - Step-by-Step DeFi Learning"
+        description="Master DeFi with our comprehensive video tutorials. Learn wallet setup, DEX trading, yield farming, and advanced strategies through easy-to-follow video guides."
+        keywords="DeFi video tutorials, cryptocurrency tutorials, wallet setup guide, DEX trading tutorial, yield farming videos, DeFi education videos"
+        url="https://3rdeyeadvisors.com/tutorials"
+      />
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
+        <div className="container mx-auto px-4 py-8">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+              Tutorials
+            </h1>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Step-by-step guides to master DeFi safely and effectively
+            </p>
+          </div>
 
         {/* Category Tabs */}
         <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="mb-8">
@@ -252,8 +260,9 @@ const VideoTutorials = () => {
             </CardDescription>
           </CardHeader>
         </Card>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

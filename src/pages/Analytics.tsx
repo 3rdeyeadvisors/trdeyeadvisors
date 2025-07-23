@@ -2,10 +2,18 @@ import { DefiCharts } from '@/components/DefiCharts';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { TrendingUp, Activity, BarChart3, AlertTriangle } from 'lucide-react';
+import SEO from '@/components/SEO';
 
 const Analytics = () => {
   return (
-    <div className="min-h-screen py-20">
+    <>
+      <SEO 
+        title="DeFi Analytics & Market Data"
+        description="Real-time DeFi analytics, protocol insights, and comprehensive market data for the decentralized finance ecosystem. Track yields, TVL, and protocol performance."
+        keywords="DeFi analytics, DeFi market data, yield farming analytics, protocol insights, TVL tracking, DeFi charts, crypto analytics"
+        url="https://3rdeyeadvisors.com/analytics"
+      />
+      <div className="min-h-screen py-20">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
@@ -52,6 +60,7 @@ const Analytics = () => {
         </Card>
       </div>
     </div>
+    </>
   );
 };
 

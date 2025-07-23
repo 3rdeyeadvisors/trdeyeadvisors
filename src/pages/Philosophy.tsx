@@ -1,5 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Eye, Brain, Zap } from "lucide-react";
+import SEO from "@/components/SEO";
 
 const Philosophy = () => {
   const philosophyPoints = [
@@ -21,7 +22,14 @@ const Philosophy = () => {
   ];
 
   return (
-    <div className="min-h-screen py-20">
+    <>
+      <SEO 
+        title="Philosophy - Financial Consciousness & DeFi Awakening"
+        description="Discover the philosophy behind 3rdeyeadvisors. Break free from traditional financial programming and reprogram your understanding of money, wealth, and financial sovereignty through DeFi."
+        keywords="financial consciousness, DeFi philosophy, financial sovereignty, money consciousness, decentralized finance mindset, financial awakening, crypto philosophy"
+        url="https://3rdeyeadvisors.com/philosophy"
+      />
+      <div className="min-h-screen py-20">
       <div className="container mx-auto px-4 max-w-4xl">
         {/* First Strip */}
         <div className="text-center mb-16">
@@ -89,6 +97,7 @@ const Philosophy = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

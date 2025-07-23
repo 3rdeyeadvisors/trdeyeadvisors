@@ -8,6 +8,7 @@ import { ArrowLeft, Calendar, Clock, User, Share, BookOpen } from "lucide-react"
 import { getBlogPost, type BlogPost } from "@/data/blogContent";
 import { CommunityHub } from "@/components/community/CommunityHub";
 import ReactMarkdown from "react-markdown";
+import SEO from "@/components/SEO";
 
 const BlogPost = () => {
   const { id } = useParams();
@@ -64,7 +65,21 @@ const BlogPost = () => {
   }
 
   return (
-    <div className="min-h-screen py-20">
+    <>
+      <SEO 
+        title={`${post.title} | 3rdeyeadvisors Blog`}
+        description={post.excerpt}
+        keywords={`${post.category.toLowerCase()}, DeFi, cryptocurrency, ${post.title.toLowerCase()}`}
+        url={`https://3rdeyeadvisors.com/blog/${post.id}`}
+        type="article"
+        article={{
+          publishedTime: post.date,
+          author: post.author,
+          section: post.category,
+          tags: [post.category, 'DeFi', 'Cryptocurrency']
+        }}
+      />
+      <div className="min-h-screen py-20">
       <div className="container mx-auto px-4 max-w-4xl">
         {/* Back Navigation */}
         <Button
@@ -260,8 +275,9 @@ const BlogPost = () => {
             </Button>
           </div>
         </Card>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

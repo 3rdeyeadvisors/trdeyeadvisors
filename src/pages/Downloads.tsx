@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Download, FileText, Calculator, TrendingUp, Package } from 'lucide-react';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
+import SEO from '@/components/SEO';
 
 interface Purchase {
   id: string;
@@ -116,23 +117,39 @@ const Downloads = () => {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center">Loading your downloads...</div>
-      </div>
+      <>
+        <SEO 
+          title="My Downloads - Digital Products"
+          description="Access your purchased DeFi education materials, guides, templates, and digital products from 3rdeyeadvisors."
+          keywords="my downloads, DeFi products, purchased materials, digital downloads, education resources"
+          url="https://3rdeyeadvisors.com/downloads"
+        />
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center">Loading your downloads...</div>
+        </div>
+      </>
     );
   }
 
   if (purchases.length === 0) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold mb-4">My Downloads</h1>
-          <p className="text-muted-foreground mb-8">You haven't purchased any digital products yet.</p>
-          <Button onClick={() => navigate('/store')}>
-            Browse Store
-          </Button>
+      <>
+        <SEO 
+          title="My Downloads - Digital Products"
+          description="Access your purchased DeFi education materials, guides, templates, and digital products from 3rdeyeadvisors."
+          keywords="my downloads, DeFi products, purchased materials, digital downloads, education resources"
+          url="https://3rdeyeadvisors.com/downloads"
+        />
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold mb-4">My Downloads</h1>
+            <p className="text-muted-foreground mb-8">You haven't purchased any digital products yet.</p>
+            <Button onClick={() => navigate('/store')}>
+              Browse Store
+            </Button>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
@@ -144,7 +161,14 @@ const Downloads = () => {
   }, {} as Record<number, ProductFile[]>);
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <>
+      <SEO 
+        title="My Downloads - Digital Products"
+        description="Access your purchased DeFi education materials, guides, templates, and digital products from 3rdeyeadvisors."
+        keywords="my downloads, DeFi products, purchased materials, digital downloads, education resources"
+        url="https://3rdeyeadvisors.com/downloads"
+      />
+      <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">My Downloads</h1>
         <p className="text-muted-foreground">Access your purchased digital products</p>
@@ -220,6 +244,7 @@ const Downloads = () => {
         })}
       </div>
     </div>
+    </>
   );
 };
 
