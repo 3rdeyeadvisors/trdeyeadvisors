@@ -69,34 +69,34 @@ const Index = () => {
                   filter: 'drop-shadow(0 0 15px hsl(var(--primary-glow))) drop-shadow(0 0 30px hsl(var(--primary))) drop-shadow(0 0 45px hsl(var(--accent) / 0.3))'
                 }}
               />
-              {/* Realistic trail behind the star (diagonally up-right from star) */}
+              {/* Realistic trail behind the star (extends up-right from star, opposite to movement) */}
               <div 
                 className="absolute"
                 style={{ 
-                  top: '-10px',
-                  right: '-10px',
+                  bottom: '12px',
+                  left: '12px',
                   width: '80px',
                   height: '2px',
-                  background: 'linear-gradient(45deg, transparent, hsl(var(--primary) / 0.1), hsl(var(--primary) / 0.4), hsl(var(--primary) / 0.8), hsl(var(--primary-glow)))',
+                  background: 'linear-gradient(-135deg, hsl(var(--primary-glow)), hsl(var(--primary) / 0.8), hsl(var(--primary) / 0.4), hsl(var(--primary) / 0.1), transparent)',
                   filter: 'blur(0.5px)',
                   opacity: '0.9',
                   transform: 'rotate(45deg)',
-                  transformOrigin: 'right center'
+                  transformOrigin: 'left center'
                 }}
               ></div>
               {/* Secondary trail for more realism */}
               <div 
                 className="absolute"
                 style={{ 
-                  top: '-15px',
-                  right: '-15px',
+                  bottom: '18px',
+                  left: '18px',
                   width: '120px',
                   height: '1px',
-                  background: 'linear-gradient(45deg, transparent, hsl(var(--primary) / 0.1), hsl(var(--primary) / 0.3), hsl(var(--primary) / 0.6))',
+                  background: 'linear-gradient(-135deg, hsl(var(--primary) / 0.6), hsl(var(--primary) / 0.3), hsl(var(--primary) / 0.1), transparent)',
                   filter: 'blur(1px)',
                   opacity: '0.6',
                   transform: 'rotate(45deg)',
-                  transformOrigin: 'right center'
+                  transformOrigin: 'left center'
                 }}
               ></div>
             </div>
@@ -118,33 +118,33 @@ const Index = () => {
                   filter: 'drop-shadow(0 0 12px hsl(var(--primary))) drop-shadow(0 0 24px hsl(var(--primary-glow) / 0.6))'
                 }}
               />
-              {/* Realistic trail */}
+              {/* Realistic trail behind the star */}
               <div 
                 className="absolute"
                 style={{ 
-                  top: '-8px',
-                  right: '-8px',
+                  bottom: '11px',
+                  left: '11px',
                   width: '70px',
                   height: '2px',
-                  background: 'linear-gradient(45deg, transparent, hsl(var(--primary) / 0.1), hsl(var(--primary) / 0.3), hsl(var(--primary) / 0.7), hsl(var(--primary)))',
+                  background: 'linear-gradient(-135deg, hsl(var(--primary)), hsl(var(--primary) / 0.7), hsl(var(--primary) / 0.3), hsl(var(--primary) / 0.1), transparent)',
                   filter: 'blur(0.5px)',
                   opacity: '0.8',
                   transform: 'rotate(45deg)',
-                  transformOrigin: 'right center'
+                  transformOrigin: 'left center'
                 }}
               ></div>
               <div 
                 className="absolute"
                 style={{ 
-                  top: '-12px',
-                  right: '-12px',
+                  bottom: '16px',
+                  left: '16px',
                   width: '100px',
                   height: '1px',
-                  background: 'linear-gradient(45deg, transparent, hsl(var(--primary) / 0.1), hsl(var(--primary) / 0.2), hsl(var(--primary) / 0.5))',
+                  background: 'linear-gradient(-135deg, hsl(var(--primary) / 0.5), hsl(var(--primary) / 0.2), hsl(var(--primary) / 0.1), transparent)',
                   filter: 'blur(1px)',
                   opacity: '0.5',
                   transform: 'rotate(45deg)',
-                  transformOrigin: 'right center'
+                  transformOrigin: 'left center'
                 }}
               ></div>
             </div>
@@ -166,33 +166,33 @@ const Index = () => {
                   filter: 'drop-shadow(0 0 10px hsl(var(--primary-glow) / 0.8)) drop-shadow(0 0 20px hsl(var(--primary) / 0.4))'
                 }}
               />
-              {/* Realistic trail */}
+              {/* Realistic trail behind the star */}
               <div 
                 className="absolute"
                 style={{ 
-                  top: '-6px',
-                  right: '-6px',
+                  bottom: '10px',
+                  left: '10px',
                   width: '60px',
                   height: '2px',
-                  background: 'linear-gradient(45deg, transparent, hsl(var(--primary) / 0.1), hsl(var(--primary) / 0.3), hsl(var(--primary) / 0.6), hsl(var(--primary-glow) / 0.8))',
+                  background: 'linear-gradient(-135deg, hsl(var(--primary-glow) / 0.8), hsl(var(--primary) / 0.6), hsl(var(--primary) / 0.3), hsl(var(--primary) / 0.1), transparent)',
                   filter: 'blur(0.5px)',
                   opacity: '0.7',
                   transform: 'rotate(45deg)',
-                  transformOrigin: 'right center'
+                  transformOrigin: 'left center'
                 }}
               ></div>
               <div 
                 className="absolute"
                 style={{ 
-                  top: '-10px',
-                  right: '-10px',
+                  bottom: '15px',
+                  left: '15px',
                   width: '90px',
                   height: '1px',
-                  background: 'linear-gradient(45deg, transparent, hsl(var(--primary) / 0.1), hsl(var(--primary) / 0.2), hsl(var(--primary) / 0.4))',
+                  background: 'linear-gradient(-135deg, hsl(var(--primary) / 0.4), hsl(var(--primary) / 0.2), hsl(var(--primary) / 0.1), transparent)',
                   filter: 'blur(1px)',
                   opacity: '0.4',
                   transform: 'rotate(45deg)',
-                  transformOrigin: 'right center'
+                  transformOrigin: 'left center'
                 }}
               ></div>
             </div>
