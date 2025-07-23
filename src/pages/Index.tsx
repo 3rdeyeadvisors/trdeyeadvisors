@@ -58,15 +58,40 @@ const Index = () => {
         {/* Shooting Star */}
         {showStar && (
           <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-50 overflow-hidden">
-            <Star 
-              className="absolute text-primary-glow animate-[shooting-star_3s_linear] opacity-90" 
-              size={32}
+            {/* Star with trail */}
+            <div 
+              className="absolute animate-[shooting-star_3s_linear]"
               style={{
-                top: '20%',
-                left: '-10%',
-                filter: 'drop-shadow(0 0 10px hsl(var(--primary-glow))) drop-shadow(0 0 20px hsl(var(--primary)))'
+                top: '10%',
+                right: '-10%',
               }}
-            />
+            >
+              {/* Trail elements */}
+              <div className="absolute flex items-center">
+                {/* Trail dots */}
+                <div className="flex items-center space-x-2 opacity-30">
+                  <div className="w-1 h-1 bg-primary-glow rounded-full animate-pulse" style={{ animationDelay: '0.3s' }}></div>
+                  <div className="w-1.5 h-1.5 bg-primary-glow rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+                  <div className="w-2 h-2 bg-primary rounded-full animate-pulse" style={{ animationDelay: '0.1s' }}></div>
+                </div>
+                {/* Main star */}
+                <Star 
+                  className="text-primary-glow opacity-90 ml-2" 
+                  size={28}
+                  style={{
+                    filter: 'drop-shadow(0 0 15px hsl(var(--primary-glow))) drop-shadow(0 0 30px hsl(var(--primary))) drop-shadow(0 0 45px hsl(var(--accent) / 0.3))'
+                  }}
+                />
+              </div>
+              {/* Glowing trail line */}
+              <div 
+                className="absolute top-1/2 -translate-y-1/2 w-20 h-0.5 bg-gradient-to-r from-transparent via-primary/60 to-primary-glow opacity-70"
+                style={{ 
+                  right: '28px',
+                  filter: 'blur(1px)'
+                }}
+              ></div>
+            </div>
           </div>
         )}
         

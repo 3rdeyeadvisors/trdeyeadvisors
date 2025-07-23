@@ -123,7 +123,7 @@ export default {
 				},
 				'shooting-star': {
 					'0%': {
-						transform: 'translateX(-100px) translateY(0px) rotate(45deg)',
+						transform: 'translateX(0px) translateY(0px) rotate(-45deg)',
 						opacity: '0'
 					},
 					'10%': {
@@ -133,7 +133,7 @@ export default {
 						opacity: '1'
 					},
 					'100%': {
-						transform: 'translateX(calc(100vw + 100px)) translateY(-50px) rotate(45deg)',
+						transform: 'translateX(calc(-100vw - 200px)) translateY(calc(100vh + 200px)) rotate(-45deg)',
 						opacity: '0'
 					}
 				}
