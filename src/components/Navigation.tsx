@@ -13,16 +13,13 @@ const Navigation = () => {
   const { user, signOut } = useAuth();
   const { toast } = useToast();
 
-  const primaryNavItems = [
+  const navItems = [
     { path: "/", label: "Home" },
     { path: "/philosophy", label: "Philosophy" },
     { path: "/courses", label: "Courses" },
     { path: "/tutorials", label: "Tutorials" },
     { path: "/blog", label: "Blog" },
     { path: "/resources", label: "Resources" },
-  ];
-
-  const secondaryNavItems = [
     { path: "/analytics", label: "Analytics" },
     { path: "/store", label: "Store" },
     { path: "/downloads", label: "Downloads" },
@@ -54,13 +51,13 @@ const Navigation = () => {
           {/* Logo/Brand */}
           <Link to="/" className="flex items-center space-x-3">
             <div className="text-xl font-consciousness font-bold text-primary">
-              3rdeyeadvisors
+              3EA
             </div>
           </Link>
           
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-6">
-            {primaryNavItems.map((item) => (
+          <div className="hidden md:flex items-center space-x-6">
+            {navItems.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
@@ -110,7 +107,7 @@ const Navigation = () => {
           </div>
 
           {/* Mobile Cart & Menu */}
-          <div className="lg:hidden flex items-center space-x-3">
+          <div className="md:hidden flex items-center space-x-3">
             {/* Mobile Cart */}
             <Link to="/cart" className="relative">
               <Button variant="ghost" size="icon" className="relative">
@@ -147,9 +144,9 @@ const Navigation = () => {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="lg:hidden py-4 border-t border-border">
+          <div className="md:hidden py-4 border-t border-border">
             <div className="flex flex-col space-y-4">
-              {[...primaryNavItems, ...secondaryNavItems].map((item) => (
+              {navItems.map((item) => (
                 <Link
                   key={item.path}
                   to={item.path}
@@ -236,7 +233,7 @@ const Navigation = () => {
                   <div className="space-y-3">
                     {/* Welcome Message for Guest Users */}
                     <div className="text-center space-y-2">
-                      <p className="text-sm font-medium">Welcome to 3rdeyeadvisors</p>
+                      <p className="text-sm font-medium">Welcome to 3EA</p>
                       <p className="text-xs text-muted-foreground">
                         Explore our free resources or sign in to track your progress
                       </p>
