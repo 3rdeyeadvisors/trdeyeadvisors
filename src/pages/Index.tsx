@@ -12,19 +12,14 @@ const Index = () => {
   const [showStar, setShowStar] = useState(false);
 
   useEffect(() => {
-    // Start the shooting star immediately when component mounts
+    // Start the shooting star only once when component mounts
     const startShootingStar = () => {
       setShowStar(true);
-      setTimeout(() => setShowStar(false), 3000); // Hide after 3 seconds
+      setTimeout(() => setShowStar(false), 4000); // Hide after 4 seconds to allow all 3 stars to pass
     };
 
-    // Initial shooting star on page load
+    // Trigger shooting star only once on page load
     startShootingStar();
-
-    // Set interval for every 15 seconds
-    const interval = setInterval(startShootingStar, 15000);
-
-    return () => clearInterval(interval);
   }, []);
 
   const features = [
@@ -58,7 +53,7 @@ const Index = () => {
         {/* Shooting Star */}
         {showStar && (
           <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-50 overflow-hidden">
-            {/* 3-Star Trail for 3rdeyeadvisors */}
+            {/* First Star */}
             <div 
               className="absolute animate-[shooting-star_3s_linear]"
               style={{
@@ -66,41 +61,71 @@ const Index = () => {
                 right: '-10%',
               }}
             >
-              {/* Trail of 3 stars - each progressively smaller and more transparent */}
-              <div className="absolute flex items-center space-x-3">
-                {/* Third star (furthest back, smallest, most transparent) */}
-                <Star 
-                  className="text-primary-glow opacity-20" 
-                  size={16}
-                  style={{
-                    filter: 'drop-shadow(0 0 8px hsl(var(--primary-glow) / 0.3))',
-                    animationDelay: '0.3s'
-                  }}
-                />
-                {/* Second star (middle, medium size, medium opacity) */}
-                <Star 
-                  className="text-primary opacity-40" 
-                  size={20}
-                  style={{
-                    filter: 'drop-shadow(0 0 12px hsl(var(--primary) / 0.5))',
-                    animationDelay: '0.15s'
-                  }}
-                />
-                {/* First star (lead star, largest, brightest) */}
-                <Star 
-                  className="text-primary-glow opacity-95" 
-                  size={28}
-                  style={{
-                    filter: 'drop-shadow(0 0 15px hsl(var(--primary-glow))) drop-shadow(0 0 30px hsl(var(--primary))) drop-shadow(0 0 45px hsl(var(--accent) / 0.4))'
-                  }}
-                />
-              </div>
-              {/* Subtle connecting glow between stars */}
+              <Star 
+                className="text-primary-glow opacity-95" 
+                size={24}
+                style={{
+                  filter: 'drop-shadow(0 0 15px hsl(var(--primary-glow))) drop-shadow(0 0 30px hsl(var(--primary)))'
+                }}
+              />
+              {/* Trail behind the star */}
               <div 
-                className="absolute top-1/2 -translate-y-1/2 w-24 h-px bg-gradient-to-r from-transparent via-primary/30 to-primary-glow/60 opacity-50"
+                className="absolute top-1/2 -translate-y-1/2 w-16 h-px bg-gradient-to-l from-primary-glow/80 via-primary/40 to-transparent opacity-70"
                 style={{ 
-                  right: '28px',
-                  filter: 'blur(2px)'
+                  left: '-16px',
+                  filter: 'blur(1px)'
+                }}
+              ></div>
+            </div>
+
+            {/* Second Star (follows 0.8s later) */}
+            <div 
+              className="absolute animate-[shooting-star_3s_linear]"
+              style={{
+                top: '12%',
+                right: '-10%',
+                animationDelay: '0.8s'
+              }}
+            >
+              <Star 
+                className="text-primary opacity-85" 
+                size={22}
+                style={{
+                  filter: 'drop-shadow(0 0 12px hsl(var(--primary))) drop-shadow(0 0 24px hsl(var(--primary-glow) / 0.6))'
+                }}
+              />
+              {/* Trail behind the star */}
+              <div 
+                className="absolute top-1/2 -translate-y-1/2 w-14 h-px bg-gradient-to-l from-primary/70 via-primary/30 to-transparent opacity-60"
+                style={{ 
+                  left: '-14px',
+                  filter: 'blur(1px)'
+                }}
+              ></div>
+            </div>
+
+            {/* Third Star (follows 1.6s later) */}
+            <div 
+              className="absolute animate-[shooting-star_3s_linear]"
+              style={{
+                top: '14%',
+                right: '-10%',
+                animationDelay: '1.6s'
+              }}
+            >
+              <Star 
+                className="text-primary-glow opacity-75" 
+                size={20}
+                style={{
+                  filter: 'drop-shadow(0 0 10px hsl(var(--primary-glow) / 0.8)) drop-shadow(0 0 20px hsl(var(--primary) / 0.4))'
+                }}
+              />
+              {/* Trail behind the star */}
+              <div 
+                className="absolute top-1/2 -translate-y-1/2 w-12 h-px bg-gradient-to-l from-primary-glow/60 via-primary/20 to-transparent opacity-50"
+                style={{ 
+                  left: '-12px',
+                  filter: 'blur(1px)'
                 }}
               ></div>
             </div>
