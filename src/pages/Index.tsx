@@ -1,27 +1,13 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { BookOpen, Wrench, Eye, Code, TrendingUp, Shield, Star } from "lucide-react";
+import { BookOpen, Wrench, Eye, Code, TrendingUp, Shield } from "lucide-react";
 import cosmicHeroBg from "@/assets/cosmic-hero-bg.jpg";
 import NewsletterSignup from "@/components/NewsletterSignup";
-import { useEffect, useState } from "react";
 
 import SEO from "@/components/SEO";
 
 const Index = () => {
-  const [showStar, setShowStar] = useState(false);
-
-  useEffect(() => {
-    // Start the shooting star only once when component mounts
-    const startShootingStar = () => {
-      setShowStar(true);
-      setTimeout(() => setShowStar(false), 4000); // Hide after 4 seconds to allow all 3 stars to pass
-    };
-
-    // Trigger shooting star only once on page load
-    startShootingStar();
-  }, []);
-
   const features = [
     {
       icon: Eye,
@@ -50,155 +36,6 @@ const Index = () => {
       <SEO />
       
       <div className="min-h-screen">
-        {/* Shooting Star */}
-        {showStar && (
-          <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-50 overflow-hidden">
-            {/* First Star */}
-            <div 
-              className="absolute animate-[shooting-star-1_3s_linear]"
-              style={{
-                top: '10%',
-                right: '-10%',
-              }}
-            >
-              <Star 
-                className="text-primary-glow opacity-95" 
-                size={24}
-                fill="currentColor"
-                style={{
-                  filter: 'drop-shadow(0 0 15px hsl(var(--primary-glow))) drop-shadow(0 0 30px hsl(var(--primary))) drop-shadow(0 0 45px hsl(var(--accent) / 0.3))'
-                }}
-              />
-              {/* Realistic trail behind the star (extends up-right from star, opposite to movement) */}
-              <div 
-                className="absolute"
-                style={{ 
-                  bottom: '12px',
-                  left: '12px',
-                  width: '80px',
-                  height: '2px',
-                  background: 'linear-gradient(-135deg, hsl(var(--primary-glow)), hsl(var(--primary) / 0.8), hsl(var(--primary) / 0.4), hsl(var(--primary) / 0.1), transparent)',
-                  filter: 'blur(0.5px)',
-                  opacity: '0.9',
-                  transform: 'rotate(45deg)',
-                  transformOrigin: 'left center'
-                }}
-              ></div>
-              {/* Secondary trail for more realism */}
-              <div 
-                className="absolute"
-                style={{ 
-                  bottom: '18px',
-                  left: '18px',
-                  width: '120px',
-                  height: '1px',
-                  background: 'linear-gradient(-135deg, hsl(var(--primary) / 0.6), hsl(var(--primary) / 0.3), hsl(var(--primary) / 0.1), transparent)',
-                  filter: 'blur(1px)',
-                  opacity: '0.6',
-                  transform: 'rotate(45deg)',
-                  transformOrigin: 'left center'
-                }}
-              ></div>
-            </div>
-
-            {/* Second Star (follows 0.8s later) */}
-            <div 
-              className="absolute animate-[shooting-star-2_3s_linear]"
-              style={{
-                top: '12%',
-                right: '-10%',
-                animationDelay: '0.8s'
-              }}
-            >
-              <Star 
-                className="text-primary opacity-85" 
-                size={22}
-                fill="currentColor"
-                style={{
-                  filter: 'drop-shadow(0 0 12px hsl(var(--primary))) drop-shadow(0 0 24px hsl(var(--primary-glow) / 0.6))'
-                }}
-              />
-              {/* Realistic trail behind the star */}
-              <div 
-                className="absolute"
-                style={{ 
-                  bottom: '11px',
-                  left: '11px',
-                  width: '70px',
-                  height: '2px',
-                  background: 'linear-gradient(-135deg, hsl(var(--primary)), hsl(var(--primary) / 0.7), hsl(var(--primary) / 0.3), hsl(var(--primary) / 0.1), transparent)',
-                  filter: 'blur(0.5px)',
-                  opacity: '0.8',
-                  transform: 'rotate(45deg)',
-                  transformOrigin: 'left center'
-                }}
-              ></div>
-              <div 
-                className="absolute"
-                style={{ 
-                  bottom: '16px',
-                  left: '16px',
-                  width: '100px',
-                  height: '1px',
-                  background: 'linear-gradient(-135deg, hsl(var(--primary) / 0.5), hsl(var(--primary) / 0.2), hsl(var(--primary) / 0.1), transparent)',
-                  filter: 'blur(1px)',
-                  opacity: '0.5',
-                  transform: 'rotate(45deg)',
-                  transformOrigin: 'left center'
-                }}
-              ></div>
-            </div>
-
-            {/* Third Star (follows 1.6s later) */}
-            <div 
-              className="absolute animate-[shooting-star-3_3s_linear]"
-              style={{
-                top: '14%',
-                right: '-10%',
-                animationDelay: '1.6s'
-              }}
-            >
-              <Star 
-                className="text-primary-glow opacity-75" 
-                size={20}
-                fill="currentColor"
-                style={{
-                  filter: 'drop-shadow(0 0 10px hsl(var(--primary-glow) / 0.8)) drop-shadow(0 0 20px hsl(var(--primary) / 0.4))'
-                }}
-              />
-              {/* Realistic trail behind the star */}
-              <div 
-                className="absolute"
-                style={{ 
-                  bottom: '10px',
-                  left: '10px',
-                  width: '60px',
-                  height: '2px',
-                  background: 'linear-gradient(-135deg, hsl(var(--primary-glow) / 0.8), hsl(var(--primary) / 0.6), hsl(var(--primary) / 0.3), hsl(var(--primary) / 0.1), transparent)',
-                  filter: 'blur(0.5px)',
-                  opacity: '0.7',
-                  transform: 'rotate(45deg)',
-                  transformOrigin: 'left center'
-                }}
-              ></div>
-              <div 
-                className="absolute"
-                style={{ 
-                  bottom: '15px',
-                  left: '15px',
-                  width: '90px',
-                  height: '1px',
-                  background: 'linear-gradient(-135deg, hsl(var(--primary) / 0.4), hsl(var(--primary) / 0.2), hsl(var(--primary) / 0.1), transparent)',
-                  filter: 'blur(1px)',
-                  opacity: '0.4',
-                  transform: 'rotate(45deg)',
-                  transformOrigin: 'left center'
-                }}
-              ></div>
-            </div>
-          </div>
-        )}
-        
       {/* Hero Section */}
       <section 
         className="relative min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
