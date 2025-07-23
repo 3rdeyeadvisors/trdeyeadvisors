@@ -64,16 +64,31 @@ const Index = () => {
               <Star 
                 className="text-primary-glow opacity-95" 
                 size={24}
+                fill="currentColor"
                 style={{
-                  filter: 'drop-shadow(0 0 15px hsl(var(--primary-glow))) drop-shadow(0 0 30px hsl(var(--primary)))'
+                  filter: 'drop-shadow(0 0 15px hsl(var(--primary-glow))) drop-shadow(0 0 30px hsl(var(--primary))) drop-shadow(0 0 45px hsl(var(--accent) / 0.3))'
                 }}
               />
-              {/* Trail behind the star */}
+              {/* Realistic trail behind the star */}
               <div 
-                className="absolute top-1/2 -translate-y-1/2 w-16 h-px bg-gradient-to-l from-primary-glow/80 via-primary/40 to-transparent opacity-70"
+                className="absolute top-1/2 -translate-y-1/2 h-0.5"
                 style={{ 
-                  left: '-16px',
-                  filter: 'blur(1px)'
+                  left: '-80px',
+                  width: '80px',
+                  background: 'linear-gradient(to left, hsl(var(--primary-glow)), hsl(var(--primary) / 0.8), hsl(var(--primary) / 0.4), hsl(var(--primary) / 0.1), transparent)',
+                  filter: 'blur(0.5px)',
+                  opacity: '0.9'
+                }}
+              ></div>
+              {/* Secondary trail for more realism */}
+              <div 
+                className="absolute top-1/2 -translate-y-1/2 h-px"
+                style={{ 
+                  left: '-120px',
+                  width: '120px',
+                  background: 'linear-gradient(to left, hsl(var(--primary) / 0.6), hsl(var(--primary) / 0.3), hsl(var(--primary) / 0.1), transparent)',
+                  filter: 'blur(1px)',
+                  opacity: '0.6'
                 }}
               ></div>
             </div>
@@ -90,16 +105,30 @@ const Index = () => {
               <Star 
                 className="text-primary opacity-85" 
                 size={22}
+                fill="currentColor"
                 style={{
                   filter: 'drop-shadow(0 0 12px hsl(var(--primary))) drop-shadow(0 0 24px hsl(var(--primary-glow) / 0.6))'
                 }}
               />
-              {/* Trail behind the star */}
+              {/* Realistic trail */}
               <div 
-                className="absolute top-1/2 -translate-y-1/2 w-14 h-px bg-gradient-to-l from-primary/70 via-primary/30 to-transparent opacity-60"
+                className="absolute top-1/2 -translate-y-1/2 h-0.5"
                 style={{ 
-                  left: '-14px',
-                  filter: 'blur(1px)'
+                  left: '-70px',
+                  width: '70px',
+                  background: 'linear-gradient(to left, hsl(var(--primary)), hsl(var(--primary) / 0.7), hsl(var(--primary) / 0.3), hsl(var(--primary) / 0.1), transparent)',
+                  filter: 'blur(0.5px)',
+                  opacity: '0.8'
+                }}
+              ></div>
+              <div 
+                className="absolute top-1/2 -translate-y-1/2 h-px"
+                style={{ 
+                  left: '-100px',
+                  width: '100px',
+                  background: 'linear-gradient(to left, hsl(var(--primary) / 0.5), hsl(var(--primary) / 0.2), hsl(var(--primary) / 0.1), transparent)',
+                  filter: 'blur(1px)',
+                  opacity: '0.5'
                 }}
               ></div>
             </div>
@@ -116,16 +145,30 @@ const Index = () => {
               <Star 
                 className="text-primary-glow opacity-75" 
                 size={20}
+                fill="currentColor"
                 style={{
                   filter: 'drop-shadow(0 0 10px hsl(var(--primary-glow) / 0.8)) drop-shadow(0 0 20px hsl(var(--primary) / 0.4))'
                 }}
               />
-              {/* Trail behind the star */}
+              {/* Realistic trail */}
               <div 
-                className="absolute top-1/2 -translate-y-1/2 w-12 h-px bg-gradient-to-l from-primary-glow/60 via-primary/20 to-transparent opacity-50"
+                className="absolute top-1/2 -translate-y-1/2 h-0.5"
                 style={{ 
-                  left: '-12px',
-                  filter: 'blur(1px)'
+                  left: '-60px',
+                  width: '60px',
+                  background: 'linear-gradient(to left, hsl(var(--primary-glow) / 0.8), hsl(var(--primary) / 0.6), hsl(var(--primary) / 0.3), hsl(var(--primary) / 0.1), transparent)',
+                  filter: 'blur(0.5px)',
+                  opacity: '0.7'
+                }}
+              ></div>
+              <div 
+                className="absolute top-1/2 -translate-y-1/2 h-px"
+                style={{ 
+                  left: '-90px',
+                  width: '90px',
+                  background: 'linear-gradient(to left, hsl(var(--primary) / 0.4), hsl(var(--primary) / 0.2), hsl(var(--primary) / 0.1), transparent)',
+                  filter: 'blur(1px)',
+                  opacity: '0.4'
                 }}
               ></div>
             </div>
