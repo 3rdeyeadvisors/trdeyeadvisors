@@ -48,6 +48,13 @@ const Navigation = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
+          {/* Logo/Brand */}
+          <Link to="/" className="flex items-center space-x-3">
+            <div className="text-xl font-consciousness font-bold text-primary">
+              3rdeyeadvisors
+            </div>
+          </Link>
+          
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
@@ -113,16 +120,40 @@ const Navigation = () => {
             </div>
           </div>
 
-          {/* Mobile menu button */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden"
-            onClick={() => setIsOpen(!isOpen)}
-            aria-label="Toggle navigation menu"
-          >
-            {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </Button>
+          {/* Mobile Cart & Menu */}
+          <div className="md:hidden flex items-center space-x-3">
+            {/* Mobile Cart */}
+            <Link to="/cart" className="relative">
+              <Button variant="ghost" size="icon" className="relative">
+                <ShoppingCart className="h-5 w-5" />
+                {itemCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {itemCount}
+                  </span>
+                )}
+              </Button>
+            </Link>
+            
+            {/* Mobile Auth Button */}
+            {!user && (
+              <Button asChild variant="outline" size="sm">
+                <Link to="/auth" className="flex items-center space-x-1">
+                  <LogIn className="w-4 h-4" />
+                  <span className="hidden xs:inline">Sign In</span>
+                </Link>
+              </Button>
+            )}
+            
+            {/* Mobile menu button */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsOpen(!isOpen)}
+              aria-label="Toggle navigation menu"
+            >
+              {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </Button>
+          </div>
         </div>
 
         {/* Mobile Navigation */}
@@ -212,48 +243,17 @@ const Navigation = () => {
                       <span>Sign Out</span>
                     </Button>
                   </div>
-                ) : (
-                  <div className="space-y-3">
-                    {/* Sign In Call to Action */}
-                    <div className="text-center space-y-2">
-                      <p className="text-sm text-muted-foreground">
-                        Sign in to access your courses and track progress
-                      </p>
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-3">
-                      <Button asChild variant="default" size="sm" className="flex items-center justify-center space-x-2">
-                        <Link 
-                          to="/auth" 
-                          className="flex items-center space-x-2"
-                          onClick={() => setIsOpen(false)}
-                        >
-                          <LogIn className="w-4 h-4" />
-                          <span>Sign In</span>
-                        </Link>
-                      </Button>
-                      
-                      <Button
-                        asChild
-                        variant="outline"
-                        size="sm"
-                        className="flex items-center justify-center space-x-2"
-                      >
-                        <Link to="/cart" onClick={() => setIsOpen(false)}>
-                          <div className="flex items-center space-x-2 relative">
-                            <ShoppingCart className="w-4 h-4" />
-                            <span>Cart</span>
-                            {itemCount > 0 && (
-                              <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs rounded-full h-4 w-4 flex items-center justify-center">
-                                {itemCount}
-                              </span>
-                            )}
-                          </div>
-                        </Link>
-                      </Button>
-                    </div>
-                  </div>
-                )}
+                 ) : (
+                   <div className="space-y-3">
+                     {/* Welcome Message for Guest Users */}
+                     <div className="text-center space-y-2">
+                       <p className="text-sm font-medium">Welcome to 3rdeyeadvisors</p>
+                       <p className="text-xs text-muted-foreground">
+                         Explore our free resources or sign in to track your progress
+                       </p>
+                     </div>
+                   </div>
+                 )}
               </div>
             </div>
           </div>
