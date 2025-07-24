@@ -56,12 +56,12 @@ const Navigation = () => {
           </Link>
           
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-6">
+          <div className="hidden md:flex items-center space-x-8 flex-1 justify-center">
             {navItems.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
-                className={`text-sm font-consciousness transition-all duration-cosmic hover:text-primary ${
+                className={`text-base font-consciousness transition-all duration-cosmic hover:text-primary ${
                   isActive(item.path)
                     ? "text-primary font-medium"
                     : "text-muted-foreground"
