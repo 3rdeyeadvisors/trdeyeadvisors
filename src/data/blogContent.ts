@@ -301,7 +301,7 @@ Start your journey today by exploring our educational resources, understanding t
 *Ready to transform your understanding of decentralized finance? Begin with our [beginner-friendly DeFi course](/courses/defi-fundamentals) and progress toward advanced RWA strategies. Your financial education journey starts here.*`,
     category: "Innovation",
     readTime: "12 min read",
-    date: "2025-01-15",
+    date: "2025-07-24",
     featured: true,
     author: "DeFi Research Team",
     tags: ["RWA", "Tokenization", "DeFi", "2025", "Institutional", "BlackRock", "Ondo Finance", "Regulation", "CLARITY Act", "Investment"]
