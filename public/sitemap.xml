@@ -41,6 +41,14 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- Blog Posts -->
+  <url>
+    <loc>https://3rdeyeadvisors.com/blog/1</loc>
+    <lastmod>2025-07-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
   <url>
     <loc>https://3rdeyeadvisors.com/resources</loc>
     <lastmod>2025-01-21</lastmod>
