@@ -25,6 +25,7 @@ import Downloads from "./pages/Downloads";
 import AdminUploadContent from "./pages/AdminUploadContent";
 import TestDownloads from "./pages/TestDownloads";
 import Analytics from "./pages/Analytics";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 import VideoTutorials from "./pages/VideoTutorials";
 import WalletSetupTutorial from "./pages/WalletSetupTutorial";
 import FirstDexSwapTutorial from "./pages/FirstDexSwapTutorial";
@@ -88,8 +89,16 @@ const App = () => (
                   <Route path="/auth" element={<Auth />} />
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/downloads" element={<Downloads />} />
-                  <Route path="/admin/upload" element={<AdminUploadContent />} />
-                  <Route path="/test-downloads" element={<TestDownloads />} />
+                  <Route path="/admin/upload" element={
+                    <ProtectedRoute requireRole="admin">
+                      <AdminUploadContent />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/test-downloads" element={
+                    <ProtectedRoute requireRole="admin">
+                      <TestDownloads />
+                    </ProtectedRoute>
+                  } />
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/privacy" element={<PrivacyPolicy />} />
                   <Route path="/terms" element={<TermsOfService />} />

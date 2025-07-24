@@ -5,10 +5,10 @@ const SecurityHeaders = () => {
   useEffect(() => {
     // Set security headers via meta tags where possible
     const setSecurityHeaders = () => {
-      // Content Security Policy
+      // Content Security Policy - More restrictive
       const cspMeta = document.createElement('meta');
       cspMeta.httpEquiv = 'Content-Security-Policy';
-      cspMeta.content = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' https:; connect-src 'self' https:;";
+      cspMeta.content = "default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://esm.sh; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https: blob:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co https://api.resend.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self';";
       document.head.appendChild(cspMeta);
 
       // X-Content-Type-Options
