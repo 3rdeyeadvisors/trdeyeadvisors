@@ -50,7 +50,7 @@ const Navigation = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo/Brand */}
           <Link to="/" className="flex items-center space-x-3 md:justify-start justify-center flex-1 md:flex-none">
-            <div className="text-xl font-consciousness font-bold text-primary">
+            <div className="text-xl md:text-2xl font-consciousness font-bold text-primary">
               3rdeyeadvisors
             </div>
           </Link>
