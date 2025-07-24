@@ -49,9 +49,9 @@ const Navigation = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo/Brand */}
-          <Link to="/" className="flex items-center space-x-3">
+          <Link to="/" className="flex items-center space-x-3 md:justify-start justify-center flex-1 md:flex-none">
             <div className="text-xl font-consciousness font-bold text-primary">
-              3EA
+              3rdeyeadvisors
             </div>
           </Link>
           
@@ -233,7 +233,7 @@ const Navigation = () => {
                   <div className="space-y-3">
                     {/* Welcome Message for Guest Users */}
                     <div className="text-center space-y-2">
-                      <p className="text-sm font-medium">Welcome to 3EA</p>
+                      <p className="text-sm font-medium">Welcome to 3rdeyeadvisors</p>
                       <p className="text-xs text-muted-foreground">
                         Explore our free resources or sign in to track your progress
                       </p>
