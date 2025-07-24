@@ -70,19 +70,8 @@ serve(async (req) => {
       },
     });
 
-    // Record digital product purchases in user_purchases table
-    const digitalItems = items.filter(item => item.type === 'digital');
-    
-    if (digitalItems.length > 0 && user) {
-      for (const item of digitalItems) {
-        await supabaseService.from('user_purchases').insert({
-          user_id: user.id,
-          product_id: item.id,
-          stripe_session_id: session.id,
-          amount_paid: Math.round(item.price * 100), // Convert to cents
-        });
-      }
-    }
+    // Note: Digital product purchase recording would be handled after successful payment
+    // via webhook or success page, not in the checkout creation phase
 
     return new Response(JSON.stringify({ url: session.url }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },

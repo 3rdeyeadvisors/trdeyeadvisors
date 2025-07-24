@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CartProvider } from "@/contexts/CartContext";
 import { HelmetProvider } from "react-helmet-async";
+import SecurityHeaders from "@/components/SecurityHeaders";
 import Layout from "./components/Layout";
 import { AuthProvider } from "./components/auth/AuthProvider";
 import { ProgressProvider } from "./components/progress/ProgressProvider";
@@ -53,6 +54,7 @@ const App = () => (
         <CartProvider>
           <AuthProvider>
             <ProgressProvider>
+              <SecurityHeaders />
               <Toaster />
             <Sonner />
             <BrowserRouter>

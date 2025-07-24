@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Mail, Check, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { newsletterSchema, sanitizeInput, checkRateLimit } from "@/lib/validation";
 
 interface NewsletterSignupProps {
   variant?: "default" | "cosmic" | "minimal";
@@ -19,10 +20,22 @@ const NewsletterSignup = ({ variant = "default", className = "" }: NewsletterSig
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!email || !email.includes("@")) {
+    // Rate limiting check
+    if (!checkRateLimit(`newsletter_${email}`, 3, 300000)) { // 3 requests per 5 minutes
       toast({
-        title: "Invalid Email",
-        description: "Please enter a valid email address.",
+        title: "Too many requests",
+        description: "Please wait before trying again.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Validate email
+    const validation = newsletterSchema.safeParse({ email });
+    if (!validation.success) {
+      toast({
+        title: "Invalid email",
+        description: validation.error.issues[0].message,
         variant: "destructive",
       });
       return;
@@ -30,8 +43,11 @@ const NewsletterSignup = ({ variant = "default", className = "" }: NewsletterSig
 
     setIsLoading(true);
 
-    // Simulate API call - replace with actual newsletter service
     try {
+      // Sanitize input
+      const sanitizedEmail = sanitizeInput(email);
+      
+      // Simulate API call - replace with actual newsletter service
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       setIsSubscribed(true);
