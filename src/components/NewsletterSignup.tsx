@@ -21,7 +21,7 @@ const NewsletterSignup = ({ variant = "default", className = "" }: NewsletterSig
     e.preventDefault();
     
     // Rate limiting check
-    if (!checkRateLimit(`newsletter_${email}`, 3, 300000)) { // 3 requests per 5 minutes
+    if (!(await checkRateLimit(`newsletter_${email}`, 'newsletter', 3, 5))) { // 3 requests per 5 minutes
       toast({
         title: "Too many requests",
         description: "Please wait before trying again.",
