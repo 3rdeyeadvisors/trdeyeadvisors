@@ -153,6 +153,42 @@ export type Database = {
         }
         Relationships: []
       }
+      courses: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          id: number
+          is_active: boolean
+          price_cents: number | null
+          stripe_price_id: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          description?: string | null
+          id?: number
+          is_active?: boolean
+          price_cents?: number | null
+          stripe_price_id?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: number
+          is_active?: boolean
+          price_cents?: number | null
+          stripe_price_id?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       digital_product_files: {
         Row: {
           created_at: string
@@ -704,6 +740,10 @@ export type Database = {
           _details?: Json
         }
         Returns: undefined
+      }
+      user_has_purchased_course: {
+        Args: { course_id: number }
+        Returns: boolean
       }
       user_has_purchased_product: {
         Args: { product_id: number }

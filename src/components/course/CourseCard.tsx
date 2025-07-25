@@ -3,7 +3,10 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ProgressBar } from '@/components/progress/ProgressBar';
 import { useAuth } from '@/components/auth/AuthProvider';
-import { LucideIcon } from 'lucide-react';
+import { LucideIcon, CreditCard } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 interface Course {
   id: number;
@@ -25,6 +28,40 @@ interface CourseCardProps {
 
 export const CourseCard = ({ course, index, onStartCourse, onAuthRequired }: CourseCardProps) => {
   const { user } = useAuth();
+  const [hasAccess, setHasAccess] = useState<boolean | null>(null);
+  const [isCheckingAccess, setIsCheckingAccess] = useState(false);
+  const [isPurchasing, setIsPurchasing] = useState(false);
+
+  // Check if user has access to this course
+  useEffect(() => {
+    const checkAccess = async () => {
+      if (!user || course.category === 'free') {
+        setHasAccess(course.category === 'free');
+        return;
+      }
+
+      try {
+        setIsCheckingAccess(true);
+        const { data, error } = await supabase.rpc('user_has_purchased_course', {
+          course_id: course.id
+        });
+
+        if (error) {
+          console.error('Error checking course access:', error);
+          setHasAccess(false);
+        } else {
+          setHasAccess(data);
+        }
+      } catch (error) {
+        console.error('Error checking course access:', error);
+        setHasAccess(false);
+      } finally {
+        setIsCheckingAccess(false);
+      }
+    };
+
+    checkAccess();
+  }, [user, course.id, course.category]);
 
   const getCategoryColor = (category: string) => {
     switch (category) {
@@ -35,12 +72,64 @@ export const CourseCard = ({ course, index, onStartCourse, onAuthRequired }: Cou
     }
   };
 
+  const handlePurchaseCourse = async () => {
+    if (!user) {
+      onAuthRequired();
+      return;
+    }
+
+    setIsPurchasing(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('create-course-checkout', {
+        body: { courseId: course.id }
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      // Open Stripe checkout in a new tab
+      window.open(data.url, '_blank');
+    } catch (error) {
+      console.error('Error creating course checkout:', error);
+      toast.error('Failed to initiate course purchase');
+    } finally {
+      setIsPurchasing(false);
+    }
+  };
+
   const handleStartCourse = () => {
     if (!user) {
       onAuthRequired();
       return;
     }
+
+    // For paid courses, check if user has access
+    if (course.category === 'paid' && hasAccess === false) {
+      handlePurchaseCourse();
+      return;
+    }
+
     onStartCourse(course.id);
+  };
+
+  const getButtonText = () => {
+    if (!user) return "Start Learning";
+    if (isCheckingAccess) return "Checking Access...";
+    if (course.category === 'free') return user ? "Continue Learning" : "Start Learning";
+    if (course.category === 'paid') {
+      if (hasAccess === null) return "Checking Access...";
+      if (hasAccess === false) return isPurchasing ? "Opening Checkout..." : "Purchase Course";
+      return "Continue Learning";
+    }
+    return user ? "Continue Learning" : "Start Learning";
+  };
+
+  const getButtonIcon = () => {
+    if (course.category === 'paid' && hasAccess === false && user) {
+      return <CreditCard className="w-4 h-4 mr-2" />;
+    }
+    return null;
   };
 
   return (
@@ -80,9 +169,10 @@ export const CourseCard = ({ course, index, onStartCourse, onAuthRequired }: Cou
           size="sm"
           className="font-consciousness"
           onClick={handleStartCourse}
+          disabled={isCheckingAccess || isPurchasing}
         >
-          {course.category === "tool" ? "Launch" : 
-           user ? "Continue Learning" : "Start Learning"}
+          {getButtonIcon()}
+          {getButtonText()}
         </Button>
       </div>
     </Card>
