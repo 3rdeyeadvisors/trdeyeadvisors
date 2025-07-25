@@ -60,22 +60,31 @@ export const sanitizeInput = (input: string): string => {
     .replace(/\//g, '&#x2F;');
 };
 
-// Rate limiting helper (simple in-memory implementation)
-const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+// Database-backed rate limiting
+import { supabase } from '@/integrations/supabase/client';
 
-export const checkRateLimit = (identifier: string, maxRequests: number = 5, windowMs: number = 60000): boolean => {
-  const now = Date.now();
-  const record = rateLimitMap.get(identifier);
-  
-  if (!record || now > record.resetTime) {
-    rateLimitMap.set(identifier, { count: 1, resetTime: now + windowMs });
-    return true;
+export const checkRateLimit = async (
+  identifier: string, 
+  actionType: string = 'general',
+  maxRequests: number = 5, 
+  windowMinutes: number = 60
+): Promise<boolean> => {
+  try {
+    const { data, error } = await supabase.rpc('check_rate_limit', {
+      _identifier: identifier,
+      _action_type: actionType,
+      _max_requests: maxRequests,
+      _window_minutes: windowMinutes
+    });
+    
+    if (error) {
+      console.error('Rate limit check failed:', error);
+      return false; // Fail closed for security
+    }
+    
+    return data === true;
+  } catch (error) {
+    console.error('Rate limit error:', error);
+    return false; // Fail closed for security
   }
-  
-  if (record.count >= maxRequests) {
-    return false;
-  }
-  
-  record.count += 1;
-  return true;
 };
