@@ -64,6 +64,33 @@ const BlogPost = () => {
     return null;
   }
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": post.title,
+    "description": post.excerpt,
+    "image": "https://3rdeyeadvisors.com/social-share.jpg",
+    "author": {
+      "@type": "Person",
+      "name": post.author
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "3rdeyeadvisors",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://3rdeyeadvisors.com/favicon-3ea.svg"
+      }
+    },
+    "datePublished": post.date,
+    "dateModified": post.date,
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `https://3rdeyeadvisors.com/blog/${post.id}`
+    },
+    "keywords": `${post.category.toLowerCase()}, DeFi, cryptocurrency, ${post.tags.join(', ')}`
+  };
+
   return (
     <>
       <SEO 
@@ -78,6 +105,10 @@ const BlogPost = () => {
           section: post.category,
           tags: [post.category, 'DeFi', 'Cryptocurrency']
         }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <div className="min-h-screen py-20">
       <div className="container mx-auto px-4 max-w-4xl">
