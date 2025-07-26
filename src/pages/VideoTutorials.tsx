@@ -143,10 +143,47 @@ const VideoTutorials = () => {
   return (
     <>
       <SEO 
-        title="Video Tutorials - Step-by-Step DeFi Learning"
-        description="Master DeFi with our comprehensive video tutorials. Learn wallet setup, DEX trading, yield farming, and advanced strategies through easy-to-follow video guides."
-        keywords="DeFi video tutorials, cryptocurrency tutorials, wallet setup guide, DEX trading tutorial, yield farming videos, DeFi education videos"
+        title="DeFi Video Tutorials - Step-by-Step Cryptocurrency Guides"
+        description="Comprehensive DeFi video tutorials covering wallet setup, DEX swaps, yield farming, staking, and advanced DeFi strategies. Perfect for visual learners entering cryptocurrency."
+        keywords="DeFi video tutorials, cryptocurrency tutorials, DeFi step-by-step guides, wallet setup tutorial, DEX swap guide, yield farming tutorial, staking tutorial, DeFi education videos"
         url="https://3rdeyeadvisors.com/tutorials"
+        schema={{
+          type: 'Course',
+          data: {
+            provider: {
+              "@type": "Organization",
+              name: "3rdeyeadvisors",
+              url: "https://3rdeyeadvisors.com"
+            },
+            educationalLevel: "Beginner to Advanced",
+            learningResourceType: "Video Tutorial",
+            teaches: [
+              "Cryptocurrency wallet setup",
+              "Decentralized exchange trading",
+              "Yield farming strategies",
+              "DeFi staking protocols",
+              "Risk management in DeFi"
+            ]
+          }
+        }}
+        faq={[
+          {
+            question: "Are your DeFi tutorials suitable for complete beginners?",
+            answer: "Yes! Our video tutorials start from the absolute basics, including how to set up your first cryptocurrency wallet and make your first DeFi transaction. No prior experience needed."
+          },
+          {
+            question: "What DeFi topics do your video tutorials cover?",
+            answer: "Our tutorials cover wallet setup, DEX trading, yield farming, staking, liquidity pools, portfolio management, risk assessment, and advanced DeFi strategies across multiple protocols."
+          },
+          {
+            question: "How do I learn yield farming safely?",
+            answer: "Our yield farming tutorials teach you to start small, understand impermanent loss, research protocols thoroughly, and diversify across trusted platforms. We emphasize risk management in every strategy."
+          },
+          {
+            question: "Do you provide tutorials for specific DeFi platforms?",
+            answer: "Yes, we create tutorials for major DeFi platforms including Uniswap, Compound, Aave, PancakeSwap, and other leading protocols, showing step-by-step usage and best practices."
+          }
+        ]}
       />
       <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
         <div className="container mx-auto px-4 py-8">

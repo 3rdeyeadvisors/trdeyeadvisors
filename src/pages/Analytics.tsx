@@ -8,10 +8,43 @@ const Analytics = () => {
   return (
     <>
       <SEO 
-        title="DeFi Analytics & Market Data"
-        description="Real-time DeFi analytics, protocol insights, and comprehensive market data for the decentralized finance ecosystem. Track yields, TVL, and protocol performance."
-        keywords="DeFi analytics, DeFi market data, yield farming analytics, protocol insights, TVL tracking, DeFi charts, crypto analytics"
+        title="DeFi Analytics & Market Data - Real-Time Protocol Insights"
+        description="Comprehensive DeFi analytics dashboard with real-time market data, yield farming insights, TVL tracking, and protocol performance metrics. Essential tools for DeFi investors and analysts."
+        keywords="DeFi analytics, real-time DeFi data, yield farming analytics, TVL tracking, DeFi market insights, protocol analytics, crypto market data, DeFi charts, blockchain analytics"
         url="https://3rdeyeadvisors.com/analytics"
+        schema={{
+          type: 'SoftwareApplication',
+          data: {
+            applicationCategory: "FinanceApplication",
+            operatingSystem: "Web Browser",
+            offers: {
+              "@type": "Offer",
+              price: "0",
+              priceCurrency: "USD"
+            },
+            featureList: [
+              "Real-time DeFi protocol data",
+              "Yield farming analytics",
+              "TVL tracking and insights",
+              "Market performance metrics",
+              "Interactive DeFi charts"
+            ]
+          }
+        }}
+        faq={[
+          {
+            question: "What DeFi analytics data do you provide?",
+            answer: "Our analytics dashboard provides real-time data on DeFi protocols including Total Value Locked (TVL), yield farming rates, liquidity pool performance, and market trends across major DeFi platforms."
+          },
+          {
+            question: "How accurate is your DeFi market data?",
+            answer: "Our DeFi analytics are updated every 10 seconds and sourced from multiple reliable data providers to ensure accuracy. We track over 200+ DeFi protocols and their performance metrics."
+          },
+          {
+            question: "Can I use this data for investment decisions?",
+            answer: "Our analytics provide educational insights for learning purposes. While the data reflects real market patterns, always conduct your own research and consider multiple sources before making any investment decisions."
+          }
+        ]}
       />
       <div className="min-h-screen py-20">
       <div className="container mx-auto px-4">

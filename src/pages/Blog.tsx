@@ -27,10 +27,34 @@ const Blog = () => {
   return (
     <>
       <SEO 
-        title="DeFi Blog & Educational Articles"
-        description="Stay updated with the latest DeFi insights, educational content, security analysis, and cryptocurrency trends. Expert articles for beginners to advanced users."
-        keywords="DeFi blog, cryptocurrency articles, blockchain education, DeFi analysis, crypto news, yield farming insights, smart contract security"
+        title="DeFi Blog - Cryptocurrency Articles & Blockchain Education"
+        description="Expert DeFi blog with cryptocurrency analysis, yield farming insights, blockchain education, and DeFi security guides. Stay updated with the latest decentralized finance trends and strategies."
+        keywords="DeFi blog, cryptocurrency articles, blockchain education, DeFi analysis, crypto news, yield farming insights, DeFi security, cryptocurrency trends, blockchain analysis"
         url="https://3rdeyeadvisors.com/blog"
+        schema={{
+          type: 'WebPage',
+          data: {
+            mainEntity: {
+              "@type": "Blog",
+              name: "3rdeyeadvisors DeFi Blog",
+              description: "Educational content about decentralized finance, cryptocurrency, and blockchain technology"
+            }
+          }
+        }}
+        faq={[
+          {
+            question: "What topics does your DeFi blog cover?",
+            answer: "Our DeFi blog covers yield farming strategies, cryptocurrency analysis, blockchain technology insights, DeFi security best practices, market trends, and educational content for all skill levels."
+          },
+          {
+            question: "How often do you publish new cryptocurrency articles?",
+            answer: "We regularly publish new articles covering the latest DeFi developments, market analysis, and educational content. Our blog is updated with fresh insights on decentralized finance trends and opportunities."
+          },
+          {
+            question: "Are your DeFi articles suitable for beginners?",
+            answer: "Yes! Our blog features content for all levels, from beginner-friendly explanations of DeFi concepts to advanced analysis for experienced crypto investors. Each article is clearly marked by difficulty level."
+          }
+        ]}
       />
       <div className="min-h-screen py-20">
       <div className="container mx-auto px-4">

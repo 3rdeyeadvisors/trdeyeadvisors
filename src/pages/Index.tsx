@@ -33,7 +33,45 @@ const Index = () => {
 
   return (
     <>
-      <SEO />
+      <SEO 
+        title="3rdeyeadvisors | DeFi Education & Financial Consciousness Training"
+        description="Learn DeFi analytics, cryptocurrency strategies, and blockchain investing. Free courses, calculators, and tutorials for passive income through decentralized finance."
+        keywords="DeFi education, DeFi analytics, cryptocurrency courses, DeFi passive income, blockchain investing, yield farming strategies, DeFi calculators, crypto education, financial consciousness"
+        schema={{
+          type: 'WebPage',
+          data: {
+            breadcrumb: {
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  name: "Home",
+                  item: "https://3rdeyeadvisors.com"
+                }
+              ]
+            }
+          }
+        }}
+        faq={[
+          {
+            question: "What is DeFi and how can I learn it?",
+            answer: "DeFi (Decentralized Finance) is a new financial system built on blockchain technology. Our platform offers comprehensive courses from beginner to advanced levels, covering yield farming, staking, liquidity pools, and safe investing strategies."
+          },
+          {
+            question: "How can I make passive income with DeFi?",
+            answer: "DeFi offers multiple passive income opportunities including yield farming, liquidity providing, staking, and lending protocols. Our courses teach you how to safely earn 5-20% APY through decentralized finance strategies."
+          },
+          {
+            question: "What DeFi tools and calculators do you provide?",
+            answer: "We provide comprehensive DeFi calculators for APY calculations, impermanent loss estimation, yield farming returns, and portfolio rebalancing tools to help you make informed investment decisions."
+          },
+          {
+            question: "Are your DeFi courses suitable for beginners?",
+            answer: "Yes! We offer beginner-friendly DeFi education starting from the basics of blockchain and cryptocurrency, progressing to advanced DeFi strategies. No prior knowledge required to start your financial consciousness journey."
+          }
+        ]}
+      />
       
       <div className="min-h-screen">
       {/* Hero Section */}

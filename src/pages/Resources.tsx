@@ -61,10 +61,47 @@ const Resources = () => {
   return (
     <>
       <SEO 
-        title="DeFi Resources & Tools Hub"
-        description="Curated collection of trusted DeFi tools, platforms, wallets, and educational resources. Everything you need to navigate decentralized finance safely and effectively."
-        keywords="DeFi tools, cryptocurrency resources, wallet recommendations, portfolio trackers, DeFi protocols, yield farming tools, crypto security"
+        title="DeFi Tools & Calculators - Essential Resources for Crypto Investing"
+        description="Comprehensive DeFi tools including yield farming calculators, portfolio trackers, trusted wallets, and essential platforms for decentralized finance investing and passive income strategies."
+        keywords="DeFi calculators, crypto tools, yield farming calculator, DeFi portfolio tracker, cryptocurrency calculators, DeFi platforms, blockchain tools, passive income calculators"
         url="https://3rdeyeadvisors.com/resources"
+        schema={{
+          type: 'SoftwareApplication',
+          data: {
+            applicationCategory: "FinanceApplication",
+            operatingSystem: "Web Browser",
+            offers: {
+              "@type": "Offer",
+              price: "0",
+              priceCurrency: "USD"
+            },
+            featureList: [
+              "DeFi yield calculators",
+              "Portfolio tracking tools",
+              "Risk assessment calculators",
+              "APY comparison tools",
+              "Impermanent loss calculators"
+            ]
+          }
+        }}
+        faq={[
+          {
+            question: "What DeFi calculators do you provide?",
+            answer: "We offer comprehensive DeFi calculators including yield farming APY calculators, impermanent loss estimators, portfolio rebalancing tools, and risk assessment calculators to help you make informed DeFi investment decisions."
+          },
+          {
+            question: "Are your DeFi tools free to use?",
+            answer: "Yes, all our DeFi calculators and basic tools are completely free. We provide these resources to help educate users about decentralized finance and support informed decision-making in crypto investing."
+          },
+          {
+            question: "Which DeFi platforms do you recommend?",
+            answer: "We curate trusted DeFi platforms including leading DEXs, lending protocols, and yield farming platforms. All recommendations are based on security audits, track record, and community trust in the DeFi ecosystem."
+          },
+          {
+            question: "How do I calculate DeFi yields and returns?",
+            answer: "Our DeFi calculators help you estimate yields from staking, liquidity providing, and yield farming. Input your investment amount, duration, and platform APY to see projected returns and understand associated risks."
+          }
+        ]}
       />
       <div className="min-h-screen py-20">
       <div className="container mx-auto px-4">

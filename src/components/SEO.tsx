@@ -14,6 +14,14 @@ interface SEOProps {
     section?: string;
     tags?: string[];
   };
+  schema?: {
+    type: 'Article' | 'Course' | 'FinancialProduct' | 'SoftwareApplication' | 'WebPage' | 'Organization' | 'FAQPage';
+    data?: any;
+  };
+  faq?: Array<{
+    question: string;
+    answer: string;
+  }>;
 }
 
 const SEO = ({
@@ -23,10 +31,59 @@ const SEO = ({
   image = "https://zapbkuaejvzpqerkkcnc.supabase.co/storage/v1/object/public/social-banners/3ea-social-banner.webp",
   url = "https://3rdeyeadvisors.com",
   type = "website",
-  article
+  article,
+  schema,
+  faq
 }: SEOProps) => {
   const siteTitle = "3rdeyeadvisors";
   const fullTitle = title.includes(siteTitle) ? title : `${title} | ${siteTitle}`;
+
+  // Generate schema markup based on type
+  const generateSchema = () => {
+    if (!schema) return null;
+
+    const baseSchema = {
+      "@context": "https://schema.org",
+      "@type": schema.type,
+      name: title,
+      description: description,
+      url: url,
+      image: image,
+      publisher: {
+        "@type": "Organization",
+        name: "3rdeyeadvisors",
+        url: "https://3rdeyeadvisors.com",
+        logo: {
+          "@type": "ImageObject",
+          url: "https://3rdeyeadvisors.com/favicon-3ea-new.png"
+        }
+      },
+      ...schema.data
+    };
+
+    return baseSchema;
+  };
+
+  // Generate FAQ schema
+  const generateFAQSchema = () => {
+    if (!faq || faq.length === 0) return null;
+
+    return {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faq.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.answer
+        }
+      }))
+    };
+  };
+
+  const schemaMarkup = generateSchema();
+  const faqMarkup = generateFAQSchema();
 
   return (
     <Helmet>
@@ -35,6 +92,11 @@ const SEO = ({
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords} />
       <link rel="canonical" href={url} />
+      
+      {/* AI Crawler Optimization */}
+      <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+      <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+      <meta name="bingbot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
 
       {/* Open Graph Tags */}
       <meta property="og:title" content={fullTitle} />
@@ -42,7 +104,10 @@ const SEO = ({
       <meta property="og:type" content={type} />
       <meta property="og:url" content={url} />
       <meta property="og:image" content={image} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
       <meta property="og:site_name" content={siteTitle} />
+      <meta property="og:locale" content="en_US" />
 
       {/* Twitter Card Tags */}
       <meta name="twitter:card" content="summary_large_image" />
@@ -50,6 +115,7 @@ const SEO = ({
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={image} />
       <meta name="twitter:creator" content="@3rdeyeadvisors" />
+      <meta name="twitter:site" content="@3rdeyeadvisors" />
 
       {/* Article-specific meta tags */}
       {article && (
@@ -62,6 +128,22 @@ const SEO = ({
             <meta key={index} property="article:tag" content={tag} />
           ))}
         </>
+      )}
+
+      {/* Schema.org Structured Data */}
+      {schemaMarkup && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaMarkup) }}
+        />
+      )}
+
+      {/* FAQ Schema */}
+      {faqMarkup && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqMarkup) }}
+        />
       )}
     </Helmet>
   );

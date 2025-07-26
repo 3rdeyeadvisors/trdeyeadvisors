@@ -24,10 +24,35 @@ const Philosophy = () => {
   return (
     <>
       <SEO 
-        title="Philosophy - Financial Consciousness & DeFi Awakening"
-        description="Discover the philosophy behind 3rdeyeadvisors. Break free from traditional financial programming and reprogram your understanding of money, wealth, and financial sovereignty through DeFi."
-        keywords="financial consciousness, DeFi philosophy, financial sovereignty, money consciousness, decentralized finance mindset, financial awakening, crypto philosophy"
+        title="Financial Consciousness & DeFi Philosophy - Money Awakening"
+        description="Transform your relationship with money through financial consciousness and DeFi education. Break free from traditional banking and discover financial sovereignty through decentralized finance."
+        keywords="financial consciousness, DeFi philosophy, financial sovereignty, money consciousness, decentralized finance mindset, financial awakening, crypto philosophy, financial freedom"
         url="https://3rdeyeadvisors.com/philosophy"
+        schema={{
+          type: 'WebPage',
+          data: {
+            about: [
+              "Financial consciousness and awareness",
+              "Decentralized finance philosophy",
+              "Money and wealth consciousness",
+              "Financial sovereignty education"
+            ]
+          }
+        }}
+        faq={[
+          {
+            question: "What is financial consciousness?",
+            answer: "Financial consciousness is the awareness of how money and financial systems truly work, including understanding the limitations of traditional banking and the opportunities presented by decentralized finance (DeFi)."
+          },
+          {
+            question: "How does DeFi promote financial sovereignty?",
+            answer: "DeFi promotes financial sovereignty by removing intermediaries, giving individuals direct control over their assets, and providing access to financial services without traditional banking restrictions or gatekeepers."
+          },
+          {
+            question: "What does it mean to reprogram your relationship with money?",
+            answer: "Reprogramming your relationship with money means questioning traditional financial assumptions, understanding how modern monetary systems work, and exploring alternative financial paradigms like cryptocurrency and DeFi for true financial independence."
+          }
+        ]}
       />
       <div className="min-h-screen py-20">
       <div className="container mx-auto px-4 max-w-4xl">

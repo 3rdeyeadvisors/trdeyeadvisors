@@ -148,10 +148,46 @@ const Courses = () => {
   return (
     <>
       <SEO 
-        title="DeFi Courses & Education"
-        description="Learn decentralized finance with our comprehensive courses. From beginner basics to advanced DeFi strategies, start your financial consciousness journey today."
-        keywords="DeFi courses, cryptocurrency education, blockchain courses, yield farming course, DeFi beginner guide, decentralized finance training"
+        title="DeFi Courses & Cryptocurrency Education - Learn Blockchain Investing"
+        description="Comprehensive DeFi courses from beginner to advanced. Learn yield farming, staking, DeFi protocols, and passive income strategies. Free and paid courses available for cryptocurrency education."
+        keywords="DeFi courses, cryptocurrency education, blockchain courses, yield farming course, DeFi beginner guide, crypto passive income, DeFi training, blockchain investing course"
         url="https://3rdeyeadvisors.com/courses"
+        schema={{
+          type: 'Course',
+          data: {
+            provider: {
+              "@type": "Organization",
+              name: "3rdeyeadvisors",
+              url: "https://3rdeyeadvisors.com"
+            },
+            educationalLevel: "Beginner to Advanced",
+            teaches: [
+              "Decentralized Finance (DeFi)",
+              "Yield Farming Strategies",
+              "Cryptocurrency Investing",
+              "Blockchain Technology",
+              "Financial Independence"
+            ]
+          }
+        }}
+        faq={[
+          {
+            question: "What DeFi courses do you offer?",
+            answer: "We offer comprehensive DeFi courses ranging from beginner foundations to advanced protocol analysis. Topics include yield farming, staking, portfolio management, risk assessment, and safe DeFi practices."
+          },
+          {
+            question: "Are your cryptocurrency courses suitable for beginners?",
+            answer: "Yes! Our courses start with the absolute basics of blockchain and cryptocurrency, requiring no prior knowledge. We guide you step-by-step from understanding what DeFi is to implementing advanced strategies."
+          },
+          {
+            question: "How can I earn passive income through DeFi?",
+            answer: "Our courses teach multiple DeFi passive income strategies including yield farming (5-50% APY), liquidity providing, staking rewards, and DeFi lending protocols. Learn to safely navigate opportunities while managing risks."
+          },
+          {
+            question: "Do you offer free DeFi education?",
+            answer: "Yes, we provide free foundational courses covering DeFi basics, wallet setup, and essential security practices. Premium courses dive deeper into advanced strategies and portfolio management techniques."
+          }
+        ]}
       />
       <div className="min-h-screen py-20">
       <div className="container mx-auto px-4">
