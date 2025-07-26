@@ -23,6 +23,7 @@ import {
   RefreshCw
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import SEO from "@/components/SEO";
 
 const FirstDexSwapTutorial = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -394,7 +395,50 @@ const FirstDexSwapTutorial = () => {
   const isStepCompleted = (stepId: number) => completedSteps.includes(stepId);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
+    <>
+      <SEO 
+        title="First DEX Swap Tutorial - Uniswap Trading Guide"
+        description="Complete beginner's guide to your first decentralized exchange swap. Learn to trade safely on Uniswap with step-by-step instructions for DeFi trading."
+        keywords="DEX swap tutorial, Uniswap guide, decentralized exchange trading, DeFi trading tutorial, first crypto swap, Polygon DEX tutorial"
+        url="https://3rdeyeadvisors.com/tutorials/first-dex-swap"
+        schema={{
+          type: 'Course',
+          data: {
+            offers: {
+              price: "0",
+              priceCurrency: "USD"
+            },
+            hasCourseInstance: true,
+            coursePrerequisites: "MetaMask wallet setup required",
+            educationalLevel: "Beginner",
+            teaches: [
+              "DEX selection and verification",
+              "Safe wallet connection",
+              "Network switching (Polygon)",
+              "Gas fee management",
+              "Transaction review and execution",
+              "Post-trade security practices"
+            ],
+            timeRequired: "PT20M",
+            courseCode: "DEX-SWAP-101"
+          }
+        }}
+        faq={[
+          {
+            question: "How do I make my first DEX swap safely?",
+            answer: "Follow our 8-step tutorial: Choose a reputable DEX (like Uniswap), connect your MetaMask wallet, switch to Polygon network for low fees, get native tokens for gas, select your trade carefully, review all details, execute the swap, and verify the transaction."
+          },
+          {
+            question: "What network should I use for my first DEX trade?",
+            answer: "We recommend Polygon network for beginners because of very low gas fees ($0.01-0.10), fast transactions (2 seconds), and wide token availability. You'll need a small amount of MATIC for gas fees."
+          },
+          {
+            question: "How much should I trade for my first DEX swap?",
+            answer: "Start small with $10-50 for your first trade. This lets you learn the process without significant risk. Use stablecoins like USDC for predictable values, and always verify token addresses to avoid fake tokens."
+          }
+        ]}
+      />
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -971,7 +1015,8 @@ const FirstDexSwapTutorial = () => {
           </Card>
         )}
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

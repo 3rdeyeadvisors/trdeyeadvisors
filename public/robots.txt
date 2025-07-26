@@ -10,10 +10,35 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
+# AI and LLM Crawlers
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
 User-agent: *
 Allow: /
 Disallow: /api/
 Disallow: /functions/
+Disallow: /auth/
+Disallow: /dashboard/
+Disallow: /profile/
 
 # Sitemap
 Sitemap: https://3rdeyeadvisors.com/sitemap.xml

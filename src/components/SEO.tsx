@@ -61,6 +61,52 @@ const SEO = ({
       ...schema.data
     };
 
+    // Add Course-specific schema enhancements
+    if (schema.type === 'Course') {
+      // Add proper offers object
+      if (schema.data?.offers) {
+        baseSchema.offers = {
+          "@type": "Offer",
+          price: schema.data.offers.price || "0",
+          priceCurrency: schema.data.offers.priceCurrency || "USD",
+          availability: "https://schema.org/InStock",
+          url: url,
+          validFrom: new Date().toISOString(),
+          seller: {
+            "@type": "Organization",
+            name: "3rdeyeadvisors",
+            url: "https://3rdeyeadvisors.com"
+          }
+        };
+      }
+
+      // Add proper hasCourseInstance object
+      if (schema.data?.hasCourseInstance) {
+        baseSchema.hasCourseInstance = {
+          "@type": "CourseInstance",
+          courseMode: "online",
+          instructor: {
+            "@type": "Person",
+            name: "3rdeyeadvisors Team"
+          },
+          startDate: new Date().toISOString().split('T')[0], // Today's date
+          endDate: "2025-12-31", // Self-paced courses available through end of year
+          courseSchedule: {
+            "@type": "Schedule",
+            scheduleTimezone: "UTC",
+            repeatFrequency: "P1D",
+            byDay: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+          }
+        };
+      }
+
+      // Add course-specific properties
+      baseSchema.coursePrerequisites = schema.data?.coursePrerequisites || "No prior experience required";
+      baseSchema.educationalLevel = schema.data?.educationalLevel || "Beginner to Advanced";
+      baseSchema.inLanguage = "en-US";
+      baseSchema.isAccessibleForFree = schema.data?.offers?.price === "0" || schema.data?.offers?.price === 0;
+    }
+
     return baseSchema;
   };
 

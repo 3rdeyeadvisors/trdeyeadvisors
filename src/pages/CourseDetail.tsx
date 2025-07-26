@@ -15,6 +15,7 @@ import { CommunityTabs } from "@/components/community/CommunityTabs";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import SEO from "@/components/SEO";
 
 const CourseDetail = () => {
   const { courseId } = useParams();
@@ -196,7 +197,46 @@ const CourseDetail = () => {
   };
 
   return (
-    <div className="min-h-screen py-20">
+    <>
+      <SEO 
+        title={`${course.title} - DeFi Course`}
+        description={course.description}
+        keywords={`DeFi course, ${course.title.toLowerCase()}, decentralized finance, cryptocurrency education, blockchain learning, ${course.category === 'free' ? 'free course' : 'premium course'}`}
+        url={`https://3rdeyeadvisors.com/courses/${courseId}`}
+        schema={{
+          type: 'Course',
+          data: {
+            offers: {
+              price: course.category === 'free' ? "0" : coursePrice.replace('$', '') || "67",
+              priceCurrency: "USD"
+            },
+            hasCourseInstance: true,
+            coursePrerequisites: course.difficulty === 'Beginner' ? 'No prior experience required' : 'Basic understanding of cryptocurrency recommended',
+            educationalLevel: course.difficulty,
+            teaches: course.modules?.map(module => module.title) || [],
+            timeRequired: course.estimatedTime,
+            courseCode: `DEFI-${courseId}`,
+            numberOfCredits: course.modules?.length || 5
+          }
+        }}
+        faq={[
+          {
+            question: `What will I learn in ${course.title}?`,
+            answer: `${course.description} This course covers ${course.modules?.length || 5} comprehensive modules designed to take you from ${course.difficulty.toLowerCase()} level to confident understanding.`
+          },
+          {
+            question: "How long does this course take to complete?",
+            answer: `This course is estimated to take ${course.estimatedTime}. You can learn at your own pace with lifetime access to all materials.`
+          },
+          {
+            question: course.category === 'free' ? "Is this course completely free?" : "What's included in the course price?",
+            answer: course.category === 'free' 
+              ? "Yes, this course is completely free with no hidden costs. Sign up to track your progress and earn completion certificates."
+              : `For ${coursePrice}, you get lifetime access to all ${course.modules?.length || 5} modules, community discussions, downloadable resources, and completion certificates.`
+          }
+        ]}
+      />
+      <div className="min-h-screen py-20">
       <div className="container mx-auto px-4 max-w-4xl">
         {/* Back Button */}
         <Button
@@ -426,7 +466,8 @@ const CourseDetail = () => {
         isOpen={showAuthModal} 
         onClose={() => setShowAuthModal(false)} 
       />
-    </div>
+      </div>
+    </>
   );
 };
 

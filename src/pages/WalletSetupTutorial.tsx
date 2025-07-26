@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { CommunityHub } from "@/components/community/CommunityHub";
+import SEO from "@/components/SEO";
 
 const WalletSetupTutorial = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -244,7 +245,49 @@ const WalletSetupTutorial = () => {
   const isStepCompleted = (stepId: number) => completedSteps.includes(stepId);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
+    <>
+      <SEO 
+        title="DeFi Wallet Setup Tutorial - MetaMask Security Guide"
+        description="Complete step-by-step guide to setting up MetaMask wallet safely. Learn wallet security, seed phrase protection, and DeFi best practices for beginners."
+        keywords="MetaMask setup, DeFi wallet security, cryptocurrency wallet tutorial, seed phrase backup, blockchain wallet guide, DeFi security"
+        url="https://3rdeyeadvisors.com/tutorials/wallet-setup"
+        schema={{
+          type: 'Course',
+          data: {
+            offers: {
+              price: "0",
+              priceCurrency: "USD"
+            },
+            hasCourseInstance: true,
+            coursePrerequisites: "No prior experience required",
+            educationalLevel: "Beginner",
+            teaches: [
+              "MetaMask wallet setup",
+              "Seed phrase security",
+              "DeFi wallet best practices",
+              "Cryptocurrency wallet safety",
+              "Blockchain security fundamentals"
+            ],
+            timeRequired: "PT15M",
+            courseCode: "WALLET-SETUP-101"
+          }
+        }}
+        faq={[
+          {
+            question: "How do I set up a MetaMask wallet safely?",
+            answer: "Follow our 6-step tutorial: Choose MetaMask, download from official sources, create with strong password, secure your seed phrase, verify setup, and implement security practices. Always write down your seed phrase on paper."
+          },
+          {
+            question: "What is a seed phrase and why is it important?",
+            answer: "A seed phrase is a 12-word backup that controls your entire wallet. It's the master key to your cryptocurrency. Never share it, store it digitally, or take photos. Write it on paper and store in secure locations."
+          },
+          {
+            question: "Is MetaMask safe for DeFi?",
+            answer: "MetaMask is widely trusted for DeFi when used properly. Follow security practices: verify URLs, review transactions carefully, keep software updated, and never share your seed phrase or private keys."
+          }
+        ]}
+      />
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -676,7 +719,8 @@ const WalletSetupTutorial = () => {
           title="Wallet Setup & Security Tutorial"
         />
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

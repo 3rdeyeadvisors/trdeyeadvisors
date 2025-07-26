@@ -167,7 +167,14 @@ const Courses = () => {
               "Cryptocurrency Investing",
               "Blockchain Technology",
               "Financial Independence"
-            ]
+            ],
+            offers: {
+              price: "0",
+              priceCurrency: "USD"
+            },
+            hasCourseInstance: true,
+            coursePrerequisites: "No prior experience required",
+            timeRequired: "2-8 hours per course"
           }
         }}
         faq={[
