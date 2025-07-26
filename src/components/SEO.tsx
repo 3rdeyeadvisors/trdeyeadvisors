@@ -1,5 +1,8 @@
 import { Helmet } from "react-helmet-async";
 
+// Legacy SEO component - Consider using SEOAutomation for new pages
+// This component is maintained for backwards compatibility
+
 interface SEOProps {
   title?: string;
   description?: string;
