@@ -145,7 +145,7 @@ const Store = () => {
     <>
       <SEO 
         title="DeFi Products & Merchandise Store"
-        description="Discover premium DeFi education products, portfolio trackers, and consciousness-inspired merchandise. Support your financial education journey with our curated collection."
+        description="Premium DeFi education products, portfolio trackers, and guides. Support your financial education journey with our curated digital collection."
         keywords="DeFi products, cryptocurrency guides, portfolio tracker, yield farming strategies, DeFi merchandise, blockchain education"
         url="https://3rdeyeadvisors.com/store"
       />

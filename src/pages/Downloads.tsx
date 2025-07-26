@@ -170,7 +170,7 @@ const Downloads = () => {
       />
       <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">My Downloads</h1>
+        <h2 className="text-3xl font-bold mb-2">My Downloads</h2>
         <p className="text-muted-foreground">Access your purchased digital products</p>
       </div>
 

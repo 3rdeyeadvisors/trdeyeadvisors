@@ -173,9 +173,9 @@ const BlogPost = () => {
             <ReactMarkdown
               components={{
                 h1: ({ children }) => (
-                  <h1 className="text-3xl font-consciousness font-bold text-foreground mb-6 mt-8">
+                  <h2 className="text-3xl font-consciousness font-bold text-foreground mb-6 mt-8">
                     {children}
-                  </h1>
+                  </h2>
                 ),
                 h2: ({ children }) => (
                   <h2 className="text-2xl font-consciousness font-bold text-foreground mb-4 mt-8">

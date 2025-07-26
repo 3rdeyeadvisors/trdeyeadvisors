@@ -66,7 +66,7 @@ const Contact = () => {
     <>
       <SEO 
         title="Contact & About - Connect with 3rdeyeadvisors"
-        description="Get in touch with the consciousness behind 3rdeyeadvisors. Connect for DeFi education inquiries, support, or to join our mission of financial awakening."
+        description="Contact 3rdeyeadvisors for DeFi education inquiries and support. Connect with our team to join the mission of financial awakening and consciousness."
         keywords="contact 3rdeyeadvisors, DeFi education support, financial consciousness contact, crypto education inquiry"
         url="https://3rdeyeadvisors.com/contact"
       />

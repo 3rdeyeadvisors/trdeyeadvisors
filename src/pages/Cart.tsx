@@ -68,9 +68,9 @@ const Cart = () => {
   return (
     <div className="min-h-screen py-20">
       <div className="container mx-auto px-4">
-        <h1 className="text-4xl md:text-5xl font-consciousness font-bold text-foreground mb-8">
+        <h2 className="text-4xl md:text-5xl font-consciousness font-bold text-foreground mb-8">
           Shopping Cart
-        </h1>
+        </h2>
 
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Cart Items */}
