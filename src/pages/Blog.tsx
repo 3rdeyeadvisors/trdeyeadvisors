@@ -19,6 +19,9 @@ const Blog = () => {
   
   const featuredPosts = posts.filter(post => post.featured);
   console.log("Featured posts:", featuredPosts);
+  
+  const regularPosts = posts.filter(post => !post.featured);
+  console.log("Regular posts:", regularPosts);
 
   const categories = ["All", "Education", "Security", "Tools", "Analysis"];
 
@@ -149,8 +152,8 @@ const Blog = () => {
         ))}
 
         {/* Regular Posts Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {posts.filter(post => !post.featured).map((post, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {regularPosts.map((post, index) => (
             <Card 
               key={post.id}
               className="p-6 bg-card/60 border-border hover:border-primary/40 transition-all duration-cosmic hover:shadow-consciousness group"
