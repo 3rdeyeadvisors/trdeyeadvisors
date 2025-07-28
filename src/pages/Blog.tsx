@@ -93,6 +93,15 @@ const Blog = () => {
           ))}
         </div>
 
+        {/* Debug Info */}
+        {posts.length === 0 && (
+          <div className="text-center p-8 bg-red-100 text-red-800 rounded">
+            <p>No blog posts found! Debug info:</p>
+            <p>Selected Category: {selectedCategory}</p>
+            <p>Posts array length: {posts.length}</p>
+          </div>
+        )}
+        
         {/* Featured Post */}
         {featuredPosts.map((post) => (
           <Card 
