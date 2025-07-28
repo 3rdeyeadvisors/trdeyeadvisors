@@ -221,9 +221,45 @@ AFP on Autonity represents more than a protocol launch—it's a glimpse into fin
     category: "Innovation",
     readTime: "14 min read",
     date: "2025-07-28",
-    featured: false,
+    featured: true,
     author: "DeFi Research Team",
     tags: ["DeFi forecast markets", "Clearmatics AFP", "Autonity chain", "decentralized derivatives", "on-chain futures", "crypto innovation", "time-series trading", "DeFi 2025"]
+  },
+  {
+    id: 2,
+    title: "DeFi Security Fundamentals: Protecting Your Assets in 2025",
+    excerpt: "Essential security practices every DeFi user needs to know. From wallet security to smart contract risks, learn how to navigate DeFi safely while maximizing opportunities.",
+    content: "# DeFi Security Fundamentals: Protecting Your Assets in 2025\n\nComprehensive guide to DeFi security best practices...",
+    category: "Security",
+    readTime: "8 min read",
+    date: "2025-07-26",
+    featured: false,
+    author: "Security Team",
+    tags: ["DeFi security", "wallet protection", "smart contract risks", "crypto safety"]
+  },
+  {
+    id: 3,
+    title: "Yield Farming Strategies That Actually Work",
+    excerpt: "Cut through the noise and discover proven yield farming strategies. Learn how to evaluate opportunities, manage risks, and build sustainable DeFi income streams.",
+    content: "# Yield Farming Strategies That Actually Work\n\nYield farming guide with practical strategies...",
+    category: "Education",
+    readTime: "10 min read",
+    date: "2025-07-24",
+    featured: false,
+    author: "DeFi Strategists",
+    tags: ["yield farming", "DeFi strategies", "passive income", "liquidity provision"]
+  },
+  {
+    id: 4,
+    title: "The Rise of Real World Assets (RWAs) in DeFi",
+    excerpt: "Traditional assets are moving on-chain. Explore how real estate, commodities, and bonds are being tokenized and what it means for the future of finance.",
+    content: "# The Rise of Real World Assets (RWAs) in DeFi\n\nExploring the tokenization of traditional assets...",
+    category: "Analysis",
+    readTime: "12 min read",
+    date: "2025-07-22",
+    featured: false,
+    author: "Market Analysts",
+    tags: ["RWA", "tokenization", "real world assets", "DeFi evolution"]
   }
 ];
 
