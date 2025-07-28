@@ -17,12 +17,17 @@ const BlogPost = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    console.log("BlogPost - URL id parameter:", id);
     const postId = parseInt(id || "0");
+    console.log("BlogPost - parsed postId:", postId);
     const foundPost = getBlogPost(postId);
+    console.log("BlogPost - found post:", foundPost);
     
     if (foundPost) {
       setPost(foundPost);
+      console.log("BlogPost - post set successfully");
     } else {
+      console.log("BlogPost - no post found, redirecting to blog");
       // Redirect to blog if post not found
       navigate("/blog");
       return;
