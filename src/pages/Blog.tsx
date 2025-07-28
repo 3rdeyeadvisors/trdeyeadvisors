@@ -11,6 +11,14 @@ const Blog = () => {
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState("All");
   const posts = getBlogPostsByCategory(selectedCategory);
+  
+  // Debug logging
+  console.log("Blog component - selectedCategory:", selectedCategory);
+  console.log("Blog component - posts:", posts);
+  console.log("Blog component - posts length:", posts.length);
+  
+  const featuredPosts = posts.filter(post => post.featured);
+  console.log("Featured posts:", featuredPosts);
 
   const categories = ["All", "Education", "Security", "Tools", "Analysis"];
 
@@ -86,7 +94,7 @@ const Blog = () => {
         </div>
 
         {/* Featured Post */}
-        {posts.filter(post => post.featured).map((post) => (
+        {featuredPosts.map((post) => (
           <Card 
             key={post.id}
             className="p-8 mb-12 bg-gradient-consciousness border-primary/20 shadow-consciousness hover:shadow-awareness transition-all duration-cosmic"
