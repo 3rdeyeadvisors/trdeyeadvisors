@@ -220,7 +220,7 @@ AFP on Autonity represents more than a protocol launch—it's a glimpse into fin
 *The decentralized future isn't waiting. Your DeFi education starts here.*`,
     category: "Innovation",
     readTime: "14 min read",
-    date: "2025-01-28",
+    date: "2025-07-28",
     featured: true,
     author: "DeFi Research Team",
     tags: ["DeFi forecast markets", "Clearmatics AFP", "Autonity chain", "decentralized derivatives", "on-chain futures", "crypto innovation", "time-series trading", "DeFi 2025"]
