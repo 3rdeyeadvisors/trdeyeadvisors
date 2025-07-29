@@ -81,7 +81,9 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
+    console.log("Received contact form request:", JSON.stringify({ email: req.headers.get('content-type'), method: req.method }));
     const { name, email, subject, message }: ContactFormRequest = await req.json();
+    console.log("Parsed form data:", { name: name?.substring(0, 10), email: email?.substring(0, 15), hasSubject: !!subject, hasMessage: !!message });
 
     // Input validation
     if (!validateEmail(email)) {

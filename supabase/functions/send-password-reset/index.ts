@@ -20,9 +20,9 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
+    console.log("Received password reset request");
     const { email, resetUrl }: PasswordResetRequest = await req.json();
-
-    console.log(`Sending password reset email to: ${email}`);
+    console.log(`Processing password reset for email: ${email?.substring(0, 5)}...`);
 
     const emailResponse = await resend.emails.send({
       from: "onboarding@resend.dev",
