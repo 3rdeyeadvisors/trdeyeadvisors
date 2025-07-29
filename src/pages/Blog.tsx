@@ -112,7 +112,7 @@ const Blog = () => {
             className="p-8 mb-12 bg-gradient-consciousness border-primary/20 shadow-consciousness hover:shadow-awareness transition-all duration-cosmic"
           >
             <div className="flex flex-wrap items-center gap-4 mb-4">
-              <Badge className="bg-primary/30 text-primary border-primary/40">
+              <Badge className="bg-primary text-primary-foreground border-primary shadow-cosmic">
                 Featured
               </Badge>
               <Badge className={getCategoryColor(post.category)}>
