@@ -78,35 +78,39 @@ function generateCourseSchema(content: PageContent): SchemaConfig {
         name: '3rdeyeadvisors',
         url: 'https://3rdeyeadvisors.com'
       },
-      offers: {
-        '@type': 'Offer',
-        price: content.price?.toString() || '0',
-        priceCurrency: content.currency || 'USD',
-        availability: 'https://schema.org/InStock',
-        url: content.url,
-        validFrom: new Date().toISOString(),
-        seller: {
-          '@type': 'Organization',
-          name: '3rdeyeadvisors',
-          url: 'https://3rdeyeadvisors.com'
+      offers: [
+        {
+          '@type': 'Offer',
+          price: content.price?.toString() || '0',
+          priceCurrency: content.currency || 'USD',
+          availability: 'https://schema.org/InStock',
+          url: content.url,
+          validFrom: new Date().toISOString(),
+          priceValidUntil: '2025-12-31',
+          seller: {
+            '@type': 'Organization',
+            name: '3rdeyeadvisors',
+            url: 'https://3rdeyeadvisors.com'
+          }
         }
-      },
-      hasCourseInstance: {
-        '@type': 'CourseInstance',
-        courseMode: 'online',
-        instructor: {
-          '@type': 'Person',
-          name: '3rdeyeadvisors Team'
-        },
-        startDate: new Date().toISOString().split('T')[0],
-        endDate: '2025-12-31',
-        courseSchedule: {
-          '@type': 'Schedule',
-          scheduleTimezone: 'UTC',
-          repeatFrequency: 'P1D',
-          byDay: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+      ],
+      hasCourseInstance: [
+        {
+          '@type': 'CourseInstance',
+          courseMode: 'online',
+          instructor: {
+            '@type': 'Person',
+            name: '3rdeyeadvisors Team'
+          },
+          startDate: new Date().toISOString().split('T')[0],
+          courseSchedule: {
+            '@type': 'Schedule',
+            scheduleTimezone: 'UTC',
+            repeatFrequency: 'P1D',
+            byDay: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+          }
         }
-      },
+      ],
       coursePrerequisites: 'No prior experience required',
       educationalLevel: 'Beginner to Advanced',
       inLanguage: 'en-US',
