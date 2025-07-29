@@ -11,16 +11,14 @@ import ReactMarkdown from "react-markdown";
 import SEO from "@/components/SEO";
 
 const BlogPost = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
   const navigate = useNavigate();
   const [post, setPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log("BlogPost - URL id parameter:", id);
-    const postId = parseInt(id || "0");
-    console.log("BlogPost - parsed postId:", postId);
-    const foundPost = getBlogPost(postId);
+    console.log("BlogPost - URL slug parameter:", slug);
+    const foundPost = getBlogPost(slug || "");
     console.log("BlogPost - found post:", foundPost);
     
     if (foundPost) {
@@ -34,7 +32,7 @@ const BlogPost = () => {
     }
     
     setLoading(false);
-  }, [id, navigate]);
+  }, [slug, navigate]);
 
   const getCategoryColor = (category: string) => {
     switch (category) {
@@ -91,7 +89,7 @@ const BlogPost = () => {
     "dateModified": post.date,
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": `https://3rdeyeadvisors.com/blog/${post.id}`
+      "@id": `https://3rdeyeadvisors.com/blog/${post.slug}`
     },
     "keywords": `${post.category.toLowerCase()}, DeFi, cryptocurrency, ${post.tags.join(', ')}`
   };
@@ -102,7 +100,7 @@ const BlogPost = () => {
         title={`${post.title} | 3rdeyeadvisors Blog`}
         description={post.excerpt}
         keywords={`${post.category.toLowerCase()}, DeFi, cryptocurrency, ${post.title.toLowerCase()}`}
-        url={`https://3rdeyeadvisors.com/blog/${post.id}`}
+        url={`https://3rdeyeadvisors.com/blog/${post.slug}`}
         type="article"
         article={{
           publishedTime: post.date,
@@ -275,7 +273,7 @@ const BlogPost = () => {
         {/* Community Discussion */}
         <CommunityHub
           contentType="tutorial"
-          contentId={`blog-${post.id}`}
+          contentId={`blog-${post.slug}`}
           title={post.title}
         />
 

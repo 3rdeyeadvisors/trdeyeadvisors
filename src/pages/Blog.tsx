@@ -142,7 +142,7 @@ const Blog = () => {
               <Button 
                 variant="cosmic" 
                 className="font-consciousness"
-                onClick={() => navigate(`/blog/${post.id}`)}
+                onClick={() => navigate(`/blog/${post.slug}`)}
               >
                 Read Article
                 <ArrowRight className="w-4 h-4 ml-2" />
@@ -186,7 +186,7 @@ const Blog = () => {
                 variant="awareness" 
                 size="sm" 
                 className="w-full font-consciousness"
-                onClick={() => navigate(`/blog/${post.id}`)}
+                onClick={() => navigate(`/blog/${post.slug}`)}
               >
                 Read More
                 <ArrowRight className="w-4 h-4 ml-2" />

@@ -1,5 +1,6 @@
 export interface BlogPost {
   id: number;
+  slug: string;
   title: string;
   excerpt: string;
   content: string;
@@ -14,6 +15,7 @@ export interface BlogPost {
 export const blogPosts: BlogPost[] = [
   {
     id: 1,
+    slug: "defi-forecast-markets-clearmatics-afp-autonity",
     title: "How DeFi Forecast Markets Are Changing the Game: Inside Clearmatics' AFP Launch on Autonity",
     excerpt: "Clearmatics just launched the Autonomous Futures Protocol (AFP) on Autonity, enabling decentralized forecast trading using real-world time-series data. Discover how it works and why it's the most innovative move in DeFi this year.",
     content: `# How DeFi Forecast Markets Are Changing the Game: Inside Clearmatics' AFP Launch on Autonity
@@ -227,6 +229,7 @@ AFP on Autonity represents more than a protocol launch—it's a glimpse into fin
   },
   {
     id: 2,
+    slug: "defi-security-fundamentals-2025",
     title: "DeFi Security Fundamentals: Protecting Your Assets in 2025",
     excerpt: "Essential security practices every DeFi user needs to know. From wallet security to smart contract risks, learn how to navigate DeFi safely while maximizing opportunities.",
     content: `# DeFi Security Fundamentals: Protecting Your Assets in 2025
@@ -371,6 +374,7 @@ Remember: The goal isn't to eliminate all risk (which is impossible), but to tak
   },
   {
     id: 3,
+    slug: "yield-farming-strategies-that-work",
     title: "Yield Farming Strategies That Actually Work",
     excerpt: "Cut through the noise and discover proven yield farming strategies. Learn how to evaluate opportunities, manage risks, and build sustainable DeFi income streams.",
     content: `# Yield Farming Strategies That Actually Work
@@ -594,6 +598,7 @@ Remember: The best yield farming strategy is one you can sleep well with at nigh
   },
   {
     id: 4,
+    slug: "real-world-assets-rwa-defi-tokenization",
     title: "The Rise of Real World Assets (RWAs) in DeFi",
     excerpt: "Traditional assets are moving on-chain. Explore how real estate, commodities, and bonds are being tokenized and what it means for the future of finance.",
     content: `# The Rise of Real World Assets (RWAs) in DeFi
@@ -863,8 +868,23 @@ export const getAllBlogPosts = (): BlogPost[] => {
 };
 
 // Helper function to get blog post by ID
-export const getBlogPost = (id: number): BlogPost | undefined => {
-  return blogPosts.find(post => post.id === id);
+// Utility function to generate SEO-friendly slugs
+export const generateSlug = (title: string): string => {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
+    .replace(/\s+/g, '-') // Replace spaces with hyphens
+    .replace(/-+/g, '-') // Replace multiple hyphens with single hyphen
+    .trim()
+    .substring(0, 60); // Limit length for SEO
+};
+
+export const getBlogPost = (idOrSlug: number | string): BlogPost | undefined => {
+  if (typeof idOrSlug === 'number') {
+    return blogPosts.find(post => post.id === idOrSlug);
+  } else {
+    return blogPosts.find(post => post.slug === idOrSlug);
+  }
 };
 
 // Helper function to get featured blog posts
