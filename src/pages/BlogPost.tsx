@@ -157,7 +157,7 @@ const BlogPost = () => {
             </div>
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4" />
-              <span>{new Date(post.date).toLocaleDateString()}</span>
+              <span>{new Date(post.date + 'T12:00:00').toLocaleDateString()}</span>
             </div>
             <div className="flex items-center gap-2">
               <Clock className="w-4 h-4" />
