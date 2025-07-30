@@ -26,6 +26,7 @@ import {
   Zap
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Link } from "react-router-dom";
 
 const SpottingScamsTutorial = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -1177,10 +1178,10 @@ const SpottingScamsTutorial = () => {
               </p>
               <div className="flex gap-2">
                 <Button asChild>
-                  <a href="/tutorials">Back to Tutorials</a>
+                  <Link to="/tutorials">Back to Tutorials</Link>
                 </Button>
                 <Button variant="outline" asChild>
-                  <a href="/courses">Continue Learning DeFi</a>
+                  <Link to="/courses">Continue Learning DeFi</Link>
                 </Button>
               </div>
             </CardContent>

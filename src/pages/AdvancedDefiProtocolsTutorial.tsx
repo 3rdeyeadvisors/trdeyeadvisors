@@ -20,6 +20,7 @@ import {
   RefreshCw
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Link } from "react-router-dom";
 
 const AdvancedDefiProtocolsTutorial = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -969,10 +970,10 @@ const AdvancedDefiProtocolsTutorial = () => {
               </p>
               <div className="flex gap-2">
                 <Button asChild>
-                  <a href="/tutorials">Back to Tutorials</a>
+                  <Link to="/tutorials">Back to Tutorials</Link>
                 </Button>
                 <Button variant="outline" asChild>
-                  <a href="/courses">Continue Learning</a>
+                  <Link to="/courses">Continue Learning</Link>
                 </Button>
               </div>
             </CardContent>

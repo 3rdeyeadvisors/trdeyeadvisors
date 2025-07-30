@@ -24,6 +24,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { CommunityHub } from "@/components/community/CommunityHub";
 import SEO from "@/components/SEO";
+import { Link } from "react-router-dom";
 
 const WalletSetupTutorial = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -702,10 +703,10 @@ const WalletSetupTutorial = () => {
               </p>
               <div className="flex gap-2">
                 <Button asChild>
-                  <a href="/tutorials">Back to Tutorials</a>
+                  <Link to="/tutorials">Back to Tutorials</Link>
                 </Button>
                 <Button variant="outline" asChild>
-                  <a href="/courses">Start DeFi Courses</a>
+                  <Link to="/courses">Start DeFi Courses</Link>
                 </Button>
               </div>
             </CardContent>

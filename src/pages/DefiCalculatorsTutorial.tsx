@@ -24,6 +24,7 @@ import {
   Settings
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Link } from "react-router-dom";
 
 const DefiCalculatorsTutorial = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -867,10 +868,10 @@ const DefiCalculatorsTutorial = () => {
               </p>
               <div className="flex gap-2">
                 <Button asChild>
-                  <a href="/tutorials">Back to Tutorials</a>
+                  <Link to="/tutorials">Back to Tutorials</Link>
                 </Button>
                 <Button variant="outline" asChild>
-                  <a href="/courses">Apply Your Knowledge</a>
+                  <Link to="/courses">Apply Your Knowledge</Link>
                 </Button>
               </div>
             </CardContent>
