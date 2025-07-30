@@ -200,7 +200,7 @@ AFP isn't emerging in isolation—it's part of several converging trends reshapi
 
 **Build Your Toolkit**: Success in forecast markets requires the right tools and resources:
 
-- **[DeFi Calculators](/tools/calculators)**: Model complex derivative scenarios and understand potential outcomes
+- **[DeFi Calculators](/tutorials/defi-calculators)**: Model complex derivative scenarios and understand potential outcomes
 - **[Security Guide](/resources)**: Protect your assets while engaging with cutting-edge protocols
 - **[Risk Checklist](/resources)**: Systematic approach to evaluating new DeFi opportunities
 
