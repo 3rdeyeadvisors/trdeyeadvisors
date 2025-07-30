@@ -36,11 +36,19 @@ const BlogPost = () => {
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case "Education": return "bg-awareness/20 text-awareness border-awareness/30";
-      case "Security": return "bg-primary/20 text-primary border-primary/30";
-      case "Tools": return "bg-accent/20 text-accent border-accent/30";
-      case "Analysis": return "bg-secondary/40 text-secondary-foreground border-secondary";
-      default: return "bg-muted/20 text-muted-foreground border-border";
+      case "DeFi Education":
+      case "Education": 
+        return "bg-gradient-to-r from-awareness/20 to-primary/10 text-awareness border-awareness/30 font-semibold";
+      case "Security": 
+        return "bg-gradient-to-r from-primary/20 to-accent/10 text-primary border-primary/30 font-semibold";
+      case "Innovation": 
+        return "bg-gradient-to-r from-accent/20 to-secondary/10 text-accent border-accent/30 font-semibold";
+      case "Tools": 
+        return "bg-gradient-to-r from-secondary/20 to-primary/10 text-secondary-foreground border-secondary/30 font-semibold";
+      case "Analysis": 
+        return "bg-gradient-to-r from-muted/30 to-accent/10 text-foreground border-border font-semibold";
+      default: 
+        return "bg-gradient-to-r from-primary/10 to-accent/10 text-primary border-primary/20 font-semibold";
     }
   };
 
