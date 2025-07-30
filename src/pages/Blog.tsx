@@ -29,17 +29,17 @@ const Blog = () => {
     switch (category) {
       case "DeFi Education":
       case "Education": 
-        return "bg-gradient-to-r from-awareness/20 to-primary/10 text-awareness border-awareness/30 font-semibold hover:from-awareness/30 hover:to-primary/20";
+        return "bg-awareness/20 text-awareness border-awareness/30 hover:bg-awareness/30";
       case "Security": 
-        return "bg-gradient-to-r from-primary/20 to-accent/10 text-primary border-primary/30 font-semibold hover:from-primary/30 hover:to-accent/20";
+        return "bg-primary/20 text-primary border-primary/30 hover:bg-primary/30";
       case "Innovation": 
-        return "bg-gradient-to-r from-accent/20 to-secondary/10 text-accent border-accent/30 font-semibold hover:from-accent/30 hover:to-secondary/20";
+        return "bg-accent/20 text-accent border-accent/30 hover:bg-accent/30";
       case "Tools": 
-        return "bg-gradient-to-r from-secondary/20 to-primary/10 text-secondary-foreground border-secondary/30 font-semibold hover:from-secondary/30 hover:to-primary/20";
+        return "bg-secondary/40 text-secondary-foreground border-secondary/30 hover:bg-secondary/50";
       case "Analysis": 
-        return "bg-gradient-to-r from-muted/30 to-accent/10 text-foreground border-border font-semibold hover:from-muted/40 hover:to-accent/20";
+        return "bg-muted/30 text-foreground border-border hover:bg-muted/40";
       default: 
-        return "bg-gradient-to-r from-primary/10 to-accent/10 text-primary border-primary/20 font-semibold hover:from-primary/20 hover:to-accent/20";
+        return "bg-primary/20 text-primary border-primary/30 hover:bg-primary/30";
     }
   };
 
