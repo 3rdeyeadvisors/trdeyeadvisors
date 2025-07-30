@@ -269,7 +269,7 @@ AFP on Autonity represents more than a protocol launch—it's a glimpse into fin
     tags: ["DeFi forecast markets", "Clearmatics AFP", "Autonity chain", "decentralized derivatives", "on-chain futures", "crypto innovation", "time-series trading", "DeFi 2025"]
   },
   {
-    id: 2,
+    id: 3,
     slug: "defi-security-fundamentals-2025",
     title: "DeFi Security Fundamentals: Protecting Your Assets in 2025",
     excerpt: "Essential security practices every DeFi user needs to know. From wallet security to smart contract risks, learn how to navigate DeFi safely while maximizing opportunities.",
