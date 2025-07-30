@@ -49,7 +49,7 @@ The movement toward decentralized finance represents humanity's opportunity to b
 **The real reason DeFi exists is simple:** to prove that finance can work without gatekeepers, without discrimination, and without the systemic failures that plague traditional institutions. It's financial freedom through code.`,
     category: "DeFi Education",
     readTime: "4 min read",
-    date: "2025-01-30",
+    date: "2024-12-15",
     featured: true,
     author: "3EA Team",
     tags: ["DeFi", "decentralized finance", "smart contracts", "permissionless finance", "DeFi tools", "DeFi education"]
@@ -263,7 +263,7 @@ AFP on Autonity represents more than a protocol launch—it's a glimpse into fin
 *The decentralized future isn't waiting. Your DeFi education starts here.*`,
     category: "Innovation",
     readTime: "14 min read",
-    date: "2025-07-28",
+    date: "2024-12-10",
     featured: true,
     author: "DeFi Research Team",
     tags: ["DeFi forecast markets", "Clearmatics AFP", "Autonity chain", "decentralized derivatives", "on-chain futures", "crypto innovation", "time-series trading", "DeFi 2025"]
@@ -408,7 +408,7 @@ Remember: The goal isn't to eliminate all risk (which is impossible), but to tak
 *Your security is your responsibility in DeFi. Take it seriously, and the decentralized financial future awaits.*`,
     category: "Security",
     readTime: "8 min read",
-    date: "2025-07-26",
+    date: "2024-12-05",
     featured: false,
     author: "Security Team",
     tags: ["DeFi security", "wallet protection", "smart contract risks", "crypto safety"]
@@ -632,7 +632,7 @@ Remember: The best yield farming strategy is one you can sleep well with at nigh
 *The DeFi ecosystem rewards patience, research, and disciplined risk management. Farm wisely, and let compound growth work in your favor.*`,
     category: "Education",
     readTime: "10 min read",
-    date: "2025-07-24",
+    date: "2024-11-28",
     featured: false,
     author: "DeFi Strategists",
     tags: ["yield farming", "DeFi strategies", "passive income", "liquidity provision"]
@@ -896,7 +896,7 @@ For investors, RWAs provide an opportunity to earn yield from real economic acti
 *The future of finance is hybrid: combining the best of traditional and decentralized systems. RWAs are leading this convergence.*`,
     category: "Analysis",
     readTime: "12 min read",
-    date: "2025-07-22",
+    date: "2024-11-20",
     featured: false,
     author: "Market Analysts",
     tags: ["RWA", "tokenization", "real world assets", "DeFi evolution"]

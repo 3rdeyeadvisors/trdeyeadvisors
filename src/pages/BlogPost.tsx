@@ -163,7 +163,25 @@ const BlogPost = () => {
               <Clock className="w-4 h-4" />
               <span>{post.readTime}</span>
             </div>
-            <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-primary">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="text-muted-foreground hover:text-primary"
+              onClick={() => {
+                const url = window.location.href;
+                const text = `Check out this article: ${post.title}`;
+                if (navigator.share) {
+                  navigator.share({
+                    title: post.title,
+                    text: post.excerpt,
+                    url: url,
+                  });
+                } else {
+                  navigator.clipboard.writeText(`${text} - ${url}`);
+                  // You could add a toast notification here
+                }
+              }}
+            >
               <Share className="w-4 h-4 mr-2" />
               Share
             </Button>
