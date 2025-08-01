@@ -1024,7 +1024,7 @@ The success of **modular lending protocols** like Morpho Blue suggests that the 
 **As decentralized lending evolves, tools like Morpho Blue may redefine how we approach capital efficiency and risk. Stay tuned to learn more about the innovations shaping the next era of DeFi.**`,
     category: "DeFi Tools",
     readTime: "12 min read",
-    date: "2025-01-01",
+    date: "2025-08-01",
     featured: true,
     author: "DeFi Research Team",
     tags: ["DeFi lending", "Morpho Blue", "modular lending protocol", "Aave vs Morpho", "DeFi tools 2025", "isolated markets", "peer-to-pool lending", "capital efficiency", "DeFi protocols"]
