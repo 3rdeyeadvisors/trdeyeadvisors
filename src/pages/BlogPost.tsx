@@ -8,6 +8,7 @@ import { ArrowLeft, Calendar, Clock, User, Share, BookOpen } from "lucide-react"
 import { getBlogPost, type BlogPost } from "@/data/blogContent";
 import { CommunityHub } from "@/components/community/CommunityHub";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import SEO from "@/components/SEO";
 
 const BlogPost = () => {
@@ -200,6 +201,7 @@ const BlogPost = () => {
         <Card className="p-8 mb-8">
           <div className="prose prose-lg max-w-none">
             <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
               components={{
                 h1: ({ children }) => (
                   <h2 className="text-3xl font-consciousness font-bold text-foreground mb-6 mt-8">
