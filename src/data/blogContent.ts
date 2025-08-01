@@ -49,8 +49,8 @@ The movement toward decentralized finance represents humanity's opportunity to b
 **The real reason DeFi exists is simple:** to prove that finance can work without gatekeepers, without discrimination, and without the systemic failures that plague traditional institutions. It's financial freedom through code.`,
     category: "DeFi Education",
     readTime: "4 min read",
-    date: "2025-07-29",
-    featured: true,
+    date: "2024-12-10",
+    featured: false,
     author: "3EA Team",
     tags: ["DeFi", "decentralized finance", "smart contracts", "permissionless finance", "DeFi tools", "DeFi education"]
   },
@@ -1024,7 +1024,7 @@ The success of **modular lending protocols** like Morpho Blue suggests that the 
 **As decentralized lending evolves, tools like Morpho Blue may redefine how we approach capital efficiency and risk. Stay tuned to learn more about the innovations shaping the next era of DeFi.**`,
     category: "DeFi Tools",
     readTime: "12 min read",
-    date: "2025-01-15",
+    date: "2025-01-01",
     featured: true,
     author: "DeFi Research Team",
     tags: ["DeFi lending", "Morpho Blue", "modular lending protocol", "Aave vs Morpho", "DeFi tools 2025", "isolated markets", "peer-to-pool lending", "capital efficiency", "DeFi protocols"]
