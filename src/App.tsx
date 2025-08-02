@@ -48,6 +48,12 @@ import SocialBanner from "./pages/SocialBanner";
 
 const queryClient = new QueryClient();
 
+// Handle domain redirect from 3rdeyeadvisors.com to the3rdeyeadvisors.com
+if (typeof window !== 'undefined' && window.location.hostname === '3rdeyeadvisors.com') {
+  const redirectUrl = `https://the3rdeyeadvisors.com${window.location.pathname}${window.location.search}${window.location.hash}`;
+  window.location.replace(redirectUrl);
+}
+
 const App = () => (
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
