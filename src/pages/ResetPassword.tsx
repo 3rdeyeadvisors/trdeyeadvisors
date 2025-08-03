@@ -29,6 +29,7 @@ const ResetPassword = () => {
       const type = searchParams.get('type');
       
       console.log('Reset page loaded with params:', { tokenHash, type });
+      console.log('Current URL:', window.location.href);
       
       if (!tokenHash || type !== 'recovery') {
         console.log('Invalid token or type, redirecting to auth');
@@ -42,11 +43,29 @@ const ResetPassword = () => {
       }
 
       try {
-        // Verify the session with the token
+        // Check current session first
+        const { data: sessionData } = await supabase.auth.getSession();
+        console.log('Current session:', sessionData.session);
+        
+        // If we already have a session from the magic link, we can proceed
+        if (sessionData.session) {
+          console.log('Found existing session, proceeding with reset');
+          setIsValidToken(true);
+          setTokenVerified(true);
+          toast({
+            title: "Ready to Reset Password",
+            description: "Please enter your new password below.",
+          });
+          return;
+        }
+
+        // If no session, try to verify the token
         const { data, error } = await supabase.auth.verifyOtp({
           token_hash: tokenHash,
           type: 'recovery'
         });
+
+        console.log('Token verification result:', { data, error });
 
         if (error) {
           console.error('Token verification error:', error);
