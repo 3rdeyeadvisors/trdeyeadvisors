@@ -168,7 +168,7 @@ const Navigation = () => {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden fixed inset-x-0 top-16 bottom-0 bg-background border-t border-border z-40">
+          <div className="md:hidden fixed inset-x-0 top-16 bottom-0 bg-background/95 backdrop-blur-md border-t border-border z-40">
             <div className="max-h-[calc(100vh-4rem)] overflow-y-auto">
               {/* Account Section (Top Priority) */}
               {user ? (
