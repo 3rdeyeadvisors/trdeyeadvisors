@@ -151,14 +151,14 @@ const Courses = () => {
         title="DeFi Courses & Cryptocurrency Education - Learn Blockchain Investing"
         description="Comprehensive DeFi courses from beginner to advanced. Learn yield farming, staking, DeFi protocols, and passive income strategies. Free and paid courses available for cryptocurrency education."
         keywords="DeFi courses, cryptocurrency education, blockchain courses, yield farming course, DeFi beginner guide, crypto passive income, DeFi training, blockchain investing course"
-        url="https://3rdeyeadvisors.com/courses"
+        url="https://the3rdeyeadvisors.com/courses"
         schema={{
           type: 'Course',
           data: {
             provider: {
               "@type": "Organization",
               name: "3rdeyeadvisors",
-              url: "https://3rdeyeadvisors.com"
+              url: "https://the3rdeyeadvisors.com"
             },
             educationalLevel: "Beginner to Advanced",
             teaches: [

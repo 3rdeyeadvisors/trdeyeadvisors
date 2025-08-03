@@ -41,10 +41,10 @@ function generateArticleSchema(content: PageContent): SchemaConfig {
       publisher: {
         '@type': 'Organization',
         name: '3rdeyeadvisors',
-        url: 'https://3rdeyeadvisors.com',
+        url: 'https://the3rdeyeadvisors.com',
         logo: {
           '@type': 'ImageObject',
-          url: 'https://3rdeyeadvisors.com/favicon-3ea-new.png'
+          url: 'https://the3rdeyeadvisors.com/favicon-3ea-new.png'
         }
       },
       datePublished: content.publishedDate || new Date().toISOString(),
@@ -76,7 +76,7 @@ function generateCourseSchema(content: PageContent): SchemaConfig {
       provider: {
         '@type': 'Organization',
         name: '3rdeyeadvisors',
-        url: 'https://3rdeyeadvisors.com'
+        url: 'https://the3rdeyeadvisors.com'
       },
       offers: [
         {
@@ -90,7 +90,7 @@ function generateCourseSchema(content: PageContent): SchemaConfig {
           seller: {
             '@type': 'Organization',
             name: '3rdeyeadvisors',
-            url: 'https://3rdeyeadvisors.com'
+            url: 'https://the3rdeyeadvisors.com'
           }
         }
       ],
@@ -150,7 +150,7 @@ function generateProductSchema(content: PageContent): SchemaConfig {
         seller: {
           '@type': 'Organization',
           name: '3rdeyeadvisors',
-          url: 'https://3rdeyeadvisors.com'
+          url: 'https://the3rdeyeadvisors.com'
         }
       },
       brand: {
@@ -188,7 +188,7 @@ function generateWebPageSchema(content: PageContent): SchemaConfig {
       isPartOf: {
         '@type': 'WebSite',
         name: '3rdeyeadvisors',
-        url: 'https://3rdeyeadvisors.com'
+        url: 'https://the3rdeyeadvisors.com'
       },
       about: {
         '@type': 'Thing',
@@ -250,8 +250,8 @@ export function generateSchema(content: PageContent): {
         type: 'Organization',
         data: {
           name: '3rdeyeadvisors',
-          url: 'https://3rdeyeadvisors.com',
-          logo: 'https://3rdeyeadvisors.com/favicon-3ea-new.png',
+          url: 'https://the3rdeyeadvisors.com',
+          logo: 'https://the3rdeyeadvisors.com/favicon-3ea-new.png',
           description: 'DeFi education platform for financial consciousness and decentralized finance mastery',
           foundingDate: '2024',
           sameAs: [

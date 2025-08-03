@@ -47,7 +47,7 @@ const Index = () => {
                   "@type": "ListItem",
                   position: 1,
                   name: "Home",
-                  item: "https://3rdeyeadvisors.com"
+                  item: "https://the3rdeyeadvisors.com"
                 }
               ]
             }

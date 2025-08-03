@@ -147,7 +147,7 @@ const Store = () => {
         title="DeFi Products & Merchandise Store"
         description="Premium DeFi education products, portfolio trackers, and guides. Support your financial education journey with our curated digital collection."
         keywords="DeFi products, cryptocurrency guides, portfolio tracker, yield farming strategies, DeFi merchandise, blockchain education"
-        url="https://3rdeyeadvisors.com/store"
+        url="https://the3rdeyeadvisors.com/store"
       />
       <div className="min-h-screen py-20">
       <div className="container mx-auto px-4">

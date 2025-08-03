@@ -64,7 +64,7 @@ const Resources = () => {
         title="DeFi Tools & Calculators - Essential Resources for Crypto Investing"
         description="Comprehensive DeFi tools including yield farming calculators, portfolio trackers, trusted wallets, and essential platforms for decentralized finance investing and passive income strategies."
         keywords="DeFi calculators, crypto tools, yield farming calculator, DeFi portfolio tracker, cryptocurrency calculators, DeFi platforms, blockchain tools, passive income calculators"
-        url="https://3rdeyeadvisors.com/resources"
+        url="https://the3rdeyeadvisors.com/resources"
         schema={{
           type: 'SoftwareApplication',
           data: {

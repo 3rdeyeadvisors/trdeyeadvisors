@@ -251,7 +251,7 @@ const WalletSetupTutorial = () => {
         title="DeFi Wallet Setup Tutorial - MetaMask Security Guide"
         description="Complete step-by-step guide to setting up MetaMask wallet safely. Learn wallet security, seed phrase protection, and DeFi best practices for beginners."
         keywords="MetaMask setup, DeFi wallet security, cryptocurrency wallet tutorial, seed phrase backup, blockchain wallet guide, DeFi security"
-        url="https://3rdeyeadvisors.com/tutorials/wallet-setup"
+        url="https://the3rdeyeadvisors.com/tutorials/wallet-setup"
         schema={{
           type: 'Course',
           data: {

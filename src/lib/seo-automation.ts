@@ -174,7 +174,7 @@ export function validateSEO(config: SEOConfig, htmlContent?: string): SEOValidat
   }
 
   // Validate URL structure
-  if (!config.url.includes('3rdeyeadvisors.com')) {
+  if (!config.url.includes('the3rdeyeadvisors.com')) {
     issues.push('URL should include domain for canonical reference');
     fixes.push('Ensure URL includes full domain');
   }

@@ -32,7 +32,7 @@ const SEO = ({
   description = "Transform your financial future with comprehensive DeFi education. Learn decentralized finance, yield farming, blockchain investing, and cryptocurrency strategies from beginner to advanced levels.",
   keywords = "DeFi education, decentralized finance, yield farming, blockchain investing, cryptocurrency courses, financial consciousness, DeFi beginner guide, crypto education, smart contracts, liquidity pools",
   image = "https://zapbkuaejvzpqerkkcnc.supabase.co/storage/v1/object/public/social-banners/3ea-social-banner.webp",
-  url = "https://3rdeyeadvisors.com",
+  url = "https://the3rdeyeadvisors.com",
   type = "website",
   article,
   schema,
@@ -55,10 +55,10 @@ const SEO = ({
       publisher: {
         "@type": "Organization",
         name: "3rdeyeadvisors",
-        url: "https://3rdeyeadvisors.com",
+        url: "https://the3rdeyeadvisors.com",
         logo: {
           "@type": "ImageObject",
-          url: "https://3rdeyeadvisors.com/favicon-3ea-new.png"
+          url: "https://the3rdeyeadvisors.com/favicon-3ea-new.png"
         }
       },
       ...schema.data
@@ -78,7 +78,7 @@ const SEO = ({
           seller: {
             "@type": "Organization",
             name: "3rdeyeadvisors",
-            url: "https://3rdeyeadvisors.com"
+            url: "https://the3rdeyeadvisors.com"
           }
         };
       }

@@ -146,14 +146,14 @@ const VideoTutorials = () => {
         title="DeFi Video Tutorials - Step-by-Step Cryptocurrency Guides"
         description="Comprehensive DeFi video tutorials covering wallet setup, DEX swaps, yield farming, staking, and advanced DeFi strategies. Perfect for visual learners entering cryptocurrency."
         keywords="DeFi video tutorials, cryptocurrency tutorials, DeFi step-by-step guides, wallet setup tutorial, DEX swap guide, yield farming tutorial, staking tutorial, DeFi education videos"
-        url="https://3rdeyeadvisors.com/tutorials"
+        url="https://the3rdeyeadvisors.com/tutorials"
         schema={{
           type: 'Course',
           data: {
             provider: {
               "@type": "Organization",
               name: "3rdeyeadvisors",
-              url: "https://3rdeyeadvisors.com"
+              url: "https://the3rdeyeadvisors.com"
             },
             educationalLevel: "Beginner to Advanced",
             learningResourceType: "Video Tutorial",

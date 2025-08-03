@@ -81,7 +81,7 @@ const BlogPost = () => {
     "@type": "BlogPosting",
     "headline": post.title,
     "description": post.excerpt,
-    "image": "https://3rdeyeadvisors.com/social-share.jpg",
+    "image": "https://the3rdeyeadvisors.com/social-share.jpg",
     "author": {
       "@type": "Person",
       "name": post.author
@@ -91,14 +91,14 @@ const BlogPost = () => {
       "name": "3rdeyeadvisors",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://3rdeyeadvisors.com/favicon-3ea.svg"
+        "url": "https://the3rdeyeadvisors.com/favicon-3ea.svg"
       }
     },
     "datePublished": post.date,
     "dateModified": post.date,
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": `https://3rdeyeadvisors.com/blog/${post.slug}`
+      "@id": `https://the3rdeyeadvisors.com/blog/${post.slug}`
     },
     "keywords": `${post.category.toLowerCase()}, DeFi, cryptocurrency, ${post.tags.join(', ')}`
   };
@@ -109,7 +109,7 @@ const BlogPost = () => {
         title={`${post.title} | 3rdeyeadvisors Blog`}
         description={post.excerpt}
         keywords={`${post.category.toLowerCase()}, DeFi, cryptocurrency, ${post.title.toLowerCase()}`}
-        url={`https://3rdeyeadvisors.com/blog/${post.slug}`}
+        url={`https://the3rdeyeadvisors.com/blog/${post.slug}`}
         type="article"
         article={{
           publishedTime: post.date,

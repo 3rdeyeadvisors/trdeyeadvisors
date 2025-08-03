@@ -58,7 +58,7 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <a href="mailto:info@3rdeyeadvisors.com" className="text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness">
+                <a href="mailto:info@the3rdeyeadvisors.com" className="text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness">
                   Support Email
                 </a>
               </li>
@@ -82,7 +82,7 @@ const Footer = () => {
             </ul>
             
             <div className="flex space-x-3">
-              <a href="mailto:info@3rdeyeadvisors.com" className="text-muted-foreground hover:text-primary transition-colors">
+              <a href="mailto:info@the3rdeyeadvisors.com" className="text-muted-foreground hover:text-primary transition-colors">
                 <Mail className="w-4 h-4" />
               </a>
               <a href="#" className="text-muted-foreground hover:text-primary transition-colors">

@@ -43,8 +43,8 @@ const handler = async (req: Request): Promise<Response> => {
     
     // Send notification email
     const emailResponse = await resend.emails.send({
-      from: "3rdeyeadvisors <notifications@3rdeyeadvisors.com>",
-      to: ["info@3rdeyeadvisors.com"],
+      from: "3rdeyeadvisors <notifications@the3rdeyeadvisors.com>",
+      to: ["info@the3rdeyeadvisors.com"],
       subject: `New ${signupType === 'subscriber' ? 'Subscriber' : 'Signup'} on 3rdeyeadvisors`,
       html: `
         <h2>New ${signupType === 'subscriber' ? 'Subscriber' : 'User Signup'} Alert</h2>

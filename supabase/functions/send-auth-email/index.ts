@@ -60,7 +60,7 @@ const handler = async (req: Request): Promise<Response> => {
 
           <div style="text-align: center; padding: 20px 0; border-top: 1px solid #eee; margin-top: 30px;">
             <p style="color: #999; font-size: 14px; margin: 0;">
-              Questions? Reply to this email or contact us at <a href="mailto:info@3rdeyeadvisors.com" style="color: #00d4ff;">info@3rdeyeadvisors.com</a>
+              Questions? Reply to this email or contact us at <a href="mailto:info@the3rdeyeadvisors.com" style="color: #00d4ff;">info@the3rdeyeadvisors.com</a>
             </p>
             <p style="color: #999; font-size: 12px; margin: 10px 0 0 0;">
               © 2024 3rdeyeadvisors. All rights reserved.
@@ -103,7 +103,7 @@ const handler = async (req: Request): Promise<Response> => {
 
           <div style="text-align: center; padding: 20px 0; border-top: 1px solid #eee; margin-top: 30px;">
             <p style="color: #999; font-size: 14px; margin: 0;">
-              Need help? Contact us at <a href="mailto:info@3rdeyeadvisors.com" style="color: #00d4ff;">info@3rdeyeadvisors.com</a>
+              Need help? Contact us at <a href="mailto:info@the3rdeyeadvisors.com" style="color: #00d4ff;">info@the3rdeyeadvisors.com</a>
             </p>
             <p style="color: #999; font-size: 12px; margin: 10px 0 0 0;">
               © 2024 3rdeyeadvisors. All rights reserved.

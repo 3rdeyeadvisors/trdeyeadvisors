@@ -68,7 +68,7 @@ const Contact = () => {
         title="Contact & About - Connect with 3rdeyeadvisors"
         description="Contact 3rdeyeadvisors for DeFi education inquiries and support. Connect with our team to join the mission of financial awakening and consciousness."
         keywords="contact 3rdeyeadvisors, DeFi education support, financial consciousness contact, crypto education inquiry"
-        url="https://3rdeyeadvisors.com/contact"
+        url="https://the3rdeyeadvisors.com/contact"
       />
       <div className="min-h-screen py-20">
       <div className="container mx-auto px-4">
@@ -231,7 +231,7 @@ const Contact = () => {
               <div className="space-y-3">
                 <Button variant="outline" className="w-full justify-start font-consciousness">
                   <Mail className="w-4 h-4 mr-3" />
-                  info@3rdeyeadvisors.com
+                  info@the3rdeyeadvisors.com
                 </Button>
                 
                 <Button variant="outline" className="w-full justify-start font-consciousness">

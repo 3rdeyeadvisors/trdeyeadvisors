@@ -76,7 +76,7 @@ const handler = async (req: Request): Promise<Response> => {
           <div style="text-align: center; padding: 30px 20px; background: #f8f9fa; margin-top: 20px; border-radius: 8px;">
             <p style="color: #777; font-size: 14px; margin: 0 0 8px 0;">
               Need help? Contact our support team at 
-              <a href="mailto:info@3rdeyeadvisors.com" style="color: #00d4ff; text-decoration: none;">info@3rdeyeadvisors.com</a>
+              <a href="mailto:info@the3rdeyeadvisors.com" style="color: #00d4ff; text-decoration: none;">info@the3rdeyeadvisors.com</a>
             </p>
             <p style="color: #999; font-size: 12px; margin: 0;">
               © 2024 3rdeyeadvisors. All rights reserved.

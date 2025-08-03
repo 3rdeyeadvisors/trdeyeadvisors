@@ -164,7 +164,7 @@ const handler = async (req: Request): Promise<Response> => {
     // Send email to info
     const supportEmailResponse = await resend.emails.send({
       from: "onboarding@resend.dev",
-      to: ["info@3rdeyeadvisors.com"],
+      to: ["info@the3rdeyeadvisors.com"],
       subject: `Contact Form: ${sanitizedSubject}`,
       html: `
         <h2>New Contact Form Submission</h2>
