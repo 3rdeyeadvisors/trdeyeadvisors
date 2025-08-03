@@ -40,19 +40,24 @@ const Auth = () => {
       window.history.replaceState({}, document.title, window.location.pathname);
     }
     
-    // Handle password reset token from email
+    // Handle password reset token from email - redirect to dedicated reset page
     if (tokenHash && type === 'recovery') {
-      setIsPasswordUpdate(true);
-      // Clean up URL but keep the token handling
-      toast({
-        title: "Ready to reset password",
-        description: "Enter your new password below.",
-      });
+      navigate('/reset-password' + window.location.search);
+      return;
     }
-  }, [toast]);
+  }, [toast, navigate]);
 
-  // Redirect if already authenticated
+  // Redirect if already authenticated (but not during password reset flow)
   useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const tokenHash = urlParams.get('token_hash');
+    const type = urlParams.get('type');
+    
+    // Don't redirect if this is a password reset flow
+    if (tokenHash && type === 'recovery') {
+      return;
+    }
+    
     if (user) {
       navigate("/");
     }
