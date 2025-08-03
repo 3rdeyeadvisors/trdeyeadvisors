@@ -168,7 +168,7 @@ const Navigation = () => {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden border-t border-border bg-background">
+          <div className="md:hidden fixed inset-x-0 top-16 bottom-0 bg-background border-t border-border z-40">
             <div className="max-h-[calc(100vh-4rem)] overflow-y-auto">
               {/* Account Section (Top Priority) */}
               {user ? (
@@ -262,30 +262,30 @@ const Navigation = () => {
               {/* Navigation Sections */}
               <div className="p-4 space-y-4">
                 {/* Home */}
-                <div className="space-y-2">
-                  <Link
-                    to="/"
-                    className={`flex items-center space-x-3 p-3 rounded-lg transition-colors ${
-                      isActive("/")
-                        ? "bg-primary/10 text-primary font-medium"
-                        : "text-foreground hover:bg-muted"
-                    }`}
-                    onClick={() => setIsOpen(false)}
-                  >
-                    <span className="font-consciousness">Home</span>
-                  </Link>
-                  <Link
-                    to="/philosophy"
-                    className={`flex items-center space-x-3 p-3 rounded-lg transition-colors ${
-                      isActive("/philosophy")
-                        ? "bg-primary/10 text-primary font-medium"
-                        : "text-foreground hover:bg-muted"
-                    }`}
-                    onClick={() => setIsOpen(false)}
-                  >
-                    <span className="font-consciousness">Philosophy</span>
-                  </Link>
-                </div>
+                <Link
+                  to="/"
+                  className={`flex items-center space-x-3 p-3 rounded-lg transition-colors ${
+                    isActive("/")
+                      ? "bg-primary/10 text-primary font-medium"
+                      : "text-foreground hover:bg-muted"
+                  }`}
+                  onClick={() => setIsOpen(false)}
+                >
+                  <span className="font-consciousness">Home</span>
+                </Link>
+
+                {/* Philosophy */}
+                <Link
+                  to="/philosophy"
+                  className={`flex items-center space-x-3 p-3 rounded-lg transition-colors ${
+                    isActive("/philosophy")
+                      ? "bg-primary/10 text-primary font-medium"
+                      : "text-foreground hover:bg-muted"
+                  }`}
+                  onClick={() => setIsOpen(false)}
+                >
+                  <span className="font-consciousness">Philosophy</span>
+                </Link>
 
                 {/* Learning Section */}
                 <Collapsible open={isLearningOpen} onOpenChange={setIsLearningOpen}>
