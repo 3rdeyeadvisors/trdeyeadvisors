@@ -261,23 +261,30 @@ const Navigation = () => {
 
               {/* Navigation Sections */}
               <div className="p-4 space-y-4">
-                {/* Primary Navigation */}
+                {/* Home */}
                 <div className="space-y-2">
-                  {mobileNavStructure.primary.map((item) => (
-                    <Link
-                      key={item.path}
-                      to={item.path}
-                      className={`flex items-center space-x-3 p-3 rounded-lg transition-colors ${
-                        isActive(item.path)
-                          ? "bg-primary/10 text-primary font-medium"
-                          : "text-foreground hover:bg-muted"
-                      }`}
-                      onClick={() => setIsOpen(false)}
-                    >
-                      {item.icon && <item.icon className="w-5 h-5" />}
-                      <span className="font-consciousness">{item.label}</span>
-                    </Link>
-                  ))}
+                  <Link
+                    to="/"
+                    className={`flex items-center space-x-3 p-3 rounded-lg transition-colors ${
+                      isActive("/")
+                        ? "bg-primary/10 text-primary font-medium"
+                        : "text-foreground hover:bg-muted"
+                    }`}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <span className="font-consciousness">Home</span>
+                  </Link>
+                  <Link
+                    to="/philosophy"
+                    className={`flex items-center space-x-3 p-3 rounded-lg transition-colors ${
+                      isActive("/philosophy")
+                        ? "bg-primary/10 text-primary font-medium"
+                        : "text-foreground hover:bg-muted"
+                    }`}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <span className="font-consciousness">Philosophy</span>
+                  </Link>
                 </div>
 
                 {/* Learning Section */}
@@ -335,6 +342,22 @@ const Navigation = () => {
                     ))}
                   </CollapsibleContent>
                 </Collapsible>
+
+                {/* Store Section */}
+                <div className="space-y-2">
+                  <Link
+                    to="/store"
+                    className={`flex items-center space-x-3 p-3 rounded-lg transition-colors ${
+                      isActive("/store")
+                        ? "bg-primary/10 text-primary font-medium"
+                        : "text-foreground hover:bg-muted"
+                    }`}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <Package className="w-5 h-5" />
+                    <span className="font-consciousness">Store</span>
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
