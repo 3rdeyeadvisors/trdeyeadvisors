@@ -1,18 +1,22 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, LogIn, LogOut, User, ShoppingCart } from "lucide-react";
+import { Menu, X, LogIn, LogOut, User, ShoppingCart, ChevronDown, ChevronRight, BookOpen, BarChart3, Package, FileText } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/contexts/CartContext";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 const Navigation = () => {
   const { itemCount } = useCart();
   const [isOpen, setIsOpen] = useState(false);
+  const [isLearningOpen, setIsLearningOpen] = useState(false);
+  const [isMoreOpen, setIsMoreOpen] = useState(false);
   const location = useLocation();
   const { user, signOut } = useAuth();
   const { toast } = useToast();
 
+  // Desktop navigation items (unchanged)
   const navItems = [
     { path: "/", label: "Home" },
     { path: "/philosophy", label: "Philosophy" },
@@ -25,6 +29,26 @@ const Navigation = () => {
     { path: "/downloads", label: "Downloads" },
     { path: "/contact", label: "Contact" },
   ];
+
+  // Mobile navigation structure with grouping
+  const mobileNavStructure = {
+    primary: [
+      { path: "/", label: "Home" },
+      { path: "/philosophy", label: "Philosophy" },
+      { path: "/store", label: "Store", icon: Package },
+    ],
+    learning: [
+      { path: "/courses", label: "Courses", icon: BookOpen },
+      { path: "/tutorials", label: "Tutorials", icon: BookOpen },
+      { path: "/blog", label: "Blog", icon: FileText },
+      { path: "/resources", label: "Resources", icon: FileText },
+    ],
+    more: [
+      { path: "/analytics", label: "Analytics", icon: BarChart3 },
+      { path: "/downloads", label: "Downloads" },
+      { path: "/contact", label: "Contact" },
+    ]
+  };
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -144,29 +168,14 @@ const Navigation = () => {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden py-4 border-t border-border">
-            <div className="flex flex-col space-y-4">
-              {navItems.map((item) => (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className={`text-sm font-consciousness transition-colors hover:text-primary ${
-                    isActive(item.path)
-                      ? "text-primary font-medium"
-                      : "text-muted-foreground"
-                  }`}
-                  onClick={() => setIsOpen(false)}
-                >
-                  {item.label}
-                </Link>
-              ))}
-              
-              {/* Mobile Cart & Auth */}
-              <div className="pt-4 border-t border-border">
-                {user ? (
-                  <div className="space-y-4">
-                    {/* User Info Card */}
-                    <div className="bg-muted/50 rounded-lg p-3">
+          <div className="md:hidden border-t border-border bg-background">
+            <div className="max-h-[calc(100vh-4rem)] overflow-y-auto">
+              {/* Account Section (Top Priority) */}
+              {user ? (
+                <div className="p-4 border-b border-border bg-muted/30">
+                  {/* User Info Card */}
+                  <div className="bg-card rounded-lg p-3 mb-3 border">
+                    <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
                         <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
                           <User className="w-5 h-5 text-primary" />
@@ -177,69 +186,155 @@ const Navigation = () => {
                         </div>
                       </div>
                     </div>
-                    
-                    {/* Action Buttons */}
-                    <div className="grid grid-cols-2 gap-3">
-                      <Button
-                        asChild
-                        variant="outline"
-                        size="sm"
-                        className="flex items-center justify-center space-x-2"
+                  </div>
+                  
+                  {/* Account Actions */}
+                  <div className="grid grid-cols-3 gap-2">
+                    <Button
+                      asChild
+                      variant="outline"
+                      size="sm"
+                      className="text-xs"
+                    >
+                      <Link 
+                        to="/profile" 
+                        className="flex items-center justify-center space-x-1"
+                        onClick={() => setIsOpen(false)}
                       >
-                        <Link 
-                          to="/profile" 
-                          className="flex items-center space-x-2"
-                          onClick={() => setIsOpen(false)}
-                        >
-                          <User className="w-4 h-4" />
-                          <span>Profile</span>
-                        </Link>
-                      </Button>
-                      
-                      <Button
-                        asChild
-                        variant="outline"
-                        size="sm"
-                        className="flex items-center justify-center space-x-2"
-                      >
-                        <Link to="/cart" onClick={() => setIsOpen(false)}>
-                          <div className="flex items-center space-x-2 relative">
-                            <ShoppingCart className="w-4 h-4" />
-                            <span>Cart</span>
-                            {itemCount > 0 && (
-                              <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs rounded-full h-4 w-4 flex items-center justify-center">
-                                {itemCount}
-                              </span>
-                            )}
-                          </div>
-                        </Link>
-                      </Button>
-                    </div>
+                        <User className="w-3 h-3" />
+                        <span>Profile</span>
+                      </Link>
+                    </Button>
                     
                     <Button
-                      variant="ghost"
+                      asChild
+                      variant="outline"
+                      size="sm"
+                      className="text-xs relative"
+                    >
+                      <Link 
+                        to="/cart" 
+                        className="flex items-center justify-center space-x-1"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        <ShoppingCart className="w-3 h-3" />
+                        <span>Cart</span>
+                        {itemCount > 0 && (
+                          <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full h-4 w-4 flex items-center justify-center">
+                            {itemCount}
+                          </span>
+                        )}
+                      </Link>
+                    </Button>
+                    
+                    <Button
+                      variant="destructive"
                       size="sm"
                       onClick={() => {
                         handleSignOut();
                         setIsOpen(false);
                       }}
-                      className="flex items-center justify-center space-x-2 w-full text-muted-foreground hover:text-foreground"
+                      className="text-xs"
                     >
-                      <LogOut className="w-4 h-4" />
+                      <LogOut className="w-3 h-3 mr-1" />
                       <span>Sign Out</span>
                     </Button>
                   </div>
-                ) : (
-                  <div className="space-y-3">
-                    {/* Welcome Message for Guest Users */}
-                    <div className="text-center space-y-2">
-                      <p className="text-sm font-medium">Welcome to 3rdeyeadvisors</p>
-                      <p className="text-xs text-muted-foreground">
-                        Explore our free resources or sign in to track your progress
-                      </p>
-                    </div>
+                </div>
+              ) : (
+                <div className="p-4 border-b border-border bg-muted/30">
+                  <div className="text-center space-y-3">
+                    <p className="text-sm font-medium">Welcome to 3rdeyeadvisors</p>
+                    <Button asChild variant="default" size="sm" className="w-full">
+                      <Link 
+                        to="/auth" 
+                        className="flex items-center justify-center space-x-2"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        <LogIn className="w-4 h-4" />
+                        <span>Sign In to Get Started</span>
+                      </Link>
+                    </Button>
                   </div>
-                )}
+                </div>
+              )}
+
+              {/* Navigation Sections */}
+              <div className="p-4 space-y-4">
+                {/* Primary Navigation */}
+                <div className="space-y-2">
+                  {mobileNavStructure.primary.map((item) => (
+                    <Link
+                      key={item.path}
+                      to={item.path}
+                      className={`flex items-center space-x-3 p-3 rounded-lg transition-colors ${
+                        isActive(item.path)
+                          ? "bg-primary/10 text-primary font-medium"
+                          : "text-foreground hover:bg-muted"
+                      }`}
+                      onClick={() => setIsOpen(false)}
+                    >
+                      {item.icon && <item.icon className="w-5 h-5" />}
+                      <span className="font-consciousness">{item.label}</span>
+                    </Link>
+                  ))}
+                </div>
+
+                {/* Learning Section */}
+                <Collapsible open={isLearningOpen} onOpenChange={setIsLearningOpen}>
+                  <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
+                    <div className="flex items-center space-x-3">
+                      <BookOpen className="w-5 h-5" />
+                      <span className="font-consciousness font-medium">Learning</span>
+                    </div>
+                    {isLearningOpen ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="mt-2 space-y-1">
+                    {mobileNavStructure.learning.map((item) => (
+                      <Link
+                        key={item.path}
+                        to={item.path}
+                        className={`flex items-center space-x-3 p-2 pl-6 rounded-lg transition-colors ${
+                          isActive(item.path)
+                            ? "bg-primary/10 text-primary font-medium"
+                            : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                        }`}
+                        onClick={() => setIsOpen(false)}
+                      >
+                        {item.icon && <item.icon className="w-4 h-4" />}
+                        <span className="text-sm">{item.label}</span>
+                      </Link>
+                    ))}
+                  </CollapsibleContent>
+                </Collapsible>
+
+                {/* More Section */}
+                <Collapsible open={isMoreOpen} onOpenChange={setIsMoreOpen}>
+                  <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
+                    <div className="flex items-center space-x-3">
+                      <BarChart3 className="w-5 h-5" />
+                      <span className="font-consciousness font-medium">More</span>
+                    </div>
+                    {isMoreOpen ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="mt-2 space-y-1">
+                    {mobileNavStructure.more.map((item) => (
+                      <Link
+                        key={item.path}
+                        to={item.path}
+                        className={`flex items-center space-x-3 p-2 pl-6 rounded-lg transition-colors ${
+                          isActive(item.path)
+                            ? "bg-primary/10 text-primary font-medium"
+                            : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                        }`}
+                        onClick={() => setIsOpen(false)}
+                      >
+                        {item.icon && <item.icon className="w-4 h-4" />}
+                        <span className="text-sm">{item.label}</span>
+                      </Link>
+                    ))}
+                  </CollapsibleContent>
+                </Collapsible>
               </div>
             </div>
           </div>
