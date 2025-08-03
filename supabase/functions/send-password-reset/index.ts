@@ -25,70 +25,73 @@ const handler = async (req: Request): Promise<Response> => {
     console.log(`Processing password reset for email: ${email?.substring(0, 5)}...`);
 
     const emailResponse = await resend.emails.send({
-      from: "onboarding@resend.dev",
+      from: "3rdeyeadvisors <info@the3rdeyeadvisors.com>",
       to: [email],
       subject: "Reset Your Password - 3rdeyeadvisors",
       html: `
-        <div style="max-width: 600px; margin: 0 auto; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333;">
+        <div style="max-width: 600px; margin: 0 auto; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; color: #fff; background: hsl(222, 84%, 4.9%);">
           
-          <!-- Header -->
-          <div style="text-align: center; padding: 40px 20px 20px; background: linear-gradient(135deg, #0a0a0a, #1a1a1a); border-radius: 12px 12px 0 0;">
-            <h1 style="color: #00d4ff; font-size: 32px; margin: 0; font-weight: bold;">3rdeyeadvisors</h1>
-            <p style="color: #ccc; font-size: 16px; margin: 8px 0 0 0;">Password Reset Request</p>
+          <!-- Header with Cosmic Background -->
+          <div style="text-align: center; padding: 50px 30px 30px; background: linear-gradient(135deg, hsl(222, 84%, 4.9%), hsl(217, 32%, 8%)); border-radius: 12px 12px 0 0; position: relative;">
+            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 50% 50%, hsl(217, 91%, 60%, 0.1), transparent 70%); border-radius: 12px 12px 0 0;"></div>
+            <h1 style="color: hsl(217, 91%, 60%); font-size: 36px; margin: 0; font-weight: bold; text-shadow: 0 0 20px hsl(217, 91%, 60%, 0.3); position: relative; z-index: 1;">3rdeyeadvisors</h1>
+            <p style="color: hsl(0, 0%, 95%); font-size: 18px; margin: 12px 0 0 0; opacity: 0.9; position: relative; z-index: 1;">Secure Password Reset</p>
           </div>
 
-          <!-- Main Content -->
-          <div style="background: #ffffff; padding: 40px 30px; border-radius: 0 0 12px 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+          <!-- Main Content with Cosmic Theme -->
+          <div style="background: linear-gradient(180deg, hsl(217, 32%, 8%), hsl(217, 32%, 6%)); padding: 40px 30px; border-radius: 0 0 12px 12px; border: 1px solid hsl(217, 32%, 15%);">
             
             <!-- Greeting -->
-            <h2 style="color: #333; font-size: 24px; margin: 0 0 20px 0; font-weight: 600;">Password Reset Request</h2>
+            <h2 style="color: hsl(217, 91%, 70%); font-size: 24px; margin: 0 0 24px 0; font-weight: 600;">Password Reset Request</h2>
             
-            <p style="color: #555; font-size: 16px; margin: 0 0 24px 0; line-height: 1.6;">
-              We received a request to reset the password for your 3rdeyeadvisors account. If you made this request, click the button below to reset your password.
+            <p style="color: hsl(0, 0%, 90%); font-size: 16px; margin: 0 0 28px 0; line-height: 1.6;">
+              We received a request to reset the password for your 3rdeyeadvisors account. Click the button below to create a new secure password and continue your DeFi journey.
             </p>
 
-            <!-- Reset Button -->
+            <!-- Reset Button with Cosmic Glow -->
             <div style="text-align: center; margin: 40px 0;">
               <a href="${resetUrl}" 
-                 style="display: inline-block; background: #00d4ff; color: #000; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px; box-shadow: 0 2px 8px rgba(0, 212, 255, 0.3); transition: all 0.3s ease;">
-                Reset Password
+                 style="display: inline-block; background: linear-gradient(45deg, hsl(217, 91%, 60%), hsl(271, 91%, 65%)); color: hsl(222, 84%, 4.9%); padding: 18px 36px; text-decoration: none; border-radius: 12px; font-weight: bold; font-size: 16px; box-shadow: 0 0 30px hsl(217, 91%, 60%, 0.4), 0 8px 20px rgba(0,0,0,0.3); transition: all 0.3s ease; font-family: 'Inter', sans-serif;">
+                🔐 Reset My Password
               </a>
             </div>
 
-            <!-- Security Notice -->
-            <div style="background: #f8f9fa; border-left: 4px solid #00d4ff; padding: 20px; margin: 30px 0; border-radius: 0 8px 8px 0;">
-              <p style="color: #555; margin: 0; font-size: 14px;">
-                <strong>🔒 Security Notice:</strong> This link will expire in 24 hours for your security. If you didn't request this password reset, you can safely ignore this email.
+            <!-- Security Notice with Cosmic Styling -->
+            <div style="background: linear-gradient(135deg, hsl(217, 32%, 10%), hsl(217, 32%, 12%)); border-left: 4px solid hsl(217, 91%, 60%); padding: 24px; margin: 32px 0; border-radius: 0 12px 12px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+              <p style="color: hsl(0, 0%, 90%); margin: 0; font-size: 14px; line-height: 1.5;">
+                <strong style="color: hsl(217, 91%, 70%);">🛡️ Security Notice:</strong> This link will expire in 24 hours for your protection. If you didn't request this password reset, you can safely ignore this email.
               </p>
             </div>
 
             <!-- Alternative Link -->
-            <p style="color: #777; font-size: 14px; margin: 30px 0; line-height: 1.5;">
-              If the button above doesn't work, you can copy and paste this link into your browser:
+            <p style="color: hsl(215, 20%, 65%); font-size: 14px; margin: 32px 0 16px 0; line-height: 1.5;">
+              If the button doesn't work, copy and paste this link into your browser:
             </p>
-            <p style="background: #f5f5f5; padding: 12px; border-radius: 6px; word-break: break-all; font-size: 13px; color: #555; margin: 0 0 30px 0;">
+            <div style="background: hsl(217, 32%, 10%); padding: 16px; border-radius: 8px; word-break: break-all; font-size: 13px; color: hsl(217, 91%, 70%); margin: 0 0 32px 0; border: 1px solid hsl(217, 32%, 15%); font-family: 'JetBrains Mono', monospace;">
               ${resetUrl}
-            </p>
+            </div>
 
           </div>
 
-          <!-- Footer -->
-          <div style="text-align: center; padding: 30px 20px; background: #f8f9fa; margin-top: 20px; border-radius: 8px;">
-            <p style="color: #777; font-size: 14px; margin: 0 0 8px 0;">
+          <!-- Footer with Cosmic Branding -->
+          <div style="text-align: center; padding: 32px 24px; background: linear-gradient(135deg, hsl(217, 32%, 6%), hsl(222, 84%, 4.9%)); margin-top: 24px; border-radius: 12px; border: 1px solid hsl(217, 32%, 15%);">
+            <p style="color: hsl(215, 20%, 65%); font-size: 14px; margin: 0 0 12px 0; line-height: 1.5;">
               Need help? Contact our support team at 
-              <a href="mailto:info@the3rdeyeadvisors.com" style="color: #00d4ff; text-decoration: none;">info@the3rdeyeadvisors.com</a>
+              <a href="mailto:info@the3rdeyeadvisors.com" style="color: hsl(217, 91%, 70%); text-decoration: none; font-weight: 500;">info@the3rdeyeadvisors.com</a>
             </p>
-            <p style="color: #999; font-size: 12px; margin: 0;">
-              © 2024 3rdeyeadvisors. All rights reserved.
+            <p style="color: hsl(215, 20%, 50%); font-size: 12px; margin: 0;">
+              © 2024 3rdeyeadvisors. Empowering DeFi consciousness.
             </p>
           </div>
 
           <!-- Mobile Responsive -->
           <style>
             @media only screen and (max-width: 600px) {
-              .container { padding: 10px !important; }
-              .content { padding: 20px !important; }
-              .button { padding: 14px 24px !important; font-size: 14px !important; }
+              .container { padding: 16px !important; }
+              .content { padding: 24px !important; }
+              .button { padding: 16px 28px !important; font-size: 15px !important; }
+              h1 { font-size: 28px !important; }
+              h2 { font-size: 20px !important; }
             }
           </style>
         </div>
