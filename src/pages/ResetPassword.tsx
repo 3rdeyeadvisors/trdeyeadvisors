@@ -41,50 +41,13 @@ const ResetPassword = () => {
         return;
       }
 
-      try {
-        // Verify the OTP token and establish a session
-        const { data, error } = await supabase.auth.verifyOtp({
-          token_hash: tokenHash,
-          type: 'recovery'
-        });
-        
-        if (error) {
-          console.log('Token verification failed:', error);
-          toast({
-            title: "Invalid Reset Link",
-            description: "This password reset link is invalid or has expired. Please request a new one.",
-            variant: "destructive",
-          });
-          navigate('/auth');
-          return;
-        }
-
-        if (data.session) {
-          console.log('Token verified successfully, user signed in');
-          setIsValidToken(true);
-          setTokenVerified(true);
-          toast({
-            title: "Ready to Reset Password",
-            description: "Please enter your new password below.",
-          });
-        } else {
-          console.log('No session created during verification');
-          toast({
-            title: "Invalid Reset Link", 
-            description: "This password reset link is invalid or has expired. Please request a new one.",
-            variant: "destructive",
-          });
-          navigate('/auth');
-        }
-      } catch (error) {
-        console.error('Error verifying token:', error);
-        toast({
-          title: "Invalid Reset Link",
-          description: "This password reset link is invalid or has expired. Please request a new one.",
-          variant: "destructive",
-        });
-        navigate('/auth');
-      }
+      // Just verify we have the required parameters - we'll verify the actual token when they submit
+      setIsValidToken(true);
+      setTokenVerified(true);
+      toast({
+        title: "Ready to Reset Password",
+        description: "Please enter your new password below.",
+      });
     };
 
     verifyToken();
@@ -158,21 +121,56 @@ const ResetPassword = () => {
     setLoading(true);
     
     try {
-      const { error } = await updatePassword(newPassword);
+      const tokenHash = searchParams.get('token_hash');
+      const type = searchParams.get('type');
       
+      if (!tokenHash || type !== 'recovery') {
+        toast({
+          title: "Invalid Reset Link",
+          description: "This password reset link is invalid or has expired.",
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
+
+      // Use verifyOtp to verify the token and set the new password
+      const { error } = await supabase.auth.verifyOtp({
+        token_hash: tokenHash,
+        type: 'recovery'
+      });
+
       if (error) {
         toast({
+          title: "Invalid Reset Link",
+          description: "This password reset link is invalid or has expired. Please request a new one.",
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
+
+      // Now update the password
+      const { error: updateError } = await supabase.auth.updateUser({
+        password: newPassword
+      });
+
+      if (updateError) {
+        toast({
           title: "Error Updating Password",
-          description: error.message,
+          description: updateError.message,
           variant: "destructive",
         });
       } else {
         toast({
           title: "Password Updated Successfully!",
-          description: "Your password has been changed. You will now be redirected to sign in.",
+          description: "Your password has been changed. Please sign in with your new password.",
         });
         
-        // Clean up and redirect to sign in
+        // Sign out to ensure they need to login again with new password
+        await supabase.auth.signOut();
+        
+        // Redirect to sign in
         setTimeout(() => {
           navigate("/auth");
         }, 2000);
