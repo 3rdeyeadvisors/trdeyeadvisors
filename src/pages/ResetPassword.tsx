@@ -28,7 +28,10 @@ const ResetPassword = () => {
       const tokenHash = searchParams.get('token_hash');
       const type = searchParams.get('type');
       
+      console.log('Reset page loaded with params:', { tokenHash, type });
+      
       if (!tokenHash || type !== 'recovery') {
+        console.log('Invalid token or type, redirecting to auth');
         toast({
           title: "Invalid Reset Link",
           description: "This password reset link is invalid or has expired. Please request a new one.",
@@ -78,12 +81,13 @@ const ResetPassword = () => {
     verifyToken();
   }, [searchParams, navigate, toast]);
 
-  // Redirect if already authenticated (but not from reset flow)
+  // Don't redirect authenticated users away from reset page - they need to reset their password
   useEffect(() => {
-    if (user && !tokenVerified) {
+    // Only redirect to dashboard if user is authenticated AND not in a password reset flow
+    if (user && !tokenVerified && !searchParams.get('token_hash')) {
       navigate("/dashboard");
     }
-  }, [user, navigate, tokenVerified]);
+  }, [user, navigate, tokenVerified, searchParams]);
 
   const validatePassword = (password: string): { isValid: boolean; errors: string[] } => {
     const errors: string[] = [];
