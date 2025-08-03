@@ -18,6 +18,7 @@ import Store from "./pages/Store";
 import Cart from "./pages/Cart";
 import Contact from "./pages/Contact";
 import Auth from "./pages/Auth";
+import ResetPassword from "./pages/ResetPassword";
 import CourseDetail from "./pages/CourseDetail";
 import ModuleViewer from "./pages/ModuleViewer";
 import Dashboard from "./pages/Dashboard";
@@ -93,6 +94,7 @@ const App = () => (
                   <Route path="/cart" element={<Cart />} />
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/auth" element={<Auth />} />
+                  <Route path="/reset-password" element={<ResetPassword />} />
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/downloads" element={<Downloads />} />
                   <Route path="/admin/upload" element={
