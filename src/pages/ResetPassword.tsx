@@ -41,20 +41,43 @@ const ResetPassword = () => {
         return;
       }
 
-      // Supabase automatically signs users in when they click recovery links
-      // So we just need to verify they have a valid session and show the reset form
-      const { data: sessionData } = await supabase.auth.getSession();
-      
-      if (sessionData.session) {
-        console.log('User is signed in via recovery link, showing reset form');
-        setIsValidToken(true);
-        setTokenVerified(true);
-        toast({
-          title: "Ready to Reset Password",
-          description: "Please enter your new password below.",
+      try {
+        // Verify the OTP token and establish a session
+        const { data, error } = await supabase.auth.verifyOtp({
+          token_hash: tokenHash,
+          type: 'recovery'
         });
-      } else {
-        console.log('No session found, recovery link may be invalid');
+        
+        if (error) {
+          console.log('Token verification failed:', error);
+          toast({
+            title: "Invalid Reset Link",
+            description: "This password reset link is invalid or has expired. Please request a new one.",
+            variant: "destructive",
+          });
+          navigate('/auth');
+          return;
+        }
+
+        if (data.session) {
+          console.log('Token verified successfully, user signed in');
+          setIsValidToken(true);
+          setTokenVerified(true);
+          toast({
+            title: "Ready to Reset Password",
+            description: "Please enter your new password below.",
+          });
+        } else {
+          console.log('No session created during verification');
+          toast({
+            title: "Invalid Reset Link", 
+            description: "This password reset link is invalid or has expired. Please request a new one.",
+            variant: "destructive",
+          });
+          navigate('/auth');
+        }
+      } catch (error) {
+        console.error('Error verifying token:', error);
         toast({
           title: "Invalid Reset Link",
           description: "This password reset link is invalid or has expired. Please request a new one.",
