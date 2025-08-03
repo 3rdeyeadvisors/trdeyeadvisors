@@ -36,7 +36,8 @@ const handler = async (req: Request): Promise<Response> => {
 
     const { table, record } = payload;
     const email = record.email;
-    const name = record.name || record.display_name || 'Not provided';
+    const name = record.name || record.display_name || 'New User';
+    const firstName = name.split(' ')[0] || 'there';
     
     // Determine the type of signup
     const signupType = table === 'subscribers' ? 'subscriber' : 'user signup';
@@ -60,8 +61,8 @@ const handler = async (req: Request): Promise<Response> => {
           <div style="background: linear-gradient(135deg, hsl(217, 32%, 10%), hsl(217, 32%, 12%)); padding: 24px; border-radius: 12px; margin: 24px 0; border: 1px solid hsl(217, 32%, 15%);">
             <h3 style="color: hsl(217, 91%, 70%); margin: 0 0 16px 0; font-size: 18px;">Details:</h3>
             <div style="color: hsl(0, 0%, 85%); line-height: 1.6;">
+              <p style="margin: 8px 0;"><strong style="color: hsl(217, 91%, 70%);">Name:</strong> ${firstName}</p>
               <p style="margin: 8px 0;"><strong style="color: hsl(217, 91%, 70%);">Email:</strong> ${email}</p>
-              <p style="margin: 8px 0;"><strong style="color: hsl(217, 91%, 70%);">Name:</strong> ${name}</p>
               <p style="margin: 8px 0;"><strong style="color: hsl(217, 91%, 70%);">Source:</strong> ${table}</p>
               <p style="margin: 8px 0;"><strong style="color: hsl(217, 91%, 70%);">Date:</strong> ${new Date(record.created_at).toLocaleString()}</p>
               <p style="margin: 8px 0;"><strong style="color: hsl(217, 91%, 70%);">User ID:</strong> ${record.id}</p>

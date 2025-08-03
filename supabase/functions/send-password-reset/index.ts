@@ -1,7 +1,12 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0';
 import { Resend } from "npm:resend@2.0.0";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+const supabase = createClient(
+  Deno.env.get('SUPABASE_URL') ?? '',
+  Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+);
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -24,6 +29,15 @@ const handler = async (req: Request): Promise<Response> => {
     const { email, resetUrl }: PasswordResetRequest = await req.json();
     console.log(`Processing password reset for email: ${email?.substring(0, 5)}...`);
 
+    // Get user's name from profiles table
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('display_name')
+      .eq('user_id', (await supabase.auth.admin.getUserByEmail(email)).data.user?.id)
+      .single();
+
+    const firstName = profile?.display_name?.split(' ')[0] || 'there';
+
     const emailResponse = await resend.emails.send({
       from: "3rdeyeadvisors <info@the3rdeyeadvisors.com>",
       to: [email],
@@ -42,7 +56,7 @@ const handler = async (req: Request): Promise<Response> => {
           <div style="background: linear-gradient(180deg, hsl(217, 32%, 8%), hsl(217, 32%, 6%)); padding: 40px 30px; border-radius: 0 0 12px 12px; border: 1px solid hsl(217, 32%, 15%);">
             
             <!-- Greeting -->
-            <h2 style="color: hsl(217, 91%, 70%); font-size: 24px; margin: 0 0 24px 0; font-weight: 600;">Password Reset Request</h2>
+            <h2 style="color: hsl(217, 91%, 70%); font-size: 24px; margin: 0 0 24px 0; font-weight: 600;">Hello ${firstName}!</h2>
             
             <p style="color: hsl(0, 0%, 90%); font-size: 16px; margin: 0 0 28px 0; line-height: 1.6;">
               We received a request to reset the password for your 3rdeyeadvisors account. Click the button below to create a new secure password and continue your DeFi journey.
