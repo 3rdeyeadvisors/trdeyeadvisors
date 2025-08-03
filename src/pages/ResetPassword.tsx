@@ -29,7 +29,6 @@ const ResetPassword = () => {
       const type = searchParams.get('type');
       
       console.log('Reset page loaded with params:', { tokenHash, type });
-      console.log('Current URL:', window.location.href);
       
       if (!tokenHash || type !== 'recovery') {
         console.log('Invalid token or type, redirecting to auth');
@@ -42,55 +41,23 @@ const ResetPassword = () => {
         return;
       }
 
-      try {
-        // Check current session first
-        const { data: sessionData } = await supabase.auth.getSession();
-        console.log('Current session:', sessionData.session);
-        
-        // If we already have a session from the magic link, we can proceed
-        if (sessionData.session) {
-          console.log('Found existing session, proceeding with reset');
-          setIsValidToken(true);
-          setTokenVerified(true);
-          toast({
-            title: "Ready to Reset Password",
-            description: "Please enter your new password below.",
-          });
-          return;
-        }
-
-        // If no session, try to verify the token
-        const { data, error } = await supabase.auth.verifyOtp({
-          token_hash: tokenHash,
-          type: 'recovery'
-        });
-
-        console.log('Token verification result:', { data, error });
-
-        if (error) {
-          console.error('Token verification error:', error);
-          toast({
-            title: "Invalid or Expired Link",
-            description: "This password reset link is invalid or has expired. Please request a new one.",
-            variant: "destructive",
-          });
-          navigate('/auth');
-          return;
-        }
-
-        if (data.session) {
-          setIsValidToken(true);
-          setTokenVerified(true);
-          toast({
-            title: "Ready to Reset Password",
-            description: "Please enter your new password below.",
-          });
-        }
-      } catch (error) {
-        console.error('Token verification failed:', error);
+      // Supabase automatically signs users in when they click recovery links
+      // So we just need to verify they have a valid session and show the reset form
+      const { data: sessionData } = await supabase.auth.getSession();
+      
+      if (sessionData.session) {
+        console.log('User is signed in via recovery link, showing reset form');
+        setIsValidToken(true);
+        setTokenVerified(true);
         toast({
-          title: "Reset Link Error",
-          description: "Unable to verify reset link. Please try requesting a new one.",
+          title: "Ready to Reset Password",
+          description: "Please enter your new password below.",
+        });
+      } else {
+        console.log('No session found, recovery link may be invalid');
+        toast({
+          title: "Invalid Reset Link",
+          description: "This password reset link is invalid or has expired. Please request a new one.",
           variant: "destructive",
         });
         navigate('/auth');
@@ -100,10 +67,20 @@ const ResetPassword = () => {
     verifyToken();
   }, [searchParams, navigate, toast]);
 
-  // Don't redirect authenticated users away from reset page - they need to reset their password
+  // CRITICAL: Prevent any redirects when user is in password reset flow
+  // This overrides any other authentication redirects
   useEffect(() => {
+    const tokenHash = searchParams.get('token_hash');
+    const type = searchParams.get('type');
+    
+    // If we have reset parameters, NEVER redirect away from this page
+    if (tokenHash && type === 'recovery') {
+      console.log('Password reset flow detected, preventing redirects');
+      return; // Don't redirect anywhere
+    }
+    
     // Only redirect to dashboard if user is authenticated AND not in a password reset flow
-    if (user && !tokenVerified && !searchParams.get('token_hash')) {
+    if (user && !tokenVerified) {
       navigate("/dashboard");
     }
   }, [user, navigate, tokenVerified, searchParams]);
