@@ -10,7 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 
 const Auth = () => {
-  const { user, signIn, signUp, resetPassword } = useAuth();
+  const { user, signIn, signUp, resetPassword, updatePassword } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   
@@ -20,12 +20,16 @@ const Auth = () => {
   const [displayName, setDisplayName] = useState("");
   const [loading, setLoading] = useState(false);
   const [isPasswordReset, setIsPasswordReset] = useState(false);
+  const [isPasswordUpdate, setIsPasswordUpdate] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
 
   // Check URL parameters
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const verified = urlParams.get('verified');
-    const reset = urlParams.get('reset');
+    const tokenHash = urlParams.get('token_hash');
+    const type = urlParams.get('type');
     
     if (verified === 'true') {
       toast({
@@ -36,8 +40,14 @@ const Auth = () => {
       window.history.replaceState({}, document.title, window.location.pathname);
     }
     
-    if (reset === 'true') {
-      setIsPasswordReset(true);
+    // Handle password reset token from email
+    if (tokenHash && type === 'recovery') {
+      setIsPasswordUpdate(true);
+      // Clean up URL but keep the token handling
+      toast({
+        title: "Ready to reset password",
+        description: "Enter your new password below.",
+      });
     }
   }, [toast]);
 
@@ -145,6 +155,62 @@ const Auth = () => {
     }
   };
 
+  const handleUpdatePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (newPassword !== confirmNewPassword) {
+      toast({
+        title: "Passwords don't match",
+        description: "Please make sure your passwords match.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (newPassword.length < 8) {
+      toast({
+        title: "Password too short",
+        description: "Password must be at least 8 characters long.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setLoading(true);
+    
+    try {
+      const { error } = await updatePassword(newPassword);
+      
+      if (error) {
+        toast({
+          title: "Error updating password",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Password updated successfully!",
+          description: "Your password has been changed. You can now sign in with your new password.",
+        });
+        
+        // Clean up and redirect
+        setIsPasswordUpdate(false);
+        setNewPassword("");
+        setConfirmNewPassword("");
+        window.history.replaceState({}, document.title, window.location.pathname);
+        navigate("/");
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (isPasswordReset) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-cosmic px-4">
@@ -185,6 +251,57 @@ const Auth = () => {
                   Back to Sign In
                 </Button>
               </div>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Show password update form when coming from reset email
+  if (isPasswordUpdate) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-cosmic px-4">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <CardTitle className="text-2xl font-bold">Set New Password</CardTitle>
+            <CardDescription>
+              Enter your new password below
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleUpdatePassword} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="new-password">New Password</Label>
+                <Input
+                  id="new-password"
+                  type="password"
+                  placeholder="••••••••"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  required
+                  minLength={8}
+                />
+                <p className="text-xs text-muted-foreground">
+                  Password must be at least 8 characters long
+                </p>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="confirm-new-password">Confirm New Password</Label>
+                <Input
+                  id="confirm-new-password"
+                  type="password"
+                  placeholder="••••••••"
+                  value={confirmNewPassword}
+                  onChange={(e) => setConfirmNewPassword(e.target.value)}
+                  required
+                  minLength={8}
+                />
+              </div>
+              <Button type="submit" disabled={loading} className="w-full">
+                {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Update Password
+              </Button>
             </form>
           </CardContent>
         </Card>
