@@ -20,21 +20,12 @@ const NewsletterSignup = ({ variant = "default", className = "" }: NewsletterSig
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('📧 Newsletter form submitted!', { email });
     
-    // Skip rate limiting for now to debug the core issue
-    console.log('⏩ Skipping rate limit check for debugging...');
-    
-    // Validate email
-    console.log('🔍 Validating email format...');
-    const validation = newsletterSchema.safeParse({ email });
-    console.log('✅ Email validation result:', validation);
-    
-    if (!validation.success) {
-      console.log('❌ Email validation failed:', validation.error.issues);
+    // Simple email validation
+    if (!email || !email.includes('@')) {
       toast({
         title: "Invalid email",
-        description: validation.error.issues[0].message,
+        description: "Please enter a valid email address.",
         variant: "destructive",
       });
       return;
@@ -43,35 +34,20 @@ const NewsletterSignup = ({ variant = "default", className = "" }: NewsletterSig
     setIsLoading(true);
 
     try {
-      // Sanitize input
-      const sanitizedEmail = sanitizeInput(email);
-      console.log('Attempting to subscribe email:', sanitizedEmail);
-      
-      // Insert subscriber into database with detailed logging
-      console.log('About to call supabase.from(subscribers).insert()...');
-      const { data, error } = await supabase
+      // Direct insert without complex validation that might fail
+      const { error } = await supabase
         .from('subscribers')
-        .insert([{ email: sanitizedEmail }]);
-
-      console.log('Raw Supabase response:', { data, error, sanitizedEmail });
+        .insert([{ email: email.trim().toLowerCase() }]);
 
       if (error) {
-        console.error('Detailed subscription error:', {
-          message: error.message,
-          details: error.details,
-          hint: error.hint,
-          code: error.code
+        console.error('Subscription error:', error);
+        toast({
+          title: "Subscription Failed",
+          description: error.message || "Something went wrong. Please try again.",
+          variant: "destructive",
         });
-        throw error;
+        return;
       }
-      
-      console.log('Subscription successful - triggers should have fired!');
-      
-      // Check if triggers fired by looking for recent edge function activity
-      setTimeout(async () => {
-        console.log('Checking if emails were sent...');
-        // This is just for debugging - in production this check wouldn't be needed
-      }, 2000);
       
       setIsSubscribed(true);
       setEmail("");
@@ -83,8 +59,8 @@ const NewsletterSignup = ({ variant = "default", className = "" }: NewsletterSig
     } catch (error: any) {
       console.error('Newsletter subscription error:', error);
       toast({
-        title: "Subscription Failed",
-        description: error.message || "Something went wrong. Please try again.",
+        title: "Subscription Failed", 
+        description: "Something went wrong. Please try again.",
         variant: "destructive",
       });
     } finally {
