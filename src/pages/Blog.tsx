@@ -185,7 +185,7 @@ const Blog = () => {
           {regularPosts.map((post, index) => (
             <Card 
               key={post.id}
-              className="p-6 bg-card/60 border-border hover:border-primary/40 transition-all duration-cosmic hover:shadow-consciousness group"
+              className="p-6 bg-card/60 border-border hover:border-primary/40 transition-all duration-cosmic hover:shadow-consciousness group flex flex-col h-full"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               <Badge className={`mb-4 ${getCategoryColor(post.category)}`}>
@@ -196,7 +196,7 @@ const Blog = () => {
                 {post.title}
               </h3>
               
-              <p className="text-muted-foreground font-consciousness mb-4 leading-relaxed">
+              <p className="text-muted-foreground font-consciousness mb-4 leading-relaxed flex-grow">
                 {post.excerpt}
               </p>
               
