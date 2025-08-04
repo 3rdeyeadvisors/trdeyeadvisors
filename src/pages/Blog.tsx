@@ -119,7 +119,7 @@ const Blog = () => {
         {featuredPosts.length > 0 && (
           <div className="mb-12">
             <h2 className="text-2xl font-consciousness font-bold text-foreground mb-6">Featured Articles</h2>
-            <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
+            <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide justify-center md:justify-start">
               {featuredPosts.map((post) => (
                 <Card 
                   key={post.id}
