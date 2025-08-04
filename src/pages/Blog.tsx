@@ -23,7 +23,7 @@ const Blog = () => {
   const regularPosts = posts.filter(post => !post.featured);
   console.log("Regular posts:", regularPosts);
 
-  const categories = ["All", "DeFi Education", "Innovation", "Security", "Education", "Analysis"];
+  const categories = ["All", "DeFi Education", "Innovation", "Security", "Education", "Analysis", "Web3 Gaming"];
 
   const getCategoryColor = (category: string) => {
     switch (category) {
@@ -38,6 +38,8 @@ const Blog = () => {
         return "bg-secondary/40 text-secondary-foreground border-secondary/30 hover:bg-secondary/50";
       case "Analysis": 
         return "bg-muted/30 text-foreground border-border hover:bg-muted/40";
+      case "Web3 Gaming":
+        return "bg-accent/20 text-accent border-accent/30 hover:bg-accent/30";
       default: 
         return "bg-primary/20 text-primary border-primary/30 hover:bg-primary/30";
     }
@@ -113,51 +115,70 @@ const Blog = () => {
           </div>
         )}
         
-        {/* Featured Post */}
-        {featuredPosts.map((post) => (
-          <Card 
-            key={post.id}
-            className="p-8 mb-12 bg-gradient-consciousness border-primary/20 shadow-consciousness hover:shadow-awareness transition-all duration-cosmic"
-          >
-            <div className="flex flex-wrap items-center gap-4 mb-4">
-              <Badge className="bg-primary text-primary-foreground border-primary shadow-cosmic">
-                Featured
-              </Badge>
-              <Badge className={getCategoryColor(post.category)}>
-                {post.category}
-              </Badge>
+        {/* Featured Posts Section */}
+        {featuredPosts.length > 0 && (
+          <div className="mb-12">
+            <h2 className="text-2xl font-consciousness font-bold text-foreground mb-6">Featured Articles</h2>
+            <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
+              {featuredPosts.map((post) => (
+                <Card 
+                  key={post.id}
+                  className="min-w-[500px] md:min-w-[600px] p-8 bg-gradient-consciousness border-primary/20 shadow-consciousness hover:shadow-awareness transition-all duration-cosmic flex-shrink-0"
+                >
+                  <div className="flex flex-wrap items-center gap-4 mb-4">
+                    <Badge className="bg-primary text-primary-foreground border-primary shadow-cosmic">
+                      Featured
+                    </Badge>
+                    <Badge className="bg-accent/30 text-accent-foreground border-accent/40 hover:bg-accent/40">
+                      {post.category}
+                    </Badge>
+                    {/* Enhanced tag visibility */}
+                    <div className="flex flex-wrap gap-2">
+                      {post.tags.slice(0, 3).map((tag, index) => (
+                        <Badge 
+                          key={index} 
+                          variant="outline" 
+                          className="text-xs bg-background/50 text-foreground border-primary/30 hover:bg-primary/10"
+                        >
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <h2 className="text-2xl md:text-3xl font-consciousness font-bold text-foreground mb-4">
+                    {post.title}
+                  </h2>
+                  
+                  <p className="text-lg text-muted-foreground font-consciousness mb-6 leading-relaxed">
+                    {post.excerpt}
+                  </p>
+                  
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-6 text-sm text-muted-foreground">
+                      <div className="flex items-center gap-2">
+                        <Calendar className="w-4 h-4" />
+                        <span className="font-system">{post.date}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-4 h-4" />
+                        <span className="font-system">{post.readTime}</span>
+                      </div>
+                    </div>
+                    <Button 
+                      variant="cosmic" 
+                      className="font-consciousness"
+                      onClick={() => navigate(`/blog/${post.slug}`)}
+                    >
+                      Read Article
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </div>
+                </Card>
+              ))}
             </div>
-            
-            <h2 className="text-2xl md:text-3xl font-consciousness font-bold text-foreground mb-4">
-              {post.title}
-            </h2>
-            
-            <p className="text-lg text-muted-foreground font-consciousness mb-6 leading-relaxed">
-              {post.excerpt}
-            </p>
-            
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-6 text-sm text-muted-foreground">
-                <div className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4" />
-                  <span className="font-system">{post.date}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4" />
-                  <span className="font-system">{post.readTime}</span>
-                </div>
-              </div>
-              <Button 
-                variant="cosmic" 
-                className="font-consciousness"
-                onClick={() => navigate(`/blog/${post.slug}`)}
-              >
-                Read Article
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </div>
-          </Card>
-        ))}
+          </div>
+        )}
 
         {/* Regular Posts Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

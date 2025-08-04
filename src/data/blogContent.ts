@@ -1226,7 +1226,7 @@ The success of **modular lending protocols** like Morpho Blue suggests that the 
     category: "DeFi Tools",
     readTime: "12 min read",
     date: "2025-08-01",
-    featured: true,
+    featured: false,
     author: "DeFi Research Team",
     tags: ["DeFi lending", "Morpho Blue", "modular lending protocol", "Aave vs Morpho", "DeFi tools 2025", "isolated markets", "peer-to-pool lending", "capital efficiency", "DeFi protocols"]
   }
