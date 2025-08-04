@@ -20,6 +20,7 @@ const NewsletterSignup = ({ variant = "default", className = "" }: NewsletterSig
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('Form submitted!', { email });
     
     // Rate limiting check
     if (!(await checkRateLimit(`newsletter_${email}`, 'newsletter', 3, 5))) { // 3 requests per 5 minutes
@@ -52,8 +53,7 @@ const NewsletterSignup = ({ variant = "default", className = "" }: NewsletterSig
       // Insert subscriber into database
       const { data, error } = await supabase
         .from('subscribers')
-        .insert([{ email: sanitizedEmail }])
-        .select();
+        .insert([{ email: sanitizedEmail }]);
 
       console.log('Subscription result:', { data, error });
 
