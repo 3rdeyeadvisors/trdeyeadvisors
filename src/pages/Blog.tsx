@@ -119,11 +119,11 @@ const Blog = () => {
         {featuredPosts.length > 0 && (
           <div className="mb-12">
             <h2 className="text-2xl font-consciousness font-bold text-foreground mb-6">Featured Articles</h2>
-            <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide justify-center md:justify-start">
+            <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
               {featuredPosts.map((post) => (
                 <Card 
                   key={post.id}
-                  className="min-w-[90vw] md:min-w-[600px] md:max-w-[800px] p-6 bg-gradient-consciousness border-primary/20 shadow-consciousness hover:shadow-awareness transition-all duration-cosmic flex-shrink-0"
+                  className="w-full p-6 bg-gradient-consciousness border-primary/20 shadow-consciousness hover:shadow-awareness transition-all duration-cosmic flex-shrink-0"
                 >
                   <div className="flex flex-wrap items-center gap-4 mb-4">
                     <Badge className="bg-primary text-primary-foreground border-primary shadow-cosmic">
