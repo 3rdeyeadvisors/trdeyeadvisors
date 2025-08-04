@@ -39,7 +39,7 @@ const handler = async (req: Request): Promise<Response> => {
       to: [email],
       subject: "🙏 Thank You for Subscribing - 3rdeyeadvisors Newsletter",
       html: `
-        <div style="max-width: 600px; margin: 0 auto; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: hsl(222, 84%, 4.9%); color: #fff; padding: 20px; border-radius: 12px;">
+        <div style="max-width: 600px; margin: 0 auto; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: hsl(222, 84%, 4.9%); color: hsl(0, 0%, 98%); padding: 20px; border-radius: 12px;">
           <!-- Cosmic Header -->
           <div style="text-align: center; padding: 40px 20px; background: linear-gradient(135deg, hsl(217, 32%, 8%), hsl(217, 32%, 6%)); border-radius: 12px; margin-bottom: 32px; border: 1px solid hsl(217, 32%, 15%); position: relative; overflow: hidden;">
             <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(ellipse at center, hsl(217, 91%, 60%, 0.1) 0%, transparent 70%);"></div>
@@ -54,7 +54,7 @@ const handler = async (req: Request): Promise<Response> => {
             <h2 style="color: hsl(217, 91%, 70%); font-size: 24px; margin: 0 0 16px 0; font-weight: 600;">
               🙏 Thank you for subscribing, ${firstName}!
             </h2>
-            <p style="color: hsl(0, 0%, 90%); font-size: 16px; line-height: 1.6; margin: 0 0 24px 0;">
+            <p style="color: hsl(0, 0%, 95%); font-size: 16px; line-height: 1.6; margin: 0 0 24px 0;">
               You're now part of our conscious DeFi community! We're grateful to have you join us on this journey of financial awareness and decentralized education.
             </p>
           </div>
@@ -62,7 +62,7 @@ const handler = async (req: Request): Promise<Response> => {
           <!-- What's Next -->
           <div style="background: linear-gradient(135deg, hsl(217, 32%, 10%), hsl(217, 32%, 12%)); padding: 24px; border-radius: 12px; margin: 24px 0; border: 1px solid hsl(217, 32%, 15%);">
             <h3 style="color: hsl(217, 91%, 70%); margin: 0 0 16px 0; font-size: 18px;">What's coming your way:</h3>
-            <ul style="color: hsl(0, 0%, 85%); line-height: 1.6; margin: 0; padding-left: 20px;">
+            <ul style="color: hsl(0, 0%, 90%); line-height: 1.6; margin: 0; padding-left: 20px;">
               <li style="margin: 8px 0;">📧 <strong>Weekly DeFi insights</strong> directly to your inbox</li>
               <li style="margin: 8px 0;">🔍 <strong>Market analysis</strong> with a conscious perspective</li>
               <li style="margin: 8px 0;">🛡️ <strong>Security tips</strong> to protect your digital assets</li>
@@ -74,7 +74,7 @@ const handler = async (req: Request): Promise<Response> => {
           <!-- Explore Now -->
           <div style="background: linear-gradient(135deg, hsl(271, 91%, 10%), hsl(271, 91%, 12%)); padding: 24px; border-radius: 12px; margin: 24px 0; border: 1px solid hsl(271, 91%, 25%);">
             <h3 style="color: hsl(271, 91%, 75%); margin: 0 0 16px 0; font-size: 18px;">Start exploring now:</h3>
-            <p style="color: hsl(0, 0%, 85%); line-height: 1.6; margin: 0 0 16px 0;">
+            <p style="color: hsl(0, 0%, 90%); line-height: 1.6; margin: 0 0 16px 0;">
               While you wait for your first newsletter, dive into our free educational content:
             </p>
             <div style="text-align: center;">
@@ -89,7 +89,7 @@ const handler = async (req: Request): Promise<Response> => {
 
           <!-- Personal Note -->
           <div style="text-align: center; margin: 32px 0; padding: 20px; background: linear-gradient(135deg, hsl(217, 32%, 8%), hsl(217, 32%, 10%)); border-radius: 8px; border: 1px solid hsl(217, 32%, 15%);">
-            <p style="color: hsl(0, 0%, 85%); font-size: 14px; margin: 0 0 16px 0;">
+            <p style="color: hsl(0, 0%, 90%); font-size: 14px; margin: 0 0 16px 0;">
               Have questions? Just reply to this email - we read every message personally.
             </p>
             <p style="color: hsl(217, 91%, 70%); font-size: 16px; margin: 0; font-weight: 500;">
