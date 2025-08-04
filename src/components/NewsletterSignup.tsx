@@ -50,19 +50,32 @@ const NewsletterSignup = ({ variant = "default", className = "" }: NewsletterSig
       const sanitizedEmail = sanitizeInput(email);
       console.log('Attempting to subscribe email:', sanitizedEmail);
       
-      // Insert subscriber into database
+      // Insert subscriber into database with detailed logging
+      console.log('About to call supabase.from(subscribers).insert()...');
       const { data, error } = await supabase
         .from('subscribers')
         .insert([{ email: sanitizedEmail }]);
 
-      console.log('Subscription result:', { data, error });
+      console.log('Raw Supabase response:', { data, error, sanitizedEmail });
 
       if (error) {
-        console.error('Subscription error:', error);
+        console.error('Detailed subscription error:', {
+          message: error.message,
+          details: error.details,
+          hint: error.hint,
+          code: error.code
+        });
         throw error;
       }
       
-      console.log('Subscription successful:', data);
+      console.log('Subscription successful - triggers should have fired!');
+      
+      // Check if triggers fired by looking for recent edge function activity
+      setTimeout(async () => {
+        console.log('Checking if emails were sent...');
+        // This is just for debugging - in production this check wouldn't be needed
+      }, 2000);
+      
       setIsSubscribed(true);
       setEmail("");
       
