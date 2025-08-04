@@ -123,7 +123,7 @@ const Blog = () => {
               {featuredPosts.map((post) => (
                 <Card 
                   key={post.id}
-                  className="min-w-[500px] md:min-w-[600px] p-8 bg-gradient-consciousness border-primary/20 shadow-consciousness hover:shadow-awareness transition-all duration-cosmic flex-shrink-0"
+                  className="min-w-[400px] max-w-[500px] p-6 bg-gradient-consciousness border-primary/20 shadow-consciousness hover:shadow-awareness transition-all duration-cosmic flex-shrink-0"
                 >
                   <div className="flex flex-wrap items-center gap-4 mb-4">
                     <Badge className="bg-primary text-primary-foreground border-primary shadow-cosmic">
@@ -146,15 +146,15 @@ const Blog = () => {
                     </div>
                   </div>
                   
-                  <h2 className="text-2xl md:text-3xl font-consciousness font-bold text-foreground mb-4">
+                  <h2 className="text-xl md:text-2xl font-consciousness font-bold text-foreground mb-3 line-clamp-2">
                     {post.title}
                   </h2>
                   
-                  <p className="text-lg text-muted-foreground font-consciousness mb-6 leading-relaxed">
+                  <p className="text-base text-muted-foreground font-consciousness mb-4 leading-relaxed line-clamp-3">
                     {post.excerpt}
                   </p>
                   
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div className="flex items-center gap-6 text-sm text-muted-foreground">
                       <div className="flex items-center gap-2">
                         <Calendar className="w-4 h-4" />
