@@ -8,7 +8,11 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    // Configure MIME types for XML files
+    middlewareMode: false,
   },
+  // Ensure XML files are served with correct MIME type
+  assetsInclude: ['**/*.xml'],
   plugins: [
     react(),
     mode === 'development' &&
