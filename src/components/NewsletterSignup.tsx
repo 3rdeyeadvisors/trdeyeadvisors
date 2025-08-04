@@ -20,27 +20,41 @@ const NewsletterSignup = ({ variant = "default", className = "" }: NewsletterSig
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted!', { email });
+    console.log('📧 Newsletter form submitted!', { email });
     
-    // Rate limiting check
-    if (!(await checkRateLimit(`newsletter_${email}`, 'newsletter', 3, 5))) { // 3 requests per 5 minutes
-      toast({
-        title: "Too many requests",
-        description: "Please wait before trying again.",
-        variant: "destructive",
-      });
-      return;
-    }
+    try {
+      // Test rate limiting first
+      console.log('🔍 Checking rate limit...');
+      const rateLimitCheck = await checkRateLimit(`newsletter_${email}`, 'newsletter', 3, 5);
+      console.log('✅ Rate limit check result:', rateLimitCheck);
+      
+      if (!rateLimitCheck) { // 3 requests per 5 minutes
+        console.log('❌ Rate limit exceeded');
+        toast({
+          title: "Too many requests",
+          description: "Please wait before trying again.",
+          variant: "destructive",
+        });
+        return;
+      }
 
-    // Validate email
-    const validation = newsletterSchema.safeParse({ email });
-    if (!validation.success) {
-      toast({
-        title: "Invalid email",
-        description: validation.error.issues[0].message,
-        variant: "destructive",
-      });
-      return;
+      // Validate email
+      console.log('🔍 Validating email format...');
+      const validation = newsletterSchema.safeParse({ email });
+      console.log('✅ Email validation result:', validation);
+      
+      if (!validation.success) {
+        console.log('❌ Email validation failed:', validation.error.issues);
+        toast({
+          title: "Invalid email",
+          description: validation.error.issues[0].message,
+          variant: "destructive",
+        });
+        return;
+      }
+    } catch (rateLimitError) {
+      console.error('❌ Rate limit check failed:', rateLimitError);
+      // Continue anyway for debugging
     }
 
     setIsLoading(true);
