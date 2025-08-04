@@ -212,7 +212,7 @@ const Blog = () => {
               </div>
               
               <Button 
-                variant="awareness" 
+                variant="cosmic" 
                 size="sm" 
                 className="w-full font-consciousness"
                 onClick={() => navigate(`/blog/${post.slug}`)}
