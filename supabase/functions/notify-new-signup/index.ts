@@ -42,6 +42,28 @@ const handler = async (req: Request): Promise<Response> => {
     // Determine the type of signup
     const signupType = table === 'subscribers' ? 'subscriber' : 'user signup';
     
+    // If this is a subscriber, also send welcome email
+    if (table === 'subscribers') {
+      console.log('Sending welcome email to subscriber:', email);
+      try {
+        const welcomeResponse = await fetch('https://zapbkuaejvzpqerkkcnc.supabase.co/functions/v1/send-welcome-email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        });
+        
+        if (welcomeResponse.ok) {
+          console.log('Welcome email triggered successfully');
+        } else {
+          console.error('Failed to trigger welcome email:', await welcomeResponse.text());
+        }
+      } catch (error) {
+        console.error('Error triggering welcome email:', error);
+      }
+    }
+    
     // Send notification email
     const emailResponse = await resend.emails.send({
       from: "3rdeyeadvisors <info@the3rdeyeadvisors.com>",
