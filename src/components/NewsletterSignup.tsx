@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Mail, Check, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { newsletterSchema, sanitizeInput, checkRateLimit } from "@/lib/validation";
+import { supabase } from "@/integrations/supabase/client";
 
 interface NewsletterSignupProps {
   variant?: "default" | "cosmic" | "minimal";
@@ -47,8 +48,15 @@ const NewsletterSignup = ({ variant = "default", className = "" }: NewsletterSig
       // Sanitize input
       const sanitizedEmail = sanitizeInput(email);
       
-      // Simulate API call - replace with actual newsletter service
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Insert subscriber into database
+      const { error } = await supabase
+        .from('subscribers')
+        .insert([{ email: sanitizedEmail }]);
+
+      if (error) {
+        console.error('Subscription error:', error);
+        throw error;
+      }
       
       setIsSubscribed(true);
       setEmail("");
@@ -57,10 +65,11 @@ const NewsletterSignup = ({ variant = "default", className = "" }: NewsletterSig
         title: "Successfully Subscribed!",
         description: "You'll receive our latest DeFi insights and updates.",
       });
-    } catch (error) {
+    } catch (error: any) {
+      console.error('Newsletter subscription error:', error);
       toast({
         title: "Subscription Failed",
-        description: "Something went wrong. Please try again.",
+        description: error.message || "Something went wrong. Please try again.",
         variant: "destructive",
       });
     } finally {
