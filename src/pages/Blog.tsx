@@ -134,9 +134,9 @@ const Blog = () => {
                     </Badge>
                     {/* Enhanced tag visibility */}
                     <div className="flex flex-wrap gap-2">
-                      {post.tags.slice(0, 3).map((tag, index) => (
+                      {post.tags.slice(0, 3).map((tag, tagIndex) => (
                         <Badge 
-                          key={index} 
+                          key={`${post.id}-tag-${tagIndex}`} 
                           variant="outline" 
                           className="text-xs bg-background/50 text-foreground border-primary/30 hover:bg-primary/10"
                         >
