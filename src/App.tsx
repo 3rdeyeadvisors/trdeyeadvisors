@@ -46,6 +46,7 @@ import BlogPost from "./pages/BlogPost";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import SocialBanner from "./pages/SocialBanner";
+import WebThreeGamingDefiConvergence from "./pages/WebThreeGamingDefiConvergence";
 
 const queryClient = new QueryClient();
 
@@ -74,6 +75,7 @@ const App = () => (
                   <Route path="/courses/:courseId" element={<CourseDetail />} />
                   <Route path="/courses/:courseId/module/:moduleId" element={<ModuleViewer />} />
                   <Route path="/blog" element={<Blog />} />
+                  <Route path="/blog/web3-gaming-defi-convergence-2025" element={<WebThreeGamingDefiConvergence />} />
                   <Route path="/blog/:slug" element={<BlogPost />} />
                   <Route path="/resources" element={<Resources />} />
                   <Route path="/analytics" element={<Analytics />} />
