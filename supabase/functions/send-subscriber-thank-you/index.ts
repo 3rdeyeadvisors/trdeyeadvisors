@@ -78,10 +78,10 @@ const handler = async (req: Request): Promise<Response> => {
               While you wait for your first newsletter, dive into our free educational content:
             </p>
             <div style="text-align: center;">
-              <a href="https://the3rdeyeadvisors.com/philosophy" style="background: linear-gradient(45deg, hsl(217, 91%, 60%), hsl(271, 91%, 65%)); color: hsl(222, 84%, 4.9%); padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block; margin: 8px;">
+              <a href="https://the3rdeyeadvisors.com/philosophy" style="background: linear-gradient(45deg, hsl(217, 91%, 60%), hsl(271, 91%, 65%)); color: hsl(0, 0%, 98%); padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block; margin: 8px;">
                 Our Philosophy
               </a>
-              <a href="https://the3rdeyeadvisors.com/courses" style="background: linear-gradient(45deg, hsl(271, 91%, 60%), hsl(217, 91%, 65%)); color: hsl(222, 84%, 4.9%); padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block; margin: 8px;">
+              <a href="https://the3rdeyeadvisors.com/courses" style="background: linear-gradient(45deg, hsl(271, 91%, 60%), hsl(217, 91%, 65%)); color: hsl(0, 0%, 98%); padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block; margin: 8px;">
                 Free Courses
               </a>
             </div>
