@@ -42,9 +42,28 @@ const handler = async (req: Request): Promise<Response> => {
     // Determine the type of signup
     const signupType = table === 'subscribers' ? 'subscriber' : 'user signup';
     
-    // If this is a subscriber, also send welcome email
+    // Send appropriate email based on signup type
     if (table === 'subscribers') {
-      console.log('Sending welcome email to subscriber:', email);
+      console.log('Sending thank you email to subscriber:', email);
+      try {
+        const thankYouResponse = await fetch('https://zapbkuaejvzpqerkkcnc.supabase.co/functions/v1/send-subscriber-thank-you', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        });
+        
+        if (thankYouResponse.ok) {
+          console.log('Thank you email triggered successfully');
+        } else {
+          console.error('Failed to trigger thank you email:', await thankYouResponse.text());
+        }
+      } catch (error) {
+        console.error('Error triggering thank you email:', error);
+      }
+    } else if (table === 'profiles') {
+      console.log('Sending welcome email to new user:', email);
       try {
         const welcomeResponse = await fetch('https://zapbkuaejvzpqerkkcnc.supabase.co/functions/v1/send-welcome-email', {
           method: 'POST',
