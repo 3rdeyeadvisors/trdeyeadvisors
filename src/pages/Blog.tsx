@@ -123,7 +123,7 @@ const Blog = () => {
               {featuredPosts.map((post) => (
                 <Card 
                   key={post.id}
-                  className="min-w-[400px] max-w-[500px] p-6 bg-gradient-consciousness border-primary/20 shadow-consciousness hover:shadow-awareness transition-all duration-cosmic flex-shrink-0"
+                  className="min-w-[320px] max-w-[400px] p-6 bg-gradient-consciousness border-primary/20 shadow-consciousness hover:shadow-awareness transition-all duration-cosmic flex-shrink-0"
                 >
                   <div className="flex flex-wrap items-center gap-4 mb-4">
                     <Badge className="bg-primary text-primary-foreground border-primary shadow-cosmic">
