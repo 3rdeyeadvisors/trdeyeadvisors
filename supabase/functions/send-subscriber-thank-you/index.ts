@@ -103,6 +103,8 @@ const handler = async (req: Request): Promise<Response> => {
             <a href="#" style="color: hsl(215, 20%, 65%);">Unsubscribe</a> | <a href="https://the3rdeyeadvisors.com" style="color: hsl(215, 20%, 65%);">Visit Website</a>
           </p>
         </div>
+        </body>
+        </html>
       `,
     });
 

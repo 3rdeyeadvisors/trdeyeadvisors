@@ -33,12 +33,13 @@ const handler = async (req: Request): Promise<Response> => {
     const name = record.name || 'New Subscriber';
     const firstName = name.split(' ')[0] || 'there';
     
-    // Send personalized welcome email to the subscriber
     const emailResponse = await resend.emails.send({
       from: "3rdeyeadvisors <info@the3rdeyeadvisors.com>",
       to: [email],
       subject: "🚀 Welcome to the 3rdeyeadvisors Community - Your DeFi Journey Begins!",
       html: `
+        <html>
+        <body style="margin: 0; padding: 20px; background: hsl(222, 84%, 4.9%); font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;">
         <div style="max-width: 600px; margin: 0 auto; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: hsl(222, 84%, 4.9%); color: hsl(0, 0%, 98%); padding: 20px; border-radius: 12px;">
           <!-- Cosmic Header -->
           <div style="text-align: center; padding: 40px 20px; background: linear-gradient(135deg, hsl(217, 32%, 8%), hsl(217, 32%, 6%)); border-radius: 12px; margin-bottom: 32px; border: 1px solid hsl(217, 32%, 15%); position: relative; overflow: hidden;">
@@ -103,6 +104,8 @@ const handler = async (req: Request): Promise<Response> => {
             <a href="#" style="color: hsl(215, 20%, 65%);">Unsubscribe</a> | <a href="https://the3rdeyeadvisors.com" style="color: hsl(215, 20%, 65%);">Visit Website</a>
           </p>
         </div>
+        </body>
+        </html>
       `,
     });
 
