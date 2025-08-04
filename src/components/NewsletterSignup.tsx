@@ -47,17 +47,22 @@ const NewsletterSignup = ({ variant = "default", className = "" }: NewsletterSig
     try {
       // Sanitize input
       const sanitizedEmail = sanitizeInput(email);
+      console.log('Attempting to subscribe email:', sanitizedEmail);
       
       // Insert subscriber into database
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('subscribers')
-        .insert([{ email: sanitizedEmail }]);
+        .insert([{ email: sanitizedEmail }])
+        .select();
+
+      console.log('Subscription result:', { data, error });
 
       if (error) {
         console.error('Subscription error:', error);
         throw error;
       }
       
+      console.log('Subscription successful:', data);
       setIsSubscribed(true);
       setEmail("");
       
