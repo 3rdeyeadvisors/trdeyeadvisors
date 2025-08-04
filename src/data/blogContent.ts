@@ -212,7 +212,7 @@ Whether you're a gamer looking to monetize your skills, an investor seeking new 
     date: "2025-08-04",
     featured: true,
     author: "3EA Gaming Research Team",
-    tags: ["Web3 gaming", "DeFi", "play-to-earn", "cross-chain gaming", "AI agents", "DePIN", "gaming economy", "NFT gaming", "blockchain gaming", "metaverse finance"]
+    tags: ["DeFi", "play-to-earn", "cross-chain gaming", "AI agents", "DePIN", "gaming economy", "NFT gaming", "blockchain gaming", "metaverse finance"]
   },
   {
     id: 2,
