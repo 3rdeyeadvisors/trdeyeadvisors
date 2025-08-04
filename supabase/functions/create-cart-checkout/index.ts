@@ -21,7 +21,14 @@ serve(async (req) => {
     }
 
     // Initialize Stripe with secret key
-    const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
+    const stripeSecretKey = Deno.env.get("STRIPE_SECRET_KEY");
+    console.log("Stripe key starts with:", stripeSecretKey?.substring(0, 7));
+    
+    if (!stripeSecretKey || !stripeSecretKey.startsWith('sk_')) {
+      throw new Error("Invalid or missing Stripe secret key. Expected key starting with 'sk_'");
+    }
+    
+    const stripe = new Stripe(stripeSecretKey, {
       apiVersion: "2023-10-16",
     });
 
