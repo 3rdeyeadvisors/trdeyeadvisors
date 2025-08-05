@@ -14,8 +14,10 @@ const Cart = () => {
   const handleCheckout = async () => {
     if (items.length === 0) return;
 
+    console.log('Checkout clicked! Items:', items);
     setIsLoading(true);
     try {
+      console.log('Calling checkout function...');
       const { data, error } = await supabase.functions.invoke('create-cart-checkout', {
         body: {
           items: items.map(item => ({
@@ -27,11 +29,27 @@ const Cart = () => {
         }
       });
 
-      if (error) throw error;
+      console.log('Function response:', { data, error });
+
+      if (error) {
+        console.error('Function returned error:', error);
+        throw error;
+      }
 
       // Open Stripe checkout in a new tab
       if (data?.url) {
-        window.open(data.url, '_blank');
+        console.log('Opening checkout URL:', data.url);
+        const newWindow = window.open(data.url, '_blank');
+        if (!newWindow) {
+          console.error('Popup was blocked!');
+          toast.error('Popup blocked! Please allow popups and try again.');
+        } else {
+          console.log('Checkout window opened successfully');
+          toast.success('Redirecting to checkout...');
+        }
+      } else {
+        console.error('No URL received from function:', data);
+        toast.error('No checkout URL received');
       }
     } catch (error) {
       console.error('Error creating checkout:', error);
