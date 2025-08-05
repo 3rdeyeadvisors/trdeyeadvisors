@@ -24,7 +24,11 @@ const Cart = () => {
             id: item.id,
             title: item.title,
             price: typeof item.price === 'string' ? parseFloat(item.price.replace('$', '')) : item.price,
-            quantity: item.quantity
+            quantity: item.quantity,
+            type: item.type,
+            category: item.category,
+            images: item.images,
+            printify_id: item.printify_id
           }))
         }
       });

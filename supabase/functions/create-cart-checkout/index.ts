@@ -46,21 +46,36 @@ serve(async (req) => {
     console.log('Printify items:', printifyItems.length);
 
     // Create line items for Stripe
-    const lineItems = items.map((item: any) => ({
-      price_data: {
-        currency: "usd",
-        product_data: {
-          name: item.title,
-          metadata: {
-            type: item.type || 'digital',
-            printify_id: item.printify_id || '',
-            item_id: item.id.toString(),
-          },
+    const lineItems = items.map((item: any) => {
+      const productData: any = {
+        name: item.title,
+        description: `${item.category} - ${item.type}`,
+        metadata: {
+          type: item.type || 'digital',
+          category: item.category || 'product',
+          printify_id: item.printify_id || '',
+          item_id: item.id.toString(),
         },
-        unit_amount: Math.round(item.price * 100), // Convert to cents
-      },
-      quantity: item.quantity,
-    }));
+      };
+
+      // Add product images if available
+      if (item.images && item.images.length > 0) {
+        // Use the first image as the main product image
+        const mainImage = item.images[0];
+        if (mainImage && (mainImage.src || mainImage.url)) {
+          productData.images = [mainImage.src || mainImage.url];
+        }
+      }
+
+      return {
+        price_data: {
+          currency: "usd",
+          product_data: productData,
+          unit_amount: Math.round(item.price * 100), // Convert to cents
+        },
+        quantity: item.quantity,
+      };
+    });
 
     // Create a checkout session
     const session = await stripe.checkout.sessions.create({
