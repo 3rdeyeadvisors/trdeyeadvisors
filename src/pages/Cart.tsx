@@ -39,13 +39,17 @@ const Cart = () => {
       // Open Stripe checkout in a new tab
       if (data?.url) {
         console.log('Opening checkout URL:', data.url);
-        const newWindow = window.open(data.url, '_blank');
-        if (!newWindow) {
-          console.error('Popup was blocked!');
-          toast.error('Popup blocked! Please allow popups and try again.');
-        } else {
-          console.log('Checkout window opened successfully');
+        console.log('URL type:', typeof data.url);
+        console.log('URL length:', data.url.length);
+        
+        try {
+          // Try opening in new tab first
+          window.open(data.url, '_blank');
           toast.success('Redirecting to checkout...');
+        } catch (error) {
+          console.error('Failed to open popup, trying redirect:', error);
+          // Fallback to current window redirect
+          window.location.href = data.url;
         }
       } else {
         console.error('No URL received from function:', data);
