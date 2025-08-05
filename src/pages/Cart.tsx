@@ -36,21 +36,11 @@ const Cart = () => {
         throw error;
       }
 
-      // Open Stripe checkout in a new tab
+      // Open Stripe checkout
       if (data?.url) {
         console.log('Opening checkout URL:', data.url);
-        console.log('URL type:', typeof data.url);
-        console.log('URL length:', data.url.length);
-        
-        try {
-          // Try opening in new tab first
-          window.open(data.url, '_blank');
-          toast.success('Redirecting to checkout...');
-        } catch (error) {
-          console.error('Failed to open popup, trying redirect:', error);
-          // Fallback to current window redirect
-          window.location.href = data.url;
-        }
+        // Directly redirect to checkout URL in the same window for reliability
+        window.location.href = data.url;
       } else {
         console.error('No URL received from function:', data);
         toast.error('No checkout URL received');
