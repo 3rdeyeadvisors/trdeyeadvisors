@@ -23,7 +23,7 @@ const Blog = () => {
   const regularPosts = posts.filter(post => !post.featured);
   console.log("Regular posts:", regularPosts);
 
-  const categories = ["All", "DeFi Education", "Innovation", "Security", "Education", "Analysis", "Web3 Gaming"];
+  const categories = ["All", "DeFi Education", "Innovation", "Security", "Education", "Analysis", "Web3 Gaming", "DeFAI"];
 
   const getCategoryColor = (category: string) => {
     switch (category) {
