@@ -501,7 +501,7 @@ The future of finance is being written right now, and those who understand and r
     tags: ["AI in DeFi", "DeFAI 2025", "AI crypto agents", "automated yield farming", "AI trading in DeFi", "decentralized AI finance", "crypto bots", "DAO automation", "blockchain AI"]
   },
   {
-    id: 4,
+    id: 3,
     slug: "the-real-reason-defi-exists",
     title: "The Real Reason DeFi Exists",
     excerpt: "Discover why decentralized finance represents more than just financial innovation—it's a fundamental shift toward permissionless systems that eliminate middlemen and unlock global financial access through smart contracts.",
@@ -542,7 +542,7 @@ The movement toward decentralized finance represents humanity's opportunity to b
     tags: ["DeFi", "decentralized finance", "smart contracts", "permissionless finance", "DeFi tools", "DeFi education"]
   },
   {
-    id: 3,
+    id: 4,
     slug: "defi-forecast-markets-clearmatics-afp-autonity",
     title: "How DeFi Forecast Markets Are Changing the Game: Inside Clearmatics' AFP Launch on Autonity",
     excerpt: "Clearmatics just launched the Autonomous Futures Protocol (AFP) on Autonity, enabling decentralized forecast trading using real-world time-series data. Discover how it works and why it's the most innovative move in DeFi this year.",
@@ -756,7 +756,7 @@ AFP on Autonity represents more than a protocol launch—it's a glimpse into fin
     tags: ["DeFi forecast markets", "Clearmatics AFP", "Autonity chain", "decentralized derivatives", "on-chain futures", "crypto innovation", "time-series trading", "DeFi 2025"]
   },
   {
-    id: 3,
+    id: 5,
     slug: "defi-security-fundamentals-2025",
     title: "DeFi Security Fundamentals: Protecting Your Assets in 2025",
     excerpt: "Essential security practices every DeFi user needs to know. From wallet security to smart contract risks, learn how to navigate DeFi safely while maximizing opportunities.",
@@ -901,7 +901,7 @@ Remember: The goal isn't to eliminate all risk (which is impossible), but to tak
     tags: ["DeFi security", "wallet protection", "smart contract risks", "crypto safety"]
   },
   {
-    id: 3,
+    id: 6,
     slug: "yield-farming-strategies-that-work",
     title: "Yield Farming Strategies That Actually Work",
     excerpt: "Cut through the noise and discover proven yield farming strategies. Learn how to evaluate opportunities, manage risks, and build sustainable DeFi income streams.",
@@ -1125,7 +1125,7 @@ Remember: The best yield farming strategy is one you can sleep well with at nigh
     tags: ["yield farming", "DeFi strategies", "passive income", "liquidity provision"]
   },
   {
-    id: 4,
+    id: 7,
     slug: "real-world-assets-rwa-defi-tokenization",
     title: "The Rise of Real World Assets (RWAs) in DeFi",
     excerpt: "Traditional assets are moving on-chain. Explore how real estate, commodities, and bonds are being tokenized and what it means for the future of finance.",
@@ -1389,7 +1389,7 @@ For investors, RWAs provide an opportunity to earn yield from real economic acti
     tags: ["RWA", "tokenization", "real world assets", "DeFi evolution"]
   },
   {
-    id: 5,
+    id: 8,
     slug: "morpho-blue-modular-lending-protocol-2025",
     title: "Morpho Blue: The Modular Lending Protocol Reshaping DeFi in 2025",
     excerpt: "Discover how Morpho Blue's innovative peer-to-pool lending model and isolated market design is revolutionizing DeFi lending. Learn why developers and DAOs are choosing this modular approach over traditional protocols.",
