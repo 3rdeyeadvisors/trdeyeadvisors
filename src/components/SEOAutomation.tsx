@@ -41,7 +41,7 @@ const SEOAutomation = ({
         <title>{seoConfig.title}</title>
         <meta name="description" content={seoConfig.description} />
         <meta name="keywords" content={seoConfig.keywords} />
-        <link rel="canonical" href={seoConfig.url} />
+        <link rel="canonical" href={`https://www.the3rdeyeadvisors.com${window.location.pathname}`} />
         
         {/* AI Crawler Optimization */}
         <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />

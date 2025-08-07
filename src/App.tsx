@@ -51,13 +51,21 @@ import DefaiRevolution2025 from "./pages/DefaiRevolution2025";
 
 const queryClient = new QueryClient();
 
-// Handle domain redirect from 3rdeyeadvisors.com to the3rdeyeadvisors.com
-// Only redirect if actually on the old domain, not on the new domain
-if (typeof window !== 'undefined' && 
-    window.location.hostname === '3rdeyeadvisors.com' && 
-    !window.location.hostname.includes('the3rdeyeadvisors.com')) {
-  const redirectUrl = `https://the3rdeyeadvisors.com${window.location.pathname}${window.location.search}${window.location.hash}`;
-  window.location.replace(redirectUrl);
+// Handle domain redirect: non-www and old domain to https://www.the3rdeyeadvisors.com
+if (typeof window !== 'undefined') {
+  const hostname = window.location.hostname;
+  const protocol = window.location.protocol;
+  const pathname = window.location.pathname;
+  const search = window.location.search;
+  const hash = window.location.hash;
+  
+  // Redirect from old domain or non-www to www.the3rdeyeadvisors.com
+  if (hostname === '3rdeyeadvisors.com' || 
+      hostname === 'www.3rdeyeadvisors.com' || 
+      hostname === 'the3rdeyeadvisors.com') {
+    const redirectUrl = `https://www.the3rdeyeadvisors.com${pathname}${search}${hash}`;
+    window.location.replace(redirectUrl);
+  }
 }
 
 const App = () => (
