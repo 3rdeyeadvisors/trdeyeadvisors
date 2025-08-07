@@ -52,7 +52,10 @@ import DefaiRevolution2025 from "./pages/DefaiRevolution2025";
 const queryClient = new QueryClient();
 
 // Handle domain redirect from 3rdeyeadvisors.com to the3rdeyeadvisors.com
-if (typeof window !== 'undefined' && window.location.hostname === '3rdeyeadvisors.com') {
+// Only redirect if actually on the old domain, not on the new domain
+if (typeof window !== 'undefined' && 
+    window.location.hostname === '3rdeyeadvisors.com' && 
+    !window.location.hostname.includes('the3rdeyeadvisors.com')) {
   const redirectUrl = `https://the3rdeyeadvisors.com${window.location.pathname}${window.location.search}${window.location.hash}`;
   window.location.replace(redirectUrl);
 }

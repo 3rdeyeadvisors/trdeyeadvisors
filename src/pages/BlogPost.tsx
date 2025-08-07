@@ -26,10 +26,9 @@ const BlogPost = () => {
       setPost(foundPost);
       console.log("BlogPost - post set successfully");
     } else {
-      console.log("BlogPost - no post found, redirecting to blog");
-      // Redirect to blog if post not found
-      navigate("/blog");
-      return;
+      console.log("BlogPost - no post found, showing 404");
+      // Don't redirect - let the post render as 404 to avoid redirect status codes
+      setPost(null);
     }
     
     setLoading(false);
