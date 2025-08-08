@@ -68,7 +68,7 @@ const Contact = () => {
         title="Contact & About - Connect with 3rdeyeadvisors"
         description="Contact 3rdeyeadvisors for DeFi education inquiries and support. Connect with our team to join the mission of financial awakening and consciousness."
         keywords="contact 3rdeyeadvisors, DeFi education support, financial consciousness contact, crypto education inquiry"
-        url="https://the3rdeyeadvisors.com/contact"
+        url="https://www.the3rdeyeadvisors.com/contact"
       />
       <div className="min-h-screen py-20">
       <div className="container mx-auto px-4">

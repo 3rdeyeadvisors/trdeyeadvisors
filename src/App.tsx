@@ -59,10 +59,8 @@ if (typeof window !== 'undefined') {
   const search = window.location.search;
   const hash = window.location.hash;
   
-  // Redirect from old domain or non-www to www.the3rdeyeadvisors.com
-  if (hostname === '3rdeyeadvisors.com' || 
-      hostname === 'www.3rdeyeadvisors.com' || 
-      hostname === 'the3rdeyeadvisors.com') {
+  // Redirect non-www the3rdeyeadvisors.com to www
+  if (hostname === 'the3rdeyeadvisors.com') {
     const redirectUrl = `https://www.the3rdeyeadvisors.com${pathname}${search}${hash}`;
     window.location.replace(redirectUrl);
   }

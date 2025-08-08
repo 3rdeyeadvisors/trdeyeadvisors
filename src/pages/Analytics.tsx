@@ -11,7 +11,7 @@ const Analytics = () => {
         title="DeFi Analytics & Market Data - Real-Time Protocol Insights"
         description="Comprehensive DeFi analytics dashboard with real-time market data, yield farming insights, TVL tracking, and protocol performance metrics. Essential tools for DeFi investors and analysts."
         keywords="DeFi analytics, real-time DeFi data, yield farming analytics, TVL tracking, DeFi market insights, protocol analytics, crypto market data, DeFi charts, blockchain analytics"
-        url="https://the3rdeyeadvisors.com/analytics"
+        url="https://www.the3rdeyeadvisors.com/analytics"
         schema={{
           type: 'SoftwareApplication',
           data: {

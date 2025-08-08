@@ -41,11 +41,11 @@ function generateArticleSchema(content: PageContent): SchemaConfig {
       publisher: {
         '@type': 'Organization',
         name: '3rdeyeadvisors',
-        url: 'https://the3rdeyeadvisors.com',
-        logo: {
-          '@type': 'ImageObject',
-          url: 'https://the3rdeyeadvisors.com/favicon-3ea-new.png'
-        }
+         url: 'https://www.the3rdeyeadvisors.com',
+         logo: {
+           '@type': 'ImageObject',
+           url: 'https://www.the3rdeyeadvisors.com/favicon-3ea-new.png'
+         }
       },
       datePublished: content.publishedDate || new Date().toISOString(),
       dateModified: content.modifiedDate || new Date().toISOString(),
@@ -75,8 +75,8 @@ function generateCourseSchema(content: PageContent): SchemaConfig {
       description: content.description,
       provider: {
         '@type': 'Organization',
-        name: '3rdeyeadvisors',
-        url: 'https://the3rdeyeadvisors.com'
+         name: '3rdeyeadvisors',
+         url: 'https://www.the3rdeyeadvisors.com'
       },
       offers: [
         {
@@ -88,9 +88,9 @@ function generateCourseSchema(content: PageContent): SchemaConfig {
           validFrom: new Date().toISOString(),
           priceValidUntil: '2025-12-31',
           seller: {
-            '@type': 'Organization',
-            name: '3rdeyeadvisors',
-            url: 'https://the3rdeyeadvisors.com'
+             '@type': 'Organization',
+             name: '3rdeyeadvisors',
+             url: 'https://www.the3rdeyeadvisors.com'
           }
         }
       ],
@@ -148,9 +148,9 @@ function generateProductSchema(content: PageContent): SchemaConfig {
         availability: 'https://schema.org/InStock',
         url: content.url,
         seller: {
-          '@type': 'Organization',
-          name: '3rdeyeadvisors',
-          url: 'https://the3rdeyeadvisors.com'
+           '@type': 'Organization',
+           name: '3rdeyeadvisors',
+           url: 'https://www.the3rdeyeadvisors.com'
         }
       },
       brand: {
@@ -186,9 +186,9 @@ function generateWebPageSchema(content: PageContent): SchemaConfig {
       url: content.url,
       inLanguage: 'en-US',
       isPartOf: {
-        '@type': 'WebSite',
-        name: '3rdeyeadvisors',
-        url: 'https://the3rdeyeadvisors.com'
+         '@type': 'WebSite',
+         name: '3rdeyeadvisors',
+         url: 'https://www.the3rdeyeadvisors.com'
       },
       about: {
         '@type': 'Thing',
@@ -250,8 +250,8 @@ export function generateSchema(content: PageContent): {
         type: 'Organization',
         data: {
           name: '3rdeyeadvisors',
-          url: 'https://the3rdeyeadvisors.com',
-          logo: 'https://the3rdeyeadvisors.com/favicon-3ea-new.png',
+           url: 'https://www.the3rdeyeadvisors.com',
+           logo: 'https://www.the3rdeyeadvisors.com/favicon-3ea-new.png',
           description: 'DeFi education platform for financial consciousness and decentralized finance mastery',
           foundingDate: '2024',
           sameAs: [

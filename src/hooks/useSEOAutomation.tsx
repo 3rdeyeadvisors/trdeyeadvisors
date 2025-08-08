@@ -58,7 +58,7 @@ export function useSEOAutomation(options: SEOAutomationOptions): SEOAutomationRe
         setErrors([]);
 
         // Build full URL
-        const fullUrl = `https://the3rdeyeadvisors.com${location.pathname}`;
+        const fullUrl = `https://www.the3rdeyeadvisors.com${location.pathname}`;
         
         // Generate automatic SEO config
         const seoConfig = generateSEOConfig(
@@ -138,7 +138,7 @@ export function useSEOAutomation(options: SEOAutomationOptions): SEOAutomationRe
       title: options.title,
       description: options.description || '',
       keywords: '',
-      url: `https://the3rdeyeadvisors.com${location.pathname}`
+      url: `https://www.the3rdeyeadvisors.com${location.pathname}`
     },
     schema: { type: 'WebPage', data: {} },
     validation: {

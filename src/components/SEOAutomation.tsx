@@ -82,10 +82,10 @@ const SEOAutomation = ({
                 publisher: {
                   "@type": "Organization",
                   name: "3rdeyeadvisors",
-                  url: "https://the3rdeyeadvisors.com",
+                  url: "https://www.the3rdeyeadvisors.com",
                   logo: {
                     "@type": "ImageObject",
-                    url: "https://the3rdeyeadvisors.com/favicon-3ea-new.png"
+                    url: "https://www.the3rdeyeadvisors.com/favicon-3ea-new.png"
                   }
                 },
                 ...schema.data

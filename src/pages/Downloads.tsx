@@ -122,7 +122,7 @@ const Downloads = () => {
           title="My Downloads - Digital Products"
           description="Access your purchased DeFi education materials, guides, templates, and digital products from 3rdeyeadvisors."
           keywords="my downloads, DeFi products, purchased materials, digital downloads, education resources"
-          url="https://the3rdeyeadvisors.com/downloads"
+           url="https://www.the3rdeyeadvisors.com/downloads"
         />
         <div className="container mx-auto px-4 py-8">
           <div className="text-center">Loading your downloads...</div>
@@ -138,7 +138,7 @@ const Downloads = () => {
           title="My Downloads - Digital Products"
           description="Access your purchased DeFi education materials, guides, templates, and digital products from 3rdeyeadvisors."
           keywords="my downloads, DeFi products, purchased materials, digital downloads, education resources"
-          url="https://the3rdeyeadvisors.com/downloads"
+           url="https://www.the3rdeyeadvisors.com/downloads"
         />
         <div className="container mx-auto px-4 py-8">
           <div className="text-center">
@@ -166,7 +166,7 @@ const Downloads = () => {
         title="My Downloads - Digital Products"
         description="Access your purchased DeFi education materials, guides, templates, and digital products from 3rdeyeadvisors."
         keywords="my downloads, DeFi products, purchased materials, digital downloads, education resources"
-        url="https://the3rdeyeadvisors.com/downloads"
+        url="https://www.the3rdeyeadvisors.com/downloads"
       />
       <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
