@@ -188,7 +188,7 @@ const VideoTutorials = () => {
                   {category.videos.map((video) => {
                     const VideoIcon = video.icon;
                     return (
-                      <Card key={video.id} className="group hover:shadow-cosmic transition-all duration-cosmic border border-border/50 bg-card/80 backdrop-blur-sm hover:bg-card hover:border-primary/30">
+                      <Card key={video.id} className="group hover:shadow-cosmic transition-all duration-cosmic border border-border/50 bg-card/80 backdrop-blur-sm hover:bg-card hover:border-primary/30 h-full flex flex-col">
                         <CardHeader className="pb-4">
                           <div className="flex items-start justify-between">
                             <div className="flex items-center gap-3">
@@ -218,7 +218,7 @@ const VideoTutorials = () => {
                           </div>
                         </CardHeader>
 
-                        <CardContent className="pt-0">
+                        <CardContent className="pt-0 flex-1 flex flex-col">
                           <CardDescription className="mb-4 text-sm text-muted-foreground">
                             {video.description}
                           </CardDescription>
@@ -230,9 +230,9 @@ const VideoTutorials = () => {
                           </div>
 
                           <Button 
-                            className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-all hover:shadow-cosmic border-primary/30"
+                            className="mt-auto w-full group-hover:bg-primary group-hover:text-primary-foreground transition-all hover:shadow-cosmic border-primary/30"
                             variant="outline"
-onClick={() => {
+                            onClick={() => {
                               const tutorialRoutes: { [key: string]: string } = {
                                 "wallet-setup": "/tutorials/wallet-setup",
                                 "first-dex-swap": "/tutorials/first-dex-swap",
