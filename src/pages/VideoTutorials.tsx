@@ -5,9 +5,11 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Play, Shield, TrendingUp, Calculator, AlertTriangle, Wallet, ArrowLeftRight, PieChart, Target } from "lucide-react";
 import SEO from "@/components/SEO";
+import { useToast } from "@/hooks/use-toast";
 
 const VideoTutorials = () => {
   const [selectedCategory, setSelectedCategory] = useState("immediate");
+  const { toast } = useToast();
 
   const videoCategories = {
     immediate: {
@@ -230,14 +232,26 @@ const VideoTutorials = () => {
                           <Button 
                             className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-all hover:shadow-cosmic border-primary/30"
                             variant="outline"
-                            onClick={() => {
+onClick={() => {
                               const tutorialRoutes: { [key: string]: string } = {
                                 "wallet-setup": "/tutorials/wallet-setup",
                                 "first-dex-swap": "/tutorials/first-dex-swap",
                                 "defi-calculators": "/tutorials/defi-calculators",
-                                "spotting-scams": "/tutorials/spotting-scams"
+                                "spotting-scams": "/tutorials/spotting-scams",
+                                "yield-farming": "/tutorials/advanced-defi-protocols",
+                                "liquidity-pools": "/tutorials/first-dex-swap",
+                                "portfolio-tracking": "/tutorials/portfolio-rebalancing",
+                                "risk-assessment": "/tutorials/risk-assessment"
                               };
-                              window.location.href = tutorialRoutes[video.id] || "/tutorials";
+                              const route = tutorialRoutes[video.id];
+                              if (route) {
+                                window.location.href = route;
+                              } else {
+                                toast({
+                                  title: "Coming soon",
+                                  description: "This tutorial is being prepared. Explore other tutorials in the meantime.",
+                                });
+                              }
                             }}
                           >
                             <Play className="h-4 w-4 mr-2" />
