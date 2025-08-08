@@ -146,7 +146,7 @@ const VideoTutorials = () => {
         title="DeFi Video Tutorials | The 3rd Eye Advisors"
         description="Step-by-step video tutorials covering DeFi, cryptocurrency, and blockchain education. Learn wallet setup, DEX trading, yield farming, and more."
         keywords="DeFi tutorials, crypto video guides, blockchain education videos, DeFi how-to"
-        url="https://www.the3rdeyeadvisors.com/tutorials"
+        url="https://the3rdeyeadvisors.com/tutorials"
         type="website"
       />
       <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
