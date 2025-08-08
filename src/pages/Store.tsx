@@ -46,7 +46,7 @@ const Store = () => {
       type: "digital",
       category: "Guide",
       icon: TrendingUp,
-      features: ["10 proven strategies", "Risk frameworks", "ROI calculators", "Video tutorials"],
+      features: ["10 proven strategies", "Risk frameworks", "ROI calculators", "Guided tutorials"],
       files: ["Strategy Guide (PDF)", "ROI Calculator (Excel)"]
     }
   ]);

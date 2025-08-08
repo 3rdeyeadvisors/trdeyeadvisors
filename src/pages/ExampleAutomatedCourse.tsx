@@ -30,7 +30,7 @@ const ExampleAutomatedCourse = () => {
     ],
     features: [
       "8 comprehensive modules",
-      "25+ video lessons", 
+      "25+ lessons", 
       "Hands-on projects",
       "Community access",
       "Certificate of completion",

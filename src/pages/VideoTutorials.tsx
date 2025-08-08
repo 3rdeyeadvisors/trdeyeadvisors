@@ -143,9 +143,9 @@ const VideoTutorials = () => {
   return (
     <>
       <SEO 
-        title="DeFi Video Tutorials | The 3rd Eye Advisors"
-        description="Step-by-step video tutorials covering DeFi, cryptocurrency, and blockchain education. Learn wallet setup, DEX trading, yield farming, and more."
-        keywords="DeFi tutorials, crypto video guides, blockchain education videos, DeFi how-to"
+        title="DeFi Tutorials | The 3rd Eye Advisors"
+        description="Step-by-step tutorials covering DeFi, cryptocurrency, and blockchain education. Learn wallet setup, DEX trading, yield farming, and more."
+        keywords="DeFi tutorials, crypto guides, blockchain education, DeFi how-to"
         url="https://the3rdeyeadvisors.com/tutorials"
         type="website"
       />
@@ -257,7 +257,7 @@ const VideoTutorials = () => {
             <CardHeader className="text-center">
               <CardTitle className="text-xl">More Tutorials Coming Soon</CardTitle>
               <CardDescription>
-                We're continuously adding new video content. Next up: Advanced DeFi strategies and protocol deep-dives.
+                We're continuously adding new tutorials. Next up: Advanced DeFi strategies and protocol deep-dives.
               </CardDescription>
             </CardHeader>
           </Card>
