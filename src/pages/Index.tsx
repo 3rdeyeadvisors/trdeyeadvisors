@@ -34,7 +34,7 @@ const Index = () => {
   return (
     <>
       <SEO 
-        title="3rdeyeadvisors"
+        title="The 3rd Eye Advisors - Master DeFi & Build True Wealth"
         description="Transform your financial future with expert DeFi education. Learn decentralized finance, crypto strategies, and blockchain protocols from industry professionals."
         keywords="DeFi education, crypto training, blockchain courses, decentralized finance, cryptocurrency strategies"
         url="https://www.the3rdeyeadvisors.com/"

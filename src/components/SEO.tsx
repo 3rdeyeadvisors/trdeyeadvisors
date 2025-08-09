@@ -1,5 +1,4 @@
 import { Helmet } from "react-helmet-async";
-import { siteConfig } from "@/config/site";
 
 // Legacy SEO component - Consider using SEOAutomation for new pages
 // This component is maintained for backwards compatibility
@@ -32,14 +31,14 @@ const SEO = ({
   title = "3rdeyeadvisors | DeFi Education & Financial Consciousness",
   description = "Transform your financial future with comprehensive DeFi education. Learn decentralized finance, yield farming, blockchain investing, and cryptocurrency strategies from beginner to advanced levels.",
   keywords = "DeFi education, decentralized finance, yield farming, blockchain investing, cryptocurrency courses, financial consciousness, DeFi beginner guide, crypto education, smart contracts, liquidity pools",
-  image = `${siteConfig.siteUrl}${siteConfig.defaultSocialImage}`,
-  url = siteConfig.siteUrl,
+  image = `${window.location.origin}/social-share-3rdeyeadvisors-new.jpg`,
+  url = "https://www.the3rdeyeadvisors.com",
   type = "website",
   article,
   schema,
   faq
 }: SEOProps) => {
-  const siteTitle = siteConfig.name;
+  const siteTitle = "3rdeyeadvisors";
   const fullTitle = title.includes(siteTitle) ? title : `${title} | ${siteTitle}`;
 
   // Generate schema markup based on type
@@ -55,11 +54,11 @@ const SEO = ({
       image: image,
       publisher: {
         "@type": "Organization",
-        name: siteConfig.name,
-        url: siteConfig.siteUrl,
+        name: "3rdeyeadvisors",
+        url: "https://www.the3rdeyeadvisors.com",
         logo: {
           "@type": "ImageObject",
-          url: `${siteConfig.siteUrl}${siteConfig.logo.squarePng}`
+          url: "https://www.the3rdeyeadvisors.com/favicon-3ea-new.png"
         }
       },
       ...schema.data
