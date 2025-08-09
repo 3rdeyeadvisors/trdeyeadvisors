@@ -224,7 +224,7 @@ Whether you're a gamer looking to monetize your skills, an investor seeking new 
       <div className="min-h-screen py-20">
         <div className="container mx-auto px-4 max-w-4xl">
           {/* Article Header */}
-          <Card className="p-8 mb-8 bg-gradient-consciousness border-primary/20">
+          <Card className="p-8 mb-8 bg-gradient-consciousness border-primary/20 mobile-typography-center">
             <div className="flex flex-wrap gap-3 mb-6">
               <Badge variant="default" className="bg-primary text-primary-foreground">
                 {blogPost.category}
@@ -263,7 +263,7 @@ Whether you're a gamer looking to monetize your skills, an investor seeking new 
 
           {/* Article Content */}
           <Card className="p-8">
-            <article className="prose prose-lg max-w-none dark:prose-invert">
+            <article className="prose prose-lg max-w-none dark:prose-invert mobile-typography-center">
               <div 
                 dangerouslySetInnerHTML={{ 
                   __html: blogPost.content

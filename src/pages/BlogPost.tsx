@@ -134,7 +134,7 @@ const BlogPost = () => {
         </Button>
 
         {/* Article Header */}
-        <Card className="p-8 mb-8">
+        <Card className="p-8 mb-8 mobile-typography-center">
           {/* Category and Tags */}
           <div className="flex flex-wrap items-center gap-2 mb-6">
             <Badge className={getCategoryColor(post.category)}>
@@ -198,7 +198,7 @@ const BlogPost = () => {
 
         {/* Article Content */}
         <Card className="p-8 mb-8">
-          <div className="prose prose-lg max-w-none">
+          <div className="prose prose-lg max-w-none mobile-typography-center">
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
               components={{

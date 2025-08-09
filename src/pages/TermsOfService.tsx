@@ -14,7 +14,7 @@ const TermsOfService = () => {
         </div>
 
         <Card className="p-8 bg-card/60 border-border">
-          <div className="prose prose-lg max-w-none space-y-8 text-foreground font-consciousness">
+          <div className="prose prose-lg max-w-none space-y-8 text-foreground font-consciousness mobile-typography-center">
             
             <section>
               <h2 className="text-2xl font-bold mb-4">1. Acceptance of Terms</h2>

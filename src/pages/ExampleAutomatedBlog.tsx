@@ -54,7 +54,7 @@ Every strategy must be evaluated through our proprietary risk assessment matrix.
       <div className="min-h-screen py-20">
         <div className="container mx-auto px-4 max-w-4xl">
           {/* Article Header */}
-          <Card className="p-8 mb-8 bg-gradient-consciousness border-primary/20">
+          <Card className="p-8 mb-8 bg-gradient-consciousness border-primary/20 mobile-typography-center">
             <div className="flex flex-wrap gap-3 mb-6">
               <Badge variant="default" className="bg-primary text-primary-foreground">
                 {blogPost.category}
@@ -93,7 +93,7 @@ Every strategy must be evaluated through our proprietary risk assessment matrix.
 
           {/* Article Content */}
           <Card className="p-8">
-            <div className="prose prose-lg max-w-none">
+            <div className="prose prose-lg max-w-none mobile-typography-center">
               <div dangerouslySetInnerHTML={{ __html: blogPost.content.replace(/\n/g, '<br/>').replace(/#{1,6}\s/g, '') }} />
             </div>
           </Card>

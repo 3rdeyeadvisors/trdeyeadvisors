@@ -173,4 +173,71 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+
+  /* Mobile Typography Centering */
+  .mobile-typography-center {
+    text-align: center;
+  }
+  .mobile-typography-center h1,
+  .mobile-typography-center h2,
+  .mobile-typography-center h3,
+  .mobile-typography-center h4,
+  .mobile-typography-center h5,
+  .mobile-typography-center h6,
+  .mobile-typography-center p,
+  .mobile-typography-center li,
+  .mobile-typography-center blockquote,
+  .mobile-typography-center figcaption {
+    text-align: center;
+  }
+
+  /* Consistent, readable spacing */
+  .mobile-typography-center p {
+    margin: 0.5rem 0 0.75rem;
+    line-height: 1.75;
+  }
+  .mobile-typography-center h1,
+  .mobile-typography-center h2,
+  .mobile-typography-center h3 {
+    margin: 1rem 0 0.5rem;
+    line-height: 1.25;
+  }
+  .mobile-typography-center h4,
+  .mobile-typography-center h5,
+  .mobile-typography-center h6 {
+    margin: 0.75rem 0 0.5rem;
+  }
+
+  /* Lists: keep bullets visually coherent when centered */
+  .mobile-typography-center ul,
+  .mobile-typography-center ol {
+    list-style-position: inside;
+    padding-left: 0;
+    margin: 0.5rem 0 0.75rem;
+  }
+
+  /* Media and tables: avoid overflow and keep visuals centered */
+  .mobile-typography-center img,
+  .mobile-typography-center figure {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
+  }
+  .mobile-typography-center table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .mobile-typography-center th,
+  .mobile-typography-center td {
+    white-space: normal;
+  }
+
+  /* Code/pre remain left-aligned for readability */
+  .mobile-typography-center pre,
+  .mobile-typography-center code {
+    text-align: left;
+  }
 }
