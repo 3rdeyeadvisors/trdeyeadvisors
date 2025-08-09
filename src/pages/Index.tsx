@@ -34,7 +34,7 @@ const Index = () => {
   return (
     <>
       <SEO 
-        title="The 3rd Eye Advisors - Master DeFi & Build True Wealth"
+        title="Master DeFi & Build True Wealth"
         description="Transform your financial future with expert DeFi education. Learn decentralized finance, crypto strategies, and blockchain protocols from industry professionals."
         keywords="DeFi education, crypto training, blockchain courses, decentralized finance, cryptocurrency strategies"
         url="https://www.the3rdeyeadvisors.com/"
@@ -43,7 +43,7 @@ const Index = () => {
           type: "Organization",
           data: {
             "@type": "Organization",
-            "name": "The 3rd Eye Advisors",
+            "name": "3rdeyeadvisors",
             "description": "Expert DeFi education and cryptocurrency training platform",
             "url": "https://www.the3rdeyeadvisors.com",
             "sameAs": [
