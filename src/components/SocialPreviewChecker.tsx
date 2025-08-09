@@ -7,7 +7,7 @@ import { ExternalLink, RefreshCw } from "lucide-react";
 export const SocialPreviewChecker = () => {
   const [isChecking, setIsChecking] = useState(false);
   const currentUrl = window.location.origin;
-  const socialImage = `${currentUrl}/social-share-3rdeyeadvisors-new.jpg`;
+  const socialImage = `${currentUrl}/social-share-3rdeyeadvisors.jpg`;
 
   const checkPreview = () => {
     setIsChecking(true);

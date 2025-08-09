@@ -53,7 +53,7 @@ const SEOAutomation = ({
         <meta property="og:description" content={seoConfig.description} />
         <meta property="og:type" content={seoConfig.type || 'website'} />
         <meta property="og:url" content={seoConfig.url} />
-        <meta property="og:image" content={`${window.location.origin}/social-share-3rdeyeadvisors-new.jpg`} />
+        <meta property="og:image" content={`${window.location.origin}/social-share-3rdeyeadvisors.jpg`} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:site_name" content="3rdeyeadvisors" />
@@ -63,7 +63,7 @@ const SEOAutomation = ({
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={seoConfig.title} />
         <meta name="twitter:description" content={seoConfig.description} />
-        <meta name="twitter:image" content={`${window.location.origin}/social-share-3rdeyeadvisors-new.jpg`} />
+        <meta name="twitter:image" content={`${window.location.origin}/social-share-3rdeyeadvisors.jpg`} />
         <meta name="twitter:creator" content="@3rdeyeadvisors" />
         <meta name="twitter:site" content="@3rdeyeadvisors" />
 
@@ -78,14 +78,14 @@ const SEOAutomation = ({
                 name: seoConfig.title,
                 description: seoConfig.description,
                 url: seoConfig.url,
-                image: `${window.location.origin}/social-share-3rdeyeadvisors-new.jpg`,
+                image: `${window.location.origin}/social-share-3rdeyeadvisors.jpg`,
                 publisher: {
                   "@type": "Organization",
                   name: "3rdeyeadvisors",
                   url: "https://www.the3rdeyeadvisors.com",
                   logo: {
                     "@type": "ImageObject",
-                    url: "https://www.the3rdeyeadvisors.com/favicon-3ea-new.png"
+                    url: "https://www.the3rdeyeadvisors.com/favicon-3rdeyeadvisors.png"
                   }
                 },
                 ...schema.data
