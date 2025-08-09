@@ -6,6 +6,7 @@
 
 import { Helmet } from "react-helmet-async";
 import { useSEOAutomation, type SEOAutomationOptions } from "@/hooks/useSEOAutomation";
+import { siteConfig } from "@/config/site";
 
 interface SEOAutomationProps extends SEOAutomationOptions {
   children?: React.ReactNode;
@@ -41,7 +42,7 @@ const SEOAutomation = ({
         <title>{seoConfig.title}</title>
         <meta name="description" content={seoConfig.description} />
         <meta name="keywords" content={seoConfig.keywords} />
-        <link rel="canonical" href={`https://www.the3rdeyeadvisors.com${window.location.pathname}`} />
+        <link rel="canonical" href={`${siteConfig.siteUrl}${window.location.pathname}`} />
         
         {/* AI Crawler Optimization */}
         <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
@@ -53,17 +54,17 @@ const SEOAutomation = ({
         <meta property="og:description" content={seoConfig.description} />
         <meta property="og:type" content={seoConfig.type || 'website'} />
         <meta property="og:url" content={seoConfig.url} />
-        <meta property="og:image" content={`${window.location.origin}/social-share-3rdeyeadvisors-new.jpg`} />
+        <meta property="og:image" content={`${siteConfig.siteUrl}${siteConfig.defaultSocialImage}`} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:site_name" content="3rdeyeadvisors" />
+        <meta property="og:site_name" content={siteConfig.name} />
         <meta property="og:locale" content="en_US" />
 
         {/* Twitter Card Tags */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={seoConfig.title} />
         <meta name="twitter:description" content={seoConfig.description} />
-        <meta name="twitter:image" content={`${window.location.origin}/social-share-3rdeyeadvisors-new.jpg`} />
+        <meta name="twitter:image" content={`${siteConfig.siteUrl}${siteConfig.defaultSocialImage}`} />
         <meta name="twitter:creator" content="@3rdeyeadvisors" />
         <meta name="twitter:site" content="@3rdeyeadvisors" />
 
@@ -78,14 +79,14 @@ const SEOAutomation = ({
                 name: seoConfig.title,
                 description: seoConfig.description,
                 url: seoConfig.url,
-                image: `${window.location.origin}/social-share-3rdeyeadvisors-new.jpg`,
+                image: `${siteConfig.siteUrl}${siteConfig.defaultSocialImage}`,
                 publisher: {
                   "@type": "Organization",
-                  name: "3rdeyeadvisors",
-                  url: "https://www.the3rdeyeadvisors.com",
+                  name: siteConfig.name,
+                  url: siteConfig.siteUrl,
                   logo: {
                     "@type": "ImageObject",
-                    url: "https://www.the3rdeyeadvisors.com/favicon-3ea-new.png"
+                    url: `${siteConfig.siteUrl}${siteConfig.logo.squarePng}`
                   }
                 },
                 ...schema.data

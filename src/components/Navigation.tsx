@@ -6,6 +6,7 @@ import { useAuth } from "@/components/auth/AuthProvider";
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/contexts/CartContext";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { siteConfig } from "@/config/site";
 
 const Navigation = () => {
   const { itemCount } = useCart();
@@ -75,12 +76,12 @@ const Navigation = () => {
           {/* Logo/Brand */}
           <Link to="/" className="flex items-center space-x-3 md:justify-start justify-center flex-1 md:flex-none">
             <img
-              src="/favicon-3ea.svg"
-              alt="3rdeyeadvisors logo"
+              src={siteConfig.logo.svg}
+              alt={`${siteConfig.name} logo`}
               className="h-6 w-6 md:h-7 md:w-7"
             />
             <span className="text-sm md:text-base font-consciousness font-semibold text-foreground truncate">
-              master defi & build true wealth | 3rdeyeadvisors
+              {siteConfig.brandLabel}
             </span>
           </Link>
           
