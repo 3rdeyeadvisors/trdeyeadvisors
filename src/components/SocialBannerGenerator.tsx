@@ -17,7 +17,7 @@ export const SocialBannerGenerator = () => {
   const generateBanner = async () => {
     setIsGenerating(true);
     try {
-      const prompt = `Professional DeFi education platform banner featuring "3rdeyeadvisors" and "3EA" branding, cosmic purple gradient background (#5B21B6 to #1A1B2E), floating interconnected blockchain nodes, subtle geometric patterns, modern minimalist design, "DeFi Education & Financial Consciousness" tagline, clean typography, trustworthy and innovative aesthetic, high-tech glow effects, professional web banner format 1792x1024, ultra high resolution`;
+      const prompt = `Professional DeFi education platform banner featuring "3rdeyeadvisors" and "3EA" branding, cosmic purple gradient background (#5B21B6 to #1A1B2E), floating interconnected blockchain nodes, subtle geometric patterns, modern minimalist design, "Decentralized DeFi Education & Wealth Tools" tagline, clean typography, trustworthy and innovative aesthetic, high-tech glow effects, professional web banner format 1792x1024, ultra high resolution`;
 
       const { data, error } = await supabase.functions.invoke('generate-social-banner', {
         body: {
