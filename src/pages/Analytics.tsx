@@ -75,7 +75,7 @@ const Analytics = () => {
         <DefiCharts />
 
         {/* Market Insights Card */}
-        <Card className="mt-12 p-6 bg-card/60 border-border">
+        <Card className="mt-12 p-6 bg-card/60 border-border mobile-typography-center">
           <div className="flex items-start gap-4">
             <AlertTriangle className="w-6 h-6 text-amber-500 flex-shrink-0 mt-1" />
             <div>
