@@ -17,54 +17,111 @@ export const SocialBannerGenerator = () => {
   const generateBanner = async () => {
     setIsGenerating(true);
     try {
-      const prompt = `Premium 3EA social share banner matching the site palette. Dark cosmic bg (hsl 222 84% 4.9%) into deep navy; accents ONLY in electric blue (hsl 217 91% 60%). Center a crisp logo-style wordmark with EXACT text: 3rdeyeadvisors (lowercase) as ONE UNBROKEN WORD — no letter spacing, no spaces, no hyphens, no line breaks, tight kerning. No other text. Subtle blue tech grid/nodes. Minimalist, safe margins. 1792x1024, ultra high resolution.`;
+      // Build colors from design tokens with safe fallbacks
+      const root = getComputedStyle(document.documentElement);
+      const bgStart = (root.getPropertyValue('--background')?.trim() || '222 84% 4.9%');
+      const bgEnd = (root.getPropertyValue('--muted')?.trim() || '230 40% 8%');
+      const accent = (root.getPropertyValue('--accent')?.trim() || '217 91% 60%');
+      const foreground = (root.getPropertyValue('--foreground')?.trim() || '0 0% 100%');
 
-      const { data, error } = await supabase.functions.invoke('generate-social-banner', {
-        body: {
-          prompt,
-          size: "1792x1024",
-          quality: "high"
-        }
-      });
+      // Canvas setup
+      const width = 1792;
+      const height = 1024;
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) throw new Error('Canvas not supported');
 
-      if (error) throw error;
+      // Background gradient (cosmic dark -> deep navy)
+      const grad = ctx.createLinearGradient(0, 0, width, height);
+      grad.addColorStop(0, `hsl(${bgStart})`);
+      grad.addColorStop(1, `hsl(${bgEnd})`);
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, width, height);
 
-      if (data?.data?.[0]?.b64_json) {
-        const imageUrl = `data:image/webp;base64,${data.data[0].b64_json}`;
-        setGeneratedImage(imageUrl);
-        
-        // Auto-save to storage for social sharing
-        const base64Data = data.data[0].b64_json;
-        const byteCharacters = atob(base64Data);
-        const byteNumbers = new Array(byteCharacters.length);
-        for (let i = 0; i < byteCharacters.length; i++) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
-        const byteArray = new Uint8Array(byteNumbers);
-        const file = new File([byteArray], '3ea-social-banner.webp', { type: 'image/webp' });
-        
-        // Upload to storage
-        const { error: uploadError } = await supabase.storage
-          .from('social-banners')
-          .upload('3ea-social-banner.webp', file, { upsert: true });
-          
-        if (uploadError) {
-          console.error('Upload error:', uploadError);
-        }
-        
-        toast({
-          title: "Social banner generated!",
-          description: "Your banner is ready and social sharing is now active!",
-        });
-      } else {
-        throw new Error('No image data received');
+      // Subtle tech grid
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = `hsla(${accent} / 0.08)`;
+      const gridSize = 64;
+      for (let x = 0; x <= width; x += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, height);
+        ctx.stroke();
       }
+      for (let y = 0; y <= height; y += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(width, y);
+        ctx.stroke();
+      }
+
+      // Soft radial glow behind text
+      const glow = ctx.createRadialGradient(width/2, height/2, 0, width/2, height/2, Math.max(width, height)/2);
+      glow.addColorStop(0, `hsla(${accent} / 0.10)`);
+      glow.addColorStop(1, 'transparent');
+      ctx.fillStyle = glow;
+      ctx.fillRect(0, 0, width, height);
+
+      // Wordmark: EXACT single unbroken word
+      const word = '3rdeyeadvisors';
+      // Choose a clean geometric sans; fall back to system
+      let fontSize = 220; // will shrink to fit
+      const padding = 120; // safe margins
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.shadowColor = `hsla(${accent} / 0.25)`;
+      ctx.shadowBlur = 24;
+
+      const setFont = (size: number) => {
+        ctx.font = `700 ${size}px ui-sans-serif, Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial`;
+      };
+
+      setFont(fontSize);
+      // Reduce font size until it fits within width - 2*padding
+      while (ctx.measureText(word).width > (width - padding * 2) && fontSize > 40) {
+        fontSize -= 4;
+        setFont(fontSize);
+      }
+
+      // Fill text with electric blue accent
+      ctx.fillStyle = `hsl(${accent})`;
+      ctx.fillText(word, width / 2, height / 2);
+
+      // Optional thin outline for contrast in dark mode
+      ctx.shadowBlur = 0;
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = `hsla(${foreground} / 0.25)`;
+      ctx.strokeText(word, width / 2, height / 2);
+
+      // Export as WebP
+      const dataUrl = canvas.toDataURL('image/webp', 0.85);
+      setGeneratedImage(dataUrl);
+
+      // Convert to File and upload to Supabase Storage (keeps previous path)
+      const res = await fetch(dataUrl);
+      const blob = await res.blob();
+      const file = new File([blob], '3ea-social-banner.webp', { type: 'image/webp' });
+
+      const { error: uploadError } = await supabase.storage
+        .from('social-banners')
+        .upload('3ea-social-banner.webp', file, { upsert: true });
+
+      if (uploadError) {
+        console.error('Upload error:', uploadError);
+      }
+
+      toast({
+        title: 'Social banner updated',
+        description: 'Centered text "3rdeyeadvisors" (single unbroken word) with site theme applied.',
+      });
     } catch (error: any) {
       console.error('Error generating banner:', error);
       toast({
-        title: "Generation failed",
-        description: error.message || "Failed to generate social banner.",
-        variant: "destructive",
+        title: 'Generation failed',
+        description: error.message || 'Failed to generate social banner.',
+        variant: 'destructive',
       });
     } finally {
       setIsGenerating(false);
