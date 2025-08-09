@@ -17,7 +17,7 @@ export const SocialBannerGenerator = () => {
   const generateBanner = async () => {
     setIsGenerating(true);
     try {
-      const prompt = `Premium 3EA social share banner: deep cosmic purple gradient (#5B21B6→#1A1B2E), subtle tech grid and nodes, modern minimalist style. Center a crisp, high-contrast wordmark with ONLY the exact text: 3rdeyeadvisors (all lowercase), clean geometric sans (Orbitron/Inter style), sharp edges. No other words, no typos, no paragraphs. Balanced margins for safe cropping. 1792x1024, ultra high resolution.`;
+      const prompt = `Premium 3EA social share banner that matches the site palette. Dark cosmic background matching token --background (hsl 222 84% 4.9%) with a subtle gradient into deep navy; accents and glows ONLY in electric cosmic blue matching token --primary (hsl 217 91% 60%). Absolutely no purple or magenta tones. Subtle tech grid and a few faint interconnected nodes in blue. Center a crisp, high-contrast wordmark with ONLY the exact text: 3rdeyeadvisors (all lowercase), geometric sans similar to Orbitron/Inter, sharp edges. No other words or small text. Minimalist composition with generous safe margins for social cropping. 1792x1024, ultra high resolution.`;
 
       const { data, error } = await supabase.functions.invoke('generate-social-banner', {
         body: {
