@@ -245,7 +245,7 @@ export const EnhancedContentPlayer = ({
   return (
     <div className="max-w-6xl mx-auto p-6">
       {/* Enhanced Module Header */}
-      <div className="mb-6">
+      <div className="mb-6 mobile-typography-center">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <Badge className={getTypeColor(module.type)}>
@@ -343,7 +343,7 @@ export const EnhancedContentPlayer = ({
               {module.type === 'text' && module.content.text && (
                 <div 
                   id="module-content"
-                  className="prose prose-lg max-w-none font-consciousness overflow-y-auto max-h-[600px]"
+                  className="prose prose-lg max-w-none font-consciousness overflow-y-auto max-h-[600px] mobile-typography-center"
                 >
                   <ReactMarkdown>{module.content.text}</ReactMarkdown>
                 </div>

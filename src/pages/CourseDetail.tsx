@@ -249,7 +249,7 @@ const CourseDetail = () => {
         </Button>
 
         {/* Course Header */}
-        <div className="mb-8">
+        <div className="mb-8 mobile-typography-center">
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
             <div className="flex items-center gap-4">
               <BookOpen className="w-8 h-8 text-primary" />
