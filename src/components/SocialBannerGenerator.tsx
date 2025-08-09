@@ -17,7 +17,7 @@ export const SocialBannerGenerator = () => {
   const generateBanner = async () => {
     setIsGenerating(true);
     try {
-      const prompt = `Professional, clean 3EA social banner with logo-centered branding, cosmic purple gradient (#5B21B6→#1A1B2E), floating blockchain nodes, subtle geometric patterns, modern minimalist style. No text overlay anywhere. Leave balanced negative space for platform captions. Crisp edges, high contrast, web banner 1792x1024, ultra high resolution.`;
+      const prompt = `Premium 3EA social share banner: deep cosmic purple gradient (#5B21B6→#1A1B2E), subtle tech grid and nodes, modern minimalist style. Center a crisp, high-contrast wordmark with ONLY the exact text: 3rdeyeadvisors (all lowercase), clean geometric sans (Orbitron/Inter style), sharp edges. No other words, no typos, no paragraphs. Balanced margins for safe cropping. 1792x1024, ultra high resolution.`;
 
       const { data, error } = await supabase.functions.invoke('generate-social-banner', {
         body: {
@@ -110,7 +110,7 @@ export const SocialBannerGenerator = () => {
           <div className="relative bg-card rounded-lg overflow-hidden border">
             <img 
               src={generatedImage} 
-              alt="3EA Social Share Banner"
+              alt="3EA Social Share Banner — 3rdeyeadvisors wordmark"
               className="w-full h-auto"
             />
           </div>

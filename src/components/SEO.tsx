@@ -31,7 +31,7 @@ const SEO = ({
   title = "Decentralized DeFi Education & Wealth Tools | 3rdeyeadvisors",
   description = "Transform your financial future with comprehensive DeFi education. Learn decentralized finance, yield farming, blockchain investing, and cryptocurrency strategies from beginner to advanced levels.",
   keywords = "DeFi education, decentralized finance, yield farming, blockchain investing, cryptocurrency courses, financial consciousness, DeFi beginner guide, crypto education, smart contracts, liquidity pools",
-  image = `${window.location.origin}/social-share-3rdeyeadvisors-new.jpg`,
+  image = `${window.location.origin}/social-share-3rdeyeadvisors-text.jpg`,
   url = "https://www.the3rdeyeadvisors.com",
   type = "website",
   article,
