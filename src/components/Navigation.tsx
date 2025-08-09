@@ -74,7 +74,6 @@ const Navigation = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo/Brand */}
           <Link to="/" className="flex items-center space-x-3 md:justify-start justify-center flex-1 md:flex-none" aria-label="3rdeyeadvisors home">
-            <img src="/favicon-3ea.svg" alt="3rdeyeadvisors logo" className="h-8 w-8" loading="eager" />
             <div className="text-lg md:text-xl font-consciousness font-bold text-primary">
               3rdeyeadvisors
             </div>
