@@ -41,39 +41,14 @@ export const SocialBannerGenerator = () => {
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, width, height);
 
-      // Subtle tech grid matching primary
-      ctx.lineWidth = 1;
-      ctx.strokeStyle = `hsla(${primary} / 0.08)`;
-      const gridSize = 64;
-      for (let x = 0; x <= width; x += gridSize) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, height);
-        ctx.stroke();
-      }
-      for (let y = 0; y <= height; y += gridSize) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(width, y);
-        ctx.stroke();
-      }
+      // Clean background — no grid per user preference
 
-      // Sparse starfield noise for depth
-      const stars = Math.floor((width * height) / 18000);
-      ctx.fillStyle = `hsla(${primary} / 0.10)`;
-      for (let i = 0; i < stars; i++) {
-        const sx = Math.random() * width;
-        const sy = Math.random() * height;
-        const r = Math.random() * 1.1 + 0.2;
-        ctx.beginPath();
-        ctx.arc(sx, sy, r, 0, Math.PI * 2);
-        ctx.fill();
-      }
+      // No starfield — keeping it minimal and clean
 
       // Vignette to focus center
       const vignette = ctx.createRadialGradient(width/2, height/2, Math.min(width, height)/3, width/2, height/2, Math.max(width, height)/1.1);
       vignette.addColorStop(0, 'transparent');
-      vignette.addColorStop(1, `hsla(${bgStart} / 0.6)`);
+      vignette.addColorStop(1, `hsla(${bgStart} / 0.4)`);
       ctx.fillStyle = vignette;
       ctx.fillRect(0, 0, width, height);
 
