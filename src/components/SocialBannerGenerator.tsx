@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Download, ImageIcon } from "lucide-react";
+import cosmicBg from "@/assets/cosmic-hero-bg.jpg";
 
 export const SocialBannerGenerator = () => {
   const [isGenerating, setIsGenerating] = useState(false);
@@ -34,10 +35,32 @@ export const SocialBannerGenerator = () => {
       const ctx = canvas.getContext('2d');
       if (!ctx) throw new Error('Canvas not supported');
 
-      // Background gradient (site cosmic background -> card)
+      // Background: homepage cosmic image (cover) + on-brand color grade
+      const bgImage = await new Promise<HTMLImageElement>((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = cosmicBg;
+      });
+      const imgRatio = bgImage.width / bgImage.height;
+      const canvasRatio = width / height;
+      let drawW = width, drawH = height, dx = 0, dy = 0;
+      if (imgRatio > canvasRatio) {
+        drawH = height;
+        drawW = height * imgRatio;
+        dx = (width - drawW) / 2;
+      } else {
+        drawW = width;
+        drawH = width / imgRatio;
+        dy = (height - drawH) / 2;
+      }
+      ctx.drawImage(bgImage, dx, dy, drawW, drawH);
+
+      // Overlay brand gradient to match site tone
       const grad = ctx.createLinearGradient(0, 0, width, height);
-      grad.addColorStop(0, `hsl(${bgStart})`);
-      grad.addColorStop(1, `hsl(${bgEnd})`);
+      grad.addColorStop(0, `hsla(${bgStart} / 0.85)`);
+      grad.addColorStop(1, `hsla(${bgEnd} / 0.85)`);
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, width, height);
 
