@@ -17,12 +17,13 @@ export const SocialBannerGenerator = () => {
   const generateBanner = async () => {
     setIsGenerating(true);
     try {
-      // Build colors from design tokens with safe fallbacks
+      // Build colors from design tokens with safe fallbacks (exact site theme)
       const root = getComputedStyle(document.documentElement);
       const bgStart = (root.getPropertyValue('--background')?.trim() || '222 84% 4.9%');
-      const bgEnd = (root.getPropertyValue('--muted')?.trim() || '230 40% 8%');
-      const accent = (root.getPropertyValue('--accent')?.trim() || '217 91% 60%');
-      const foreground = (root.getPropertyValue('--foreground')?.trim() || '0 0% 100%');
+      const bgEnd = (root.getPropertyValue('--card')?.trim() || '217 32% 8%');
+      const primary = (root.getPropertyValue('--primary')?.trim() || '217 91% 60%');
+      const primaryGlow = (root.getPropertyValue('--primary-glow')?.trim() || '217 91% 70%');
+      const foreground = (root.getPropertyValue('--foreground')?.trim() || '0 0% 98%');
 
       // Canvas setup
       const width = 1792;
@@ -33,16 +34,16 @@ export const SocialBannerGenerator = () => {
       const ctx = canvas.getContext('2d');
       if (!ctx) throw new Error('Canvas not supported');
 
-      // Background gradient (cosmic dark -> deep navy)
+      // Background gradient (site cosmic background -> card)
       const grad = ctx.createLinearGradient(0, 0, width, height);
       grad.addColorStop(0, `hsl(${bgStart})`);
       grad.addColorStop(1, `hsl(${bgEnd})`);
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, width, height);
 
-      // Subtle tech grid
+      // Subtle tech grid matching primary
       ctx.lineWidth = 1;
-      ctx.strokeStyle = `hsla(${accent} / 0.08)`;
+      ctx.strokeStyle = `hsla(${primary} / 0.08)`;
       const gridSize = 64;
       for (let x = 0; x <= width; x += gridSize) {
         ctx.beginPath();
@@ -57,9 +58,28 @@ export const SocialBannerGenerator = () => {
         ctx.stroke();
       }
 
-      // Soft radial glow behind text
+      // Sparse starfield noise for depth
+      const stars = Math.floor((width * height) / 18000);
+      ctx.fillStyle = `hsla(${primary} / 0.10)`;
+      for (let i = 0; i < stars; i++) {
+        const sx = Math.random() * width;
+        const sy = Math.random() * height;
+        const r = Math.random() * 1.1 + 0.2;
+        ctx.beginPath();
+        ctx.arc(sx, sy, r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Vignette to focus center
+      const vignette = ctx.createRadialGradient(width/2, height/2, Math.min(width, height)/3, width/2, height/2, Math.max(width, height)/1.1);
+      vignette.addColorStop(0, 'transparent');
+      vignette.addColorStop(1, `hsla(${bgStart} / 0.6)`);
+      ctx.fillStyle = vignette;
+      ctx.fillRect(0, 0, width, height);
+
+      // Soft radial glow behind text (primary glow)
       const glow = ctx.createRadialGradient(width/2, height/2, 0, width/2, height/2, Math.max(width, height)/2);
-      glow.addColorStop(0, `hsla(${accent} / 0.10)`);
+      glow.addColorStop(0, `hsla(${primaryGlow} / 0.14)`);
       glow.addColorStop(1, 'transparent');
       ctx.fillStyle = glow;
       ctx.fillRect(0, 0, width, height);
@@ -71,7 +91,7 @@ export const SocialBannerGenerator = () => {
       const padding = 120; // safe margins
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.shadowColor = `hsla(${accent} / 0.25)`;
+      ctx.shadowColor = `hsla(${primaryGlow} / 0.25)`;
       ctx.shadowBlur = 24;
 
       const setFont = (size: number) => {
@@ -85,8 +105,8 @@ export const SocialBannerGenerator = () => {
         setFont(fontSize);
       }
 
-      // Fill text with electric blue accent
-      ctx.fillStyle = `hsl(${accent})`;
+      // Fill text with brand primary blue
+      ctx.fillStyle = `hsl(${primary})`;
       ctx.fillText(word, width / 2, height / 2);
 
       // Optional thin outline for contrast in dark mode
