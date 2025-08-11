@@ -138,7 +138,7 @@ const Blog = () => {
                     <Badge className="bg-primary text-primary-foreground border-primary shadow-cosmic">
                       Featured
                     </Badge>
-                    <Badge className="bg-accent/30 text-accent-foreground border-accent/40 hover:bg-accent/40">
+                    <Badge className={`${getCategoryColor(post.category)}`}>
                       {post.category}
                     </Badge>
                     <div className="flex flex-wrap gap-2">
