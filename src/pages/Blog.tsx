@@ -17,10 +17,18 @@ const Blog = () => {
   console.log("Blog component - posts:", posts);
   console.log("Blog component - posts length:", posts.length);
   
-  const featuredPosts = posts.filter(post => post.featured);
-  console.log("Featured posts:", featuredPosts);
+  const now = new Date();
+  const cutoff = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+  const featuredPosts = posts.filter(post => {
+    const d = new Date(post.date);
+    return !isNaN(d.getTime()) && d >= cutoff;
+  });
+  console.log("Featured posts (last 7 days):", featuredPosts);
   
-  const regularPosts = posts.filter(post => !post.featured);
+  const regularPosts = posts.filter(post => {
+    const d = new Date(post.date);
+    return isNaN(d.getTime()) || d < cutoff;
+  });
   console.log("Regular posts:", regularPosts);
 
   const categories = ["All", "DeFi Education", "Innovation", "Security", "Education", "Analysis", "Web3 Gaming", "DeFAI"];
@@ -115,70 +123,6 @@ const Blog = () => {
           </div>
         )}
         
-        {/* Featured Posts Section */}
-        {featuredPosts.length > 0 && (
-          <div className="mb-12">
-            <h2 className="text-2xl font-consciousness font-bold text-foreground mb-6">Featured Articles</h2>
-            <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
-              {featuredPosts.map((post) => (
-                <Card 
-                  key={post.id}
-                  className="w-full p-6 bg-gradient-consciousness border-primary/20 shadow-consciousness hover:shadow-awareness transition-all duration-cosmic flex-shrink-0"
-                >
-                  <div className="flex flex-wrap items-center gap-4 mb-4">
-                    <Badge className="bg-primary text-primary-foreground border-primary shadow-cosmic">
-                      Featured
-                    </Badge>
-                    <Badge className="bg-accent/30 text-accent-foreground border-accent/40 hover:bg-accent/40">
-                      {post.category}
-                    </Badge>
-                    {/* Enhanced tag visibility */}
-                    <div className="flex flex-wrap gap-2">
-                      {post.tags.slice(0, 3).map((tag, tagIndex) => (
-                        <Badge 
-                          key={`${post.id}-tag-${tagIndex}`} 
-                          variant="outline" 
-                          className="text-xs bg-background/50 text-foreground border-primary/30 hover:bg-primary/10"
-                        >
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  <h2 className="text-xl md:text-2xl font-consciousness font-bold text-foreground mb-3 line-clamp-2">
-                    {post.title}
-                  </h2>
-                  
-                  <p className="text-base text-muted-foreground font-consciousness mb-4 leading-relaxed line-clamp-3 break-words overflow-hidden w-full">
-                    {post.excerpt}
-                  </p>
-                  
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                    <div className="flex items-center gap-6 text-sm text-muted-foreground">
-                      <div className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4" />
-                        <span className="font-system">{post.date}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Clock className="w-4 h-4" />
-                        <span className="font-system">{post.readTime}</span>
-                      </div>
-                    </div>
-                    <Button 
-                      variant="cosmic" 
-                      className="font-consciousness"
-                      onClick={() => navigate(`/blog/${post.slug}`)}
-                    >
-                      Read Article
-                      <ArrowRight className="w-4 h-4 ml-2" />
-                    </Button>
-                  </div>
-                </Card>
-              ))}
-            </div>
-          </div>
-        )}
 
         {/* Regular Posts Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -223,6 +167,66 @@ const Blog = () => {
             </Card>
           ))}
         </div>
+        {/* Featured Posts Section */}
+        {featuredPosts.length > 0 && (
+          <div className="mt-12">
+            <h2 className="text-2xl font-consciousness font-bold text-foreground mb-6">Featured This Week</h2>
+            <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
+              {featuredPosts.map((post) => (
+                <Card 
+                  key={post.id}
+                  className="w-full p-6 bg-gradient-consciousness border-primary/20 shadow-consciousness hover:shadow-awareness transition-all duration-cosmic flex-shrink-0"
+                >
+                  <div className="flex flex-wrap items-center gap-4 mb-4">
+                    <Badge className="bg-primary text-primary-foreground border-primary shadow-cosmic">
+                      Featured
+                    </Badge>
+                    <Badge className="bg-accent/30 text-accent-foreground border-accent/40 hover:bg-accent/40">
+                      {post.category}
+                    </Badge>
+                    <div className="flex flex-wrap gap-2">
+                      {post.tags.slice(0, 3).map((tag, tagIndex) => (
+                        <Badge 
+                          key={`${post.id}-tag-${tagIndex}`} 
+                          variant="outline" 
+                          className="text-xs bg-background/50 text-foreground border-primary/30 hover:bg-primary/10"
+                        >
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                  <h2 className="text-xl md:text-2xl font-consciousness font-bold text-foreground mb-3 line-clamp-2">
+                    {post.title}
+                  </h2>
+                  <p className="text-base text-muted-foreground font-consciousness mb-4 leading-relaxed line-clamp-3 break-words overflow-hidden w-full">
+                    {post.excerpt}
+                  </p>
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div className="flex items-center gap-6 text-sm text-muted-foreground">
+                      <div className="flex items-center gap-2">
+                        <Calendar className="w-4 h-4" />
+                        <span className="font-system">{post.date}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-4 h-4" />
+                        <span className="font-system">{post.readTime}</span>
+                      </div>
+                    </div>
+                    <Button 
+                      variant="cosmic" 
+                      className="font-consciousness"
+                      onClick={() => navigate(`/blog/${post.slug}`)}
+                    >
+                      Read Article
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
     </>

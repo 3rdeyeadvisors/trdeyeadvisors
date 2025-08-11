@@ -1646,8 +1646,15 @@ export const getBlogPost = (idOrSlug: number | string): BlogPost | undefined => 
 };
 
 // Helper function to get featured blog posts
-export const getFeaturedBlogPosts = (): BlogPost[] => {
-  return blogPosts.filter(post => post.featured);
+export const getFeaturedBlogPosts = (days: number = 7): BlogPost[] => {
+  const now = new Date();
+  const cutoff = new Date(now.getTime() - days * 24 * 60 * 60 * 1000);
+  return blogPosts
+    .filter(post => {
+      const d = new Date(post.date);
+      return !isNaN(d.getTime()) && d >= cutoff;
+    })
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 };
 
 // Helper function to get blog posts by category
