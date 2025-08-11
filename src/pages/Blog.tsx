@@ -124,49 +124,6 @@ const Blog = () => {
         )}
         
 
-        {/* Regular Posts Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {regularPosts.map((post, index) => (
-            <Card 
-              key={post.id}
-              className="p-6 bg-card/60 border-border hover:border-primary/40 transition-all duration-cosmic hover:shadow-consciousness group flex flex-col h-full"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <Badge className={`mb-4 ${getCategoryColor(post.category)}`}>
-                {post.category}
-              </Badge>
-              
-              <h3 className="text-xl font-consciousness font-semibold text-foreground mb-3 group-hover:text-primary transition-colors">
-                {post.title}
-              </h3>
-              
-              <p className="text-muted-foreground font-consciousness mb-4 leading-relaxed flex-grow">
-                {post.excerpt}
-              </p>
-              
-              <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
-                <div className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4" />
-                  <span className="font-system">{post.date}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4" />
-                  <span className="font-system">{post.readTime}</span>
-                </div>
-              </div>
-              
-              <Button 
-                variant="cosmic" 
-                size="sm" 
-                className="w-full font-consciousness"
-                onClick={() => navigate(`/blog/${post.slug}`)}
-              >
-                Read More
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </Card>
-          ))}
-        </div>
         {/* Featured Posts Section */}
         {featuredPosts.length > 0 && (
           <div className="mt-12">
@@ -227,6 +184,50 @@ const Blog = () => {
             </div>
           </div>
         )}
+
+        {/* Regular Posts Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {regularPosts.map((post, index) => (
+            <Card 
+              key={post.id}
+              className="p-6 bg-card/60 border-border hover:border-primary/40 transition-all duration-cosmic hover:shadow-consciousness group flex flex-col h-full"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
+              <Badge className={`mb-4 ${getCategoryColor(post.category)}`}>
+                {post.category}
+              </Badge>
+              
+              <h3 className="text-xl font-consciousness font-semibold text-foreground mb-3 group-hover:text-primary transition-colors">
+                {post.title}
+              </h3>
+              
+              <p className="text-muted-foreground font-consciousness mb-4 leading-relaxed flex-grow">
+                {post.excerpt}
+              </p>
+              
+              <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
+                <div className="flex items-center gap-2">
+                  <Calendar className="w-4 h-4" />
+                  <span className="font-system">{post.date}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="w-4 h-4" />
+                  <span className="font-system">{post.readTime}</span>
+                </div>
+              </div>
+              
+              <Button 
+                variant="cosmic" 
+                size="sm" 
+                className="w-full font-consciousness"
+                onClick={() => navigate(`/blog/${post.slug}`)}
+              >
+                Read More
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </Card>
+          ))}
+        </div>
       </div>
     </div>
     </>
