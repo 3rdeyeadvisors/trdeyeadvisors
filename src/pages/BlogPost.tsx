@@ -43,10 +43,15 @@ const BlogPost = () => {
         return "bg-primary/20 text-primary border-primary/30";
       case "Innovation": 
         return "bg-accent/20 text-accent border-accent/30";
+      case "DeFi Tools":
       case "Tools": 
         return "bg-secondary/40 text-secondary-foreground border-secondary/30";
       case "Analysis": 
         return "bg-muted/30 text-foreground border-border";
+      case "Web3 Gaming":
+        return "bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-700 border-purple-500/30";
+      case "DeFAI":
+        return "bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-700 border-blue-500/30";
       default: 
         return "bg-primary/20 text-primary border-primary/30";
     }

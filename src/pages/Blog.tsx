@@ -31,7 +31,7 @@ const Blog = () => {
   });
   console.log("Regular posts:", regularPosts);
 
-  const categories = ["All", "DeFi Education", "Innovation", "Security", "Education", "Analysis", "Web3 Gaming", "DeFAI"];
+  const categories = ["All", "DeFi Education", "Innovation", "Security", "Education", "Analysis", "Web3 Gaming", "DeFAI", "DeFi Tools"];
 
   const getCategoryColor = (category: string) => {
     switch (category) {
@@ -42,12 +42,15 @@ const Blog = () => {
         return "bg-primary/20 text-primary border-primary/30 hover:bg-primary/30";
       case "Innovation": 
         return "bg-accent/20 text-accent border-accent/30 hover:bg-accent/30";
+      case "DeFi Tools":
       case "Tools": 
         return "bg-secondary/40 text-secondary-foreground border-secondary/30 hover:bg-secondary/50";
       case "Analysis": 
         return "bg-muted/30 text-foreground border-border hover:bg-muted/40";
       case "Web3 Gaming":
-        return "bg-accent/20 text-accent border-accent/30 hover:bg-accent/30";
+        return "bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-700 border-purple-500/30 hover:from-purple-500/30 hover:to-pink-500/30";
+      case "DeFAI":
+        return "bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-700 border-blue-500/30 hover:from-blue-500/30 hover:to-cyan-500/30";
       default: 
         return "bg-primary/20 text-primary border-primary/30 hover:bg-primary/30";
     }
