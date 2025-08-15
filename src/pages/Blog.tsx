@@ -130,7 +130,7 @@ const Blog = () => {
         {/* Featured Posts Section */}
         {featuredPosts.length > 0 && (
           <div className="mt-12">
-            <h2 className="text-2xl font-consciousness font-bold text-foreground mb-6">Featured This Week</h2>
+            <h2 className="text-2xl section-heading mb-6">Featured This Week</h2>
             <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
               {featuredPosts.map((post) => (
                 <Card 

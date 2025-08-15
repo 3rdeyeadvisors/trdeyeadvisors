@@ -125,6 +125,18 @@
   }
 }
 
+/* Section heading utilities */
+@layer utilities {
+  .section-heading {
+    @apply text-center font-consciousness font-bold text-foreground;
+    text-shadow: 0 0 20px hsl(var(--primary) / 0.4);
+    transition: var(--transition-cosmic);
+  }
+  .section-heading:hover {
+    text-shadow: 0 0 30px hsl(var(--accent) / 0.6);
+  }
+}
+
 /* Mobile-specific improvements */
 @media (max-width: 768px) {
   /* Better mobile scrolling */
@@ -174,7 +186,7 @@
     overflow: hidden;
   }
 
-  /* Mobile Typography Centering */
+  /* Typography Centering - All Screen Sizes */
   .mobile-typography-center {
     text-align: center;
   }
