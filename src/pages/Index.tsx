@@ -77,23 +77,23 @@ const Index = () => {
             through decentralized finance education.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-            <Link to="/courses">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center w-full">
+            <Link to="/courses" className="w-full sm:w-auto flex justify-center">
               <Button 
                 variant="cosmic" 
                 size="lg" 
-                className="text-lg px-8 py-6 font-consciousness animate-consciousness-glow"
+                className="text-lg px-8 py-6 font-consciousness animate-consciousness-glow w-full sm:w-auto"
               >
                 <BookOpen className="w-6 h-6 mr-3" />
                 Start Learning
               </Button>
             </Link>
             
-            <Link to="/resources">
+            <Link to="/resources" className="w-full sm:w-auto flex justify-center">
               <Button 
                 variant="awareness" 
                 size="lg" 
-                className="text-lg px-8 py-6 font-consciousness animate-consciousness-glow"
+                className="text-lg px-8 py-6 font-consciousness animate-consciousness-glow w-full sm:w-auto"
                 style={{ animationDelay: "0.3s" }}
               >
                 <Wrench className="w-6 h-6 mr-3" />
