@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -11,6 +11,10 @@ const Blog = () => {
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [currentFeaturedIndex, setCurrentFeaturedIndex] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [translateX, setTranslateX] = useState(0);
+  const sliderRef = useRef<HTMLDivElement>(null);
   const posts = getBlogPostsByCategory(selectedCategory);
   
   // Debug logging
@@ -33,6 +37,33 @@ const Blog = () => {
   console.log("Regular posts:", regularPosts);
 
   const categories = ["All", "DeFi Education", "Innovation", "Security", "Education", "Analysis", "Web3 Gaming", "DeFAI", "DeFi Tools"];
+
+  // Touch/Mouse sliding handlers
+  const handleStart = (clientX: number) => {
+    setIsDragging(true);
+    setStartX(clientX);
+  };
+
+  const handleMove = (clientX: number) => {
+    if (!isDragging) return;
+    const diff = clientX - startX;
+    setTranslateX(diff);
+  };
+
+  const handleEnd = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+    
+    const threshold = 100;
+    if (Math.abs(translateX) > threshold) {
+      if (translateX > 0 && currentFeaturedIndex > 0) {
+        setCurrentFeaturedIndex(currentFeaturedIndex - 1);
+      } else if (translateX < 0 && currentFeaturedIndex < featuredPosts.length - 1) {
+        setCurrentFeaturedIndex(currentFeaturedIndex + 1);
+      }
+    }
+    setTranslateX(0);
+  };
 
   const getCategoryColor = (category: string) => {
     switch (category) {
@@ -132,17 +163,32 @@ const Blog = () => {
         {featuredPosts.length > 0 && (
           <div className="mb-12">
             <h2 className="text-2xl section-heading mb-6">Featured This Week</h2>
-            <div className="max-w-sm mx-auto md:max-w-none md:mx-0">
-              <Card className="p-6 bg-gradient-consciousness border-primary/20 shadow-consciousness hover:shadow-awareness transition-all duration-cosmic h-full">
-                <div className="overflow-hidden h-full">
+            <div className="max-w-xs mx-auto md:max-w-sm lg:max-w-md">
+              <Card 
+                className="p-6 bg-gradient-consciousness border-primary/20 shadow-consciousness hover:shadow-awareness transition-all duration-cosmic cursor-grab active:cursor-grabbing"
+                ref={sliderRef}
+                onMouseDown={(e) => handleStart(e.clientX)}
+                onMouseMove={(e) => handleMove(e.clientX)}
+                onMouseUp={handleEnd}
+                onMouseLeave={handleEnd}
+                onTouchStart={(e) => handleStart(e.touches[0].clientX)}
+                onTouchMove={(e) => handleMove(e.touches[0].clientX)}
+                onTouchEnd={handleEnd}
+              >
+                <div className="overflow-hidden">
                   <div 
-                    className="flex transition-transform duration-500 ease-in-out h-full" 
-                    style={{ transform: `translateX(-${currentFeaturedIndex * 100}%)` }}
+                    className="flex transition-transform duration-300 ease-out select-none" 
+                    style={{ 
+                      transform: `translateX(${-currentFeaturedIndex * 100 + (translateX / (sliderRef.current?.offsetWidth || 1)) * 100}%)` 
+                    }}
                   >
                     {featuredPosts.map((post) => (
-                      <div key={post.id} className="w-full flex-shrink-0 flex flex-col h-full">
-                        {/* Tags Section */}
-                        <div className="mb-4">
+                      <div key={post.id} className="w-full flex-shrink-0 flex flex-col">
+                        {/* Featured Badge */}
+                        <div className="flex items-center gap-2 mb-4">
+                          <Badge className="bg-primary text-primary-foreground border-primary shadow-cosmic">
+                            Featured
+                          </Badge>
                           <Badge className={`${getCategoryColor(post.category)}`}>
                             {post.category}
                           </Badge>
@@ -183,7 +229,7 @@ const Blog = () => {
                   </div>
                 </div>
                 
-                {/* Navigation dots if multiple featured posts */}
+                {/* Navigation dots */}
                 {featuredPosts.length > 1 && (
                   <div className="flex justify-center gap-2 mt-4 pt-4 border-t border-primary/20">
                     {featuredPosts.map((_, index) => (
