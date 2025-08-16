@@ -131,11 +131,11 @@ const Blog = () => {
         {featuredPosts.length > 0 && (
           <div className="mb-12">
             <h2 className="text-2xl section-heading mb-6">Featured This Week</h2>
-            <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
+            <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
               {featuredPosts.map((post) => (
                 <Card 
                   key={post.id}
-                  className="min-w-[300px] sm:min-w-[350px] p-6 bg-gradient-consciousness border-primary/20 shadow-consciousness hover:shadow-awareness transition-all duration-cosmic flex-shrink-0 flex flex-col"
+                  className="min-w-[280px] max-w-[320px] w-[280px] p-4 bg-gradient-consciousness border-primary/20 shadow-consciousness hover:shadow-awareness transition-all duration-cosmic flex-shrink-0 flex flex-col"
                 >
                   {/* Tags Section - Clean Layout */}
                   <div className="flex flex-col gap-3 mb-4">
