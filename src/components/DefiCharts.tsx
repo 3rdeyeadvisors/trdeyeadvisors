@@ -301,16 +301,20 @@ export const DefiCharts = () => {
           </div>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={280}>
             <AreaChart data={data.historicalData}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis 
                 dataKey="date" 
                 tickFormatter={(value) => new Date(value).toLocaleDateString()}
+                fontSize={12}
               />
-              <YAxis tickFormatter={(value) => 
-                selectedMetric === 'yield' ? `${value}%` : formatCurrency(value)
-              } />
+              <YAxis 
+                tickFormatter={(value) => 
+                  selectedMetric === 'yield' ? `${value}%` : formatCurrency(value)
+                }
+                fontSize={12}
+              />
               <Tooltip 
                 labelFormatter={(value) => new Date(value).toLocaleDateString()}
                 formatter={(value) => [
@@ -344,73 +348,80 @@ export const DefiCharts = () => {
             {data?.protocols && data.protocols.length > 0 ? (
               <div className="space-y-4">
                 {data.protocols.slice(0, 6).map((protocol, index) => (
-                  <div key={protocol.id} className="flex items-center justify-between p-4 rounded-lg border hover:bg-muted/50 transition-colors">
-                    <div className="flex items-center gap-4 flex-1">
-                      <div className="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-sm font-bold text-primary">
-                        {index + 1}
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-1">
-                          <span className="font-semibold text-lg">{protocol.name}</span>
-                          <Badge 
-                            variant="outline" 
-                            className="text-xs"
-                            style={{ 
-                              borderColor: getProtocolColor(protocol.category),
-                              color: getProtocolColor(protocol.category),
-                              backgroundColor: `${getProtocolColor(protocol.category)}10`
-                            }}
-                          >
-                            {protocol.category}
-                          </Badge>
+                  <div key={protocol.id} className="p-3 md:p-4 rounded-lg border hover:bg-muted/50 transition-colors">
+                    {/* Mobile: Stack vertically, Desktop: Side by side */}
+                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                      {/* Protocol info */}
+                      <div className="flex items-center gap-3 flex-1">
+                        <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-xs md:text-sm font-bold text-primary flex-shrink-0">
+                          {index + 1}
                         </div>
-                        <div className="text-sm text-muted-foreground">
-                          TVL: <span className="font-mono font-semibold">{formatCurrency(protocol.tvl)}</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      {/* Mini trend indicator */}
-                      <div className="flex flex-col items-end gap-1">
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs text-muted-foreground">24h:</span>
-                          <div className={`flex items-center text-sm font-mono ${protocol.change_1d >= 0 ? 'text-awareness' : 'text-destructive'}`}>
-                            {protocol.change_1d >= 0 ? (
-                              <TrendingUp className="w-3 h-3 mr-1" />
-                            ) : (
-                              <TrendingDown className="w-3 h-3 mr-1" />
-                            )}
-                            {protocol.change_1d >= 0 ? '+' : ''}{protocol.change_1d.toFixed(2)}%
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs text-muted-foreground">7d:</span>
-                          <div className={`flex items-center text-sm font-mono ${protocol.change_7d >= 0 ? 'text-awareness' : 'text-destructive'}`}>
-                            {protocol.change_7d >= 0 ? (
-                              <TrendingUp className="w-3 h-3 mr-1" />
-                            ) : (
-                              <TrendingDown className="w-3 h-3 mr-1" />
-                            )}
-                            {protocol.change_7d >= 0 ? '+' : ''}{protocol.change_7d.toFixed(2)}%
-                          </div>
-                        </div>
-                      </div>
-                      {/* Visual trend line */}
-                      <div className="w-16 h-8 flex items-end justify-between">
-                        {Array.from({ length: 7 }, (_, i) => {
-                          const height = Math.max(4, Math.random() * 24 + (protocol.change_7d >= 0 ? 8 : -4));
-                          return (
-                            <div
-                              key={i}
-                              className="w-1.5 rounded-sm"
+                        <div className="flex-1 min-w-0">
+                          <div className="flex flex-wrap items-center gap-2 mb-1">
+                            <span className="font-semibold text-base md:text-lg truncate">{protocol.name}</span>
+                            <Badge 
+                              variant="outline" 
+                              className="text-xs flex-shrink-0"
                               style={{ 
-                                height: `${Math.abs(height)}px`,
-                                backgroundColor: getProtocolColor(protocol.category),
-                                opacity: 0.3 + (i * 0.1)
+                                borderColor: getProtocolColor(protocol.category),
+                                color: getProtocolColor(protocol.category),
+                                backgroundColor: `${getProtocolColor(protocol.category)}10`
                               }}
-                            />
-                          );
-                        })}
+                            >
+                              {protocol.category}
+                            </Badge>
+                          </div>
+                          <div className="text-sm text-muted-foreground">
+                            TVL: <span className="font-mono font-semibold">{formatCurrency(protocol.tvl)}</span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Performance data - responsive layout */}
+                      <div className="flex items-center justify-between md:justify-end gap-4 pl-10 md:pl-0">
+                        {/* Change indicators */}
+                        <div className="flex gap-4">
+                          <div className="text-center">
+                            <div className="text-xs text-muted-foreground mb-1">24h</div>
+                            <div className={`flex items-center text-sm font-mono ${protocol.change_1d >= 0 ? 'text-awareness' : 'text-destructive'}`}>
+                              {protocol.change_1d >= 0 ? (
+                                <TrendingUp className="w-3 h-3 mr-1" />
+                              ) : (
+                                <TrendingDown className="w-3 h-3 mr-1" />
+                              )}
+                              {protocol.change_1d >= 0 ? '+' : ''}{protocol.change_1d.toFixed(1)}%
+                            </div>
+                          </div>
+                          <div className="text-center">
+                            <div className="text-xs text-muted-foreground mb-1">7d</div>
+                            <div className={`flex items-center text-sm font-mono ${protocol.change_7d >= 0 ? 'text-awareness' : 'text-destructive'}`}>
+                              {protocol.change_7d >= 0 ? (
+                                <TrendingUp className="w-3 h-3 mr-1" />
+                              ) : (
+                                <TrendingDown className="w-3 h-3 mr-1" />
+                              )}
+                              {protocol.change_7d >= 0 ? '+' : ''}{protocol.change_7d.toFixed(1)}%
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* Visual trend line - hidden on very small screens */}
+                        <div className="hidden sm:flex w-12 md:w-16 h-6 md:h-8 items-end justify-between">
+                          {Array.from({ length: 7 }, (_, i) => {
+                            const height = Math.max(3, Math.random() * 20 + (protocol.change_7d >= 0 ? 6 : -4));
+                            return (
+                              <div
+                                key={i}
+                                className="w-1 md:w-1.5 rounded-sm"
+                                style={{ 
+                                  height: `${Math.abs(height)}px`,
+                                  backgroundColor: getProtocolColor(protocol.category),
+                                  opacity: 0.4 + (i * 0.08)
+                                }}
+                              />
+                            );
+                          })}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -438,15 +449,15 @@ export const DefiCharts = () => {
             <CardDescription>Portfolio risk allocation across DeFi</CardDescription>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={250}>
               <PieChart>
                 <Pie
                   data={data.riskDistribution}
                   cx="50%"
                   cy="50%"
-                  outerRadius={80}
+                  outerRadius={window.innerWidth < 768 ? 60 : 80}
                   dataKey="value"
-                  label={({ name, value }) => `${name}: ${value}%`}
+                  label={window.innerWidth >= 768 ? ({ name, value }) => `${name}: ${value}%` : ({ value }) => `${value}%`}
                 >
                   {data.riskDistribution.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
@@ -466,7 +477,8 @@ export const DefiCharts = () => {
           <CardDescription>Detailed metrics for top DeFi protocols</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="overflow-x-auto">
+          {/* Desktop Table */}
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full border-collapse">
               <thead>
                 <tr className="border-b">
@@ -511,6 +523,50 @@ export const DefiCharts = () => {
                 ))}
               </tbody>
             </table>
+          </div>
+          
+          {/* Mobile Cards */}
+          <div className="md:hidden space-y-3">
+            {data.protocols.slice(0, 6).map((protocol, index) => (
+              <div key={protocol.id} className="p-3 rounded-lg border bg-card">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-xs font-bold text-primary">
+                      {index + 1}
+                    </div>
+                    <span className="font-medium">{protocol.name}</span>
+                  </div>
+                  <Badge 
+                    variant="outline" 
+                    className="text-xs"
+                    style={{ 
+                      borderColor: getProtocolColor(protocol.category),
+                      color: getProtocolColor(protocol.category)
+                    }}
+                  >
+                    {protocol.category}
+                  </Badge>
+                </div>
+                <div className="grid grid-cols-3 gap-2 text-sm">
+                  <div className="text-center">
+                    <div className="text-xs text-muted-foreground">TVL</div>
+                    <div className="font-mono font-medium">{formatCurrency(protocol.tvl)}</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-xs text-muted-foreground">24h</div>
+                    <div className={`font-mono font-medium ${protocol.change_1d >= 0 ? 'text-awareness' : 'text-destructive'}`}>
+                      {protocol.change_1d >= 0 ? '+' : ''}{protocol.change_1d.toFixed(1)}%
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-xs text-muted-foreground">7d</div>
+                    <div className={`font-mono font-medium ${protocol.change_7d >= 0 ? 'text-awareness' : 'text-destructive'}`}>
+                      {protocol.change_7d >= 0 ? '+' : ''}{protocol.change_7d.toFixed(1)}%
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </CardContent>
       </Card>
