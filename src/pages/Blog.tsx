@@ -234,8 +234,8 @@ const Blog = () => {
                         onClick={() => setCurrentFeaturedIndex(index)}
                         className={`w-2 h-2 rounded-full transition-colors ${
                           index === currentFeaturedIndex 
-                            ? 'bg-awareness' 
-                            : 'bg-foreground/20 hover:bg-awareness/60'
+                            ? 'bg-foreground' 
+                            : 'bg-foreground/20 hover:bg-foreground/60'
                         }`}
                       />
                     ))}
