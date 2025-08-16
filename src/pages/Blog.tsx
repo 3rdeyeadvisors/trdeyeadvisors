@@ -174,8 +174,8 @@ const Blog = () => {
                       </div>
                     </div>
                     <Button 
-                      variant="awareness" 
-                      className="font-consciousness"
+                      variant="default" 
+                      className="font-consciousness bg-primary hover:bg-primary-glow text-primary-foreground shadow-cosmic"
                       onClick={() => navigate(`/blog/${post.slug}`)}
                     >
                       Read Article
