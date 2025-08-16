@@ -94,16 +94,20 @@ export const DefiCharts = () => {
         throw new Error('Failed to fetch DeFi data');
       }
       
-      if (response) {
+      if (response && response.protocols && Array.isArray(response.protocols)) {
+        console.log('API returned protocols:', response.protocols.length);
         setData(response);
         setLastUpdated(new Date());
       } else {
-        throw new Error('No data received');
+        console.warn('Invalid response structure, using fallback data');
+        throw new Error('Invalid data structure received');
       }
     } catch (err) {
-      console.error('Error fetching DeFi data:', err);
-      setError('Failed to load real-time data. Using fallback data.');
-      setData(generateFallbackData());
+      console.error('Error fetching DeFi data, using fallback:', err);
+      setError('Using sample data due to network issues.');
+      const fallbackData = generateFallbackData();
+      console.log('Using fallback protocols:', fallbackData.protocols.length);
+      setData(fallbackData);
       setLastUpdated(new Date());
     } finally {
       setLoading(false);
@@ -299,15 +303,25 @@ export const DefiCharts = () => {
             <CardDescription>Ranked by Total Value Locked</CardDescription>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={data.protocols.slice(0, 6)} layout="horizontal">
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis type="number" tickFormatter={formatCurrency} />
-                <YAxis type="category" dataKey="name" width={80} />
-                <Tooltip formatter={(value) => [formatCurrency(Number(value)), 'TVL']} />
-                <Bar dataKey="tvl" fill="hsl(var(--primary))" />
-              </BarChart>
-            </ResponsiveContainer>
+            {data?.protocols && data.protocols.length > 0 ? (
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={data.protocols.slice(0, 6)} layout="horizontal">
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis type="number" tickFormatter={formatCurrency} />
+                  <YAxis type="category" dataKey="name" width={80} />
+                  <Tooltip formatter={(value) => [formatCurrency(Number(value)), 'TVL']} />
+                  <Bar dataKey="tvl" fill="hsl(var(--primary))" />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="flex items-center justify-center h-[300px] text-muted-foreground">
+                <div className="text-center">
+                  <BarChart3 className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                  <p>Protocol data loading...</p>
+                  {error && <p className="text-sm mt-2">{error}</p>}
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
 
