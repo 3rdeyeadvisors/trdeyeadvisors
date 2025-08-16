@@ -38,7 +38,7 @@ const Analytics = () => {
           },
           {
             question: "How accurate is your DeFi market data?",
-            answer: "Our DeFi analytics are updated every 10 seconds and sourced from multiple reliable data providers to ensure accuracy. We track over 200+ DeFi protocols and their performance metrics."
+            answer: "Our DeFi analytics are updated every 60 seconds and sourced from multiple reliable data providers to ensure accuracy. We track over 200+ DeFi protocols and their performance metrics."
           },
           {
             question: "Can I use this data for investment decisions?",
@@ -66,7 +66,7 @@ const Analytics = () => {
             </Badge>
             <Badge variant="outline">
               <TrendingUp className="w-4 h-4 mr-2" />
-              Auto-Updates Every 10s
+              Auto-Updates Every 60s
             </Badge>
           </div>
         </div>

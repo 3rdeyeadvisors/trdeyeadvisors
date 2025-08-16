@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Tooltip as UITooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell, Area, AreaChart } from 'recharts';
-import { TrendingUp, TrendingDown, DollarSign, Percent, BarChart3, PieChart as PieChartIcon, Activity, Loader2 } from 'lucide-react';
+import { TrendingUp, TrendingDown, DollarSign, Percent, BarChart3, PieChart as PieChartIcon, Activity, Loader2, Clock } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 
 interface DefiProtocol {
@@ -79,6 +80,7 @@ export const DefiCharts = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedMetric, setSelectedMetric] = useState<'totalTvl' | 'volume' | 'yield'>('totalTvl');
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
   const fetchDefiData = async () => {
     try {
@@ -94,6 +96,7 @@ export const DefiCharts = () => {
       
       if (response) {
         setData(response);
+        setLastUpdated(new Date());
       } else {
         throw new Error('No data received');
       }
@@ -101,6 +104,7 @@ export const DefiCharts = () => {
       console.error('Error fetching DeFi data:', err);
       setError('Failed to load real-time data. Using fallback data.');
       setData(generateFallbackData());
+      setLastUpdated(new Date());
     } finally {
       setLoading(false);
     }
@@ -149,13 +153,26 @@ export const DefiCharts = () => {
             <p className="text-amber-500 text-sm mt-1">{error}</p>
           )}
         </div>
-        <div className="flex gap-2">
-          <Badge variant="secondary" className={loading ? "animate-pulse" : ""}>
-            <Activity className="w-4 h-4 mr-2" />
-            {loading ? 'Updating...' : 'Live Data'}
-          </Badge>
-          <Badge variant="outline">Updates every 60s</Badge>
-        </div>
+        <TooltipProvider>
+          <div className="flex gap-2">
+            <Badge variant="secondary" className={loading ? "animate-pulse" : ""}>
+              <Activity className="w-4 h-4 mr-2" />
+              {loading ? 'Updating...' : 'Live Data'}
+            </Badge>
+            <UITooltip>
+              <TooltipTrigger asChild>
+                <Badge variant="outline" className="cursor-help">
+                  <Clock className="w-4 h-4 mr-2" />
+                  {lastUpdated ? `Last updated ${lastUpdated.toLocaleTimeString()}` : 'Updates every 60s'}
+                </Badge>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Data refreshes automatically every 60 seconds</p>
+                {lastUpdated && <p>Last refresh: {lastUpdated.toLocaleString()}</p>}
+              </TooltipContent>
+            </UITooltip>
+          </div>
+        </TooltipProvider>
       </div>
 
       {/* Key Metrics Cards */}
