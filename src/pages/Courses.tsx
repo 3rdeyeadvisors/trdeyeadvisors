@@ -200,20 +200,22 @@ const Courses = () => {
       <div className="container mx-auto px-4 mobile-typography-center">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <h1 className="text-4xl md:text-5xl font-consciousness font-bold text-foreground">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
+            <h1 className="text-4xl md:text-5xl font-consciousness font-bold text-foreground text-center">
               Courses & Tools
             </h1>
             {!user && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setShowAuthModal(true)}
-                className="font-consciousness"
-              >
-                <LogIn className="w-4 h-4 mr-2" />
-                Track Progress
-              </Button>
+              <div className="flex justify-center w-full sm:w-auto">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowAuthModal(true)}
+                  className="font-consciousness"
+                >
+                  <LogIn className="w-4 h-4 mr-2" />
+                  Track Progress
+                </Button>
+              </div>
             )}
           </div>
           <p className="text-xl text-muted-foreground font-consciousness max-w-2xl mx-auto">
@@ -276,16 +278,18 @@ const Courses = () => {
             <p className="text-muted-foreground font-consciousness mb-4">
               Try adjusting your search or filter criteria
             </p>
-            <Button 
-              variant="outline" 
-              onClick={() => {
-                setSearchQuery("");
-                setActiveFilter("all");
-              }}
-              className="font-consciousness"
-            >
-              Clear filters
-            </Button>
+            <div className="flex justify-center">
+              <Button 
+                variant="outline" 
+                onClick={() => {
+                  setSearchQuery("");
+                  setActiveFilter("all");
+                }}
+                className="font-consciousness"
+              >
+                Clear filters
+              </Button>
+            </div>
           </div>
         )}
         </div>
