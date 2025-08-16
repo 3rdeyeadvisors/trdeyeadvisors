@@ -129,68 +129,67 @@ const Blog = () => {
 
         {/* Featured Posts Section */}
         {featuredPosts.length > 0 && (
-          <div className="mt-12">
+          <div className="mb-12">
             <h2 className="text-2xl section-heading mb-6">Featured This Week</h2>
-            <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
+            <div className="grid grid-cols-1 gap-6">
               {featuredPosts.map((post) => (
                 <Card 
                   key={post.id}
-                  className="w-full p-6 bg-gradient-consciousness border-primary/20 shadow-consciousness hover:shadow-awareness transition-all duration-cosmic flex-shrink-0"
+                  className="p-6 bg-gradient-consciousness border-primary/20 shadow-consciousness hover:shadow-awareness transition-all duration-cosmic"
                 >
-                  <div className="mb-4">
-                    <div className="flex flex-col gap-2">
-                      <div className="flex items-center gap-2">
-                        <Badge className="bg-primary text-primary-foreground border-primary shadow-cosmic">
-                          Featured
-                        </Badge>
-                        <Badge className={`${getCategoryColor(post.category)}`}>
-                          {post.category}
-                        </Badge>
-                      </div>
-                      {post.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-1.5">
-                          {post.tags.slice(0, 3).map((tag, tagIndex) => (
-                            <Badge 
-                              key={`${post.id}-tag-${tagIndex}`} 
-                              variant="outline" 
-                              className="text-xs bg-card/80 text-foreground border-primary/50 hover:bg-primary/20 hover:text-primary"
-                            >
-                              {tag}
-                            </Badge>
-                          ))}
-                        </div>
-                      )}
+                  {/* Tags Section - Clean Layout */}
+                  <div className="flex flex-col gap-3 mb-4">
+                    <div className="flex items-center gap-2">
+                      <Badge className="bg-primary text-primary-foreground border-primary shadow-cosmic">
+                        Featured
+                      </Badge>
+                      <Badge className={`${getCategoryColor(post.category)}`}>
+                        {post.category}
+                      </Badge>
                     </div>
+                    {post.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5">
+                        {post.tags.slice(0, 3).map((tag, tagIndex) => (
+                          <Badge 
+                            key={`${post.id}-tag-${tagIndex}`} 
+                            variant="outline" 
+                            className="text-xs bg-card/80 text-foreground border-primary/50 hover:bg-primary/20 hover:text-primary"
+                          >
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
+                    )}
                   </div>
+
+                  {/* Content */}
                   <h2 className="text-xl md:text-2xl font-consciousness font-bold text-foreground mb-3 line-clamp-2">
                     {post.title}
                   </h2>
-                  <p className="text-base text-muted-foreground font-consciousness mb-4 leading-relaxed line-clamp-3 break-words overflow-hidden w-full">
+                  <p className="text-base text-muted-foreground font-consciousness mb-4 leading-relaxed line-clamp-3">
                     {post.excerpt}
                   </p>
-                  <div className="mt-auto">
-                    <div className="flex flex-col gap-4">
-                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 text-sm text-muted-foreground">
-                        <div className="flex items-center gap-2">
-                          <Calendar className="w-4 h-4" />
-                          <span className="font-system">{post.date}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Clock className="w-4 h-4" />
-                          <span className="font-system">{post.readTime}</span>
-                        </div>
+
+                  {/* Footer - Consistent Layout */}
+                  <div className="flex flex-col gap-4">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-6 text-sm text-muted-foreground">
+                      <div className="flex items-center gap-2">
+                        <Calendar className="w-4 h-4" />
+                        <span className="font-system">{post.date}</span>
                       </div>
-                      <div className="flex justify-center sm:justify-end">
-                        <Button 
-                          variant="default" 
-                          className="font-consciousness bg-accent hover:bg-accent-glow text-foreground shadow-cosmic w-full sm:w-auto"
-                          onClick={() => navigate(`/blog/${post.slug}`)}
-                        >
-                          Read Article
-                          <ArrowRight className="w-4 h-4 ml-2" />
-                        </Button>
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-4 h-4" />
+                        <span className="font-system">{post.readTime}</span>
                       </div>
                     </div>
+                    <Button 
+                      variant="cosmic" 
+                      className="w-full sm:w-auto font-consciousness"
+                      onClick={() => navigate(`/blog/${post.slug}`)}
+                    >
+                      Read Article
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
                   </div>
                 </Card>
               ))}
