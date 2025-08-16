@@ -209,15 +209,17 @@ const Blog = () => {
                           </div>
                         </div>
                         
-                        <Button 
-                          variant="cosmic" 
-                          size="sm"
-                          className="w-full font-consciousness text-sm h-8"
-                          onClick={() => navigate(`/blog/${post.slug}`)}
-                        >
-                          Read More
-                          <ArrowRight className="w-3 h-3 ml-1" />
-                        </Button>
+                        <div className="px-2">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            className="w-full font-consciousness text-sm h-8 bg-background/90 hover:bg-primary/10 border-primary/40"
+                            onClick={() => navigate(`/blog/${post.slug}`)}
+                          >
+                            Read More
+                            <ArrowRight className="w-3 h-3 ml-1" />
+                          </Button>
+                        </div>
                       </div>
                     ))}
                   </div>
