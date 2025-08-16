@@ -160,11 +160,8 @@ export const CourseCard = ({ course, index, onStartCourse, onAuthRequired }: Cou
         />
       )}
       
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <span className="text-sm text-muted-foreground font-system text-center sm:text-left">
-          {course.duration}
-        </span>
-        <div className="flex justify-center sm:justify-end">
+      <div className="flex flex-col gap-3">
+        <div className="flex justify-center">
           <Button 
             variant={course.category === "paid" ? "cosmic" : "awareness"}
             size="sm"
@@ -175,6 +172,11 @@ export const CourseCard = ({ course, index, onStartCourse, onAuthRequired }: Cou
             {getButtonIcon()}
             {getButtonText()}
           </Button>
+        </div>
+        <div className="text-center">
+          <span className="text-sm text-muted-foreground font-system">
+            {course.duration}
+          </span>
         </div>
       </div>
     </Card>
