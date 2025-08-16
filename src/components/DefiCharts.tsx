@@ -346,10 +346,7 @@ export const DefiCharts = () => {
                 {data.protocols.slice(0, 6).map((protocol, index) => (
                   <div key={protocol.id} className="flex items-center justify-between p-4 rounded-lg border hover:bg-muted/50 transition-colors">
                     <div className="flex items-center gap-4 flex-1">
-                      <div 
-                        className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white"
-                        style={{ backgroundColor: getProtocolColor(protocol.category) }}
-                      >
+                      <div className="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-sm font-bold text-primary">
                         {index + 1}
                       </div>
                       <div className="flex-1">
@@ -485,7 +482,7 @@ export const DefiCharts = () => {
                   <tr key={protocol.id} className="border-b hover:bg-muted/50">
                     <td className="py-2 px-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-sm font-bold">
+                        <div className="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-sm font-bold text-primary">
                           {index + 1}
                         </div>
                         <span className="font-medium">{protocol.name}</span>
