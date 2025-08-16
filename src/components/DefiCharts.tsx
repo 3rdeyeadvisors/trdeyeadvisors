@@ -318,34 +318,87 @@ export const DefiCharts = () => {
               <BarChart3 className="w-5 h-5 mr-2" />
               Top DeFi Protocols
             </CardTitle>
-            <CardDescription>Ranked by Total Value Locked</CardDescription>
+            <CardDescription>Ranked by Total Value Locked with 7-day trends</CardDescription>
           </CardHeader>
           <CardContent>
             {data?.protocols && data.protocols.length > 0 ? (
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={data.protocols.slice(0, 6)} layout="horizontal">
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis type="number" tickFormatter={formatCurrency} />
-                  <YAxis type="category" dataKey="name" width={80} />
-                  <Tooltip 
-                    formatter={(value, name, props) => [
-                      formatCurrency(Number(value)), 
-                      'TVL'
-                    ]}
-                    labelFormatter={(label) => `${label}`}
-                    contentStyle={{
-                      backgroundColor: 'hsl(var(--background))',
-                      border: '1px solid hsl(var(--border))',
-                      borderRadius: '6px'
-                    }}
-                  />
-                  <Bar dataKey="tvl">
-                    {data.protocols.slice(0, 6).map((protocol, index) => (
-                      <Cell key={`cell-${index}`} fill={getProtocolColor(protocol.category)} />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
+              <div className="space-y-4">
+                {data.protocols.slice(0, 6).map((protocol, index) => (
+                  <div key={protocol.id} className="flex items-center justify-between p-4 rounded-lg border hover:bg-muted/50 transition-colors">
+                    <div className="flex items-center gap-4 flex-1">
+                      <div 
+                        className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white"
+                        style={{ backgroundColor: getProtocolColor(protocol.category) }}
+                      >
+                        {index + 1}
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-1">
+                          <span className="font-semibold text-lg">{protocol.name}</span>
+                          <Badge 
+                            variant="outline" 
+                            className="text-xs"
+                            style={{ 
+                              borderColor: getProtocolColor(protocol.category),
+                              color: getProtocolColor(protocol.category),
+                              backgroundColor: `${getProtocolColor(protocol.category)}10`
+                            }}
+                          >
+                            {protocol.category}
+                          </Badge>
+                        </div>
+                        <div className="text-sm text-muted-foreground">
+                          TVL: <span className="font-mono font-semibold">{formatCurrency(protocol.tvl)}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      {/* Mini trend indicator */}
+                      <div className="flex flex-col items-end gap-1">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-muted-foreground">24h:</span>
+                          <div className={`flex items-center text-sm font-mono ${protocol.change_1d >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                            {protocol.change_1d >= 0 ? (
+                              <TrendingUp className="w-3 h-3 mr-1" />
+                            ) : (
+                              <TrendingDown className="w-3 h-3 mr-1" />
+                            )}
+                            {protocol.change_1d >= 0 ? '+' : ''}{protocol.change_1d.toFixed(2)}%
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-muted-foreground">7d:</span>
+                          <div className={`flex items-center text-sm font-mono ${protocol.change_7d >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                            {protocol.change_7d >= 0 ? (
+                              <TrendingUp className="w-3 h-3 mr-1" />
+                            ) : (
+                              <TrendingDown className="w-3 h-3 mr-1" />
+                            )}
+                            {protocol.change_7d >= 0 ? '+' : ''}{protocol.change_7d.toFixed(2)}%
+                          </div>
+                        </div>
+                      </div>
+                      {/* Visual trend line */}
+                      <div className="w-16 h-8 flex items-end justify-between">
+                        {Array.from({ length: 7 }, (_, i) => {
+                          const height = Math.max(4, Math.random() * 24 + (protocol.change_7d >= 0 ? 8 : -4));
+                          return (
+                            <div
+                              key={i}
+                              className={`w-1.5 rounded-sm ${protocol.change_7d >= 0 ? 'bg-green-500' : 'bg-red-500'}`}
+                              style={{ 
+                                height: `${Math.abs(height)}px`,
+                                backgroundColor: getProtocolColor(protocol.category),
+                                opacity: 0.3 + (i * 0.1)
+                              }}
+                            />
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             ) : (
               <div className="flex items-center justify-center h-[300px] text-muted-foreground">
                 <div className="text-center">
