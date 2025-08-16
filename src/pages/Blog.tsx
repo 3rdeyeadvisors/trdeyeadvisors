@@ -38,10 +38,11 @@ const Blog = () => {
 
   const categories = ["All", "DeFi Education", "Innovation", "Security", "Education", "Analysis", "Web3 Gaming", "DeFAI", "DeFi Tools"];
 
-  // Touch/Mouse sliding handlers
+  // Simplified sliding handlers
   const handleStart = (clientX: number) => {
     setIsDragging(true);
     setStartX(clientX);
+    setTranslateX(0);
   };
 
   const handleMove = (clientX: number) => {
@@ -54,13 +55,11 @@ const Blog = () => {
     if (!isDragging) return;
     setIsDragging(false);
     
-    const threshold = 100;
-    if (Math.abs(translateX) > threshold) {
-      if (translateX > 0 && currentFeaturedIndex > 0) {
-        setCurrentFeaturedIndex(currentFeaturedIndex - 1);
-      } else if (translateX < 0 && currentFeaturedIndex < featuredPosts.length - 1) {
-        setCurrentFeaturedIndex(currentFeaturedIndex + 1);
-      }
+    const threshold = 50;
+    if (translateX > threshold && currentFeaturedIndex > 0) {
+      setCurrentFeaturedIndex(currentFeaturedIndex - 1);
+    } else if (translateX < -threshold && currentFeaturedIndex < featuredPosts.length - 1) {
+      setCurrentFeaturedIndex(currentFeaturedIndex + 1);
     }
     setTranslateX(0);
   };
@@ -163,9 +162,9 @@ const Blog = () => {
         {featuredPosts.length > 0 && (
           <div className="mb-12">
             <h2 className="text-2xl section-heading mb-6">Featured This Week</h2>
-            <div className="max-w-sm mx-auto">
+            <div className="max-w-xs mx-auto">
               <Card 
-                className="p-6 bg-gradient-consciousness border-primary/20 shadow-consciousness hover:shadow-awareness transition-all duration-cosmic cursor-grab active:cursor-grabbing"
+                className="p-4 bg-gradient-consciousness border-primary/20 shadow-consciousness cursor-grab active:cursor-grabbing select-none"
                 ref={sliderRef}
                 onMouseDown={(e) => handleStart(e.clientX)}
                 onMouseMove={(e) => handleMove(e.clientX)}
@@ -177,40 +176,35 @@ const Blog = () => {
               >
                 <div className="overflow-hidden">
                   <div 
-                    className="flex transition-transform duration-300 ease-out select-none" 
+                    className={`flex ${isDragging ? '' : 'transition-transform duration-300 ease-out'}`}
                     style={{ 
-                      transform: `translateX(${-currentFeaturedIndex * 100 + (translateX / (sliderRef.current?.offsetWidth || 1)) * 100}%)` 
+                      transform: `translateX(${-currentFeaturedIndex * 100 + (isDragging ? (translateX / 320) * 100 : 0)}%)` 
                     }}
                   >
                     {featuredPosts.map((post) => (
-                      <div key={post.id} className="w-full flex-shrink-0 flex flex-col">
-                        {/* Featured Badge */}
-                        <div className="flex items-center gap-2 mb-4">
-                          <Badge className="bg-primary text-primary-foreground border-primary shadow-cosmic">
-                            Featured
-                          </Badge>
-                          <Badge className={`${getCategoryColor(post.category)}`}>
-                            {post.category}
-                          </Badge>
-                        </div>
+                      <div key={post.id} className="w-full flex-shrink-0 flex flex-col min-h-[200px]">
+                        {/* Badge */}
+                        <Badge className={`mb-3 w-fit ${getCategoryColor(post.category)}`}>
+                          {post.category}
+                        </Badge>
 
                         {/* Content */}
-                        <h3 className="text-xl font-consciousness font-semibold text-foreground mb-3 hover:text-primary transition-colors line-clamp-2">
+                        <h3 className="text-lg font-consciousness font-semibold text-foreground mb-2 line-clamp-2">
                           {post.title}
                         </h3>
                         
-                        <p className="text-muted-foreground font-consciousness mb-4 leading-relaxed flex-grow line-clamp-3">
+                        <p className="text-sm text-muted-foreground font-consciousness mb-3 leading-relaxed flex-grow line-clamp-2">
                           {post.excerpt}
                         </p>
                         
                         {/* Footer */}
-                        <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
-                          <div className="flex items-center gap-2">
-                            <Calendar className="w-4 h-4" />
+                        <div className="flex items-center justify-between text-xs text-muted-foreground mb-3">
+                          <div className="flex items-center gap-1">
+                            <Calendar className="w-3 h-3" />
                             <span className="font-system">{post.date}</span>
                           </div>
-                          <div className="flex items-center gap-2">
-                            <Clock className="w-4 h-4" />
+                          <div className="flex items-center gap-1">
+                            <Clock className="w-3 h-3" />
                             <span className="font-system">{post.readTime}</span>
                           </div>
                         </div>
@@ -218,11 +212,11 @@ const Blog = () => {
                         <Button 
                           variant="cosmic" 
                           size="sm"
-                          className="w-full font-consciousness"
+                          className="w-full font-consciousness text-sm h-8"
                           onClick={() => navigate(`/blog/${post.slug}`)}
                         >
                           Read More
-                          <ArrowRight className="w-4 h-4 ml-2" />
+                          <ArrowRight className="w-3 h-3 ml-1" />
                         </Button>
                       </div>
                     ))}
@@ -231,15 +225,15 @@ const Blog = () => {
                 
                 {/* Navigation dots */}
                 {featuredPosts.length > 1 && (
-                  <div className="flex justify-center gap-2 mt-4 pt-4 border-t border-primary/20">
+                  <div className="flex justify-center gap-1.5 mt-3 pt-3 border-t border-primary/20">
                     {featuredPosts.map((_, index) => (
                       <button
                         key={index}
                         onClick={() => setCurrentFeaturedIndex(index)}
-                        className={`w-3 h-3 rounded-full transition-colors ${
+                        className={`w-2 h-2 rounded-full transition-colors ${
                           index === currentFeaturedIndex 
                             ? 'bg-awareness' 
-                            : 'bg-foreground/30 hover:bg-awareness/60'
+                            : 'bg-foreground/20 hover:bg-awareness/60'
                         }`}
                       />
                     ))}
