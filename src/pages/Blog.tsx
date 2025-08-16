@@ -131,48 +131,49 @@ const Blog = () => {
         {featuredPosts.length > 0 && (
           <div className="mb-12">
             <h2 className="text-2xl section-heading mb-6">Featured This Week</h2>
-            <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
-              {featuredPosts.map((post) => (
-                <Card 
-                  key={post.id}
-                  className="min-w-[280px] max-w-[320px] w-[280px] p-4 bg-gradient-consciousness border-primary/20 shadow-consciousness hover:shadow-awareness transition-all duration-cosmic flex-shrink-0 flex flex-col"
-                >
-                  {/* Tags Section - Clean Layout */}
-                  <div className="flex flex-col gap-3 mb-4">
-                    <div className="flex items-center gap-2">
-                      <Badge className="bg-primary text-primary-foreground border-primary shadow-cosmic">
-                        Featured
-                      </Badge>
-                      <Badge className={`${getCategoryColor(post.category)}`}>
-                        {post.category}
-                      </Badge>
-                    </div>
-                    {post.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-1.5">
-                        {post.tags.slice(0, 3).map((tag, tagIndex) => (
-                          <Badge 
-                            key={`${post.id}-tag-${tagIndex}`} 
-                            variant="outline" 
-                            className="text-xs bg-card/80 text-foreground border-primary/50 hover:bg-primary/20 hover:text-primary"
-                          >
-                            {tag}
-                          </Badge>
-                        ))}
+            <div className="overflow-hidden">
+              <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
+                {featuredPosts.map((post) => (
+                  <Card 
+                    key={post.id}
+                    className="min-w-[280px] max-w-[320px] p-6 bg-gradient-consciousness border-primary/20 shadow-consciousness hover:shadow-awareness transition-all duration-cosmic flex-shrink-0 flex flex-col h-full"
+                  >
+                    {/* Tags Section */}
+                    <div className="flex flex-col gap-3 mb-4">
+                      <div className="flex items-center gap-2">
+                        <Badge className="bg-primary text-primary-foreground border-primary shadow-cosmic">
+                          Featured
+                        </Badge>
+                        <Badge className={`${getCategoryColor(post.category)}`}>
+                          {post.category}
+                        </Badge>
                       </div>
-                    )}
-                  </div>
+                      {post.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5">
+                          {post.tags.slice(0, 3).map((tag, tagIndex) => (
+                            <Badge 
+                              key={`${post.id}-tag-${tagIndex}`} 
+                              variant="outline" 
+                              className="text-xs bg-card/80 text-foreground border-primary/50 hover:bg-primary/20 hover:text-primary"
+                            >
+                              {tag}
+                            </Badge>
+                          ))}
+                        </div>
+                      )}
+                    </div>
 
-                  {/* Content */}
-                  <h2 className="text-xl md:text-2xl font-consciousness font-bold text-foreground mb-3 line-clamp-2">
-                    {post.title}
-                  </h2>
-                  <p className="text-base text-muted-foreground font-consciousness mb-4 leading-relaxed line-clamp-3 flex-grow">
-                    {post.excerpt}
-                  </p>
-
-                  {/* Footer - Consistent Layout */}
-                  <div className="flex flex-col gap-4 mt-auto">
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-6 text-sm text-muted-foreground">
+                    {/* Content */}
+                    <h3 className="text-xl font-consciousness font-semibold text-foreground mb-3 group-hover:text-primary transition-colors">
+                      {post.title}
+                    </h3>
+                    
+                    <p className="text-muted-foreground font-consciousness mb-4 leading-relaxed flex-grow">
+                      {post.excerpt}
+                    </p>
+                    
+                    {/* Footer */}
+                    <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
                       <div className="flex items-center gap-2">
                         <Calendar className="w-4 h-4" />
                         <span className="font-system">{post.date}</span>
@@ -182,17 +183,19 @@ const Blog = () => {
                         <span className="font-system">{post.readTime}</span>
                       </div>
                     </div>
+                    
                     <Button 
                       variant="cosmic" 
+                      size="sm" 
                       className="w-full font-consciousness"
                       onClick={() => navigate(`/blog/${post.slug}`)}
                     >
                       Read Article
                       <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
-                  </div>
-                </Card>
-              ))}
+                  </Card>
+                ))}
+              </div>
             </div>
           </div>
         )}
