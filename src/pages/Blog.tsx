@@ -182,7 +182,7 @@ const Blog = () => {
                     }}
                   >
                     {featuredPosts.map((post) => (
-                      <div key={post.id} className="w-full flex-shrink-0 flex flex-col min-h-[200px]">
+                      <div key={post.id} className="w-full flex-shrink-0 flex flex-col">
                         {/* Badge */}
                         <Badge className={`mb-3 w-fit ${getCategoryColor(post.category)}`}>
                           {post.category}
@@ -193,7 +193,7 @@ const Blog = () => {
                           {post.title}
                         </h3>
                         
-                        <p className="text-sm text-muted-foreground font-consciousness mb-3 leading-relaxed flex-grow line-clamp-2">
+                        <p className="text-sm text-muted-foreground font-consciousness mb-3 leading-relaxed line-clamp-2">
                           {post.excerpt}
                         </p>
                         
