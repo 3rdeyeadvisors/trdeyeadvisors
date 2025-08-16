@@ -141,6 +141,24 @@ export const DefiCharts = () => {
 
   if (!data) return null;
 
+  // Category colors for protocol visualization
+  const categoryColors: { [key: string]: string } = {
+    'Liquid Staking': '#3b82f6', // Blue
+    'Lending': '#10b981', // Green  
+    'DEX': '#f59e0b', // Orange
+    'CDP': '#8b5cf6', // Purple
+    'Yield': '#ef4444', // Red
+    'CEX': '#6b7280', // Gray
+    'Bridge': '#06b6d4', // Cyan
+    'Derivatives': '#ec4899', // Pink
+    'Insurance': '#84cc16', // Lime
+    'default': '#64748b' // Default gray
+  };
+
+  const getProtocolColor = (category: string) => {
+    return categoryColors[category] || categoryColors.default;
+  };
+
   const getCurrentTVL = () => data.historicalData[data.historicalData.length - 1]?.totalTvl || data.totalTvl;
   const getPreviousTVL = () => data.historicalData[data.historicalData.length - 2]?.totalTvl || data.totalTvl;
   const getTVLChange = () => ((getCurrentTVL() - getPreviousTVL()) / getPreviousTVL() * 100).toFixed(2);
@@ -309,8 +327,23 @@ export const DefiCharts = () => {
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis type="number" tickFormatter={formatCurrency} />
                   <YAxis type="category" dataKey="name" width={80} />
-                  <Tooltip formatter={(value) => [formatCurrency(Number(value)), 'TVL']} />
-                  <Bar dataKey="tvl" fill="hsl(var(--primary))" />
+                  <Tooltip 
+                    formatter={(value, name, props) => [
+                      formatCurrency(Number(value)), 
+                      'TVL'
+                    ]}
+                    labelFormatter={(label) => `${label}`}
+                    contentStyle={{
+                      backgroundColor: 'hsl(var(--background))',
+                      border: '1px solid hsl(var(--border))',
+                      borderRadius: '6px'
+                    }}
+                  />
+                  <Bar dataKey="tvl">
+                    {data.protocols.slice(0, 6).map((protocol, index) => (
+                      <Cell key={`cell-${index}`} fill={getProtocolColor(protocol.category)} />
+                    ))}
+                  </Bar>
                 </BarChart>
               </ResponsiveContainer>
             ) : (
@@ -393,7 +426,14 @@ export const DefiCharts = () => {
                       {protocol.change_7d >= 0 ? '+' : ''}{protocol.change_7d.toFixed(2)}%
                     </td>
                     <td className="text-right py-2 px-4">
-                      <Badge variant="outline" className="text-xs">
+                      <Badge 
+                        variant="outline" 
+                        className="text-xs"
+                        style={{ 
+                          borderColor: getProtocolColor(protocol.category),
+                          color: getProtocolColor(protocol.category)
+                        }}
+                      >
                         {protocol.category}
                       </Badge>
                     </td>
