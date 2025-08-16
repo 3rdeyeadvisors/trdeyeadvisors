@@ -131,11 +131,11 @@ const Blog = () => {
         {featuredPosts.length > 0 && (
           <div className="mb-12">
             <h2 className="text-2xl section-heading mb-6">Featured This Week</h2>
-            <div className="grid grid-cols-1 gap-6">
+            <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
               {featuredPosts.map((post) => (
                 <Card 
                   key={post.id}
-                  className="p-6 bg-gradient-consciousness border-primary/20 shadow-consciousness hover:shadow-awareness transition-all duration-cosmic"
+                  className="min-w-[300px] sm:min-w-[350px] p-6 bg-gradient-consciousness border-primary/20 shadow-consciousness hover:shadow-awareness transition-all duration-cosmic flex-shrink-0 flex flex-col"
                 >
                   {/* Tags Section - Clean Layout */}
                   <div className="flex flex-col gap-3 mb-4">
@@ -166,12 +166,12 @@ const Blog = () => {
                   <h2 className="text-xl md:text-2xl font-consciousness font-bold text-foreground mb-3 line-clamp-2">
                     {post.title}
                   </h2>
-                  <p className="text-base text-muted-foreground font-consciousness mb-4 leading-relaxed line-clamp-3">
+                  <p className="text-base text-muted-foreground font-consciousness mb-4 leading-relaxed line-clamp-3 flex-grow">
                     {post.excerpt}
                   </p>
 
                   {/* Footer - Consistent Layout */}
-                  <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-4 mt-auto">
                     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-6 text-sm text-muted-foreground">
                       <div className="flex items-center gap-2">
                         <Calendar className="w-4 h-4" />
@@ -184,7 +184,7 @@ const Blog = () => {
                     </div>
                     <Button 
                       variant="cosmic" 
-                      className="w-full sm:w-auto font-consciousness"
+                      className="w-full font-consciousness"
                       onClick={() => navigate(`/blog/${post.slug}`)}
                     >
                       Read Article
