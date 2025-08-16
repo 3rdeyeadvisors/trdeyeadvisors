@@ -200,24 +200,22 @@ const Courses = () => {
       <div className="container mx-auto px-4 mobile-typography-center">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
-            <h1 className="text-4xl md:text-5xl font-consciousness font-bold text-foreground text-center">
-              Courses & Tools
-            </h1>
-            {!user && (
-              <div className="flex justify-center w-full sm:w-auto">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setShowAuthModal(true)}
-                  className="font-consciousness"
-                >
-                  <LogIn className="w-4 h-4 mr-2" />
-                  Track Progress
-                </Button>
-              </div>
-            )}
-          </div>
+          <h1 className="text-4xl md:text-5xl font-consciousness font-bold text-foreground mb-6">
+            Courses & Tools
+          </h1>
+          {!user && (
+            <div className="flex justify-center mb-6">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowAuthModal(true)}
+                className="font-consciousness"
+              >
+                <LogIn className="w-4 h-4 mr-2" />
+                Track Progress
+              </Button>
+            </div>
+          )}
           <p className="text-xl text-muted-foreground font-consciousness max-w-2xl mx-auto">
             Reprogram your understanding with our curated learning resources and practical tools
           </p>
