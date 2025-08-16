@@ -187,8 +187,8 @@ const Contact = () => {
           <div className="space-y-8">
             {/* About Section */}
             <Card className="p-8 bg-gradient-consciousness border-primary/20">
-              <div className="flex flex-col items-center gap-3 mb-6 text-center md:flex-row md:items-center md:justify-start md:text-left">
-                <Globe className="w-8 h-8 md:w-6 md:h-6 text-foreground shrink-0 drop-shadow-sm" aria-hidden="true" />
+              <div className="flex items-center justify-center mb-4 md:mb-6 text-center md:justify-start md:text-left md:gap-3">
+                <Globe className="hidden md:block w-6 h-6 text-foreground shrink-0 drop-shadow-sm" aria-hidden="true" />
                 <h2 className="text-2xl font-consciousness font-bold text-foreground text-center md:text-left">
                   About 3rdeyeadvisors
                 </h2>
