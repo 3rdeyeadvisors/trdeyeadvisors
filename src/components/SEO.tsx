@@ -140,7 +140,7 @@ const SEO = ({
       <title>{fullTitle}</title>
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords} />
-      <link rel="canonical" href={url} />
+      {/* Canonical URL is handled by Layout component */}
       
       {/* AI Crawler Optimization */}
       <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />

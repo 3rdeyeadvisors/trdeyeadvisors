@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { CartProvider } from "@/contexts/CartContext";
 import { HelmetProvider } from "react-helmet-async";
 import SecurityHeaders from "@/components/SecurityHeaders";
@@ -51,7 +51,7 @@ import DefaiRevolution2025 from "./pages/DefaiRevolution2025";
 
 const queryClient = new QueryClient();
 
-// Handle domain redirect: non-www and old domain to https://www.the3rdeyeadvisors.com
+// Handle domain and protocol redirects to https://www.the3rdeyeadvisors.com
 if (typeof window !== 'undefined') {
   const hostname = window.location.hostname;
   const protocol = window.location.protocol;
@@ -59,8 +59,8 @@ if (typeof window !== 'undefined') {
   const search = window.location.search;
   const hash = window.location.hash;
   
-  // Redirect non-www the3rdeyeadvisors.com to www
-  if (hostname === 'the3rdeyeadvisors.com') {
+  // Redirect non-www to www or http to https
+  if (hostname === 'the3rdeyeadvisors.com' || protocol === 'http:') {
     const redirectUrl = `https://www.the3rdeyeadvisors.com${pathname}${search}${hash}`;
     window.location.replace(redirectUrl);
   }
@@ -85,6 +85,7 @@ const App = () => (
                   <Route path="/courses/:courseId" element={<CourseDetail />} />
                   <Route path="/courses/:courseId/module/:moduleId" element={<ModuleViewer />} />
                   <Route path="/blog" element={<Blog />} />
+                  <Route path="/blog/:page(\\d+)" element={<Navigate to="/blog" replace />} />
                   <Route path="/blog/web3-gaming-defi-convergence-2025" element={<WebThreeGamingDefiConvergence />} />
                   <Route path="/blog/defai-revolution-2025" element={<DefaiRevolution2025 />} />
                   <Route path="/blog/:slug" element={<BlogPost />} />

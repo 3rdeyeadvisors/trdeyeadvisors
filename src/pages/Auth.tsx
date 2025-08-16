@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
-import SEO from "@/components/SEO";
+import { Helmet } from "react-helmet-async";
 
 const Auth = () => {
   const { user, signIn, signUp, resetPassword, updatePassword } = useAuth();
@@ -220,13 +220,9 @@ const Auth = () => {
   if (isPasswordReset) {
     return (
       <>
-        <SEO 
-          title="Reset Password | The 3rd Eye Advisors"
-          description="Reset your password to regain access to your DeFi education dashboard and cryptocurrency learning materials."
-          keywords="password reset, account recovery, DeFi education access"
-          url="https://www.the3rdeyeadvisors.com/auth"
-          type="website"
-        />
+      <Helmet>
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
         <div className="min-h-screen flex items-center justify-center bg-gradient-cosmic px-4">
           <Card className="w-full max-w-md">
             <CardHeader className="text-center">
@@ -326,13 +322,9 @@ const Auth = () => {
 
   return (
     <>
-      <SEO 
-        title="Sign In | The 3rd Eye Advisors"
-        description="Access your DeFi education dashboard. Sign in to continue your cryptocurrency and blockchain learning journey."
-        keywords="DeFi login, crypto education access, blockchain courses sign in"
-        url="https://www.the3rdeyeadvisors.com/auth"
-        type="website"
-      />
+      <Helmet>
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
       <div className="min-h-screen flex items-center justify-center bg-gradient-cosmic px-4">
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">

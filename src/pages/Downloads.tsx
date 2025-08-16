@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Download, FileText, Calculator, TrendingUp, Package } from 'lucide-react';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
-import SEO from '@/components/SEO';
+import { Helmet } from "react-helmet-async";
 
 interface Purchase {
   id: string;
@@ -118,12 +118,9 @@ const Downloads = () => {
   if (isLoading) {
     return (
       <>
-        <SEO 
-          title="My Downloads - Digital Products"
-          description="Access your purchased DeFi education materials, guides, templates, and digital products from 3rdeyeadvisors."
-          keywords="my downloads, DeFi products, purchased materials, digital downloads, education resources"
-           url="https://www.the3rdeyeadvisors.com/downloads"
-        />
+      <Helmet>
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
         <div className="container mx-auto px-4 py-8">
           <div className="text-center">Loading your downloads...</div>
         </div>
@@ -134,12 +131,9 @@ const Downloads = () => {
   if (purchases.length === 0) {
     return (
       <>
-        <SEO 
-          title="My Downloads - Digital Products"
-          description="Access your purchased DeFi education materials, guides, templates, and digital products from 3rdeyeadvisors."
-          keywords="my downloads, DeFi products, purchased materials, digital downloads, education resources"
-           url="https://www.the3rdeyeadvisors.com/downloads"
-        />
+      <Helmet>
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
         <div className="container mx-auto px-4 py-8">
           <div className="text-center">
             <h1 className="text-3xl font-bold mb-4">My Downloads</h1>
@@ -162,12 +156,9 @@ const Downloads = () => {
 
   return (
     <>
-      <SEO 
-        title="My Downloads - Digital Products"
-        description="Access your purchased DeFi education materials, guides, templates, and digital products from 3rdeyeadvisors."
-        keywords="my downloads, DeFi products, purchased materials, digital downloads, education resources"
-        url="https://www.the3rdeyeadvisors.com/downloads"
-      />
+      <Helmet>
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
       <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
         <h2 className="text-3xl font-bold mb-2">My Downloads</h2>
