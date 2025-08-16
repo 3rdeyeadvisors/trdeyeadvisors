@@ -60,9 +60,9 @@ const generateFallbackData = (): DefiData => {
   ];
 
   const riskDistribution = [
-    { name: 'Low Risk', value: 45, color: '#10b981' },
-    { name: 'Medium Risk', value: 35, color: '#f59e0b' },
-    { name: 'High Risk', value: 20, color: '#ef4444' }
+    { name: 'Low Risk', value: 45, color: 'hsl(var(--awareness))' },
+    { name: 'Medium Risk', value: 35, color: 'hsl(var(--accent))' },
+    { name: 'High Risk', value: 20, color: 'hsl(var(--destructive))' }
   ];
 
   return {
@@ -141,38 +141,38 @@ export const DefiCharts = () => {
 
   if (!data) return null;
 
-  // Category colors for protocol visualization - each category gets a unique color
+  // Category colors for protocol visualization - using design system tokens
   const categoryColors: { [key: string]: string } = {
-    'Liquid Staking': '#3b82f6', // Blue
-    'Lending': '#10b981', // Green  
-    'DEX': '#f59e0b', // Orange
-    'CDP': '#8b5cf6', // Purple
-    'Yield': '#ef4444', // Red
-    'CEX': '#6b7280', // Gray
-    'Bridge': '#06b6d4', // Cyan
-    'Derivatives': '#ec4899', // Pink
-    'Insurance': '#84cc16', // Lime
-    'Restaking': '#f97316', // Dark Orange
-    'RWA': '#14b8a6', // Teal
-    'Gaming': '#a855f7', // Violet
-    'NFT Marketplace': '#f43f5e', // Rose
-    'Synthetics': '#22c55e', // Emerald
-    'Options': '#8b5cf6', // Blue Violet
-    'Prediction Market': '#06b6d4', // Sky
-    'Stablecoin': '#65a30d', // Green-600
-    'Launchpad': '#dc2626', // Red-600
-    'Perpetuals': '#7c3aed', // Violet-600
-    'SocialFi': '#db2777', // Pink-600
-    'Privacy': '#1f2937', // Gray-800
-    'Oracle': '#059669', // Emerald-600
-    'DAO': '#9333ea', // Purple-600
-    'Analytics': '#0891b2', // Cyan-600
-    'Cross Chain': '#ea580c', // Orange-600
-    'Farm': '#16a34a', // Green-500
-    'Algo-Stables': '#0d9488', // Teal-600
-    'Indexes': '#7c2d12', // Orange-900
-    'Reserve Currency': '#be185d', // Pink-700
-    'default': '#64748b' // Default slate
+    'Liquid Staking': 'hsl(var(--primary))', // Primary brand color
+    'Lending': 'hsl(var(--awareness))', // Green awareness color  
+    'DEX': 'hsl(var(--accent))', // Accent color
+    'CDP': 'hsl(var(--secondary))', // Secondary color
+    'Yield': 'hsl(var(--destructive))', // Red destructive color
+    'CEX': 'hsl(var(--muted-foreground))', // Muted gray
+    'Bridge': 'hsl(215 100% 60%)', // Bright blue
+    'Derivatives': 'hsl(330 80% 65%)', // Pink
+    'Insurance': 'hsl(84 81% 44%)', // Lime green
+    'Restaking': 'hsl(24 95% 53%)', // Orange variant
+    'RWA': 'hsl(168 76% 42%)', // Teal
+    'Gaming': 'hsl(271 91% 65%)', // Purple violet
+    'NFT Marketplace': 'hsl(348 83% 47%)', // Rose red
+    'Synthetics': 'hsl(142 76% 36%)', // Emerald green
+    'Options': 'hsl(262 83% 58%)', // Blue violet
+    'Prediction Market': 'hsl(199 89% 48%)', // Sky blue
+    'Stablecoin': 'hsl(88 50% 53%)', // Stable green
+    'Launchpad': 'hsl(0 84% 60%)', // Launch red
+    'Perpetuals': 'hsl(258 90% 66%)', // Deep purple
+    'SocialFi': 'hsl(322 84% 57%)', // Social pink
+    'Privacy': 'hsl(220 13% 18%)', // Dark gray
+    'Oracle': 'hsl(160 84% 39%)', // Oracle green
+    'DAO': 'hsl(271 81% 56%)', // DAO purple
+    'Analytics': 'hsl(188 95% 68%)', // Analytics cyan
+    'Cross Chain': 'hsl(20 90% 48%)', // Chain orange
+    'Farm': 'hsl(142 71% 45%)', // Farm green
+    'Algo-Stables': 'hsl(173 80% 40%)', // Algorithm teal
+    'Indexes': 'hsl(25 95% 39%)', // Index brown
+    'Reserve Currency': 'hsl(329 69% 52%)', // Reserve pink
+    'default': 'hsl(var(--muted-foreground))' // Default using theme
   };
 
   const getProtocolColor = (category: string) => {
@@ -228,11 +228,11 @@ export const DefiCharts = () => {
             <div className="text-2xl font-bold">{formatCurrency(getCurrentTVL())}</div>
             <div className="flex items-center text-xs text-muted-foreground">
               {parseFloat(getTVLChange()) >= 0 ? (
-                <TrendingUp className="w-4 h-4 text-green-500 mr-1" />
+                <TrendingUp className="w-4 h-4 text-awareness mr-1" />
               ) : (
-                <TrendingDown className="w-4 h-4 text-red-500 mr-1" />
+                <TrendingDown className="w-4 h-4 text-destructive mr-1" />
               )}
-              <span className={parseFloat(getTVLChange()) >= 0 ? 'text-green-500' : 'text-red-500'}>
+              <span className={parseFloat(getTVLChange()) >= 0 ? 'text-awareness' : 'text-destructive'}>
                 {getTVLChange()}%
               </span>
               <span className="ml-1">from yesterday</span>
@@ -377,7 +377,7 @@ export const DefiCharts = () => {
                       <div className="flex flex-col items-end gap-1">
                         <div className="flex items-center gap-2">
                           <span className="text-xs text-muted-foreground">24h:</span>
-                          <div className={`flex items-center text-sm font-mono ${protocol.change_1d >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                          <div className={`flex items-center text-sm font-mono ${protocol.change_1d >= 0 ? 'text-awareness' : 'text-destructive'}`}>
                             {protocol.change_1d >= 0 ? (
                               <TrendingUp className="w-3 h-3 mr-1" />
                             ) : (
@@ -388,7 +388,7 @@ export const DefiCharts = () => {
                         </div>
                         <div className="flex items-center gap-2">
                           <span className="text-xs text-muted-foreground">7d:</span>
-                          <div className={`flex items-center text-sm font-mono ${protocol.change_7d >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                          <div className={`flex items-center text-sm font-mono ${protocol.change_7d >= 0 ? 'text-awareness' : 'text-destructive'}`}>
                             {protocol.change_7d >= 0 ? (
                               <TrendingUp className="w-3 h-3 mr-1" />
                             ) : (
@@ -405,7 +405,7 @@ export const DefiCharts = () => {
                           return (
                             <div
                               key={i}
-                              className={`w-1.5 rounded-sm ${protocol.change_7d >= 0 ? 'bg-green-500' : 'bg-red-500'}`}
+                              className="w-1.5 rounded-sm"
                               style={{ 
                                 height: `${Math.abs(height)}px`,
                                 backgroundColor: getProtocolColor(protocol.category),
@@ -492,10 +492,10 @@ export const DefiCharts = () => {
                       </div>
                     </td>
                     <td className="text-right py-2 px-4 font-mono">{formatCurrency(protocol.tvl)}</td>
-                    <td className={`text-right py-2 px-4 font-mono ${protocol.change_1d >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    <td className={`text-right py-2 px-4 font-mono ${protocol.change_1d >= 0 ? 'text-awareness' : 'text-destructive'}`}>
                       {protocol.change_1d >= 0 ? '+' : ''}{protocol.change_1d.toFixed(2)}%
                     </td>
-                    <td className={`text-right py-2 px-4 font-mono ${protocol.change_7d >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    <td className={`text-right py-2 px-4 font-mono ${protocol.change_7d >= 0 ? 'text-awareness' : 'text-destructive'}`}>
                       {protocol.change_7d >= 0 ? '+' : ''}{protocol.change_7d.toFixed(2)}%
                     </td>
                     <td className="text-right py-2 px-4">
