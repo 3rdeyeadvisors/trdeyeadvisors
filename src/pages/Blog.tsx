@@ -37,22 +37,22 @@ const Blog = () => {
     switch (category) {
       case "DeFi Education":
       case "Education": 
-        return "bg-awareness/20 text-awareness border-awareness/30 hover:bg-awareness/30";
+        return "bg-awareness/30 text-awareness border-awareness/50 hover:bg-awareness/40";
       case "Security": 
-        return "bg-primary/20 text-primary border-primary/30 hover:bg-primary/30";
+        return "bg-primary/30 text-primary border-primary/50 hover:bg-primary/40";
       case "Innovation": 
-        return "bg-accent/20 text-accent border-accent/30 hover:bg-accent/30";
+        return "bg-accent/30 text-accent border-accent/50 hover:bg-accent/40";
       case "DeFi Tools":
       case "Tools": 
-        return "bg-secondary/40 text-secondary-foreground border-secondary/30 hover:bg-secondary/50";
+        return "bg-secondary/60 text-secondary-foreground border-secondary/50 hover:bg-secondary/70";
       case "Analysis": 
-        return "bg-muted/30 text-foreground border-border hover:bg-muted/40";
+        return "bg-muted/50 text-foreground border-border hover:bg-muted/60";
       case "Web3 Gaming":
-        return "bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-700 border-purple-500/30 hover:from-purple-500/30 hover:to-pink-500/30";
+        return "bg-accent/25 text-accent border-accent/40 hover:bg-accent/35";
       case "DeFAI":
-        return "bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-700 border-blue-500/30 hover:from-blue-500/30 hover:to-cyan-500/30";
+        return "bg-primary/25 text-primary border-primary/40 hover:bg-primary/35";
       default: 
-        return "bg-primary/20 text-primary border-primary/30 hover:bg-primary/30";
+        return "bg-primary/30 text-primary border-primary/50 hover:bg-primary/40";
     }
   };
 
@@ -107,7 +107,7 @@ const Blog = () => {
               key={category}
               className={`px-4 py-2 cursor-pointer transition-all duration-cosmic hover:scale-105 ${
                 category === selectedCategory 
-                  ? "bg-primary/20 text-primary border-primary/30" 
+                  ? "bg-primary/40 text-primary border-primary/60" 
                   : getCategoryColor(category)
               }`}
               onClick={() => setSelectedCategory(category)}
@@ -149,7 +149,7 @@ const Blog = () => {
                         <Badge 
                           key={`${post.id}-tag-${tagIndex}`} 
                           variant="outline" 
-                          className="text-xs bg-background/50 text-foreground border-primary/30 hover:bg-primary/10"
+                          className="text-xs bg-card/80 text-foreground border-primary/50 hover:bg-primary/20 hover:text-primary"
                         >
                           {tag}
                         </Badge>
