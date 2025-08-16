@@ -186,6 +186,12 @@
     overflow: hidden;
   }
 
+  /* Fix excessive bottom spacing before footer */
+  main > *:last-child {
+    margin-bottom: 0 !important;
+    padding-bottom: 1rem !important;
+  }
+
   /* Typography Centering - All Screen Sizes */
   .mobile-typography-center {
     text-align: center;
