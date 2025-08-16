@@ -10,6 +10,7 @@ import SEO from "@/components/SEO";
 const Blog = () => {
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [currentFeaturedIndex, setCurrentFeaturedIndex] = useState(0);
   const posts = getBlogPostsByCategory(selectedCategory);
   
   // Debug logging
@@ -131,72 +132,88 @@ const Blog = () => {
         {featuredPosts.length > 0 && (
           <div className="mb-12">
             <h2 className="text-2xl section-heading mb-6">Featured This Week</h2>
-            <div className="overflow-hidden">
-              <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
-                {featuredPosts.map((post) => (
-                  <Card 
-                    key={post.id}
-                    className="min-w-[280px] max-w-[320px] p-6 bg-gradient-consciousness border-primary/20 shadow-consciousness hover:shadow-awareness transition-all duration-cosmic flex-shrink-0 flex flex-col h-full"
-                  >
-                    {/* Tags Section */}
-                    <div className="flex flex-col gap-3 mb-4">
-                      <div className="flex items-center gap-2">
-                        <Badge className="bg-primary text-primary-foreground border-primary shadow-cosmic">
-                          Featured
-                        </Badge>
-                        <Badge className={`${getCategoryColor(post.category)}`}>
-                          {post.category}
-                        </Badge>
-                      </div>
-                      {post.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-1.5">
-                          {post.tags.slice(0, 3).map((tag, tagIndex) => (
-                            <Badge 
-                              key={`${post.id}-tag-${tagIndex}`} 
-                              variant="outline" 
-                              className="text-xs bg-card/80 text-foreground border-primary/50 hover:bg-primary/20 hover:text-primary"
-                            >
-                              {tag}
-                            </Badge>
-                          ))}
+            <Card className="p-6 bg-gradient-consciousness border-primary/20 shadow-consciousness">
+              <div className="overflow-hidden">
+                <div className="flex transition-transform duration-500 ease-in-out" style={{ transform: `translateX(-${currentFeaturedIndex * 100}%)` }}>
+                  {featuredPosts.map((post, index) => (
+                    <div key={post.id} className="w-full flex-shrink-0">
+                      {/* Tags Section */}
+                      <div className="flex flex-col gap-3 mb-4">
+                        <div className="flex items-center gap-2">
+                          <Badge className="bg-primary text-primary-foreground border-primary shadow-cosmic">
+                            Featured
+                          </Badge>
+                          <Badge className={`${getCategoryColor(post.category)}`}>
+                            {post.category}
+                          </Badge>
                         </div>
-                      )}
-                    </div>
+                        {post.tags.length > 0 && (
+                          <div className="flex flex-wrap gap-1.5">
+                            {post.tags.slice(0, 3).map((tag, tagIndex) => (
+                              <Badge 
+                                key={`${post.id}-tag-${tagIndex}`} 
+                                variant="outline" 
+                                className="text-xs bg-card/80 text-foreground border-primary/50 hover:bg-primary/20 hover:text-primary"
+                              >
+                                {tag}
+                              </Badge>
+                            ))}
+                          </div>
+                        )}
+                      </div>
 
-                    {/* Content */}
-                    <h3 className="text-xl font-consciousness font-semibold text-foreground mb-3 group-hover:text-primary transition-colors">
-                      {post.title}
-                    </h3>
-                    
-                    <p className="text-muted-foreground font-consciousness mb-4 leading-relaxed flex-grow">
-                      {post.excerpt}
-                    </p>
-                    
-                    {/* Footer */}
-                    <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
-                      <div className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4" />
-                        <span className="font-system">{post.date}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Clock className="w-4 h-4" />
-                        <span className="font-system">{post.readTime}</span>
+                      {/* Content */}
+                      <h3 className="text-xl md:text-2xl font-consciousness font-bold text-foreground mb-4">
+                        {post.title}
+                      </h3>
+                      
+                      <p className="text-base text-muted-foreground font-consciousness mb-6 leading-relaxed">
+                        {post.excerpt}
+                      </p>
+                      
+                      {/* Footer */}
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div className="flex items-center gap-6 text-sm text-muted-foreground">
+                          <div className="flex items-center gap-2">
+                            <Calendar className="w-4 h-4" />
+                            <span className="font-system">{post.date}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Clock className="w-4 h-4" />
+                            <span className="font-system">{post.readTime}</span>
+                          </div>
+                        </div>
+                        <Button 
+                          variant="cosmic" 
+                          className="font-consciousness w-full sm:w-auto"
+                          onClick={() => navigate(`/blog/${post.slug}`)}
+                        >
+                          Read Article
+                          <ArrowRight className="w-4 h-4 ml-2" />
+                        </Button>
                       </div>
                     </div>
-                    
-                    <Button 
-                      variant="cosmic" 
-                      size="sm" 
-                      className="w-full font-consciousness"
-                      onClick={() => navigate(`/blog/${post.slug}`)}
-                    >
-                      Read Article
-                      <ArrowRight className="w-4 h-4 ml-2" />
-                    </Button>
-                  </Card>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
+              
+              {/* Navigation dots if multiple featured posts */}
+              {featuredPosts.length > 1 && (
+                <div className="flex justify-center gap-2 mt-6">
+                  {featuredPosts.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentFeaturedIndex(index)}
+                      className={`w-3 h-3 rounded-full transition-colors ${
+                        index === currentFeaturedIndex 
+                          ? 'bg-primary' 
+                          : 'bg-primary/40 hover:bg-primary/60'
+                      }`}
+                    />
+                  ))}
+                </div>
+              )}
+            </Card>
           </div>
         )}
 
