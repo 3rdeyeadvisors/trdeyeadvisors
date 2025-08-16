@@ -191,7 +191,7 @@ const Store = () => {
 
           {/* Digital Products Section */}
           <div className="mb-16">
-            <div className="flex items-center gap-4 mb-8">
+            <div className="flex flex-col md:flex-row items-center md:items-center gap-4 mb-8 text-center md:text-left">
               <Download className="w-6 h-6 text-primary" />
               <h2 className="text-2xl font-consciousness font-bold text-foreground">
                 Digital Products
@@ -202,54 +202,54 @@ const Store = () => {
               {digitalProducts.map((product, index) => {
                 const ProductIcon = getProductIcon(product);
                 return (
-                  <Card 
-                    key={product.id}
-                    className="p-6 bg-card/60 border-border hover:border-primary/40 transition-all duration-cosmic hover:shadow-consciousness group"
-                    style={{ animationDelay: `${index * 0.1}s` }}
-                  >
-                    <div className="flex items-start justify-between mb-4">
-                      <ProductIcon className="w-8 h-8 text-primary group-hover:text-primary-glow transition-colors" />
-                      <Badge className={getTypeColor(product.type)}>
-                        {product.category}
-                      </Badge>
-                    </div>
-                    
-                    <h3 className="text-xl font-consciousness font-semibold text-foreground mb-3">
-                      {product.title}
-                    </h3>
-                    
-                    <p className="text-muted-foreground font-consciousness mb-4 leading-relaxed">
-                      {product.description}
-                    </p>
+                   <Card 
+                     key={product.id}
+                     className="p-6 bg-card/60 border-border hover:border-primary/40 transition-all duration-cosmic hover:shadow-consciousness group text-center md:text-left"
+                     style={{ animationDelay: `${index * 0.1}s` }}
+                   >
+                     <div className="flex flex-col md:flex-row items-center md:items-start md:justify-between mb-4 gap-3 md:gap-0">
+                       <ProductIcon className="w-8 h-8 text-primary group-hover:text-primary-glow transition-colors" />
+                       <Badge className={`${getTypeColor(product.type)} mx-auto md:mx-0`}>
+                         {product.category}
+                       </Badge>
+                     </div>
+                     
+                     <h3 className="text-xl font-consciousness font-semibold text-foreground mb-3">
+                       {product.title}
+                     </h3>
+                     
+                     <p className="text-muted-foreground font-consciousness mb-4 leading-relaxed">
+                       {product.description}
+                     </p>
 
-                    <div className="mb-4">
-                      <h4 className="text-sm font-consciousness font-medium text-foreground mb-2">
-                        Includes:
-                      </h4>
-                      <ul className="text-sm text-muted-foreground space-y-1">
-                        {product.features.map((feature, idx) => (
-                          <li key={idx} className="flex items-center gap-2">
-                            <div className="w-1 h-1 bg-primary rounded-full"></div>
-                            {feature}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    
-                     <div className="flex items-center justify-between">
-                       <span className="text-2xl font-consciousness font-bold text-primary">
-                         ${typeof product.price === 'string' ? product.price : product.price.toFixed(2)}
-                       </span>
-                      <Button 
-                        variant={isInCart(product.id) ? "outline" : "cosmic"}
-                        className="font-consciousness"
-                        onClick={() => handleAddToCart(product)}
-                      >
-                        <Plus className="w-4 h-4 mr-2" />
-                        {isInCart(product.id) ? "Add Another" : "Add to Cart"}
-                      </Button>
-                    </div>
-                  </Card>
+                     <div className="mb-4">
+                       <h4 className="text-sm font-consciousness font-medium text-foreground mb-2">
+                         Includes:
+                       </h4>
+                       <ul className="text-sm text-muted-foreground space-y-1">
+                         {product.features.map((feature, idx) => (
+                           <li key={idx} className="flex items-center justify-center md:justify-start gap-2">
+                             <div className="w-1 h-1 bg-primary rounded-full"></div>
+                             {feature}
+                           </li>
+                         ))}
+                       </ul>
+                     </div>
+                     
+                      <div className="flex flex-col md:flex-row items-center md:justify-between gap-3 md:gap-0">
+                        <span className="text-2xl font-consciousness font-bold text-primary">
+                          ${typeof product.price === 'string' ? product.price : product.price.toFixed(2)}
+                        </span>
+                       <Button 
+                         variant={isInCart(product.id) ? "outline" : "cosmic"}
+                         className="font-consciousness w-full md:w-auto"
+                         onClick={() => handleAddToCart(product)}
+                       >
+                         <Plus className="w-4 h-4 mr-2" />
+                         {isInCart(product.id) ? "Add Another" : "Add to Cart"}
+                       </Button>
+                     </div>
+                   </Card>
                 );
               })}
             </div>
