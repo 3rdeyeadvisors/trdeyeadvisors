@@ -137,23 +137,27 @@ const Blog = () => {
                   key={post.id}
                   className="w-full p-6 bg-gradient-consciousness border-primary/20 shadow-consciousness hover:shadow-awareness transition-all duration-cosmic flex-shrink-0"
                 >
-                  <div className="flex flex-wrap items-center gap-4 mb-4">
-                    <Badge className="bg-primary text-primary-foreground border-primary shadow-cosmic">
-                      Featured
-                    </Badge>
-                    <Badge className={`${getCategoryColor(post.category)}`}>
-                      {post.category}
-                    </Badge>
-                    <div className="flex flex-wrap gap-2">
-                      {post.tags.slice(0, 3).map((tag, tagIndex) => (
-                        <Badge 
-                          key={`${post.id}-tag-${tagIndex}`} 
-                          variant="outline" 
-                          className="text-xs bg-card/80 text-foreground border-primary/50 hover:bg-primary/20 hover:text-primary"
-                        >
-                          {tag}
+                  <div className="mb-4">
+                    <div className="flex flex-col gap-3">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <Badge className="bg-primary text-primary-foreground border-primary shadow-cosmic">
+                          Featured
                         </Badge>
-                      ))}
+                        <Badge className={`${getCategoryColor(post.category)}`}>
+                          {post.category}
+                        </Badge>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {post.tags.slice(0, 3).map((tag, tagIndex) => (
+                          <Badge 
+                            key={`${post.id}-tag-${tagIndex}`} 
+                            variant="outline" 
+                            className="text-xs bg-card/80 text-foreground border-primary/50 hover:bg-primary/20 hover:text-primary"
+                          >
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
                     </div>
                   </div>
                   <h2 className="text-xl md:text-2xl font-consciousness font-bold text-foreground mb-3 line-clamp-2">
@@ -162,25 +166,29 @@ const Blog = () => {
                   <p className="text-base text-muted-foreground font-consciousness mb-4 leading-relaxed line-clamp-3 break-words overflow-hidden w-full">
                     {post.excerpt}
                   </p>
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                    <div className="flex items-center gap-6 text-sm text-muted-foreground">
-                      <div className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4" />
-                        <span className="font-system">{post.date}</span>
+                  <div className="mt-auto">
+                    <div className="flex flex-col gap-4">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-2">
+                          <Calendar className="w-4 h-4" />
+                          <span className="font-system">{post.date}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Clock className="w-4 h-4" />
+                          <span className="font-system">{post.readTime}</span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Clock className="w-4 h-4" />
-                        <span className="font-system">{post.readTime}</span>
+                      <div className="flex justify-center sm:justify-end">
+                        <Button 
+                          variant="default" 
+                          className="font-consciousness bg-accent hover:bg-accent-glow text-foreground shadow-cosmic w-full sm:w-auto"
+                          onClick={() => navigate(`/blog/${post.slug}`)}
+                        >
+                          Read Article
+                          <ArrowRight className="w-4 h-4 ml-2" />
+                        </Button>
                       </div>
                     </div>
-                    <Button 
-                      variant="default" 
-                      className="font-consciousness bg-accent hover:bg-accent-glow text-foreground shadow-cosmic"
-                      onClick={() => navigate(`/blog/${post.slug}`)}
-                    >
-                      Read Article
-                      <ArrowRight className="w-4 h-4 ml-2" />
-                    </Button>
                   </div>
                 </Card>
               ))}
