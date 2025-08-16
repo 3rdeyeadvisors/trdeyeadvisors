@@ -454,33 +454,31 @@ export const DefiCharts = () => {
                 {/* Mobile Carousel */}
                 <MobileCarousel>
                   {data.protocols.slice(0, 8).map((protocol, index) => (
-                    <div key={protocol.id} className="flex-shrink-0 w-72 p-3 rounded-lg border bg-card">
-                      <div className="flex items-center gap-3 mb-3">
+                    <div key={protocol.id} className="flex-shrink-0 w-72 p-3 rounded-lg border bg-card text-center">
+                      <div className="flex flex-col items-center gap-2 mb-3">
                         <div className="w-7 h-7 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-xs font-bold text-primary">
                           {index + 1}
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="font-semibold truncate">{protocol.name}</div>
-                          <Badge 
-                            variant="outline" 
-                            className="text-xs mt-1"
-                            style={{ 
-                              borderColor: getProtocolColor(protocol.category),
-                              color: getProtocolColor(protocol.category),
-                              backgroundColor: `${getProtocolColor(protocol.category)}10`
-                            }}
-                          >
-                            {protocol.category}
-                          </Badge>
-                        </div>
+                        <div className="font-semibold">{protocol.name}</div>
+                        <Badge 
+                          variant="outline" 
+                          className="text-xs"
+                          style={{ 
+                            borderColor: getProtocolColor(protocol.category),
+                            color: getProtocolColor(protocol.category),
+                            backgroundColor: `${getProtocolColor(protocol.category)}10`
+                          }}
+                        >
+                          {protocol.category}
+                        </Badge>
                       </div>
                       
-                      <div className="space-y-2">
-                        <div className="text-sm text-muted-foreground">
+                      <div className="space-y-3">
+                        <div className="text-sm text-muted-foreground text-center">
                           TVL: <span className="font-mono font-semibold text-foreground">{formatCurrency(protocol.tvl)}</span>
                         </div>
                         
-                        <div className="flex justify-between text-sm">
+                        <div className="flex justify-center gap-6 text-sm">
                           <div className="text-center">
                             <div className="text-xs text-muted-foreground">24h</div>
                             <div className={`font-mono font-medium ${protocol.change_1d >= 0 ? 'text-awareness' : 'text-destructive'}`}>
@@ -496,7 +494,7 @@ export const DefiCharts = () => {
                         </div>
 
                         {/* Mini trend visualization */}
-                        <div className="flex w-full h-6 items-end justify-between gap-0.5">
+                        <div className="flex w-full h-6 items-end justify-center gap-0.5 mx-auto max-w-48">
                           {Array.from({ length: 12 }, (_, i) => {
                             const height = Math.max(2, Math.random() * 16 + (protocol.change_7d >= 0 ? 4 : -2));
                             return (
