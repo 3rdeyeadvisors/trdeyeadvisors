@@ -12,7 +12,10 @@ const Layout = ({ children }: LayoutProps) => {
   const location = useLocation();
   
   // Generate canonical URL - normalize path and ensure proper domain
-  const canonicalUrl = `https://www.the3rdeyeadvisors.com${location.pathname}`.replace(/\/$/, '') || 'https://www.the3rdeyeadvisors.com';
+  // Keep trailing slash only for homepage, remove for all other pages
+  const canonicalUrl = location.pathname === '/' 
+    ? 'https://www.the3rdeyeadvisors.com/'
+    : `https://www.the3rdeyeadvisors.com${location.pathname}`.replace(/\/$/, '');
 
   return (
     <>

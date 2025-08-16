@@ -78,6 +78,13 @@
   </url>
 
   <url>
+    <loc>https://www.the3rdeyeadvisors.com/cart</loc>
+    <lastmod>2025-08-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
     <loc>https://www.the3rdeyeadvisors.com/analytics</loc>
     <lastmod>2025-08-16</lastmod>
     <changefreq>weekly</changefreq>
