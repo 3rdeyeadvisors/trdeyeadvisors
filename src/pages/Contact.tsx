@@ -87,9 +87,9 @@ const Contact = () => {
           {/* Contact Form */}
           <div>
             <Card className="p-8 bg-card/60 border-border">
-              <div className="flex items-center gap-3 mb-6">
-                <Mail className="w-6 h-6 text-primary" />
-                <h2 className="text-2xl font-consciousness font-bold text-foreground">
+              <div className="flex items-center justify-center mb-4 md:mb-6 text-center md:justify-start md:text-left md:gap-3">
+                <Mail className="hidden md:block w-6 h-6 text-primary shrink-0" aria-hidden="true" />
+                <h2 className="text-2xl font-consciousness font-bold text-foreground text-center md:text-left">
                   Get in Touch
                 </h2>
               </div>
