@@ -160,20 +160,22 @@ export const CourseCard = ({ course, index, onStartCourse, onAuthRequired }: Cou
         />
       )}
       
-      <div className="flex items-center justify-between">
-        <span className="text-sm text-muted-foreground font-system">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <span className="text-sm text-muted-foreground font-system text-center sm:text-left">
           {course.duration}
         </span>
-        <Button 
-          variant={course.category === "paid" ? "cosmic" : "awareness"}
-          size="sm"
-          className="font-consciousness"
-          onClick={handleStartCourse}
-          disabled={isCheckingAccess || isPurchasing}
-        >
-          {getButtonIcon()}
-          {getButtonText()}
-        </Button>
+        <div className="flex justify-center sm:justify-end">
+          <Button 
+            variant={course.category === "paid" ? "cosmic" : "awareness"}
+            size="sm"
+            className="font-consciousness w-full sm:w-auto"
+            onClick={handleStartCourse}
+            disabled={isCheckingAccess || isPurchasing}
+          >
+            {getButtonIcon()}
+            {getButtonText()}
+          </Button>
+        </div>
       </div>
     </Card>
   );
