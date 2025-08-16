@@ -9,8 +9,8 @@ const Analytics = () => {
     <>
       <SEO 
         title="DeFi Analytics & Market Data - Real-Time Protocol Insights"
-        description="Comprehensive DeFi analytics dashboard with real-time market data, yield farming insights, TVL tracking, and protocol performance metrics. Essential tools for DeFi investors and analysts."
-        keywords="DeFi analytics, real-time DeFi data, yield farming analytics, TVL tracking, DeFi market insights, protocol analytics, crypto market data, DeFi charts, blockchain analytics"
+        description="Live DeFi analytics dashboard powered by DefiLlama API with real-time market data, yield farming insights, TVL tracking, and protocol performance metrics from Aave, Uniswap, and 200+ protocols."
+        keywords="DeFi analytics, real-time DeFi data, DefiLlama API, yield farming analytics, TVL tracking, DeFi market insights, protocol analytics, crypto market data, DeFi charts, blockchain analytics, Aave data, Uniswap analytics"
         url="https://www.the3rdeyeadvisors.com/analytics"
         schema={{
           type: 'SoftwareApplication',
@@ -57,7 +57,7 @@ const Analytics = () => {
             </h1>
           </div>
           <p className="text-xl text-muted-foreground font-consciousness max-w-3xl mx-auto">
-            Real-time market data, protocol insights, and comprehensive analytics for the decentralized finance ecosystem
+            Real-time market data from DefiLlama API, tracking 200+ protocols with live updates every 60 seconds
           </p>
           <div className="flex items-center justify-center gap-2 mt-4">
             <Badge variant="secondary" className="animate-pulse">
@@ -83,10 +83,9 @@ const Analytics = () => {
                 Market Data Disclaimer
               </h3>
               <p className="text-muted-foreground font-consciousness leading-relaxed">
-                This data is for educational and informational purposes only. The simulated data represents 
-                typical DeFi market patterns but should not be used for actual investment decisions. 
-                Always verify data from official protocol sources and conduct your own research before 
-                making any financial decisions in the DeFi space.
+                This data is sourced live from DefiLlama API and leading DeFi protocols for educational and informational purposes. 
+                While the data represents real market conditions, it should not be used as the sole basis for investment decisions. 
+                Always verify data from multiple sources and conduct your own research before making any financial decisions in the DeFi space.
               </p>
             </div>
           </div>

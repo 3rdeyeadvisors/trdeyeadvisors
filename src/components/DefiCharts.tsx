@@ -3,53 +3,114 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell, Area, AreaChart } from 'recharts';
-import { TrendingUp, TrendingDown, DollarSign, Percent, BarChart3, PieChart as PieChartIcon, Activity } from 'lucide-react';
+import { TrendingUp, TrendingDown, DollarSign, Percent, BarChart3, PieChart as PieChartIcon, Activity, Loader2 } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 
-// Mock DeFi data that updates dynamically
-const generateMockData = () => {
-  const protocols = ['Uniswap', 'Compound', 'Aave', 'MakerDAO', 'Curve', 'SushiSwap'];
-  const timeData = [];
-  const protocolData = [];
-  const riskData = [
-    { name: 'Low Risk', value: 35, color: '#10b981' },
-    { name: 'Medium Risk', value: 45, color: '#f59e0b' },
+interface DefiProtocol {
+  id: string;
+  name: string;
+  tvl: number;
+  change_1d: number;
+  change_7d: number;
+  category: string;
+}
+
+interface DefiData {
+  totalTvl: number;
+  totalVolume24h: number;
+  averageYield: number;
+  protocols: DefiProtocol[];
+  historicalData: Array<{
+    date: string;
+    totalTvl: number;
+    volume: number;
+    yield: number;
+  }>;
+  riskDistribution: Array<{
+    name: string;
+    value: number;
+    color: string;
+  }>;
+}
+
+// Fallback data in case of API errors
+const generateFallbackData = (): DefiData => {
+  const historicalData = Array.from({ length: 30 }, (_, i) => {
+    const date = new Date();
+    date.setDate(date.getDate() - (29 - i));
+    
+    return {
+      date: date.toISOString().split('T')[0],
+      totalTvl: 180000000000 + Math.random() * 40000000000, // $180B - $220B
+      volume: 40000000000 + Math.random() * 20000000000, // $40B - $60B  
+      yield: 6 + Math.random() * 8 // 6% - 14%
+    };
+  });
+
+  const protocols: DefiProtocol[] = [
+    { id: 'lido', name: 'Lido', tvl: 32000000000, change_1d: 2.1, change_7d: 5.3, category: 'Liquid Staking' },
+    { id: 'aave', name: 'Aave', tvl: 18000000000, change_1d: -1.2, change_7d: 3.1, category: 'Lending' },
+    { id: 'makerdao', name: 'MakerDAO', tvl: 15000000000, change_1d: 0.8, change_7d: -2.1, category: 'CDP' },
+    { id: 'uniswap', name: 'Uniswap', tvl: 12000000000, change_1d: 1.5, change_7d: 4.2, category: 'DEX' },
+    { id: 'compound', name: 'Compound', tvl: 8000000000, change_1d: -0.5, change_7d: 1.8, category: 'Lending' },
+    { id: 'convex', name: 'Convex', tvl: 6500000000, change_1d: 3.2, change_7d: 8.1, category: 'Yield' },
+    { id: 'curve', name: 'Curve', tvl: 5200000000, change_1d: 1.8, change_7d: 2.9, category: 'DEX' },
+    { id: 'pancakeswap', name: 'PancakeSwap', tvl: 4800000000, change_1d: 2.5, change_7d: 6.7, category: 'DEX' }
+  ];
+
+  const riskDistribution = [
+    { name: 'Low Risk', value: 45, color: '#10b981' },
+    { name: 'Medium Risk', value: 35, color: '#f59e0b' },
     { name: 'High Risk', value: 20, color: '#ef4444' }
   ];
 
-  // Generate 30 days of price data
-  for (let i = 29; i >= 0; i--) {
-    const date = new Date();
-    date.setDate(date.getDate() - i);
-    timeData.push({
-      date: date.toISOString().split('T')[0],
-      tvl: Math.floor(Math.random() * 50000000000) + 100000000000,
-      volume: Math.floor(Math.random() * 5000000000) + 1000000000,
-      yield: (Math.random() * 15 + 2).toFixed(2)
-    });
-  }
-
-  // Generate protocol data
-  protocols.forEach(protocol => {
-    protocolData.push({
-      name: protocol,
-      tvl: Math.floor(Math.random() * 20000000000) + 5000000000,
-      apr: (Math.random() * 12 + 2).toFixed(2),
-      volume24h: Math.floor(Math.random() * 2000000000) + 100000000
-    });
-  });
-
-  return { timeData, protocolData, riskData };
+  return {
+    totalTvl: 200000000000,
+    totalVolume24h: 50000000000,
+    averageYield: 8.5,
+    protocols,
+    historicalData,
+    riskDistribution
+  };
 };
 
 export const DefiCharts = () => {
-  const [data, setData] = useState(generateMockData());
-  const [selectedMetric, setSelectedMetric] = useState<'tvl' | 'volume' | 'yield'>('tvl');
+  const [data, setData] = useState<DefiData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedMetric, setSelectedMetric] = useState<'totalTvl' | 'volume' | 'yield'>('totalTvl');
+
+  const fetchDefiData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const { data: response, error: functionError } = await supabase.functions.invoke('fetch-defi-data');
+      
+      if (functionError) {
+        console.error('Supabase function error:', functionError);
+        throw new Error('Failed to fetch DeFi data');
+      }
+      
+      if (response) {
+        setData(response);
+      } else {
+        throw new Error('No data received');
+      }
+    } catch (err) {
+      console.error('Error fetching DeFi data:', err);
+      setError('Failed to load real-time data. Using fallback data.');
+      setData(generateFallbackData());
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setData(generateMockData());
-    }, 10000); // Update every 10 seconds
-
+    fetchDefiData();
+    
+    // Update data every 60 seconds
+    const interval = setInterval(fetchDefiData, 60000);
     return () => clearInterval(interval);
   }, []);
 
@@ -59,8 +120,21 @@ export const DefiCharts = () => {
     return `$${value.toLocaleString()}`;
   };
 
-  const getCurrentTVL = () => data.timeData[data.timeData.length - 1]?.tvl || 0;
-  const getPreviousTVL = () => data.timeData[data.timeData.length - 2]?.tvl || 0;
+  if (loading && !data) {
+    return (
+      <div className="container mx-auto px-4 py-8 space-y-6 mobile-typography-center">
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="w-8 h-8 animate-spin mr-2" />
+          <span>Loading real-time DeFi data...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (!data) return null;
+
+  const getCurrentTVL = () => data.historicalData[data.historicalData.length - 1]?.totalTvl || data.totalTvl;
+  const getPreviousTVL = () => data.historicalData[data.historicalData.length - 2]?.totalTvl || data.totalTvl;
   const getTVLChange = () => ((getCurrentTVL() - getPreviousTVL()) / getPreviousTVL() * 100).toFixed(2);
 
   return (
@@ -69,13 +143,19 @@ export const DefiCharts = () => {
         <div>
           <h1 className="text-3xl font-bold">DeFi Analytics Dashboard</h1>
           <p className="text-muted-foreground mt-2">
-            Live market data and insights from the decentralized finance ecosystem
+            Real-time data from DefiLlama, Aave, Uniswap, and leading DeFi protocols
           </p>
+          {error && (
+            <p className="text-amber-500 text-sm mt-1">{error}</p>
+          )}
         </div>
-        <Badge variant="secondary" className="animate-pulse">
-          <Activity className="w-4 h-4 mr-2" />
-          Live Data
-        </Badge>
+        <div className="flex gap-2">
+          <Badge variant="secondary" className={loading ? "animate-pulse" : ""}>
+            <Activity className="w-4 h-4 mr-2" />
+            {loading ? 'Updating...' : 'Live Data'}
+          </Badge>
+          <Badge variant="outline">Updates every 60s</Badge>
+        </div>
       </div>
 
       {/* Key Metrics Cards */}
@@ -108,7 +188,7 @@ export const DefiCharts = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {formatCurrency(data.timeData[data.timeData.length - 1]?.volume || 0)}
+              {formatCurrency(data.totalVolume24h)}
             </div>
             <p className="text-xs text-muted-foreground">Trading volume across protocols</p>
           </CardContent>
@@ -121,7 +201,7 @@ export const DefiCharts = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {data.timeData[data.timeData.length - 1]?.yield || '0'}%
+              {data.averageYield.toFixed(2)}%
             </div>
             <p className="text-xs text-muted-foreground">Annual percentage yield</p>
           </CardContent>
@@ -138,9 +218,9 @@ export const DefiCharts = () => {
             </div>
             <div className="flex gap-2">
               <Button
-                variant={selectedMetric === 'tvl' ? 'default' : 'outline'}
+                variant={selectedMetric === 'totalTvl' ? 'default' : 'outline'}
                 size="sm"
-                onClick={() => setSelectedMetric('tvl')}
+                onClick={() => setSelectedMetric('totalTvl')}
               >
                 TVL
               </Button>
@@ -163,7 +243,7 @@ export const DefiCharts = () => {
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={300}>
-            <AreaChart data={data.timeData}>
+            <AreaChart data={data.historicalData}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis 
                 dataKey="date" 
@@ -176,7 +256,7 @@ export const DefiCharts = () => {
                 labelFormatter={(value) => new Date(value).toLocaleDateString()}
                 formatter={(value) => [
                   selectedMetric === 'yield' ? `${value}%` : formatCurrency(Number(value)),
-                  selectedMetric.toUpperCase()
+                  selectedMetric === 'totalTvl' ? 'TVL' : selectedMetric.toUpperCase()
                 ]}
               />
               <Area
@@ -203,10 +283,10 @@ export const DefiCharts = () => {
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={data.protocolData.sort((a, b) => b.tvl - a.tvl)}>
+              <BarChart data={data.protocols.slice(0, 6)} layout="horizontal">
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis tickFormatter={formatCurrency} />
+                <XAxis type="number" tickFormatter={formatCurrency} />
+                <YAxis type="category" dataKey="name" width={80} />
                 <Tooltip formatter={(value) => [formatCurrency(Number(value)), 'TVL']} />
                 <Bar dataKey="tvl" fill="hsl(var(--primary))" />
               </BarChart>
@@ -227,14 +307,14 @@ export const DefiCharts = () => {
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
-                  data={data.riskData}
+                  data={data.riskDistribution}
                   cx="50%"
                   cy="50%"
                   outerRadius={80}
                   dataKey="value"
                   label={({ name, value }) => `${name}: ${value}%`}
                 >
-                  {data.riskData.map((entry, index) => (
+                  {data.riskDistribution.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>
@@ -258,21 +338,36 @@ export const DefiCharts = () => {
                 <tr className="border-b">
                   <th className="text-left py-2 px-4">Protocol</th>
                   <th className="text-right py-2 px-4">TVL</th>
-                  <th className="text-right py-2 px-4">APR</th>
-                  <th className="text-right py-2 px-4">24h Volume</th>
+                  <th className="text-right py-2 px-4">1D Change</th>
+                  <th className="text-right py-2 px-4">7D Change</th>
+                  <th className="text-right py-2 px-4">Category</th>
                 </tr>
               </thead>
               <tbody>
-                {data.protocolData
-                  .sort((a, b) => b.tvl - a.tvl)
-                  .map((protocol, index) => (
-                    <tr key={protocol.name} className="border-b hover:bg-muted/50">
-                      <td className="py-2 px-4 font-medium">{protocol.name}</td>
-                      <td className="text-right py-2 px-4">{formatCurrency(protocol.tvl)}</td>
-                      <td className="text-right py-2 px-4 text-green-600">{protocol.apr}%</td>
-                      <td className="text-right py-2 px-4">{formatCurrency(protocol.volume24h)}</td>
-                    </tr>
-                  ))}
+                {data.protocols.slice(0, 8).map((protocol, index) => (
+                  <tr key={protocol.id} className="border-b hover:bg-muted/50">
+                    <td className="py-2 px-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-sm font-bold">
+                          {index + 1}
+                        </div>
+                        <span className="font-medium">{protocol.name}</span>
+                      </div>
+                    </td>
+                    <td className="text-right py-2 px-4 font-mono">{formatCurrency(protocol.tvl)}</td>
+                    <td className={`text-right py-2 px-4 font-mono ${protocol.change_1d >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                      {protocol.change_1d >= 0 ? '+' : ''}{protocol.change_1d.toFixed(2)}%
+                    </td>
+                    <td className={`text-right py-2 px-4 font-mono ${protocol.change_7d >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                      {protocol.change_7d >= 0 ? '+' : ''}{protocol.change_7d.toFixed(2)}%
+                    </td>
+                    <td className="text-right py-2 px-4">
+                      <Badge variant="outline" className="text-xs">
+                        {protocol.category}
+                      </Badge>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>

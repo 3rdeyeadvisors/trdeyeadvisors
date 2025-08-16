@@ -67,3 +67,6 @@ verify_jwt = false
 
 [functions.send-subscriber-thank-you]
 verify_jwt = false
+
+[functions.fetch-defi-data]
+verify_jwt = false
