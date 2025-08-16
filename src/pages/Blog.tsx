@@ -138,8 +138,8 @@ const Blog = () => {
                   className="w-full p-6 bg-gradient-consciousness border-primary/20 shadow-consciousness hover:shadow-awareness transition-all duration-cosmic flex-shrink-0"
                 >
                   <div className="mb-4">
-                    <div className="flex flex-col gap-3">
-                      <div className="flex flex-wrap items-center gap-2">
+                    <div className="flex flex-col gap-2">
+                      <div className="flex items-center gap-2">
                         <Badge className="bg-primary text-primary-foreground border-primary shadow-cosmic">
                           Featured
                         </Badge>
@@ -147,17 +147,19 @@ const Blog = () => {
                           {post.category}
                         </Badge>
                       </div>
-                      <div className="flex flex-wrap gap-2">
-                        {post.tags.slice(0, 3).map((tag, tagIndex) => (
-                          <Badge 
-                            key={`${post.id}-tag-${tagIndex}`} 
-                            variant="outline" 
-                            className="text-xs bg-card/80 text-foreground border-primary/50 hover:bg-primary/20 hover:text-primary"
-                          >
-                            {tag}
-                          </Badge>
-                        ))}
-                      </div>
+                      {post.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5">
+                          {post.tags.slice(0, 3).map((tag, tagIndex) => (
+                            <Badge 
+                              key={`${post.id}-tag-${tagIndex}`} 
+                              variant="outline" 
+                              className="text-xs bg-card/80 text-foreground border-primary/50 hover:bg-primary/20 hover:text-primary"
+                            >
+                              {tag}
+                            </Badge>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </div>
                   <h2 className="text-xl md:text-2xl font-consciousness font-bold text-foreground mb-3 line-clamp-2">
