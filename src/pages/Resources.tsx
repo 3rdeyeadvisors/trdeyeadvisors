@@ -120,7 +120,7 @@ const Resources = () => {
           {resourceCategories.map((category, categoryIndex) => (
             <div key={category.title} className="space-y-6">
               {/* Category Header */}
-              <div className="flex items-center gap-4 mb-6">
+              <div className="flex flex-col md:flex-row items-center md:items-center gap-4 mb-6 text-center md:text-left">
                 <category.icon className="w-8 h-8 text-primary" />
                 <div>
                   <h2 className="text-2xl font-consciousness font-bold text-foreground">

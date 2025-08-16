@@ -64,8 +64,8 @@ export const DefiCharts = () => {
   const getTVLChange = () => ((getCurrentTVL() - getPreviousTVL()) / getPreviousTVL() * 100).toFixed(2);
 
   return (
-    <div className="container mx-auto px-4 py-8 space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="container mx-auto px-4 py-8 space-y-6 mobile-typography-center">
+      <div className="flex flex-col md:flex-row items-center md:items-center justify-between gap-4 text-center md:text-left">
         <div>
           <h1 className="text-3xl font-bold">DeFi Analytics Dashboard</h1>
           <p className="text-muted-foreground mt-2">
@@ -131,7 +131,7 @@ export const DefiCharts = () => {
       {/* Time Series Chart */}
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col md:flex-row items-center md:items-center justify-between gap-4 text-center md:text-left">
             <div>
               <CardTitle>Market Trends (30 Days)</CardTitle>
               <CardDescription>Track key DeFi metrics over time</CardDescription>
@@ -194,8 +194,8 @@ export const DefiCharts = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Protocol Rankings */}
         <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
+          <CardHeader className="text-center md:text-left">
+            <CardTitle className="flex items-center justify-center md:justify-start">
               <BarChart3 className="w-5 h-5 mr-2" />
               Top DeFi Protocols
             </CardTitle>
@@ -216,8 +216,8 @@ export const DefiCharts = () => {
 
         {/* Risk Distribution */}
         <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
+          <CardHeader className="text-center md:text-left">
+            <CardTitle className="flex items-center justify-center md:justify-start">
               <PieChartIcon className="w-5 h-5 mr-2" />
               Risk Distribution
             </CardTitle>
@@ -247,7 +247,7 @@ export const DefiCharts = () => {
 
       {/* Protocol Details Table */}
       <Card>
-        <CardHeader>
+        <CardHeader className="text-center md:text-left">
           <CardTitle>Protocol Performance</CardTitle>
           <CardDescription>Detailed metrics for top DeFi protocols</CardDescription>
         </CardHeader>
