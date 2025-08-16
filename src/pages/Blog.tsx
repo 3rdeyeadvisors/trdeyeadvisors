@@ -225,17 +225,17 @@ const Blog = () => {
                   </div>
                 </div>
                 
-                {/* Navigation dots */}
+                {/* Navigation bars */}
                 {featuredPosts.length > 1 && (
-                  <div className="flex justify-center gap-1.5 mt-3 pt-3 border-t border-primary/20">
+                  <div className="flex mt-3 pt-3 border-t border-primary/20">
                     {featuredPosts.map((_, index) => (
                       <button
                         key={index}
                         onClick={() => setCurrentFeaturedIndex(index)}
-                        className={`w-2 h-2 rounded-full transition-colors ${
+                        className={`flex-1 h-1 transition-colors ${
                           index === currentFeaturedIndex 
-                            ? 'bg-black' 
-                            : 'bg-black/30 hover:bg-black/60'
+                            ? 'bg-black/60' 
+                            : 'bg-black/20 hover:bg-black/40'
                         }`}
                       />
                     ))}
