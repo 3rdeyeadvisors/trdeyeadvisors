@@ -61,7 +61,7 @@ const Index = () => {
       >
         <div className="absolute inset-0 bg-background/60 backdrop-blur-sm"></div>
         
-        <div className="relative z-10 container mx-auto px-4 text-center">
+        <div className="relative z-10 container mx-auto px-4 text-center mobile-typography-center">
           <div className="animate-awareness-float">
             <h1 className="text-5xl md:text-7xl font-consciousness font-bold text-foreground mb-6">
               Awaken Awareness.
@@ -106,7 +106,7 @@ const Index = () => {
 
       {/* Mission Statement */}
       <section className="py-20 bg-background">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4 mobile-typography-center">
           <Card className="p-8 bg-gradient-consciousness border-primary/20 shadow-consciousness max-w-4xl mx-auto hover:shadow-[0_0_30px_hsl(var(--primary)/0.4),0_0_60px_hsl(var(--accent)/0.3)] hover:border-primary/40 transition-all duration-consciousness cursor-pointer group animate-consciousness-glow hover:animate-none">
             <div className="text-center">
               <h2 className="text-2xl md:text-3xl font-consciousness font-bold text-foreground mb-6 group-hover:text-primary-glow transition-colors duration-cosmic">
@@ -125,7 +125,7 @@ const Index = () => {
 
       {/* Features Grid */}
       <section className="py-20 bg-muted/20">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4 mobile-typography-center">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-consciousness font-bold text-foreground mb-4">
               The Path to Financial Consciousness
@@ -157,7 +157,7 @@ const Index = () => {
 
       {/* Call to Action */}
       <section className="py-20 bg-background">
-        <div className="container mx-auto px-4 text-center">
+        <div className="container mx-auto px-4 text-center mobile-typography-center">
           <h2 className="text-3xl md:text-4xl font-consciousness font-bold text-foreground mb-8">
             Ready to Begin Your Reprogramming?
           </h2>
@@ -175,7 +175,7 @@ const Index = () => {
 
       {/* Newsletter Signup */}
       <section className="py-16 bg-muted/10">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4 mobile-typography-center">
           <NewsletterSignup variant="cosmic" />
         </div>
       </section>

@@ -197,7 +197,7 @@ const Courses = () => {
         ]}
       />
       <div className="min-h-screen py-20">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 mobile-typography-center">
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-4 mb-6">

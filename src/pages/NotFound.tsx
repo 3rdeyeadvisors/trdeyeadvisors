@@ -16,7 +16,7 @@ const NotFound = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center py-20">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 mobile-typography-center">
         <Card className="p-12 bg-card/60 border-border max-w-md mx-auto text-center">
           <Eye className="w-16 h-16 text-primary mx-auto mb-6 animate-cosmic-pulse" />
           <h1 className="text-6xl font-consciousness font-bold text-primary mb-4">404</h1>

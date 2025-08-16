@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 const TermsOfService = () => {
   return (
     <div className="min-h-screen py-20">
-      <div className="container mx-auto px-4 max-w-4xl">
+      <div className="container mx-auto px-4 max-w-4xl mobile-typography-center">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-consciousness font-bold text-foreground mb-4">
             Terms of Service
