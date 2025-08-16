@@ -79,7 +79,7 @@ const Philosophy = () => {
               that true financial freedom is impossible. They've conditioned us to accept 
               middlemen, hidden fees, and systems designed to extract value from our labor. 
               It's time to break free from this conditioning and reprogram our understanding 
-              of what money and finance can truly be.
+              of what money and finance truly represent.
             </p>
           </Card>
         </div>
