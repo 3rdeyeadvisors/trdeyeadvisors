@@ -141,7 +141,7 @@ export const DefiCharts = () => {
 
   if (!data) return null;
 
-  // Category colors for protocol visualization
+  // Category colors for protocol visualization - each category gets a unique color
   const categoryColors: { [key: string]: string } = {
     'Liquid Staking': '#3b82f6', // Blue
     'Lending': '#10b981', // Green  
@@ -152,7 +152,27 @@ export const DefiCharts = () => {
     'Bridge': '#06b6d4', // Cyan
     'Derivatives': '#ec4899', // Pink
     'Insurance': '#84cc16', // Lime
-    'default': '#64748b' // Default gray
+    'Restaking': '#f97316', // Dark Orange
+    'RWA': '#14b8a6', // Teal
+    'Gaming': '#a855f7', // Violet
+    'NFT Marketplace': '#f43f5e', // Rose
+    'Synthetics': '#22c55e', // Emerald
+    'Options': '#8b5cf6', // Blue Violet
+    'Prediction Market': '#06b6d4', // Sky
+    'Stablecoin': '#65a30d', // Green-600
+    'Launchpad': '#dc2626', // Red-600
+    'Perpetuals': '#7c3aed', // Violet-600
+    'SocialFi': '#db2777', // Pink-600
+    'Privacy': '#1f2937', // Gray-800
+    'Oracle': '#059669', // Emerald-600
+    'DAO': '#9333ea', // Purple-600
+    'Analytics': '#0891b2', // Cyan-600
+    'Cross Chain': '#ea580c', // Orange-600
+    'Farm': '#16a34a', // Green-500
+    'Algo-Stables': '#0d9488', // Teal-600
+    'Indexes': '#7c2d12', // Orange-900
+    'Reserve Currency': '#be185d', // Pink-700
+    'default': '#64748b' // Default slate
   };
 
   const getProtocolColor = (category: string) => {
