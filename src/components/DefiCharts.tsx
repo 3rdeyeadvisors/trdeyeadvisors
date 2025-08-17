@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tooltip as UITooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext, type CarouselApi } from '@/components/ui/carousel';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell, Area, AreaChart } from 'recharts';
-import { TrendingUp, TrendingDown, DollarSign, Percent, BarChart3, PieChart as PieChartIcon, Activity, Loader2, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
+import { TrendingUp, TrendingDown, DollarSign, Percent, BarChart3, PieChart as PieChartIcon, Activity, Loader2, Clock, ChevronLeft, ChevronRight, RefreshCw } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 
 interface DefiProtocol {
@@ -87,12 +87,14 @@ export const DefiCharts = () => {
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  const fetchDefiData = async () => {
+  const fetchDefiData = async (forceRefresh: boolean = false) => {
     try {
       setLoading(true);
       setError(null);
       
-      const { data: response, error: functionError } = await supabase.functions.invoke('fetch-defi-data');
+      // Add force parameter if manual refresh is requested
+      const functionName = forceRefresh ? 'fetch-defi-data?force=1' : 'fetch-defi-data';
+      const { data: response, error: functionError } = await supabase.functions.invoke(functionName);
       
       if (functionError) {
         console.error('Supabase function error:', functionError);
@@ -122,8 +124,8 @@ export const DefiCharts = () => {
   useEffect(() => {
     fetchDefiData();
     
-    // Update data every 60 seconds
-    const interval = setInterval(fetchDefiData, 60000);
+    // Update data every 5 minutes
+    const interval = setInterval(() => fetchDefiData(), 300000);
     return () => clearInterval(interval);
   }, []);
 
@@ -253,14 +255,24 @@ export const DefiCharts = () => {
               <TooltipTrigger asChild>
                 <Badge variant="outline" className="cursor-help">
                   <Clock className="w-4 h-4 mr-2" />
-                  {lastUpdated ? `Last updated ${lastUpdated.toLocaleTimeString()}` : 'Updates every 60s'}
+                  {lastUpdated ? `Last updated ${lastUpdated.toLocaleTimeString()}` : 'Updates every 5 min'}
                 </Badge>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Data refreshes automatically every 60 seconds</p>
+                <p>Data refreshes automatically every 5 minutes</p>
                 {lastUpdated && <p>Last refresh: {lastUpdated.toLocaleString()}</p>}
               </TooltipContent>
             </UITooltip>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => fetchDefiData(true)}
+              disabled={loading}
+              className="gap-2"
+            >
+              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+              Refresh Now
+            </Button>
           </div>
         </TooltipProvider>
       </div>

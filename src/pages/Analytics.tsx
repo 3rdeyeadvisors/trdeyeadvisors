@@ -38,7 +38,7 @@ const Analytics = () => {
           },
           {
             question: "How accurate is your DeFi market data?",
-            answer: "Our DeFi analytics are updated every 60 seconds and sourced from multiple reliable data providers to ensure accuracy. We track over 200+ DeFi protocols and their performance metrics."
+            answer: "Our DeFi analytics are updated every 5 minutes and sourced from multiple reliable data providers to ensure accuracy. We track over 200+ DeFi protocols and their performance metrics."
           },
           {
             question: "Can I use this data for investment decisions?",
@@ -57,7 +57,7 @@ const Analytics = () => {
             </h1>
           </div>
           <p className="text-xl text-muted-foreground font-consciousness max-w-3xl mx-auto">
-            Real-time market data from DefiLlama API, tracking 200+ protocols with live updates every 60 seconds
+            Real-time market data from DefiLlama API, tracking 200+ protocols with live updates every 5 minutes
           </p>
           <div className="flex items-center justify-center gap-2 mt-4">
             <Badge variant="secondary" className="animate-pulse">
@@ -66,7 +66,7 @@ const Analytics = () => {
             </Badge>
             <Badge variant="outline">
               <TrendingUp className="w-4 h-4 mr-2" />
-              Auto-Updates Every 60s
+              Auto-Updates Every 5 min
             </Badge>
           </div>
         </div>

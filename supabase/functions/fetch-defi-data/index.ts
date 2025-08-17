@@ -152,9 +152,13 @@ serve(async (req) => {
   }
 
   try {
-    // Check cache first
+    // Check for force refresh parameter
+    const url = new URL(req.url);
+    const forceRefresh = url.searchParams.get('force') === '1';
+    
+    // Check cache first (unless force refresh is requested)
     const now = Date.now();
-    if (cachedData && (now - cacheTimestamp) < CACHE_DURATION) {
+    if (!forceRefresh && cachedData && (now - cacheTimestamp) < CACHE_DURATION) {
       console.log('Returning cached DeFi data');
       return new Response(JSON.stringify(cachedData), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
