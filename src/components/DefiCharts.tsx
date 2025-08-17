@@ -604,11 +604,10 @@ export const DefiCharts = () => {
             </CardTitle>
             <CardDescription>Portfolio risk allocation across DeFi</CardDescription>
           </CardHeader>
-          <CardContent className="pb-4 flex items-center justify-center">
-            {/* Mobile: Stack vertically, Desktop: Side by side centered */}
-            <div className="flex flex-col md:flex-row md:justify-center md:items-center gap-6 md:gap-8 w-full">
-              {/* Chart Container - Fixed square size */}
-              <div className="mx-auto flex-shrink-0">
+          <CardContent className="py-2">
+            <div className="flex flex-col md:flex-row md:justify-center md:items-start gap-4 md:gap-8">
+              {/* Chart Container */}
+              <div className="flex justify-center flex-shrink-0">
                 <div className="w-[280px] h-[280px] md:w-[320px] md:h-[320px] lg:w-[340px] lg:h-[340px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
@@ -633,34 +632,40 @@ export const DefiCharts = () => {
                 </div>
               </div>
               
-              {/* Legend - Responsive layout */}
-              <div className="w-full md:w-auto md:flex-none">
-                {/* Mobile: Centered wrapped layout */}
-                <div className="flex flex-wrap justify-center gap-4 md:hidden">
+              {/* Legend */}
+              <div className="flex-shrink-0">
+                {/* Mobile: 2-column grid */}
+                <div className="grid grid-cols-2 gap-x-4 gap-y-2 md:hidden">
                   {data.riskDistribution.map((entry, index) => (
-                    <div key={index} className="flex items-center gap-2">
+                    <div key={index} className="flex items-center gap-2 min-w-0">
                       <div 
-                        className="w-3 h-3 rounded-full" 
+                        className="w-3 h-3 rounded-full flex-shrink-0" 
                         style={{ backgroundColor: entry.color }}
                       />
-                      <span className="text-sm font-medium">{entry.name}</span>
-                      <span className="text-sm text-muted-foreground">{entry.value}%</span>
+                      <div className="flex flex-col min-w-0">
+                        <span className="text-xs font-medium truncate">{entry.name}</span>
+                        <span className="text-xs text-muted-foreground font-mono">{entry.value}%</span>
+                      </div>
                     </div>
                   ))}
                 </div>
                 
-                {/* Desktop: Vertical list centered */}
-                <div className="hidden md:flex md:flex-col md:items-center gap-3">
-                  {data.riskDistribution.map((entry, index) => (
-                    <div key={index} className="flex items-center gap-3">
-                      <div 
-                        className="w-4 h-4 rounded-full flex-shrink-0" 
-                        style={{ backgroundColor: entry.color }}
-                      />
-                      <span className="text-sm font-medium">{entry.name}</span>
-                      <span className="text-sm text-muted-foreground font-mono ml-2">{entry.value}%</span>
-                    </div>
-                  ))}
+                {/* Desktop: Clean table-like structure */}
+                <div className="hidden md:block min-w-[200px]">
+                  <div className="space-y-2">
+                    {data.riskDistribution.map((entry, index) => (
+                      <div key={index} className="flex items-center justify-between py-1 px-2 rounded-md hover:bg-muted/50 transition-colors">
+                        <div className="flex items-center gap-3">
+                          <div 
+                            className="w-3 h-3 rounded-full flex-shrink-0" 
+                            style={{ backgroundColor: entry.color }}
+                          />
+                          <span className="text-sm font-medium">{entry.name}</span>
+                        </div>
+                        <span className="text-sm text-muted-foreground font-mono ml-4">{entry.value}%</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
