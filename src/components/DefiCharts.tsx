@@ -528,7 +528,7 @@ export const DefiCharts = () => {
         </Card>
 
         {/* Risk Distribution */}
-        <Card>
+        <Card className="self-start">
           <CardHeader className="text-center">
             <CardTitle className="flex items-center justify-center">
               <PieChartIcon className="w-5 h-5 mr-2" />
@@ -536,9 +536,9 @@ export const DefiCharts = () => {
             </CardTitle>
             <CardDescription>Portfolio risk allocation across DeFi</CardDescription>
           </CardHeader>
-          <CardContent>
-            {/* Mobile: Stack vertically, Desktop: Side by side */}
-            <div className="flex flex-col md:flex-row md:items-center gap-6 md:gap-8">
+          <CardContent className="pb-4">
+            {/* Mobile: Stack vertically, Desktop: Side by side centered */}
+            <div className="flex flex-col md:flex-row md:justify-center md:items-center gap-6 md:gap-8">
               {/* Chart Container - Fixed square size */}
               <div className="mx-auto md:mx-0 flex-shrink-0">
                 <div className="w-[280px] h-[280px]">
@@ -566,7 +566,7 @@ export const DefiCharts = () => {
               </div>
               
               {/* Legend - Responsive layout */}
-              <div className="flex-1">
+              <div className="w-full md:w-auto md:flex-none">
                 {/* Mobile: Centered wrapped layout */}
                 <div className="flex flex-wrap justify-center gap-4 md:hidden">
                   {data.riskDistribution.map((entry, index) => (
@@ -581,18 +581,16 @@ export const DefiCharts = () => {
                   ))}
                 </div>
                 
-                {/* Desktop: Vertical list */}
-                <div className="hidden md:flex md:flex-col gap-3">
+                {/* Desktop: Vertical list centered */}
+                <div className="hidden md:flex md:flex-col md:items-center gap-3">
                   {data.riskDistribution.map((entry, index) => (
                     <div key={index} className="flex items-center gap-3">
                       <div 
                         className="w-4 h-4 rounded-full flex-shrink-0" 
                         style={{ backgroundColor: entry.color }}
                       />
-                      <div className="flex-1 flex justify-between items-center">
-                        <span className="text-sm font-medium">{entry.name}</span>
-                        <span className="text-sm text-muted-foreground font-mono">{entry.value}%</span>
-                      </div>
+                      <span className="text-sm font-medium">{entry.name}</span>
+                      <span className="text-sm text-muted-foreground font-mono ml-2">{entry.value}%</span>
                     </div>
                   ))}
                 </div>
