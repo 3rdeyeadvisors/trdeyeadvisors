@@ -87,9 +87,9 @@ const Contact = () => {
           {/* Contact Form */}
           <div>
             <Card className="p-8 bg-card/60 border-border">
-              <div className="flex items-center justify-center mb-4 md:mb-6 text-center md:justify-start md:text-left md:gap-3">
-                <Mail className="hidden md:block w-6 h-6 text-primary shrink-0" aria-hidden="true" />
-                <h2 className="text-2xl font-consciousness font-bold text-foreground text-center md:text-left">
+              <div className="flex items-center justify-center mb-4 md:mb-6 text-center">
+                <Mail className="hidden md:block w-6 h-6 text-primary shrink-0 mr-3" aria-hidden="true" />
+                <h2 className="text-2xl font-consciousness font-bold text-foreground text-center">
                   Get in Touch
                 </h2>
               </div>
@@ -187,14 +187,14 @@ const Contact = () => {
           <div className="space-y-8">
             {/* About Section */}
             <Card className="p-8 bg-gradient-consciousness border-primary/20">
-              <div className="flex items-center justify-center mb-4 md:mb-6 text-center md:justify-start md:text-left md:gap-3">
-                <Globe className="hidden md:block w-6 h-6 text-foreground shrink-0 drop-shadow-sm" aria-hidden="true" />
-                <h2 className="text-2xl font-consciousness font-bold text-foreground text-center md:text-left">
+              <div className="flex items-center justify-center mb-4 md:mb-6 text-center">
+                <Globe className="hidden md:block w-6 h-6 text-foreground shrink-0 mr-3 drop-shadow-sm" aria-hidden="true" />
+                <h2 className="text-2xl font-consciousness font-bold text-foreground text-center">
                   About 3rdeyeadvisors
                 </h2>
               </div>
 
-              <div className="space-y-4 text-foreground/90 font-consciousness leading-relaxed">
+              <div className="space-y-4 text-foreground/90 font-consciousness leading-relaxed text-center">
                 <p>
                   We are consciousness explorers who discovered that traditional financial systems 
                   were designed to keep humanity in a state of economic dependence. DeFi represents 
@@ -224,24 +224,42 @@ const Contact = () => {
 
             {/* Social Connect */}
             <Card className="p-6 bg-card/60 border-border">
-              <h3 className="text-lg font-consciousness font-semibold text-foreground mb-4">
+              <h3 className="text-lg font-consciousness font-semibold text-foreground mb-4 text-center">
                 Connect With Us
               </h3>
               
               <div className="space-y-3">
-                <Button variant="outline" className="w-full justify-start font-consciousness">
-                  <Mail className="w-4 h-4 mr-3" />
-                  info@the3rdeyeadvisors.com
+                <Button 
+                  variant="outline" 
+                  className="w-full justify-start font-consciousness"
+                  asChild
+                >
+                  <a href="mailto:info@the3rdeyeadvisors.com" className="flex items-center">
+                    <Mail className="w-4 h-4 mr-3" />
+                    info@the3rdeyeadvisors.com
+                  </a>
                 </Button>
                 
-                <Button variant="outline" className="w-full justify-start font-consciousness">
-                  <Twitter className="w-4 h-4 mr-3" />
-                  @3rdeyeadvisors
+                <Button 
+                  variant="outline" 
+                  className="w-full justify-start font-consciousness"
+                  asChild
+                >
+                  <a href="https://twitter.com/3rdeyeadvisors" target="_blank" rel="noopener noreferrer" className="flex items-center">
+                    <Twitter className="w-4 h-4 mr-3" />
+                    @3rdeyeadvisors
+                  </a>
                 </Button>
                 
-                <Button variant="outline" className="w-full justify-start font-consciousness">
-                  <Github className="w-4 h-4 mr-3" />
-                  Open Source Resources
+                <Button 
+                  variant="outline" 
+                  className="w-full justify-start font-consciousness"
+                  asChild
+                >
+                  <a href="https://github.com/3rdeyeadvisors" target="_blank" rel="noopener noreferrer" className="flex items-center">
+                    <Github className="w-4 h-4 mr-3" />
+                    Open Source Resources
+                  </a>
                 </Button>
               </div>
             </Card>
@@ -251,7 +269,7 @@ const Contact = () => {
               <div className="flex items-start gap-3">
                 <MessageSquare className="w-5 h-5 text-awareness mt-1" />
                 <div>
-                  <h4 className="font-consciousness font-semibold text-foreground mb-2">
+                  <h4 className="font-consciousness font-semibold text-foreground mb-2 text-center">
                     Response Time
                   </h4>
                   <p className="text-sm text-muted-foreground font-consciousness">
