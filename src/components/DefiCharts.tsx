@@ -8,6 +8,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell, Area, AreaChart } from 'recharts';
 import { TrendingUp, TrendingDown, DollarSign, Percent, BarChart3, PieChart as PieChartIcon, Activity, Loader2, Clock, ChevronLeft, ChevronRight, RefreshCw } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 interface DefiProtocol {
   id: string;
@@ -78,6 +79,7 @@ const generateFallbackData = (): DefiData => {
 };
 
 export const DefiCharts = () => {
+  const { toast } = useToast();
   const [data, setData] = useState<DefiData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -86,6 +88,11 @@ export const DefiCharts = () => {
   const [isDesktop, setIsDesktop] = useState(false);
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [currentSlide, setCurrentSlide] = useState(0);
+  
+  // New states for countdown and cooldown
+  const [nextRefreshTime, setNextRefreshTime] = useState<Date | null>(null);
+  const [countdownSeconds, setCountdownSeconds] = useState<number>(0);
+  const [refreshCooldown, setRefreshCooldown] = useState<number>(0);
 
   const fetchDefiData = async (forceRefresh: boolean = false) => {
     try {
@@ -105,6 +112,22 @@ export const DefiCharts = () => {
         console.log('API returned protocols:', response.protocols.length);
         setData(response);
         setLastUpdated(new Date());
+        
+        // Set next refresh time and reset countdown
+        const nextRefresh = new Date(Date.now() + 300000); // 5 minutes from now
+        setNextRefreshTime(nextRefresh);
+        
+        // Show success toast for manual refresh
+        if (forceRefresh) {
+          toast({
+            title: "Data refreshed successfully",
+            description: `Updated at ${new Date().toLocaleTimeString()}`,
+            variant: "default"
+          });
+          
+          // Start cooldown
+          setRefreshCooldown(10);
+        }
       } else {
         console.warn('Invalid response structure, using fallback data');
         throw new Error('Invalid data structure received');
@@ -116,6 +139,22 @@ export const DefiCharts = () => {
       console.log('Using fallback protocols:', fallbackData.protocols.length);
       setData(fallbackData);
       setLastUpdated(new Date());
+      
+      // Set next refresh time even for fallback
+      const nextRefresh = new Date(Date.now() + 300000); // 5 minutes from now
+      setNextRefreshTime(nextRefresh);
+      
+      // Show error toast for manual refresh
+      if (forceRefresh) {
+        toast({
+          title: "Refresh failed",
+          description: "Using cached data due to network issues",
+          variant: "destructive"
+        });
+        
+        // Start cooldown even on error
+        setRefreshCooldown(10);
+      }
     } finally {
       setLoading(false);
     }
@@ -124,10 +163,43 @@ export const DefiCharts = () => {
   useEffect(() => {
     fetchDefiData();
     
+    // Set initial next refresh time
+    const nextRefresh = new Date(Date.now() + 300000); // 5 minutes from now
+    setNextRefreshTime(nextRefresh);
+    
     // Update data every 5 minutes
     const interval = setInterval(() => fetchDefiData(), 300000);
     return () => clearInterval(interval);
   }, []);
+
+  // Countdown timer effect
+  useEffect(() => {
+    const countdownInterval = setInterval(() => {
+      if (nextRefreshTime) {
+        const secondsUntilRefresh = Math.max(0, Math.floor((nextRefreshTime.getTime() - Date.now()) / 1000));
+        setCountdownSeconds(secondsUntilRefresh);
+        
+        // Reset next refresh time when countdown reaches 0
+        if (secondsUntilRefresh === 0) {
+          const nextRefresh = new Date(Date.now() + 300000);
+          setNextRefreshTime(nextRefresh);
+        }
+      }
+    }, 1000);
+
+    return () => clearInterval(countdownInterval);
+  }, [nextRefreshTime]);
+
+  // Button cooldown effect
+  useEffect(() => {
+    if (refreshCooldown > 0) {
+      const cooldownInterval = setInterval(() => {
+        setRefreshCooldown(prev => Math.max(0, prev - 1));
+      }, 1000);
+      
+      return () => clearInterval(cooldownInterval);
+    }
+  }, [refreshCooldown]);
 
   // Desktop media query
   useEffect(() => {
@@ -255,7 +327,10 @@ export const DefiCharts = () => {
               <TooltipTrigger asChild>
                 <Badge variant="outline" className="cursor-help">
                   <Clock className="w-4 h-4 mr-2" />
-                  {lastUpdated ? `Last updated ${lastUpdated.toLocaleTimeString()}` : 'Updates every 5 min'}
+                  {countdownSeconds > 0 ? 
+                    `Next refresh in ${Math.floor(countdownSeconds / 60)}:${(countdownSeconds % 60).toString().padStart(2, '0')}` :
+                    (lastUpdated ? `Last updated ${lastUpdated.toLocaleTimeString()}` : 'Updates every 5 min')
+                  }
                 </Badge>
               </TooltipTrigger>
               <TooltipContent>
@@ -263,16 +338,27 @@ export const DefiCharts = () => {
                 {lastUpdated && <p>Last refresh: {lastUpdated.toLocaleString()}</p>}
               </TooltipContent>
             </UITooltip>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => fetchDefiData(true)}
-              disabled={loading}
-              className="gap-2"
-            >
-              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-              Refresh Now
-            </Button>
+            <UITooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => fetchDefiData(true)}
+                  disabled={loading || refreshCooldown > 0}
+                  className="gap-2"
+                >
+                  <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+                  {refreshCooldown > 0 ? `Wait ${refreshCooldown}s` : 'Refresh Now'}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                {refreshCooldown > 0 ? (
+                  <p>Please wait {refreshCooldown} seconds before refreshing again</p>
+                ) : (
+                  <p>Force refresh data immediately</p>
+                )}
+              </TooltipContent>
+            </UITooltip>
           </div>
         </TooltipProvider>
       </div>
