@@ -162,9 +162,9 @@ const Blog = () => {
         {featuredPosts.length > 0 && (
           <div className="mb-12">
             <h2 className="text-2xl section-heading mb-6">Featured This Week</h2>
-            <div className="max-w-xs mx-auto">
+            <div className="max-w-xs md:max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto">
               <Card 
-                className="p-4 bg-gradient-consciousness border-primary/20 shadow-consciousness cursor-grab active:cursor-grabbing select-none"
+                className="p-6 md:p-8 bg-gradient-consciousness border-primary/20 shadow-consciousness cursor-grab active:cursor-grabbing select-none"
                 ref={sliderRef}
                 onMouseDown={(e) => handleStart(e.clientX)}
                 onMouseMove={(e) => handleMove(e.clientX)}
@@ -178,48 +178,48 @@ const Blog = () => {
                   <div 
                     className={`flex ${isDragging ? '' : 'transition-transform duration-300 ease-out'}`}
                     style={{ 
-                      transform: `translateX(${-currentFeaturedIndex * 100 + (isDragging ? (translateX / 320) * 100 : 0)}%)` 
+                      transform: `translateX(${-currentFeaturedIndex * 100 + (isDragging ? (translateX / (sliderRef.current?.offsetWidth || 320)) * 100 : 0)}%)` 
                     }}
                   >
                     {featuredPosts.map((post) => (
                       <div key={post.id} className="w-full flex-shrink-0 flex flex-col">
                         {/* Badge */}
-                        <div className="flex justify-center mb-3">
+                        <div className="flex justify-center mb-4">
                           <Badge className={`w-fit ${getCategoryColor(post.category)}`}>
                             {post.category}
                           </Badge>
                         </div>
 
                         {/* Content */}
-                        <h3 className="text-lg font-consciousness font-semibold text-foreground mb-2 line-clamp-2">
+                        <h3 className="text-xl md:text-2xl font-consciousness font-semibold text-foreground mb-3 line-clamp-2 text-center">
                           {post.title}
                         </h3>
                         
-                        <p className="text-sm text-muted-foreground font-consciousness mb-3 leading-relaxed line-clamp-2">
+                        <p className="text-base md:text-lg text-muted-foreground font-consciousness mb-4 leading-relaxed line-clamp-3 text-center max-w-2xl mx-auto">
                           {post.excerpt}
                         </p>
                         
                         {/* Footer */}
-                        <div className="flex items-center justify-between text-xs text-muted-foreground mb-3">
-                          <div className="flex items-center gap-1">
-                            <Calendar className="w-3 h-3" />
+                        <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground mb-6">
+                          <div className="flex items-center gap-2">
+                            <Calendar className="w-4 h-4" />
                             <span className="font-system">{post.date}</span>
                           </div>
-                          <div className="flex items-center gap-1">
-                            <Clock className="w-3 h-3" />
+                          <div className="flex items-center gap-2">
+                            <Clock className="w-4 h-4" />
                             <span className="font-system">{post.readTime}</span>
                           </div>
                         </div>
                         
-                        <div className="px-2">
+                        <div className="flex justify-center">
                           <Button 
                             variant="outline" 
-                            size="sm"
-                            className="w-full font-consciousness text-sm h-8 bg-background/90 hover:bg-primary/10 border-primary/40"
+                            size="lg"
+                            className="font-consciousness bg-background/90 hover:bg-primary/10 border-primary/40 px-8"
                             onClick={() => navigate(`/blog/${post.slug}`)}
                           >
                             Read More
-                            <ArrowRight className="w-3 h-3 ml-1" />
+                            <ArrowRight className="w-4 h-4 ml-2" />
                           </Button>
                         </div>
                       </div>
