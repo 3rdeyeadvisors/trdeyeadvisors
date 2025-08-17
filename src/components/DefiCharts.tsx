@@ -7,7 +7,6 @@ import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell, Area, AreaChart } from 'recharts';
 import { TrendingUp, TrendingDown, DollarSign, Percent, BarChart3, PieChart as PieChartIcon, Activity, Loader2, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
-import useEmblaCarousel from 'embla-carousel-react';
 
 interface DefiProtocol {
   id: string;
@@ -241,21 +240,15 @@ export const DefiCharts = () => {
   const getPreviousTVL = () => data.historicalData[data.historicalData.length - 2]?.totalTvl || data.totalTvl;
   const getTVLChange = () => ((getCurrentTVL() - getPreviousTVL()) / getPreviousTVL() * 100).toFixed(2);
 
-  // Mobile Carousel Component
-  const MobileCarousel = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => {
-    const [emblaRef] = useEmblaCarousel({ 
-      align: 'start', 
-      containScroll: 'trimSnaps',
-      dragFree: true 
-    });
-
+  // Mobile Carousel using shadcn Carousel component
+  const MobileCarouselWrapper = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => {
     return (
       <div className={`md:hidden ${className}`}>
-        <div className="overflow-hidden" ref={emblaRef}>
-          <div className="flex gap-3">
+        <Carousel>
+          <CarouselContent>
             {children}
-          </div>
-        </div>
+          </CarouselContent>
+        </Carousel>
         <div className="text-center mt-3">
           <span className="text-xs text-muted-foreground">← Swipe to see more →</span>
         </div>
@@ -556,68 +549,70 @@ export const DefiCharts = () => {
                 </div>
 
                 {/* Mobile Carousel */}
-                <MobileCarousel>
+                <MobileCarouselWrapper>
                   {data.protocols.slice(0, 8).map((protocol, index) => (
-                    <div key={protocol.id} className="flex-shrink-0 w-72 p-3 rounded-lg border bg-card text-center">
-                      <div className="flex flex-col items-center gap-2 mb-3">
-                        <div className="w-7 h-7 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-xs font-bold text-primary">
-                          {index + 1}
-                        </div>
-                        <div className="font-semibold">{protocol.name}</div>
-                        <Badge 
-                          variant="outline" 
-                          className="text-xs"
-                          style={{ 
-                            borderColor: getProtocolColor(protocol.category),
-                            color: getProtocolColor(protocol.category),
-                            backgroundColor: `${getProtocolColor(protocol.category)}10`
-                          }}
-                        >
-                          {protocol.category}
-                        </Badge>
-                      </div>
-                      
-                      <div className="space-y-3">
-                        <div className="text-sm text-muted-foreground text-center">
-                          TVL: <span className="font-mono font-semibold text-foreground">{formatCurrency(protocol.tvl)}</span>
+                    <CarouselItem key={protocol.id} className="basis-72">
+                      <div className="p-3 rounded-lg border bg-card text-center">
+                        <div className="flex flex-col items-center gap-2 mb-3">
+                          <div className="w-7 h-7 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-xs font-bold text-primary">
+                            {index + 1}
+                          </div>
+                          <div className="font-semibold">{protocol.name}</div>
+                          <Badge 
+                            variant="outline" 
+                            className="text-xs"
+                            style={{ 
+                              borderColor: getProtocolColor(protocol.category),
+                              color: getProtocolColor(protocol.category),
+                              backgroundColor: `${getProtocolColor(protocol.category)}10`
+                            }}
+                          >
+                            {protocol.category}
+                          </Badge>
                         </div>
                         
-                        <div className="flex justify-center gap-6 text-sm">
-                          <div className="text-center">
-                            <div className="text-xs text-muted-foreground">24h</div>
-                            <div className={`font-mono font-medium ${protocol.change_1d >= 0 ? 'text-awareness' : 'text-destructive'}`}>
-                              {protocol.change_1d >= 0 ? '+' : ''}{protocol.change_1d.toFixed(1)}%
+                        <div className="space-y-3">
+                          <div className="text-sm text-muted-foreground text-center">
+                            TVL: <span className="font-mono font-semibold text-foreground">{formatCurrency(protocol.tvl)}</span>
+                          </div>
+                          
+                          <div className="flex justify-center gap-6 text-sm">
+                            <div className="text-center">
+                              <div className="text-xs text-muted-foreground">24h</div>
+                              <div className={`font-mono font-medium ${protocol.change_1d >= 0 ? 'text-awareness' : 'text-destructive'}`}>
+                                {protocol.change_1d >= 0 ? '+' : ''}{protocol.change_1d.toFixed(1)}%
+                              </div>
+                            </div>
+                            <div className="text-center">
+                              <div className="text-xs text-muted-foreground">7d</div>
+                              <div className={`font-mono font-medium ${protocol.change_7d >= 0 ? 'text-awareness' : 'text-destructive'}`}>
+                                {protocol.change_7d >= 0 ? '+' : ''}{protocol.change_7d.toFixed(1)}%
+                              </div>
                             </div>
                           </div>
-                          <div className="text-center">
-                            <div className="text-xs text-muted-foreground">7d</div>
-                            <div className={`font-mono font-medium ${protocol.change_7d >= 0 ? 'text-awareness' : 'text-destructive'}`}>
-                              {protocol.change_7d >= 0 ? '+' : ''}{protocol.change_7d.toFixed(1)}%
-                            </div>
-                          </div>
-                        </div>
 
-                        {/* Mini trend visualization */}
-                        <div className="flex w-full h-6 items-end justify-center gap-0.5 mx-auto max-w-48">
-                          {Array.from({ length: 12 }, (_, i) => {
-                            const height = Math.max(2, Math.random() * 16 + (protocol.change_7d >= 0 ? 4 : -2));
-                            return (
-                              <div
-                                key={i}
-                                className="flex-1 rounded-sm"
-                                style={{ 
-                                  height: `${Math.abs(height)}px`,
-                                  backgroundColor: getProtocolColor(protocol.category),
-                                  opacity: 0.3 + (i * 0.05)
-                                }}
-                              />
-                            );
-                          })}
+                          {/* Mini trend visualization */}
+                          <div className="flex w-full h-6 items-end justify-center gap-0.5 mx-auto max-w-48">
+                            {Array.from({ length: 12 }, (_, i) => {
+                              const height = Math.max(2, Math.random() * 16 + (protocol.change_7d >= 0 ? 4 : -2));
+                              return (
+                                <div
+                                  key={i}
+                                  className="flex-1 rounded-sm"
+                                  style={{ 
+                                    height: `${Math.abs(height)}px`,
+                                    backgroundColor: getProtocolColor(protocol.category),
+                                    opacity: 0.3 + (i * 0.05)
+                                  }}
+                                />
+                              );
+                            })}
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    </CarouselItem>
                   ))}
-                </MobileCarousel>
+                </MobileCarouselWrapper>
               </>
             ) : (
               <div className="flex items-center justify-center h-[300px] text-muted-foreground">
@@ -760,49 +755,51 @@ export const DefiCharts = () => {
           </div>
           
           {/* Mobile Carousel */}
-          <MobileCarousel>
+          <MobileCarouselWrapper>
             {data.protocols.slice(0, 8).map((protocol, index) => (
-              <div key={protocol.id} className="flex-shrink-0 w-64 p-3 rounded-lg border bg-card">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-xs font-bold text-primary">
-                      {index + 1}
+              <CarouselItem key={protocol.id} className="basis-64">
+                <div className="p-3 rounded-lg border bg-card">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-xs font-bold text-primary">
+                        {index + 1}
+                      </div>
+                      <span className="font-medium truncate">{protocol.name}</span>
                     </div>
-                    <span className="font-medium truncate">{protocol.name}</span>
+                    <Badge 
+                      variant="outline" 
+                      className="text-xs flex-shrink-0"
+                      style={{ 
+                        borderColor: getProtocolColor(protocol.category),
+                        color: getProtocolColor(protocol.category),
+                        backgroundColor: `${getProtocolColor(protocol.category)}10`
+                      }}
+                    >
+                      {protocol.category}
+                    </Badge>
                   </div>
-                  <Badge 
-                    variant="outline" 
-                    className="text-xs flex-shrink-0"
-                    style={{ 
-                      borderColor: getProtocolColor(protocol.category),
-                      color: getProtocolColor(protocol.category),
-                      backgroundColor: `${getProtocolColor(protocol.category)}10`
-                    }}
-                  >
-                    {protocol.category}
-                  </Badge>
+                  <div className="grid grid-cols-3 gap-2 text-sm">
+                    <div className="text-center">
+                      <div className="text-xs text-muted-foreground">TVL</div>
+                      <div className="font-mono font-medium">{formatCurrency(protocol.tvl)}</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-xs text-muted-foreground">24h</div>
+                      <div className={`font-mono font-medium ${protocol.change_1d >= 0 ? 'text-awareness' : 'text-destructive'}`}>
+                        {protocol.change_1d >= 0 ? '+' : ''}{protocol.change_1d.toFixed(1)}%
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-xs text-muted-foreground">7d</div>
+                      <div className={`font-mono font-medium ${protocol.change_7d >= 0 ? 'text-awareness' : 'text-destructive'}`}>
+                        {protocol.change_7d >= 0 ? '+' : ''}{protocol.change_7d.toFixed(1)}%
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="grid grid-cols-3 gap-2 text-sm">
-                  <div className="text-center">
-                    <div className="text-xs text-muted-foreground">TVL</div>
-                    <div className="font-mono font-medium">{formatCurrency(protocol.tvl)}</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-xs text-muted-foreground">24h</div>
-                    <div className={`font-mono font-medium ${protocol.change_1d >= 0 ? 'text-awareness' : 'text-destructive'}`}>
-                      {protocol.change_1d >= 0 ? '+' : ''}{protocol.change_1d.toFixed(1)}%
-                    </div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-xs text-muted-foreground">7d</div>
-                    <div className={`font-mono font-medium ${protocol.change_7d >= 0 ? 'text-awareness' : 'text-destructive'}`}>
-                      {protocol.change_7d >= 0 ? '+' : ''}{protocol.change_7d.toFixed(1)}%
-                    </div>
-                  </div>
-                </div>
-              </div>
+              </CarouselItem>
             ))}
-          </MobileCarousel>
+          </MobileCarouselWrapper>
         </CardContent>
       </Card>
     </div>
