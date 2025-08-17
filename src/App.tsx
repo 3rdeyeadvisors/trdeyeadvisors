@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useEffect } from "react";
 import { CartProvider } from "@/contexts/CartContext";
 import { HelmetProvider } from "react-helmet-async";
 import SecurityHeaders from "@/components/SecurityHeaders";
@@ -51,22 +52,28 @@ import DefaiRevolution2025 from "./pages/DefaiRevolution2025";
 
 const queryClient = new QueryClient();
 
-// Handle domain and protocol redirects to https://www.the3rdeyeadvisors.com
-if (typeof window !== 'undefined') {
-  const hostname = window.location.hostname;
-  const protocol = window.location.protocol;
-  const pathname = window.location.pathname;
-  const search = window.location.search;
-  const hash = window.location.hash;
-  
-  // Redirect non-www to www or http to https
-  if (hostname === 'the3rdeyeadvisors.com' || protocol === 'http:') {
-    const redirectUrl = `https://www.the3rdeyeadvisors.com${pathname}${search}${hash}`;
-    window.location.replace(redirectUrl);
-  }
-}
+const App = () => {
+  // Handle domain and protocol redirects in production only
+  useEffect(() => {
+    if (!import.meta.env.PROD) return;
+    
+    const hostname = window.location.hostname;
+    const protocol = window.location.protocol;
+    const pathname = window.location.pathname;
+    const search = window.location.search;
+    const hash = window.location.hash;
+    
+    // Only redirect on the3rdeyeadvisors.com domain
+    if (hostname.endsWith('the3rdeyeadvisors.com')) {
+      // Redirect non-www to www or http to https
+      if (hostname === 'the3rdeyeadvisors.com' || protocol === 'http:') {
+        const redirectUrl = `https://www.the3rdeyeadvisors.com${pathname}${search}${hash}`;
+        window.location.replace(redirectUrl);
+      }
+    }
+  }, []);
 
-const App = () => (
+  return (
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
@@ -135,6 +142,7 @@ const App = () => (
     </TooltipProvider>
   </QueryClientProvider>
   </HelmetProvider>
-);
+  );
+};
 
 export default App;

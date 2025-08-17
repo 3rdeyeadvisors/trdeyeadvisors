@@ -159,14 +159,19 @@ export const DefiCharts = () => {
 
   // Measure the Risk Distribution card height for matching protocol cards
   useEffect(() => {
-    const resizeObserver = new ResizeObserver((entries) => {
-      if (entries[0] && riskCardRef.current) {
-        const height = entries[0].contentRect.height;
-        setRiskCardHeight(height);
+    const measureHeight = () => {
+      if (riskCardRef.current) {
+        const rect = riskCardRef.current.getBoundingClientRect();
+        setRiskCardHeight(rect.height);
       }
+    };
+
+    const resizeObserver = new ResizeObserver(() => {
+      measureHeight();
     });
 
     if (riskCardRef.current) {
+      measureHeight(); // Initial measurement
       resizeObserver.observe(riskCardRef.current);
     }
 
@@ -519,27 +524,34 @@ export const DefiCharts = () => {
                     </Carousel>
                   </div>
                   
-                  {/* Controls and Indicators */}
-                  <div className="flex items-center justify-between mt-4 flex-shrink-0">
-                    <CarouselPrevious />
-                    
-                    {/* Slide Indicators */}
-                    <div className="flex gap-2">
-                      {Array.from({ length: Math.ceil(data.protocols.length / 4) }, (_, index) => (
-                        <button
-                          key={index}
-                          onClick={() => carouselApi?.scrollTo(index)}
-                          className={`w-2 h-2 rounded-full transition-colors ${
-                            currentSlide === index ? 'bg-primary' : 'bg-muted-foreground/30'
-                          }`}
-                          aria-label={`Go to slide ${index + 1}`}
-                        >
-                          <span className="sr-only">Go to slide {index + 1}</span>
-                        </button>
-                      ))}
+                  {/* Controls and Progress Indicator */}
+                  <div className="space-y-3 mt-4 flex-shrink-0">
+                    {/* Progress Bar Indicator */}
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div className="flex h-full rounded-full overflow-hidden">
+                        {Array.from({ length: Math.ceil(data.protocols.length / 4) }, (_, index) => (
+                          <button
+                            key={index}
+                            onClick={() => carouselApi?.scrollTo(index)}
+                            className={`flex-1 h-full transition-colors border-r border-background last:border-r-0 ${
+                              currentSlide === index ? 'bg-primary' : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
+                            }`}
+                            aria-label={`Go to slide ${index + 1}`}
+                          >
+                            <span className="sr-only">Go to slide {index + 1} of {Math.ceil(data.protocols.length / 4)}</span>
+                          </button>
+                        ))}
+                      </div>
                     </div>
                     
-                    <CarouselNext />
+                    {/* Navigation Buttons */}
+                    <div className="flex items-center justify-center gap-2">
+                      <CarouselPrevious />
+                      <span className="text-xs text-muted-foreground px-2">
+                        {currentSlide + 1} of {Math.ceil(data.protocols.length / 4)}
+                      </span>
+                      <CarouselNext />
+                    </div>
                   </div>
                 </div>
 
