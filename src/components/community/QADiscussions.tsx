@@ -8,6 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
+import { useBatchProfiles } from "@/hooks/useBatchProfiles";
 import { 
   MessageCircle, 
   Plus, 
@@ -30,10 +31,6 @@ interface Discussion {
   views_count: number;
   replies_count: number;
   created_at: string;
-  profiles: {
-    display_name: string | null;
-    avatar_url: string | null;
-  } | null;
 }
 
 interface DiscussionReply {
@@ -44,10 +41,6 @@ interface DiscussionReply {
   is_solution: boolean;
   likes_count: number;
   created_at: string;
-  profiles: {
-    display_name: string | null;
-    avatar_url: string | null;
-  } | null;
   user_liked?: boolean;
 }
 
@@ -74,6 +67,12 @@ export const QADiscussions = ({ contentType, contentId, title }: QADiscussionsPr
   const [newReply, setNewReply] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
+  // Extract unique user IDs for batch profile fetching
+  const discussionUserIds = [...new Set(discussions.map(discussion => discussion.user_id))];
+  const replyUserIds = [...new Set(replies.map(reply => reply.user_id))];
+  const allUserIds = [...new Set([...discussionUserIds, ...replyUserIds])];
+  const { profiles } = useBatchProfiles(allUserIds);
+
   useEffect(() => {
     loadDiscussions();
   }, [contentType, contentId]);
@@ -94,24 +93,8 @@ export const QADiscussions = ({ contentType, contentId, title }: QADiscussionsPr
 
       if (error) throw error;
 
-      // Load profiles for each discussion
-      const discussionsWithProfiles: Discussion[] = [];
-      if (allDiscussions) {
-        for (const discussion of allDiscussions) {
-          const { data: profile } = await supabase
-            .from('profiles')
-            .select('display_name, avatar_url')
-            .eq('user_id', discussion.user_id)
-            .single();
-
-          discussionsWithProfiles.push({
-            ...discussion,
-            profiles: profile || null
-          });
-        }
-      }
-
-      setDiscussions(discussionsWithProfiles);
+      // No longer need individual profile lookups - will use batch profiles
+      setDiscussions(allDiscussions || []);
     } catch (error) {
       console.error('Error loading discussions:', error);
       toast({
@@ -134,25 +117,11 @@ export const QADiscussions = ({ contentType, contentId, title }: QADiscussionsPr
 
       if (error) throw error;
 
-      // Load profiles for each reply
-      const repliesWithProfiles: DiscussionReply[] = [];
-      if (allReplies) {
-        for (const reply of allReplies) {
-          const { data: profile } = await supabase
-            .from('profiles')
-            .select('display_name, avatar_url')
-            .eq('user_id', reply.user_id)
-            .single();
-
-          repliesWithProfiles.push({
-            ...reply,
-            profiles: profile || null,
-            user_liked: false // TODO: Check if user liked this reply
-          });
-        }
-      }
-
-      setReplies(repliesWithProfiles);
+      // No longer need individual profile lookups - will use batch profiles
+      setReplies((allReplies || []).map(reply => ({
+        ...reply,
+        user_liked: false // TODO: Check if user liked this reply
+      })));
 
       // Increment view count
       await supabase
@@ -372,59 +341,59 @@ export const QADiscussions = ({ contentType, contentId, title }: QADiscussionsPr
                   }}
                 >
                   <CardContent className="p-4">
-                    <div className="flex items-start gap-3">
-                      <Avatar className="w-10 h-10">
-                        <AvatarImage src={discussion.profiles?.avatar_url || ""} />
-                        <AvatarFallback className="bg-primary/10 text-primary">
-                          {(discussion.profiles?.display_name || 'U').charAt(0).toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
-                      
-                      <div className="flex-1">
-                        <div className="flex items-start justify-between mb-2">
-                          <h4 className="font-medium text-foreground line-clamp-2">
-                            {discussion.title}
-                          </h4>
-                          {discussion.is_solved && (
-                            <Badge variant="outline" className="text-green-600 border-green-600">
-                              <CheckCircle className="w-3 h-3 mr-1" />
-                              Solved
-                            </Badge>
-                          )}
-                        </div>
-                        
-                        <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-                          {discussion.description}
-                        </p>
-                        
-                        {discussion.tags.length > 0 && (
-                          <div className="flex items-center gap-1 mb-3">
-                            <Tag className="w-3 h-3 text-muted-foreground" />
-                            {discussion.tags.slice(0, 3).map((tag, index) => (
-                              <Badge key={index} variant="secondary" className="text-xs">
-                                {tag}
-                              </Badge>
-                            ))}
-                          </div>
+                  <div className="flex items-start gap-3">
+                    <Avatar className="w-10 h-10">
+                      <AvatarImage src={profiles[discussion.user_id]?.avatar_url || ""} />
+                      <AvatarFallback className="bg-primary/10 text-primary">
+                        {(profiles[discussion.user_id]?.display_name || 'U').charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    
+                    <div className="flex-1">
+                      <div className="flex items-start justify-between mb-2">
+                        <h4 className="font-medium text-foreground line-clamp-2">
+                          {discussion.title}
+                        </h4>
+                        {discussion.is_solved && (
+                          <Badge variant="outline" className="text-green-600 border-green-600">
+                            <CheckCircle className="w-3 h-3 mr-1" />
+                            Solved
+                          </Badge>
                         )}
-                        
-                        <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                          <span className="flex items-center gap-1">
-                            <Clock className="w-3 h-3" />
-                            {formatDate(discussion.created_at)}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <MessageCircle className="w-3 h-3" />
-                            {discussion.replies_count} replies
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Eye className="w-3 h-3" />
-                            {discussion.views_count} views
-                          </span>
-                          <span>by {discussion.profiles?.display_name || 'Anonymous'}</span>
+                      </div>
+                      
+                      <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+                        {discussion.description}
+                      </p>
+                      
+                      {discussion.tags.length > 0 && (
+                        <div className="flex items-center gap-1 mb-3">
+                          <Tag className="w-3 h-3 text-muted-foreground" />
+                          {discussion.tags.slice(0, 3).map((tag, index) => (
+                            <Badge key={index} variant="secondary" className="text-xs">
+                              {tag}
+                            </Badge>
+                          ))}
                         </div>
+                      )}
+                      
+                      <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                        <span className="flex items-center gap-1">
+                          <Clock className="w-3 h-3" />
+                          {formatDate(discussion.created_at)}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <MessageCircle className="w-3 h-3" />
+                          {discussion.replies_count} replies
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <Eye className="w-3 h-3" />
+                          {discussion.views_count} views
+                        </span>
+                        <span>by {profiles[discussion.user_id]?.display_name || 'Anonymous'}</span>
                       </div>
                     </div>
+                  </div>
                   </CardContent>
                 </Card>
               ))}
@@ -454,49 +423,49 @@ export const QADiscussions = ({ contentType, contentId, title }: QADiscussionsPr
           {/* Discussion Header */}
           <Card className="mb-6">
             <CardContent className="p-6">
-              <div className="flex items-start gap-4">
-                <Avatar className="w-12 h-12">
-                  <AvatarImage src={selectedDiscussion.profiles?.avatar_url || ""} />
-                  <AvatarFallback className="bg-primary/10 text-primary">
-                    {(selectedDiscussion.profiles?.display_name || 'U').charAt(0).toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
-                
-                <div className="flex-1">
-                  <div className="flex items-start justify-between mb-2">
-                    <h2 className="text-xl font-semibold text-foreground">
-                      {selectedDiscussion.title}
-                    </h2>
-                    {selectedDiscussion.is_solved && (
-                      <Badge variant="outline" className="text-green-600 border-green-600">
-                        <CheckCircle className="w-4 h-4 mr-1" />
-                        Solved
-                      </Badge>
-                    )}
-                  </div>
-                  
-                  <p className="text-foreground mb-4 whitespace-pre-wrap">
-                    {selectedDiscussion.description}
-                  </p>
-                  
-                  {selectedDiscussion.tags.length > 0 && (
-                    <div className="flex items-center gap-2 mb-4">
-                      <Tag className="w-4 h-4 text-muted-foreground" />
-                      {selectedDiscussion.tags.map((tag, index) => (
-                        <Badge key={index} variant="secondary">
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
+            <div className="flex items-start gap-4">
+              <Avatar className="w-12 h-12">
+                <AvatarImage src={profiles[selectedDiscussion.user_id]?.avatar_url || ""} />
+                <AvatarFallback className="bg-primary/10 text-primary">
+                  {(profiles[selectedDiscussion.user_id]?.display_name || 'U').charAt(0).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              
+              <div className="flex-1">
+                <div className="flex items-start justify-between mb-2">
+                  <h2 className="text-xl font-semibold text-foreground">
+                    {selectedDiscussion.title}
+                  </h2>
+                  {selectedDiscussion.is_solved && (
+                    <Badge variant="outline" className="text-green-600 border-green-600">
+                      <CheckCircle className="w-4 h-4 mr-1" />
+                      Solved
+                    </Badge>
                   )}
-                  
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                    <span>by {selectedDiscussion.profiles?.display_name || 'Anonymous'}</span>
-                    <span>{formatDate(selectedDiscussion.created_at)}</span>
-                    <span>{selectedDiscussion.views_count} views</span>
+                </div>
+                
+                <p className="text-foreground mb-4 whitespace-pre-wrap">
+                  {selectedDiscussion.description}
+                </p>
+                
+                {selectedDiscussion.tags.length > 0 && (
+                  <div className="flex items-center gap-2 mb-4">
+                    <Tag className="w-4 h-4 text-muted-foreground" />
+                    {selectedDiscussion.tags.map((tag, index) => (
+                      <Badge key={index} variant="secondary">
+                        {tag}
+                      </Badge>
+                    ))}
                   </div>
+                )}
+                
+                <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                  <span>by {profiles[selectedDiscussion.user_id]?.display_name || 'Anonymous'}</span>
+                  <span>{formatDate(selectedDiscussion.created_at)}</span>
+                  <span>{selectedDiscussion.views_count} views</span>
                 </div>
               </div>
+            </div>
             </CardContent>
           </Card>
 
@@ -505,45 +474,45 @@ export const QADiscussions = ({ contentType, contentId, title }: QADiscussionsPr
             {replies.map((reply) => (
               <Card key={reply.id}>
                 <CardContent className="p-4">
-                  <div className="flex items-start gap-3">
-                    <Avatar className="w-8 h-8">
-                      <AvatarImage src={reply.profiles?.avatar_url || ""} />
-                      <AvatarFallback className="bg-primary/10 text-primary text-sm">
-                        {(reply.profiles?.display_name || 'U').charAt(0).toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
+                <div className="flex items-start gap-3">
+                  <Avatar className="w-8 h-8">
+                    <AvatarImage src={profiles[reply.user_id]?.avatar_url || ""} />
+                    <AvatarFallback className="bg-primary/10 text-primary text-sm">
+                      {(profiles[reply.user_id]?.display_name || 'U').charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="font-medium text-sm">
+                        {profiles[reply.user_id]?.display_name || 'Anonymous User'}
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        {formatDate(reply.created_at)}
+                      </span>
+                      {reply.is_solution && (
+                        <Badge variant="outline" className="text-green-600 border-green-600 text-xs">
+                          Solution
+                        </Badge>
+                      )}
+                    </div>
                     
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="font-medium text-sm">
-                          {reply.profiles?.display_name || 'Anonymous User'}
-                        </span>
-                        <span className="text-xs text-muted-foreground">
-                          {formatDate(reply.created_at)}
-                        </span>
-                        {reply.is_solution && (
-                          <Badge variant="outline" className="text-green-600 border-green-600 text-xs">
-                            Solution
-                          </Badge>
-                        )}
-                      </div>
-                      
-                      <p className="text-sm text-foreground mb-3 whitespace-pre-wrap">
-                        {reply.content}
-                      </p>
-                      
-                      <div className="flex items-center gap-4">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="text-xs text-muted-foreground hover:text-primary"
-                        >
-                          <Heart className="w-4 h-4 mr-1" />
-                          {reply.likes_count}
-                        </Button>
-                      </div>
+                    <p className="text-sm text-foreground mb-3 whitespace-pre-wrap">
+                      {reply.content}
+                    </p>
+                    
+                    <div className="flex items-center gap-4">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-xs text-muted-foreground hover:text-primary"
+                      >
+                        <Heart className="w-4 h-4 mr-1" />
+                        {reply.likes_count}
+                      </Button>
                     </div>
                   </div>
+                </div>
                 </CardContent>
               </Card>
             ))}

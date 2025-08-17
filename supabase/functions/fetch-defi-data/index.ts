@@ -33,10 +33,10 @@ interface DefiData {
   }>;
 }
 
-// Cache for 60 seconds
+// Cache for 5 minutes for better performance
 let cachedData: DefiData | null = null;
 let cacheTimestamp = 0;
-const CACHE_DURATION = 60 * 1000; // 60 seconds
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
 async function fetchDefiLlamaData(): Promise<DefiData> {
   console.log('Fetching fresh DeFi data from APIs...');

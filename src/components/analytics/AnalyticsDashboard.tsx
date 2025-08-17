@@ -56,25 +56,22 @@ export const AnalyticsDashboard = () => {
 
   const loadAnalytics = async () => {
     try {
-      // Load basic counts
-      const [usersCount, commentsCount, ratingsData] = await Promise.all([
-        supabase.from('profiles').select('id', { count: 'exact', head: true }),
+      // Use optimized database functions for better performance
+      const [usersResponse, coursesResponse, commentsResponse, averageRatingResponse] = await Promise.all([
+        supabase.rpc('get_total_users_count'),
+        supabase.rpc('get_total_courses_count'),
         supabase.from('comments').select('id', { count: 'exact', head: true }),
-        supabase.from('ratings').select('rating')
+        supabase.rpc('get_average_rating')
       ]);
 
-      const totalUsers = usersCount.count || 0;
-      const totalComments = commentsCount.count || 0;
-      const averageRating = ratingsData.data?.length 
-        ? ratingsData.data.reduce((sum, r) => sum + r.rating, 0) / ratingsData.data.length 
-        : 0;
+      const averageRating = averageRatingResponse.data || 0;
 
       // Mock additional data for demo
       setAnalytics({
-        totalUsers,
-        totalCourses: 12, // Our tutorial count
-        totalComments,
-        averageRating: Math.round(averageRating * 10) / 10,
+        totalUsers: usersResponse.data || 0,
+        totalCourses: coursesResponse.data || 0,
+        totalComments: commentsResponse.count || 0,
+        averageRating: Number(averageRating.toFixed(1)),
         popularTutorials: [
           { id: 'wallet-setup', title: 'Wallet Setup & Security', views: 1250, rating: 4.8 },
           { id: 'first-dex-swap', title: 'Your First DEX Swap', views: 980, rating: 4.6 },

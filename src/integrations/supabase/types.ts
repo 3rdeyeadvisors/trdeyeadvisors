@@ -748,6 +748,26 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
+      get_average_rating: {
+        Args: Record<PropertyKey, never>
+        Returns: number
+      }
+      get_profiles_batch: {
+        Args: { user_ids: string[] }
+        Returns: {
+          avatar_url: string
+          display_name: string
+          user_id: string
+        }[]
+      }
+      get_total_courses_count: {
+        Args: Record<PropertyKey, never>
+        Returns: number
+      }
+      get_total_users_count: {
+        Args: Record<PropertyKey, never>
+        Returns: number
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
