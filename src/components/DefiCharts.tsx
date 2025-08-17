@@ -529,31 +529,53 @@ export const DefiCharts = () => {
 
         {/* Risk Distribution */}
         <Card>
-          <CardHeader className="text-center md:text-left">
-            <CardTitle className="flex items-center justify-center md:justify-start">
+          <CardHeader className="text-center">
+            <CardTitle className="flex items-center justify-center">
               <PieChartIcon className="w-5 h-5 mr-2" />
               Risk Distribution
             </CardTitle>
             <CardDescription>Portfolio risk allocation across DeFi</CardDescription>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={250}>
-              <PieChart>
-                <Pie
-                  data={data.riskDistribution}
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={window.innerWidth < 768 ? 60 : 80}
-                  dataKey="value"
-                  label={window.innerWidth >= 768 ? ({ name, value }) => `${name}: ${value}%` : ({ value }) => `${value}%`}
-                >
-                  {data.riskDistribution.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip formatter={(value) => [`${value}%`, 'Allocation']} />
-              </PieChart>
-            </ResponsiveContainer>
+            <div className="flex flex-col items-center gap-6">
+              {/* Chart Container */}
+              <div className="max-w-xs sm:max-w-sm md:max-w-md mx-auto">
+                <ResponsiveContainer width="100%" height={280}>
+                  <PieChart margin={{ top: 8, right: 8, bottom: 8, left: 8 }}>
+                    <Pie
+                      data={data.riskDistribution}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={50}
+                      outerRadius={90}
+                      paddingAngle={2}
+                      dataKey="value"
+                      label={false}
+                      labelLine={false}
+                    >
+                      {data.riskDistribution.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip formatter={(value) => [`${value}%`, 'Allocation']} />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              
+              {/* Legend */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full justify-items-center">
+                {data.riskDistribution.map((entry, index) => (
+                  <div key={index} className="flex items-center gap-2">
+                    <div 
+                      className="w-3 h-3 rounded-full" 
+                      style={{ backgroundColor: entry.color }}
+                    />
+                    <span className="text-sm font-medium">{entry.name}</span>
+                    <span className="text-sm text-muted-foreground">{entry.value}%</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>
