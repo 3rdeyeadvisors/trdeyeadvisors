@@ -605,7 +605,7 @@ export const DefiCharts = () => {
             <CardDescription>Portfolio risk allocation across DeFi</CardDescription>
           </CardHeader>
           <CardContent className="py-2">
-            <div className="flex flex-col md:flex-row md:justify-center md:items-start gap-4 md:gap-8">
+            <div className="flex flex-col md:flex-row md:justify-center md:items-center gap-4 md:gap-8">
               {/* Chart Container */}
               <div className="flex justify-center flex-shrink-0">
                 <div className="w-[280px] h-[280px] md:w-[320px] md:h-[320px] lg:w-[340px] lg:h-[340px]">
