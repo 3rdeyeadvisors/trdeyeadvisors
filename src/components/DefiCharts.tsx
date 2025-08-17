@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
+
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -82,12 +83,9 @@ export const DefiCharts = () => {
   const [error, setError] = useState<string | null>(null);
   const [selectedMetric, setSelectedMetric] = useState<'totalTvl' | 'volume' | 'yield'>('totalTvl');
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
-  const [riskCardHeight, setRiskCardHeight] = useState<number>(0);
   const [isDesktop, setIsDesktop] = useState(false);
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [currentSlide, setCurrentSlide] = useState(0);
-  
-  const riskCardRef = useRef<HTMLDivElement>(null);
 
   const fetchDefiData = async () => {
     try {
@@ -155,29 +153,6 @@ export const DefiCharts = () => {
       carouselApi.off('select', onSelect);
     };
   }, [carouselApi]);
-
-  // Measure the Risk Distribution card height for matching protocol cards
-  useEffect(() => {
-    const measureHeight = () => {
-      if (riskCardRef.current) {
-        const rect = riskCardRef.current.getBoundingClientRect();
-        setRiskCardHeight(rect.height);
-      }
-    };
-
-    const resizeObserver = new ResizeObserver(() => {
-      measureHeight();
-    });
-
-    if (riskCardRef.current) {
-      measureHeight(); // Initial measurement
-      resizeObserver.observe(riskCardRef.current);
-    }
-
-    return () => {
-      resizeObserver.disconnect();
-    };
-  }, [data]); // Re-observe when data changes
 
   const formatCurrency = (value: number) => {
     if (value >= 1e9) return `$${(value / 1e9).toFixed(1)}B`;
@@ -409,12 +384,7 @@ export const DefiCharts = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Protocol Rankings */}
-        <Card 
-          className="flex flex-col"
-          style={{ 
-            height: isDesktop && riskCardHeight > 0 ? `${riskCardHeight}px` : 'auto'
-          }}
-        >
+        <Card className="flex flex-col">
           <CardHeader className="text-center md:text-left flex-shrink-0">
             <CardTitle className="flex items-center justify-center md:justify-start">
               <BarChart3 className="w-5 h-5 mr-2" />
@@ -514,12 +484,20 @@ export const DefiCharts = () => {
                           </CarouselItem>
                         ))}
                       </CarouselContent>
+                      
+                      {/* Navigation controls inside the carousel */}
+                      <div className="absolute -bottom-16 left-1/2 transform -translate-x-1/2 flex items-center gap-2">
+                        <CarouselPrevious />
+                        <span className="text-xs text-muted-foreground px-2">
+                          {currentSlide + 1} of {Math.ceil(data.protocols.length / 4)}
+                        </span>
+                        <CarouselNext />
+                      </div>
                     </Carousel>
                   </div>
                   
-                  {/* Controls and Progress Indicator */}
-                  <div className="space-y-3 mt-4 flex-shrink-0">
-                    {/* Progress Bar Indicator */}
+                  {/* Progress Bar Indicator */}
+                  <div className="space-y-3 mt-16 flex-shrink-0">
                     <div className="w-full bg-muted rounded-full h-2">
                       <div className="flex h-full rounded-full overflow-hidden">
                         {Array.from({ length: Math.ceil(data.protocols.length / 4) }, (_, index) => (
@@ -535,15 +513,6 @@ export const DefiCharts = () => {
                           </button>
                         ))}
                       </div>
-                    </div>
-                    
-                    {/* Navigation Buttons */}
-                    <div className="flex items-center justify-center gap-2">
-                      <CarouselPrevious />
-                      <span className="text-xs text-muted-foreground px-2">
-                        {currentSlide + 1} of {Math.ceil(data.protocols.length / 4)}
-                      </span>
-                      <CarouselNext />
                     </div>
                   </div>
                 </div>
@@ -627,7 +596,7 @@ export const DefiCharts = () => {
         </Card>
 
         {/* Risk Distribution */}
-        <Card className="flex flex-col" ref={riskCardRef}>
+        <Card className="flex flex-col">
           <CardHeader className="text-center">
             <CardTitle className="flex items-center justify-center">
               <PieChartIcon className="w-5 h-5 mr-2" />
