@@ -14,6 +14,36 @@ export interface BlogPost {
 
 export const blogPosts: BlogPost[] = [
   {
+    id: 1000004,
+    slug: "defi-regulation-aml-integration",
+    title: "Can DeFi Be Regulated and Permissionless? On-Chain AML & Digital ID Integration Explained",
+    excerpt: "The U.S. Treasury's proposal to embed AML frameworks and digital identity verification into DeFi smart contracts creates a fundamental tension between compliance and decentralization.",
+    content: `# Can DeFi Be Regulated and Permissionless? On-Chain AML & Digital ID Integration Explained
+
+The DeFi Paradox: Open Finance Meets Regulatory Reality
+Decentralized Finance (DeFi) promised a world where anyone, anywhere could access financial services without traditional gatekeepers. But as the sector grows beyond $100 billion in total value locked, regulators are pushing back with proposals that could fundamentally alter DeFi's permissionless nature.
+
+U.S. Treasury's Digital Identity Push in DeFi
+In a recent consultation under the GENIUS Act, the U.S. Department of Treasury is seeking public feedback on embedding digital identity verification and Anti-Money Laundering (AML) frameworks directly into DeFi smart contracts. The proposal suggests "compliance-by-design" approaches where identity checks would become mandatory components of decentralized protocols.
+
+According to the Federal Register document, the Treasury is exploring how KYC in DeFi could be implemented at the protocol level, potentially requiring users to verify their identities before interacting with certain smart contracts. This represents a significant shift from DeFi's current pseudonymous model.
+
+Why This Matters for the Future of Finance
+The integration of smart contract compliance tools addresses legitimate concerns about illicit finance while potentially opening doors for institutional adoption. However, it also raises fundamental questions about whether regulated DeFi can maintain the innovation and accessibility that made it revolutionary.
+
+Looking Ahead: Two Paths for DeFi
+The industry may split into parallel ecosystems: compliant DeFi protocols that integrate regulatory frameworks for institutional use, and permissionless finance networks that maintain pseudonymity for users prioritizing privacy and censorship resistance.
+
+The Soul of DeFi in Question
+As the Treasury's consultation period progresses, the DeFi community faces a defining moment. Can DeFi keep its soul while integrating compliance? The answer may reshape the future of finance itself.`,
+    category: "Regulation",
+    readTime: "4 min read",
+    date: "2025-08-18",
+    featured: true,
+    author: "3rd Eye Advisors",
+    tags: ["DeFi regulation", "AML in DeFi", "digital identity blockchain", "permissionless finance", "smart contract compliance", "KYC in DeFi"]
+  },
+  {
     id: 1000003,
     slug: "why-real-world-asset-tokenization-defi-fastest-growing-frontier",
     title: "Why Real-World Asset Tokenization is DeFi's Fastest-Growing Frontier",
