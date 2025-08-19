@@ -10,6 +10,7 @@ import { CommunityHub } from "@/components/community/CommunityHub";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import SEO from "@/components/SEO";
+import { BRAND_AUTHOR } from "@/lib/constants";
 
 const BlogPost = () => {
   const { slug } = useParams();
@@ -88,7 +89,7 @@ const BlogPost = () => {
     "image": "https://www.the3rdeyeadvisors.com/social-share.jpg",
     "author": {
       "@type": "Person",
-      "name": post.author
+      "name": BRAND_AUTHOR
     },
     "publisher": {
       "@type": "Organization",
@@ -117,7 +118,7 @@ const BlogPost = () => {
         type="article"
         article={{
           publishedTime: post.date,
-          author: post.author,
+          author: BRAND_AUTHOR,
           section: post.category,
           tags: [post.category, 'DeFi', 'Cryptocurrency']
         }}
@@ -166,7 +167,7 @@ const BlogPost = () => {
           <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
               <User className="w-4 h-4" />
-              <span>{post.author}</span>
+              <span>{BRAND_AUTHOR}</span>
             </div>
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4" />

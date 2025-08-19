@@ -4,6 +4,7 @@
  */
 
 import { detectPageType } from './seo-automation';
+import { BRAND_AUTHOR } from './constants';
 
 export interface SchemaConfig {
   type: 'Article' | 'Course' | 'FinancialProduct' | 'SoftwareApplication' | 'WebPage' | 'Organization' | 'FAQPage';
@@ -36,7 +37,7 @@ function generateArticleSchema(content: PageContent): SchemaConfig {
       description: content.description,
       author: {
         '@type': 'Person',
-        name: content.author || '3rdeyeadvisors Team'
+        name: BRAND_AUTHOR
       },
       publisher: {
         '@type': 'Organization',

@@ -7,13 +7,14 @@ import { BlogSEOAutomation } from "@/components/SEOAutomation";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, User, Clock } from "lucide-react";
+import { BRAND_AUTHOR } from "@/lib/constants";
 
 const ExampleAutomatedBlog = () => {
   // Blog post data - this would typically come from a CMS or API
   const blogPost = {
     title: "Advanced DeFi Yield Strategies for 2025",
     excerpt: "Discover cutting-edge yield farming techniques and portfolio optimization strategies for maximizing DeFi returns while managing risk effectively.",
-    author: "3rdeyeadvisors Team",
+    author: BRAND_AUTHOR,
     publishedDate: "2025-07-26",
     category: "DeFi Strategies",
     tags: ["yield farming", "DeFi", "portfolio optimization", "risk management", "cryptocurrency"],
@@ -78,7 +79,7 @@ Every strategy must be evaluated through our proprietary risk assessment matrix.
             <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <User className="w-4 h-4" />
-                <span>{blogPost.author}</span>
+                <span>{BRAND_AUTHOR}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4" />

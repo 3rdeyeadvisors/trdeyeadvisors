@@ -7,12 +7,13 @@ import { BlogSEOAutomation } from "@/components/SEOAutomation";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, User, Clock } from "lucide-react";
+import { BRAND_AUTHOR } from "@/lib/constants";
 
 const WebThreeGamingDefiConvergence = () => {
   const blogPost = {
     title: "Level Up Your Finances: The Web3 Gaming Revolution Meets DeFi",
     excerpt: "Discover how Web3 gaming is merging with DeFi to create the ultimate financial playground. From play-to-earn models to cross-chain gaming economies, explore the secret level where gamers become investors.",
-    author: "3EA Gaming Research Team",
+    author: BRAND_AUTHOR,
     publishedDate: "2025-08-04",
     category: "Web3 Gaming",
     tags: ["Web3 gaming", "DeFi", "play-to-earn", "cross-chain gaming", "AI agents", "DePIN", "gaming economy", "NFT gaming", "blockchain gaming", "metaverse finance"],
@@ -248,7 +249,7 @@ Whether you're a gamer looking to monetize your skills, an investor seeking new 
             <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <User className="w-4 h-4" />
-                <span>{blogPost.author}</span>
+                <span>{BRAND_AUTHOR}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4" />

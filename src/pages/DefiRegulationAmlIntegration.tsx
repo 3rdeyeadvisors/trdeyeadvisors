@@ -3,12 +3,13 @@ import { BlogSEOAutomation } from '@/components/SEOAutomation';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Calendar, User, Clock, ExternalLink } from 'lucide-react';
+import { BRAND_AUTHOR } from '@/lib/constants';
 
 const DefiRegulationAmlIntegration = () => {
   const blogPost = {
     title: "Can DeFi Be Regulated and Permissionless? On-Chain AML & Digital ID Integration Explained",
     excerpt: "The U.S. Treasury's proposal to embed AML frameworks and digital identity verification into DeFi smart contracts creates a fundamental tension between compliance and decentralization.",
-    author: "3rd Eye Advisors",
+    author: BRAND_AUTHOR,
     publishedDate: new Date().toISOString().split('T')[0],
     category: "Regulation",
     tags: ["DeFi regulation", "AML in DeFi", "digital identity blockchain", "permissionless finance", "smart contract compliance", "KYC in DeFi"],
@@ -82,7 +83,7 @@ const DefiRegulationAmlIntegration = () => {
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-1">
                     <User className="w-4 h-4" />
-                    <span>{blogPost.author}</span>
+                    <span>{BRAND_AUTHOR}</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <Calendar className="w-4 h-4" />

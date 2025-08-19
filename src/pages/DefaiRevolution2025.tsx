@@ -7,12 +7,13 @@ import { BlogSEOAutomation } from "@/components/SEOAutomation";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, User, Clock, TrendingUp, Shield, Zap } from "lucide-react";
+import { BRAND_AUTHOR } from "@/lib/constants";
 
 const DefaiRevolution2025 = () => {
   const blogPost = {
     title: "DeFAI Revolution 2025: How AI Agents Are Transforming Decentralized Finance",
     excerpt: "Discover the explosive fusion of AI and DeFi in 2025. From autonomous trading agents to intelligent yield optimization, explore how DeFAI is creating the next generation of automated financial services and why it's the hottest trend in crypto.",
-    author: "3EA DeFAI Research Team",
+    author: BRAND_AUTHOR,
     publishedDate: "2025-08-06",
     category: "DeFAI",
     tags: ["AI in DeFi", "DeFAI 2025", "AI crypto agents", "automated yield farming", "AI trading in DeFi", "decentralized AI finance", "crypto bots", "DAO automation", "blockchain AI"],
@@ -378,7 +379,7 @@ const DefaiRevolution2025 = () => {
             <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <User className="w-4 h-4" />
-                <span>{blogPost.author}</span>
+                <span>{BRAND_AUTHOR}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4" />

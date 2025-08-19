@@ -6,6 +6,7 @@
 
 import { Helmet } from "react-helmet-async";
 import { useSEOAutomation, type SEOAutomationOptions } from "@/hooks/useSEOAutomation";
+import { BRAND_AUTHOR } from "@/lib/constants";
 
 interface SEOAutomationProps extends SEOAutomationOptions {
   children?: React.ReactNode;
@@ -158,7 +159,7 @@ export const BlogSEOAutomation = ({
   <SEOAutomation
     title={title}
     description={excerpt}
-    author={author}
+    author={BRAND_AUTHOR}
     publishedDate={publishedDate}
     category={category}
     tags={tags}
