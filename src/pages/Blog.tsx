@@ -81,7 +81,8 @@ const Blog = () => {
       case "Web3 Gaming":
         return "bg-accent/25 text-accent border-accent/40 hover:bg-accent/35";
       case "DeFAI":
-        return "bg-primary/25 text-primary border-primary/40 hover:bg-primary/35";
+      case "DEFAI":
+        return "bg-primary text-primary-foreground border-primary/60 hover:bg-primary/90 shadow-sm backdrop-blur-sm";
       case "Regulation":
         return "bg-primary text-primary-foreground border-primary/60 hover:bg-primary/90 shadow-sm backdrop-blur-sm";
       default: 

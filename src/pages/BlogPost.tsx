@@ -52,7 +52,8 @@ const BlogPost = () => {
       case "Web3 Gaming":
         return "bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-700 border-purple-500/30";
       case "DeFAI":
-        return "bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-700 border-blue-500/30";
+      case "DEFAI":
+        return "bg-primary text-primary-foreground border-primary/60 shadow-sm";
       default: 
         return "bg-primary/20 text-primary border-primary/30";
     }
