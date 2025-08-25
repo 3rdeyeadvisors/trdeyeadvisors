@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, Calendar, Clock, User, Share, BookOpen } from "lucide-react";
-import { getBlogPost, type BlogPost } from "@/data/blogContent";
+import { getBlogPost, getPublishedDate, type BlogPost } from "@/data/blogContent";
 import { CommunityHub } from "@/components/community/CommunityHub";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -100,8 +100,8 @@ const BlogPost = () => {
         "url": "https://www.the3rdeyeadvisors.com/favicon-3ea.svg"
       }
     },
-    "datePublished": post.date,
-    "dateModified": post.date,
+    "datePublished": getPublishedDate(post.date),
+    "dateModified": getPublishedDate(post.date),
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": `https://www.the3rdeyeadvisors.com/blog/${post.slug}`
@@ -172,7 +172,7 @@ const BlogPost = () => {
             </div>
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4" />
-              <span>{new Date(post.date + 'T12:00:00').toLocaleDateString()}</span>
+              <span>{new Date(getPublishedDate(post.date) + 'T12:00:00').toLocaleDateString()}</span>
             </div>
             <div className="flex items-center gap-2">
               <Clock className="w-4 h-4" />

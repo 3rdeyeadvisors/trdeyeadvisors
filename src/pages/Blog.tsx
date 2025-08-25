@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, ArrowRight } from "lucide-react";
-import { getBlogPosts, getBlogPostsByCategory } from "@/data/blogContent";
+import { getBlogPosts, getBlogPostsByCategory, getPublishedDate } from "@/data/blogContent";
 import SEO from "@/components/SEO";
 
 const Blog = () => {
@@ -25,7 +25,7 @@ const Blog = () => {
   const now = new Date();
   const cutoff = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
   const featuredPosts = posts.filter(post => {
-    const d = new Date(post.date);
+    const d = new Date(getPublishedDate(post.date));
     return !isNaN(d.getTime()) && d >= cutoff;
   });
   console.log("Featured posts (last 7 days):", featuredPosts);
@@ -206,7 +206,7 @@ const Blog = () => {
                         <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground mb-6">
                           <div className="flex items-center gap-2">
                             <Calendar className="w-4 h-4" />
-                            <span className="font-system">{post.date}</span>
+                            <span className="font-system">{getPublishedDate(post.date)}</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <Clock className="w-4 h-4" />
@@ -274,7 +274,7 @@ const Blog = () => {
               <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
                 <div className="flex items-center gap-2">
                   <Calendar className="w-4 h-4" />
-                  <span className="font-system">{post.date}</span>
+                  <span className="font-system">{getPublishedDate(post.date)}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Clock className="w-4 h-4" />

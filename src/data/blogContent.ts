@@ -86,7 +86,7 @@ Whether you're looking to hedge existing positions or capitalize on potential pr
 *Stay informed on the latest DeFi market movements and unlock schedules by following our analysis and subscribing to our newsletter for real-time alerts.*`,
     category: "Analysis",
     readTime: "3 min read",
-    date: "2025-08-30",
+    date: "2025-08-25",
     featured: true,
     author: "3EA Research Team",
     tags: ["Solana", "Token Unlocks", "DeFi", "Market Analysis", "Trading", "Volatility", "Crypto Investment", "SOL", "Liquidity Events"]
@@ -2035,6 +2035,19 @@ export const getBlogPostsByCategory = (category: string): BlogPost[] => {
 export const getBlogCategories = (): string[] => {
   const categories = [...new Set(blogPosts.map(post => post.category))];
   return ["All", ...categories];
+};
+
+// Helper function to ensure blog posts don't show future dates
+export const getPublishedDate = (date: string): string => {
+  const postDate = new Date(date);
+  const today = new Date();
+  
+  // If the post date is in the future, return today's date
+  if (postDate > today) {
+    return today.toISOString().split('T')[0];
+  }
+  
+  return date;
 };
 
 // Legacy export for backward compatibility
