@@ -86,7 +86,7 @@ const SEOAutomation = ({
                   url: "https://www.the3rdeyeadvisors.com",
                   logo: {
                     "@type": "ImageObject",
-                    url: "https://www.the3rdeyeadvisors.com/favicon-3rdeyeadvisors.png"
+                    url: "https://www.the3rdeyeadvisors.com/favicon-3rdeyeadvisors.png?v=4"
                   }
                 },
                 ...schema.data

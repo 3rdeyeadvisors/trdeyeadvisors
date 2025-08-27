@@ -97,7 +97,7 @@ const BlogPost = () => {
       "name": "3rdeyeadvisors",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://www.the3rdeyeadvisors.com/favicon-3ea.svg"
+        "url": "https://www.the3rdeyeadvisors.com/favicon-3rdeyeadvisors.png?v=4"
       }
     },
     "datePublished": getPublishedDate(post.date),
