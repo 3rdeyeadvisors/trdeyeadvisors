@@ -36,7 +36,7 @@ const Blog = () => {
   });
   console.log("Regular posts:", regularPosts);
 
-  const categories = ["All", "DeFi Education", "Innovation", "Security", "Education", "Analysis", "Web3 Gaming", "DeFAI", "DeFi Tools"];
+  const categories = ["All", "DeFi Education", "Innovation", "Security", "Education", "Analysis", "Web3 Gaming", "DeFAI", "DeFi Tools", "Policy"];
 
   // Simplified sliding handlers
   const handleStart = (clientX: number) => {
@@ -84,6 +84,7 @@ const Blog = () => {
       case "DEFAI":
         return "bg-primary text-primary-foreground border-primary/60 hover:bg-primary/90 shadow-sm backdrop-blur-sm";
       case "Regulation":
+      case "Policy":
         return "bg-primary text-primary-foreground border-primary/60 hover:bg-primary/90 shadow-sm backdrop-blur-sm";
       default: 
         return "bg-primary/30 text-primary border-primary/50 hover:bg-primary/40";
