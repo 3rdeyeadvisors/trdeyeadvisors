@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, ArrowRight } from "lucide-react";
-import { getBlogPosts, getBlogPostsByCategory, getPublishedDate } from "@/data/blogContent";
+import { getBlogPosts, getBlogPostsByCategory, getPublishedDate, getBlogCategories } from "@/data/blogContent";
 import SEO from "@/components/SEO";
 
 const Blog = () => {
@@ -36,7 +36,7 @@ const Blog = () => {
   });
   console.log("Regular posts:", regularPosts);
 
-  const categories = ["All", "DeFi Education", "Innovation", "Security", "Education", "Analysis", "Web3 Gaming", "DeFAI", "DeFi Tools", "Policy"];
+  const categories = getBlogCategories();
 
   // Simplified sliding handlers
   const handleStart = (clientX: number) => {

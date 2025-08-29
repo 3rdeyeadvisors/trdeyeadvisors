@@ -109,7 +109,7 @@ DeFi needs rules to protect users from fraud and technical failures, enable inst
 The open letter was signed by over 110 industry leaders, including major companies like Coinbase, Uniswap Labs, 1inch, Solana Foundation, Polygon Labs, and numerous DeFi protocols, venture capital firms, and blockchain infrastructure providers. The full list represents a broad coalition across the entire DeFi ecosystem.`,
     category: "Policy",
     readTime: "5 min read",
-    date: "2024-12-29",
+    date: "2025-08-29",
     featured: true,
     author: "3EA Research Team",
     tags: ["DeFi regulation 2025", "decentralized finance rules", "U.S. DeFi legislation", "non-custodial wallets", "crypto policy", "DeFi innovation", "Policy", "Regulation"]
