@@ -243,26 +243,26 @@ export const EnhancedContentPlayer = ({
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div className="max-w-6xl mx-auto p-4 md:p-6">
       {/* Enhanced Module Header */}
-      <div className="mb-6 mobile-typography-center">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-3">
-            <Badge className={getTypeColor(module.type)}>
+      <div className="mb-4 md:mb-6 mobile-typography-center">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
+          <div className="flex flex-wrap items-center gap-2 md:gap-3">
+            <Badge className={`${getTypeColor(module.type)} text-xs md:text-sm`}>
               {getTypeIcon(module.type)} {module.type.charAt(0).toUpperCase() + module.type.slice(1)}
             </Badge>
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <Clock className="w-4 h-4" />
-              <span className="text-sm">{module.duration} min</span>
+            <div className="flex items-center gap-1 md:gap-2 text-muted-foreground">
+              <Clock className="w-3 h-3 md:w-4 md:h-4" />
+              <span className="text-xs md:text-sm">{module.duration} min</span>
             </div>
             {isCompleted && (
-              <Badge variant="default" className="bg-green-100 text-green-700 border-green-200">
+              <Badge variant="default" className="bg-green-100 text-green-700 border-green-200 text-xs md:text-sm">
                 <CheckCircle className="w-3 h-3 mr-1" />
                 Completed
               </Badge>
             )}
             {quiz && (
-              <Badge variant="outline" className="border-purple-200 text-purple-700">
+              <Badge variant="outline" className="border-purple-200 text-purple-700 text-xs md:text-sm">
                 <Brain className="w-3 h-3 mr-1" />
                 Quiz Available
               </Badge>
@@ -274,7 +274,7 @@ export const EnhancedContentPlayer = ({
               variant="ghost"
               size="sm"
               onClick={toggleBookmark}
-              className="text-muted-foreground hover:text-foreground"
+              className="text-muted-foreground hover:text-foreground p-1 md:p-2"
             >
               {isBookmarked ? (
                 <BookmarkCheck className="w-4 h-4" />
@@ -282,13 +282,13 @@ export const EnhancedContentPlayer = ({
                 <Bookmark className="w-4 h-4" />
               )}
             </Button>
-            <span className="text-sm text-muted-foreground">
+            <span className="text-xs md:text-sm text-muted-foreground">
               {currentModuleIndex + 1} of {totalModules}
             </span>
           </div>
         </div>
 
-        <h1 className="text-3xl font-consciousness font-bold text-foreground mb-4">
+        <h1 className="text-xl md:text-3xl font-consciousness font-bold text-foreground mb-3 md:mb-4">
           {module.title}
         </h1>
 
@@ -315,23 +315,25 @@ export const EnhancedContentPlayer = ({
       </div>
 
       {/* Enhanced Content with Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4 md:space-y-6">
         <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="content" className="font-consciousness">
-            <BookOpen className="w-4 h-4 mr-2" />
-            Content
+          <TabsTrigger value="content" className="font-consciousness text-xs md:text-sm px-1 md:px-3">
+            <BookOpen className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
+            <span className="hidden sm:inline">Content</span>
+            <span className="sm:hidden">View</span>
           </TabsTrigger>
-          <TabsTrigger value="notes" className="font-consciousness">
-            <MessageSquare className="w-4 h-4 mr-2" />
+          <TabsTrigger value="notes" className="font-consciousness text-xs md:text-sm px-1 md:px-3">
+            <MessageSquare className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
             Notes
           </TabsTrigger>
-          <TabsTrigger value="resources" className="font-consciousness">
-            <FileText className="w-4 h-4 mr-2" />
-            Resources
+          <TabsTrigger value="resources" className="font-consciousness text-xs md:text-sm px-1 md:px-3">
+            <FileText className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
+            <span className="hidden sm:inline">Resources</span>
+            <span className="sm:hidden">Links</span>
           </TabsTrigger>
           {quiz && (
-            <TabsTrigger value="quiz" className="font-consciousness">
-              <Brain className="w-4 h-4 mr-2" />
+            <TabsTrigger value="quiz" className="font-consciousness text-xs md:text-sm px-1 md:px-3">
+              <Brain className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
               Quiz
             </TabsTrigger>
           )}

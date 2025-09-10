@@ -96,35 +96,37 @@ const ModuleViewer = () => {
   }
 
   return (
-    <div className="min-h-screen py-20">
-      <div className="container mx-auto px-4 mobile-typography-center">
+    <div className="min-h-screen py-12 md:py-20">
+      <div className="container mx-auto px-4 mobile-typography-center max-w-7xl">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-4">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6 md:mb-8">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
             <Button
               variant="outline"
               onClick={() => navigate(`/courses/${courseId}`)}
-              className="font-consciousness"
+              className="font-consciousness text-sm md:text-base"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Course
+              <span className="hidden sm:inline">Back to Course</span>
+              <span className="sm:hidden">Back</span>
             </Button>
 
             <Button
               variant="ghost"
               onClick={() => setShowModuleList(!showModuleList)}
-              className="font-consciousness"
+              className="font-consciousness text-sm md:text-base"
             >
               <List className="w-4 h-4 mr-2" />
-              All Modules
+              <span className="hidden sm:inline">All Modules</span>
+              <span className="sm:hidden">Modules</span>
             </Button>
           </div>
 
-          <div className="text-right">
-            <h2 className="text-lg font-consciousness font-semibold text-foreground">
+          <div className="text-left md:text-right">
+            <h2 className="text-base md:text-lg font-consciousness font-semibold text-foreground line-clamp-1">
               {course.title}
             </h2>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-xs md:text-sm text-muted-foreground">
               {course.category === "free" ? "Free Course" : `${course.category} Course`}
             </p>
           </div>
@@ -132,9 +134,9 @@ const ModuleViewer = () => {
 
         {/* Module List Sidebar */}
         {showModuleList && (
-          <Card className="mb-6 p-6">
-            <h3 className="text-lg font-consciousness font-semibold mb-4">Course Modules</h3>
-            <div className="grid md:grid-cols-2 gap-3">
+          <Card className="mb-4 md:mb-6 p-4 md:p-6">
+            <h3 className="text-base md:text-lg font-consciousness font-semibold mb-3 md:mb-4">Course Modules</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3">
               {course.modules.map((module, index) => {
                 const isCompleted = isModuleCompleted(index);
                 const isCurrent = index === currentModuleIndex;
@@ -143,7 +145,7 @@ const ModuleViewer = () => {
                   <Button
                     key={module.id}
                     variant={isCurrent ? "default" : "outline"}
-                    className={`justify-start h-auto p-4 ${
+                    className={`justify-start h-auto p-3 md:p-4 text-left ${
                       isCompleted ? "border-green-500 bg-green-50 hover:bg-green-100" : ""
                     }`}
                     onClick={() => {
@@ -151,21 +153,21 @@ const ModuleViewer = () => {
                       setShowModuleList(false);
                     }}
                   >
-                    <div className="flex items-start gap-3 w-full">
-                      <div className="flex items-center gap-2 min-w-0">
+                    <div className="flex items-start gap-2 md:gap-3 w-full">
+                      <div className="flex items-center gap-1 md:gap-2 min-w-0">
                         {isCompleted ? (
-                          <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                          <div className="w-5 h-5 md:w-6 md:h-6 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
                             <span className="text-white text-xs">✓</span>
                           </div>
                         ) : (
-                          <div className="w-6 h-6 border-2 border-muted-foreground rounded-full flex items-center justify-center">
+                          <div className="w-5 h-5 md:w-6 md:h-6 border-2 border-muted-foreground rounded-full flex items-center justify-center flex-shrink-0">
                             <span className="text-xs">{index + 1}</span>
                           </div>
                         )}
-                        {isCurrent && <Play className="w-4 h-4 text-primary" />}
+                        {isCurrent && <Play className="w-3 h-3 md:w-4 md:h-4 text-primary flex-shrink-0" />}
                       </div>
                       <div className="text-left flex-1 min-w-0">
-                        <p className="text-sm font-medium line-clamp-2">{module.title}</p>
+                        <p className="text-xs md:text-sm font-medium line-clamp-2">{module.title}</p>
                         <p className="text-xs text-muted-foreground">{module.duration} min</p>
                       </div>
                     </div>
