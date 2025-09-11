@@ -243,7 +243,7 @@ export const EnhancedContentPlayer = ({
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-4 md:p-6">
+    <div className="w-full px-4 md:px-6">
       {/* Enhanced Module Header */}
       <div className="mb-4 md:mb-6 mobile-typography-center">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
@@ -315,37 +315,37 @@ export const EnhancedContentPlayer = ({
       </div>
 
       {/* Enhanced Content with Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4 md:space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="content" className="font-consciousness text-xs md:text-sm px-1 md:px-3">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4 md:space-y-6 w-full">
+        <TabsList className="flex w-full overflow-x-auto gap-2 no-scrollbar">
+          <TabsTrigger value="content" className="font-consciousness text-xs md:text-sm px-2 md:px-3 min-w-[88px] flex-1">
             <BookOpen className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
             <span className="hidden sm:inline">Content</span>
             <span className="sm:hidden">View</span>
           </TabsTrigger>
-          <TabsTrigger value="notes" className="font-consciousness text-xs md:text-sm px-1 md:px-3">
+          <TabsTrigger value="notes" className="font-consciousness text-xs md:text-sm px-2 md:px-3 min-w-[88px] flex-1">
             <MessageSquare className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
             Notes
           </TabsTrigger>
-          <TabsTrigger value="resources" className="font-consciousness text-xs md:text-sm px-1 md:px-3">
+          <TabsTrigger value="resources" className="font-consciousness text-xs md:text-sm px-2 md:px-3 min-w-[88px] flex-1">
             <FileText className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
             <span className="hidden sm:inline">Resources</span>
             <span className="sm:hidden">Links</span>
           </TabsTrigger>
           {quiz && (
-            <TabsTrigger value="quiz" className="font-consciousness text-xs md:text-sm px-1 md:px-3">
+            <TabsTrigger value="quiz" className="font-consciousness text-xs md:text-sm px-2 md:px-3 min-w-[88px] flex-1">
               <Brain className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
               Quiz
             </TabsTrigger>
           )}
         </TabsList>
 
-        <TabsContent value="content" className="space-y-6">
-          <Card className={`${fullscreen ? 'fixed inset-0 z-50' : ''}`}>
-            <div className="p-6">
+        <TabsContent value="content" className="space-y-6 w-full">
+          <Card className={`${fullscreen ? 'fixed inset-0 z-50' : ''} w-full`}>
+            <div className="p-4 md:p-6">
               {module.type === 'text' && module.content.text && (
                 <div 
                   id="module-content"
-                  className="prose prose-lg max-w-none font-consciousness overflow-y-auto max-h-[600px] mobile-typography-center"
+                  className="prose prose-lg max-w-none font-consciousness md:overflow-y-auto md:max-h-[600px] mobile-typography-center"
                 >
                   <ReactMarkdown>{module.content.text}</ReactMarkdown>
                 </div>
