@@ -97,7 +97,7 @@ const ModuleViewer = () => {
 
   return (
     <div className="min-h-screen py-12 md:py-20">
-      <div className="mx-auto w-full px-4 md:px-6 max-w-7xl mobile-typography-center">
+      <div className="w-full px-4 md:px-6 mobile-typography-center">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6 md:mb-8">
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">

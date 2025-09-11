@@ -316,23 +316,23 @@ export const EnhancedContentPlayer = ({
 
       {/* Enhanced Content with Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4 md:space-y-6 w-full">
-        <TabsList className="flex w-full overflow-x-auto gap-2 no-scrollbar">
-          <TabsTrigger value="content" className="font-consciousness text-xs md:text-sm px-2 md:px-3 min-w-[88px] flex-1">
+        <TabsList className="flex w-full justify-start overflow-x-auto gap-2 no-scrollbar px-0">
+          <TabsTrigger value="content" className="font-consciousness text-xs md:text-sm px-2 md:px-3 min-w-[96px] shrink-0">
             <BookOpen className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
             <span className="hidden sm:inline">Content</span>
             <span className="sm:hidden">View</span>
           </TabsTrigger>
-          <TabsTrigger value="notes" className="font-consciousness text-xs md:text-sm px-2 md:px-3 min-w-[88px] flex-1">
+          <TabsTrigger value="notes" className="font-consciousness text-xs md:text-sm px-2 md:px-3 min-w-[96px] shrink-0">
             <MessageSquare className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
             Notes
           </TabsTrigger>
-          <TabsTrigger value="resources" className="font-consciousness text-xs md:text-sm px-2 md:px-3 min-w-[88px] flex-1">
+          <TabsTrigger value="resources" className="font-consciousness text-xs md:text-sm px-2 md:px-3 min-w-[96px] shrink-0">
             <FileText className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
             <span className="hidden sm:inline">Resources</span>
             <span className="sm:hidden">Links</span>
           </TabsTrigger>
           {quiz && (
-            <TabsTrigger value="quiz" className="font-consciousness text-xs md:text-sm px-2 md:px-3 min-w-[88px] flex-1">
+            <TabsTrigger value="quiz" className="font-consciousness text-xs md:text-sm px-2 md:px-3 min-w-[96px] shrink-0">
               <Brain className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
               Quiz
             </TabsTrigger>
@@ -345,7 +345,7 @@ export const EnhancedContentPlayer = ({
               {module.type === 'text' && module.content.text && (
                 <div 
                   id="module-content"
-                  className="prose prose-lg max-w-none font-consciousness md:overflow-y-auto md:max-h-[600px] mobile-typography-center"
+                  className="prose prose-lg max-w-none font-consciousness md:overflow-y-auto md:max-h-[600px] mobile-typography-center w-full max-w-full break-words overflow-x-hidden"
                 >
                   <ReactMarkdown>{module.content.text}</ReactMarkdown>
                 </div>

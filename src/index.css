@@ -137,6 +137,33 @@ body {
   }
 }
 
+/* Root safety net */
+#root, main {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Module content word wrapping */
+#module-content {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  max-width: 100%;
+}
+
+#module-content pre,
+#module-content code {
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+#module-content a {
+  word-break: break-all;
+}
+
 /* Mobile-specific improvements */
 @media (max-width: 768px) {
   /* Better mobile scrolling */
