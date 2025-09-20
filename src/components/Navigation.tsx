@@ -24,7 +24,7 @@ const Navigation = () => {
     { path: "/tutorials", label: "Tutorials" },
     { path: "/blog", label: "Blog" },
     { path: "/resources", label: "Resources" },
-    { path: "/resources/3EA-Whitepaper-White.pdf", label: "Whitepaper (PDF)", external: true },
+    { path: "/resources/3EA-Whitepaper-White.pdf", label: "Whitepaper", external: true },
     { path: "/analytics", label: "Analytics" },
     { path: "/store", label: "Store" },
     { path: "/downloads", label: "Downloads" },
@@ -43,7 +43,7 @@ const Navigation = () => {
       { path: "/tutorials", label: "Tutorials", icon: BookOpen },
       { path: "/blog", label: "Blog", icon: FileText },
       { path: "/resources", label: "Resources", icon: FileText },
-      { path: "/resources/3EA-Whitepaper-White.pdf", label: "Whitepaper (PDF)", icon: FileText, external: true },
+      { path: "/resources/3EA-Whitepaper-White.pdf", label: "Whitepaper", icon: FileText, external: true },
     ],
     more: [
       { path: "/analytics", label: "Analytics", icon: BarChart3 },
