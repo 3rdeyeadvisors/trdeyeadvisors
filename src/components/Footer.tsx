@@ -58,6 +58,16 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
+                <a 
+                  href="/resources/3EA-Whitepaper-White.pdf" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness"
+                >
+                  Whitepaper (PDF)
+                </a>
+              </li>
+              <li>
                 <a href="mailto:info@the3rdeyeadvisors.com" className="text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness">
                   Support Email
                 </a>

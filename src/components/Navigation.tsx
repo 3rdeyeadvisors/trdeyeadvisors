@@ -16,7 +16,7 @@ const Navigation = () => {
   const { user, signOut } = useAuth();
   const { toast } = useToast();
 
-  // Desktop navigation items (unchanged)
+  // Desktop navigation items
   const navItems = [
     { path: "/", label: "Home" },
     { path: "/philosophy", label: "Philosophy" },
@@ -24,6 +24,7 @@ const Navigation = () => {
     { path: "/tutorials", label: "Tutorials" },
     { path: "/blog", label: "Blog" },
     { path: "/resources", label: "Resources" },
+    { path: "/resources/3EA-Whitepaper-White.pdf", label: "Whitepaper (PDF)", external: true },
     { path: "/analytics", label: "Analytics" },
     { path: "/store", label: "Store" },
     { path: "/downloads", label: "Downloads" },
@@ -42,6 +43,7 @@ const Navigation = () => {
       { path: "/tutorials", label: "Tutorials", icon: BookOpen },
       { path: "/blog", label: "Blog", icon: FileText },
       { path: "/resources", label: "Resources", icon: FileText },
+      { path: "/resources/3EA-Whitepaper-White.pdf", label: "Whitepaper (PDF)", icon: FileText, external: true },
     ],
     more: [
       { path: "/analytics", label: "Analytics", icon: BarChart3 },
@@ -82,17 +84,29 @@ const Navigation = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8 flex-1 justify-center">
             {navItems.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`text-base font-consciousness transition-all duration-cosmic hover:text-primary ${
-                  isActive(item.path)
-                    ? "text-primary font-medium"
-                    : "text-muted-foreground"
-                }`}
-              >
-                {item.label}
-              </Link>
+              item.external ? (
+                <a
+                  key={item.path}
+                  href={item.path}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-base font-consciousness transition-all duration-cosmic hover:text-primary text-muted-foreground"
+                >
+                  {item.label}
+                </a>
+              ) : (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`text-base font-consciousness transition-all duration-cosmic hover:text-primary ${
+                    isActive(item.path)
+                      ? "text-primary font-medium"
+                      : "text-muted-foreground"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              )
             ))}
             
             {/* Right side actions */}
@@ -298,19 +312,33 @@ const Navigation = () => {
                   </CollapsibleTrigger>
                   <CollapsibleContent className="mt-2 space-y-1">
                     {mobileNavStructure.learning.map((item) => (
-                      <Link
-                        key={item.path}
-                        to={item.path}
-                        className={`flex items-center space-x-3 p-2 pl-6 rounded-lg transition-colors ${
-                          isActive(item.path)
-                            ? "bg-primary/10 text-primary font-medium"
-                            : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                        }`}
-                        onClick={() => setIsOpen(false)}
-                      >
-                        {item.icon && <item.icon className="w-4 h-4" />}
-                        <span className="text-sm">{item.label}</span>
-                      </Link>
+                      item.external ? (
+                        <a
+                          key={item.path}
+                          href={item.path}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center space-x-3 p-2 pl-6 rounded-lg transition-colors text-muted-foreground hover:bg-muted hover:text-foreground"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          {item.icon && <item.icon className="w-4 h-4" />}
+                          <span className="text-sm">{item.label}</span>
+                        </a>
+                      ) : (
+                        <Link
+                          key={item.path}
+                          to={item.path}
+                          className={`flex items-center space-x-3 p-2 pl-6 rounded-lg transition-colors ${
+                            isActive(item.path)
+                              ? "bg-primary/10 text-primary font-medium"
+                              : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                          }`}
+                          onClick={() => setIsOpen(false)}
+                        >
+                          {item.icon && <item.icon className="w-4 h-4" />}
+                          <span className="text-sm">{item.label}</span>
+                        </Link>
+                      )
                     ))}
                   </CollapsibleContent>
                 </Collapsible>
