@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useProgress } from "@/components/progress/ProgressProvider";
 import { QuizComponent } from "@/components/quiz/QuizComponent";
+import { ExpandableText } from "@/components/ui/expandable-text";
 import { 
   BookOpen, 
   Clock, 
@@ -28,7 +29,8 @@ import {
   Maximize,
   MessageSquare,
   Brain,
-  Star
+  Star,
+  Monitor
 } from "lucide-react";
 import { ModuleContent } from "@/data/courseContent";
 import ReactMarkdown from "react-markdown";
