@@ -363,8 +363,48 @@ export const DefiCharts = () => {
         </TooltipProvider>
       </div>
 
-      {/* Key Metrics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* Mobile View - Only show key metrics */}
+      <div className="block md:hidden space-y-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Value Locked</CardTitle>
+            <DollarSign className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{formatCurrency(getCurrentTVL())}</div>
+            <div className="flex items-center text-xs text-muted-foreground">
+              {parseFloat(getTVLChange()) >= 0 ? (
+                <TrendingUp className="w-4 h-4 text-awareness mr-1" />
+              ) : (
+                <TrendingDown className="w-4 h-4 text-destructive mr-1" />
+              )}
+              <span className={parseFloat(getTVLChange()) >= 0 ? 'text-awareness' : 'text-destructive'}>
+                {getTVLChange()}%
+              </span>
+              <span className="ml-1">from yesterday</span>
+            </div>
+          </CardContent>
+        </Card>
+
+        
+        {/* Mobile Analytics Notice */}
+        <Card className="bg-primary/5 border-primary/20">
+          <CardHeader>
+            <CardTitle className="text-lg flex items-center gap-2">
+              <BarChart3 className="h-5 w-5" />
+              Explore Full Analytics on Desktop
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground">
+              Access comprehensive charts, risk analysis, and detailed protocol data on desktop.
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Desktop View - Show all metrics */}
+      <div className="hidden md:grid md:grid-cols-3 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Value Locked</CardTitle>

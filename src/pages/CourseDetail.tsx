@@ -8,7 +8,7 @@ import { ProgressBar } from "@/components/progress/ProgressBar";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useProgress } from "@/components/progress/ProgressProvider";
 import { AuthModal } from "@/components/auth/AuthModal";
-import { ArrowLeft, BookOpen, CheckCircle, Clock, Play, Grid3X3, CreditCard, Lock } from "lucide-react";
+import { ArrowLeft, BookOpen, CheckCircle, Clock, Play, Grid3X3, CreditCard, Lock, ChevronDown, Monitor } from "lucide-react";
 import { getCourseContent } from "@/data/courseContent";
 import { EnhancedModuleNavigation } from "@/components/course/EnhancedModuleNavigation";
 import { CommunityTabs } from "@/components/community/CommunityTabs";
@@ -16,6 +16,13 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import SEO from "@/components/SEO";
+import { ExpandableText } from "@/components/ui/expandable-text";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 const CourseDetail = () => {
   const { courseId } = useParams();
@@ -303,9 +310,20 @@ const CourseDetail = () => {
             {course.title}
           </h1>
 
-          <p className="text-lg text-muted-foreground font-consciousness leading-relaxed mb-6">
-            {course.description}
-          </p>
+          {/* Mobile: Expandable text, Desktop: Full text */}
+          <div className="mb-6">
+            <div className="block md:hidden">
+              <ExpandableText 
+                text={course.description}
+                maxLines={3}
+                className="text-lg text-muted-foreground font-consciousness leading-relaxed"
+                mobileOnly={true}
+              />
+            </div>
+            <p className="hidden md:block text-lg text-muted-foreground font-consciousness leading-relaxed">
+              {course.description}
+            </p>
+          </div>
 
           {user && (
             <ProgressBar 

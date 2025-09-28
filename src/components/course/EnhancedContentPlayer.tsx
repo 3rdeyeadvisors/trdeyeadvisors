@@ -343,12 +343,34 @@ export const EnhancedContentPlayer = ({
           <Card className={`${fullscreen ? 'fixed inset-0 z-50' : ''} w-full`}>
             <div className="p-4 md:p-6">
               {module.type === 'text' && module.content.text && (
-                <div 
-                  id="module-content"
-                  className="prose prose-lg max-w-none font-consciousness md:overflow-y-auto md:max-h-[600px] mobile-typography-center w-full max-w-full break-words overflow-x-hidden"
-                >
-                  <ReactMarkdown>{module.content.text}</ReactMarkdown>
-                </div>
+                <>
+                  {/* Mobile View */}
+                  <div className="block md:hidden">
+                    <ExpandableText 
+                      text={module.content.text}
+                      maxLines={10}
+                      className="prose prose-lg max-w-none font-consciousness"
+                      expandLabel="Read Full Content"
+                      mobileOnly={true}
+                    />
+                    <Card className="mt-4 p-3 bg-primary/5 border-primary/20">
+                      <div className="flex items-center gap-2">
+                        <Monitor className="w-4 h-4 text-primary" />
+                        <p className="text-xs text-muted-foreground">
+                          Full lessons and modules available on desktop.
+                        </p>
+                      </div>
+                    </Card>
+                  </div>
+                  
+                  {/* Desktop View */}
+                  <div 
+                    id="module-content"
+                    className="hidden md:block prose prose-lg max-w-none font-consciousness md:overflow-y-auto md:max-h-[600px] mobile-typography-center w-full max-w-full break-words overflow-x-hidden"
+                  >
+                    <ReactMarkdown>{module.content.text}</ReactMarkdown>
+                  </div>
+                </>
               )}
 
               {module.type === 'video' && module.content.videoUrl && (
