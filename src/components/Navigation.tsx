@@ -94,8 +94,9 @@ const Navigation = () => {
           </Link>
           
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-4 flex-1 justify-start">
-            {mainNavItems.map((item) => (
+          <div className="hidden md:flex items-center justify-between w-full">
+            <div className="flex items-center space-x-4">
+              {mainNavItems.map((item) => (
               item.external ? (
                 <a
                   key={item.path}
@@ -154,6 +155,7 @@ const Navigation = () => {
                 </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
+            </div>
             
             {/* Right side actions */}
             <div className="flex items-center space-x-3">
