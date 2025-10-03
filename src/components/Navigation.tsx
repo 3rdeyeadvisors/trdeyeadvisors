@@ -86,19 +86,15 @@ const Navigation = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background border-b border-border">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          {/* Logo/Brand - Hidden on desktop to save space */}
-          <Link to="/" className="flex items-center space-x-3 md:justify-start justify-center flex-1 md:flex-none" aria-label="3rdeyeadvisors home">
-            <div className="text-lg md:text-xl font-consciousness font-bold text-primary md:hidden">
+          {/* Logo/Brand - Mobile only */}
+          <Link to="/" className="flex md:hidden items-center space-x-3 justify-center flex-1" aria-label="3rdeyeadvisors home">
+            <div className="text-lg font-consciousness font-bold text-primary">
               3rdeyeadvisors
-            </div>
-            {/* Just icon/minimal brand on desktop */}
-            <div className="hidden md:block w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
-              <span className="text-primary font-bold text-sm">3EA</span>
             </div>
           </Link>
           
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-4 flex-1 justify-center">
+          <div className="hidden md:flex items-center space-x-4 flex-1 justify-start">
             {mainNavItems.map((item) => (
               item.external ? (
                 <a
