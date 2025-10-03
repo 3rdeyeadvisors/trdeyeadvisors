@@ -56,7 +56,7 @@ const Index = () => {
       <div className="min-h-screen">
       {/* Hero Section */}
       <section 
-        className="relative min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
+        className="relative min-h-[80vh] md:min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${cosmicHeroBg})` }}
       >
         <div className="absolute inset-0 bg-background/60 backdrop-blur-sm"></div>
@@ -105,11 +105,11 @@ const Index = () => {
       </section>
 
       {/* Mission Statement */}
-      <section className="py-20 bg-background">
+      <section className="py-8 sm:py-12 md:py-16 lg:py-20 bg-background">
         <div className="container mx-auto px-4 mobile-typography-center">
           <Card className="p-8 bg-gradient-consciousness border-primary/20 shadow-consciousness max-w-4xl mx-auto hover:shadow-[0_0_30px_hsl(var(--primary)/0.4),0_0_60px_hsl(var(--accent)/0.3)] hover:border-primary/40 transition-all duration-consciousness cursor-pointer group animate-consciousness-glow hover:animate-none">
             <div className="text-center">
-              <h2 className="text-2xl md:text-3xl font-consciousness font-bold text-foreground mb-6 group-hover:text-primary-glow transition-colors duration-cosmic">
+              <h2 className="text-2xl md:text-3xl font-consciousness font-bold text-foreground mb-4 md:mb-6 group-hover:text-primary-glow transition-colors duration-cosmic">
                 Our Mission
               </h2>
               <p className="text-lg text-foreground/90 font-consciousness leading-relaxed drop-shadow-sm group-hover:text-foreground transition-colors duration-cosmic">
@@ -124,10 +124,10 @@ const Index = () => {
       </section>
 
       {/* Features Grid */}
-      <section className="py-20 bg-muted/20">
+      <section className="py-8 sm:py-12 md:py-16 lg:py-20 bg-muted/20">
         <div className="container mx-auto px-4 mobile-typography-center">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-consciousness font-bold text-foreground mb-4">
+          <div className="text-center mb-8 md:mb-16">
+            <h2 className="text-3xl md:text-4xl font-consciousness font-bold text-foreground mb-3 md:mb-4">
               The Path to Financial Consciousness
             </h2>
             <p className="text-xl text-muted-foreground font-consciousness max-w-2xl mx-auto">
@@ -156,12 +156,12 @@ const Index = () => {
       </section>
 
       {/* Call to Action */}
-      <section className="py-20 bg-background">
+      <section className="py-8 sm:py-12 md:py-16 lg:py-20 bg-background">
         <div className="container mx-auto px-4 text-center mobile-typography-center">
-          <h2 className="text-3xl md:text-4xl font-consciousness font-bold text-foreground mb-8">
+          <h2 className="text-3xl md:text-4xl font-consciousness font-bold text-foreground mb-4 md:mb-8">
             Ready to Begin Your Reprogramming?
           </h2>
-          <p className="text-lg text-muted-foreground font-consciousness mb-8 max-w-2xl mx-auto">
+          <p className="text-lg text-muted-foreground font-consciousness mb-6 md:mb-8 max-w-2xl mx-auto">
             Start with our philosophy, explore our courses, or dive into the resource hub. 
             The system is waiting to be rewritten.
           </p>
@@ -174,7 +174,7 @@ const Index = () => {
       </section>
 
       {/* Newsletter Signup */}
-      <section className="py-16 bg-muted/10">
+      <section className="py-6 sm:py-10 md:py-12 lg:py-16 bg-muted/10">
         <div className="container mx-auto px-4 mobile-typography-center">
           <NewsletterSignup variant="cosmic" />
         </div>
