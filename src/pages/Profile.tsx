@@ -364,13 +364,14 @@ const Profile = () => {
                   </div>
 
                   {/* Edit Controls */}
-                  <div className="flex gap-2">
+                  <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                     {isEditing ? (
                       <>
                         <Button
                           onClick={handleSaveProfile}
                           disabled={saving}
                           size="sm"
+                          className="w-full sm:w-auto flex items-center justify-center"
                         >
                           <Save className="w-4 h-4 mr-2" />
                           {saving ? "Saving..." : "Save"}
@@ -386,6 +387,7 @@ const Profile = () => {
                             });
                           }}
                           size="sm"
+                          className="w-full sm:w-auto flex items-center justify-center"
                         >
                           <X className="w-4 h-4 mr-2" />
                           Cancel
@@ -396,6 +398,7 @@ const Profile = () => {
                         variant="outline"
                         onClick={() => setIsEditing(true)}
                         size="sm"
+                        className="w-full sm:w-auto flex items-center justify-center"
                       >
                         <Edit className="w-4 h-4 mr-2" />
                         Edit Profile

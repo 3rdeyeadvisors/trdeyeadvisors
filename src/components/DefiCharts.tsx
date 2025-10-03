@@ -345,10 +345,12 @@ export const DefiCharts = () => {
                   size="sm"
                   onClick={() => fetchDefiData(true)}
                   disabled={loading || refreshCooldown > 0}
-                  className="gap-2"
+                  className="gap-2 flex items-center justify-center"
                 >
                   <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-                  {refreshCooldown > 0 ? `Wait ${refreshCooldown}s` : 'Refresh Now'}
+                  <span className="hidden sm:inline whitespace-nowrap">
+                    {refreshCooldown > 0 ? `Wait ${refreshCooldown}s` : 'Refresh Now'}
+                  </span>
                 </Button>
               </TooltipTrigger>
               <TooltipContent>

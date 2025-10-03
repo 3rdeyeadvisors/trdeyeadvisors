@@ -283,7 +283,7 @@ const CourseDetail = () => {
               <Button
                 onClick={handlePurchaseCourse}
                 disabled={isPurchasing}
-                className="bg-primary hover:bg-primary/90 font-consciousness"
+                className="bg-primary hover:bg-primary/90 font-consciousness w-full sm:w-auto flex items-center justify-center mx-auto"
                 size="lg"
               >
                 <CreditCard className="w-5 h-5 mr-2" />
@@ -294,10 +294,10 @@ const CourseDetail = () => {
 
           {/* Start Learning Button - Only for users with access */}
           {user && hasAccess && (
-            <div className="mb-6">
+            <div className="mb-6 flex justify-center sm:justify-start">
               <Button
                 onClick={() => navigate(`/courses/${courseId}/module/${course.modules[0]?.id}`)}
-                className="bg-primary hover:bg-primary/90 font-consciousness"
+                className="bg-primary hover:bg-primary/90 font-consciousness w-full sm:w-auto flex items-center justify-center"
                 size="lg"
               >
                 <Play className="w-5 h-5 mr-2" />

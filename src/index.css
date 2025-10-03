@@ -211,6 +211,13 @@ body {
   button, a, [role="button"] {
     min-height: 44px;
     min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  button span, a span {
+    text-align: center;
   }
   
   /* Mobile-optimized animations */

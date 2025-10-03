@@ -538,35 +538,36 @@ export const EnhancedContentPlayer = ({
       <Separator className="my-8" />
 
       {/* Enhanced Navigation */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          {hasPrevious && (
-            <Button variant="outline" onClick={onPrevious} size="lg">
-              <ChevronLeft className="w-4 h-4 mr-2" />
-              Previous Module
-            </Button>
-          )}
-        </div>
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+        {hasPrevious && (
+          <Button variant="outline" onClick={onPrevious} size="lg" className="w-full sm:w-auto">
+            <ChevronLeft className="w-4 h-4 mr-2" />
+            Previous Module
+          </Button>
+        )}
 
-        <div className="flex items-center gap-4">
-          {!isCompleted && user && (
-            <Button onClick={handleComplete} size="lg" className="bg-green-600 hover:bg-green-700">
-              <CheckCircle className="w-4 h-4 mr-2" />
-              Mark Complete
-            </Button>
-          )}
+        {!isCompleted && user && (
+          <Button 
+            onClick={handleComplete} 
+            size="lg" 
+            className="bg-green-600 hover:bg-green-700 w-full sm:w-auto sm:mx-auto"
+          >
+            <CheckCircle className="w-4 h-4 mr-2" />
+            Mark Complete
+          </Button>
+        )}
 
-          {hasNext && (
-            <Button 
-              variant={isCompleted ? "default" : "outline"} 
-              onClick={onNext}
-              size="lg"
-            >
-              Next Module
-              <ChevronRight className="w-4 h-4 ml-2" />
-            </Button>
-          )}
-        </div>
+        {hasNext && (
+          <Button 
+            variant={isCompleted ? "default" : "outline"} 
+            onClick={onNext}
+            size="lg"
+            className="w-full sm:w-auto"
+          >
+            Next Module
+            <ChevronRight className="w-4 h-4 ml-2" />
+          </Button>
+        )}
       </div>
     </div>
   );
