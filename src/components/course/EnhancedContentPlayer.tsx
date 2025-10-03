@@ -350,19 +350,13 @@ export const EnhancedContentPlayer = ({
                   <div className="block md:hidden">
                     <ExpandableText 
                       text={module.content.text}
-                      maxLines={10}
-                      className="prose prose-lg max-w-none font-consciousness"
+                      maxLines={15}
+                      className="prose prose-sm md:prose-lg max-w-none font-consciousness dark:prose-invert"
                       expandLabel="Read Full Content"
+                      collapseLabel="Show Less"
                       mobileOnly={true}
+                      renderMarkdown={true}
                     />
-                    <Card className="mt-4 p-3 bg-primary/5 border-primary/20">
-                      <div className="flex items-center gap-2">
-                        <Monitor className="w-4 h-4 text-primary" />
-                        <p className="text-xs text-muted-foreground">
-                          Full lessons and modules available on desktop.
-                        </p>
-                      </div>
-                    </Card>
                   </div>
                   
                   {/* Desktop View */}

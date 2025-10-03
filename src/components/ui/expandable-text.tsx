@@ -2,6 +2,8 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 interface ExpandableTextProps {
   text: string;
@@ -10,6 +12,7 @@ interface ExpandableTextProps {
   expandLabel?: string;
   collapseLabel?: string;
   mobileOnly?: boolean;
+  renderMarkdown?: boolean;
 }
 
 export function ExpandableText({
@@ -19,6 +22,7 @@ export function ExpandableText({
   expandLabel = "Read More",
   collapseLabel = "Read Less",
   mobileOnly = true,
+  renderMarkdown = false,
 }: ExpandableTextProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -31,7 +35,7 @@ export function ExpandableText({
 
   return (
     <div className={cn("relative", className)}>
-      <p
+      <div
         className={cn(
           "transition-all duration-300",
           !isExpanded && `line-clamp-${maxLines}`
@@ -43,8 +47,14 @@ export function ExpandableText({
           overflow: !isExpanded ? "hidden" : "visible",
         }}
       >
-        {text}
-      </p>
+        {renderMarkdown ? (
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            {text}
+          </ReactMarkdown>
+        ) : (
+          <p>{text}</p>
+        )}
+      </div>
       
       {text.split('\n').length > maxLines || text.length > 150 && (
         <Button
