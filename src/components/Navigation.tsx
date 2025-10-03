@@ -1,11 +1,19 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, LogIn, LogOut, User, ShoppingCart, ChevronDown, ChevronRight, BookOpen, BarChart3, Package, FileText } from "lucide-react";
+import { Menu, X, LogIn, LogOut, User, ShoppingCart, ChevronDown, ChevronRight, BookOpen, BarChart3, Package, FileText, MoreHorizontal } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/contexts/CartContext";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
 
 const Navigation = () => {
   const { itemCount } = useCart();
@@ -16,8 +24,8 @@ const Navigation = () => {
   const { user, signOut } = useAuth();
   const { toast } = useToast();
 
-  // Desktop navigation items
-  const navItems = [
+  // Desktop navigation - main items
+  const mainNavItems = [
     { path: "/", label: "Home" },
     { path: "/philosophy", label: "Philosophy" },
     { path: "/courses", label: "Courses" },
@@ -25,8 +33,12 @@ const Navigation = () => {
     { path: "/blog", label: "Blog" },
     { path: "/resources", label: "Resources" },
     { path: "/resources/3EA-Whitepaper-White.pdf", label: "Whitepaper", external: true },
-    { path: "/analytics", label: "Analytics" },
     { path: "/store", label: "Store" },
+  ];
+
+  // Desktop navigation - dropdown items
+  const moreNavItems = [
+    { path: "/analytics", label: "Analytics" },
     { path: "/downloads", label: "Downloads" },
     { path: "/contact", label: "Contact" },
   ];
@@ -74,23 +86,27 @@ const Navigation = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background border-b border-border">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          {/* Logo/Brand */}
+          {/* Logo/Brand - Hidden on desktop to save space */}
           <Link to="/" className="flex items-center space-x-3 md:justify-start justify-center flex-1 md:flex-none" aria-label="3rdeyeadvisors home">
-            <div className="text-lg md:text-xl font-consciousness font-bold text-primary">
+            <div className="text-lg md:text-xl font-consciousness font-bold text-primary md:hidden">
               3rdeyeadvisors
+            </div>
+            {/* Just icon/minimal brand on desktop */}
+            <div className="hidden md:block w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
+              <span className="text-primary font-bold text-sm">3EA</span>
             </div>
           </Link>
           
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8 flex-1 justify-center">
-            {navItems.map((item) => (
+          <div className="hidden md:flex items-center space-x-4 flex-1 justify-center">
+            {mainNavItems.map((item) => (
               item.external ? (
                 <a
                   key={item.path}
                   href={item.path}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-base font-consciousness transition-all duration-cosmic hover:text-primary text-muted-foreground"
+                  className="text-sm font-consciousness transition-all duration-cosmic hover:text-primary text-muted-foreground whitespace-nowrap"
                 >
                   {item.label}
                 </a>
@@ -98,7 +114,7 @@ const Navigation = () => {
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`text-base font-consciousness transition-all duration-cosmic hover:text-primary ${
+                  className={`text-sm font-consciousness transition-all duration-cosmic hover:text-primary whitespace-nowrap ${
                     isActive(item.path)
                       ? "text-primary font-medium"
                       : "text-muted-foreground"
@@ -108,6 +124,40 @@ const Navigation = () => {
                 </Link>
               )
             ))}
+            
+            {/* More Dropdown */}
+            <NavigationMenu>
+              <NavigationMenuList>
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="text-sm font-consciousness h-auto py-1 px-2 bg-transparent hover:bg-transparent data-[state=open]:bg-transparent">
+                    <MoreHorizontal className="h-4 w-4 mr-1" />
+                    More
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid w-[200px] gap-1 p-2 bg-popover">
+                      {moreNavItems.map((item) => (
+                        <li key={item.path}>
+                          <NavigationMenuLink asChild>
+                            <Link
+                              to={item.path}
+                              className={`block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground ${
+                                isActive(item.path)
+                                  ? "bg-accent text-accent-foreground"
+                                  : ""
+                              }`}
+                            >
+                              <div className="text-sm font-medium leading-none font-consciousness">
+                                {item.label}
+                              </div>
+                            </Link>
+                          </NavigationMenuLink>
+                        </li>
+                      ))}
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
             
             {/* Right side actions */}
             <div className="flex items-center space-x-3">
