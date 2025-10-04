@@ -141,6 +141,11 @@ const App = () => {
                       <UploadDigitalProducts />
                     </ProtectedRoute>
                   } />
+                  <Route path="/setup-stripe-products" element={
+                    <ProtectedRoute requireRole="admin">
+                      <SetupStripeProducts />
+                    </ProtectedRoute>
+                  } />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </Layout>
