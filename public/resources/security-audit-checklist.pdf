@@ -1,0 +1,279 @@
+%PDF-1.4
+1 0 obj
+<<
+/Type /Catalog
+/Pages 2 0 R
+>>
+endobj
+
+2 0 obj
+<<
+/Type /Pages
+/Kids [3 0 R 4 0 R]
+/Count 2
+>>
+endobj
+
+3 0 obj
+<<
+/Type /Page
+/Parent 2 0 R
+/MediaBox [0 0 612 792]
+/Contents 5 0 R
+/Resources <<
+/Font <<
+/F1 6 0 R
+/F2 7 0 R
+>>
+>>
+>>
+endobj
+
+4 0 obj
+<<
+/Type /Page
+/Parent 2 0 R
+/MediaBox [0 0 612 792]
+/Contents 8 0 R
+/Resources <<
+/Font <<
+/F1 6 0 R
+/F2 7 0 R
+>>
+>>
+>>
+endobj
+
+5 0 obj
+<<
+/Length 1800
+>>
+stream
+BT
+/F1 28 Tf
+130 720 Td
+(DeFi Security Audit Checklist) Tj
+/F2 14 Tf
+180 -35 Td
+(Professional Risk Assessment) Tj
+
+/F1 18 Tf
+50 -70 Td
+(Protocol Due Diligence) Tj
+
+/F2 11 Tf
+50 -30 Td
+(Before investing in any DeFi protocol, complete this checklist:) Tj
+
+0 -30 Td
+([ ] Smart Contract Audits) Tj
+0 -18 Td
+(    - Check for audits by reputable firms:) Tj
+0 -15 Td
+(      * Trail of Bits, Consensys Diligence, OpenZeppelin) Tj
+0 -15 Td
+(      * CertiK, Quantstamp, PeckShield) Tj
+0 -15 Td
+(    - Review audit reports for critical/high severity issues) Tj
+0 -15 Td
+(    - Verify audits are recent \(within 6 months\)) Tj
+
+0 -25 Td
+([ ] Protocol Track Record) Tj
+0 -18 Td
+(    - Time in production: Minimum 6 months preferred) Tj
+0 -15 Td
+(    - Total Value Locked \(TVL\): Higher generally safer) Tj
+0 -15 Td
+(    - History of exploits or bugs: Check past incidents) Tj
+0 -15 Td
+(    - Bug bounty program: Active program is positive sign) Tj
+
+0 -25 Td
+([ ] Team and Governance) Tj
+0 -18 Td
+(    - Team transparency: Known vs anonymous developers) Tj
+0 -15 Td
+(    - GitHub activity: Regular commits and maintenance) Tj
+0 -15 Td
+(    - Community engagement: Active Discord/Twitter) Tj
+0 -15 Td
+(    - Governance model: Decentralization level) Tj
+
+0 -25 Td
+([ ] Smart Contract Analysis) Tj
+0 -18 Td
+(    - Code is open source and verified on Etherscan) Tj
+0 -15 Td
+(    - Admin keys and upgrade mechanisms disclosed) Tj
+0 -15 Td
+(    - Timelock on sensitive functions \(24-48 hours\)) Tj
+0 -15 Td
+(    - Multi-sig requirements for critical operations) Tj
+
+/F1 18 Tf
+0 -35 Td
+(Wallet Security Best Practices) Tj
+
+/F2 11 Tf
+0 -25 Td
+([ ] Hardware Wallet Usage) Tj
+0 -18 Td
+(    - Use Ledger or Trezor for significant holdings) Tj
+0 -15 Td
+(    - Never share seed phrase or private keys) Tj
+0 -15 Td
+(    - Store seed phrase physically in secure location) Tj
+0 -15 Td
+(    - Consider multi-location backup strategy) Tj
+ET
+endstream
+endobj
+
+8 0 obj
+<<
+/Length 1750
+>>
+stream
+BT
+/F1 18 Tf
+50 720 Td
+(Transaction Security Checklist) Tj
+
+/F2 11 Tf
+50 -30 Td
+([ ] Pre-Transaction Verification) Tj
+0 -18 Td
+(    - Double-check recipient address) Tj
+0 -15 Td
+(    - Verify contract address on official documentation) Tj
+0 -15 Td
+(    - Review transaction details in wallet before signing) Tj
+0 -15 Td
+(    - Check gas fees are reasonable for network conditions) Tj
+0 -15 Td
+(    - Use simulation tools \(Tenderly, Blocknative\)) Tj
+
+0 -25 Td
+([ ] Token Approval Management) Tj
+0 -18 Td
+(    - Only approve necessary token amounts) Tj
+0 -15 Td
+(    - Revoke unlimited approvals after transactions) Tj
+0 -15 Td
+(    - Regularly audit approvals using Etherscan or Revoke.cash) Tj
+0 -15 Td
+(    - Never approve untrusted or new contracts) Tj
+
+/F1 18 Tf
+0 -35 Td
+(Ongoing Monitoring and Maintenance) Tj
+
+/F2 11 Tf
+0 -25 Td
+([ ] Position Monitoring) Tj
+0 -18 Td
+(    - Set price alerts for liquidation levels) Tj
+0 -15 Td
+(    - Monitor collateralization ratios daily) Tj
+0 -15 Td
+(    - Track protocol TVL and stability) Tj
+0 -15 Td
+(    - Watch for governance proposals affecting positions) Tj
+
+0 -25 Td
+([ ] Security Tools to Use) Tj
+0 -18 Td
+(    - DeFi Safety: Protocol safety ratings) Tj
+0 -15 Td
+(    - Revoke.cash: Manage token approvals) Tj
+0 -15 Td
+(    - Etherscan: Verify contracts and transactions) Tj
+0 -15 Td
+(    - MetaMask transaction insights) Tj
+0 -15 Td
+(    - Wallet Guard: Phishing protection) Tj
+
+/F1 18 Tf
+0 -35 Td
+(Red Flags to Avoid) Tj
+
+/F2 11 Tf
+0 -25 Td
+(NEVER invest in protocols with these characteristics:) Tj
+0 -20 Td
+(X  No smart contract audit from reputable firm) Tj
+0 -15 Td
+(X  Anonymous team with no track record) Tj
+0 -15 Td
+(X  Unrealistic APY promises \(>1000%\)) Tj
+0 -15 Td
+(X  Closed-source or unverified contracts) Tj
+0 -15 Td
+(X  Less than $1M TVL for new protocols) Tj
+0 -15 Td
+(X  Heavy marketing focus with little technical detail) Tj
+0 -15 Td
+(X  Copying code from other projects without audit) Tj
+0 -15 Td
+(X  Centralized control without transparency) Tj
+
+/F1 16 Tf
+50 -45 Td
+(Emergency Response Plan) Tj
+
+/F2 11 Tf
+0 -25 Td
+(If you suspect a security breach:) Tj
+0 -18 Td
+(1. Immediately move funds to secure wallet) Tj
+0 -15 Td
+(2. Revoke all token approvals for affected contracts) Tj
+0 -15 Td
+(3. Document all transactions and evidence) Tj
+0 -15 Td
+(4. Report to protocol team and community) Tj
+0 -15 Td
+(5. Monitor for protocol response and compensation plans) Tj
+
+0 -25 Td
+(Visit 3rdeyeadvisors.com for security tutorials and updates) Tj
+ET
+endstream
+endobj
+
+6 0 obj
+<<
+/Type /Font
+/Subtype /Type1
+/BaseFont /Helvetica-Bold
+>>
+endobj
+
+7 0 obj
+<<
+/Type /Font
+/Subtype /Type1
+/BaseFont /Helvetica
+>>
+endobj
+
+xref
+0 9
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000117 00000 n 
+0000000276 00000 n 
+0000000435 00000 n 
+0000002287 00000 n 
+0000002366 00000 n 
+0000002440 00000 n 
+trailer
+<<
+/Size 9
+/Root 1 0 R
+>>
+startxref
+4242
+%%EOF

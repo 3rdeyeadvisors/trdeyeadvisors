@@ -1,0 +1,107 @@
+Yield Farming Calculator and Strategy Template
+3rd Eye Advisors - Professional DeFi Tools
+
+CALCULATOR INPUTS
+Parameter,Value,Unit,Notes
+Initial Investment,10000,USD,Starting capital
+Investment Period,365,Days,Time horizon
+Compound Frequency,Daily,,Reinvest rewards frequency
+Gas Fee per Transaction,15,USD,Average Ethereum mainnet fee
+Platform Fee,0.5,%,Protocol performance fee
+
+PROTOCOL COMPARISON
+Protocol,Asset Pair,Base APY,Reward Token,Reward APY,Total APY,TVL Million,Risk Score,Gas Efficiency
+Uniswap V3,ETH-USDC,8.5%,None,0%,8.5%,450,Low,Medium
+Curve,3pool,5.2%,CRV,12.3%,17.5%,1200,Very Low,High
+Aave,USDC,4.1%,AAVE,2.8%,6.9%,5800,Very Low,High
+Yearn,yvUSDC,12.5%,None,0%,12.5%,280,Low,Very High
+Convex,cvx3Crv,18.3%,CVX+CRV,14.2%,32.5%,2100,Medium,High
+Balancer,80BAL-20WETH,15.7%,BAL,8.9%,24.6%,890,Medium,Medium
+
+YIELD PROJECTION
+Month,Investment USD,Base Yield,Reward Yield,Gas Costs,Net Yield,Cumulative USD,APY Actual
+1,10000,71.67,102.50,450,174.17,10174.17,21.4%
+2,10174.17,72.92,104.44,450,177.36,10351.53,21.6%
+3,10351.53,74.19,106.42,450,180.61,10532.14,21.8%
+6,11118.34,79.68,114.22,450,193.90,11312.24,22.5%
+12,12456.89,89.27,127.96,450,217.23,12674.12,26.7%
+
+IMPERMANENT LOSS CALCULATOR
+Scenario,Price Change,IL Percentage,Value Without IL,Value With IL,Net Loss USD,Break Even APY
+Stable,0%,0.00%,10000,10000,0,0.0%
+Small Move,10%,0.25%,10000,9975,25,3.0%
+Moderate Move,25%,2.02%,10000,9798,202,24.2%
+Large Move,50%,5.72%,10000,9428,572,68.6%
+Very Large,100%,20.00%,10000,8000,2000,240.0%
+
+IL MITIGATION STRATEGIES
+Strategy,Description,Effectiveness,Implementation,Best For
+Correlated Pairs,"Use pairs that move together (ETH-WBTC)",High,Choose similar assets,Volatile markets
+Stablecoin Pairs,"Minimize price divergence (USDC-DAI)",Very High,Use stablecoin pools,Conservative investors
+Narrow Ranges,"Uniswap V3 concentrated liquidity",Medium,Active management,Experienced traders
+Single-Sided,"Protocols offering single-sided deposits",High,Use specific protocols,Risk averse
+Rebalancing,"Regular position adjustments",Medium,Set schedule,Active managers
+
+RISK ASSESSMENT MATRIX
+Risk Factor,Weight,Uniswap V3,Curve,Aave,Yearn,Convex,Balancer
+Smart Contract,30%,9,10,10,8,7,8
+Audit Quality,20%,10,10,10,9,8,9
+TVL/Liquidity,15%,9,10,10,7,9,8
+Protocol Age,10%,10,10,10,8,7,7
+Token Price Risk,15%,7,9,10,9,6,7
+Complexity,10%,8,9,10,7,6,7
+Total Score,100%,8.65,9.65,10.00,8.10,7.00,7.85
+
+GAS OPTIMIZATION STRATEGIES
+Strategy,Gas Savings,Complexity,Best Time,Protocol Support
+Batch Transactions,40-60%,High,Low congestion,Limited
+Layer 2 Solutions,80-95%,Medium,Always,Growing
+Off-peak Hours,30-50%,Low,Weekends,All protocols
+Flash Bots,20-40%,High,High value txns,Ethereum only
+Protocol Aggregators,15-30%,Low,Always,Select platforms
+
+ADVANCED METRICS
+Metric,Formula,Your Value,Target,Status
+Sharpe Ratio,(Return - Risk Free) / Volatility,1.85,>1.5,Good
+Max Drawdown,Largest peak to trough decline,-12.3%,<-20%,Acceptable
+Sortino Ratio,(Return - Risk Free) / Downside Dev,2.31,>2.0,Excellent
+Calmar Ratio,Annual Return / Max Drawdown,2.17,>1.5,Very Good
+Win Rate,Profitable Periods / Total Periods,73%,>60%,Strong
+
+COMPOUND INTEREST CALCULATOR
+Initial,Daily Rate,Days,Final Value,Total Gain,Effective APY
+10000,0.0890%,30,10270.23,270.23,33.1%
+10000,0.0890%,90,10841.67,841.67,34.7%
+10000,0.0890%,180,11773.84,1773.84,36.5%
+10000,0.0890%,365,13897.11,3897.11,38.97%
+
+PORTFOLIO ALLOCATION OPTIMIZER
+Risk Profile,Stablecoins,Blue Chip,DeFi Tokens,Expected APY,Max Drawdown
+Conservative,70%,25%,5%,12.5%,-8%
+Moderate,40%,40%,20%,24.3%,-18%
+Aggressive,20%,30%,50%,42.7%,-35%
+Custom,30%,45%,25%,28.9%,-22%
+
+TAX OPTIMIZATION TIPS
+"1. Track all transactions for capital gains reporting"
+"2. Consider tax-loss harvesting opportunities"
+"3. Hold positions >1 year for long-term capital gains"
+"4. Keep detailed records of cost basis"
+"5. Consult with crypto-specialized tax professional"
+"6. Use portfolio tracking software for automated reporting"
+
+EMERGENCY EXIT STRATEGY
+Trigger,Action,Priority,Timeframe
+TVL drops >50%,Exit position immediately,Critical,<1 hour
+APY drops below X%,Evaluate alternatives,High,24 hours
+Smart contract exploit,Withdraw all funds,Critical,Immediate
+Token price crashes,Assess and rebalance,Medium,4 hours
+Protocol governance changes,Review and decide,Low,1 week
+
+RESOURCES
+"DeFi Safety - Protocol security ratings"
+"DeFiLlama - TVL and APY tracking"
+"Token Terminal - Protocol financials"
+"3rdeyeadvisors.com - Tutorials and courses"
+
+For live updates and advanced strategies visit 3rdeyeadvisors.com
