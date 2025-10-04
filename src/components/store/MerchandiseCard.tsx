@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -61,8 +61,27 @@ export function MerchandiseCard({ product, onAddToCart, isInCart }: MerchandiseC
     );
     if (firstVariant) {
       setSelectedVariant(firstVariant);
+      // Set the correct image for the first variant
+      const colorImageIndex = product.images?.findIndex((img: any) => 
+        img.variant_ids?.includes(firstVariant.id)
+      );
+      if (colorImageIndex !== -1) {
+        setCurrentImageIndex(colorImageIndex);
+      }
     }
   }
+
+  // Update image when variant changes
+  useEffect(() => {
+    if (selectedVariant && product.images) {
+      const colorImageIndex = product.images.findIndex((img: any) => 
+        img.variant_ids?.includes(selectedVariant.id)
+      );
+      if (colorImageIndex !== -1) {
+        setCurrentImageIndex(colorImageIndex);
+      }
+    }
+  }, [selectedVariant, product.images]);
 
   const handleColorChange = (color: string) => {
     setSelectedColor(color);
