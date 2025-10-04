@@ -127,7 +127,8 @@ const Store = () => {
       window.history.replaceState({}, document.title, window.location.pathname);
     }
 
-    loadPrintifyProducts();
+    setIsLoading(true);
+    loadPrintifyProducts().finally(() => setIsLoading(false));
   }, []);
 
   const allProducts = [...digitalProducts, ...printifyProducts];
@@ -191,15 +192,20 @@ const Store = () => {
           )}
 
           {/* Digital Products Section */}
-          <div className="mb-16">
-            <div className="flex flex-col md:flex-row items-center md:items-center gap-4 mb-8 text-center md:text-left">
-              <Download className="w-6 h-6 text-primary" />
-              <h2 className="text-2xl font-consciousness font-bold text-foreground">
-                Digital Products
-              </h2>
+          <section className="mb-16" aria-labelledby="digital-products-heading">
+            <div className="flex flex-col md:flex-row items-center md:items-start gap-4 mb-8 text-center md:text-left">
+              <Download className="w-8 h-8 text-primary flex-shrink-0" aria-hidden="true" />
+              <div>
+                <h2 id="digital-products-heading" className="text-3xl font-consciousness font-bold text-foreground">
+                  Digital Products
+                </h2>
+                <p className="text-sm text-muted-foreground font-consciousness mt-1">
+                  Premium guides and tools for DeFi mastery
+                </p>
+              </div>
             </div>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {digitalProducts.map((product, index) => {
                 const ProductIcon = getProductIcon(product);
                 return (
@@ -254,19 +260,19 @@ const Store = () => {
                 );
               })}
             </div>
-          </div>
+          </section>
 
           {/* Merchandise Section */}
-          <div className="mb-16">
-            <div className="flex items-center justify-between mb-8">
-              <div className="flex flex-col md:flex-row items-center md:items-center gap-4 text-center md:text-left">
-                <Package className="w-6 h-6 text-primary" />
+          <section className="mb-16" aria-labelledby="merchandise-heading">
+            <div className="flex flex-col md:flex-row items-center md:items-start md:justify-between gap-6 mb-8">
+              <div className="flex flex-col md:flex-row items-center md:items-start gap-4 text-center md:text-left">
+                <Package className="w-8 h-8 text-primary flex-shrink-0" aria-hidden="true" />
                 <div>
-                  <h2 className="text-2xl font-consciousness font-bold text-foreground">
+                  <h2 id="merchandise-heading" className="text-3xl font-consciousness font-bold text-foreground">
                     Merchandise
                   </h2>
-                  <p className="text-muted-foreground font-consciousness text-sm">
-                    Premium apparel from our collection
+                  <p className="text-sm text-muted-foreground font-consciousness mt-1">
+                    Consciousness-inspired premium apparel
                   </p>
                 </div>
               </div>
@@ -274,39 +280,68 @@ const Store = () => {
                 onClick={syncPrintifyProducts} 
                 disabled={isSyncing}
                 variant="outline"
-                className="gap-2 font-consciousness hidden md:flex"
+                size="sm"
+                className="gap-2 font-consciousness w-full md:w-auto touch-target"
+                aria-label="Sync merchandise products"
               >
-                <RefreshCw className={`h-4 w-4 ${isSyncing ? 'animate-spin' : ''}`} />
-                {isSyncing ? 'Syncing...' : 'Sync'}
+                <RefreshCw className={`h-4 w-4 ${isSyncing ? 'animate-spin' : ''}`} aria-hidden="true" />
+                {isSyncing ? 'Syncing...' : 'Sync Products'}
               </Button>
             </div>
 
-            {isLoading ? (
-              <div className="text-center py-12">
-                <p className="text-muted-foreground font-consciousness">Loading merchandise...</p>
-              </div>
-            ) : printifyProducts.length === 0 ? (
-              <Card className="p-12 text-center border-2 bg-card/50 backdrop-blur">
-                <Package className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-xl font-consciousness font-semibold mb-2">No Merchandise Available</h3>
-                <p className="text-muted-foreground font-consciousness mb-4">
-                  Check back soon for new products!
-                </p>
-                <Button 
-                  onClick={syncPrintifyProducts} 
-                  disabled={isSyncing}
-                  variant="outline"
-                  className="gap-2 font-consciousness"
-                >
-                  <RefreshCw className={`h-4 w-4 ${isSyncing ? 'animate-spin' : ''}`} />
-                  {isSyncing ? 'Syncing...' : 'Sync Products'}
-                </Button>
-              </Card>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {printifyProducts
-                  .filter(product => product.printify_id === '6844ba70f6f4da591706ef43')
-                  .map((product: any) => (
+            {(() => {
+              const filteredProducts = printifyProducts.filter(
+                product => product.printify_id === '6844ba70f6f4da591706ef43'
+              );
+
+              if (isLoading) {
+                return (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {[1, 2, 3].map((i) => (
+                      <Card key={i} className="overflow-hidden animate-pulse">
+                        <div className="aspect-square bg-muted" />
+                        <div className="p-6 space-y-4">
+                          <div className="h-6 bg-muted rounded w-3/4" />
+                          <div className="h-4 bg-muted rounded w-full" />
+                          <div className="h-4 bg-muted rounded w-2/3" />
+                          <div className="flex justify-between items-center pt-4">
+                            <div className="h-8 bg-muted rounded w-20" />
+                            <div className="h-10 bg-muted rounded w-32" />
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                );
+              }
+
+              if (filteredProducts.length === 0) {
+                return (
+                  <Card className="p-12 text-center border-2 bg-card/50 backdrop-blur">
+                    <Package className="h-16 w-16 text-muted-foreground mx-auto mb-4" aria-hidden="true" />
+                    <h3 className="text-xl font-consciousness font-semibold mb-2">
+                      No Merchandise Available
+                    </h3>
+                    <p className="text-muted-foreground font-consciousness mb-6">
+                      Check back soon for new products!
+                    </p>
+                    <Button 
+                      onClick={syncPrintifyProducts} 
+                      disabled={isSyncing}
+                      variant="outline"
+                      className="gap-2 font-consciousness touch-target"
+                      aria-label="Sync merchandise products from Printify"
+                    >
+                      <RefreshCw className={`h-4 w-4 ${isSyncing ? 'animate-spin' : ''}`} aria-hidden="true" />
+                      {isSyncing ? 'Syncing...' : 'Sync Products'}
+                    </Button>
+                  </Card>
+                );
+              }
+
+              return (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredProducts.map((product: any) => (
                     <MerchandiseCard 
                       key={product.id} 
                       product={product}
@@ -314,15 +349,16 @@ const Store = () => {
                       isInCart={isInCart}
                     />
                   ))}
-              </div>
-            )}
-          </div>
+                </div>
+              );
+            })()}
+          </section>
 
-          <Card className="mt-16 p-6 bg-secondary/40 border-border">
-            <div className="flex items-start gap-4 text-center md:text-left flex-col md:flex-row items-center">
-              <Shield className="h-8 w-8 text-primary flex-shrink-0" />
+          <Card className="mt-16 p-6 md:p-8 bg-secondary/40 border-border" role="region" aria-label="Payment information">
+            <div className="flex flex-col md:flex-row items-center md:items-start gap-4 text-center md:text-left">
+              <Shield className="h-8 w-8 text-primary flex-shrink-0" aria-hidden="true" />
               <div>
-                <h3 className="text-lg font-consciousness font-semibold text-foreground mb-3">
+                <h3 className="text-lg font-consciousness font-semibold text-foreground mb-2">
                   Secure Payment Processing
                 </h3>
                 <p className="text-muted-foreground font-consciousness leading-relaxed">
