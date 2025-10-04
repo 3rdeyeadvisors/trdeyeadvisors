@@ -48,6 +48,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import SocialBanner from "./pages/SocialBanner";
 import UploadDigitalProducts from "./pages/UploadDigitalProducts";
+import SetupStripeProducts from "./pages/SetupStripeProducts";
 import WebThreeGamingDefiConvergence from "./pages/WebThreeGamingDefiConvergence";
 import DefaiRevolution2025 from "./pages/DefaiRevolution2025";
 import DefiRegulationAmlIntegration from "./pages/DefiRegulationAmlIntegration";
