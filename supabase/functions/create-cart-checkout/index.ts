@@ -47,20 +47,34 @@ serve(async (req) => {
 
     // Create line items for Stripe
     const lineItems = items.map((item: any) => {
+      // Build product name with variant info for Printify items
+      let productName = item.title;
+      if (item.printify_id && (item.color || item.size)) {
+        const variantInfo = [item.color, item.size].filter(Boolean).join(' / ');
+        if (variantInfo) {
+          productName = `${item.title} (${variantInfo})`;
+        }
+      }
+
       const productData: any = {
-        name: item.title,
+        name: productName,
         description: `${item.category} - ${item.type}`,
         metadata: {
           type: item.type || 'digital',
           category: item.category || 'product',
           printify_id: item.printify_id || '',
+          printify_product_id: item.printify_product_id || '',
+          variant_id: item.variant_id ? item.variant_id.toString() : '',
+          color: item.color || '',
+          size: item.size || '',
           item_id: item.id.toString(),
         },
       };
 
-      // Add product images if available
-      if (item.images && item.images.length > 0) {
-        // Use the first image as the main product image
+      // Add product image - use item.image if available, otherwise fallback to images array
+      if (item.image) {
+        productData.images = [item.image];
+      } else if (item.images && item.images.length > 0) {
         const mainImage = item.images[0];
         if (mainImage && (mainImage.src || mainImage.url)) {
           productData.images = [mainImage.src || mainImage.url];

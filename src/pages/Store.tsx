@@ -1,12 +1,13 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ShoppingCart, Download, Package, FileText, Calculator, TrendingUp, CheckCircle, X, Plus, RefreshCw } from "lucide-react";
+import { ShoppingCart, Download, Package, FileText, Calculator, TrendingUp, CheckCircle, X, Plus, RefreshCw, Shield } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useCart } from "@/contexts/CartContext";
 import SEO from "@/components/SEO";
+import { MerchandiseCard } from "@/components/store/MerchandiseCard";
 
 const Store = () => {
   const { addItem, items } = useCart();
@@ -255,14 +256,77 @@ const Store = () => {
             </div>
           </div>
 
+          {/* Merchandise Section */}
+          <div className="mb-16">
+            <div className="flex items-center justify-between mb-8">
+              <div className="flex flex-col md:flex-row items-center md:items-center gap-4 text-center md:text-left">
+                <Package className="w-6 h-6 text-primary" />
+                <div>
+                  <h2 className="text-2xl font-consciousness font-bold text-foreground">
+                    Merchandise
+                  </h2>
+                  <p className="text-muted-foreground font-consciousness text-sm">
+                    Premium apparel from our collection
+                  </p>
+                </div>
+              </div>
+              <Button 
+                onClick={syncPrintifyProducts} 
+                disabled={isSyncing}
+                variant="outline"
+                className="gap-2 font-consciousness hidden md:flex"
+              >
+                <RefreshCw className={`h-4 w-4 ${isSyncing ? 'animate-spin' : ''}`} />
+                {isSyncing ? 'Syncing...' : 'Sync'}
+              </Button>
+            </div>
+
+            {isLoading ? (
+              <div className="text-center py-12">
+                <p className="text-muted-foreground font-consciousness">Loading merchandise...</p>
+              </div>
+            ) : printifyProducts.length === 0 ? (
+              <Card className="p-12 text-center border-2 bg-card/50 backdrop-blur">
+                <Package className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-xl font-consciousness font-semibold mb-2">No Merchandise Available</h3>
+                <p className="text-muted-foreground font-consciousness mb-4">
+                  Check back soon for new products!
+                </p>
+                <Button 
+                  onClick={syncPrintifyProducts} 
+                  disabled={isSyncing}
+                  variant="outline"
+                  className="gap-2 font-consciousness"
+                >
+                  <RefreshCw className={`h-4 w-4 ${isSyncing ? 'animate-spin' : ''}`} />
+                  {isSyncing ? 'Syncing...' : 'Sync Products'}
+                </Button>
+              </Card>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {printifyProducts.map((product: any) => (
+                  <MerchandiseCard 
+                    key={product.id} 
+                    product={product}
+                    onAddToCart={handleAddToCart}
+                    isInCart={isInCart}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+
           <Card className="mt-16 p-6 bg-secondary/40 border-border">
-            <div className="text-center">
-              <h3 className="text-lg font-consciousness font-semibold text-foreground mb-3">
-                Secure Payment Processing
-              </h3>
-              <p className="text-muted-foreground font-consciousness leading-relaxed">
-                All digital products are delivered instantly via email. Merchandise is automatically fulfilled with 5-7 business day processing and shipping. We accept all major payment methods.
-              </p>
+            <div className="flex items-start gap-4 text-center md:text-left flex-col md:flex-row items-center">
+              <Shield className="h-8 w-8 text-primary flex-shrink-0" />
+              <div>
+                <h3 className="text-lg font-consciousness font-semibold text-foreground mb-3">
+                  Secure Payment Processing
+                </h3>
+                <p className="text-muted-foreground font-consciousness leading-relaxed">
+                  All digital products are delivered instantly via email. Merchandise is automatically fulfilled with 5-7 business day processing and shipping. We accept all major payment methods.
+                </p>
+              </div>
             </div>
           </Card>
         </div>
