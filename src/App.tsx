@@ -47,6 +47,7 @@ import BlogPost from "./pages/BlogPost";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import SocialBanner from "./pages/SocialBanner";
+import UploadDigitalProducts from "./pages/UploadDigitalProducts";
 import WebThreeGamingDefiConvergence from "./pages/WebThreeGamingDefiConvergence";
 import DefaiRevolution2025 from "./pages/DefaiRevolution2025";
 import DefiRegulationAmlIntegration from "./pages/DefiRegulationAmlIntegration";
@@ -134,6 +135,11 @@ const App = () => {
                   <Route path="/privacy" element={<PrivacyPolicy />} />
                   <Route path="/terms" element={<TermsOfService />} />
                   <Route path="/social-banner" element={<SocialBanner />} />
+                  <Route path="/upload-digital-products" element={
+                    <ProtectedRoute requireRole="admin">
+                      <UploadDigitalProducts />
+                    </ProtectedRoute>
+                  } />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </Layout>
