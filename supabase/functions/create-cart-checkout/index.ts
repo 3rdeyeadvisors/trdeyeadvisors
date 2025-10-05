@@ -89,6 +89,8 @@ serve(async (req) => {
           tax_behavior: 'exclusive', // Tax calculated and added on top
         },
         quantity: item.quantity,
+        // Add tax code for digital vs physical products
+        tax_code: item.printify_id ? 'txcd_99999999' : 'txcd_10000000', // physical goods : digital goods
       };
     });
 

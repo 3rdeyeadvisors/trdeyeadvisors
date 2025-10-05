@@ -33,6 +33,7 @@ serve(async (req) => {
             tax_behavior: 'exclusive', // Tax calculated and added on top
           },
           quantity: 1,
+          tax_code: 'txcd_10000000', // Digital goods
         },
       ],
       mode: "payment",
