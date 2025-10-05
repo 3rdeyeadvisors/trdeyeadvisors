@@ -121,6 +121,9 @@ serve(async (req) => {
         },
       ],
       mode: "payment",
+      automatic_tax: {
+        enabled: true,
+      },
       success_url: `${req.headers.get("origin")}/courses/${courseId}?payment=success`,
       cancel_url: `${req.headers.get("origin")}/courses?payment=canceled`,
       metadata: {
