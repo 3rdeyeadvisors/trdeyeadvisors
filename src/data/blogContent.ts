@@ -431,7 +431,7 @@ As the Treasury's consultation period progresses, the DeFi community faces a def
     readTime: "4 min read",
     date: "2025-08-18",
     featured: true,
-    author: "3rd Eye Advisors",
+    author: "3rdeyeadvisors",
     tags: ["DeFi regulation", "AML in DeFi", "digital identity blockchain", "permissionless finance", "smart contract compliance", "KYC in DeFi"]
   },
   {
