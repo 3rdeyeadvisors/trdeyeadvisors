@@ -543,8 +543,8 @@ const Profile = () => {
 
         {/* Achievements */}
         <Card className="mb-8">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+          <CardHeader className="text-center">
+            <CardTitle className="flex items-center justify-center gap-2">
               <Trophy className="w-5 h-5" />
               Achievements
             </CardTitle>
