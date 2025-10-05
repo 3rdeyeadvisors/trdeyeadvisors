@@ -96,7 +96,7 @@ serve(async (req) => {
     const session = await stripe.checkout.sessions.create({
       line_items: lineItems,
       mode: "payment",
-      billing_address_collection: printifyItems.length > 0 ? 'required' : 'auto', // Auto for digital-only, required for physical
+      billing_address_collection: 'required', // Required for accurate tax calculation
       // Collect shipping address if there are physical items
       ...(printifyItems.length > 0 && {
         shipping_address_collection: {

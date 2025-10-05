@@ -36,7 +36,7 @@ serve(async (req) => {
         },
       ],
       mode: "payment",
-      billing_address_collection: 'auto', // Auto-detect location for tax via IP
+      billing_address_collection: 'required', // Required for accurate tax calculation
       automatic_tax: {
         enabled: true,
       },
