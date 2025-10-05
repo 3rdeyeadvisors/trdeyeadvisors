@@ -5,17 +5,20 @@ import { ShoppingCart, Download, Package, FileText, Calculator, TrendingUp, Chec
 import { supabase } from "@/integrations/supabase/client";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import { useAuth } from "@/components/auth/AuthProvider";
 import { useCart } from "@/contexts/CartContext";
 import SEO from "@/components/SEO";
 import { MerchandiseCard } from "@/components/store/MerchandiseCard";
 
 const Store = () => {
   const { addItem, items } = useCart();
+  const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [purchasedProduct, setPurchasedProduct] = useState<string>("");
   const [printifyProducts, setPrintifyProducts] = useState<any[]>([]);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [digitalProducts] = useState([
     {
       id: 1,
@@ -111,6 +114,27 @@ const Store = () => {
   const isInCart = (productId: string | number) => {
     return items.some(item => item.id == productId || item.id == productId.toString());
   };
+
+  // Check admin role
+  useEffect(() => {
+    const checkAdminRole = async () => {
+      if (!user) {
+        setIsAdmin(false);
+        return;
+      }
+
+      const { data } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', user.id)
+        .eq('role', 'admin')
+        .single();
+
+      setIsAdmin(!!data);
+    };
+
+    checkAdminRole();
+  }, [user]);
 
   // Load products on mount
   useEffect(() => {
@@ -276,17 +300,19 @@ const Store = () => {
                   </p>
                 </div>
               </div>
-              <Button 
-                onClick={syncPrintifyProducts} 
-                disabled={isSyncing}
-                variant="outline"
-                size="sm"
-                className="gap-2 font-consciousness w-full md:w-auto touch-target"
-                aria-label="Sync merchandise products"
-              >
-                <RefreshCw className={`h-4 w-4 ${isSyncing ? 'animate-spin' : ''}`} aria-hidden="true" />
-                {isSyncing ? 'Syncing...' : 'Sync Products'}
-              </Button>
+              {isAdmin && (
+                <Button 
+                  onClick={syncPrintifyProducts} 
+                  disabled={isSyncing}
+                  variant="outline"
+                  size="sm"
+                  className="gap-2 font-consciousness w-full md:w-auto touch-target"
+                  aria-label="Sync merchandise products"
+                >
+                  <RefreshCw className={`h-4 w-4 ${isSyncing ? 'animate-spin' : ''}`} aria-hidden="true" />
+                  {isSyncing ? 'Syncing...' : 'Sync Products'}
+                </Button>
+              )}
             </div>
 
             {(() => {
@@ -325,16 +351,18 @@ const Store = () => {
                     <p className="text-muted-foreground font-consciousness mb-6">
                       Check back soon for new products!
                     </p>
-                    <Button 
-                      onClick={syncPrintifyProducts} 
-                      disabled={isSyncing}
-                      variant="outline"
-                      className="gap-2 font-consciousness touch-target"
-                      aria-label="Sync merchandise products from Printify"
-                    >
-                      <RefreshCw className={`h-4 w-4 ${isSyncing ? 'animate-spin' : ''}`} aria-hidden="true" />
-                      {isSyncing ? 'Syncing...' : 'Sync Products'}
-                    </Button>
+                    {isAdmin && (
+                      <Button 
+                        onClick={syncPrintifyProducts} 
+                        disabled={isSyncing}
+                        variant="outline"
+                        className="gap-2 font-consciousness touch-target"
+                        aria-label="Sync merchandise products from Printify"
+                      >
+                        <RefreshCw className={`h-4 w-4 ${isSyncing ? 'animate-spin' : ''}`} aria-hidden="true" />
+                        {isSyncing ? 'Syncing...' : 'Sync Products'}
+                      </Button>
+                    )}
                   </Card>
                 );
               }
