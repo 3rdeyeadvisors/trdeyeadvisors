@@ -103,7 +103,7 @@ serve(async (req) => {
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       customer_email: customerId ? undefined : userData.user.email,
-      billing_address_collection: 'auto', // Collect address only when needed for tax
+      billing_address_collection: 'required', // Required for tax calculation
       line_items: [
         {
           price_data: {

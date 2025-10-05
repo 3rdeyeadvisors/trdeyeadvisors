@@ -36,7 +36,7 @@ serve(async (req) => {
         },
       ],
       mode: "payment",
-      billing_address_collection: 'auto', // Collect address only when needed for tax
+      billing_address_collection: 'required', // Required for tax calculation
       automatic_tax: {
         enabled: true,
       },
