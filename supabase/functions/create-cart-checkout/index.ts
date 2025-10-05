@@ -86,6 +86,7 @@ serve(async (req) => {
           currency: "usd",
           product_data: productData,
           unit_amount: Math.round(item.price * 100), // Convert to cents
+          tax_behavior: 'exclusive', // Tax calculated and added on top
         },
         quantity: item.quantity,
       };

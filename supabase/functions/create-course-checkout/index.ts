@@ -116,6 +116,7 @@ serve(async (req) => {
               },
             },
             unit_amount: course.price_cents,
+            tax_behavior: 'exclusive', // Tax calculated and added on top
           },
           quantity: 1,
         },

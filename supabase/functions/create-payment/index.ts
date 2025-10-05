@@ -30,6 +30,7 @@ serve(async (req) => {
               name: productName,
             },
             unit_amount: price * 100, // Convert to cents
+            tax_behavior: 'exclusive', // Tax calculated and added on top
           },
           quantity: 1,
         },
