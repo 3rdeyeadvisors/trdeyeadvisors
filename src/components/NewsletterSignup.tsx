@@ -14,6 +14,7 @@ interface NewsletterSignupProps {
 
 const NewsletterSignup = ({ variant = "default", className = "" }: NewsletterSignupProps) => {
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
   const { toast } = useToast();
@@ -37,7 +38,10 @@ const NewsletterSignup = ({ variant = "default", className = "" }: NewsletterSig
       // Direct insert without complex validation that might fail
       const { error } = await supabase
         .from('subscribers')
-        .insert([{ email: email.trim().toLowerCase() }]);
+        .insert([{ 
+          email: email.trim().toLowerCase(),
+          name: name.trim() || null
+        }]);
 
       if (error) {
         console.error('Subscription error:', error);
@@ -51,6 +55,7 @@ const NewsletterSignup = ({ variant = "default", className = "" }: NewsletterSig
       
       setIsSubscribed(true);
       setEmail("");
+      setName("");
       
       toast({
         title: "Successfully Subscribed!",
@@ -71,7 +76,15 @@ const NewsletterSignup = ({ variant = "default", className = "" }: NewsletterSig
   if (variant === "minimal") {
     return (
       <div className={`max-w-md mx-auto ${className}`}>
-        <form onSubmit={handleSubmit} className="flex gap-2">
+        <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2">
+          <Input
+            type="text"
+            placeholder="Your name (optional)"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="flex-1"
+            disabled={isLoading || isSubscribed}
+          />
           <Input
             type="email"
             placeholder="Enter your email"
@@ -120,6 +133,14 @@ const NewsletterSignup = ({ variant = "default", className = "" }: NewsletterSig
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
+              <Input
+                type="text"
+                placeholder="Your name (optional)"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="h-12 font-consciousness"
+                disabled={isLoading}
+              />
               <div className="flex gap-3">
                 <Input
                   type="email"
@@ -168,6 +189,14 @@ const NewsletterSignup = ({ variant = "default", className = "" }: NewsletterSig
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-3">
+              <Input
+                type="text"
+                placeholder="Your name (optional)"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="font-consciousness"
+                disabled={isLoading}
+              />
               <Input
                 type="email"
                 placeholder="Enter your email"

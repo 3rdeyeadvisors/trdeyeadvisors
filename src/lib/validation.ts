@@ -20,7 +20,13 @@ export const contactFormSchema = z.object({
 
 // Newsletter signup validation schema
 export const newsletterSchema = z.object({
-  email: emailSchema
+  email: emailSchema,
+  name: z.string()
+    .min(2, 'Name must be at least 2 characters')
+    .max(100, 'Name must not exceed 100 characters')
+    .regex(/^[a-zA-Z\s'-]+$/, 'Name can only contain letters, spaces, hyphens, and apostrophes')
+    .optional()
+    .or(z.literal(''))
 });
 
 // Password validation schema
