@@ -310,8 +310,8 @@ const Profile = () => {
 
               {/* Profile Info */}
               <div className="flex-1 space-y-4">
-                <div className="flex items-start justify-between">
-                  <div>
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                  <div className="flex-1">
                     {isEditing ? (
                       <div className="space-y-4">
                         <div>
@@ -364,17 +364,16 @@ const Profile = () => {
                   </div>
 
                   {/* Edit Controls */}
-                  <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                  <div className="flex gap-2 sm:self-start">
                     {isEditing ? (
                       <>
                         <Button
                           onClick={handleSaveProfile}
                           disabled={saving}
                           size="sm"
-                          className="w-full sm:w-auto flex items-center justify-center"
                         >
-                          <Save className="w-4 h-4 mr-2" />
-                          {saving ? "Saving..." : "Save"}
+                          <Save className="w-4 h-4 sm:mr-2" />
+                          <span className="hidden sm:inline">{saving ? "Saving..." : "Save"}</span>
                         </Button>
                         <Button
                           variant="outline"
@@ -387,10 +386,9 @@ const Profile = () => {
                             });
                           }}
                           size="sm"
-                          className="w-full sm:w-auto flex items-center justify-center"
                         >
-                          <X className="w-4 h-4 mr-2" />
-                          Cancel
+                          <X className="w-4 h-4 sm:mr-2" />
+                          <span className="hidden sm:inline">Cancel</span>
                         </Button>
                       </>
                     ) : (
@@ -398,10 +396,9 @@ const Profile = () => {
                         variant="outline"
                         onClick={() => setIsEditing(true)}
                         size="sm"
-                        className="w-full sm:w-auto flex items-center justify-center"
                       >
-                        <Edit className="w-4 h-4 mr-2" />
-                        Edit Profile
+                        <Edit className="w-4 h-4 sm:mr-2" />
+                        <span className="hidden sm:inline">Edit Profile</span>
                       </Button>
                     )}
                   </div>
