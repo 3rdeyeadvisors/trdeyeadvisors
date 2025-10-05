@@ -454,14 +454,14 @@ const Profile = () => {
                         <h1 className="text-3xl font-consciousness font-bold text-foreground mb-2">
                           {profile?.display_name || user.email?.split('@')[0] || 'User'}
                         </h1>
-                        <div className="flex items-center gap-2 text-muted-foreground mb-4">
+                        <div className="flex items-center justify-center md:justify-start gap-2 text-muted-foreground mb-4">
                           <Mail className="w-4 h-4" />
                           <span>{user.email}</span>
                         </div>
                         {profile?.bio && (
                           <p className="text-muted-foreground mb-4">{profile.bio}</p>
                         )}
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <div className="flex items-center justify-center md:justify-start gap-2 text-sm text-muted-foreground">
                           <Calendar className="w-4 h-4" />
                           <span>Joined {new Date(user.created_at).toLocaleDateString()}</span>
                         </div>
