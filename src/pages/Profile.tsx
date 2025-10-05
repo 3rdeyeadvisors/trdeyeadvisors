@@ -382,7 +382,7 @@ const Profile = () => {
         {/* Profile Header */}
         <Card className="mb-8">
           <CardContent className="p-8">
-            <div className="flex flex-col md:flex-row items-start gap-6">
+            <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
               {/* Avatar Section */}
               <div className="relative">
                 <Avatar className="w-32 h-32">
@@ -415,7 +415,7 @@ const Profile = () => {
               </div>
 
               {/* Profile Info */}
-              <div className="flex-1 space-y-4">
+              <div className="flex-1 space-y-4 text-center md:text-left">
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                   <div className="flex-1">
                     {isEditing ? (
@@ -470,7 +470,7 @@ const Profile = () => {
                   </div>
 
                   {/* Edit Controls */}
-                  <div className="flex gap-2 sm:self-start">
+                  <div className="flex gap-2 justify-center sm:self-start">
                     {isEditing ? (
                       <>
                         <Button
