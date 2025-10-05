@@ -111,7 +111,7 @@ The open letter was signed by over 110 industry leaders, including major compani
     readTime: "5 min read",
     date: "2025-08-29",
     featured: true,
-    author: "3EA Research Team",
+    author: "3rdeyeadvisors Research Team",
     tags: ["DeFi regulation 2025", "decentralized finance rules", "U.S. DeFi legislation", "non-custodial wallets", "crypto policy", "DeFi innovation", "Policy", "Regulation"]
   },
   {
@@ -237,7 +237,7 @@ As Wall Street continues its march into DeFi, the question isn't whether to part
     readTime: "4 min read",
     date: "2025-08-27",
     featured: true,
-    author: "3EA Research Team",
+    author: "3rdeyeadvisors Research Team",
     tags: ["Ethereum", "DeFi", "Institutional Adoption", "Wall Street", "Decentralized Finance", "TVL", "Smart Contracts", "Crypto Investment", "DeFi Protocols", "Financial Infrastructure"]
   },
   {

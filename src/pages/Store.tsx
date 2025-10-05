@@ -146,7 +146,7 @@ const Store = () => {
   return (
     <>
       <SEO 
-        title="DeFi Education Store | The 3rd Eye Advisors"
+        title="DeFi Education Store | 3rdeyeadvisors"
         description="Premium DeFi courses, guides, and educational materials. Get access to expert cryptocurrency training and blockchain education resources."
         keywords="DeFi courses, crypto education store, blockchain training materials, DeFi guides"
         url="https://www.the3rdeyeadvisors.com/store"

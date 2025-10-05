@@ -48,6 +48,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import SocialBanner from "./pages/SocialBanner";
 import UploadDigitalProducts from "./pages/UploadDigitalProducts";
+import AdminUploadProducts from "./pages/AdminUploadProducts";
 import SetupStripeProducts from "./pages/SetupStripeProducts";
 import WebThreeGamingDefiConvergence from "./pages/WebThreeGamingDefiConvergence";
 import DefaiRevolution2025 from "./pages/DefaiRevolution2025";
@@ -139,6 +140,11 @@ const App = () => {
                   <Route path="/upload-digital-products" element={
                     <ProtectedRoute requireRole="admin">
                       <UploadDigitalProducts />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/admin/upload-products" element={
+                    <ProtectedRoute requireRole="admin">
+                      <AdminUploadProducts />
                     </ProtectedRoute>
                   } />
                   <Route path="/setup-stripe-products" element={
