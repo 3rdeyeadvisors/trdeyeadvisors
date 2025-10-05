@@ -87,7 +87,6 @@ serve(async (req) => {
           product_data: productData,
           unit_amount: Math.round(item.price * 100), // Convert to cents
           tax_behavior: 'exclusive', // Tax calculated and added on top
-          tax_code: item.printify_id ? 'txcd_99999999' : 'txcd_10000000', // physical goods : digital goods
         },
         quantity: item.quantity,
       };

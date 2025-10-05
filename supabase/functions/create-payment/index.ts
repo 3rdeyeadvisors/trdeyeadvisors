@@ -31,7 +31,6 @@ serve(async (req) => {
             },
             unit_amount: price * 100, // Convert to cents
             tax_behavior: 'exclusive', // Tax calculated and added on top
-            tax_code: 'txcd_10000000', // Digital goods
           },
           quantity: 1,
         },
