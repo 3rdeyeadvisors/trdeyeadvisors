@@ -118,9 +118,9 @@ serve(async (req) => {
             },
             unit_amount: course.price_cents,
             tax_behavior: 'exclusive', // Tax calculated and added on top
+            tax_code: 'txcd_10000000', // Digital goods (courses)
           },
           quantity: 1,
-          tax_code: 'txcd_10000000', // Digital goods (courses)
         },
       ],
       mode: "payment",
