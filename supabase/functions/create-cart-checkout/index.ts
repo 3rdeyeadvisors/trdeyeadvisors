@@ -96,6 +96,7 @@ serve(async (req) => {
     const session = await stripe.checkout.sessions.create({
       line_items: lineItems,
       mode: "payment",
+      billing_address_collection: 'auto', // Collect address only when needed for tax
       automatic_tax: {
         enabled: true,
       },
