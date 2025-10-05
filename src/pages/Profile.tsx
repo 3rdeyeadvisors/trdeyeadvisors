@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -23,7 +23,9 @@ import {
   TrendingUp,
   Shield,
   Settings,
-  Camera
+  Camera,
+  Upload,
+  Loader2
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -68,6 +70,8 @@ const Profile = () => {
   });
   const [profileLoading, setProfileLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -185,6 +189,96 @@ const Profile = () => {
     }
   };
 
+  const handleAvatarUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!user || !event.target.files || event.target.files.length === 0) return;
+
+    const file = event.target.files[0];
+    
+    // Validate file type
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+    if (!validTypes.includes(file.type)) {
+      toast({
+        title: "Invalid file type",
+        description: "Please upload a valid image file (JPEG, PNG, WebP, or GIF).",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Validate file size (5MB max)
+    if (file.size > 5242880) {
+      toast({
+        title: "File too large",
+        description: "Please upload an image smaller than 5MB.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setUploading(true);
+    try {
+      // Delete old avatar if it exists and is from our storage
+      if (profile?.avatar_url && profile.avatar_url.includes('supabase.co/storage')) {
+        const oldPath = profile.avatar_url.split('/avatars/')[1];
+        if (oldPath) {
+          await supabase.storage.from('avatars').remove([oldPath]);
+        }
+      }
+
+      // Upload new avatar
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${user.id}/${Date.now()}.${fileExt}`;
+      
+      const { error: uploadError } = await supabase.storage
+        .from('avatars')
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
+
+      if (uploadError) throw uploadError;
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('avatars')
+        .getPublicUrl(fileName);
+
+      // Update profile with new avatar URL
+      const { data, error: updateError } = await supabase
+        .from('profiles')
+        .update({
+          avatar_url: publicUrl,
+          updated_at: new Date().toISOString()
+        })
+        .eq('user_id', user.id)
+        .select()
+        .single();
+
+      if (updateError) throw updateError;
+
+      setProfile(data);
+      setEditForm(prev => ({ ...prev, avatar_url: publicUrl }));
+      
+      toast({
+        title: "Avatar updated",
+        description: "Your profile picture has been successfully updated.",
+      });
+    } catch (error) {
+      console.error('Error uploading avatar:', error);
+      toast({
+        title: "Upload failed",
+        description: "Failed to upload image. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setUploading(false);
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
   const handleSaveProfile = async () => {
     if (!user || !profile) return;
 
@@ -297,15 +391,27 @@ const Profile = () => {
                     {(profile?.display_name || user.email)?.charAt(0).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
-                {isEditing && (
-                  <Button
-                    size="icon"
-                    variant="secondary"
-                    className="absolute -bottom-2 -right-2 rounded-full shadow-lg"
-                  >
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
+                  onChange={handleAvatarUpload}
+                  className="hidden"
+                />
+                <Button
+                  size="icon"
+                  variant="secondary"
+                  className="absolute -bottom-2 -right-2 rounded-full shadow-lg"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploading}
+                  title="Upload new avatar"
+                >
+                  {uploading ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
                     <Camera className="w-4 h-4" />
-                  </Button>
-                )}
+                  )}
+                </Button>
               </div>
 
               {/* Profile Info */}
