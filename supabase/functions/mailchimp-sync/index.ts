@@ -31,8 +31,10 @@ const handler = async (req: Request): Promise<Response> => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  let payload: MailchimpPayload | null = null;
+
   try {
-    const payload: MailchimpPayload = await req.json();
+    payload = await req.json();
     console.log('Received Mailchimp sync payload:', payload);
 
     const { table, record } = payload;
@@ -206,19 +208,20 @@ const handler = async (req: Request): Promise<Response> => {
   } catch (error: any) {
     console.error("Error in mailchimp-sync function:", error);
 
-    // Log failed sync
-    try {
-      const payload: MailchimpPayload = await req.json();
-      await supabase.from('email_logs').insert({
-        email_type: 'mailchimp_sync',
-        recipient_email: payload.record.email,
-        status: 'failed',
-        edge_function_name: 'mailchimp-sync',
-        related_id: payload.record.id,
-        error_message: error.message
-      });
-    } catch (logError) {
-      console.error('Failed to log Mailchimp sync error:', logError);
+    // Log failed sync (only if we successfully parsed the payload)
+    if (payload) {
+      try {
+        await supabase.from('email_logs').insert({
+          email_type: 'mailchimp_sync',
+          recipient_email: payload.record.email,
+          status: 'failed',
+          edge_function_name: 'mailchimp-sync',
+          related_id: payload.record.id,
+          error_message: error.message
+        });
+      } catch (logError) {
+        console.error('Failed to log Mailchimp sync error:', logError);
+      }
     }
 
     return new Response(
