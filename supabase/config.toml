@@ -73,3 +73,6 @@ verify_jwt = false
 
 [functions.fetch-defi-data]
 verify_jwt = false
+
+[functions.backfill-subscribers]
+verify_jwt = false

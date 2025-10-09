@@ -142,6 +142,20 @@ const handler = async (req: Request): Promise<Response> => {
     );
   } catch (error: any) {
     console.error("Error in notify-new-signup function:", error);
+
+    // Log failed notification
+    try {
+      await supabase.from('email_logs').insert({
+        email_type: 'notification',
+        recipient_email: 'info@the3rdeyeadvisors.com',
+        status: 'failed',
+        edge_function_name: 'notify-new-signup',
+        error_message: error.message
+      });
+    } catch (logError) {
+      console.error('Failed to log notification error:', logError);
+    }
+
     return new Response(
       JSON.stringify({ 
         success: false, 

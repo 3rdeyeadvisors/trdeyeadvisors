@@ -27,6 +27,7 @@ import Downloads from "./pages/Downloads";
 import AdminUploadContent from "./pages/AdminUploadContent";
 import TestDownloads from "./pages/TestDownloads";
 import Analytics from "./pages/Analytics";
+import EmailLogsAdmin from "./pages/EmailLogsAdmin";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import VideoTutorials from "./pages/VideoTutorials";
 import WalletSetupTutorial from "./pages/WalletSetupTutorial";
@@ -150,6 +151,11 @@ const App = () => {
                   <Route path="/setup-stripe-products" element={
                     <ProtectedRoute requireRole="admin">
                       <SetupStripeProducts />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/admin/email-logs" element={
+                    <ProtectedRoute requireRole="admin">
+                      <EmailLogsAdmin />
                     </ProtectedRoute>
                   } />
                   <Route path="*" element={<NotFound />} />

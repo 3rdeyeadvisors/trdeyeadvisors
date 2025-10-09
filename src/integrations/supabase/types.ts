@@ -311,6 +311,42 @@ export type Database = {
         }
         Relationships: []
       }
+      email_logs: {
+        Row: {
+          created_at: string
+          edge_function_name: string
+          email_type: string
+          error_message: string | null
+          id: string
+          metadata: Json | null
+          recipient_email: string
+          related_id: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          edge_function_name: string
+          email_type: string
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          recipient_email: string
+          related_id?: string | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          edge_function_name?: string
+          email_type?: string
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          recipient_email?: string
+          related_id?: string | null
+          status?: string
+        }
+        Relationships: []
+      }
       printify_orders: {
         Row: {
           address_to: Json

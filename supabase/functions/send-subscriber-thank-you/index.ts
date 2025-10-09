@@ -1,7 +1,13 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "npm:resend@2.0.0";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.7';
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+
+const supabase = createClient(
+  Deno.env.get('SUPABASE_URL') ?? '',
+  Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+);
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -110,6 +116,18 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log("Subscriber thank you email sent successfully to:", email);
 
+    // Log to email_logs table
+    await supabase.from('email_logs').insert({
+      email_type: 'thank_you',
+      recipient_email: email,
+      status: 'sent',
+      edge_function_name: 'send-subscriber-thank-you',
+      metadata: {
+        resend_id: emailResponse.data?.id,
+        name: name || 'Valued Reader'
+      }
+    });
+
     return new Response(
       JSON.stringify({ 
         success: true, 
@@ -126,6 +144,21 @@ const handler = async (req: Request): Promise<Response> => {
     );
   } catch (error: any) {
     console.error("Error in send-subscriber-thank-you function:", error);
+
+    // Log failed email
+    try {
+      const payload: SubscriberThankYouPayload = await req.json();
+      await supabase.from('email_logs').insert({
+        email_type: 'thank_you',
+        recipient_email: payload.record.email,
+        status: 'failed',
+        edge_function_name: 'send-subscriber-thank-you',
+        error_message: error.message
+      });
+    } catch (logError) {
+      console.error('Failed to log email error:', logError);
+    }
+
     return new Response(
       JSON.stringify({ 
         success: false, 

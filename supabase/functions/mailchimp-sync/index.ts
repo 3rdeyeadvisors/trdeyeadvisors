@@ -171,6 +171,20 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log("Member successfully added/updated in Mailchimp:", memberResult.email_address);
 
+    // Log to email_logs table
+    await supabase.from('email_logs').insert({
+      email_type: 'mailchimp_sync',
+      recipient_email: email,
+      status: 'sent',
+      edge_function_name: 'mailchimp-sync',
+      related_id: record.id,
+      metadata: {
+        mailchimp_member_id: memberResult.id,
+        tag: tag,
+        audience_id: audienceId
+      }
+    });
+
     return new Response(
       JSON.stringify({ 
         success: true, 
@@ -187,6 +201,22 @@ const handler = async (req: Request): Promise<Response> => {
     );
   } catch (error: any) {
     console.error("Error in mailchimp-sync function:", error);
+
+    // Log failed sync
+    try {
+      const payload: MailchimpPayload = await req.json();
+      await supabase.from('email_logs').insert({
+        email_type: 'mailchimp_sync',
+        recipient_email: payload.record.email,
+        status: 'failed',
+        edge_function_name: 'mailchimp-sync',
+        related_id: payload.record.id,
+        error_message: error.message
+      });
+    } catch (logError) {
+      console.error('Failed to log Mailchimp sync error:', logError);
+    }
+
     return new Response(
       JSON.stringify({ 
         success: false, 
