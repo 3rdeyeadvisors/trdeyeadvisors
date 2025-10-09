@@ -39,6 +39,10 @@
     --awareness: 142 76% 36%;
     --awareness-glow: 142 76% 46%;
 
+    /* Destructive/Error states - cosmic red */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
     /* System borders and inputs */
     --border: 217 32% 15%;
     --input: 217 32% 12%;
