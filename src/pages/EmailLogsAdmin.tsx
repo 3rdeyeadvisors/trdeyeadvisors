@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Mail, RefreshCw, Search } from "lucide-react";
+import { Loader2, Mail, RefreshCw, Search, X } from "lucide-react";
 import Layout from "@/components/Layout";
 
 interface EmailLog {
@@ -19,6 +19,12 @@ interface EmailLog {
   created_at: string;
 }
 
+interface Subscriber {
+  id: string;
+  email: string;
+  name: string | null;
+}
+
 const EmailLogsAdmin = () => {
   const [logs, setLogs] = useState<EmailLog[]>([]);
   const [loading, setLoading] = useState(true);
@@ -26,6 +32,10 @@ const EmailLogsAdmin = () => {
   const [isBackfilling, setIsBackfilling] = useState(false);
   const [showEmailInput, setShowEmailInput] = useState(false);
   const [targetEmails, setTargetEmails] = useState("");
+  const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
+  const [selectedEmails, setSelectedEmails] = useState<string[]>([]);
+  const [inputValue, setInputValue] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const { toast } = useToast();
 
   const fetchLogs = async () => {
@@ -51,8 +61,23 @@ const EmailLogsAdmin = () => {
     }
   };
 
+  const fetchSubscribers = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('subscribers')
+        .select('id, email, name')
+        .order('email', { ascending: true });
+
+      if (error) throw error;
+      setSubscribers(data || []);
+    } catch (error: any) {
+      console.error('Error fetching subscribers:', error);
+    }
+  };
+
   useEffect(() => {
     fetchLogs();
+    fetchSubscribers();
   }, []);
 
   const handleBackfill = async (specificEmails?: string[]) => {
@@ -75,7 +100,8 @@ const EmailLogsAdmin = () => {
       // Refresh logs
       await fetchLogs();
       setShowEmailInput(false);
-      setTargetEmails("");
+      setSelectedEmails([]);
+      setInputValue("");
     } catch (error: any) {
       console.error('Error during backfill:', error);
       toast({
@@ -89,22 +115,35 @@ const EmailLogsAdmin = () => {
   };
 
   const handleTargetedBackfill = () => {
-    const emails = targetEmails
-      .split(/[,\n]/)
-      .map(e => e.trim())
-      .filter(e => e.length > 0);
-
-    if (emails.length === 0) {
+    if (selectedEmails.length === 0) {
       toast({
-        title: "No Emails Provided",
-        description: "Please enter at least one email address",
+        title: "No Emails Selected",
+        description: "Please select at least one email address",
         variant: "destructive",
       });
       return;
     }
 
-    handleBackfill(emails);
+    handleBackfill(selectedEmails);
   };
+
+  const handleAddEmail = (email: string) => {
+    if (!selectedEmails.includes(email)) {
+      setSelectedEmails([...selectedEmails, email]);
+    }
+    setInputValue("");
+    setShowSuggestions(false);
+  };
+
+  const handleRemoveEmail = (email: string) => {
+    setSelectedEmails(selectedEmails.filter(e => e !== email));
+  };
+
+  const filteredSubscribers = subscribers.filter(sub => 
+    !selectedEmails.includes(sub.email) &&
+    (sub.email.toLowerCase().includes(inputValue.toLowerCase()) ||
+     sub.name?.toLowerCase().includes(inputValue.toLowerCase()))
+  );
 
   const filteredLogs = logs.filter(log =>
     log.recipient_email.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -185,23 +224,65 @@ const EmailLogsAdmin = () => {
             <CardHeader>
               <CardTitle>Target Specific Subscribers</CardTitle>
               <CardDescription>
-                Enter email addresses (comma or newline separated) to backfill only specific subscribers
+                Search and select subscribers to send welcome emails
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <textarea
-                value={targetEmails}
-                onChange={(e) => setTargetEmails(e.target.value)}
-                placeholder="Enter email addresses (one per line or comma-separated)&#10;example@domain.com&#10;another@domain.com"
-                className="w-full min-h-[120px] p-3 border rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:bg-card transition-colors"
-                disabled={isBackfilling}
-              />
+              {/* Selected emails */}
+              {selectedEmails.length > 0 && (
+                <div className="flex flex-wrap gap-2 p-3 bg-muted rounded-md">
+                  {selectedEmails.map((email) => (
+                    <Badge key={email} variant="secondary" className="gap-1">
+                      {email}
+                      <X
+                        className="h-3 w-3 cursor-pointer hover:text-destructive"
+                        onClick={() => handleRemoveEmail(email)}
+                      />
+                    </Badge>
+                  ))}
+                </div>
+              )}
+
+              {/* Search input with autocomplete */}
+              <div className="relative">
+                <Input
+                  value={inputValue}
+                  onChange={(e) => {
+                    setInputValue(e.target.value);
+                    setShowSuggestions(e.target.value.length > 0);
+                  }}
+                  onFocus={() => setShowSuggestions(inputValue.length > 0)}
+                  placeholder="Search subscribers by email or name..."
+                  className="bg-background text-foreground"
+                  disabled={isBackfilling}
+                />
+
+                {/* Autocomplete dropdown */}
+                {showSuggestions && filteredSubscribers.length > 0 && (
+                  <div className="absolute z-50 w-full mt-1 bg-card border rounded-md shadow-lg max-h-60 overflow-auto">
+                    {filteredSubscribers.slice(0, 10).map((sub) => (
+                      <button
+                        key={sub.id}
+                        onClick={() => handleAddEmail(sub.email)}
+                        className="w-full px-4 py-2 text-left hover:bg-muted transition-colors flex flex-col"
+                      >
+                        <span className="font-medium text-foreground">{sub.email}</span>
+                        {sub.name && (
+                          <span className="text-sm text-muted-foreground">{sub.name}</span>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
               <div className="flex gap-2 justify-end">
                 <Button
                   variant="outline"
                   onClick={() => {
                     setShowEmailInput(false);
-                    setTargetEmails("");
+                    setSelectedEmails([]);
+                    setInputValue("");
                   }}
                   disabled={isBackfilling}
                 >
@@ -209,7 +290,7 @@ const EmailLogsAdmin = () => {
                 </Button>
                 <Button
                   onClick={handleTargetedBackfill}
-                  disabled={isBackfilling}
+                  disabled={isBackfilling || selectedEmails.length === 0}
                   className="gap-2"
                 >
                   {isBackfilling ? (
@@ -218,7 +299,7 @@ const EmailLogsAdmin = () => {
                       Sending...
                     </>
                   ) : (
-                    "Send to Selected"
+                    `Send to ${selectedEmails.length} Selected`
                   )}
                 </Button>
               </div>
