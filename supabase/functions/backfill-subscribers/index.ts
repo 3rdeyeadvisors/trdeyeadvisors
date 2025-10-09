@@ -67,8 +67,13 @@ const handler = async (req: Request): Promise<Response> => {
       try {
         const thankYouResponse = await supabase.functions.invoke('send-subscriber-thank-you', {
           body: {
-            email: subscriber.email,
-            name: subscriber.name || '',
+            table: 'subscribers',
+            record: {
+              id: subscriber.id,
+              email: subscriber.email,
+              name: subscriber.name,
+              created_at: subscriber.created_at,
+            },
           },
         });
 
