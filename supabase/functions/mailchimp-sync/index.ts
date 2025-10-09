@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.7';
+import { createHash } from "https://deno.land/std@0.190.0/hash/mod.ts";
 
 const supabase = createClient(
   Deno.env.get('SUPABASE_URL') ?? '',
@@ -141,8 +142,9 @@ const handler = async (req: Request): Promise<Response> => {
     let memberResult;
     if (addMemberResponse.status === 400) {
       // Member might already exist, try to update instead
-      const emailHash = await crypto.subtle.digest('MD5', new TextEncoder().encode(email.toLowerCase()));
-      const emailHashHex = Array.from(new Uint8Array(emailHash)).map(b => b.toString(16).padStart(2, '0')).join('');
+      const hash = createHash("md5");
+      hash.update(email.toLowerCase());
+      const emailHashHex = hash.toString();
       
       console.log('Member might exist, trying to update instead');
       const updateResponse = await fetch(`${baseUrl}/lists/${audienceId}/members/${emailHashHex}`, {
