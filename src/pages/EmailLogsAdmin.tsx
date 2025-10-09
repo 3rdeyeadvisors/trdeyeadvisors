@@ -623,44 +623,79 @@ const EmailLogsAdmin = () => {
                 <p>No email logs found</p>
               </div>
             ) : (
-              <div className="space-y-4">
-                {filteredLogs.map((log) => (
-                  <div
-                    key={log.id}
-                    className="border rounded-lg p-4 hover:bg-muted/50 transition-colors"
-                  >
-                    <div className="flex items-start justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        {getEmailTypeBadge(log.email_type)}
-                        {getStatusBadge(log.status)}
-                      </div>
-                      <span className="text-xs text-muted-foreground">
-                        {new Date(log.created_at).toLocaleString()}
-                      </span>
-                    </div>
-                    <div className="space-y-1">
-                      <p className="font-medium">{log.recipient_email}</p>
-                      <p className="text-sm text-muted-foreground">
-                        Function: {log.edge_function_name}
-                      </p>
-                      {log.error_message && (
-                        <p className="text-sm text-red-600 mt-2">
-                          Error: {log.error_message}
-                        </p>
-                      )}
-                      {log.metadata && Object.keys(log.metadata).length > 0 && (
-                        <details className="text-xs mt-2">
-                          <summary className="cursor-pointer text-muted-foreground hover:text-foreground">
-                            View metadata
-                          </summary>
-                          <pre className="mt-2 p-2 bg-muted rounded overflow-x-auto">
-                            {JSON.stringify(log.metadata, null, 2)}
-                          </pre>
-                        </details>
-                      )}
-                    </div>
-                  </div>
-                ))}
+              <div className="space-y-3">
+                {/* Group logs into chunks of 5 */}
+                {Array.from({ length: Math.ceil(filteredLogs.length / 5) }, (_, groupIndex) => {
+                  const groupStart = groupIndex * 5;
+                  const groupEnd = Math.min(groupStart + 5, filteredLogs.length);
+                  const groupLogs = filteredLogs.slice(groupStart, groupEnd);
+                  const firstLog = groupLogs[0];
+                  const lastLog = groupLogs[groupLogs.length - 1];
+                  
+                  return (
+                    <Accordion key={`group-${groupIndex}`} type="single" collapsible className="w-full">
+                      <AccordionItem value={`logs-${groupIndex}`} className="border rounded-lg">
+                        <AccordionTrigger className="px-4 hover:no-underline hover:bg-muted/50 rounded-lg">
+                          <div className="flex items-center justify-between w-full pr-4">
+                            <div className="flex items-center gap-3">
+                              <span className="text-sm font-medium">
+                                Logs {groupStart + 1}-{groupEnd}
+                              </span>
+                              <div className="flex gap-2">
+                                {getStatusBadge(firstLog.status)}
+                                {getEmailTypeBadge(firstLog.email_type)}
+                              </div>
+                            </div>
+                            <span className="text-xs text-muted-foreground">
+                              {new Date(lastLog.created_at).toLocaleDateString()} - {new Date(firstLog.created_at).toLocaleDateString()}
+                            </span>
+                          </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="px-4 pt-3 pb-4">
+                          <div className="space-y-3">
+                            {groupLogs.map((log) => (
+                              <div
+                                key={log.id}
+                                className="border rounded-lg p-4 hover:bg-muted/50 transition-colors"
+                              >
+                                <div className="flex items-start justify-between mb-2">
+                                  <div className="flex items-center gap-2">
+                                    {getEmailTypeBadge(log.email_type)}
+                                    {getStatusBadge(log.status)}
+                                  </div>
+                                  <span className="text-xs text-muted-foreground">
+                                    {new Date(log.created_at).toLocaleString()}
+                                  </span>
+                                </div>
+                                <div className="space-y-1">
+                                  <p className="font-medium">{log.recipient_email}</p>
+                                  <p className="text-sm text-muted-foreground">
+                                    Function: {log.edge_function_name}
+                                  </p>
+                                  {log.error_message && (
+                                    <p className="text-sm text-red-600 mt-2">
+                                      Error: {log.error_message}
+                                    </p>
+                                  )}
+                                  {log.metadata && Object.keys(log.metadata).length > 0 && (
+                                    <details className="text-xs mt-2">
+                                      <summary className="cursor-pointer text-muted-foreground hover:text-foreground">
+                                        View metadata
+                                      </summary>
+                                      <pre className="mt-2 p-2 bg-muted rounded overflow-x-auto">
+                                        {JSON.stringify(log.metadata, null, 2)}
+                                      </pre>
+                                    </details>
+                                  )}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
+                  );
+                })}
               </div>
             )}
           </CardContent>
