@@ -808,6 +808,15 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: number
       }
+      get_user_emails_with_profiles: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          created_at: string
+          display_name: string
+          email: string
+          user_id: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

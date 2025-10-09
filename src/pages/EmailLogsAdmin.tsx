@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, Mail, RefreshCw, Search, X } from "lucide-react";
 import Layout from "@/components/Layout";
@@ -97,24 +98,15 @@ const EmailLogsAdmin = () => {
   const fetchRegisteredUsers = async () => {
     try {
       // Query profiles joined with auth data via RPC function
-      const { data, error } = await supabase.rpc('get_user_emails_with_profiles');
+      const { data, error } = await supabase.rpc('get_user_emails_with_profiles') as {
+        data: RegisteredUser[] | null;
+        error: any;
+      };
 
       if (error) {
-        console.error('RPC error, falling back to profiles only:', error);
-        // Fallback: just get profiles
-        const { data: profiles } = await supabase
-          .from('profiles')
-          .select('user_id, display_name');
-        
-        const users: RegisteredUser[] = (profiles || []).map(p => ({
-          user_id: p.user_id,
-          email: `user_${p.user_id.substring(0, 8)}`, // Placeholder
-          display_name: p.display_name,
-          created_at: new Date().toISOString(),
-        }));
-        
-        setRegisteredUsers(users);
-        return users;
+        console.error('RPC error:', error);
+        setRegisteredUsers([]);
+        return [];
       }
 
       setRegisteredUsers(data || []);
@@ -497,24 +489,57 @@ const EmailLogsAdmin = () => {
               </div>
             ) : (
               <div className="space-y-3">
-                {userStatuses.map((user) => (
-                  <div
-                    key={user.email}
-                    className="border rounded-lg p-4 hover:bg-muted/50 transition-colors"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex-1">
-                        <p className="font-medium text-foreground">{user.email}</p>
-                        {user.name && (
-                          <p className="text-sm text-muted-foreground">{user.name}</p>
-                        )}
-                      </div>
-                      <div className="flex gap-2">
-                        {getStatusBadges(user)}
-                      </div>
+                {/* First user - always visible */}
+                <div
+                  className="border rounded-lg p-4 hover:bg-muted/50 transition-colors"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <p className="font-medium text-foreground">{userStatuses[0].email}</p>
+                      {userStatuses[0].name && (
+                        <p className="text-sm text-muted-foreground">{userStatuses[0].name}</p>
+                      )}
+                    </div>
+                    <div className="flex gap-2">
+                      {getStatusBadges(userStatuses[0])}
                     </div>
                   </div>
-                ))}
+                </div>
+
+                {/* Rest of users - in accordion */}
+                {userStatuses.length > 1 && (
+                  <Accordion type="single" collapsible className="w-full">
+                    <AccordionItem value="more-users" className="border rounded-lg">
+                      <AccordionTrigger className="px-4 hover:no-underline hover:bg-muted/50 rounded-lg">
+                        <span className="text-sm font-medium">
+                          Show {userStatuses.length - 1} more {userStatuses.length - 1 === 1 ? 'user' : 'users'}
+                        </span>
+                      </AccordionTrigger>
+                      <AccordionContent className="px-4 pt-3 pb-4">
+                        <div className="space-y-3">
+                          {userStatuses.slice(1).map((user) => (
+                            <div
+                              key={user.email}
+                              className="border rounded-lg p-4 hover:bg-muted/50 transition-colors"
+                            >
+                              <div className="flex items-center justify-between">
+                                <div className="flex-1">
+                                  <p className="font-medium text-foreground">{user.email}</p>
+                                  {user.name && (
+                                    <p className="text-sm text-muted-foreground">{user.name}</p>
+                                  )}
+                                </div>
+                                <div className="flex gap-2">
+                                  {getStatusBadges(user)}
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                )}
               </div>
             )}
           </CardContent>
