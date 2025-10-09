@@ -11,6 +11,8 @@ interface AuthContextType {
   signOut: () => Promise<any>;
   resetPassword: (email: string) => Promise<any>;
   updatePassword: (password: string) => Promise<any>;
+  signInWithGoogle: () => Promise<any>;
+  signInWithApple: () => Promise<any>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -115,6 +117,28 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return result;
   };
 
+  const signInWithGoogle = async () => {
+    const redirectUrl = `${window.location.origin}/auth`;
+    const result = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: redirectUrl,
+      },
+    });
+    return result;
+  };
+
+  const signInWithApple = async () => {
+    const redirectUrl = `${window.location.origin}/auth`;
+    const result = await supabase.auth.signInWithOAuth({
+      provider: 'apple',
+      options: {
+        redirectTo: redirectUrl,
+      },
+    });
+    return result;
+  };
+
   const value = {
     user,
     session,
@@ -124,6 +148,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     signOut,
     resetPassword,
     updatePassword,
+    signInWithGoogle,
+    signInWithApple,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
