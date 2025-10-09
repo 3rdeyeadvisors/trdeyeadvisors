@@ -92,10 +92,10 @@ const handler = async (req: Request): Promise<Response> => {
           name: '3rdeyeadvisors Subscribers',
           contact: {
             company: '3rdeyeadvisors',
-            address1: '',
-            city: '',
-            state: '',
-            zip: '',
+            address1: '123 Main Street',
+            city: 'New York',
+            state: 'NY',
+            zip: '10001',
             country: 'US'
           },
           permission_reminder: 'You signed up for updates from 3rdeyeadvisors',
