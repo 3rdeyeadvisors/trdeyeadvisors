@@ -46,16 +46,16 @@ const handler = async (req: Request): Promise<Response> => {
       subject: "🙏 Thank You for Subscribing - 3rdeyeadvisors Newsletter",
       html: `
         <!DOCTYPE html>
-        <html>
+        <html style="height: 100%; margin: 0; padding: 0; background-color: hsl(222, 84%, 4.9%);">
         <head>
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
         </head>
-        <body style="margin: 0; padding: 0; background-color: hsl(222, 84%, 4.9%);">
-          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: hsl(222, 84%, 4.9%); margin: 0; padding: 0;">
+        <body style="height: 100%; margin: 0; padding: 0; background-color: hsl(222, 84%, 4.9%);">
+          <table width="100%" height="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: hsl(222, 84%, 4.9%); margin: 0; padding: 0; border-collapse: collapse;">
             <tr>
-              <td align="center" style="padding: 20px 0;">
-                <table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; margin: 0 auto; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; background: hsl(222, 84%, 4.9%); color: hsl(0, 0%, 98%);">
+              <td align="center" style="background-color: hsl(222, 84%, 4.9%); padding: 0; margin: 0;">
+                <table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; background: hsl(222, 84%, 4.9%); color: hsl(0, 0%, 98%);">
                   <tr>
                     <td style="padding: 32px 20px;">
                       
