@@ -46,18 +46,22 @@ const handler = async (req: Request): Promise<Response> => {
       subject: "🙏 Thank You for Subscribing - 3rdeyeadvisors Newsletter",
       html: `
         <!DOCTYPE html>
-        <html style="height: 100%; margin: 0; padding: 0; background-color: hsl(222, 84%, 4.9%);">
+        <html style="margin: 0; padding: 0; height: 100%; width: 100%;">
         <head>
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <style type="text/css">
+            body { margin: 0 !important; padding: 0 !important; height: 100% !important; width: 100% !important; }
+            html { margin: 0 !important; padding: 0 !important; height: 100% !important; width: 100% !important; }
+          </style>
         </head>
-        <body style="height: 100%; margin: 0; padding: 0; background-color: hsl(222, 84%, 4.9%);">
-          <table width="100%" height="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: hsl(222, 84%, 4.9%); margin: 0; padding: 0; border-collapse: collapse;">
+        <body style="margin: 0; padding: 0; height: 100%; width: 100%;" bgcolor="#0a0f1e">
+          <table width="100%" height="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#0a0f1e" style="margin: 0; padding: 0; border-collapse: collapse; background-color: #0a0f1e;">
             <tr>
-              <td align="center" style="background-color: hsl(222, 84%, 4.9%); padding: 0; margin: 0;">
-                <table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; background: hsl(222, 84%, 4.9%); color: hsl(0, 0%, 98%);">
+              <td align="center" valign="top" bgcolor="#0a0f1e" style="margin: 0; padding: 0; background-color: #0a0f1e;">
+                <table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; background-color: #0a0f1e; color: #fafafa;">
                   <tr>
-                    <td style="padding: 32px 20px;">
+                    <td style="padding: 32px 20px; background-color: #0a0f1e;">
                       
                       <!-- Cosmic Header -->
                       <table width="100%" cellpadding="0" cellspacing="0" border="0">
