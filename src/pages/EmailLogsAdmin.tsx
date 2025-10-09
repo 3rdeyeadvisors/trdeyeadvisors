@@ -96,30 +96,29 @@ const EmailLogsAdmin = () => {
 
   const fetchRegisteredUsers = async () => {
     try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('user_id, display_name');
+      // Query profiles joined with auth data via RPC function
+      const { data, error } = await supabase.rpc('get_user_emails_with_profiles');
 
-      if (error) throw error;
-
-      // Get emails from auth.users
-      const userIds = data?.map(p => p.user_id) || [];
-      const users: RegisteredUser[] = [];
-
-      for (const profile of data || []) {
-        const { data: userData } = await supabase.auth.admin.getUserById(profile.user_id);
-        if (userData?.user) {
-          users.push({
-            user_id: profile.user_id,
-            email: userData.user.email || '',
-            display_name: profile.display_name,
-            created_at: userData.user.created_at,
-          });
-        }
+      if (error) {
+        console.error('RPC error, falling back to profiles only:', error);
+        // Fallback: just get profiles
+        const { data: profiles } = await supabase
+          .from('profiles')
+          .select('user_id, display_name');
+        
+        const users: RegisteredUser[] = (profiles || []).map(p => ({
+          user_id: p.user_id,
+          email: `user_${p.user_id.substring(0, 8)}`, // Placeholder
+          display_name: p.display_name,
+          created_at: new Date().toISOString(),
+        }));
+        
+        setRegisteredUsers(users);
+        return users;
       }
 
-      setRegisteredUsers(users);
-      return users;
+      setRegisteredUsers(data || []);
+      return data || [];
     } catch (error: any) {
       console.error('Error fetching registered users:', error);
       return [];
