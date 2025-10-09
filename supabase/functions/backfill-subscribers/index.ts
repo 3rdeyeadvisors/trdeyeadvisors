@@ -25,13 +25,26 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    console.log('Starting subscriber backfill process...');
+    const body = await req.json().catch(() => ({}));
+    const targetEmails: string[] = body.emails || [];
 
-    // Fetch all subscribers
-    const { data: subscribers, error: fetchError } = await supabase
+    console.log('Starting subscriber backfill process...');
+    if (targetEmails.length > 0) {
+      console.log(`Targeting specific emails: ${targetEmails.join(', ')}`);
+    } else {
+      console.log('Processing all subscribers');
+    }
+
+    // Fetch subscribers (all or specific ones)
+    let query = supabase
       .from('subscribers')
-      .select('*')
-      .order('created_at', { ascending: true });
+      .select('*');
+    
+    if (targetEmails.length > 0) {
+      query = query.in('email', targetEmails);
+    }
+    
+    const { data: subscribers, error: fetchError } = await query.order('created_at', { ascending: true });
 
     if (fetchError) {
       throw new Error(`Failed to fetch subscribers: ${fetchError.message}`);

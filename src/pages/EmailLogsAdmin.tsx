@@ -24,6 +24,8 @@ const EmailLogsAdmin = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [isBackfilling, setIsBackfilling] = useState(false);
+  const [showEmailInput, setShowEmailInput] = useState(false);
+  const [targetEmails, setTargetEmails] = useState("");
   const { toast } = useToast();
 
   const fetchLogs = async () => {
@@ -53,20 +55,27 @@ const EmailLogsAdmin = () => {
     fetchLogs();
   }, []);
 
-  const handleBackfill = async () => {
+  const handleBackfill = async (specificEmails?: string[]) => {
     setIsBackfilling(true);
     try {
-      const { data, error } = await supabase.functions.invoke('backfill-subscribers');
+      const body = specificEmails && specificEmails.length > 0 
+        ? { emails: specificEmails }
+        : {};
+
+      const { data, error } = await supabase.functions.invoke('backfill-subscribers', { body });
 
       if (error) throw error;
 
+      const emailCount = specificEmails?.length || data.summary.total;
       toast({
         title: "Backfill Complete",
-        description: `Successfully processed ${data.summary.successful} out of ${data.summary.total} subscribers`,
+        description: `Successfully processed ${data.summary.successful} out of ${emailCount} subscribers`,
       });
 
       // Refresh logs
       await fetchLogs();
+      setShowEmailInput(false);
+      setTargetEmails("");
     } catch (error: any) {
       console.error('Error during backfill:', error);
       toast({
@@ -77,6 +86,24 @@ const EmailLogsAdmin = () => {
     } finally {
       setIsBackfilling(false);
     }
+  };
+
+  const handleTargetedBackfill = () => {
+    const emails = targetEmails
+      .split(/[,\n]/)
+      .map(e => e.trim())
+      .filter(e => e.length > 0);
+
+    if (emails.length === 0) {
+      toast({
+        title: "No Emails Provided",
+        description: "Please enter at least one email address",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    handleBackfill(emails);
   };
 
   const filteredLogs = logs.filter(log =>
@@ -122,24 +149,82 @@ const EmailLogsAdmin = () => {
             <h1 className="text-4xl font-bold mb-2">Email Logs Dashboard</h1>
             <p className="text-muted-foreground">Monitor all email activity and Mailchimp syncs</p>
           </div>
-          <Button
-            onClick={handleBackfill}
-            disabled={isBackfilling}
-            className="gap-2"
-          >
-            {isBackfilling ? (
-              <>
-                <Loader2 className="h-4 w-4 animate-spin" />
-                Processing...
-              </>
-            ) : (
-              <>
-                <RefreshCw className="h-4 w-4" />
-                Backfill Subscribers
-              </>
-            )}
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              onClick={() => handleBackfill()}
+              disabled={isBackfilling}
+              variant="default"
+              className="gap-2"
+            >
+              {isBackfilling ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                <>
+                  <RefreshCw className="h-4 w-4" />
+                  Backfill All
+                </>
+              )}
+            </Button>
+            <Button
+              onClick={() => setShowEmailInput(!showEmailInput)}
+              disabled={isBackfilling}
+              variant="outline"
+              className="gap-2"
+            >
+              Target Specific
+            </Button>
+          </div>
         </div>
+
+        {/* Targeted Email Input */}
+        {showEmailInput && (
+          <Card className="mb-8">
+            <CardHeader>
+              <CardTitle>Target Specific Subscribers</CardTitle>
+              <CardDescription>
+                Enter email addresses (comma or newline separated) to backfill only specific subscribers
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <textarea
+                value={targetEmails}
+                onChange={(e) => setTargetEmails(e.target.value)}
+                placeholder="demond.hall98@gmail.com, kevin@3rdeyeadvisors.com"
+                className="w-full min-h-[120px] p-3 border rounded-md font-mono text-sm"
+                disabled={isBackfilling}
+              />
+              <div className="flex gap-2 justify-end">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setShowEmailInput(false);
+                    setTargetEmails("");
+                  }}
+                  disabled={isBackfilling}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={handleTargetedBackfill}
+                  disabled={isBackfilling}
+                  className="gap-2"
+                >
+                  {isBackfilling ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Sending...
+                    </>
+                  ) : (
+                    "Send to Selected"
+                  )}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
