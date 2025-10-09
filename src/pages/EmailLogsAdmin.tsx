@@ -25,14 +25,31 @@ interface Subscriber {
   name: string | null;
 }
 
+interface RegisteredUser {
+  user_id: string;
+  email: string;
+  display_name: string | null;
+  created_at: string;
+}
+
+interface UserStatus {
+  email: string;
+  name: string | null;
+  isSubscribed: boolean;
+  isRegistered: boolean;
+  registeredAt: string | null;
+  subscribedAt: string | null;
+}
+
 const EmailLogsAdmin = () => {
   const [logs, setLogs] = useState<EmailLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [isBackfilling, setIsBackfilling] = useState(false);
   const [showEmailInput, setShowEmailInput] = useState(false);
-  const [targetEmails, setTargetEmails] = useState("");
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
+  const [registeredUsers, setRegisteredUsers] = useState<RegisteredUser[]>([]);
+  const [userStatuses, setUserStatuses] = useState<UserStatus[]>([]);
   const [selectedEmails, setSelectedEmails] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -65,19 +82,99 @@ const EmailLogsAdmin = () => {
     try {
       const { data, error } = await supabase
         .from('subscribers')
-        .select('id, email, name')
+        .select('id, email, name, created_at')
         .order('email', { ascending: true });
 
       if (error) throw error;
       setSubscribers(data || []);
+      return data || [];
     } catch (error: any) {
       console.error('Error fetching subscribers:', error);
+      return [];
     }
   };
 
+  const fetchRegisteredUsers = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('user_id, display_name');
+
+      if (error) throw error;
+
+      // Get emails from auth.users
+      const userIds = data?.map(p => p.user_id) || [];
+      const users: RegisteredUser[] = [];
+
+      for (const profile of data || []) {
+        const { data: userData } = await supabase.auth.admin.getUserById(profile.user_id);
+        if (userData?.user) {
+          users.push({
+            user_id: profile.user_id,
+            email: userData.user.email || '',
+            display_name: profile.display_name,
+            created_at: userData.user.created_at,
+          });
+        }
+      }
+
+      setRegisteredUsers(users);
+      return users;
+    } catch (error: any) {
+      console.error('Error fetching registered users:', error);
+      return [];
+    }
+  };
+
+  const combineUserStatuses = (subs: Subscriber[], users: RegisteredUser[]) => {
+    const statusMap = new Map<string, UserStatus>();
+
+    // Add subscribers
+    subs.forEach(sub => {
+      statusMap.set(sub.email, {
+        email: sub.email,
+        name: sub.name,
+        isSubscribed: true,
+        isRegistered: false,
+        subscribedAt: null,
+        registeredAt: null,
+      });
+    });
+
+    // Add registered users
+    users.forEach(user => {
+      const existing = statusMap.get(user.email);
+      if (existing) {
+        existing.isRegistered = true;
+        existing.registeredAt = user.created_at;
+        existing.name = existing.name || user.display_name;
+      } else {
+        statusMap.set(user.email, {
+          email: user.email,
+          name: user.display_name,
+          isSubscribed: false,
+          isRegistered: true,
+          subscribedAt: null,
+          registeredAt: user.created_at,
+        });
+      }
+    });
+
+    setUserStatuses(Array.from(statusMap.values()).sort((a, b) => 
+      a.email.localeCompare(b.email)
+    ));
+  };
+
   useEffect(() => {
-    fetchLogs();
-    fetchSubscribers();
+    const loadData = async () => {
+      setLoading(true);
+      await fetchLogs();
+      const subs = await fetchSubscribers();
+      const users = await fetchRegisteredUsers();
+      combineUserStatuses(subs, users);
+      setLoading(false);
+    };
+    loadData();
   }, []);
 
   const handleBackfill = async (specificEmails?: string[]) => {
@@ -155,6 +252,32 @@ const EmailLogsAdmin = () => {
     sent: logs.filter(l => l.status === 'sent').length,
     failed: logs.filter(l => l.status === 'failed').length,
     pending: logs.filter(l => l.status === 'pending').length,
+  };
+
+  const getStatusBadges = (status: UserStatus) => {
+    const badges = [];
+    
+    if (status.isSubscribed && status.isRegistered) {
+      badges.push(
+        <Badge key="both" className="bg-gradient-to-r from-primary to-accent text-white">
+          Newsletter + Account
+        </Badge>
+      );
+    } else if (status.isSubscribed) {
+      badges.push(
+        <Badge key="newsletter" variant="secondary" className="bg-awareness text-white">
+          Newsletter Only
+        </Badge>
+      );
+    } else if (status.isRegistered) {
+      badges.push(
+        <Badge key="account" variant="outline">
+          Account Only
+        </Badge>
+      );
+    }
+    
+    return badges;
   };
 
   const getStatusBadge = (status: string) => {
@@ -312,7 +435,98 @@ const EmailLogsAdmin = () => {
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium text-muted-foreground">
-                Total Emails
+                Total Users
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{userStatuses.length}</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                Newsletter Subscribers
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-awareness">
+                {userStatuses.filter(u => u.isSubscribed).length}
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                Registered Accounts
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-primary">
+                {userStatuses.filter(u => u.isRegistered).length}
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                Both
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-accent">
+                {userStatuses.filter(u => u.isSubscribed && u.isRegistered).length}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Users Status List */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>All Users & Subscribers</CardTitle>
+            <CardDescription>View subscription and registration status</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {loading ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="h-8 w-8 animate-spin" />
+              </div>
+            ) : userStatuses.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">
+                <Mail className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                <p>No users found</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {userStatuses.map((user) => (
+                  <div
+                    key={user.email}
+                    className="border rounded-lg p-4 hover:bg-muted/50 transition-colors"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
+                        <p className="font-medium text-foreground">{user.email}</p>
+                        {user.name && (
+                          <p className="text-sm text-muted-foreground">{user.name}</p>
+                        )}
+                      </div>
+                      <div className="flex gap-2">
+                        {getStatusBadges(user)}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Email Logs Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                Total Email Logs
               </CardTitle>
             </CardHeader>
             <CardContent>
