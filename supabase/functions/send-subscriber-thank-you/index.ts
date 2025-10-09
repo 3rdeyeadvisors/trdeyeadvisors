@@ -46,20 +46,21 @@ const handler = async (req: Request): Promise<Response> => {
       subject: "🙏 Thank You for Subscribing - 3rdeyeadvisors Newsletter",
       html: `
         <!DOCTYPE html>
-        <html style="margin: 0; padding: 0; height: 100%; width: 100%;">
+        <html style="margin: 0; padding: 0;" bgcolor="#0a0f1e">
         <head>
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <style type="text/css">
-            body { margin: 0 !important; padding: 0 !important; height: 100% !important; width: 100% !important; }
-            html { margin: 0 !important; padding: 0 !important; height: 100% !important; width: 100% !important; }
+            * { margin: 0; padding: 0; }
+            body, html { background-color: #0a0f1e !important; }
           </style>
         </head>
-        <body style="margin: 0; padding: 0; height: 100%; width: 100%;" bgcolor="#0a0f1e">
-          <table width="100%" height="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#0a0f1e" style="margin: 0; padding: 0; border-collapse: collapse; background-color: #0a0f1e;">
+        <body style="margin: 0 !important; padding: 0 !important; background-color: #0a0f1e !important;" bgcolor="#0a0f1e">
+          <div style="background-color: #0a0f1e; margin: 0; padding: 0;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#0a0f1e" style="margin: 0; padding: 0; background-color: #0a0f1e;">
             <tr>
-              <td align="center" valign="top" bgcolor="#0a0f1e" style="margin: 0; padding: 0; background-color: #0a0f1e;">
-                <table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; background-color: #0a0f1e; color: #fafafa;">
+              <td align="center" bgcolor="#0a0f1e" style="padding: 0; margin: 0; background-color: #0a0f1e;">
+                <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; width: 100%; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; background-color: #0a0f1e; color: #fafafa;">
                   <tr>
                     <td style="padding: 32px 20px; background-color: #0a0f1e;">
                       
@@ -169,6 +170,7 @@ const handler = async (req: Request): Promise<Response> => {
               </td>
             </tr>
           </table>
+          </div>
         </body>
         </html>
       `,
