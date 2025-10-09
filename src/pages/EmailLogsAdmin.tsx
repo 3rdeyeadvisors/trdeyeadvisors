@@ -192,8 +192,8 @@ const EmailLogsAdmin = () => {
               <textarea
                 value={targetEmails}
                 onChange={(e) => setTargetEmails(e.target.value)}
-                placeholder="demond.hall98@gmail.com, kevin@3rdeyeadvisors.com"
-                className="w-full min-h-[120px] p-3 border rounded-md font-mono text-sm"
+                placeholder="Enter email addresses (one per line or comma-separated)&#10;example@domain.com&#10;another@domain.com"
+                className="w-full min-h-[120px] p-3 border rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:bg-card transition-colors"
                 disabled={isBackfilling}
               />
               <div className="flex gap-2 justify-end">
