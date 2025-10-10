@@ -94,7 +94,7 @@ const Navigation = () => {
           </Link>
           
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center w-full gap-4">
+          <div className="hidden md:flex items-center justify-between w-full">
             {mainNavItems.map((item) => (
               item.external ? (
                 <a
@@ -155,7 +155,7 @@ const Navigation = () => {
               </NavigationMenuList>
             </NavigationMenu>
             
-            <Link to="/cart" className="relative ml-auto">
+            <Link to="/cart" className="relative">
               <Button variant="ghost" size="icon" className="relative">
                 <ShoppingCart className="h-5 w-5" />
                 {itemCount > 0 && (
