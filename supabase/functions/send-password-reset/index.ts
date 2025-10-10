@@ -43,72 +43,100 @@ const handler = async (req: Request): Promise<Response> => {
       to: [email],
       subject: "Reset Your Password - 3rdeyeadvisors",
       html: `
-        <div style="max-width: 600px; margin: 0 auto; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; color: #fff; background: hsl(222, 84%, 4.9%);">
-          
-          <!-- Header with Cosmic Background -->
-          <div style="text-align: center; padding: 50px 30px 30px; background: linear-gradient(135deg, hsl(222, 84%, 4.9%), hsl(217, 32%, 8%)); border-radius: 12px 12px 0 0; position: relative;">
-            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 50% 50%, hsl(217, 91%, 60%, 0.1), transparent 70%); border-radius: 12px 12px 0 0;"></div>
-            <h1 style="color: hsl(217, 91%, 60%); font-size: 36px; margin: 0; font-weight: bold; text-shadow: 0 0 20px hsl(217, 91%, 60%, 0.3); position: relative; z-index: 1;">3rdeyeadvisors</h1>
-            <p style="color: hsl(0, 0%, 95%); font-size: 18px; margin: 12px 0 0 0; opacity: 0.9; position: relative; z-index: 1;">Secure Password Reset</p>
-          </div>
-
-          <!-- Main Content with Cosmic Theme -->
-          <div style="background: linear-gradient(180deg, hsl(217, 32%, 8%), hsl(217, 32%, 6%)); padding: 40px 30px; border-radius: 0 0 12px 12px; border: 1px solid hsl(217, 32%, 15%);">
-            
-            <!-- Greeting -->
-            <h2 style="color: hsl(217, 91%, 70%); font-size: 24px; margin: 0 0 24px 0; font-weight: 600;">Hello ${firstName}!</h2>
-            
-            <p style="color: hsl(0, 0%, 90%); font-size: 16px; margin: 0 0 28px 0; line-height: 1.6;">
-              We received a request to reset the password for your 3rdeyeadvisors account. Click the button below to create a new secure password and continue your DeFi journey.
-            </p>
-
-            <!-- Reset Button with Cosmic Glow -->
-            <div style="text-align: center; margin: 40px 0;">
-              <a href="${resetUrl}" 
-                 style="display: inline-block; background: linear-gradient(45deg, hsl(217, 91%, 60%), hsl(271, 91%, 65%)); color: hsl(222, 84%, 4.9%); padding: 18px 36px; text-decoration: none; border-radius: 12px; font-weight: bold; font-size: 16px; box-shadow: 0 0 30px hsl(217, 91%, 60%, 0.4), 0 8px 20px rgba(0,0,0,0.3); transition: all 0.3s ease; font-family: 'Inter', sans-serif;">
-                🔐 Reset My Password
-              </a>
-            </div>
-
-            <!-- Security Notice with Cosmic Styling -->
-            <div style="background: linear-gradient(135deg, hsl(217, 32%, 10%), hsl(217, 32%, 12%)); border-left: 4px solid hsl(217, 91%, 60%); padding: 24px; margin: 32px 0; border-radius: 0 12px 12px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
-              <p style="color: hsl(0, 0%, 90%); margin: 0; font-size: 14px; line-height: 1.5;">
-                <strong style="color: hsl(217, 91%, 70%);">🛡️ Security Notice:</strong> This link will expire in 24 hours for your protection. If you didn't request this password reset, you can safely ignore this email.
-              </p>
-            </div>
-
-            <!-- Alternative Link -->
-            <p style="color: hsl(215, 20%, 65%); font-size: 14px; margin: 32px 0 16px 0; line-height: 1.5;">
-              If the button doesn't work, copy and paste this link into your browser:
-            </p>
-            <div style="background: hsl(217, 32%, 10%); padding: 16px; border-radius: 8px; word-break: break-all; font-size: 13px; color: hsl(217, 91%, 70%); margin: 0 0 32px 0; border: 1px solid hsl(217, 32%, 15%); font-family: 'JetBrains Mono', monospace;">
-              ${resetUrl}
-            </div>
-
-          </div>
-
-          <!-- Footer with Cosmic Branding -->
-          <div style="text-align: center; padding: 32px 24px; background: linear-gradient(135deg, hsl(217, 32%, 6%), hsl(222, 84%, 4.9%)); margin-top: 24px; border-radius: 12px; border: 1px solid hsl(217, 32%, 15%);">
-            <p style="color: hsl(215, 20%, 65%); font-size: 14px; margin: 0 0 12px 0; line-height: 1.5;">
-              Need help? Contact our support team at 
-              <a href="mailto:info@the3rdeyeadvisors.com" style="color: hsl(217, 91%, 70%); text-decoration: none; font-weight: 500;">info@the3rdeyeadvisors.com</a>
-            </p>
-            <p style="color: hsl(215, 20%, 50%); font-size: 12px; margin: 0;">
-              © 2024 3rdeyeadvisors. Empowering DeFi consciousness.
-            </p>
-          </div>
-
-          <!-- Mobile Responsive -->
-          <style>
-            @media only screen and (max-width: 600px) {
-              .container { padding: 16px !important; }
-              .content { padding: 24px !important; }
-              .button { padding: 16px 28px !important; font-size: 15px !important; }
-              h1 { font-size: 28px !important; }
-              h2 { font-size: 20px !important; }
-            }
+        <!DOCTYPE html>
+        <html style="margin: 0; padding: 0;" bgcolor="#0a0f1e">
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <style type="text/css">
+            * { margin: 0; padding: 0; }
+            body, html { background-color: #0a0f1e !important; }
           </style>
-        </div>
+        </head>
+        <body style="margin: 0 !important; padding: 0 !important; background-color: #0a0f1e !important;" bgcolor="#0a0f1e">
+          <div style="background-color: #0a0f1e; margin: 0; padding: 0;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#0a0f1e" style="margin: 0; padding: 0; background-color: #0a0f1e;">
+            <tr>
+              <td align="center" bgcolor="#0a0f1e" style="padding: 0; margin: 0; background-color: #0a0f1e;">
+                <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; width: 100%; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; background-color: #0a0f1e; color: #fafafa;">
+                  <tr>
+                    <td style="padding: 32px 20px; background-color: #0a0f1e;">
+                      
+                      <!-- Header with Cosmic Background -->
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                          <td style="text-align: center; padding: 48px 24px; background: linear-gradient(135deg, hsl(217, 32%, 8%), hsl(217, 32%, 6%)); border-radius: 12px; border: 1px solid hsl(217, 32%, 15%);">
+                            <h1 style="color: hsl(217, 91%, 60%); font-size: 36px; margin: 0 0 8px 0; font-weight: 700; text-shadow: 0 0 24px hsla(217, 91%, 60%, 0.4);">3rdeyeadvisors</h1>
+                            <p style="color: hsl(0, 0%, 95%); font-size: 18px; margin: 0; opacity: 0.9;">Secure Password Reset</p>
+                          </td>
+                        </tr>
+                      </table>
+
+                      <!-- Spacer -->
+                      <div style="height: 32px;"></div>
+
+                      <!-- Main Content -->
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                          <td>
+                            <h2 style="color: hsl(217, 91%, 70%); font-size: 24px; margin: 0 0 24px 0; font-weight: 600;">Hello ${firstName}!</h2>
+                            
+                            <p style="color: hsl(0, 0%, 90%); font-size: 16px; margin: 0 0 28px 0; line-height: 1.6;">
+                              We received a request to reset the password for your 3rdeyeadvisors account. Click the button below to create a new secure password and continue your DeFi journey.
+                            </p>
+
+                            <!-- Reset Button -->
+                            <div style="text-align: center; margin: 32px 0;">
+                              <a href="${resetUrl}" 
+                                 style="display: inline-block; background: linear-gradient(45deg, hsl(217, 91%, 60%), hsl(271, 91%, 65%)); color: hsl(0, 0%, 98%); padding: 18px 36px; text-decoration: none; border-radius: 12px; font-weight: bold; font-size: 16px; box-shadow: 0 0 30px hsla(217, 91%, 60%, 0.4), 0 8px 20px rgba(0,0,0,0.3);">
+                                🔐 Reset My Password
+                              </a>
+                            </div>
+
+                            <!-- Security Notice -->
+                            <div style="background: linear-gradient(135deg, hsl(217, 32%, 10%), hsl(217, 32%, 12%)); border-left: 4px solid hsl(217, 91%, 60%); padding: 20px; margin: 28px 0; border-radius: 0 8px 8px 0;">
+                              <p style="color: hsl(0, 0%, 90%); margin: 0; font-size: 14px; line-height: 1.6;">
+                                <strong style="color: hsl(217, 91%, 70%);">🛡️ Security Notice:</strong> This link will expire in 24 hours for your protection. If you didn't request this password reset, you can safely ignore this email.
+                              </p>
+                            </div>
+
+                            <!-- Alternative Link -->
+                            <p style="color: hsl(215, 20%, 65%); font-size: 14px; margin: 24px 0 12px 0; line-height: 1.5;">
+                              If the button doesn't work, copy and paste this link into your browser:
+                            </p>
+                            <div style="background: hsl(217, 32%, 10%); padding: 16px; border-radius: 8px; word-break: break-all; font-size: 13px; color: hsl(217, 91%, 70%); margin: 0 0 28px 0; border: 1px solid hsl(217, 32%, 15%);">
+                              ${resetUrl}
+                            </div>
+                          </td>
+                        </tr>
+                      </table>
+
+                      <!-- Spacer -->
+                      <div style="height: 24px;"></div>
+
+                      <!-- Footer -->
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                          <td style="text-align: center; padding: 24px 0; border-top: 1px solid hsl(217, 32%, 15%);">
+                            <p style="color: hsl(215, 20%, 65%); font-size: 14px; margin: 0 0 12px 0; line-height: 1.5;">
+                              Need help? Contact our support team at 
+                              <a href="mailto:info@the3rdeyeadvisors.com" style="color: hsl(217, 91%, 70%); text-decoration: none; font-weight: 500;">info@the3rdeyeadvisors.com</a>
+                            </p>
+                            <p style="color: hsl(215, 20%, 50%); font-size: 12px; margin: 0;">
+                              © 2024 3rdeyeadvisors. Empowering DeFi consciousness.
+                            </p>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+          </div>
+        </body>
+        </html>
       `,
     });
 

@@ -44,72 +44,133 @@ const handler = async (req: Request): Promise<Response> => {
       to: [email],
       subject: "🚀 Welcome to the 3rdeyeadvisors Community - Your DeFi Journey Begins!",
       html: `
-        <html>
-        <body style="margin: 0; padding: 20px; background: hsl(222, 84%, 4.9%); font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;">
-        <div style="max-width: 600px; margin: 0 auto; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: hsl(222, 84%, 4.9%); color: hsl(0, 0%, 98%); padding: 20px; border-radius: 12px;">
-          <!-- Cosmic Header -->
-          <div style="text-align: center; padding: 40px 20px; background: linear-gradient(135deg, hsl(217, 32%, 8%), hsl(217, 32%, 6%)); border-radius: 12px; margin-bottom: 32px; border: 1px solid hsl(217, 32%, 15%); position: relative; overflow: hidden;">
-            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(ellipse at center, hsl(217, 91%, 60%, 0.1) 0%, transparent 70%);"></div>
-            <div style="position: relative;">
-              <h1 style="color: hsl(217, 91%, 60%); font-size: 32px; margin: 0 0 8px 0; font-weight: bold; text-shadow: 0 0 20px hsl(217, 91%, 60%, 0.3);">3rdeyeadvisors</h1>
-              <p style="color: hsl(271, 91%, 75%); font-size: 18px; margin: 0; font-weight: 500;">Conscious DeFi Education</p>
-            </div>
-          </div>
-          
-          <!-- Personal Welcome -->
-          <div style="margin: 32px 0;">
-            <h2 style="color: hsl(217, 91%, 70%); font-size: 24px; margin: 0 0 16px 0; font-weight: 600;">
-              🎉 Welcome to the community, ${firstName}!
-            </h2>
-            <p style="color: hsl(0, 0%, 95%); font-size: 16px; line-height: 1.6; margin: 0 0 24px 0;">
-              You've just taken the first step toward conscious DeFi investing. We're excited to have you on this journey of financial awakening and decentralized empowerment.
-            </p>
-          </div>
+        <!DOCTYPE html>
+        <html style="margin: 0; padding: 0;" bgcolor="#0a0f1e">
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <style type="text/css">
+            * { margin: 0; padding: 0; }
+            body, html { background-color: #0a0f1e !important; }
+          </style>
+        </head>
+        <body style="margin: 0 !important; padding: 0 !important; background-color: #0a0f1e !important;" bgcolor="#0a0f1e">
+          <div style="background-color: #0a0f1e; margin: 0; padding: 0;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#0a0f1e" style="margin: 0; padding: 0; background-color: #0a0f1e;">
+            <tr>
+              <td align="center" bgcolor="#0a0f1e" style="padding: 0; margin: 0; background-color: #0a0f1e;">
+                <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; width: 100%; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; background-color: #0a0f1e; color: #fafafa;">
+                  <tr>
+                    <td style="padding: 32px 20px; background-color: #0a0f1e;">
+                      
+                      <!-- Cosmic Header -->
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                          <td style="text-align: center; padding: 48px 24px; background: linear-gradient(135deg, hsl(217, 32%, 8%), hsl(217, 32%, 6%)); border-radius: 12px; margin-bottom: 32px; border: 1px solid hsl(217, 32%, 15%);">
+                            <h1 style="color: hsl(217, 91%, 60%); font-size: 36px; margin: 0 0 8px 0; font-weight: 700; text-shadow: 0 0 24px hsla(217, 91%, 60%, 0.4);">3rdeyeadvisors</h1>
+                            <p style="color: hsl(271, 91%, 75%); font-size: 18px; margin: 0; font-weight: 500;">Conscious DeFi Education</p>
+                          </td>
+                        </tr>
+                      </table>
+                      
+                      <!-- Spacer -->
+                      <div style="height: 32px;"></div>
+                      
+                      <!-- Personal Welcome -->
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                          <td>
+                            <h2 style="color: hsl(217, 91%, 70%); font-size: 24px; margin: 0 0 16px 0; font-weight: 600;">
+                              🎉 Welcome to the community, ${firstName}!
+                            </h2>
+                            <p style="color: hsl(0, 0%, 95%); font-size: 16px; line-height: 1.6; margin: 0 0 24px 0;">
+                              You've just taken the first step toward conscious DeFi investing. We're excited to have you on this journey of financial awakening and decentralized empowerment.
+                            </p>
+                          </td>
+                        </tr>
+                      </table>
 
-          <!-- What to Expect -->
-          <div style="background: linear-gradient(135deg, hsl(217, 32%, 10%), hsl(217, 32%, 12%)); padding: 24px; border-radius: 12px; margin: 24px 0; border: 1px solid hsl(217, 32%, 15%);">
-            <h3 style="color: hsl(217, 91%, 70%); margin: 0 0 16px 0; font-size: 18px;">What to expect from us:</h3>
-            <ul style="color: hsl(0, 0%, 90%); line-height: 1.6; margin: 0; padding-left: 20px;">
-              <li style="margin: 8px 0;">📚 <strong>Weekly DeFi insights</strong> to expand your financial consciousness</li>
-              <li style="margin: 8px 0;">🔍 <strong>Market analysis</strong> from a third-eye perspective</li>
-              <li style="margin: 8px 0;">🛡️ <strong>Security best practices</strong> to protect your digital assets</li>
-              <li style="margin: 8px 0;">🎓 <strong>Educational content</strong> for all experience levels</li>
-              <li style="margin: 8px 0;">🌟 <strong>Exclusive resources</strong> available only to subscribers</li>
-            </ul>
-          </div>
+                      <!-- What to Expect -->
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                          <td style="background: linear-gradient(135deg, hsl(217, 32%, 10%), hsl(217, 32%, 12%)); padding: 24px; border-radius: 12px; border: 1px solid hsl(217, 32%, 15%);">
+                            <h3 style="color: hsl(217, 91%, 70%); margin: 0 0 16px 0; font-size: 18px;">What to expect from us:</h3>
+                            <div style="color: hsl(0, 0%, 90%); line-height: 1.8; font-size: 15px;">
+                              <div style="margin: 10px 0;">📚 <strong style="color: hsl(0, 0%, 95%);">Weekly DeFi insights</strong> to expand your financial consciousness</div>
+                              <div style="margin: 10px 0;">🔍 <strong style="color: hsl(0, 0%, 95%);">Market analysis</strong> from a third-eye perspective</div>
+                              <div style="margin: 10px 0;">🛡️ <strong style="color: hsl(0, 0%, 95%);">Security best practices</strong> to protect your digital assets</div>
+                              <div style="margin: 10px 0;">🎓 <strong style="color: hsl(0, 0%, 95%);">Educational content</strong> for all experience levels</div>
+                              <div style="margin: 10px 0;">🌟 <strong style="color: hsl(0, 0%, 95%);">Exclusive resources</strong> available only to subscribers</div>
+                            </div>
+                          </td>
+                        </tr>
+                      </table>
 
-          <!-- Quick Start Guide -->
-          <div style="background: linear-gradient(135deg, hsl(271, 91%, 10%), hsl(271, 91%, 12%)); padding: 24px; border-radius: 12px; margin: 24px 0; border: 1px solid hsl(271, 91%, 25%);">
-            <h3 style="color: hsl(271, 91%, 75%); margin: 0 0 16px 0; font-size: 18px;">Ready to dive deeper?</h3>
-            <p style="color: hsl(0, 0%, 90%); line-height: 1.6; margin: 0 0 16px 0;">
-              While you're here, explore our platform to accelerate your DeFi education:
-            </p>
-            <div style="text-align: center;">
-              <a href="https://the3rdeyeadvisors.com/philosophy" style="background: linear-gradient(45deg, hsl(217, 91%, 60%), hsl(271, 91%, 65%)); color: hsl(0, 0%, 98%); padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block; margin: 8px;">
-                Our Philosophy
-              </a>
-              <a href="https://the3rdeyeadvisors.com/courses" style="background: linear-gradient(45deg, hsl(271, 91%, 60%), hsl(217, 91%, 65%)); color: hsl(0, 0%, 98%); padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block; margin: 8px;">
-                Free Courses
-              </a>
-            </div>
-          </div>
+                      <!-- Spacer -->
+                      <div style="height: 24px;"></div>
 
-          <!-- Community Connection -->
-          <div style="text-align: center; margin: 32px 0; padding: 20px; background: linear-gradient(135deg, hsl(217, 32%, 8%), hsl(217, 32%, 10%)); border-radius: 8px; border: 1px solid hsl(217, 32%, 15%);">
-            <p style="color: hsl(0, 0%, 90%); font-size: 14px; margin: 0 0 16px 0;">
-              Questions? Reply to this email - we read every message personally.
-            </p>
-            <p style="color: hsl(217, 91%, 70%); font-size: 16px; margin: 0; font-weight: 500;">
-              Welcome to conscious investing, ${firstName}! 🌟
-            </p>
+                      <!-- Quick Start Guide -->
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                          <td style="background: linear-gradient(135deg, hsl(271, 91%, 10%), hsl(271, 91%, 12%)); padding: 24px; border-radius: 12px; border: 1px solid hsl(271, 91%, 25%); text-align: center;">
+                            <h3 style="color: hsl(271, 91%, 75%); margin: 0 0 16px 0; font-size: 18px;">Ready to dive deeper?</h3>
+                            <p style="color: hsl(0, 0%, 90%); line-height: 1.6; margin: 0 0 16px 0;">
+                              While you're here, explore our platform to accelerate your DeFi education:
+                            </p>
+                            <div>
+                              <a href="https://the3rdeyeadvisors.com/philosophy" style="background: linear-gradient(45deg, hsl(217, 91%, 60%), hsl(271, 91%, 65%)); color: hsl(0, 0%, 98%); padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block; margin: 8px; box-shadow: 0 4px 12px hsla(217, 91%, 60%, 0.3);">
+                                Our Philosophy
+                              </a>
+                              <a href="https://the3rdeyeadvisors.com/courses" style="background: linear-gradient(45deg, hsl(271, 91%, 60%), hsl(217, 91%, 65%)); color: hsl(0, 0%, 98%); padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block; margin: 8px; box-shadow: 0 4px 12px hsla(271, 91%, 60%, 0.3);">
+                                Free Courses
+                              </a>
+                            </div>
+                          </td>
+                        </tr>
+                      </table>
+
+                      <!-- Spacer -->
+                      <div style="height: 32px;"></div>
+
+                      <!-- Community Connection -->
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                          <td style="text-align: center; padding: 20px; background: linear-gradient(135deg, hsl(217, 32%, 8%), hsl(217, 32%, 10%)); border-radius: 8px; border: 1px solid hsl(217, 32%, 15%);">
+                            <p style="color: hsl(0, 0%, 90%); font-size: 14px; margin: 0 0 16px 0;">
+                              Questions? Reply to this email - we read every message personally.
+                            </p>
+                            <p style="color: hsl(217, 91%, 70%); font-size: 16px; margin: 0; font-weight: 500;">
+                              Welcome to conscious investing, ${firstName}! 🌟
+                            </p>
+                          </td>
+                        </tr>
+                      </table>
+                      
+                      <!-- Spacer -->
+                      <div style="height: 24px;"></div>
+                      
+                      <!-- Footer -->
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                          <td style="text-align: center; padding-top: 24px; border-top: 1px solid hsl(217, 32%, 15%);">
+                            <p style="color: hsl(215, 20%, 65%); font-size: 12px; margin: 0 0 8px 0; line-height: 1.5;">
+                              You're receiving this because you subscribed to 3rdeyeadvisors updates.
+                            </p>
+                            <p style="margin: 0;">
+                              <a href="https://the3rdeyeadvisors.com" style="color: hsl(215, 20%, 65%); text-decoration: underline; font-size: 12px;">Visit Website</a>
+                              <span style="color: hsl(215, 20%, 65%); margin: 0 8px;">|</span>
+                              <a href="#" style="color: hsl(215, 20%, 65%); text-decoration: underline; font-size: 12px;">Unsubscribe</a>
+                            </p>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
           </div>
-          
-          <hr style="margin: 32px 0; border: none; border-top: 1px solid hsl(217, 32%, 15%);">
-          <p style="color: hsl(215, 20%, 65%); font-size: 12px; text-align: center; margin: 0;">
-            You're receiving this because you subscribed to 3rdeyeadvisors updates.<br>
-            <a href="#" style="color: hsl(215, 20%, 65%);">Unsubscribe</a> | <a href="https://the3rdeyeadvisors.com" style="color: hsl(215, 20%, 65%);">Visit Website</a>
-          </p>
-        </div>
         </body>
         </html>
       `,
