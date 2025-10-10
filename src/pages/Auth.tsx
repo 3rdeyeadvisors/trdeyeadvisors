@@ -60,8 +60,9 @@ const Auth = () => {
       return;
     }
     
+    // Redirect authenticated users immediately
     if (user) {
-      navigate("/");
+      navigate("/", { replace: true });
     }
   }, [user, navigate]);
 
