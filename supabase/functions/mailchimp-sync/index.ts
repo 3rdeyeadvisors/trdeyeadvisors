@@ -1,8 +1,8 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.7';
-import { createHash } from "https://deno.land/std@0.190.0/hash/mod.ts";
+import { crypto } from "https://deno.land/std@0.224.0/crypto/mod.ts";
 
-// Fixed: Using Deno std hash for MD5 (crypto.subtle doesn't support MD5)
+// Using crypto module for MD5 hashing
 
 const supabase = createClient(
   Deno.env.get('SUPABASE_URL') ?? '',
@@ -146,9 +146,11 @@ const handler = async (req: Request): Promise<Response> => {
     let memberResult;
     if (addMemberResponse.status === 400) {
       // Member might already exist, try to update instead
-      const hash = createHash("md5");
-      hash.update(email.toLowerCase());
-      const emailHashHex = hash.toString();
+      const encoder = new TextEncoder();
+      const data = encoder.encode(email.toLowerCase());
+      const hashBuffer = await crypto.subtle.digest("MD5", data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const emailHashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
       
       console.log('Member might exist, trying to update instead');
       const updateResponse = await fetch(`${baseUrl}/lists/${audienceId}/members/${emailHashHex}`, {
