@@ -1,7 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { User, Session } from '@supabase/supabase-js';
-import { NewsletterPromptModal } from './NewsletterPromptModal';
 
 interface AuthContextType {
   user: User | null;
@@ -30,42 +29,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
-  const [showNewsletterPrompt, setShowNewsletterPrompt] = useState(false);
-  const [userEmail, setUserEmail] = useState<string>('');
-  const [userName, setUserName] = useState<string>('');
-
-  const checkNewsletterSubscription = async (userId: string, email: string) => {
-    try {
-      // Check if newsletter prompt was already shown
-      const hasSeenPrompt = localStorage.getItem('newsletter_prompt_shown');
-      if (hasSeenPrompt === 'true') {
-        return;
-      }
-
-      const { data: subscriber } = await supabase
-        .from('subscribers')
-        .select('email')
-        .eq('email', email)
-        .single();
-
-      if (!subscriber) {
-        // Get user profile for display name
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('display_name')
-          .eq('user_id', userId)
-          .single();
-
-        setUserEmail(email);
-        setUserName(profile?.display_name || '');
-        setShowNewsletterPrompt(true);
-        // Mark as shown
-        localStorage.setItem('newsletter_prompt_shown', 'true');
-      }
-    } catch (error) {
-      console.error('Error checking newsletter subscription:', error);
-    }
-  };
 
   useEffect(() => {
     // Get initial session
@@ -74,13 +37,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
-      
-      // Check newsletter subscription on initial load if user is logged in
-      if (session?.user?.email) {
-        setTimeout(() => {
-          checkNewsletterSubscription(session.user.id, session.user.email!);
-        }, 1000);
-      }
     };
 
     getSession();
@@ -91,13 +47,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
-        
-        // Check newsletter subscription on sign in
-        if (event === 'SIGNED_IN' && session?.user?.email) {
-          setTimeout(() => {
-            checkNewsletterSubscription(session.user.id, session.user.email!);
-          }, 1000);
-        }
       }
     );
 
@@ -206,12 +155,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <AuthContext.Provider value={value}>
       {children}
-      <NewsletterPromptModal
-        isOpen={showNewsletterPrompt}
-        onClose={() => setShowNewsletterPrompt(false)}
-        userEmail={userEmail}
-        userName={userName}
-      />
     </AuthContext.Provider>
   );
 };
