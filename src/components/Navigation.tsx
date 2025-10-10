@@ -94,68 +94,71 @@ const Navigation = () => {
           </Link>
           
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center justify-between w-full gap-6">
-            {mainNavItems.map((item) => (
-              item.external ? (
-                <a
-                  key={item.path}
-                  href={item.path}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm font-consciousness transition-all duration-cosmic hover:text-primary text-muted-foreground whitespace-nowrap"
-                >
-                  {item.label}
-                </a>
-              ) : (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className={`text-sm font-consciousness transition-all duration-cosmic hover:text-primary whitespace-nowrap ${
-                    isActive(item.path)
-                      ? "text-primary font-medium"
-                      : "text-muted-foreground"
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              )
-            ))}
+          <div className="hidden md:flex items-center justify-between w-full">
+            {/* Left side - Nav items grouped together */}
+            <div className="flex items-center gap-6">
+              {mainNavItems.map((item) => (
+                item.external ? (
+                  <a
+                    key={item.path}
+                    href={item.path}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm font-consciousness transition-all duration-cosmic hover:text-primary text-muted-foreground whitespace-nowrap"
+                  >
+                    {item.label}
+                  </a>
+                ) : (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    className={`text-sm font-consciousness transition-all duration-cosmic hover:text-primary whitespace-nowrap ${
+                      isActive(item.path)
+                        ? "text-primary font-medium"
+                        : "text-muted-foreground"
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                )
+              ))}
+              
+              {/* More Dropdown */}
+              <NavigationMenu>
+                <NavigationMenuList>
+                  <NavigationMenuItem>
+                    <NavigationMenuTrigger className="text-sm font-consciousness h-auto py-1 px-2 bg-transparent hover:bg-transparent data-[state=open]:bg-transparent">
+                      <MoreHorizontal className="h-4 w-4 mr-1" />
+                      More
+                    </NavigationMenuTrigger>
+                    <NavigationMenuContent>
+                      <ul className="grid w-[200px] gap-1 p-2 bg-popover">
+                        {moreNavItems.map((item) => (
+                          <li key={item.path}>
+                            <NavigationMenuLink asChild>
+                              <Link
+                                to={item.path}
+                                className={`block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground ${
+                                  isActive(item.path)
+                                    ? "bg-accent text-accent-foreground"
+                                    : ""
+                                }`}
+                              >
+                                <div className="text-sm font-medium leading-none font-consciousness">
+                                  {item.label}
+                                </div>
+                              </Link>
+                            </NavigationMenuLink>
+                          </li>
+                        ))}
+                      </ul>
+                    </NavigationMenuContent>
+                  </NavigationMenuItem>
+                </NavigationMenuList>
+              </NavigationMenu>
+            </div>
             
-            {/* More Dropdown */}
-            <NavigationMenu>
-              <NavigationMenuList>
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="text-sm font-consciousness h-auto py-1 px-2 bg-transparent hover:bg-transparent data-[state=open]:bg-transparent">
-                    <MoreHorizontal className="h-4 w-4 mr-1" />
-                    More
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <ul className="grid w-[200px] gap-1 p-2 bg-popover">
-                      {moreNavItems.map((item) => (
-                        <li key={item.path}>
-                          <NavigationMenuLink asChild>
-                            <Link
-                              to={item.path}
-                              className={`block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground ${
-                                isActive(item.path)
-                                  ? "bg-accent text-accent-foreground"
-                                  : ""
-                              }`}
-                            >
-                              <div className="text-sm font-medium leading-none font-consciousness">
-                                {item.label}
-                              </div>
-                            </Link>
-                          </NavigationMenuLink>
-                        </li>
-                      ))}
-                    </ul>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
-            
-            {/* Right side actions */}
+            {/* Right side - Actions */}
             <div className="flex items-center space-x-3">
               <Link to="/cart" className="relative">
                 <Button variant="ghost" size="icon" className="relative">
