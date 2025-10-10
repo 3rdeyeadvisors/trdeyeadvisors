@@ -166,6 +166,9 @@ const handler = async (req: Request): Promise<Response> => {
       from: "3rdeyeadvisors <info@the3rdeyeadvisors.com>",
       to: ["info@the3rdeyeadvisors.com"],
       subject: `Contact Form: ${sanitizedSubject}`,
+      tags: [
+        { name: 'category', value: 'contact_form' }
+      ],
       html: `
         <!DOCTYPE html>
         <html>
@@ -220,6 +223,9 @@ const handler = async (req: Request): Promise<Response> => {
       from: "3rdeyeadvisors <info@the3rdeyeadvisors.com>",
       to: [email],
       subject: "We received your message!",
+      tags: [
+        { name: 'category', value: 'contact_confirmation' }
+      ],
       html: `
         <!DOCTYPE html>
         <html>

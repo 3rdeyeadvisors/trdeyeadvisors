@@ -42,6 +42,9 @@ const handler = async (req: Request): Promise<Response> => {
       from: "3rdeyeadvisors <info@the3rdeyeadvisors.com>",
       to: [email],
       subject: "Reset Your Password - 3rdeyeadvisors",
+      tags: [
+        { name: 'category', value: 'password_reset' }
+      ],
       html: `
         <!DOCTYPE html>
         <html>

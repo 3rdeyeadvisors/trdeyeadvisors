@@ -44,6 +44,9 @@ const handler = async (req: Request): Promise<Response> => {
       from: "3rdeyeadvisors <info@the3rdeyeadvisors.com>",
       to: [email],
       subject: "🙏 Thank You for Subscribing - 3rdeyeadvisors Newsletter",
+      tags: [
+        { name: 'category', value: 'thank_you' }
+      ],
       html: `
         <!DOCTYPE html>
         <html>
@@ -164,7 +167,7 @@ const handler = async (req: Request): Promise<Response> => {
                             <p style="margin: 0;">
                               <a href="https://the3rdeyeadvisors.com" style="color: hsl(215, 20%, 65%); text-decoration: underline; font-size: 12px;">Visit Website</a>
                               <span style="color: hsl(215, 20%, 65%); margin: 0 8px;">|</span>
-                              <a href="#" style="color: hsl(215, 20%, 65%); text-decoration: underline; font-size: 12px;">Unsubscribe</a>
+                              <a href="https://the3rdeyeadvisors.com/contact" style="color: hsl(215, 20%, 65%); text-decoration: underline; font-size: 12px;">Manage Preferences</a>
                             </p>
                           </td>
                         </tr>
