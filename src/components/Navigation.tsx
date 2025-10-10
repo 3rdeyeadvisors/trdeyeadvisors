@@ -168,17 +168,28 @@ const Navigation = () => {
                 </Button>
               </Link>
               {user ? (
-                <Button
-                  asChild
-                  variant="ghost"
-                  size="sm"
-                  className="text-muted-foreground hover:text-primary"
-                >
-                  <Link to="/profile" className="flex items-center space-x-2">
-                    <User className="w-4 h-4" />
-                    <span>Profile</span>
-                  </Link>
-                </Button>
+                <>
+                  <Button
+                    asChild
+                    variant="ghost"
+                    size="sm"
+                    className="text-muted-foreground hover:text-primary"
+                  >
+                    <Link to="/profile" className="flex items-center space-x-2">
+                      <User className="w-4 h-4" />
+                      <span>Profile</span>
+                    </Link>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleSignOut}
+                    className="flex items-center space-x-2"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span>Sign Out</span>
+                  </Button>
+                </>
               ) : (
                 <Button asChild variant="outline" size="sm">
                   <Link to="/auth" className="flex items-center space-x-2">
