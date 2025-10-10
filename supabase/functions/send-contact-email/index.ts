@@ -263,8 +263,8 @@ const handler = async (req: Request): Promise<Response> => {
                         <tr>
                           <td>
                             <h2 style="color: hsl(217, 91%, 70%); font-size: 24px; margin: 0 0 16px 0;">Thank you for contacting us, ${sanitizedName}!</h2>
-                            <p style="color: hsl(0, 0%, 90%); margin: 0 0 16px 0; line-height: 1.6;">We have received your message regarding: <strong style="color: hsl(0, 0%, 95%);">${sanitizedSubject}</strong></p>
-                            <p style="color: hsl(0, 0%, 90%); margin: 0 0 24px 0; line-height: 1.6;">We typically respond within 24 hours during weekdays. For urgent matters, we'll prioritize your inquiry.</p>
+                            <p style="color: #F5F5F5; margin: 0 0 16px 0; line-height: 1.6;">We have received your message regarding: <strong style="color: #FFFFFF;">${sanitizedSubject}</strong></p>
+                            <p style="color: #F5F5F5; margin: 0 0 24px 0; line-height: 1.6;">We typically respond within 24 hours during weekdays. For urgent matters, we'll prioritize your inquiry.</p>
                             
                             <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: linear-gradient(135deg, hsl(217, 32%, 10%), hsl(217, 32%, 12%)); border-radius: 8px; border: 1px solid hsl(217, 32%, 15%); margin: 20px 0;">
                               <tr>
@@ -275,8 +275,8 @@ const handler = async (req: Request): Promise<Response> => {
                               </tr>
                             </table>
                             
-                            <p style="color: hsl(0, 0%, 90%); margin: 24px 0 8px 0; line-height: 1.6;">Thank you for your patience as we work to support your journey toward financial consciousness.</p>
-                            <p style="color: hsl(0, 0%, 90%); margin: 0; line-height: 1.6;">Best regards,<br><strong style="color: hsl(217, 91%, 70%);">The 3rdeyeadvisors Team</strong></p>
+                            <p style="color: #F5F5F5; margin: 24px 0 8px 0; line-height: 1.6;">Thank you for your patience as we work to support your journey toward financial consciousness.</p>
+                            <p style="color: #F5F5F5; margin: 0; line-height: 1.6;">Best regards,<br><strong style="color: hsl(217, 91%, 70%);">The 3rdeyeadvisors Team</strong></p>
                           </td>
                         </tr>
                       </table>

@@ -83,7 +83,7 @@ const handler = async (req: Request): Promise<Response> => {
                           <td>
                             <h2 style="color: hsl(217, 91%, 70%); font-size: 24px; margin: 0 0 24px 0; font-weight: 600;">Hello ${firstName}!</h2>
                             
-                            <p style="color: hsl(0, 0%, 90%); font-size: 16px; margin: 0 0 28px 0; line-height: 1.6;">
+                            <p style="color: #F5F5F5; font-size: 16px; margin: 0 0 28px 0; line-height: 1.6;">
                               We received a request to reset the password for your 3rdeyeadvisors account. Click the button below to create a new secure password and continue your DeFi journey.
                             </p>
 
@@ -100,7 +100,7 @@ const handler = async (req: Request): Promise<Response> => {
                             <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: linear-gradient(135deg, hsl(217, 32%, 10%), hsl(217, 32%, 12%)); border-left: 4px solid hsl(217, 91%, 60%); border-radius: 0 8px 8px 0; margin: 28px 0;">
                               <tr>
                                 <td style="padding: 20px;">
-                                  <p style="color: hsl(0, 0%, 90%); margin: 0; font-size: 14px; line-height: 1.6;">
+                                  <p style="color: #F5F5F5; margin: 0; font-size: 14px; line-height: 1.6;">
                                     <strong style="color: hsl(217, 91%, 70%);">🛡️ Security Notice:</strong> This link will expire in 24 hours for your protection. If you didn't request this password reset, you can safely ignore this email.
                                   </p>
                                 </td>

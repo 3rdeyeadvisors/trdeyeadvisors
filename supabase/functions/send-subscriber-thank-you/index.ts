@@ -86,7 +86,7 @@ const handler = async (req: Request): Promise<Response> => {
                             <h2 style="color: hsl(0, 0%, 98%); font-size: 28px; margin: 0 0 16px 0; font-weight: 600;">
                               Welcome, ${firstName}! 🙏
                             </h2>
-                            <p style="color: hsl(0, 0%, 90%); font-size: 16px; line-height: 1.7; margin: 0 0 24px 0;">
+                            <p style="color: #F5F5F5; font-size: 16px; line-height: 1.7; margin: 0 0 24px 0;">
                               You are now part of our conscious DeFi community. Thank you for joining us on this journey of financial awareness and decentralized education.
                             </p>
                           </td>
@@ -102,11 +102,11 @@ const handler = async (req: Request): Promise<Response> => {
                           <td style="padding: 28px 24px;">
                             <h3 style="color: hsl(217, 91%, 70%); margin: 0 0 20px 0; font-size: 20px; font-weight: 600;">What's coming your way:</h3>
                             <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                              <tr><td style="color: #ffffff; font-size: 15px; line-height: 1.8; padding: 6px 0 6px 8px;">📧 <strong style="color: #ffffff;">Weekly DeFi insights</strong> directly to your inbox</td></tr>
-                              <tr><td style="color: #ffffff; font-size: 15px; line-height: 1.8; padding: 6px 0 6px 8px;">🔍 <strong style="color: #ffffff;">Market analysis</strong> with a conscious perspective</td></tr>
-                              <tr><td style="color: #ffffff; font-size: 15px; line-height: 1.8; padding: 6px 0 6px 8px;">🛡️ <strong style="color: #ffffff;">Security tips</strong> to protect your digital assets</td></tr>
-                              <tr><td style="color: #ffffff; font-size: 15px; line-height: 1.8; padding: 6px 0 6px 8px;">🎓 <strong style="color: #ffffff;">Educational content</strong> for all experience levels</td></tr>
-                              <tr><td style="color: #ffffff; font-size: 15px; line-height: 1.8; padding: 6px 0 6px 8px;">⚡ <strong style="color: #ffffff;">Early access</strong> to new courses and resources</td></tr>
+                              <tr><td style="color: #F5F5F5; font-size: 15px; line-height: 1.8; padding: 6px 0 6px 8px;">📧 <strong style="color: #FFFFFF;">Weekly DeFi insights</strong> directly to your inbox</td></tr>
+                              <tr><td style="color: #F5F5F5; font-size: 15px; line-height: 1.8; padding: 6px 0 6px 8px;">🔍 <strong style="color: #FFFFFF;">Market analysis</strong> with a conscious perspective</td></tr>
+                              <tr><td style="color: #F5F5F5; font-size: 15px; line-height: 1.8; padding: 6px 0 6px 8px;">🛡️ <strong style="color: #FFFFFF;">Security tips</strong> to protect your digital assets</td></tr>
+                              <tr><td style="color: #F5F5F5; font-size: 15px; line-height: 1.8; padding: 6px 0 6px 8px;">🎓 <strong style="color: #FFFFFF;">Educational content</strong> for all experience levels</td></tr>
+                              <tr><td style="color: #F5F5F5; font-size: 15px; line-height: 1.8; padding: 6px 0 6px 8px;">⚡ <strong style="color: #FFFFFF;">Early access</strong> to new courses and resources</td></tr>
                             </table>
                           </td>
                         </tr>
@@ -120,7 +120,7 @@ const handler = async (req: Request): Promise<Response> => {
                         <tr>
                           <td style="text-align: center; padding: 32px 24px;">
                             <h3 style="color: hsl(271, 91%, 75%); margin: 0 0 16px 0; font-size: 20px; font-weight: 600;">Start exploring now:</h3>
-                            <p style="color: #ffffff; line-height: 1.7; margin: 0 0 24px 0; font-size: 15px;">
+                            <p style="color: #F5F5F5; line-height: 1.7; margin: 0 0 24px 0; font-size: 15px;">
                               While you wait for your first newsletter, dive into our free educational content:
                             </p>
                             <table width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -144,7 +144,7 @@ const handler = async (req: Request): Promise<Response> => {
                       <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: linear-gradient(135deg, hsl(217, 32%, 8%), hsl(217, 32%, 10%)); border-radius: 12px; border: 1px solid hsl(217, 32%, 15%);">
                         <tr>
                           <td style="text-align: center; padding: 24px;">
-                            <p style="color: hsl(0, 0%, 85%); font-size: 14px; margin: 0 0 12px 0; line-height: 1.6;">
+                            <p style="color: #F5F5F5; font-size: 14px; margin: 0 0 12px 0; line-height: 1.6;">
                               Have questions? Just reply to this email - we read every message personally.
                             </p>
                             <p style="color: hsl(217, 91%, 70%); font-size: 16px; margin: 0; font-weight: 500;">
