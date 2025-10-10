@@ -36,6 +36,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const checkNewsletterSubscription = async (userId: string, email: string) => {
     try {
+      // Check if newsletter prompt was already shown
+      const hasSeenPrompt = localStorage.getItem('newsletter_prompt_shown');
+      if (hasSeenPrompt === 'true') {
+        return;
+      }
+
       const { data: subscriber } = await supabase
         .from('subscribers')
         .select('email')
@@ -53,6 +59,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUserEmail(email);
         setUserName(profile?.display_name || '');
         setShowNewsletterPrompt(true);
+        // Mark as shown
+        localStorage.setItem('newsletter_prompt_shown', 'true');
       }
     } catch (error) {
       console.error('Error checking newsletter subscription:', error);
