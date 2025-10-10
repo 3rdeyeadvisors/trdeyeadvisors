@@ -95,11 +95,11 @@ const handler = async (req: Request): Promise<Response> => {
                           <td style="padding: 24px;">
                             <h3 style="color: hsl(217, 91%, 70%); margin: 0 0 16px 0; font-size: 18px;">What to expect from us:</h3>
                             <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                              <tr><td style="color: hsl(0, 0%, 90%); line-height: 1.8; font-size: 15px; padding: 5px 0;">📚 <strong style="color: hsl(0, 0%, 95%);">Weekly DeFi insights</strong> to expand your financial consciousness</td></tr>
-                              <tr><td style="color: hsl(0, 0%, 90%); line-height: 1.8; font-size: 15px; padding: 5px 0;">🔍 <strong style="color: hsl(0, 0%, 95%);">Market analysis</strong> from a third-eye perspective</td></tr>
-                              <tr><td style="color: hsl(0, 0%, 90%); line-height: 1.8; font-size: 15px; padding: 5px 0;">🛡️ <strong style="color: hsl(0, 0%, 95%);">Security best practices</strong> to protect your digital assets</td></tr>
-                              <tr><td style="color: hsl(0, 0%, 90%); line-height: 1.8; font-size: 15px; padding: 5px 0;">🎓 <strong style="color: hsl(0, 0%, 95%);">Educational content</strong> for all experience levels</td></tr>
-                              <tr><td style="color: hsl(0, 0%, 90%); line-height: 1.8; font-size: 15px; padding: 5px 0;">🌟 <strong style="color: hsl(0, 0%, 95%);">Exclusive resources</strong> available only to subscribers</td></tr>
+                              <tr><td style="color: #ffffff; line-height: 1.8; font-size: 15px; padding: 5px 0;">📚 <strong style="color: #ffffff;">Weekly DeFi insights</strong> to expand your financial consciousness</td></tr>
+                              <tr><td style="color: #ffffff; line-height: 1.8; font-size: 15px; padding: 5px 0;">🔍 <strong style="color: #ffffff;">Market analysis</strong> from a third-eye perspective</td></tr>
+                              <tr><td style="color: #ffffff; line-height: 1.8; font-size: 15px; padding: 5px 0;">🛡️ <strong style="color: #ffffff;">Security best practices</strong> to protect your digital assets</td></tr>
+                              <tr><td style="color: #ffffff; line-height: 1.8; font-size: 15px; padding: 5px 0;">🎓 <strong style="color: #ffffff;">Educational content</strong> for all experience levels</td></tr>
+                              <tr><td style="color: #ffffff; line-height: 1.8; font-size: 15px; padding: 5px 0;">🌟 <strong style="color: #ffffff;">Exclusive resources</strong> available only to subscribers</td></tr>
                             </table>
                           </td>
                         </tr>
