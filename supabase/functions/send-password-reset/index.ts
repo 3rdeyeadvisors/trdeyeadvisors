@@ -44,28 +44,27 @@ const handler = async (req: Request): Promise<Response> => {
       subject: "Reset Your Password - 3rdeyeadvisors",
       html: `
         <!DOCTYPE html>
-        <html style="margin: 0; padding: 0;" bgcolor="#030717">
+        <html>
         <head>
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
           <style type="text/css">
-            * { margin: 0; padding: 0; }
-            body, html { background-color: #030717 !important; }
+            body { margin: 0; padding: 0; }
           </style>
         </head>
-        <body style="margin: 0 !important; padding: 0 !important; background-color: #030717 !important;" bgcolor="#030717">
-          <div style="background-color: #030717; margin: 0; padding: 0;">
-          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#030717" style="margin: 0; padding: 0; background-color: #030717;">
+        <body style="margin: 0; padding: 0; background-color: #030717;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 0; padding: 0; background-color: #030717;" bgcolor="#030717">
             <tr>
-              <td align="center" bgcolor="#030717" style="padding: 0; margin: 0; background-color: #030717;">
-                <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; width: 100%; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; background-color: #030717; color: #fafafa;">
+              <td align="center" style="padding: 0; background-color: #030717;" bgcolor="#030717">
+                <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; margin: 0 auto; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;">
                   <tr>
-                    <td style="padding: 32px 20px; background-color: #030717;">
+                    <td style="padding: 32px 20px;">
                       
                       <!-- Header with Cosmic Background -->
-                      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: linear-gradient(135deg, hsl(217, 32%, 8%), hsl(217, 32%, 6%)); border-radius: 12px; border: 1px solid hsl(217, 32%, 15%);">
                         <tr>
-                          <td style="text-align: center; padding: 48px 24px; background: linear-gradient(135deg, hsl(217, 32%, 8%), hsl(217, 32%, 6%)); border-radius: 12px; border: 1px solid hsl(217, 32%, 15%);">
+                          <td style="text-align: center; padding: 48px 24px;">
                             <h1 style="color: hsl(217, 91%, 60%); font-size: 36px; margin: 0 0 8px 0; font-weight: 700; text-shadow: 0 0 24px hsla(217, 91%, 60%, 0.4);">3rdeyeadvisors</h1>
                             <p style="color: hsl(0, 0%, 95%); font-size: 18px; margin: 0; opacity: 0.9;">Secure Password Reset</p>
                           </td>
@@ -73,7 +72,7 @@ const handler = async (req: Request): Promise<Response> => {
                       </table>
 
                       <!-- Spacer -->
-                      <div style="height: 32px;"></div>
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="height: 32px; line-height: 32px;"></td></tr></table>
 
                       <!-- Main Content -->
                       <table width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -86,38 +85,47 @@ const handler = async (req: Request): Promise<Response> => {
                             </p>
 
                             <!-- Reset Button -->
-                            <div style="text-align: center; margin: 32px 0;">
-                              <a href="${resetUrl}" 
-                                 style="display: inline-block; background: linear-gradient(45deg, hsl(217, 91%, 60%), hsl(271, 91%, 65%)); color: hsl(0, 0%, 98%); padding: 18px 36px; text-decoration: none; border-radius: 12px; font-weight: bold; font-size: 16px; box-shadow: 0 0 30px hsla(217, 91%, 60%, 0.4), 0 8px 20px rgba(0,0,0,0.3);">
-                                🔐 Reset My Password
-                              </a>
-                            </div>
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                              <tr>
+                                <td align="center" style="padding: 32px 0;">
+                                  <a href="${resetUrl}" style="display: inline-block; background: linear-gradient(45deg, hsl(217, 91%, 60%), hsl(271, 91%, 65%)); color: hsl(0, 0%, 98%); padding: 18px 36px; text-decoration: none; border-radius: 12px; font-weight: bold; font-size: 16px; box-shadow: 0 0 30px hsla(217, 91%, 60%, 0.4), 0 8px 20px rgba(0,0,0,0.3);">🔐 Reset My Password</a>
+                                </td>
+                              </tr>
+                            </table>
 
                             <!-- Security Notice -->
-                            <div style="background: linear-gradient(135deg, hsl(217, 32%, 10%), hsl(217, 32%, 12%)); border-left: 4px solid hsl(217, 91%, 60%); padding: 20px; margin: 28px 0; border-radius: 0 8px 8px 0;">
-                              <p style="color: hsl(0, 0%, 90%); margin: 0; font-size: 14px; line-height: 1.6;">
-                                <strong style="color: hsl(217, 91%, 70%);">🛡️ Security Notice:</strong> This link will expire in 24 hours for your protection. If you didn't request this password reset, you can safely ignore this email.
-                              </p>
-                            </div>
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: linear-gradient(135deg, hsl(217, 32%, 10%), hsl(217, 32%, 12%)); border-left: 4px solid hsl(217, 91%, 60%); border-radius: 0 8px 8px 0; margin: 28px 0;">
+                              <tr>
+                                <td style="padding: 20px;">
+                                  <p style="color: hsl(0, 0%, 90%); margin: 0; font-size: 14px; line-height: 1.6;">
+                                    <strong style="color: hsl(217, 91%, 70%);">🛡️ Security Notice:</strong> This link will expire in 24 hours for your protection. If you didn't request this password reset, you can safely ignore this email.
+                                  </p>
+                                </td>
+                              </tr>
+                            </table>
 
                             <!-- Alternative Link -->
                             <p style="color: hsl(215, 20%, 65%); font-size: 14px; margin: 24px 0 12px 0; line-height: 1.5;">
                               If the button doesn't work, copy and paste this link into your browser:
                             </p>
-                            <div style="background: hsl(217, 32%, 10%); padding: 16px; border-radius: 8px; word-break: break-all; font-size: 13px; color: hsl(217, 91%, 70%); margin: 0 0 28px 0; border: 1px solid hsl(217, 32%, 15%);">
-                              ${resetUrl}
-                            </div>
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: hsl(217, 32%, 10%); border-radius: 8px; border: 1px solid hsl(217, 32%, 15%); margin: 0 0 28px 0;">
+                              <tr>
+                                <td style="padding: 16px; word-break: break-all; font-size: 13px; color: hsl(217, 91%, 70%);">
+                                  ${resetUrl}
+                                </td>
+                              </tr>
+                            </table>
                           </td>
                         </tr>
                       </table>
 
                       <!-- Spacer -->
-                      <div style="height: 24px;"></div>
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="height: 24px; line-height: 24px;"></td></tr></table>
 
                       <!-- Footer -->
-                      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top: 1px solid hsl(217, 32%, 15%);">
                         <tr>
-                          <td style="text-align: center; padding: 24px 0; border-top: 1px solid hsl(217, 32%, 15%);">
+                          <td style="text-align: center; padding: 24px 0;">
                             <p style="color: hsl(215, 20%, 65%); font-size: 14px; margin: 0 0 12px 0; line-height: 1.5;">
                               Need help? Contact our support team at 
                               <a href="mailto:info@the3rdeyeadvisors.com" style="color: hsl(217, 91%, 70%); text-decoration: none; font-weight: 500;">info@the3rdeyeadvisors.com</a>
@@ -134,7 +142,6 @@ const handler = async (req: Request): Promise<Response> => {
               </td>
             </tr>
           </table>
-          </div>
         </body>
         </html>
       `,

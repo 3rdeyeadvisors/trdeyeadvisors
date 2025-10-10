@@ -168,29 +168,42 @@ const handler = async (req: Request): Promise<Response> => {
       subject: `Contact Form: ${sanitizedSubject}`,
       html: `
         <!DOCTYPE html>
-        <html style="margin: 0; padding: 0;" bgcolor="#030717">
+        <html>
         <head>
           <meta charset="utf-8">
-          <style>* { margin: 0; padding: 0; } body, html { background-color: #030717 !important; }</style>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+          <style type="text/css">
+            body { margin: 0; padding: 0; }
+          </style>
         </head>
-        <body style="margin: 0 !important; padding: 0 !important; background-color: #030717 !important;" bgcolor="#030717">
-          <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#030717">
+        <body style="margin: 0; padding: 0; background-color: #030717;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 0; padding: 0; background-color: #030717;" bgcolor="#030717">
             <tr>
-              <td align="center" bgcolor="#030717" style="padding: 20px;">
-                <table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; font-family: -apple-system, sans-serif; background-color: #030717; color: #fafafa;">
+              <td align="center" style="padding: 20px; background-color: #030717;" bgcolor="#030717">
+                <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; margin: 0 auto; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
                   <tr>
                     <td style="padding: 24px; background: linear-gradient(135deg, hsl(217, 32%, 8%), hsl(217, 32%, 6%)); border-radius: 12px; border: 1px solid hsl(217, 32%, 15%);">
                       <h2 style="color: hsl(217, 91%, 60%); margin: 0 0 20px 0; font-size: 24px;">New Contact Form Submission</h2>
                       <p style="color: hsl(0, 0%, 90%); margin: 12px 0;"><strong style="color: hsl(217, 91%, 70%);">From:</strong> ${sanitizedName} (${email})</p>
                       <p style="color: hsl(0, 0%, 90%); margin: 12px 0;"><strong style="color: hsl(217, 91%, 70%);">Subject:</strong> ${sanitizedSubject}</p>
                       <p style="color: hsl(0, 0%, 90%); margin: 16px 0 8px 0;"><strong style="color: hsl(217, 91%, 70%);">Message:</strong></p>
-                      <div style="background: hsl(217, 32%, 10%); padding: 16px; border-radius: 8px; margin: 10px 0; border: 1px solid hsl(217, 32%, 15%); color: hsl(0, 0%, 85%);">
-                        ${sanitizedMessage.replace(/\n/g, '<br>')}
-                      </div>
-                      <hr style="border: none; border-top: 1px solid hsl(217, 32%, 15%); margin: 24px 0;">
-                      <p style="font-size: 12px; color: hsl(215, 20%, 65%); margin: 0;">
-                        This email was sent from the 3rdeyeadvisors contact form.
-                      </p>
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: hsl(217, 32%, 10%); border-radius: 8px; border: 1px solid hsl(217, 32%, 15%); margin: 10px 0;">
+                        <tr>
+                          <td style="padding: 16px; color: hsl(0, 0%, 85%);">
+                            ${sanitizedMessage.replace(/\n/g, '<br>')}
+                          </td>
+                        </tr>
+                      </table>
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top: 1px solid hsl(217, 32%, 15%); margin: 24px 0 0 0;">
+                        <tr>
+                          <td style="padding-top: 24px;">
+                            <p style="font-size: 12px; color: hsl(215, 20%, 65%); margin: 0;">
+                              This email was sent from the 3rdeyeadvisors contact form.
+                            </p>
+                          </td>
+                        </tr>
+                      </table>
                     </td>
                   </tr>
                 </table>
@@ -209,31 +222,35 @@ const handler = async (req: Request): Promise<Response> => {
       subject: "We received your message!",
       html: `
         <!DOCTYPE html>
-        <html style="margin: 0; padding: 0;" bgcolor="#030717">
+        <html>
         <head>
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <style>* { margin: 0; padding: 0; } body, html { background-color: #030717 !important; }</style>
+          <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+          <style type="text/css">
+            body { margin: 0; padding: 0; }
+          </style>
         </head>
-        <body style="margin: 0 !important; padding: 0 !important; background-color: #030717 !important;" bgcolor="#030717">
-          <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#030717">
+        <body style="margin: 0; padding: 0; background-color: #030717;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 0; padding: 0; background-color: #030717;" bgcolor="#030717">
             <tr>
-              <td align="center" bgcolor="#030717" style="padding: 0;">
-                <table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; font-family: -apple-system, sans-serif; background-color: #030717; color: #fafafa;">
+              <td align="center" style="padding: 0; background-color: #030717;" bgcolor="#030717">
+                <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; margin: 0 auto; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
                   <tr>
-                    <td style="padding: 32px 20px; background-color: #030717;">
+                    <td style="padding: 32px 20px;">
                       
                       <!-- Header -->
-                      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: linear-gradient(135deg, hsl(217, 32%, 8%), hsl(217, 32%, 6%)); border-radius: 12px; border: 1px solid hsl(217, 32%, 15%);">
                         <tr>
-                          <td style="text-align: center; padding: 48px 24px; background: linear-gradient(135deg, hsl(217, 32%, 8%), hsl(217, 32%, 6%)); border-radius: 12px; border: 1px solid hsl(217, 32%, 15%);">
+                          <td style="text-align: center; padding: 48px 24px;">
                             <h1 style="color: hsl(217, 91%, 60%); font-size: 36px; margin: 0 0 8px 0; font-weight: 700; text-shadow: 0 0 24px hsla(217, 91%, 60%, 0.4);">3rdeyeadvisors</h1>
                             <p style="color: hsl(271, 91%, 75%); font-size: 18px; margin: 0;">Message Received</p>
                           </td>
                         </tr>
                       </table>
 
-                      <div style="height: 32px;"></div>
+                      <!-- Spacer -->
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="height: 32px; line-height: 32px;"></td></tr></table>
 
                       <!-- Content -->
                       <table width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -243,10 +260,14 @@ const handler = async (req: Request): Promise<Response> => {
                             <p style="color: hsl(0, 0%, 90%); margin: 0 0 16px 0; line-height: 1.6;">We have received your message regarding: <strong style="color: hsl(0, 0%, 95%);">${sanitizedSubject}</strong></p>
                             <p style="color: hsl(0, 0%, 90%); margin: 0 0 24px 0; line-height: 1.6;">We typically respond within 24 hours during weekdays. For urgent matters, we'll prioritize your inquiry.</p>
                             
-                            <div style="background: linear-gradient(135deg, hsl(217, 32%, 10%), hsl(217, 32%, 12%)); padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid hsl(217, 32%, 15%);">
-                              <h3 style="color: hsl(217, 91%, 70%); margin: 0 0 12px 0; font-size: 16px;">Your Message:</h3>
-                              <p style="color: hsl(0, 0%, 85%); margin: 0; line-height: 1.6;">${sanitizedMessage.replace(/\n/g, '<br>')}</p>
-                            </div>
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: linear-gradient(135deg, hsl(217, 32%, 10%), hsl(217, 32%, 12%)); border-radius: 8px; border: 1px solid hsl(217, 32%, 15%); margin: 20px 0;">
+                              <tr>
+                                <td style="padding: 20px;">
+                                  <h3 style="color: hsl(217, 91%, 70%); margin: 0 0 12px 0; font-size: 16px;">Your Message:</h3>
+                                  <p style="color: hsl(0, 0%, 85%); margin: 0; line-height: 1.6;">${sanitizedMessage.replace(/\n/g, '<br>')}</p>
+                                </td>
+                              </tr>
+                            </table>
                             
                             <p style="color: hsl(0, 0%, 90%); margin: 24px 0 8px 0; line-height: 1.6;">Thank you for your patience as we work to support your journey toward financial consciousness.</p>
                             <p style="color: hsl(0, 0%, 90%); margin: 0; line-height: 1.6;">Best regards,<br><strong style="color: hsl(217, 91%, 70%);">The 3rdeyeadvisors Team</strong></p>
@@ -254,12 +275,13 @@ const handler = async (req: Request): Promise<Response> => {
                         </tr>
                       </table>
 
-                      <div style="height: 24px;"></div>
+                      <!-- Spacer -->
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="height: 24px; line-height: 24px;"></td></tr></table>
                       
                       <!-- Footer -->
-                      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top: 1px solid hsl(217, 32%, 15%);">
                         <tr>
-                          <td style="text-align: center; padding-top: 24px; border-top: 1px solid hsl(217, 32%, 15%);">
+                          <td style="text-align: center; padding-top: 24px;">
                             <p style="color: hsl(215, 20%, 65%); font-size: 12px; margin: 0;">
                               This is an automated response from 3rdeyeadvisors.
                             </p>
