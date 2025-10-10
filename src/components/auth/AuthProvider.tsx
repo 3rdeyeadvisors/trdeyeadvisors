@@ -118,7 +118,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const signInWithGoogle = async () => {
-    const redirectUrl = `${window.location.origin}/auth`;
+    const redirectUrl = `${window.location.origin}/`;
     const result = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
@@ -129,7 +129,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const signInWithApple = async () => {
-    const redirectUrl = `${window.location.origin}/auth`;
+    const redirectUrl = `${window.location.origin}/`;
     const result = await supabase.auth.signInWithOAuth({
       provider: 'apple',
       options: {
