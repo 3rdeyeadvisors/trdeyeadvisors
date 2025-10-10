@@ -168,16 +168,16 @@ const handler = async (req: Request): Promise<Response> => {
       subject: `Contact Form: ${sanitizedSubject}`,
       html: `
         <!DOCTYPE html>
-        <html style="margin: 0; padding: 0;" bgcolor="#0a0f1e">
+        <html style="margin: 0; padding: 0;" bgcolor="#030717">
         <head>
           <meta charset="utf-8">
-          <style>* { margin: 0; padding: 0; } body, html { background-color: #0a0f1e !important; }</style>
+          <style>* { margin: 0; padding: 0; } body, html { background-color: #030717 !important; }</style>
         </head>
-        <body style="margin: 0 !important; padding: 0 !important; background-color: #0a0f1e !important;" bgcolor="#0a0f1e">
-          <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#0a0f1e">
+        <body style="margin: 0 !important; padding: 0 !important; background-color: #030717 !important;" bgcolor="#030717">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#030717">
             <tr>
-              <td align="center" bgcolor="#0a0f1e" style="padding: 20px;">
-                <table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; font-family: -apple-system, sans-serif; background-color: #0a0f1e; color: #fafafa;">
+              <td align="center" bgcolor="#030717" style="padding: 20px;">
+                <table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; font-family: -apple-system, sans-serif; background-color: #030717; color: #fafafa;">
                   <tr>
                     <td style="padding: 24px; background: linear-gradient(135deg, hsl(217, 32%, 8%), hsl(217, 32%, 6%)); border-radius: 12px; border: 1px solid hsl(217, 32%, 15%);">
                       <h2 style="color: hsl(217, 91%, 60%); margin: 0 0 20px 0; font-size: 24px;">New Contact Form Submission</h2>
@@ -209,19 +209,19 @@ const handler = async (req: Request): Promise<Response> => {
       subject: "We received your message!",
       html: `
         <!DOCTYPE html>
-        <html style="margin: 0; padding: 0;" bgcolor="#0a0f1e">
+        <html style="margin: 0; padding: 0;" bgcolor="#030717">
         <head>
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <style>* { margin: 0; padding: 0; } body, html { background-color: #0a0f1e !important; }</style>
+          <style>* { margin: 0; padding: 0; } body, html { background-color: #030717 !important; }</style>
         </head>
-        <body style="margin: 0 !important; padding: 0 !important; background-color: #0a0f1e !important;" bgcolor="#0a0f1e">
-          <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#0a0f1e">
+        <body style="margin: 0 !important; padding: 0 !important; background-color: #030717 !important;" bgcolor="#030717">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#030717">
             <tr>
-              <td align="center" bgcolor="#0a0f1e" style="padding: 0;">
-                <table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; font-family: -apple-system, sans-serif; background-color: #0a0f1e; color: #fafafa;">
+              <td align="center" bgcolor="#030717" style="padding: 0;">
+                <table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; font-family: -apple-system, sans-serif; background-color: #030717; color: #fafafa;">
                   <tr>
-                    <td style="padding: 32px 20px; background-color: #0a0f1e;">
+                    <td style="padding: 32px 20px; background-color: #030717;">
                       
                       <!-- Header -->
                       <table width="100%" cellpadding="0" cellspacing="0" border="0">

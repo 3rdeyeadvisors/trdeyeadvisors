@@ -44,23 +44,23 @@ const handler = async (req: Request): Promise<Response> => {
       subject: "Reset Your Password - 3rdeyeadvisors",
       html: `
         <!DOCTYPE html>
-        <html style="margin: 0; padding: 0;" bgcolor="#0a0f1e">
+        <html style="margin: 0; padding: 0;" bgcolor="#030717">
         <head>
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <style type="text/css">
             * { margin: 0; padding: 0; }
-            body, html { background-color: #0a0f1e !important; }
+            body, html { background-color: #030717 !important; }
           </style>
         </head>
-        <body style="margin: 0 !important; padding: 0 !important; background-color: #0a0f1e !important;" bgcolor="#0a0f1e">
-          <div style="background-color: #0a0f1e; margin: 0; padding: 0;">
-          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#0a0f1e" style="margin: 0; padding: 0; background-color: #0a0f1e;">
+        <body style="margin: 0 !important; padding: 0 !important; background-color: #030717 !important;" bgcolor="#030717">
+          <div style="background-color: #030717; margin: 0; padding: 0;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#030717" style="margin: 0; padding: 0; background-color: #030717;">
             <tr>
-              <td align="center" bgcolor="#0a0f1e" style="padding: 0; margin: 0; background-color: #0a0f1e;">
-                <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; width: 100%; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; background-color: #0a0f1e; color: #fafafa;">
+              <td align="center" bgcolor="#030717" style="padding: 0; margin: 0; background-color: #030717;">
+                <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; width: 100%; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; background-color: #030717; color: #fafafa;">
                   <tr>
-                    <td style="padding: 32px 20px; background-color: #0a0f1e;">
+                    <td style="padding: 32px 20px; background-color: #030717;">
                       
                       <!-- Header with Cosmic Background -->
                       <table width="100%" cellpadding="0" cellspacing="0" border="0">

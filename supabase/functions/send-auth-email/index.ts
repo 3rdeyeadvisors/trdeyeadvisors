@@ -53,7 +53,23 @@ const handler = async (req: Request): Promise<Response> => {
     if (type === 'signup') {
       subject = 'Welcome to 3rdeyeadvisors - Your DeFi Journey Begins! 🚀';
       htmlContent = `
-        <div style="max-width: 600px; margin: 0 auto; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; color: #fff; background: hsl(222, 84%, 4.9%);">
+        <!DOCTYPE html>
+        <html style="margin: 0; padding: 0;" bgcolor="#030717">
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <style type="text/css">
+            * { margin: 0; padding: 0; }
+            body, html { background-color: #030717 !important; }
+          </style>
+        </head>
+        <body style="margin: 0 !important; padding: 0 !important; background-color: #030717 !important;" bgcolor="#030717">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#030717" style="margin: 0; padding: 0; background-color: #030717;">
+            <tr>
+              <td align="center" bgcolor="#030717" style="padding: 0; margin: 0; background-color: #030717;">
+                <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; width: 100%; margin: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background-color: #030717; color: #fff;">
+                  <tr>
+                    <td style="padding: 20px;">
           
           <!-- Cosmic Welcome Header -->
           <div style="text-align: center; padding: 50px 30px 40px; background: linear-gradient(135deg, hsl(222, 84%, 4.9%), hsl(217, 32%, 8%)); border-radius: 12px 12px 0 0; position: relative; overflow: hidden;">
@@ -113,12 +129,35 @@ const handler = async (req: Request): Promise<Response> => {
               © 2024 3rdeyeadvisors. Empowering DeFi consciousness.
             </p>
           </div>
-        </div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </body>
+        </html>
       `;
     } else if (type === 'recovery') {
       subject = 'Reset Your 3rdeyeadvisors Password 🔑';
       htmlContent = `
-        <div style="max-width: 600px; margin: 0 auto; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; color: #fff; background: hsl(222, 84%, 4.9%);">
+        <!DOCTYPE html>
+        <html style="margin: 0; padding: 0;" bgcolor="#030717">
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <style type="text/css">
+            * { margin: 0; padding: 0; }
+            body, html { background-color: #030717 !important; }
+          </style>
+        </head>
+        <body style="margin: 0 !important; padding: 0 !important; background-color: #030717 !important;" bgcolor="#030717">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#030717" style="margin: 0; padding: 0; background-color: #030717;">
+            <tr>
+              <td align="center" bgcolor="#030717" style="padding: 0; margin: 0; background-color: #030717;">
+                <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; width: 100%; margin: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background-color: #030717; color: #fff;">
+                  <tr>
+                    <td style="padding: 20px;">
           
           <!-- Security Header -->
           <div style="text-align: center; padding: 50px 30px 30px; background: linear-gradient(135deg, hsl(222, 84%, 4.9%), hsl(217, 32%, 8%)); border-radius: 12px 12px 0 0; position: relative;">
@@ -165,7 +204,14 @@ const handler = async (req: Request): Promise<Response> => {
               © 2024 3rdeyeadvisors. Empowering DeFi consciousness.
             </p>
           </div>
-        </div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </body>
+        </html>
       `;
     } else {
       throw new Error('Invalid email type');
