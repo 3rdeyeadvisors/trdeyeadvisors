@@ -94,7 +94,7 @@ const Navigation = () => {
           </Link>
           
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center justify-between w-full">
+          <div className="hidden md:flex items-center justify-center w-full gap-8">
             {mainNavItems.map((item) => (
               item.external ? (
                 <a
