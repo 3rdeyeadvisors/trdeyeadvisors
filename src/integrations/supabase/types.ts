@@ -225,6 +225,92 @@ export type Database = {
         }
         Relationships: []
       }
+      discount_codes: {
+        Row: {
+          applies_to: string
+          code: string
+          created_at: string | null
+          current_uses: number | null
+          discount_type: string
+          discount_value: number
+          id: string
+          is_active: boolean | null
+          max_uses: number | null
+          min_purchase_amount: number | null
+          updated_at: string | null
+          valid_from: string | null
+          valid_until: string | null
+        }
+        Insert: {
+          applies_to: string
+          code: string
+          created_at?: string | null
+          current_uses?: number | null
+          discount_type: string
+          discount_value: number
+          id?: string
+          is_active?: boolean | null
+          max_uses?: number | null
+          min_purchase_amount?: number | null
+          updated_at?: string | null
+          valid_from?: string | null
+          valid_until?: string | null
+        }
+        Update: {
+          applies_to?: string
+          code?: string
+          created_at?: string | null
+          current_uses?: number | null
+          discount_type?: string
+          discount_value?: number
+          id?: string
+          is_active?: boolean | null
+          max_uses?: number | null
+          min_purchase_amount?: number | null
+          updated_at?: string | null
+          valid_from?: string | null
+          valid_until?: string | null
+        }
+        Relationships: []
+      }
+      discount_usage: {
+        Row: {
+          created_at: string | null
+          discount_amount: number
+          discount_id: string
+          id: string
+          order_amount: number
+          stripe_session_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          discount_amount: number
+          discount_id: string
+          id?: string
+          order_amount: number
+          stripe_session_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          discount_amount?: number
+          discount_id?: string
+          id?: string
+          order_amount?: number
+          stripe_session_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "discount_usage_discount_id_fkey"
+            columns: ["discount_id"]
+            isOneToOne: false
+            referencedRelation: "discount_codes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       discussion_replies: {
         Row: {
           content: string
@@ -841,6 +927,15 @@ export type Database = {
       user_has_purchased_product: {
         Args: { product_id: number }
         Returns: boolean
+      }
+      validate_discount_code: {
+        Args: { _amount: number; _code: string; _product_type: string }
+        Returns: {
+          discount_amount: number
+          discount_id: string
+          is_valid: boolean
+          message: string
+        }[]
       }
       validate_password_strength: {
         Args: { password: string }

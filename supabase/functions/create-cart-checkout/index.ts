@@ -14,7 +14,7 @@ serve(async (req) => {
   }
 
   try {
-    const { items } = await req.json();
+    const { items, discountCode } = await req.json();
 
     if (!items || items.length === 0) {
       throw new Error("No items provided");
@@ -92,27 +92,68 @@ serve(async (req) => {
       };
     });
 
-    // Create a checkout session
-    const session = await stripe.checkout.sessions.create({
+    // Calculate total amount
+    const totalAmount = lineItems.reduce((sum, item) => sum + (item.price_data.unit_amount * item.quantity), 0);
+
+    // Validate and apply discount if provided
+    let discountAmount = 0;
+    let discountId = null;
+    
+    if (discountCode) {
+      const { data: discountResult, error: discountError } = await supabaseClient
+        .rpc('validate_discount_code', {
+          _code: discountCode,
+          _amount: Math.floor(totalAmount / 100),
+          _product_type: 'all'
+        })
+        .single();
+
+      if (discountResult && discountResult.is_valid) {
+        discountId = discountResult.discount_id;
+        discountAmount = discountResult.discount_amount * 100;
+        console.log('Discount applied:', { discountId, discountAmount });
+      }
+    }
+
+    // Check if there are any physical items
+    const hasPhysicalItems = printifyItems.length > 0;
+
+    // Create checkout session config
+    const sessionConfig: any = {
       line_items: lineItems,
       mode: "payment",
-      billing_address_collection: 'required', // Required for accurate tax calculation
-      // Collect shipping address if there are physical items
-      ...(printifyItems.length > 0 && {
-        shipping_address_collection: {
-          allowed_countries: ['US', 'CA', 'GB', 'AU', 'DE', 'FR', 'IT', 'ES', 'NL', 'BE', 'SE', 'NO', 'DK', 'FI', 'AT', 'IE', 'PT', 'PL', 'CZ', 'GR', 'HU', 'RO', 'BG', 'HR', 'SK', 'SI', 'LT', 'LV', 'EE', 'CY', 'MT', 'LU', 'IS', 'LI', 'CH', 'JP', 'SG', 'NZ', 'MX', 'BR', 'AR', 'CL', 'CO', 'PE', 'CR', 'PA', 'UY', 'EC', 'GT', 'HN', 'NI', 'SV', 'DO', 'BO', 'PY', 'VE', 'TT', 'JM', 'BS', 'BB', 'BZ', 'GY', 'SR', 'GD', 'LC', 'VC', 'AG', 'DM', 'KN', 'AW', 'CW', 'BM', 'KY', 'VG', 'TC', 'AI', 'MS', 'FK', 'GI', 'GG', 'JE', 'IM', 'FO', 'GL', 'AX'],
-        },
-      }),
-      automatic_tax: {
-        enabled: true,
-      },
+      billing_address_collection: 'required',
+      automatic_tax: { enabled: true },
       success_url: `${req.headers.get("origin")}/store?success=true&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${req.headers.get("origin")}/cart?canceled=true`,
       metadata: {
         has_printify_items: printifyItems.length > 0 ? 'true' : 'false',
         printify_items_count: printifyItems.length.toString(),
+        discount_id: discountId || '',
+        discount_code: discountCode || '',
       },
-    });
+    };
+
+    // Add shipping address collection for physical items
+    if (hasPhysicalItems) {
+      sessionConfig.shipping_address_collection = {
+        allowed_countries: ['US', 'CA', 'GB', 'AU', 'DE', 'FR', 'IT', 'ES', 'NL', 'BE', 'SE', 'NO', 'DK', 'FI', 'AT', 'IE', 'PT', 'PL', 'CZ', 'GR', 'HU', 'RO', 'BG', 'HR', 'SK', 'SI', 'LT', 'LV', 'EE', 'CY', 'MT', 'LU', 'IS', 'LI', 'CH', 'JP', 'SG', 'NZ', 'MX', 'BR', 'AR', 'CL', 'CO', 'PE', 'CR', 'PA', 'UY', 'EC', 'GT', 'HN', 'NI', 'SV', 'DO', 'BO', 'PY', 'VE', 'TT', 'JM', 'BS', 'BB', 'BZ', 'GY', 'SR', 'GD', 'LC', 'VC', 'AG', 'DM', 'KN', 'AW', 'CW', 'BM', 'KY', 'VG', 'TC', 'AI', 'MS', 'FK', 'GI', 'GG', 'JE', 'IM', 'FO', 'GL', 'AX'],
+      };
+    }
+
+    // Apply discount if valid
+    if (discountAmount > 0) {
+      const coupon = await stripe.coupons.create({
+        amount_off: discountAmount,
+        currency: 'usd',
+        duration: 'once',
+        name: discountCode,
+      });
+      sessionConfig.discounts = [{ coupon: coupon.id }];
+    }
+
+    // Create a checkout session
+    const session = await stripe.checkout.sessions.create(sessionConfig);
 
     // Note: Digital product purchase recording would be handled after successful payment
     // via webhook or success page, not in the checkout creation phase

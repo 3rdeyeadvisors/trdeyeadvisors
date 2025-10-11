@@ -20,7 +20,7 @@ serve(async (req) => {
   try {
     logStep("Function started");
 
-    const { courseId } = await req.json();
+    const { courseId, discountCode } = await req.json();
     if (!courseId) {
       throw new Error("Course ID is required");
     }
@@ -85,6 +85,26 @@ serve(async (req) => {
       apiVersion: "2023-10-16",
     });
 
+    // Validate and apply discount if provided
+    let discountAmount = 0;
+    let discountId = null;
+    
+    if (discountCode && course.price_cents) {
+      const { data: discountResult, error: discountError } = await supabaseClient
+        .rpc('validate_discount_code', {
+          _code: discountCode,
+          _amount: Math.floor(course.price_cents / 100),
+          _product_type: 'courses'
+        })
+        .single();
+
+      if (discountResult && discountResult.is_valid) {
+        discountId = discountResult.discount_id;
+        discountAmount = discountResult.discount_amount * 100;
+        logStep('Discount applied', { discountId, discountAmount });
+      }
+    }
+
     // Check for existing Stripe customer
     const customers = await stripe.customers.list({ 
       email: userData.user.email, 
@@ -99,11 +119,11 @@ serve(async (req) => {
       logStep("No existing Stripe customer found");
     }
 
-    // Create checkout session
-    const session = await stripe.checkout.sessions.create({
+    // Create checkout session config
+    const sessionConfig: any = {
       customer: customerId,
       customer_email: customerId ? undefined : userData.user.email,
-      billing_address_collection: 'required', // Required for accurate tax calculation
+      billing_address_collection: 'required',
       line_items: [
         {
           price_data: {
@@ -117,23 +137,37 @@ serve(async (req) => {
               },
             },
             unit_amount: course.price_cents,
-            tax_behavior: 'exclusive', // Tax calculated and added on top
+            tax_behavior: 'exclusive',
           },
           quantity: 1,
         },
       ],
       mode: "payment",
-      automatic_tax: {
-        enabled: true,
-      },
+      automatic_tax: { enabled: true },
       success_url: `${req.headers.get("origin")}/courses/${courseId}?payment=success`,
       cancel_url: `${req.headers.get("origin")}/courses?payment=canceled`,
       metadata: {
         course_id: courseId.toString(),
         user_id: userData.user.id,
-        type: 'course_purchase'
+        type: 'course_purchase',
+        discount_id: discountId || '',
+        discount_code: discountCode || '',
       },
-    });
+    };
+
+    // Apply discount if valid
+    if (discountAmount > 0) {
+      const coupon = await stripe.coupons.create({
+        amount_off: discountAmount,
+        currency: 'usd',
+        duration: 'once',
+        name: discountCode,
+      });
+      sessionConfig.discounts = [{ coupon: coupon.id }];
+    }
+
+    // Create checkout session
+    const session = await stripe.checkout.sessions.create(sessionConfig);
 
     logStep("Checkout session created", { sessionId: session.id, url: session.url });
 

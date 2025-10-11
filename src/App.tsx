@@ -54,6 +54,7 @@ import SetupStripeProducts from "./pages/SetupStripeProducts";
 import WebThreeGamingDefiConvergence from "./pages/WebThreeGamingDefiConvergence";
 import DefaiRevolution2025 from "./pages/DefaiRevolution2025";
 import DefiRegulationAmlIntegration from "./pages/DefiRegulationAmlIntegration";
+import AdminStoreDashboard from "./pages/AdminStoreDashboard";
 
 const queryClient = new QueryClient();
 
@@ -156,6 +157,11 @@ const App = () => {
                   <Route path="/admin/email-logs" element={
                     <ProtectedRoute requireRole="admin">
                       <EmailLogsAdmin />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/admin/store" element={
+                    <ProtectedRoute requireRole="admin">
+                      <AdminStoreDashboard />
                     </ProtectedRoute>
                   } />
                   <Route path="*" element={<NotFound />} />
