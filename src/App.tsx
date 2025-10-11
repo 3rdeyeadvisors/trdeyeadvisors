@@ -54,6 +54,7 @@ import SetupStripeProducts from "./pages/SetupStripeProducts";
 import WebThreeGamingDefiConvergence from "./pages/WebThreeGamingDefiConvergence";
 import DefaiRevolution2025 from "./pages/DefaiRevolution2025";
 import DefiRegulationAmlIntegration from "./pages/DefiRegulationAmlIntegration";
+import LiquidStakingTokens2025 from "./pages/LiquidStakingTokens2025";
 import AdminStoreDashboard from "./pages/AdminStoreDashboard";
 
 const queryClient = new QueryClient();
@@ -102,6 +103,7 @@ const App = () => {
                   <Route path="/blog/defi-regulation-aml-integration" element={<DefiRegulationAmlIntegration />} />
                   <Route path="/blog/web3-gaming-defi-convergence-2025" element={<WebThreeGamingDefiConvergence />} />
                   <Route path="/blog/defai-revolution-2025" element={<DefaiRevolution2025 />} />
+                  <Route path="/blog/liquid-staking-tokens-2025" element={<LiquidStakingTokens2025 />} />
                   <Route path="/blog/:slug" element={<BlogPost />} />
                   <Route path="/resources" element={<Resources />} />
                   <Route path="/analytics" element={<Analytics />} />
