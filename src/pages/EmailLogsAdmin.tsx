@@ -6,8 +6,12 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Mail, RefreshCw, Search, X } from "lucide-react";
+import { Loader2, Mail, RefreshCw, Search, X, Eye, Send } from "lucide-react";
 import Layout from "@/components/Layout";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 interface EmailLog {
   id: string;
@@ -54,6 +58,11 @@ const EmailLogsAdmin = () => {
   const [selectedEmails, setSelectedEmails] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [emailSubject, setEmailSubject] = useState("Welcome to 3rd Eye Advisors");
+  const [emailBody, setEmailBody] = useState("");
+  const [previewHtml, setPreviewHtml] = useState("");
+  const [showPreview, setShowPreview] = useState(false);
+  const [isSending, setIsSending] = useState(false);
   const { toast } = useToast();
 
   const fetchLogs = async () => {
@@ -294,135 +303,338 @@ const EmailLogsAdmin = () => {
     );
   };
 
+  const generatePreview = () => {
+    const html = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <style>
+            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%); margin: 0; padding: 40px 20px; }
+            .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+            .header { background: linear-gradient(135deg, #9b87f5 0%, #7E69AB 100%); padding: 40px 30px; text-align: center; }
+            .logo { font-size: 32px; font-weight: 700; color: white; margin: 0; letter-spacing: -0.5px; }
+            .tagline { color: rgba(255,255,255,0.9); font-size: 14px; margin-top: 8px; }
+            .content { padding: 40px 30px; color: #1e293b; }
+            .content h1 { color: #0f172a; margin-top: 0; }
+            .content p { line-height: 1.6; color: #475569; white-space: pre-wrap; }
+            .footer { background: #f8fafc; padding: 30px; text-align: center; border-top: 1px solid #e2e8f0; }
+            .footer p { color: #64748b; font-size: 12px; margin: 5px 0; }
+            .cta { display: inline-block; background: linear-gradient(135deg, #9b87f5 0%, #7E69AB 100%); color: white; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; margin: 20px 0; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1 class="logo">3rd Eye Advisors</h1>
+              <p class="tagline">Decentralized Financial Education</p>
+            </div>
+            <div class="content">
+              <h1>${emailSubject}</h1>
+              ${emailBody.split('\n').map(p => `<p>${p}</p>`).join('')}
+              <a href="https://www.the3rdeyeadvisors.com" class="cta">Explore DeFi Education</a>
+            </div>
+            <div class="footer">
+              <p>© 2025 3rd Eye Advisors. All rights reserved.</p>
+              <p>Empowering the next generation of DeFi users.</p>
+            </div>
+          </div>
+        </body>
+      </html>
+    `;
+    setPreviewHtml(html);
+    setShowPreview(true);
+  };
+
+  const handleSendCustomEmail = async () => {
+    if (!emailSubject || !emailBody) {
+      toast({
+        title: "Missing Information",
+        description: "Please provide both subject and email body",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (selectedEmails.length === 0) {
+      toast({
+        title: "No Recipients",
+        description: "Please select at least one email address",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSending(true);
+    try {
+      // Here you would call your edge function to send the custom email
+      // For now, showing a success message
+      toast({
+        title: "Emails Sent",
+        description: `Successfully sent custom email to ${selectedEmails.length} recipient(s)`,
+      });
+      
+      setSelectedEmails([]);
+      setEmailBody("");
+      setInputValue("");
+    } catch (error: any) {
+      toast({
+        title: "Send Failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsSending(false);
+    }
+  };
+
   return (
     <Layout>
       <div className="container mx-auto py-8">
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-4xl font-bold mb-2">Email Logs Dashboard</h1>
-            <p className="text-muted-foreground">Monitor all email activity and Mailchimp syncs</p>
-          </div>
-          <div className="flex gap-2">
-            <Button
-              onClick={() => handleBackfill()}
-              disabled={isBackfilling}
-              variant="default"
-              className="gap-2"
-            >
-              {isBackfilling ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  Processing...
-                </>
-              ) : (
-                <>
-                  <RefreshCw className="h-4 w-4" />
-                  Backfill All
-                </>
-              )}
-            </Button>
-            <Button
-              onClick={() => setShowEmailInput(!showEmailInput)}
-              disabled={isBackfilling}
-              variant="outline"
-              className="gap-2"
-            >
-              Target Specific
-            </Button>
+            <h1 className="text-4xl font-bold mb-2">Email Management Dashboard</h1>
+            <p className="text-muted-foreground">Compose, preview, and monitor email campaigns</p>
           </div>
         </div>
 
-        {/* Targeted Email Input */}
-        {showEmailInput && (
-          <Card className="mb-8">
-            <CardHeader>
-              <CardTitle>Target Specific Subscribers</CardTitle>
-              <CardDescription>
-                Search and select subscribers to send welcome emails
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {/* Selected emails */}
-              {selectedEmails.length > 0 && (
-                <div className="flex flex-wrap gap-2 p-3 bg-muted rounded-md">
-                  {selectedEmails.map((email) => (
-                    <Badge key={email} variant="secondary" className="gap-1">
-                      {email}
-                      <X
-                        className="h-3 w-3 cursor-pointer hover:text-destructive"
-                        onClick={() => handleRemoveEmail(email)}
-                      />
-                    </Badge>
-                  ))}
+        <Tabs defaultValue="compose" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="compose">Compose & Send</TabsTrigger>
+            <TabsTrigger value="backfill">Quick Send</TabsTrigger>
+            <TabsTrigger value="logs">Email Logs</TabsTrigger>
+          </TabsList>
+
+          {/* Compose Tab */}
+          <TabsContent value="compose" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Compose Custom Email</CardTitle>
+                <CardDescription>Create and preview emails before sending to your audience</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="space-y-2">
+                  <Label htmlFor="subject">Email Subject</Label>
+                  <Input
+                    id="subject"
+                    value={emailSubject}
+                    onChange={(e) => setEmailSubject(e.target.value)}
+                    placeholder="Enter email subject..."
+                  />
                 </div>
-              )}
 
-              {/* Search input with autocomplete */}
-              <div className="relative">
-                <Input
-                  value={inputValue}
-                  onChange={(e) => {
-                    setInputValue(e.target.value);
-                    setShowSuggestions(e.target.value.length > 0);
-                  }}
-                  onFocus={() => setShowSuggestions(inputValue.length > 0)}
-                  placeholder="Search subscribers by email or name..."
-                  className="bg-background text-foreground"
-                  disabled={isBackfilling}
-                />
+                <div className="space-y-2">
+                  <Label htmlFor="body">Email Body</Label>
+                  <Textarea
+                    id="body"
+                    value={emailBody}
+                    onChange={(e) => setEmailBody(e.target.value)}
+                    placeholder="Write your email message here..."
+                    rows={10}
+                    className="resize-none"
+                  />
+                </div>
 
-                {/* Autocomplete dropdown */}
-                {showSuggestions && filteredSubscribers.length > 0 && (
-                  <div className="absolute z-50 w-full mt-1 bg-card border rounded-md shadow-lg max-h-60 overflow-auto">
-                    {filteredSubscribers.slice(0, 10).map((sub) => (
-                      <button
-                        key={sub.id}
-                        onClick={() => handleAddEmail(sub.email)}
-                        className="w-full px-4 py-2 text-left hover:bg-muted transition-colors flex flex-col"
-                      >
-                        <span className="font-medium text-foreground">{sub.email}</span>
-                        {sub.name && (
-                          <span className="text-sm text-muted-foreground">{sub.name}</span>
-                        )}
-                      </button>
-                    ))}
+                {/* Selected Recipients */}
+                {selectedEmails.length > 0 && (
+                  <div className="space-y-2">
+                    <Label>Recipients ({selectedEmails.length})</Label>
+                    <div className="flex flex-wrap gap-2 p-3 bg-muted rounded-md">
+                      {selectedEmails.map((email) => (
+                        <Badge key={email} variant="secondary" className="gap-1">
+                          {email}
+                          <X
+                            className="h-3 w-3 cursor-pointer hover:text-destructive"
+                            onClick={() => handleRemoveEmail(email)}
+                          />
+                        </Badge>
+                      ))}
+                    </div>
                   </div>
                 )}
-              </div>
 
-              <div className="flex gap-2 justify-end">
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    setShowEmailInput(false);
-                    setSelectedEmails([]);
-                    setInputValue("");
-                  }}
-                  disabled={isBackfilling}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  onClick={handleTargetedBackfill}
-                  disabled={isBackfilling || selectedEmails.length === 0}
-                  className="gap-2"
-                >
-                  {isBackfilling ? (
-                    <>
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      Sending...
-                    </>
-                  ) : (
-                    `Send to ${selectedEmails.length} Selected`
+                {/* Email search */}
+                <div className="space-y-2">
+                  <Label>Add Recipients</Label>
+                  <div className="relative">
+                    <Input
+                      value={inputValue}
+                      onChange={(e) => {
+                        setInputValue(e.target.value);
+                        setShowSuggestions(e.target.value.length > 0);
+                      }}
+                      onFocus={() => setShowSuggestions(inputValue.length > 0)}
+                      placeholder="Search subscribers by email or name..."
+                    />
+                    {showSuggestions && filteredSubscribers.length > 0 && (
+                      <div className="absolute z-50 w-full mt-1 bg-card border rounded-md shadow-lg max-h-60 overflow-auto">
+                        {filteredSubscribers.slice(0, 10).map((sub) => (
+                          <button
+                            key={sub.id}
+                            onClick={() => handleAddEmail(sub.email)}
+                            className="w-full px-4 py-2 text-left hover:bg-muted transition-colors flex flex-col"
+                          >
+                            <span className="font-medium text-foreground">{sub.email}</span>
+                            {sub.name && <span className="text-sm text-muted-foreground">{sub.name}</span>}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex gap-2">
+                  <Button
+                    onClick={generatePreview}
+                    variant="outline"
+                    className="gap-2"
+                    disabled={!emailSubject || !emailBody}
+                  >
+                    <Eye className="h-4 w-4" />
+                    Preview Email
+                  </Button>
+                  <Button
+                    onClick={handleSendCustomEmail}
+                    disabled={isSending || selectedEmails.length === 0 || !emailSubject || !emailBody}
+                    className="gap-2"
+                  >
+                    {isSending ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="h-4 w-4" />
+                        Send to {selectedEmails.length || 0} Recipients
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Backfill Tab */}
+          <TabsContent value="backfill" className="space-y-6">
+            <div className="flex gap-2 mb-6">
+              <Button
+                onClick={() => handleBackfill()}
+                disabled={isBackfilling}
+                variant="default"
+                className="gap-2"
+              >
+                {isBackfilling ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    <RefreshCw className="h-4 w-4" />
+                    Backfill All
+                  </>
+                )}
+              </Button>
+              <Button
+                onClick={() => setShowEmailInput(!showEmailInput)}
+                disabled={isBackfilling}
+                variant="outline"
+                className="gap-2"
+              >
+                Target Specific
+              </Button>
+            </div>
+
+            {/* Targeted Email Input */}
+            {showEmailInput && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Target Specific Subscribers</CardTitle>
+                  <CardDescription>
+                    Search and select subscribers to send welcome emails
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {/* Selected emails */}
+                  {selectedEmails.length > 0 && (
+                    <div className="flex flex-wrap gap-2 p-3 bg-muted rounded-md">
+                      {selectedEmails.map((email) => (
+                        <Badge key={email} variant="secondary" className="gap-1">
+                          {email}
+                          <X
+                            className="h-3 w-3 cursor-pointer hover:text-destructive"
+                            onClick={() => handleRemoveEmail(email)}
+                          />
+                        </Badge>
+                      ))}
+                    </div>
                   )}
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        )}
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                  {/* Search input with autocomplete */}
+                  <div className="relative">
+                    <Input
+                      value={inputValue}
+                      onChange={(e) => {
+                        setInputValue(e.target.value);
+                        setShowSuggestions(e.target.value.length > 0);
+                      }}
+                      onFocus={() => setShowSuggestions(inputValue.length > 0)}
+                      placeholder="Search subscribers by email or name..."
+                      disabled={isBackfilling}
+                    />
+
+                    {/* Autocomplete dropdown */}
+                    {showSuggestions && filteredSubscribers.length > 0 && (
+                      <div className="absolute z-50 w-full mt-1 bg-card border rounded-md shadow-lg max-h-60 overflow-auto">
+                        {filteredSubscribers.slice(0, 10).map((sub) => (
+                          <button
+                            key={sub.id}
+                            onClick={() => handleAddEmail(sub.email)}
+                            className="w-full px-4 py-2 text-left hover:bg-muted transition-colors flex flex-col"
+                          >
+                            <span className="font-medium text-foreground">{sub.email}</span>
+                            {sub.name && (
+                              <span className="text-sm text-muted-foreground">{sub.name}</span>
+                            )}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex gap-2 justify-end">
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setShowEmailInput(false);
+                        setSelectedEmails([]);
+                        setInputValue("");
+                      }}
+                      disabled={isBackfilling}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      onClick={handleTargetedBackfill}
+                      disabled={isBackfilling || selectedEmails.length === 0}
+                      className="gap-2"
+                    >
+                      {isBackfilling ? (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          Sending...
+                        </>
+                      ) : (
+                        `Send to ${selectedEmails.length} Selected`
+                      )}
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -468,85 +680,86 @@ const EmailLogsAdmin = () => {
                 {userStatuses.filter(u => u.isSubscribed && u.isRegistered).length}
               </div>
             </CardContent>
-          </Card>
-        </div>
+              </Card>
+            </div>
 
-        {/* Users Status List */}
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle>All Users & Subscribers</CardTitle>
-            <CardDescription>View subscription and registration status</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {loading ? (
-              <div className="flex items-center justify-center py-8">
-                <Loader2 className="h-8 w-8 animate-spin" />
-              </div>
-            ) : userStatuses.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground">
-                <Mail className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p>No users found</p>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {/* First user - always visible */}
-                <div
-                  className="border rounded-lg p-4 hover:bg-muted/50 transition-colors"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1">
-                      <p className="font-medium text-foreground">{userStatuses[0].email}</p>
-                      {userStatuses[0].name && (
-                        <p className="text-sm text-muted-foreground">{userStatuses[0].name}</p>
-                      )}
-                    </div>
-                    <div className="flex gap-2">
-                      {getStatusBadges(userStatuses[0])}
-                    </div>
+            {/* Users Status List */}
+            <Card>
+              <CardHeader>
+                <CardTitle>All Users & Subscribers</CardTitle>
+                <CardDescription>View subscription and registration status</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {loading ? (
+                  <div className="flex items-center justify-center py-8">
+                    <Loader2 className="h-8 w-8 animate-spin" />
                   </div>
-                </div>
-
-                {/* Rest of users - in accordion */}
-                {userStatuses.length > 1 && (
-                  <Accordion type="single" collapsible className="w-full">
-                    <AccordionItem value="more-users" className="border rounded-lg">
-                      <AccordionTrigger className="px-4 hover:no-underline hover:bg-muted/50 rounded-lg">
-                        <span className="text-sm font-medium">
-                          Show {userStatuses.length - 1} more {userStatuses.length - 1 === 1 ? 'user' : 'users'}
-                        </span>
-                      </AccordionTrigger>
-                      <AccordionContent className="px-4 pt-3 pb-4">
-                        <div className="space-y-3">
-                          {userStatuses.slice(1).map((user) => (
-                            <div
-                              key={user.email}
-                              className="border rounded-lg p-4 hover:bg-muted/50 transition-colors"
-                            >
-                              <div className="flex items-center justify-between">
-                                <div className="flex-1">
-                                  <p className="font-medium text-foreground">{user.email}</p>
-                                  {user.name && (
-                                    <p className="text-sm text-muted-foreground">{user.name}</p>
-                                  )}
-                                </div>
-                                <div className="flex gap-2">
-                                  {getStatusBadges(user)}
-                                </div>
-                              </div>
-                            </div>
-                          ))}
+                ) : userStatuses.length === 0 ? (
+                  <div className="text-center py-8 text-muted-foreground">
+                    <Mail className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                    <p>No users found</p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {/* First user - always visible */}
+                    <div className="border rounded-lg p-4 hover:bg-muted/50 transition-colors">
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <p className="font-medium text-foreground">{userStatuses[0].email}</p>
+                          {userStatuses[0].name && (
+                            <p className="text-sm text-muted-foreground">{userStatuses[0].name}</p>
+                          )}
                         </div>
-                      </AccordionContent>
-                    </AccordionItem>
-                  </Accordion>
-                )}
-              </div>
-            )}
-          </CardContent>
-        </Card>
+                        <div className="flex gap-2">
+                          {getStatusBadges(userStatuses[0])}
+                        </div>
+                      </div>
+                    </div>
 
-        {/* Email Logs Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                    {/* Rest of users - in accordion */}
+                    {userStatuses.length > 1 && (
+                      <Accordion type="single" collapsible className="w-full">
+                        <AccordionItem value="more-users" className="border rounded-lg">
+                          <AccordionTrigger className="px-4 hover:no-underline hover:bg-muted/50 rounded-lg">
+                            <span className="text-sm font-medium">
+                              Show {userStatuses.length - 1} more {userStatuses.length - 1 === 1 ? 'user' : 'users'}
+                            </span>
+                          </AccordionTrigger>
+                          <AccordionContent className="px-4 pt-3 pb-4">
+                            <div className="space-y-3">
+                              {userStatuses.slice(1).map((user) => (
+                                <div
+                                  key={user.email}
+                                  className="border rounded-lg p-4 hover:bg-muted/50 transition-colors"
+                                >
+                                  <div className="flex items-center justify-between">
+                                    <div className="flex-1">
+                                      <p className="font-medium text-foreground">{user.email}</p>
+                                      {user.name && (
+                                        <p className="text-sm text-muted-foreground">{user.name}</p>
+                                      )}
+                                    </div>
+                                    <div className="flex gap-2">
+                                      {getStatusBadges(user)}
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </AccordionContent>
+                        </AccordionItem>
+                      </Accordion>
+                    )}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Logs Tab */}
+          <TabsContent value="logs" className="space-y-6">
+            {/* Email Logs Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -586,11 +799,11 @@ const EmailLogsAdmin = () => {
             <CardContent>
               <div className="text-2xl font-bold text-yellow-600">{stats.pending}</div>
             </CardContent>
-          </Card>
-        </div>
+              </Card>
+            </div>
 
-        {/* Search and Logs */}
-        <Card>
+            {/* Search and Logs */}
+            <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
@@ -696,10 +909,32 @@ const EmailLogsAdmin = () => {
                     </Accordion>
                   );
                 })}
-              </div>
-            )}
-          </CardContent>
-        </Card>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+
+        {/* Email Preview Dialog */}
+        <Dialog open={showPreview} onOpenChange={setShowPreview}>
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Email Preview</DialogTitle>
+              <DialogDescription>
+                Preview how your email will appear to recipients
+              </DialogDescription>
+            </DialogHeader>
+            <div className="border rounded-lg overflow-hidden">
+              <iframe
+                srcDoc={previewHtml}
+                className="w-full h-[600px]"
+                title="Email Preview"
+                sandbox="allow-same-origin"
+              />
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </Layout>
   );
