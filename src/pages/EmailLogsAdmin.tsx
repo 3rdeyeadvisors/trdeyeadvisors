@@ -366,17 +366,30 @@ const EmailLogsAdmin = () => {
 
     setIsSending(true);
     try {
-      // Here you would call your edge function to send the custom email
-      // For now, showing a success message
+      const { data, error } = await supabase.functions.invoke('send-custom-email', {
+        body: {
+          recipients: selectedEmails,
+          subject: emailSubject,
+          body: emailBody
+        }
+      });
+
+      if (error) throw error;
+
+      const successCount = data?.sent || 0;
+      const failedCount = data?.failed || 0;
+
       toast({
         title: "Emails Sent",
-        description: `Successfully sent custom email to ${selectedEmails.length} recipient(s)`,
+        description: `Successfully sent to ${successCount} recipient(s)${failedCount > 0 ? `, ${failedCount} failed` : ''}`,
       });
       
       setSelectedEmails([]);
       setEmailBody("");
       setInputValue("");
+      fetchLogs(); // Refresh logs to show new emails
     } catch (error: any) {
+      console.error('Error sending custom email:', error);
       toast({
         title: "Send Failed",
         description: error.message,
