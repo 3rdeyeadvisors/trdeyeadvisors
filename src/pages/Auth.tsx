@@ -29,6 +29,7 @@ const Auth = () => {
   // Get initial tab from URL parameter or pathname
   const urlParams = new URLSearchParams(window.location.search);
   const isSignupPath = location.pathname === '/signup';
+  const isSigninPath = location.pathname === '/signin';
   const defaultTab = isSignupPath || urlParams.get('tab') === 'signup' ? 'signup' : 'signin';
 
   // Check URL parameters
