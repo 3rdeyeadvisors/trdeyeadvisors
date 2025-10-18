@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,6 +13,7 @@ import { Helmet } from "react-helmet-async";
 const Auth = () => {
   const { user, signIn, signUp, resetPassword, updatePassword } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
   
   const [email, setEmail] = useState("");
@@ -25,9 +26,10 @@ const Auth = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   
-  // Get initial tab from URL parameter
+  // Get initial tab from URL parameter or pathname
   const urlParams = new URLSearchParams(window.location.search);
-  const defaultTab = urlParams.get('tab') === 'signup' ? 'signup' : 'signin';
+  const isSignupPath = location.pathname === '/signup';
+  const defaultTab = isSignupPath || urlParams.get('tab') === 'signup' ? 'signup' : 'signin';
 
   // Check URL parameters
   useEffect(() => {
