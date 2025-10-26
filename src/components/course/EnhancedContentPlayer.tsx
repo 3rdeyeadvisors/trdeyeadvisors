@@ -228,10 +228,10 @@ export const EnhancedContentPlayer = ({
 
   const getTypeColor = (type: string) => {
     switch (type) {
-      case 'video': return 'bg-red-100 text-red-700 border-red-200';
-      case 'text': return 'bg-blue-100 text-blue-700 border-blue-200';
-      case 'interactive': return 'bg-green-100 text-green-700 border-green-200';
-      default: return 'bg-gray-100 text-gray-700 border-gray-200';
+      case 'video': return 'bg-destructive/10 text-destructive border-destructive/20';
+      case 'text': return 'bg-primary/10 text-primary border-primary/20';
+      case 'interactive': return 'bg-awareness/10 text-awareness border-awareness/20';
+      default: return 'bg-muted text-muted-foreground border-border';
     }
   };
 
@@ -247,9 +247,9 @@ export const EnhancedContentPlayer = ({
   return (
     <div className="w-full px-4 md:px-6">
       {/* Enhanced Module Header */}
-      <div className="mb-4 md:mb-6 mobile-typography-center">
+      <div className="mb-4 md:mb-6 text-center">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
-          <div className="flex flex-wrap items-center gap-2 md:gap-3">
+          <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3 mx-auto md:mx-0">
             <Badge className={`${getTypeColor(module.type)} text-xs md:text-sm`}>
               {getTypeIcon(module.type)} {module.type.charAt(0).toUpperCase() + module.type.slice(1)}
             </Badge>
@@ -258,20 +258,20 @@ export const EnhancedContentPlayer = ({
               <span className="text-xs md:text-sm">{module.duration} min</span>
             </div>
             {isCompleted && (
-              <Badge variant="default" className="bg-green-100 text-green-700 border-green-200 text-xs md:text-sm">
+              <Badge variant="default" className="bg-awareness/20 text-awareness border-awareness text-xs md:text-sm">
                 <CheckCircle className="w-3 h-3 mr-1" />
                 Completed
               </Badge>
             )}
             {quiz && (
-              <Badge variant="outline" className="border-purple-200 text-purple-700 text-xs md:text-sm">
+              <Badge variant="outline" className="border-accent/20 text-accent bg-accent/10 text-xs md:text-sm">
                 <Brain className="w-3 h-3 mr-1" />
                 Quiz Available
               </Badge>
             )}
           </div>
           
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-center md:justify-end gap-2">
             <Button
               variant="ghost"
               size="sm"
@@ -295,7 +295,7 @@ export const EnhancedContentPlayer = ({
         </h1>
 
         {/* Enhanced Progress bar */}
-        <div className="space-y-3">
+        <div className="space-y-3 max-w-2xl mx-auto">
           {module.type === 'text' && (
             <div>
               <div className="flex items-center justify-between mb-2">

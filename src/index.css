@@ -204,15 +204,19 @@ body {
   .prose {
     font-size: 0.9rem;
     line-height: 1.6;
-    text-align: center;
+    text-align: center !important;
+  }
+  
+  .prose * {
+    text-align: center !important;
   }
   
   .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
-    text-align: center;
+    text-align: center !important;
   }
   
   .prose p, .prose li, .prose blockquote {
-    text-align: center;
+    text-align: center !important;
   }
   
   .prose h1 {
@@ -238,16 +242,17 @@ body {
   
   .prose ul,
   .prose ol {
-    padding-left: 1.25rem;
+    padding-left: 0;
     margin-top: 0.75rem;
     margin-bottom: 0.75rem;
-    text-align: center;
+    text-align: center !important;
     list-style-position: inside;
   }
   
   .prose li {
     margin-top: 0.25rem;
     margin-bottom: 0.25rem;
+    text-align: center !important;
   }
   
   .prose p {
@@ -263,6 +268,64 @@ body {
     font-size: 0.85em;
     padding: 0.2em 0.4em;
     border-radius: 0.25rem;
+  }
+  
+  /* Force center all module titles */
+  h1, h2, h3 {
+    text-align: center !important;
+  }
+  
+  /* Fix module card colors - use semantic tokens */
+  [class*="border-green"] {
+    border-color: hsl(var(--awareness)) !important;
+    background-color: hsl(var(--awareness) / 0.1) !important;
+  }
+  
+  [class*="bg-green"] {
+    background-color: hsl(var(--awareness) / 0.1) !important;
+  }
+  
+  [class*="text-green"] {
+    color: hsl(var(--awareness)) !important;
+  }
+  
+  [class*="border-red"] {
+    border-color: hsl(var(--destructive) / 0.2) !important;
+    background-color: hsl(var(--destructive) / 0.1) !important;
+  }
+  
+  [class*="bg-red"] {
+    background-color: hsl(var(--destructive) / 0.1) !important;
+  }
+  
+  [class*="text-red"] {
+    color: hsl(var(--destructive)) !important;
+  }
+  
+  [class*="border-blue"] {
+    border-color: hsl(var(--primary) / 0.2) !important;
+    background-color: hsl(var(--primary) / 0.1) !important;
+  }
+  
+  [class*="bg-blue"] {
+    background-color: hsl(var(--primary) / 0.1) !important;
+  }
+  
+  [class*="text-blue"] {
+    color: hsl(var(--primary)) !important;
+  }
+  
+  [class*="border-purple"] {
+    border-color: hsl(var(--accent) / 0.2) !important;
+    background-color: hsl(var(--accent) / 0.1) !important;
+  }
+  
+  [class*="bg-purple"] {
+    background-color: hsl(var(--accent) / 0.1) !important;
+  }
+  
+  [class*="text-purple"] {
+    color: hsl(var(--accent)) !important;
   }
 }
 
