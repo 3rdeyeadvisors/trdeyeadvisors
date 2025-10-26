@@ -42,16 +42,16 @@ verify_jwt = false
 verify_jwt = false
 
 [functions.sync-printify-products]
-verify_jwt = false
+verify_jwt = true
 
 [functions.download-digital-product]
 verify_jwt = false
 
 [functions.upload-sample-content]
-verify_jwt = false
+verify_jwt = true
 
 [functions.upload-digital-products]
-verify_jwt = false
+verify_jwt = true
 
 [functions.generate-social-banner]
 verify_jwt = false
@@ -75,4 +75,7 @@ verify_jwt = false
 verify_jwt = false
 
 [functions.backfill-subscribers]
-verify_jwt = false
+verify_jwt = true
+
+[functions.setup-course-stripe-products]
+verify_jwt = true

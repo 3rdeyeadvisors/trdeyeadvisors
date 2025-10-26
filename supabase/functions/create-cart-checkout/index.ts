@@ -38,21 +38,63 @@ serve(async (req) => {
       { auth: { persistSession: false } }
     );
 
+    // Validate all items against database and fetch actual prices
+    const validatedItems = await Promise.all(items.map(async (item: any) => {
+      // Validate quantity
+      if (!Number.isInteger(item.quantity) || item.quantity < 1 || item.quantity > 100) {
+        throw new Error(`Invalid quantity for item: ${item.title || item.id}`);
+      }
+
+      if (item.printify_id) {
+        // Validate Printify product
+        const { data: product, error } = await supabaseClient
+          .from('printify_products')
+          .select('printify_id, title, variants, is_active')
+          .eq('printify_id', item.printify_id)
+          .single();
+
+        if (error || !product || !product.is_active) {
+          throw new Error(`Invalid or inactive product: ${item.printify_id}`);
+        }
+
+        // Find the specific variant price
+        const variant = product.variants?.find((v: any) => v.id === item.variant_id);
+        if (!variant) {
+          throw new Error(`Invalid variant for product: ${item.printify_id}`);
+        }
+
+        return { ...item, validatedPrice: Math.round(variant.price * 100), dbTitle: product.title };
+      } else {
+        // Validate course/digital product
+        const { data: course, error } = await supabaseClient
+          .from('courses')
+          .select('id, title, price_cents, is_active')
+          .eq('id', item.id)
+          .single();
+
+        if (error || !course || !course.is_active) {
+          throw new Error(`Invalid or inactive course: ${item.id}`);
+        }
+
+        return { ...item, validatedPrice: course.price_cents, dbTitle: course.title };
+      }
+    }));
+
     // Separate digital and physical (Printify) products
-    const digitalItems = items.filter((item: any) => !item.printify_id);
-    const printifyItems = items.filter((item: any) => item.printify_id);
+    const digitalItems = validatedItems.filter((item: any) => !item.printify_id);
+    const printifyItems = validatedItems.filter((item: any) => item.printify_id);
 
     console.log('Digital items:', digitalItems.length);
     console.log('Printify items:', printifyItems.length);
 
-    // Create line items for Stripe
-    const lineItems = items.map((item: any) => {
+    // Create line items for Stripe using validated prices
+    const lineItems = validatedItems.map((item: any) => {
       // Build product name with variant info for Printify items
-      let productName = item.title;
+      let productName = item.dbTitle; // Use validated title from database
       if (item.printify_id && (item.color || item.size)) {
         const variantInfo = [item.color, item.size].filter(Boolean).join(' / ');
         if (variantInfo) {
-          productName = `${item.title} (${variantInfo})`;
+          productName = `${item.dbTitle} (${variantInfo})`;
         }
       }
 
@@ -85,7 +127,7 @@ serve(async (req) => {
         price_data: {
           currency: "usd",
           product_data: productData,
-          unit_amount: Math.round(item.price * 100), // Convert to cents
+          unit_amount: item.validatedPrice, // Use validated price from database
           tax_behavior: 'exclusive', // Tax calculated and added on top
         },
         quantity: item.quantity,

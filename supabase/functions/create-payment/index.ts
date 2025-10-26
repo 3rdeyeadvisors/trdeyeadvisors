@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@14.21.0";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -13,23 +14,39 @@ serve(async (req) => {
   }
 
   try {
-    const { productId, productName, price } = await req.json();
+    const { productId } = await req.json();
 
-    // Initialize Stripe with secret key
+    // Initialize Stripe and Supabase
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
       apiVersion: "2023-10-16",
     });
 
-    // Create a one-time payment session
+    const supabaseClient = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
+    );
+
+    // Validate product and fetch actual price from database
+    const { data: course, error } = await supabaseClient
+      .from('courses')
+      .select('id, title, price_cents, is_active')
+      .eq('id', productId)
+      .single();
+
+    if (error || !course || !course.is_active) {
+      throw new Error(`Invalid or inactive product: ${productId}`);
+    }
+
+    // Create a one-time payment session with validated price
     const session = await stripe.checkout.sessions.create({
       line_items: [
         {
           price_data: {
             currency: "usd",
             product_data: { 
-              name: productName,
+              name: course.title, // Use validated title from database
             },
-            unit_amount: price * 100, // Convert to cents
+            unit_amount: course.price_cents, // Use validated price from database
             tax_behavior: 'exclusive', // Tax calculated and added on top
           },
           quantity: 1,
@@ -40,7 +57,7 @@ serve(async (req) => {
       automatic_tax: {
         enabled: true,
       },
-      success_url: `${req.headers.get("origin")}/store?success=true&product=${encodeURIComponent(productName)}`,
+      success_url: `${req.headers.get("origin")}/store?success=true&product=${encodeURIComponent(course.title)}`,
       cancel_url: `${req.headers.get("origin")}/store?canceled=true`,
     });
 

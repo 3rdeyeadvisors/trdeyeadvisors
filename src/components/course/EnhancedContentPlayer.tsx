@@ -131,7 +131,7 @@ export const EnhancedContentPlayer = ({
   const loadModuleQuiz = async () => {
     try {
       const { data, error } = await supabase
-        .from('quizzes')
+        .from('quizzes_public')
         .select('*')
         .eq('course_id', courseId)
         .eq('module_id', module.id)

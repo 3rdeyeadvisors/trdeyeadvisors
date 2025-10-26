@@ -610,6 +610,13 @@ export type Database = {
             referencedRelation: "quizzes"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "quiz_attempts_quiz_id_fkey"
+            columns: ["quiz_id"]
+            isOneToOne: false
+            referencedRelation: "quizzes_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       quizzes: {
@@ -854,13 +861,51 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      quizzes_public: {
+        Row: {
+          course_id: number | null
+          created_at: string | null
+          description: string | null
+          id: string | null
+          max_attempts: number | null
+          module_id: string | null
+          passing_score: number | null
+          questions: Json | null
+          time_limit: number | null
+          title: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          course_id?: number | null
+          created_at?: string | null
+          description?: string | null
+          id?: string | null
+          max_attempts?: number | null
+          module_id?: string | null
+          passing_score?: number | null
+          questions?: never
+          time_limit?: number | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          course_id?: number | null
+          created_at?: string | null
+          description?: string | null
+          id?: string | null
+          max_attempts?: number | null
+          module_id?: string | null
+          passing_score?: number | null
+          questions?: never
+          time_limit?: number | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
-      auto_cleanup_rate_limits: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
+      auto_cleanup_rate_limits: { Args: never; Returns: undefined }
       check_rate_limit: {
         Args: {
           _action_type: string
@@ -870,14 +915,8 @@ export type Database = {
         }
         Returns: boolean
       }
-      cleanup_old_rate_limits: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
-      get_average_rating: {
-        Args: Record<PropertyKey, never>
-        Returns: number
-      }
+      cleanup_old_rate_limits: { Args: never; Returns: undefined }
+      get_average_rating: { Args: never; Returns: number }
       get_profiles_batch: {
         Args: { user_ids: string[] }
         Returns: {
@@ -886,16 +925,10 @@ export type Database = {
           user_id: string
         }[]
       }
-      get_total_courses_count: {
-        Args: Record<PropertyKey, never>
-        Returns: number
-      }
-      get_total_users_count: {
-        Args: Record<PropertyKey, never>
-        Returns: number
-      }
+      get_total_courses_count: { Args: never; Returns: number }
+      get_total_users_count: { Args: never; Returns: number }
       get_user_emails_with_profiles: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: {
           created_at: string
           display_name: string
