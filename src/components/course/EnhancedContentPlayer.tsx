@@ -347,11 +347,11 @@ export const EnhancedContentPlayer = ({
               {module.type === 'text' && module.content.text && (
                 <>
                   {/* Mobile View */}
-                  <div className="block md:hidden">
+                  <div className="block md:hidden text-center">
                     <ExpandableText 
                       text={module.content.text}
                       maxLines={15}
-                      className="prose prose-sm md:prose-lg max-w-none font-consciousness dark:prose-invert"
+                      className="prose prose-sm md:prose-lg max-w-none font-consciousness dark:prose-invert text-center mx-auto"
                       expandLabel="Read Full Content"
                       collapseLabel="Show Less"
                       mobileOnly={true}
@@ -362,7 +362,7 @@ export const EnhancedContentPlayer = ({
                   {/* Desktop View */}
                   <div 
                     id="module-content"
-                    className="hidden md:block prose prose-lg max-w-none font-consciousness md:overflow-y-auto md:max-h-[600px] mobile-typography-center w-full max-w-full break-words overflow-x-hidden"
+                    className="hidden md:block prose prose-lg max-w-none font-consciousness md:overflow-y-auto md:max-h-[600px] text-center mx-auto w-full max-w-full break-words overflow-x-hidden"
                   >
                     <ReactMarkdown>{module.content.text}</ReactMarkdown>
                   </div>
