@@ -532,35 +532,41 @@ export const EnhancedContentPlayer = ({
       <Separator className="my-8" />
 
       {/* Enhanced Navigation */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-        {hasPrevious && (
-          <Button variant="outline" onClick={onPrevious} size="lg" className="w-full sm:w-auto">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4">
+        {hasPrevious ? (
+          <Button variant="outline" onClick={onPrevious} size="lg" className="w-full sm:w-auto order-1">
             <ChevronLeft className="w-4 h-4 mr-2" />
-            Previous Module
+            <span className="hidden sm:inline">Previous Module</span>
+            <span className="sm:hidden">Previous</span>
           </Button>
+        ) : (
+          <div className="hidden sm:block" />
         )}
 
         {!isCompleted && user && (
           <Button 
             onClick={handleComplete} 
             size="lg" 
-            className="bg-green-600 hover:bg-green-700 w-full sm:w-auto sm:mx-auto"
+            className="bg-green-600 hover:bg-green-700 text-white w-full sm:w-auto sm:mx-auto order-3 sm:order-2 touch-target"
           >
             <CheckCircle className="w-4 h-4 mr-2" />
             Mark Complete
           </Button>
         )}
 
-        {hasNext && (
+        {hasNext ? (
           <Button 
             variant={isCompleted ? "default" : "outline"} 
             onClick={onNext}
             size="lg"
-            className="w-full sm:w-auto"
+            className="w-full sm:w-auto order-2 sm:order-3"
           >
-            Next Module
+            <span className="hidden sm:inline">Next Module</span>
+            <span className="sm:hidden">Next</span>
             <ChevronRight className="w-4 h-4 ml-2" />
           </Button>
+        ) : (
+          <div className="hidden sm:block" />
         )}
       </div>
     </div>
