@@ -32,7 +32,9 @@ export function MerchandiseCard({ product, onAddToCart, isInCart }: MerchandiseC
   }, {});
 
   const colors = Object.keys(variantsByColor || {});
-  const [selectedColor, setSelectedColor] = useState(colors[0]);
+  // Set white as default color if available, otherwise use first color
+  const defaultColor = colors.includes('White') ? 'White' : colors[0];
+  const [selectedColor, setSelectedColor] = useState(defaultColor);
   
   // Get sizes for selected color
   const availableSizes = variantsByColor?.[selectedColor] || [];

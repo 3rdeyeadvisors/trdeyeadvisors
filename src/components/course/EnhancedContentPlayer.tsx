@@ -532,9 +532,9 @@ export const EnhancedContentPlayer = ({
       <Separator className="my-8" />
 
       {/* Enhanced Navigation */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
         {hasPrevious ? (
-          <Button variant="outline" onClick={onPrevious} size="lg" className="w-full sm:w-auto order-1">
+          <Button variant="outline" onClick={onPrevious} size="lg" className="w-full sm:w-auto flex items-center justify-center">
             <ChevronLeft className="w-4 h-4 mr-2" />
             <span className="hidden sm:inline">Previous Module</span>
             <span className="sm:hidden">Previous</span>
@@ -547,10 +547,10 @@ export const EnhancedContentPlayer = ({
           <Button 
             onClick={handleComplete} 
             size="lg" 
-            className="bg-green-600 hover:bg-green-700 text-white w-full sm:w-auto sm:mx-auto order-3 sm:order-2 touch-target"
+            className="bg-green-600 hover:bg-green-700 text-white w-full sm:w-auto flex items-center justify-center touch-target min-h-[44px]"
           >
             <CheckCircle className="w-4 h-4 mr-2" />
-            Mark Complete
+            <span>Mark Complete</span>
           </Button>
         )}
 
@@ -559,7 +559,7 @@ export const EnhancedContentPlayer = ({
             variant={isCompleted ? "default" : "outline"} 
             onClick={onNext}
             size="lg"
-            className="w-full sm:w-auto order-2 sm:order-3"
+            className="w-full sm:w-auto flex items-center justify-center"
           >
             <span className="hidden sm:inline">Next Module</span>
             <span className="sm:hidden">Next</span>

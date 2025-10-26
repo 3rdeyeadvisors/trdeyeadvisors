@@ -145,30 +145,30 @@ const ModuleViewer = () => {
                   <Button
                     key={module.id}
                     variant={isCurrent ? "default" : "outline"}
-                    className={`justify-start h-auto p-3 md:p-4 text-left ${
-                      isCompleted ? "border-green-500 bg-green-50 hover:bg-green-100" : ""
+                    className={`justify-start h-auto p-3 md:p-4 text-left min-h-[60px] ${
+                      isCompleted ? "border-green-500 bg-green-50 hover:bg-green-100 dark:bg-green-950/20" : ""
                     }`}
                     onClick={() => {
                       navigate(`/courses/${courseId}/module/${module.id}`);
                       setShowModuleList(false);
                     }}
                   >
-                    <div className="flex items-start gap-2 md:gap-3 w-full">
-                      <div className="flex items-center gap-1 md:gap-2 min-w-0">
+                    <div className="flex items-center gap-2 md:gap-3 w-full">
+                      <div className="flex items-center gap-1 md:gap-2 flex-shrink-0">
                         {isCompleted ? (
-                          <div className="w-5 h-5 md:w-6 md:h-6 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
-                            <span className="text-white text-xs">✓</span>
+                          <div className="w-5 h-5 md:w-6 md:h-6 bg-green-500 rounded-full flex items-center justify-center">
+                            <span className="text-white text-xs font-bold">✓</span>
                           </div>
                         ) : (
-                          <div className="w-5 h-5 md:w-6 md:h-6 border-2 border-muted-foreground rounded-full flex items-center justify-center flex-shrink-0">
-                            <span className="text-xs">{index + 1}</span>
+                          <div className="w-5 h-5 md:w-6 md:h-6 border-2 border-muted-foreground rounded-full flex items-center justify-center">
+                            <span className="text-xs font-medium">{index + 1}</span>
                           </div>
                         )}
-                        {isCurrent && <Play className="w-3 h-3 md:w-4 md:h-4 text-primary flex-shrink-0" />}
+                        {isCurrent && <Play className="w-3 h-3 md:w-4 md:h-4 text-primary" />}
                       </div>
-                      <div className="text-left flex-1 min-w-0">
-                        <p className="text-xs md:text-sm font-medium line-clamp-2">{module.title}</p>
-                        <p className="text-xs text-muted-foreground">{module.duration} min</p>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs md:text-sm font-medium break-words whitespace-normal overflow-wrap-anywhere">{module.title}</p>
+                        <p className="text-xs text-muted-foreground mt-1">{module.duration} min</p>
                       </div>
                     </div>
                   </Button>

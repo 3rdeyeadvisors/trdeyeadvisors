@@ -5,10 +5,10 @@ const Footer = () => {
   return (
     <footer className="bg-background/90 border-t border-border mt-8 md:mt-20">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid md:grid-cols-4 gap-8">
+        <div className="grid md:grid-cols-4 gap-8 text-center md:text-left">
           {/* Brand */}
           <div className="md:col-span-1">
-            <Link to="/" className="flex items-center space-x-2 mb-4">
+            <Link to="/" className="flex items-center justify-center md:justify-start space-x-2 mb-4">
               <span className="font-consciousness font-bold text-xl">3rdeyeadvisors</span>
             </Link>
             <p className="text-sm text-muted-foreground font-consciousness leading-relaxed">
@@ -18,7 +18,7 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h3 className="font-consciousness font-semibold mb-4">Quick Links</h3>
+            <h3 className="font-consciousness font-semibold mb-4 text-center md:text-left">Quick Links</h3>
             <ul className="space-y-2">
               <li>
                 <Link to="/courses" className="text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness">
@@ -45,7 +45,7 @@ const Footer = () => {
 
           {/* Support */}
           <div>
-            <h3 className="font-consciousness font-semibold mb-4">Support</h3>
+            <h3 className="font-consciousness font-semibold mb-4 text-center md:text-left">Support</h3>
             <ul className="space-y-2">
               <li>
                 <Link to="/contact" className="text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness">
@@ -77,7 +77,7 @@ const Footer = () => {
 
           {/* Legal & Social */}
           <div>
-            <h3 className="font-consciousness font-semibold mb-4">Legal & Social</h3>
+            <h3 className="font-consciousness font-semibold mb-4 text-center md:text-left">Legal & Social</h3>
             <ul className="space-y-2 mb-4">
               <li>
                 <Link to="/privacy" className="text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness">
@@ -91,7 +91,7 @@ const Footer = () => {
               </li>
             </ul>
             
-            <div className="flex space-x-3">
+            <div className="flex justify-center md:justify-start space-x-3">
               <a 
                 href="mailto:info@the3rdeyeadvisors.com" 
                 className="text-muted-foreground hover:text-primary transition-colors"

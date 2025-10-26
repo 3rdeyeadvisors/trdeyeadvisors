@@ -87,8 +87,8 @@ const Navigation = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo/Brand - Mobile only */}
-          <Link to="/" className="flex md:hidden items-center space-x-3 justify-center flex-1" aria-label="3rdeyeadvisors home">
-            <div className="text-lg font-consciousness font-bold text-primary">
+          <Link to="/" className="flex md:hidden items-center justify-center absolute left-1/2 -translate-x-1/2" aria-label="3rdeyeadvisors home">
+            <div className="text-base sm:text-lg font-consciousness font-bold text-primary whitespace-nowrap">
               3rdeyeadvisors
             </div>
           </Link>
@@ -199,7 +199,16 @@ const Navigation = () => {
           </div>
 
           {/* Mobile Cart & Menu */}
-          <div className="md:hidden flex items-center space-x-3">
+          <div className="md:hidden flex items-center space-x-2 ml-auto">
+            {/* Home Button */}
+            <Link to="/">
+              <Button variant="ghost" size="icon" className="relative">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+              </Button>
+            </Link>
+            
             {/* Mobile Cart */}
             <Link to="/cart" className="relative">
               <Button variant="ghost" size="icon" className="relative">
@@ -211,16 +220,6 @@ const Navigation = () => {
                 )}
               </Button>
             </Link>
-            
-            {/* Mobile Auth Button */}
-            {!user && (
-              <Button asChild variant="outline" size="sm">
-                <Link to="/auth" className="flex items-center space-x-1">
-                  <LogIn className="w-4 h-4" />
-                  <span className="hidden xs:inline">Sign In</span>
-                </Link>
-              </Button>
-            )}
             
             {/* Mobile menu button */}
             <Button
@@ -357,12 +356,12 @@ const Navigation = () => {
 
                 {/* Learning Section */}
                 <Collapsible open={isLearningOpen} onOpenChange={setIsLearningOpen}>
-                  <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
-                    <div className="flex items-center space-x-3">
+                  <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors min-h-[44px]">
+                    <div className="flex items-center justify-center space-x-3 flex-1">
                       <BookOpen className="w-5 h-5" />
                       <span className="font-consciousness font-medium">Learning</span>
                     </div>
-                    {isLearningOpen ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+                    {isLearningOpen ? <ChevronDown className="w-4 h-4 flex-shrink-0" /> : <ChevronRight className="w-4 h-4 flex-shrink-0" />}
                   </CollapsibleTrigger>
                   <CollapsibleContent className="mt-2 space-y-1">
                     {mobileNavStructure.learning.map((item) => (
@@ -399,12 +398,12 @@ const Navigation = () => {
 
                 {/* More Section */}
                 <Collapsible open={isMoreOpen} onOpenChange={setIsMoreOpen}>
-                  <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
-                    <div className="flex items-center space-x-3">
+                  <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors min-h-[44px]">
+                    <div className="flex items-center justify-center space-x-3 flex-1">
                       <BarChart3 className="w-5 h-5" />
                       <span className="font-consciousness font-medium">More</span>
                     </div>
-                    {isMoreOpen ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+                    {isMoreOpen ? <ChevronDown className="w-4 h-4 flex-shrink-0" /> : <ChevronRight className="w-4 h-4 flex-shrink-0" />}
                   </CollapsibleTrigger>
                   <CollapsibleContent className="mt-2 space-y-1">
                     {mobileNavStructure.more.map((item) => (

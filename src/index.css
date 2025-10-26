@@ -393,4 +393,64 @@ body {
   .mobile-typography-center code {
     text-align: left;
   }
+
+  /* Fix content clipping issues */
+  * {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  /* Fix module title boxes - no transforms/skewing */
+  [class*="module"] [class*="card"],
+  [class*="module"] [class*="badge"],
+  [class*="module"] [class*="button"] {
+    transform: none !important;
+  }
+
+  /* Ensure full titles are visible */
+  [class*="module"] h1,
+  [class*="module"] h2,
+  [class*="module"] h3,
+  [class*="module"] p {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    line-clamp: none !important;
+    -webkit-line-clamp: unset !important;
+  }
+
+  /* Fix dropdown backgrounds */
+  [data-radix-popper-content-wrapper],
+  [role="menu"],
+  [role="dialog"],
+  .popover-content {
+    background: hsl(var(--popover)) !important;
+    z-index: 50 !important;
+  }
+
+  /* Center all community elements */
+  [class*="community"] h1,
+  [class*="community"] h2,
+  [class*="community"] h3,
+  [class*="community"] button,
+  [class*="community"] p {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Ensure proper spacing rhythm (8/12/16px) */
+  [class*="community"] > * + * {
+    margin-top: 0.75rem; /* 12px */
+  }
+
+  /* Fix navigation dropdown centering */
+  [role="menuitem"],
+  [data-radix-collection-item] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1rem;
+    min-height: 44px;
+  }
 }

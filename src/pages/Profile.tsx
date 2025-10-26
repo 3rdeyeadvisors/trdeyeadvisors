@@ -205,11 +205,11 @@ const Profile = () => {
       return;
     }
 
-    // Validate file size (5MB max)
-    if (file.size > 5242880) {
+    // Validate file size (10MB max - increased limit)
+    if (file.size > 10485760) {
       toast({
         title: "File too large",
-        description: "Please upload an image smaller than 5MB.",
+        description: "Please upload an image smaller than 10MB.",
         variant: "destructive",
       });
       return;

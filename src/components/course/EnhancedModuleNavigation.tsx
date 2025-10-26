@@ -211,14 +211,20 @@ export const EnhancedModuleNavigation = ({
       <div className="flex flex-col sm:flex-row gap-4 mb-6">
         <div className="flex-1">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
             <Input
-              placeholder="Search modules..."
+              placeholder="Search modules by title..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
+              className="pl-10 min-h-[44px]"
+              aria-label="Search course modules"
             />
           </div>
+          {searchTerm && filteredModules.length > 0 && (
+            <p className="text-sm text-muted-foreground mt-2">
+              Found {filteredModules.length} module{filteredModules.length !== 1 ? 's' : ''}
+            </p>
+          )}
         </div>
         
         <div className="flex gap-2">
