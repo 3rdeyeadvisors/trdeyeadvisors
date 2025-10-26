@@ -451,7 +451,7 @@ export type Database = {
           tracking_number: string | null
           tracking_url: string | null
           updated_at: string
-          user_id: string | null
+          user_id: string
         }
         Insert: {
           address_to: Json
@@ -470,7 +470,7 @@ export type Database = {
           tracking_number?: string | null
           tracking_url?: string | null
           updated_at?: string
-          user_id?: string | null
+          user_id: string
         }
         Update: {
           address_to?: Json
@@ -489,7 +489,7 @@ export type Database = {
           tracking_number?: string | null
           tracking_url?: string | null
           updated_at?: string
-          user_id?: string | null
+          user_id?: string
         }
         Relationships: []
       }
@@ -816,7 +816,7 @@ export type Database = {
           product_id: number
           purchase_date: string
           stripe_session_id: string | null
-          user_id: string | null
+          user_id: string
         }
         Insert: {
           amount_paid?: number | null
@@ -825,7 +825,7 @@ export type Database = {
           product_id: number
           purchase_date?: string
           stripe_session_id?: string | null
-          user_id?: string | null
+          user_id: string
         }
         Update: {
           amount_paid?: number | null
@@ -834,7 +834,7 @@ export type Database = {
           product_id?: number
           purchase_date?: string
           stripe_session_id?: string | null
-          user_id?: string | null
+          user_id?: string
         }
         Relationships: []
       }
