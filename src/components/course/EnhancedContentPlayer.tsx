@@ -290,7 +290,7 @@ export const EnhancedContentPlayer = ({
           </div>
         </div>
 
-        <h1 className="text-xl md:text-3xl font-consciousness font-bold text-foreground mb-3 md:mb-4">
+        <h1 className="text-xl md:text-3xl font-consciousness font-bold text-foreground mb-3 md:mb-4 text-center">
           {module.title}
         </h1>
 
