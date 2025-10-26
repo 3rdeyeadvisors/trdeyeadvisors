@@ -96,10 +96,10 @@ export const EnhancedModuleNavigation = ({
 
   const getTypeColor = (type: string) => {
     switch (type) {
-      case 'video': return 'text-red-600 bg-red-50 border-red-200';
-      case 'text': return 'text-blue-600 bg-blue-50 border-blue-200';
-      case 'interactive': return 'text-purple-600 bg-purple-50 border-purple-200';
-      default: return 'text-gray-600 bg-gray-50 border-gray-200';
+      case 'video': return 'text-destructive bg-destructive/10 border-destructive/20';
+      case 'text': return 'text-primary bg-primary/10 border-primary/20';
+      case 'interactive': return 'text-accent bg-accent/10 border-accent/20';
+      default: return 'text-muted-foreground bg-muted border-border';
     }
   };
 
@@ -130,14 +130,14 @@ export const EnhancedModuleNavigation = ({
                 key={module.id}
                 variant={isCurrent ? "default" : "ghost"}
                 className={`w-full justify-start h-auto p-3 ${
-                  isCompleted ? "border-green-500 bg-green-50 hover:bg-green-100" : ""
+                  isCompleted ? "border-awareness bg-awareness/10 hover:bg-awareness/20" : ""
                 }`}
                 onClick={() => handleModuleClick(module.id)}
               >
                 <div className="flex items-center gap-3 w-full">
                   <div className="flex items-center gap-2">
-                    {isCompleted ? (
-                      <CheckCircle2 className="w-5 h-5 text-green-600" />
+                  {isCompleted ? (
+                      <CheckCircle2 className="w-5 h-5 text-awareness" />
                     ) : (
                       <div className="w-5 h-5 border-2 border-muted-foreground rounded-full flex items-center justify-center">
                         <span className="text-xs">{index + 1}</span>
@@ -186,21 +186,21 @@ export const EnhancedModuleNavigation = ({
         </div>
         <div className="bg-muted/50 p-3 rounded-lg">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-green-600" />
+            <CheckCircle2 className="w-4 h-4 text-awareness" />
             <span className="text-sm font-medium">Completed</span>
           </div>
           <p className="text-lg font-bold">{courseStats.completedModules}</p>
         </div>
         <div className="bg-muted/50 p-3 rounded-lg">
           <div className="flex items-center gap-2">
-            <Clock className="w-4 h-4 text-blue-600" />
+            <Clock className="w-4 h-4 text-primary" />
             <span className="text-sm font-medium">Time Left</span>
           </div>
           <p className="text-lg font-bold">{courseStats.totalDuration - courseStats.completedDuration}m</p>
         </div>
         <div className="bg-muted/50 p-3 rounded-lg">
           <div className="flex items-center gap-2">
-            <BookOpen className="w-4 h-4 text-purple-600" />
+            <BookOpen className="w-4 h-4 text-accent" />
             <span className="text-sm font-medium">Total</span>
           </div>
           <p className="text-lg font-bold">{courseStats.totalModules}</p>
@@ -278,14 +278,14 @@ export const EnhancedModuleNavigation = ({
               key={module.id}
               className={`p-4 cursor-pointer transition-all hover:shadow-md ${
                 isCurrent ? "border-primary bg-primary/5" : ""
-              } ${isCompleted ? "border-green-500 bg-green-50" : ""}`}
+              } ${isCompleted ? "border-awareness bg-awareness/10" : ""}`}
               onClick={() => handleModuleClick(module.id)}
             >
               <div className="flex items-start gap-3">
                 {/* Status Icon */}
                 <div className="flex items-center justify-center mt-1">
                   {isCompleted ? (
-                    <CheckCircle2 className="w-6 h-6 text-green-600" />
+                    <CheckCircle2 className="w-6 h-6 text-awareness" />
                   ) : (
                     <div className="w-6 h-6 border-2 border-muted-foreground rounded-full flex items-center justify-center">
                       <span className="text-xs font-medium">{moduleIndex + 1}</span>
@@ -332,7 +332,7 @@ export const EnhancedModuleNavigation = ({
                 {/* Action Icon */}
                 <div className="flex items-center justify-center mt-1">
                   {isCompleted ? (
-                    <Badge variant="outline" className="text-xs bg-green-100 border-green-300 text-green-700">
+                    <Badge variant="outline" className="text-xs bg-awareness/20 border-awareness text-awareness">
                       Done
                     </Badge>
                   ) : isCurrent ? (
