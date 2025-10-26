@@ -54,13 +54,24 @@ serve(async (req) => {
           .single();
 
         if (error || !product || !product.is_active) {
+          console.error('Product validation error:', { error, product, printify_id: item.printify_id });
           throw new Error(`Invalid or inactive product: ${item.printify_id}`);
         }
 
-        // Find the specific variant price
-        const variant = product.variants?.find((v: any) => v.id === item.variant_id);
+        // Find the specific variant price - try matching by id (both string and number)
+        const variant = product.variants?.find((v: any) => 
+          v.id === item.variant_id || 
+          v.id?.toString() === item.variant_id?.toString() ||
+          v.variant_id === item.variant_id
+        );
+        
         if (!variant) {
-          throw new Error(`Invalid variant for product: ${item.printify_id}`);
+          console.error('Variant not found:', { 
+            item_variant_id: item.variant_id, 
+            available_variants: product.variants?.map((v: any) => ({ id: v.id, variant_id: v.variant_id })),
+            product_title: product.title
+          });
+          throw new Error(`Invalid variant ${item.variant_id} for product: ${item.printify_id}`);
         }
 
         return { ...item, validatedPrice: Math.round(variant.price * 100), dbTitle: product.title };
