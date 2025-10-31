@@ -79,3 +79,9 @@ verify_jwt = true
 
 [functions.setup-course-stripe-products]
 verify_jwt = true
+
+[functions.create-printify-order]
+verify_jwt = false
+
+[functions.stripe-webhook]
+verify_jwt = false
