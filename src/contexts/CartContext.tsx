@@ -8,6 +8,11 @@ export interface CartItem {
   category: string;
   quantity: number;
   printify_id?: string;
+  printify_product_id?: string;
+  variant_id?: number;
+  color?: string;
+  size?: string;
+  image?: string;
   variants?: any[];
   images?: any[];
 }

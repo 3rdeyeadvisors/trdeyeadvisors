@@ -58,7 +58,12 @@ const Cart = () => {
             type: item.type,
             category: item.category,
             images: item.images,
-            printify_id: item.printify_id
+            printify_id: item.printify_id,
+            printify_product_id: item.printify_product_id || item.printify_id,
+            variant_id: item.variant_id,
+            color: item.color,
+            size: item.size,
+            image: item.image
           })),
           discountCode: discountApplied ? discountCode : null
         }
