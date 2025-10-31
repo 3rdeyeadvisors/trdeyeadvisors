@@ -113,10 +113,10 @@ serve(async (req) => {
         name: productName,
         description: `${item.category} - ${item.type}`,
         metadata: {
-          type: item.type || 'digital',
+          type: item.printify_id ? 'printify' : 'digital',
           category: item.category || 'product',
           printify_id: item.printify_id || '',
-          printify_product_id: item.printify_product_id || '',
+          printify_product_id: item.printify_id || '',
           variant_id: item.variant_id ? item.variant_id.toString() : '',
           color: item.color || '',
           size: item.size || '',
