@@ -201,6 +201,11 @@ body {
 
 /* Mobile-optimized prose styling for course content */
 @media (max-width: 768px) {
+  /* Enable smooth scrolling on mobile */
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
+
   .prose {
     font-size: 0.9rem;
     line-height: 1.6;
@@ -344,10 +349,14 @@ body {
   /* Touch-friendly form elements */
   button, a, [role="button"] {
     min-height: 44px;
-    min-width: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+  
+  .touch-target {
+    min-height: 44px !important;
+    min-width: 44px !important;
   }
   
   button span, a span {

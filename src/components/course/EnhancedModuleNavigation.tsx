@@ -98,8 +98,8 @@ export const EnhancedModuleNavigation = ({
     switch (type) {
       case 'video': return 'text-destructive bg-destructive/10 border-destructive/20';
       case 'text': return 'text-primary bg-primary/10 border-primary/20';
-      case 'interactive': return 'text-accent bg-accent/10 border-accent/20';
-      default: return 'text-muted-foreground bg-muted border-border';
+      case 'interactive': return 'text-awareness bg-awareness/10 border-awareness/20';
+      default: return 'text-muted-foreground bg-muted/50 border-border';
     }
   };
 
@@ -231,23 +231,23 @@ export const EnhancedModuleNavigation = ({
           {/* Filter Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" className="min-h-[44px]">
                 <Filter className="w-4 h-4 mr-2" />
                 Filter
                 <ChevronDown className="w-4 h-4 ml-2" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem onClick={() => setFilterType('all')}>
+            <DropdownMenuContent className="bg-card border-border z-50">
+              <DropdownMenuItem onClick={() => setFilterType('all')} className="hover:bg-muted cursor-pointer">
                 All Types
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setFilterType('text')}>
+              <DropdownMenuItem onClick={() => setFilterType('text')} className="hover:bg-muted cursor-pointer">
                 Text Only
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setFilterType('video')}>
+              <DropdownMenuItem onClick={() => setFilterType('video')} className="hover:bg-muted cursor-pointer">
                 Video Only
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setFilterType('interactive')}>
+              <DropdownMenuItem onClick={() => setFilterType('interactive')} className="hover:bg-muted cursor-pointer">
                 Interactive Only
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -258,6 +258,7 @@ export const EnhancedModuleNavigation = ({
             variant="outline"
             size="sm"
             onClick={() => setViewMode(viewMode === 'list' ? 'grid' : 'list')}
+            className="min-h-[44px]"
           >
             {viewMode === 'list' ? <Grid3X3 className="w-4 h-4" /> : <List className="w-4 h-4" />}
           </Button>

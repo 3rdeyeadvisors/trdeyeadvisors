@@ -362,7 +362,8 @@ export const EnhancedContentPlayer = ({
                   {/* Desktop View */}
                   <div 
                     id="module-content"
-                    className="hidden md:block prose prose-lg max-w-none font-consciousness md:overflow-y-auto md:max-h-[600px] text-center mx-auto w-full max-w-full break-words overflow-x-hidden"
+                    className="hidden md:block prose prose-lg max-w-none font-consciousness overflow-y-auto max-h-[calc(100vh-400px)] text-center mx-auto w-full max-w-full break-words overflow-x-hidden touch-pan-y"
+                    style={{ WebkitOverflowScrolling: 'touch' }}
                   >
                     <ReactMarkdown>{module.content.text}</ReactMarkdown>
                   </div>
@@ -459,7 +460,7 @@ export const EnhancedContentPlayer = ({
 
         <TabsContent value="notes" className="space-y-6">
           <Card className="p-6">
-            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+            <h3 className="text-lg font-semibold mb-4 flex items-center justify-center gap-2">
               <MessageSquare className="w-5 h-5" />
               Personal Notes
             </h3>
@@ -482,7 +483,7 @@ export const EnhancedContentPlayer = ({
 
         <TabsContent value="resources" className="space-y-6">
           <Card className="p-6">
-            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+            <h3 className="text-lg font-semibold mb-4 flex items-center justify-center gap-2">
               <FileText className="w-5 h-5" />
               Additional Resources
             </h3>
@@ -534,8 +535,8 @@ export const EnhancedContentPlayer = ({
       {/* Enhanced Navigation */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
         {hasPrevious ? (
-          <Button variant="outline" onClick={onPrevious} size="lg" className="w-full sm:w-auto flex items-center justify-center">
-            <ChevronLeft className="w-4 h-4 mr-2" />
+          <Button variant="outline" onClick={onPrevious} size="lg" className="w-full sm:w-auto flex items-center justify-center gap-2 min-h-[44px]">
+            <ChevronLeft className="w-4 h-4" />
             <span className="hidden sm:inline">Previous Module</span>
             <span className="sm:hidden">Previous</span>
           </Button>
@@ -547,9 +548,9 @@ export const EnhancedContentPlayer = ({
           <Button 
             onClick={handleComplete} 
             size="lg" 
-            className="bg-green-600 hover:bg-green-700 text-white w-full sm:w-auto flex items-center justify-center touch-target min-h-[44px]"
+            className="bg-awareness hover:bg-awareness/90 text-background w-full sm:w-auto flex items-center justify-center gap-2 touch-target min-h-[44px]"
           >
-            <CheckCircle className="w-4 h-4 mr-2" />
+            <CheckCircle className="w-4 h-4" />
             <span>Mark Complete</span>
           </Button>
         )}
@@ -559,11 +560,11 @@ export const EnhancedContentPlayer = ({
             variant={isCompleted ? "default" : "outline"} 
             onClick={onNext}
             size="lg"
-            className="w-full sm:w-auto flex items-center justify-center"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 min-h-[44px]"
           >
             <span className="hidden sm:inline">Next Module</span>
             <span className="sm:hidden">Next</span>
-            <ChevronRight className="w-4 h-4 ml-2" />
+            <ChevronRight className="w-4 h-4" />
           </Button>
         ) : (
           <div className="hidden sm:block" />

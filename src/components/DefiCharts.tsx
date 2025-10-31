@@ -391,13 +391,13 @@ export const DefiCharts = () => {
         
         {/* Mobile Analytics Notice */}
         <Card className="bg-primary/5 border-primary/20">
-          <CardHeader>
-            <CardTitle className="text-lg flex items-center gap-2">
+          <CardHeader className="text-center">
+            <CardTitle className="text-lg flex items-center justify-center gap-2">
               <BarChart3 className="h-5 w-5" />
               Explore Full Analytics on Desktop
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="text-center">
             <p className="text-sm text-muted-foreground">
               Access comprehensive charts, risk analysis, and detailed protocol data on desktop.
             </p>
@@ -455,8 +455,8 @@ export const DefiCharts = () => {
         </Card>
       </div>
 
-      {/* Time Series Chart */}
-      <Card>
+      {/* Time Series Chart - Hidden on mobile */}
+      <Card className="hidden md:block">
         <CardHeader>
           <div className="flex flex-col md:flex-row items-center md:items-center justify-between gap-4 text-center md:text-left">
             <div>
@@ -735,8 +735,8 @@ export const DefiCharts = () => {
           </CardContent>
         </Card>
 
-        {/* Risk Distribution */}
-        <Card className="flex flex-col">
+        {/* Risk Distribution - Hidden on mobile */}
+        <Card className="hidden md:flex md:flex-col">
           <CardHeader className="text-center">
             <CardTitle className="flex items-center justify-center">
               <PieChartIcon className="w-5 h-5 mr-2" />
