@@ -88,3 +88,6 @@ verify_jwt = false
 
 [functions.manual-process-order]
 verify_jwt = false
+
+[functions.update-product-prices]
+verify_jwt = false
