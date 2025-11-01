@@ -73,15 +73,20 @@ serve(async (req) => {
         return;
       }
 
-      const session = event.data.object as Stripe.Checkout.Session;
+      let session = event.data.object as Stripe.Checkout.Session;
+      
+      // Retrieve full session with shipping details (webhook event doesn't include them)
+      session = await stripe.checkout.sessions.retrieve(session.id, {
+        expand: ['line_items', 'line_items.data.price.product']
+      });
+      
       console.log("🛒 Processing checkout session:", session.id);
       console.log("Session metadata:", session.metadata);
       console.log("Customer email:", session.customer_email);
+      console.log("Shipping details:", session.shipping_details ? "✅ Present" : "❌ Missing");
 
-      // Get line items
-      const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
-        expand: ['data.price.product'],
-      });
+      // Line items are already expanded in the session retrieval
+      const lineItems = { data: session.line_items?.data || [] };
 
       console.log("📦 Line items count:", lineItems.data.length);
 
