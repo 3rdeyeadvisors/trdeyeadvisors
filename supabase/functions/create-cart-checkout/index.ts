@@ -74,7 +74,17 @@ serve(async (req) => {
           throw new Error(`Invalid variant ${item.variant_id} for product: ${item.printify_id}`);
         }
 
-        return { ...item, validatedPrice: Math.round(variant.price * 100), dbTitle: product.title };
+        const validatedPrice = Math.round(variant.price * 100);
+        console.log('Printify item validated:', {
+          title: product.title,
+          variant_id: item.variant_id,
+          client_price: item.price,
+          db_price: variant.price,
+          validated_price_cents: validatedPrice,
+          quantity: item.quantity
+        });
+
+        return { ...item, validatedPrice, dbTitle: product.title };
       } else {
         // Validate course/digital product
         const { data: course, error } = await supabaseClient
@@ -86,6 +96,13 @@ serve(async (req) => {
         if (error || !course || !course.is_active) {
           throw new Error(`Invalid or inactive course: ${item.id}`);
         }
+
+        console.log('Digital item validated:', {
+          title: course.title,
+          client_price: item.price,
+          db_price_cents: course.price_cents,
+          quantity: item.quantity
+        });
 
         return { ...item, validatedPrice: course.price_cents, dbTitle: course.title };
       }
@@ -124,14 +141,43 @@ serve(async (req) => {
         },
       };
 
-      // Add product image - use item.image if available, otherwise fallback to images array
-      if (item.image) {
-        productData.images = [item.image];
-      } else if (item.images && item.images.length > 0) {
-        const mainImage = item.images[0];
-        if (mainImage && (mainImage.src || mainImage.url)) {
-          productData.images = [mainImage.src || mainImage.url];
+      // Validate and add product image - Stripe requires valid HTTPS URLs
+      const isValidUrl = (url: string): boolean => {
+        if (!url || typeof url !== 'string') return false;
+        try {
+          const parsedUrl = new URL(url);
+          return parsedUrl.protocol === 'http:' || parsedUrl.protocol === 'https:';
+        } catch {
+          return false;
         }
+      };
+
+      // Try to get a valid image URL
+      let imageUrl = null;
+      
+      if (item.image && isValidUrl(item.image)) {
+        imageUrl = item.image;
+      } else if (item.images && Array.isArray(item.images)) {
+        for (const img of item.images) {
+          const url = typeof img === 'string' ? img : (img?.src || img?.url);
+          if (url && isValidUrl(url)) {
+            imageUrl = url;
+            break;
+          }
+        }
+      }
+      
+      // Only add images if we have a valid URL
+      if (imageUrl) {
+        productData.images = [imageUrl];
+        console.log('Valid image URL added:', imageUrl);
+      } else {
+        console.log('No valid image URL found for item:', { 
+          id: item.id, 
+          title: item.title,
+          image: item.image,
+          images: item.images 
+        });
       }
 
       return {
@@ -147,6 +193,19 @@ serve(async (req) => {
 
     // Calculate total amount
     const totalAmount = lineItems.reduce((sum, item) => sum + (item.price_data.unit_amount * item.quantity), 0);
+    
+    console.log('Checkout totals:', {
+      subtotal_cents: totalAmount,
+      subtotal_dollars: (totalAmount / 100).toFixed(2),
+      items_count: lineItems.length,
+      line_items: lineItems.map(item => ({
+        name: item.price_data.product_data.name,
+        unit_price_cents: item.price_data.unit_amount,
+        unit_price_dollars: (item.price_data.unit_amount / 100).toFixed(2),
+        quantity: item.quantity,
+        total_cents: item.price_data.unit_amount * item.quantity
+      }))
+    });
 
     // Validate and apply discount if provided
     let discountAmount = 0;

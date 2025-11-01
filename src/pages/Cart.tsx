@@ -385,50 +385,66 @@ const Cart = () => {
   const handleCheckout = async () => {
     if (items.length === 0) return;
 
-    console.log('Checkout clicked! Items:', items);
     setIsLoading(true);
     try {
-      console.log('Calling checkout function...');
+      const checkoutItems = items.map(item => {
+        const checkoutItem = {
+          id: item.id,
+          title: item.title,
+          price: typeof item.price === 'string' ? parseFloat(item.price.replace('$', '')) : item.price,
+          quantity: item.quantity,
+          type: item.type,
+          category: item.category,
+          images: item.images,
+          printify_id: item.printify_id,
+          printify_product_id: item.printify_product_id || item.printify_id,
+          variant_id: item.variant_id,
+          color: item.color,
+          size: item.size,
+          image: item.image
+        };
+        
+        console.log('Cart item for checkout:', {
+          id: checkoutItem.id,
+          title: checkoutItem.title,
+          price: checkoutItem.price,
+          image: checkoutItem.image,
+          images: checkoutItem.images,
+          variant_id: checkoutItem.variant_id
+        });
+        
+        return checkoutItem;
+      });
+
+      console.log('=== Checkout Request ===');
+      console.log('Items count:', checkoutItems.length);
+      console.log('Total cart value:', total);
+      console.log('Discount applied:', discountApplied, discountCode);
+      
       const { data, error } = await supabase.functions.invoke('create-cart-checkout', {
         body: {
-          items: items.map(item => ({
-            id: item.id,
-            title: item.title,
-            price: typeof item.price === 'string' ? parseFloat(item.price.replace('$', '')) : item.price,
-            quantity: item.quantity,
-            type: item.type,
-            category: item.category,
-            images: item.images,
-            printify_id: item.printify_id,
-            printify_product_id: item.printify_product_id || item.printify_id,
-            variant_id: item.variant_id,
-            color: item.color,
-            size: item.size,
-            image: item.image
-          })),
+          items: checkoutItems,
           discountCode: discountApplied ? discountCode : null
         }
       });
 
-      console.log('Function response:', { data, error });
+      console.log('Checkout response:', { data, error });
 
       if (error) {
-        console.error('Function returned error:', error);
+        console.error('Checkout error:', error);
         throw error;
       }
 
-      // Open Stripe checkout
       if (data?.url) {
-        console.log('Opening checkout URL:', data.url);
-        // Directly redirect to checkout URL in the same window for reliability
+        console.log('Redirecting to Stripe checkout:', data.url);
         window.location.href = data.url;
       } else {
-        console.error('No URL received from function:', data);
-        toast.error('No checkout URL received');
+        console.error('No checkout URL received:', data);
+        toast.error('Failed to create checkout session - no URL returned');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error creating checkout:', error);
-      toast.error('Failed to create checkout session');
+      toast.error(error.message || 'Failed to create checkout session');
     } finally {
       setIsLoading(false);
     }
