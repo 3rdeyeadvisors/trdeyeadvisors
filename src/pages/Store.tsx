@@ -19,6 +19,7 @@ const Store = () => {
   const [purchasedProduct, setPurchasedProduct] = useState<string>("");
   const [printifyProducts, setPrintifyProducts] = useState<any[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [activeCategory, setActiveCategory] = useState<"merchandise" | "quantas" | "digital">("merchandise");
   const [digitalProducts] = useState([
     {
       id: 1,
@@ -179,13 +180,49 @@ const Store = () => {
       <div className="min-h-screen py-20">
         <div className="container mx-auto px-4 mobile-typography-center">
           {/* Header */}
-          <div className="text-center mb-12">
+          <div className="text-center mb-8">
             <h1 className="text-4xl md:text-5xl font-consciousness font-bold text-foreground mb-4">
               Store
             </h1>
             <p className="text-xl text-muted-foreground font-consciousness max-w-2xl mx-auto">
               Digital resources and consciousness-inspired merchandise to support your journey
             </p>
+          </div>
+
+          {/* Category Bar */}
+          <div className="mb-12 overflow-x-auto scrollbar-hide">
+            <div className="flex justify-center gap-6 min-w-max px-4 md:px-0">
+              <button
+                onClick={() => setActiveCategory("merchandise")}
+                className={`text-lg font-consciousness pb-2 px-4 transition-all whitespace-nowrap ${
+                  activeCategory === "merchandise"
+                    ? "text-primary border-b-2 border-primary font-semibold"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Merchandise
+              </button>
+              <button
+                onClick={() => setActiveCategory("quantas")}
+                className={`text-lg font-consciousness pb-2 px-4 transition-all whitespace-nowrap ${
+                  activeCategory === "quantas"
+                    ? "text-primary border-b-2 border-primary font-semibold"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Quantas
+              </button>
+              <button
+                onClick={() => setActiveCategory("digital")}
+                className={`text-lg font-consciousness pb-2 px-4 transition-all whitespace-nowrap ${
+                  activeCategory === "digital"
+                    ? "text-primary border-b-2 border-primary font-semibold"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Digital Products
+              </button>
+            </div>
           </div>
 
           {/* Success Message */}
@@ -216,78 +253,85 @@ const Store = () => {
           )}
 
           {/* Digital Products Section */}
-          <section className="mb-16" aria-labelledby="digital-products-heading">
-            <div className="flex flex-col md:flex-row items-center md:items-start gap-4 mb-8 text-center md:text-left">
-              <Download className="w-8 h-8 text-primary flex-shrink-0" aria-hidden="true" />
-              <div>
-                <h2 id="digital-products-heading" className="text-3xl font-consciousness font-bold text-foreground">
-                  Digital Products
-                </h2>
-                <p className="text-sm text-muted-foreground font-consciousness mt-1">
-                  Premium guides and tools for DeFi mastery
-                </p>
+          {activeCategory === "digital" && (
+            <section className="mb-16" aria-labelledby="digital-products-heading">
+              <div className="flex flex-col md:flex-row items-center md:items-start gap-4 mb-8 text-center md:text-left">
+                <Download className="w-8 h-8 text-primary flex-shrink-0" aria-hidden="true" />
+                <div>
+                  <h2 id="digital-products-heading" className="text-3xl font-consciousness font-bold text-foreground">
+                    Digital Products
+                  </h2>
+                  <p className="text-sm text-muted-foreground font-consciousness mt-1">
+                    Premium guides and tools for DeFi mastery
+                  </p>
+                </div>
               </div>
-            </div>
-            
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {digitalProducts.map((product, index) => {
-                const ProductIcon = getProductIcon(product);
-                return (
-                   <Card 
-                     key={product.id}
-                     className="p-6 bg-card/60 border-border hover:border-primary/40 transition-all duration-cosmic hover:shadow-consciousness group text-center md:text-left"
-                     style={{ animationDelay: `${index * 0.1}s` }}
-                   >
-                     <div className="flex flex-col md:flex-row items-center md:items-start md:justify-between mb-4 gap-3 md:gap-0">
-                       <ProductIcon className="w-8 h-8 text-primary group-hover:text-primary-glow transition-colors" />
-                       <Badge className={`${getTypeColor(product.type)} mx-auto md:mx-0`}>
-                         {product.category}
-                       </Badge>
-                     </div>
-                     
-                     <h3 className="text-xl font-consciousness font-semibold text-foreground mb-3">
-                       {product.title}
-                     </h3>
-                     
-                     <p className="text-muted-foreground font-consciousness mb-4 leading-relaxed">
-                       {product.description}
-                     </p>
+              
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                {digitalProducts.map((product, index) => {
+                  const ProductIcon = getProductIcon(product);
+                  return (
+                     <Card 
+                       key={product.id}
+                       className="p-4 md:p-6 bg-card/60 border-border hover:border-primary/40 transition-all duration-cosmic hover:shadow-consciousness group flex flex-col"
+                       style={{ animationDelay: `${index * 0.1}s` }}
+                     >
+                       <div className="flex items-center justify-between mb-3">
+                         <ProductIcon className="w-6 h-6 text-primary group-hover:text-primary-glow transition-colors" />
+                         <Badge className={`${getTypeColor(product.type)} text-xs`}>
+                           {product.category}
+                         </Badge>
+                       </div>
+                       
+                       <h3 className="text-base md:text-lg font-consciousness font-semibold text-foreground mb-2 line-clamp-2">
+                         {product.title}
+                       </h3>
+                       
+                       <div className="flex-1 overflow-hidden mb-3">
+                         <div className="h-[140px] md:h-[180px] overflow-y-auto scrollbar-hide">
+                           <p className="text-xs md:text-sm text-muted-foreground font-consciousness leading-relaxed">
+                             {product.description}
+                           </p>
+                         </div>
+                       </div>
 
-                     <div className="mb-4">
-                       <h4 className="text-sm font-consciousness font-medium text-foreground mb-2">
-                         Includes:
-                       </h4>
-                       <ul className="text-sm text-muted-foreground space-y-1">
-                         {product.features.map((feature, idx) => (
-                           <li key={idx} className="flex items-center justify-center md:justify-start gap-2">
-                             <div className="w-1 h-1 bg-primary rounded-full"></div>
-                             {feature}
-                           </li>
-                         ))}
-                       </ul>
-                     </div>
-                     
-                      <div className="flex flex-col md:flex-row items-center md:justify-between gap-3 md:gap-0">
-                        <span className="text-2xl font-consciousness font-bold text-primary">
-                          ${typeof product.price === 'string' ? product.price : product.price.toFixed(2)}
-                        </span>
-                       <Button 
-                         variant={isInCart(product.id) ? "outline" : "cosmic"}
-                         className="font-consciousness w-full md:w-auto"
-                         onClick={() => handleAddToCart(product)}
-                       >
-                         <Plus className="w-4 h-4 mr-2" />
-                         {isInCart(product.id) ? "Add Another" : "Add to Cart"}
-                       </Button>
-                     </div>
-                   </Card>
-                );
-              })}
-            </div>
-          </section>
+                       <div className="mb-3">
+                         <h4 className="text-xs font-consciousness font-medium text-foreground mb-2">
+                           Includes:
+                         </h4>
+                         <ul className="text-xs text-muted-foreground space-y-1">
+                           {product.features.slice(0, 3).map((feature, idx) => (
+                             <li key={idx} className="flex items-start gap-2">
+                               <div className="w-1 h-1 bg-primary rounded-full mt-1.5 flex-shrink-0"></div>
+                               <span className="line-clamp-1">{feature}</span>
+                             </li>
+                           ))}
+                         </ul>
+                       </div>
+                       
+                       <div className="flex flex-col gap-2 mt-auto">
+                         <span className="text-xl md:text-2xl font-consciousness font-bold text-primary">
+                           ${typeof product.price === 'string' ? product.price : product.price.toFixed(2)}
+                         </span>
+                        <Button 
+                          variant={isInCart(product.id) ? "outline" : "cosmic"}
+                          className="font-consciousness w-full text-xs md:text-sm h-9"
+                          onClick={() => handleAddToCart(product)}
+                        >
+                          <Plus className="w-3 h-3 md:w-4 md:h-4 mr-1" />
+                          {isInCart(product.id) ? "Add Another" : "Add to Cart"}
+                        </Button>
+                      </div>
+                     </Card>
+                  );
+                })}
+              </div>
+            </section>
+          )}
 
           {/* Merchandise Section */}
-          <section className="mb-16" aria-labelledby="merchandise-heading">
+          {activeCategory === "merchandise" && (
+            <section className="mb-16" aria-labelledby="merchandise-heading">
             <div className="flex flex-col md:flex-row items-center md:items-start md:justify-between gap-6 mb-8">
               <div className="flex flex-col md:flex-row items-center md:items-start gap-4 text-center md:text-left">
                 <Package className="w-8 h-8 text-primary flex-shrink-0" aria-hidden="true" />
@@ -368,7 +412,7 @@ const Store = () => {
               }
 
               return (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
                   {filteredProducts.map((product: any) => (
                     <MerchandiseCard 
                       key={product.id} 
@@ -380,7 +424,23 @@ const Store = () => {
                 </div>
               );
             })()}
-          </section>
+            </section>
+          )}
+
+          {/* Quantas Section (Placeholder) */}
+          {activeCategory === "quantas" && (
+            <section className="mb-16">
+              <Card className="p-12 text-center border-2 bg-card/50 backdrop-blur">
+                <Package className="h-16 w-16 text-muted-foreground mx-auto mb-4" aria-hidden="true" />
+                <h3 className="text-xl font-consciousness font-semibold mb-2">
+                  Quantas Coming Soon
+                </h3>
+                <p className="text-muted-foreground font-consciousness">
+                  Exciting quantum consciousness products launching soon!
+                </p>
+              </Card>
+            </section>
+          )}
 
           <Card className="mt-16 p-6 md:p-8 bg-secondary/40 border-border" role="region" aria-label="Payment information">
             <div className="flex flex-col md:flex-row items-center md:items-start gap-4 text-center md:text-left">

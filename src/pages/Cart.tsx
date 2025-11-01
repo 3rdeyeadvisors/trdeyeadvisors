@@ -3,11 +3,166 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useCart } from "@/contexts/CartContext";
-import { Minus, Plus, Trash2, ShoppingBag, Tag } from "lucide-react";
+import { Minus, Plus, Trash2, ShoppingBag, Tag, Check } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+const CartItem = ({ item }: { item: any }) => {
+  const { removeItem, updateQuantity, addItem } = useCart();
+  const [productData, setProductData] = useState<any>(null);
+  const [variantUpdated, setVariantUpdated] = useState(false);
+
+  useEffect(() => {
+    const loadProductData = async () => {
+      if (item.type === "merchandise" && item.printify_product_id) {
+        const { data } = await supabase
+          .from('printify_products')
+          .select('*')
+          .eq('printify_id', item.printify_product_id)
+          .single();
+        
+        if (data) {
+          setProductData(data);
+        }
+      }
+    };
+    loadProductData();
+  }, [item]);
+
+  const handleVariantChange = (newVariantId: string) => {
+    if (!productData) return;
+    
+    const newVariant = productData.variants.find((v: any) => v.id.toString() === newVariantId);
+    if (!newVariant) return;
+
+    const [color, size] = newVariant.title.split(' / ');
+    
+    // Remove old item and add new one with updated variant
+    const currentQuantity = item.quantity;
+    removeItem(item.id);
+    
+    // Add the new variant item the same number of times as the old quantity
+    for (let i = 0; i < currentQuantity; i++) {
+      addItem({
+        id: `${item.printify_product_id}-${newVariant.id}`,
+        printify_id: item.printify_product_id,
+        printify_product_id: item.printify_product_id,
+        variant_id: newVariant.id,
+        title: item.title,
+        price: newVariant.price,
+        type: "merchandise",
+        category: "Apparel",
+        color: color,
+        size: size,
+        image: productData.images?.[0]?.src,
+      });
+    }
+
+    setVariantUpdated(true);
+    setTimeout(() => setVariantUpdated(false), 2000);
+  };
+
+  const isMerchandise = item.type === "merchandise" && productData;
+
+  return (
+    <Card className="p-4 md:p-6">
+      <div className="flex flex-col md:flex-row gap-4">
+        {/* Image */}
+        {item.image && (
+          <img 
+            src={item.image} 
+            alt={item.title}
+            className="w-20 h-20 object-cover rounded-md flex-shrink-0"
+          />
+        )}
+
+        <div className="flex-1 min-w-0">
+          <h3 className="text-lg font-consciousness font-semibold text-foreground mb-1 truncate">
+            {item.title}
+          </h3>
+          <p className="text-sm text-muted-foreground font-consciousness mb-2">
+            {item.category} • {item.type}
+          </p>
+
+          {/* Variant Selectors for Merchandise */}
+          {isMerchandise && (
+            <div className="flex flex-col sm:flex-row gap-2 mb-3">
+              <Select 
+                value={item.variant_id?.toString()} 
+                onValueChange={handleVariantChange}
+              >
+                <SelectTrigger className="w-full sm:w-[180px] h-9">
+                  <SelectValue placeholder="Select variant" />
+                </SelectTrigger>
+                <SelectContent>
+                  {productData.variants?.map((variant: any) => (
+                    <SelectItem key={variant.id} value={variant.id.toString()}>
+                      {variant.title} - ${variant.price}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {variantUpdated && (
+                <span className="flex items-center gap-1 text-sm text-green-600 dark:text-green-400">
+                  <Check className="w-4 h-4" />
+                  Updated
+                </span>
+              )}
+            </div>
+          )}
+
+          <p className="text-lg font-consciousness font-semibold text-primary">
+            ${typeof item.price === 'string' ? item.price : item.price.toFixed(2)}
+          </p>
+        </div>
+
+        <div className="flex md:flex-col items-center gap-3 justify-between md:justify-start">
+          {/* Quantity Controls */}
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => updateQuantity(item.id, item.quantity - 1)}
+              className="h-8 w-8"
+            >
+              <Minus className="w-4 h-4" />
+            </Button>
+            <span className="w-8 text-center font-consciousness font-medium">
+              {item.quantity}
+            </span>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => updateQuantity(item.id, item.quantity + 1)}
+              className="h-8 w-8"
+            >
+              <Plus className="w-4 h-4" />
+            </Button>
+          </div>
+
+          {/* Remove Button */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => removeItem(item.id)}
+            className="h-8 w-8 text-destructive hover:text-destructive"
+          >
+            <Trash2 className="w-4 h-4" />
+          </Button>
+        </div>
+      </div>
+    </Card>
+  );
+};
 
 const Cart = () => {
   const { items, total, removeItem, updateQuantity, clearCart } = useCart();
@@ -129,58 +284,7 @@ const Cart = () => {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
-            {items.map((item) => (
-              <Card key={item.id} className="p-6">
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <h3 className="text-lg font-consciousness font-semibold text-foreground mb-2">
-                      {item.title}
-                    </h3>
-                    <p className="text-sm text-muted-foreground font-consciousness mb-2">
-                      {item.category} • {item.type}
-                    </p>
-                    <p className="text-lg font-consciousness font-semibold text-primary">
-                      {item.price}
-                    </p>
-                  </div>
-
-                  <div className="flex items-center gap-4">
-                    {/* Quantity Controls */}
-                    <div className="flex items-center gap-2">
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                        className="h-8 w-8"
-                      >
-                        <Minus className="w-4 h-4" />
-                      </Button>
-                      <span className="w-8 text-center font-consciousness font-medium">
-                        {item.quantity}
-                      </span>
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                        className="h-8 w-8"
-                      >
-                        <Plus className="w-4 h-4" />
-                      </Button>
-                    </div>
-
-                    {/* Remove Button */}
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => removeItem(item.id)}
-                      className="h-8 w-8 text-destructive hover:text-destructive"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </div>
-              </Card>
-            ))}
+            {items.map((item) => <CartItem key={item.id} item={item} />)}
           </div>
 
           {/* Order Summary */}

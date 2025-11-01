@@ -121,7 +121,7 @@ export function MerchandiseCard({ product, onAddToCart, isInCart }: MerchandiseC
   const inCart = selectedVariant && isInCart(`${product.printify_id}-${selectedVariant.id}`);
 
   return (
-    <Card className="group overflow-hidden border-2 bg-card/50 backdrop-blur hover:border-primary/50 transition-all duration-300">
+    <Card className="group overflow-hidden border-2 bg-card/50 backdrop-blur hover:border-primary/50 transition-all duration-300 flex flex-col">
       {/* Product Image */}
       <div className="relative aspect-square overflow-hidden bg-background">
         <img
@@ -130,34 +130,40 @@ export function MerchandiseCard({ product, onAddToCart, isInCart }: MerchandiseC
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
         {product.tags?.includes('Premium Apparel') && (
-          <Badge className="absolute top-4 right-4 bg-primary/90 backdrop-blur">
+          <Badge className="absolute top-2 right-2 bg-primary/90 backdrop-blur text-xs">
             Premium
           </Badge>
         )}
       </div>
 
       {/* Product Info */}
-      <div className="p-6 space-y-4">
-        <div>
-          <h3 className="text-xl font-bold mb-2 line-clamp-2">{product.title}</h3>
+      <div className="p-4 flex flex-col flex-1">
+        <div className="mb-3">
+          <h3 className="text-base md:text-lg font-bold mb-2 line-clamp-2">{product.title}</h3>
           {product.description && (
-            <div 
-              className="text-sm text-muted-foreground line-clamp-3"
-              dangerouslySetInnerHTML={{ __html: product.description }}
-            />
+            <div className="relative">
+              <div 
+                className="h-[140px] md:h-[180px] overflow-y-auto text-xs md:text-sm text-muted-foreground scrollbar-hide relative"
+                style={{
+                  maskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)',
+                  WebkitMaskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)'
+                }}
+                dangerouslySetInnerHTML={{ __html: product.description }}
+              />
+            </div>
           )}
         </div>
 
         {/* Color Selector */}
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Color</label>
+        <div className="space-y-1.5 mb-2">
+          <label className="text-xs font-medium">Color</label>
           <Select value={selectedColor} onValueChange={handleColorChange}>
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="w-full h-9 text-xs">
               <SelectValue placeholder="Select color" />
             </SelectTrigger>
             <SelectContent>
               {colors.map((color) => (
-                <SelectItem key={color} value={color}>
+                <SelectItem key={color} value={color} className="text-xs">
                   {color}
                 </SelectItem>
               ))}
@@ -166,15 +172,15 @@ export function MerchandiseCard({ product, onAddToCart, isInCart }: MerchandiseC
         </div>
 
         {/* Size Selector */}
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Size</label>
+        <div className="space-y-1.5 mb-3">
+          <label className="text-xs font-medium">Size</label>
           <Select value={selectedSize} onValueChange={handleSizeChange}>
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="w-full h-9 text-xs">
               <SelectValue placeholder="Select size" />
             </SelectTrigger>
             <SelectContent>
               {availableSizes.map((variant: any) => (
-                <SelectItem key={variant.id} value={variant.size}>
+                <SelectItem key={variant.id} value={variant.size} className="text-xs">
                   {variant.size}
                 </SelectItem>
               ))}
@@ -183,44 +189,36 @@ export function MerchandiseCard({ product, onAddToCart, isInCart }: MerchandiseC
         </div>
 
         {/* Price & Add to Cart */}
-        <div className="flex items-center justify-between pt-4 border-t">
-          <div>
-            <p className="text-2xl font-bold text-primary">
-              ${selectedVariant?.price.toFixed(2)}
-            </p>
-            <p className="text-xs text-muted-foreground">
-              {selectedColor} / {selectedSize}
-            </p>
+        <div className="flex flex-col gap-2 mt-auto pt-3 border-t">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-lg md:text-xl font-bold text-primary">
+                ${selectedVariant?.price.toFixed(2)}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {selectedColor} / {selectedSize}
+              </p>
+            </div>
           </div>
           <Button
             onClick={handleAddToCart}
             disabled={!selectedVariant || inCart}
-            className="gap-2"
+            className="gap-2 w-full h-9 text-xs md:text-sm"
+            size="sm"
           >
             {inCart ? (
               <>
-                <Check className="h-4 w-4" />
+                <Check className="h-3 w-3 md:h-4 md:w-4" />
                 In Cart
               </>
             ) : (
               <>
-                <ShoppingCart className="h-4 w-4" />
+                <ShoppingCart className="h-3 w-3 md:h-4 md:w-4" />
                 Add to Cart
               </>
             )}
           </Button>
         </div>
-
-        {/* Tags */}
-        {product.tags && product.tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 pt-2">
-            {product.tags.slice(0, 3).map((tag: string, index: number) => (
-              <Badge key={index} variant="outline" className="text-xs">
-                {tag}
-              </Badge>
-            ))}
-          </div>
-        )}
       </div>
     </Card>
   );
