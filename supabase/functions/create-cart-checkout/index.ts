@@ -101,14 +101,19 @@ serve(async (req) => {
           throw new Error(`Invalid or inactive course: ${item.id}`);
         }
 
+        // Handle price validation - if DB price is null, use client price (converted to cents)
+        // This handles cases where courses are free or price not set in DB yet
+        const validatedPrice = course.price_cents ?? Math.round(item.price * 100);
+        
         console.log('Digital item validated:', {
           title: course.title,
           client_price: item.price,
           db_price_cents: course.price_cents,
+          validated_price_cents: validatedPrice,
           quantity: item.quantity
         });
 
-        return { ...item, validatedPrice: course.price_cents, dbTitle: course.title };
+        return { ...item, validatedPrice, dbTitle: course.title };
       }
     }));
 
