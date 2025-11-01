@@ -263,39 +263,42 @@ const Store = () => {
                   return (
                      <Card 
                        key={product.id}
-                       className="p-4 bg-card/60 border-border hover:border-primary/40 transition-all duration-cosmic hover:shadow-consciousness group flex flex-col h-full"
+                       className="p-5 md:p-6 bg-card/60 border-border hover:border-primary/40 transition-all duration-cosmic hover:shadow-consciousness group flex flex-col h-full text-center"
                        style={{ animationDelay: `${index * 0.1}s` }}
                      >
-                       <div className="flex items-center justify-between mb-2">
-                         <ProductIcon className="w-5 h-5 text-primary group-hover:text-primary-glow transition-colors" />
-                         <Badge className={`${getTypeColor(product.type)} text-xs`}>
+                       <div className="flex items-center justify-center mb-4">
+                         <Badge className={`${getTypeColor(product.type)} text-xs px-3 py-1`}>
                            {product.category}
                          </Badge>
                        </div>
                        
-                       <h3 className="text-base font-consciousness font-semibold text-foreground mb-2 line-clamp-2">
+                       <div className="flex justify-center mb-3">
+                         <ProductIcon className="w-7 h-7 md:w-8 md:h-8 text-primary group-hover:text-primary-glow transition-colors" />
+                       </div>
+                       
+                       <h3 className="text-base md:text-lg font-consciousness font-semibold text-foreground mb-3 line-clamp-2 px-2">
                          {product.title}
                        </h3>
                        
-                       <div className="relative mb-3 flex-1">
+                       <div className="relative mb-4 flex-1 flex items-center">
                          <div 
-                           className="h-[170px] md:h-[200px] overflow-y-auto pr-2 scrollbar-thin"
+                           className="h-[160px] md:h-[180px] overflow-y-auto px-2 scrollbar-thin w-full"
                            style={{
                              maskImage: 'linear-gradient(to bottom, black 85%, transparent 100%)',
                              WebkitMaskImage: 'linear-gradient(to bottom, black 85%, transparent 100%)'
                            }}
                          >
-                           <p className="text-xs text-muted-foreground font-consciousness leading-relaxed mb-3">
+                           <p className="text-xs md:text-sm text-muted-foreground font-consciousness leading-relaxed mb-4">
                              {product.description}
                            </p>
                            <div className="mb-2">
-                             <h4 className="text-xs font-consciousness font-medium text-foreground mb-1">
+                             <h4 className="text-xs md:text-sm font-consciousness font-medium text-foreground mb-2">
                                Includes:
                              </h4>
-                             <ul className="text-xs text-muted-foreground space-y-0.5">
+                             <ul className="text-xs md:text-sm text-muted-foreground space-y-1">
                                {product.features.map((feature, idx) => (
-                                 <li key={idx} className="flex items-start gap-1.5">
-                                   <div className="w-1 h-1 bg-primary rounded-full mt-1.5 flex-shrink-0"></div>
+                                 <li key={idx} className="flex items-center justify-center gap-2">
+                                   <div className="w-1.5 h-1.5 bg-primary rounded-full flex-shrink-0"></div>
                                    <span>{feature}</span>
                                  </li>
                                ))}
@@ -304,16 +307,16 @@ const Store = () => {
                          </div>
                        </div>
                        
-                       <div className="flex flex-col gap-2 mt-auto pt-2 border-t border-border/50">
-                         <span className="text-xl font-consciousness font-bold text-primary">
+                       <div className="flex flex-col gap-3 mt-auto pt-4 border-t border-border/50">
+                         <span className="text-2xl md:text-3xl font-consciousness font-bold text-primary">
                            ${typeof product.price === 'string' ? product.price : product.price.toFixed(2)}
                          </span>
                         <Button 
                           variant={isInCart(product.id) ? "outline" : "cosmic"}
-                          className="font-consciousness w-full text-sm h-9"
+                          className="font-consciousness w-full text-sm md:text-base h-10"
                           onClick={() => handleAddToCart(product)}
                         >
-                          <Plus className="w-4 h-4 mr-1" />
+                          <Plus className="w-4 h-4 mr-2" />
                           {isInCart(product.id) ? "Add Another" : "Add to Cart"}
                         </Button>
                       </div>
