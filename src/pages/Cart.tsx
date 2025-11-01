@@ -248,6 +248,9 @@ const Cart = () => {
                   <span className="font-consciousness font-bold text-foreground">Total</span>
                   <span className="font-consciousness font-bold text-primary">${finalTotal.toFixed(2)}</span>
                 </div>
+                <p className="text-xs text-muted-foreground font-consciousness mt-2">
+                  * Taxes will be calculated at checkout
+                </p>
               </div>
 
               <div className="space-y-3">
