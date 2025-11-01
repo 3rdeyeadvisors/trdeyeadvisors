@@ -3,11 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useCart } from "@/contexts/CartContext";
-import { Minus, Plus, Trash2, ShoppingBag, Tag, Check } from "lucide-react";
+import { Minus, Plus, Trash2, ShoppingBag, Tag, Check, AlertCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
+import { trackEvent } from "@/lib/analytics";
 import {
   Select,
   SelectContent,
@@ -15,11 +16,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const CartItem = ({ item }: { item: any }) => {
-  const { removeItem, updateQuantity, addItem } = useCart();
+  const { removeItem, updateQuantity, addItem, items } = useCart();
   const [productData, setProductData] = useState<any>(null);
   const [variantUpdated, setVariantUpdated] = useState(false);
+  const [variantError, setVariantError] = useState<string | null>(null);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
     const loadProductData = async () => {
@@ -38,126 +42,300 @@ const CartItem = ({ item }: { item: any }) => {
     loadProductData();
   }, [item]);
 
-  const handleVariantChange = (newVariantId: string) => {
-    if (!productData) return;
-    
-    const newVariant = productData.variants.find((v: any) => v.id.toString() === newVariantId);
-    if (!newVariant) return;
-
-    const [color, size] = newVariant.title.split(' / ');
-    
-    // Remove old item and add new one with updated variant
-    const currentQuantity = item.quantity;
-    removeItem(item.id);
-    
-    // Add the new variant item the same number of times as the old quantity
-    for (let i = 0; i < currentQuantity; i++) {
-      addItem({
-        id: `${item.printify_product_id}-${newVariant.id}`,
-        printify_id: item.printify_product_id,
-        printify_product_id: item.printify_product_id,
-        variant_id: newVariant.id,
-        title: item.title,
-        price: newVariant.price,
-        type: "merchandise",
-        category: "Apparel",
-        color: color,
-        size: size,
-        image: productData.images?.[0]?.src,
-      });
+  const getVariantStock = (variant: any): { available: boolean; isLow: boolean; count?: number } => {
+    // Check if variant has stock information
+    if (variant.is_available === false) {
+      return { available: false, isLow: false };
     }
+    
+    // If we have quantity info, check it
+    if (variant.quantity !== undefined) {
+      const stock = parseInt(variant.quantity);
+      return {
+        available: stock > 0,
+        isLow: stock > 0 && stock < 5,
+        count: stock
+      };
+    }
+    
+    // Default to available if no stock info
+    return { available: true, isLow: false };
+  };
 
-    setVariantUpdated(true);
-    setTimeout(() => setVariantUpdated(false), 2000);
+  const handleVariantChange = async (newVariantId: string) => {
+    if (!productData || isUpdating) return;
+    
+    setIsUpdating(true);
+    setVariantError(null);
+    
+    try {
+      const newVariant = productData.variants.find((v: any) => v.id.toString() === newVariantId);
+      if (!newVariant) {
+        setVariantError("Variant not found");
+        return;
+      }
+
+      // Check stock availability
+      const stockInfo = getVariantStock(newVariant);
+      if (!stockInfo.available) {
+        setVariantError("That variant is sold out—choose another.");
+        return;
+      }
+
+      const [color, size] = newVariant.title.split(' / ');
+      const newItemId = `${item.printify_product_id}-${newVariant.id}`;
+      const currentQuantity = item.quantity;
+      const oldVariantId = item.variant_id;
+      const oldPrice = typeof item.price === 'string' ? parseFloat(item.price) : item.price;
+      const newPrice = newVariant.price;
+      
+      // Find the correct image for this variant
+      const variantImage = productData.images?.find((img: any) => 
+        img.variant_ids?.includes(newVariant.id)
+      )?.src || productData.images?.[0]?.src;
+
+      // Check if this new variant already exists in cart
+      const existingItem = items.find(cartItem => 
+        cartItem.id === newItemId && cartItem.id !== item.id
+      );
+
+      // Track the change
+      trackEvent('cart_variant_changed', 'cart', newItemId, Math.round((newPrice - oldPrice) * 100));
+
+      if (existingItem) {
+        // Merge with existing item
+        updateQuantity(newItemId, existingItem.quantity + currentQuantity);
+        removeItem(item.id);
+        toast.success("Quantities merged!", {
+          description: `${currentQuantity} items added to existing variant`
+        });
+      } else {
+        // Update current item with new variant
+        removeItem(item.id);
+        addItem({
+          id: newItemId,
+          printify_id: item.printify_product_id,
+          printify_product_id: item.printify_product_id,
+          variant_id: newVariant.id,
+          title: item.title,
+          price: newPrice,
+          type: "merchandise",
+          category: "Apparel",
+          color: color,
+          size: size,
+          image: variantImage,
+        });
+        
+        // Add remaining quantity if more than 1
+        for (let i = 1; i < currentQuantity; i++) {
+          addItem({
+            id: newItemId,
+            printify_id: item.printify_product_id,
+            printify_product_id: item.printify_product_id,
+            variant_id: newVariant.id,
+            title: item.title,
+            price: newPrice,
+            type: "merchandise",
+            category: "Apparel",
+            color: color,
+            size: size,
+            image: variantImage,
+          });
+        }
+      }
+
+      setVariantUpdated(true);
+      setTimeout(() => setVariantUpdated(false), 1500);
+      
+    } catch (error) {
+      console.error('Error changing variant:', error);
+      setVariantError("Failed to update variant. Please try again.");
+    } finally {
+      setIsUpdating(false);
+    }
   };
 
   const isMerchandise = item.type === "merchandise" && productData;
 
+  // Get current variant's stock info
+  const currentVariantStock = isMerchandise && item.variant_id 
+    ? getVariantStock(productData.variants.find((v: any) => v.id === item.variant_id))
+    : { available: true, isLow: false };
+
   return (
     <Card className="p-4 md:p-6">
-      <div className="flex flex-col md:flex-row gap-4">
-        {/* Image */}
-        {item.image && (
-          <img 
-            src={item.image} 
-            alt={item.title}
-            className="w-20 h-20 object-cover rounded-md flex-shrink-0"
-          />
-        )}
+      {/* Accessibility: Live region for updates */}
+      <div 
+        className="sr-only" 
+        role="status" 
+        aria-live="polite" 
+        aria-atomic="true"
+      >
+        {variantUpdated && "Cart updated with new variant"}
+        {variantError && `Error: ${variantError}`}
+      </div>
 
-        <div className="flex-1 min-w-0">
-          <h3 className="text-lg font-consciousness font-semibold text-foreground mb-1 truncate">
-            {item.title}
-          </h3>
-          <p className="text-sm text-muted-foreground font-consciousness mb-2">
-            {item.category} • {item.type}
-          </p>
+      <div className="flex flex-col gap-4">
+        <div className="flex gap-4">
+          {/* Image - Fixed aspect ratio to prevent CLS */}
+          <div className="w-20 h-20 flex-shrink-0 rounded-md overflow-hidden bg-muted">
+            {item.image && (
+              <img 
+                src={item.image} 
+                alt={item.title}
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+            )}
+          </div>
 
-          {/* Variant Selectors for Merchandise */}
-          {isMerchandise && (
-            <div className="flex flex-col sm:flex-row gap-2 mb-3">
-              <Select 
-                value={item.variant_id?.toString()} 
-                onValueChange={handleVariantChange}
-              >
-                <SelectTrigger className="w-full sm:w-[180px] h-9">
-                  <SelectValue placeholder="Select variant" />
-                </SelectTrigger>
-                <SelectContent>
-                  {productData.variants?.map((variant: any) => (
-                    <SelectItem key={variant.id} value={variant.id.toString()}>
-                      {variant.title} - ${variant.price}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+          <div className="flex-1 min-w-0">
+            <h3 className="text-lg font-consciousness font-semibold text-foreground mb-1 truncate">
+              {item.title}
+            </h3>
+            <p className="text-sm text-muted-foreground font-consciousness mb-2">
+              {item.category} • {item.type}
+            </p>
+            {item.color && item.size && (
+              <p className="text-xs text-muted-foreground font-consciousness">
+                {item.color} / {item.size}
+              </p>
+            )}
+          </div>
+
+          <div className="flex md:hidden items-start">
+            <p className="text-lg font-consciousness font-semibold text-primary whitespace-nowrap">
+              ${typeof item.price === 'string' ? item.price : item.price.toFixed(2)}
+            </p>
+          </div>
+        </div>
+
+        {/* Variant Selectors for Merchandise */}
+        {isMerchandise && (
+          <div className="space-y-2">
+            <div className="flex flex-col sm:flex-row gap-2 items-start sm:items-center">
+              <div className="flex-1 w-full sm:w-auto">
+                <Label htmlFor={`variant-${item.id}`} className="sr-only">
+                  Change variant
+                </Label>
+                <Select 
+                  value={item.variant_id?.toString()} 
+                  onValueChange={handleVariantChange}
+                  disabled={isUpdating}
+                >
+                  <SelectTrigger 
+                    id={`variant-${item.id}`}
+                    className="w-full sm:min-w-[200px] h-10"
+                    aria-label="Select size and color variant"
+                  >
+                    <SelectValue placeholder="Select variant" />
+                  </SelectTrigger>
+                  <SelectContent className="z-50">
+                    {productData.variants?.map((variant: any) => {
+                      const stock = getVariantStock(variant);
+                      return (
+                        <SelectItem 
+                          key={variant.id} 
+                          value={variant.id.toString()}
+                          disabled={!stock.available}
+                          className="text-sm"
+                        >
+                          <div className="flex items-center justify-between gap-2 w-full">
+                            <span>{variant.title}</span>
+                            <span className="font-semibold">${variant.price}</span>
+                            {!stock.available && (
+                              <span className="text-xs text-destructive ml-2">(Sold Out)</span>
+                            )}
+                            {stock.isLow && stock.available && (
+                              <span className="text-xs text-orange-600 dark:text-orange-400 ml-2">
+                                (Low Stock)
+                              </span>
+                            )}
+                          </div>
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
+              </div>
+              
               {variantUpdated && (
-                <span className="flex items-center gap-1 text-sm text-green-600 dark:text-green-400">
-                  <Check className="w-4 h-4" />
-                  Updated
+                <span 
+                  className="flex items-center gap-1.5 text-sm text-green-600 dark:text-green-400 min-w-fit"
+                  role="status"
+                >
+                  <Check className="w-4 h-4" aria-hidden="true" />
+                  Updated ✓
                 </span>
               )}
             </div>
-          )}
 
-          <p className="text-lg font-consciousness font-semibold text-primary">
-            ${typeof item.price === 'string' ? item.price : item.price.toFixed(2)}
-          </p>
-        </div>
+            {/* Stock warning */}
+            {currentVariantStock.isLow && (
+              <Alert variant="default" className="py-2">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription className="text-xs">
+                  Low stock - only {currentVariantStock.count} remaining
+                </AlertDescription>
+              </Alert>
+            )}
 
-        <div className="flex md:flex-col items-center gap-3 justify-between md:justify-start">
-          {/* Quantity Controls */}
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => updateQuantity(item.id, item.quantity - 1)}
-              className="h-8 w-8"
-            >
-              <Minus className="w-4 h-4" />
-            </Button>
-            <span className="w-8 text-center font-consciousness font-medium">
-              {item.quantity}
-            </span>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => updateQuantity(item.id, item.quantity + 1)}
-              className="h-8 w-8"
-            >
-              <Plus className="w-4 h-4" />
-            </Button>
+            {/* Variant error */}
+            {variantError && (
+              <Alert variant="destructive" className="py-2">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription className="text-xs">
+                  {variantError}
+                </AlertDescription>
+              </Alert>
+            )}
+          </div>
+        )}
+
+        <div className="flex items-center justify-between pt-2 border-t">
+          <div className="hidden md:block">
+            <p className="text-lg font-consciousness font-semibold text-primary">
+              ${typeof item.price === 'string' ? item.price : item.price.toFixed(2)}
+            </p>
           </div>
 
-          {/* Remove Button */}
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => removeItem(item.id)}
-            className="h-8 w-8 text-destructive hover:text-destructive"
-          >
-            <Trash2 className="w-4 h-4" />
-          </Button>
+          <div className="flex items-center gap-3 ml-auto">
+            {/* Quantity Controls - Touch-friendly size */}
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                className="h-11 w-11 touch-manipulation"
+                aria-label="Decrease quantity"
+              >
+                <Minus className="w-4 h-4" />
+              </Button>
+              <span className="w-10 text-center font-consciousness font-medium" aria-label={`Quantity: ${item.quantity}`}>
+                {item.quantity}
+              </span>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                className="h-11 w-11 touch-manipulation"
+                aria-label="Increase quantity"
+              >
+                <Plus className="w-4 h-4" />
+              </Button>
+            </div>
+
+            {/* Remove Button - Touch-friendly */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => removeItem(item.id)}
+              className="h-11 w-11 text-destructive hover:text-destructive hover:bg-destructive/10 touch-manipulation"
+              aria-label="Remove item from cart"
+            >
+              <Trash2 className="w-4 h-4" />
+            </Button>
+          </div>
         </div>
       </div>
     </Card>
