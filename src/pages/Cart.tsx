@@ -356,6 +356,10 @@ const Cart = () => {
   const [discountCode, setDiscountCode] = useState("");
   const [discountApplied, setDiscountApplied] = useState(false);
   const [discountAmount, setDiscountAmount] = useState(0);
+  
+  // Check cart item types for conditional messaging
+  const hasDigitalItems = items.some(item => !item.variant_id);
+  const hasMerchandiseItems = items.some(item => item.variant_id);
 
   const handleApplyDiscount = async () => {
     if (!discountCode.trim()) return;
@@ -499,6 +503,38 @@ const Cart = () => {
               <h2 className="text-xl font-consciousness font-bold text-foreground mb-6">
                 Order Summary
               </h2>
+
+              {/* Conditional messaging based on cart contents */}
+              {hasDigitalItems && !hasMerchandiseItems && (
+                <div className="mb-4 p-3 bg-purple-50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-800 rounded-lg">
+                  <p className="text-sm text-purple-800 dark:text-purple-200 font-consciousness">
+                    📧 Digital products will be delivered to your email
+                  </p>
+                </div>
+              )}
+              
+              {!hasDigitalItems && hasMerchandiseItems && (
+                <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                  <p className="text-sm text-blue-800 dark:text-blue-200 font-consciousness">
+                    📦 Physical items will be shipped to your address
+                  </p>
+                </div>
+              )}
+              
+              {hasDigitalItems && hasMerchandiseItems && (
+                <div className="mb-4 space-y-2">
+                  <div className="p-3 bg-purple-50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-800 rounded-lg">
+                    <p className="text-sm text-purple-800 dark:text-purple-200 font-consciousness">
+                      📧 Digital items: Delivered via email
+                    </p>
+                  </div>
+                  <div className="p-3 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                    <p className="text-sm text-blue-800 dark:text-blue-200 font-consciousness">
+                      📦 Merchandise: Shipped to your address
+                    </p>
+                  </div>
+                </div>
+              )}
 
               <div className="space-y-4 mb-6">
                 {items.map((item) => (

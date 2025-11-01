@@ -204,6 +204,74 @@ serve(async (req) => {
         }
       }
 
+      // Send order confirmation emails
+      console.log("=== Sending Order Confirmation Emails ===");
+      
+      // Prepare items data for emails
+      const emailItems = lineItems.data.map(item => {
+        const product = item.price?.product as Stripe.Product;
+        const isPrintify = product.metadata?.printify_id || product.metadata?.printify_product_id;
+        
+        return {
+          name: product.name,
+          quantity: item.quantity || 1,
+          price: item.amount_total || 0,
+          type: isPrintify ? 'merchandise' : 'digital'
+        };
+      });
+
+      // Customer order confirmation
+      try {
+        const orderConfirmationPayload = {
+          order_id: session.id.substring(session.id.length - 8).toUpperCase(),
+          customer_email: session.customer_email || session.customer_details?.email || '',
+          customer_name: session.customer_details?.name || session.shipping_details?.name || 'Customer',
+          items: emailItems,
+          subtotal: session.amount_subtotal || 0,
+          shipping: session.total_details?.amount_shipping || 0,
+          total: session.amount_total || 0,
+          shipping_address: session.shipping_details?.address || undefined
+        };
+
+        console.log('Sending customer order confirmation...');
+        const { error: emailError } = await supabaseClient.functions.invoke('send-order-confirmation', {
+          body: orderConfirmationPayload
+        });
+
+        if (emailError) {
+          console.error('Failed to send order confirmation:', emailError);
+        } else {
+          console.log('✅ Order confirmation email sent');
+        }
+      } catch (emailErr) {
+        console.error('Error sending order confirmation:', emailErr);
+      }
+
+      // Admin notification
+      try {
+        const adminNotificationPayload = {
+          order_id: session.id.substring(session.id.length - 8).toUpperCase(),
+          customer_email: session.customer_email || session.customer_details?.email || '',
+          customer_name: session.customer_details?.name || session.shipping_details?.name || 'Customer',
+          items: emailItems,
+          total: session.amount_total || 0,
+          shipping_address: session.shipping_details?.address || undefined
+        };
+
+        console.log('Sending admin notification...');
+        const { error: adminEmailError } = await supabaseClient.functions.invoke('send-admin-order-notification', {
+          body: adminNotificationPayload
+        });
+
+        if (adminEmailError) {
+          console.error('Failed to send admin notification:', adminEmailError);
+        } else {
+          console.log('✅ Admin notification sent');
+        }
+      } catch (adminErr) {
+        console.error('Error sending admin notification:', adminErr);
+      }
+
       // Record discount usage if applicable
       if (session.metadata?.discount_id && session.total_details?.amount_discount) {
         console.log("Recording discount usage...");

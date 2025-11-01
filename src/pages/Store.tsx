@@ -250,7 +250,7 @@ const Store = () => {
                       Purchase Successful!
                     </h3>
                     <p className="text-green-700 dark:text-green-300 font-consciousness">
-                      Thank you for your purchase! Your cart has been cleared and you should receive your digital products via email shortly.
+                      Thank you for your purchase! Check your email for order confirmation and delivery details.
                     </p>
                   </div>
                 </div>
