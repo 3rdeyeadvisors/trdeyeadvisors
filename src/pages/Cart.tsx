@@ -28,12 +28,14 @@ const CartItem = ({ item }: { item: any }) => {
   useEffect(() => {
     const loadProductData = async () => {
       if (item.type === "merchandise" && item.printify_product_id) {
+        console.log('Loading product data for cart item:', item);
         const { data } = await supabase
           .from('printify_products')
           .select('*')
           .eq('printify_id', item.printify_product_id)
           .single();
         
+        console.log('Product data loaded:', data);
         if (data) {
           setProductData(data);
         }
@@ -178,14 +180,20 @@ const CartItem = ({ item }: { item: any }) => {
       <div className="flex flex-col gap-4">
         <div className="flex gap-4">
           {/* Image - Fixed aspect ratio to prevent CLS */}
-          <div className="w-20 h-20 flex-shrink-0 rounded-md overflow-hidden bg-muted">
-            {item.image && (
+          <div className="w-20 h-20 flex-shrink-0 rounded-md overflow-hidden bg-muted flex items-center justify-center">
+            {item.image ? (
               <img 
                 src={item.image} 
                 alt={item.title}
                 className="w-full h-full object-cover"
                 loading="lazy"
+                onError={(e) => {
+                  console.error('Image failed to load:', item.image);
+                  e.currentTarget.style.display = 'none';
+                }}
               />
+            ) : (
+              <ShoppingBag className="w-8 h-8 text-muted-foreground" />
             )}
           </div>
 

@@ -57,16 +57,31 @@ const Store = () => {
   ]);
 
   const handleAddToCart = (product: any) => {
-    addItem({
+    console.log('Adding to cart:', product);
+    
+    // Ensure image is a string, not an array
+    const imageUrl = product.image || 
+                     (product.images?.[0]?.src) || 
+                     (Array.isArray(product.images) ? product.images[0] : product.images);
+    
+    const cartItem = {
       id: product.id || product.printify_id,
       title: product.title,
       price: typeof product.price === 'string' ? parseFloat(product.price.replace('$', '')) : product.price,
       type: product.type,
       category: product.category,
       printify_id: product.printify_id,
+      printify_product_id: product.printify_product_id || product.printify_id,
+      variant_id: product.variant_id,
+      color: product.color,
+      size: product.size,
+      image: imageUrl,
       variants: product.variants,
       images: product.images
-    });
+    };
+    
+    console.log('Cart item being added:', cartItem);
+    addItem(cartItem);
     toast.success(`${product.title} added to cart!`);
   };
 
