@@ -56,6 +56,7 @@ import DefaiRevolution2025 from "./pages/DefaiRevolution2025";
 import DefiRegulationAmlIntegration from "./pages/DefiRegulationAmlIntegration";
 import LiquidStakingTokens2025 from "./pages/LiquidStakingTokens2025";
 import AdminStoreDashboard from "./pages/AdminStoreDashboard";
+import DownloadPortal from "./pages/DownloadPortal";
 
 const queryClient = new QueryClient();
 
@@ -129,6 +130,7 @@ const App = () => {
                   <Route path="/reset-password" element={<ResetPassword />} />
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/downloads" element={<Downloads />} />
+                  <Route path="/download-portal" element={<DownloadPortal />} />
                   <Route path="/admin/upload" element={
                     <ProtectedRoute requireRole="admin">
                       <AdminUploadContent />

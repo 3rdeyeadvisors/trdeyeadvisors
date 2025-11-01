@@ -129,13 +129,19 @@ serve(async (req) => {
         }
       }
 
-      // Handle Printify orders (merchandise)
+      // Handle Printify orders (merchandise only)
       if (printifyItems.length > 0) {
         try {
           if (!session.shipping_details) {
             console.error("❌ Printify items present but no shipping details!");
+            await supabaseClient.from('order_action_logs').insert({
+              order_id: session.id,
+              action_type: 'printify_created',
+              status: 'error',
+              error_message: 'No shipping details provided'
+            });
           } else {
-            console.log("📦 Creating Printify order...");
+            console.log("📦 Creating Printify order (merchandise only)...");
             
             const orderData = {
               line_items: printifyItems,
@@ -161,6 +167,12 @@ serve(async (req) => {
 
             if (printifyResponse.error) {
               console.error("❌ Error creating Printify order:", printifyResponse.error);
+              await supabaseClient.from('order_action_logs').insert({
+                order_id: session.id,
+                action_type: 'printify_created',
+                status: 'error',
+                error_message: printifyResponse.error.message
+              });
             } else {
               console.log("✅ Printify order created:", printifyResponse.data?.order?.id);
 
@@ -171,19 +183,37 @@ serve(async (req) => {
                   .update({ user_id: userId })
                   .eq('printify_order_id', printifyResponse.data.order.id);
               }
+
+              await supabaseClient.from('order_action_logs').insert({
+                order_id: session.id,
+                action_type: 'printify_created',
+                status: 'success',
+                metadata: { 
+                  printify_order_id: printifyResponse.data?.order?.id,
+                  items_count: printifyItems.length
+                }
+              });
             }
           }
         } catch (printifyErr) {
           console.error("❌ Printify order failed:", printifyErr);
+          await supabaseClient.from('order_action_logs').insert({
+            order_id: session.id,
+            action_type: 'printify_created',
+            status: 'error',
+            error_message: printifyErr.message
+          });
         }
       }
 
-      // Record digital product purchases
+      // Record digital product purchases and generate download links
+      const digitalDownloadItems: any[] = [];
       if (digitalItems.length > 0 && userId) {
         try {
-          console.log("💾 Recording digital purchases...");
+          console.log("💾 Recording digital purchases and generating download links...");
           
           for (const item of digitalItems) {
+            // Record purchase
             const { data: existingPurchase } = await supabaseClient
               .from('user_purchases')
               .select('id')
@@ -209,9 +239,72 @@ serve(async (req) => {
                 console.log("✅ Purchase recorded for product:", item.product_id);
               }
             }
+
+            // Get product details (course)
+            const { data: course } = await supabaseClient
+              .from('courses')
+              .select('title')
+              .eq('id', item.product_id)
+              .single();
+
+            // Get associated files for this product
+            const { data: files } = await supabaseClient
+              .from('digital_product_files')
+              .select('id')
+              .eq('product_id', item.product_id);
+
+            if (files && files.length > 0) {
+              // Generate unique download token
+              const downloadToken = crypto.randomUUID();
+              const expiryDate = new Date();
+              expiryDate.setDate(expiryDate.getDate() + 7); // 7 days expiry
+
+              // Create download record
+              const { error: downloadError } = await supabaseClient
+                .from('digital_downloads')
+                .insert({
+                  order_id: session.id,
+                  user_id: userId,
+                  user_email: session.customer_email || '',
+                  product_id: item.product_id,
+                  product_name: course?.title || `Course ${item.product_id}`,
+                  product_type: 'course',
+                  download_token: downloadToken,
+                  file_ids: files.map(f => f.id),
+                  expires_at: expiryDate.toISOString(),
+                  max_downloads: 5,
+                  download_count: 0
+                });
+
+              if (downloadError) {
+                console.error("❌ Error creating download record:", downloadError);
+              } else {
+                console.log("✅ Download link generated for product:", item.product_id);
+                digitalDownloadItems.push({
+                  product_id: item.product_id,
+                  product_name: course?.title || `Course ${item.product_id}`,
+                  download_token: downloadToken
+                });
+              }
+            }
           }
+
+          // Log action
+          await supabaseClient.from('order_action_logs').insert({
+            order_id: session.id,
+            action_type: 'digital_links_generated',
+            status: 'success',
+            metadata: { items_count: digitalDownloadItems.length }
+          });
+
         } catch (digitalErr) {
-          console.error("❌ Digital purchase recording failed:", digitalErr);
+          console.error("❌ Digital purchase processing failed:", digitalErr);
+          await supabaseClient.from('order_action_logs').insert({
+            order_id: session.id,
+            action_type: 'digital_links_generated',
+            status: 'error',
+            error_message: digitalErr.message
+          });
         }
       }
 
@@ -280,6 +373,50 @@ serve(async (req) => {
         }
       } catch (adminErr) {
         console.error("❌ Admin email failed:", adminErr);
+      }
+
+      // Send digital delivery email if there are digital items
+      if (digitalDownloadItems.length > 0) {
+        try {
+          console.log("📧 Sending digital delivery email...");
+          
+          const digitalDeliveryPayload = {
+            order_id: session.id.substring(session.id.length - 8).toUpperCase(),
+            customer_email: session.customer_email || session.customer_details?.email || '',
+            customer_name: session.customer_details?.name || session.shipping_details?.name || 'Customer',
+            digital_items: digitalDownloadItems
+          };
+
+          const { error: digitalEmailError } = await supabaseClient.functions.invoke('send-digital-delivery-email', {
+            body: digitalDeliveryPayload
+          });
+
+          if (digitalEmailError) {
+            console.error("❌ Failed to send digital delivery email:", digitalEmailError);
+            await supabaseClient.from('order_action_logs').insert({
+              order_id: session.id,
+              action_type: 'digital_email_sent',
+              status: 'error',
+              error_message: digitalEmailError.message
+            });
+          } else {
+            console.log("✅ Digital delivery email sent");
+            await supabaseClient.from('order_action_logs').insert({
+              order_id: session.id,
+              action_type: 'digital_email_sent',
+              status: 'success',
+              metadata: { items_count: digitalDownloadItems.length }
+            });
+          }
+        } catch (digitalEmailErr) {
+          console.error("❌ Digital delivery email failed:", digitalEmailErr);
+          await supabaseClient.from('order_action_logs').insert({
+            order_id: session.id,
+            action_type: 'digital_email_sent',
+            status: 'error',
+            error_message: digitalEmailErr.message
+          });
+        }
       }
 
       // Record discount usage if applicable

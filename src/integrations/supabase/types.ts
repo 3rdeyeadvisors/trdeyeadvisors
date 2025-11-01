@@ -189,6 +189,57 @@ export type Database = {
         }
         Relationships: []
       }
+      digital_downloads: {
+        Row: {
+          created_at: string
+          download_count: number
+          download_token: string
+          expires_at: string
+          file_ids: Json
+          id: string
+          max_downloads: number
+          order_id: string
+          product_id: number
+          product_name: string
+          product_type: string
+          updated_at: string
+          user_email: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          download_count?: number
+          download_token: string
+          expires_at: string
+          file_ids: Json
+          id?: string
+          max_downloads?: number
+          order_id: string
+          product_id: number
+          product_name: string
+          product_type: string
+          updated_at?: string
+          user_email: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          download_count?: number
+          download_token?: string
+          expires_at?: string
+          file_ids?: Json
+          id?: string
+          max_downloads?: number
+          order_id?: string
+          product_id?: number
+          product_name?: string
+          product_type?: string
+          updated_at?: string
+          user_email?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       digital_product_files: {
         Row: {
           created_at: string
@@ -429,6 +480,36 @@ export type Database = {
           metadata?: Json | null
           recipient_email?: string
           related_id?: string | null
+          status?: string
+        }
+        Relationships: []
+      }
+      order_action_logs: {
+        Row: {
+          action_type: string
+          created_at: string
+          error_message: string | null
+          id: string
+          metadata: Json | null
+          order_id: string
+          status: string
+        }
+        Insert: {
+          action_type: string
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          order_id: string
+          status: string
+        }
+        Update: {
+          action_type?: string
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          order_id?: string
           status?: string
         }
         Relationships: []

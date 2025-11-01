@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Plus, Trash2, Edit, Package, ShoppingCart, Tag } from "lucide-react";
+import { Loader2, Plus, Trash2, Edit, Package, ShoppingCart, Tag, Download, Mail } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Switch } from "@/components/ui/switch";
 
@@ -22,7 +22,9 @@ const AdminStoreDashboard = () => {
   const [discounts, setDiscounts] = useState<any[]>([]);
   const [orders, setOrders] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
+  const [digitalOrders, setDigitalOrders] = useState<any[]>([]);
   const [isCreatingDiscount, setIsCreatingDiscount] = useState(false);
+  const [resendingOrderId, setResendingOrderId] = useState<string | null>(null);
 
   const [newDiscount, setNewDiscount] = useState({
     code: "",
@@ -95,9 +97,30 @@ const AdminStoreDashboard = () => {
         .select("*")
         .order("created_at", { ascending: false });
 
+      // Load digital orders (grouped by order_id)
+      const { data: digitalOrdersData } = await supabase
+        .from("digital_downloads")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      // Group digital orders by order_id
+      const groupedDigitalOrders = digitalOrdersData?.reduce((acc: any, download: any) => {
+        if (!acc[download.order_id]) {
+          acc[download.order_id] = {
+            order_id: download.order_id,
+            user_email: download.user_email,
+            created_at: download.created_at,
+            items: []
+          };
+        }
+        acc[download.order_id].items.push(download);
+        return acc;
+      }, {});
+
       setDiscounts(discountData || []);
       setOrders(ordersData || []);
       setProducts(productsData || []);
+      setDigitalOrders(Object.values(groupedDigitalOrders || {}));
     } catch (error) {
       console.error("Error loading dashboard data:", error);
       toast({
@@ -180,6 +203,34 @@ const AdminStoreDashboard = () => {
     }
   };
 
+  const resendDigitalDeliveryEmail = async (orderId: string) => {
+    try {
+      setResendingOrderId(orderId);
+
+      const { error } = await supabase.functions.invoke('resend-digital-delivery', {
+        body: { order_id: orderId }
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: "Digital delivery email resent successfully.",
+      });
+
+      loadDashboardData();
+    } catch (error: any) {
+      console.error("Error resending email:", error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to resend email.",
+        variant: "destructive",
+      });
+    } finally {
+      setResendingOrderId(null);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -206,7 +257,11 @@ const AdminStoreDashboard = () => {
           </TabsTrigger>
           <TabsTrigger value="orders" className="flex items-center gap-2">
             <ShoppingCart className="h-4 w-4" />
-            Orders
+            Physical Orders
+          </TabsTrigger>
+          <TabsTrigger value="digital-orders" className="flex items-center gap-2">
+            <Download className="h-4 w-4" />
+            Digital Orders
           </TabsTrigger>
           <TabsTrigger value="products" className="flex items-center gap-2">
             <Package className="h-4 w-4" />
@@ -466,6 +521,67 @@ const AdminStoreDashboard = () => {
                     <TableRow>
                       <TableCell colSpan={4} className="text-center text-muted-foreground">
                         No orders yet
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Digital Orders Tab */}
+        <TabsContent value="digital-orders" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Digital Orders</CardTitle>
+              <CardDescription>Manage digital product deliveries</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Order ID</TableHead>
+                    <TableHead>Customer</TableHead>
+                    <TableHead>Items</TableHead>
+                    <TableHead>Date</TableHead>
+                    <TableHead>Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {digitalOrders.map((order: any) => (
+                    <TableRow key={order.order_id}>
+                      <TableCell className="font-mono text-xs">
+                        {order.order_id.substring(order.order_id.length - 8).toUpperCase()}
+                      </TableCell>
+                      <TableCell>{order.user_email}</TableCell>
+                      <TableCell>{order.items.length} item(s)</TableCell>
+                      <TableCell>
+                        {new Date(order.created_at).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => resendDigitalDeliveryEmail(order.order_id)}
+                          disabled={resendingOrderId === order.order_id}
+                        >
+                          {resendingOrderId === order.order_id ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            <>
+                              <Mail className="h-4 w-4 mr-2" />
+                              Resend Email
+                            </>
+                          )}
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                  {digitalOrders.length === 0 && (
+                    <TableRow>
+                      <TableCell colSpan={5} className="text-center text-muted-foreground">
+                        No digital orders yet
                       </TableCell>
                     </TableRow>
                   )}

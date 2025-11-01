@@ -97,3 +97,12 @@ verify_jwt = false
 
 [functions.send-admin-order-notification]
 verify_jwt = false
+
+[functions.send-digital-delivery-email]
+verify_jwt = false
+
+[functions.download-digital-file]
+verify_jwt = false
+
+[functions.resend-digital-delivery]
+verify_jwt = false
