@@ -19,7 +19,7 @@ const Store = () => {
   const [purchasedProduct, setPurchasedProduct] = useState<string>("");
   const [printifyProducts, setPrintifyProducts] = useState<any[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [activeCategory, setActiveCategory] = useState<"merchandise" | "quantas" | "digital">("merchandise");
+  const [activeCategory, setActiveCategory] = useState<"merchandise" | "digital">("merchandise");
   const [digitalProducts] = useState([
     {
       id: 1,
@@ -191,10 +191,10 @@ const Store = () => {
 
           {/* Category Bar */}
           <div className="mb-12 overflow-x-auto scrollbar-hide">
-            <div className="flex justify-center gap-6 min-w-max px-4 md:px-0">
+            <div className="flex justify-center gap-8 min-w-max px-4 md:px-0">
               <button
                 onClick={() => setActiveCategory("merchandise")}
-                className={`text-lg font-consciousness pb-2 px-4 transition-all whitespace-nowrap ${
+                className={`text-lg font-consciousness pb-2 px-6 transition-all whitespace-nowrap ${
                   activeCategory === "merchandise"
                     ? "text-primary border-b-2 border-primary font-semibold"
                     : "text-muted-foreground hover:text-foreground"
@@ -203,18 +203,8 @@ const Store = () => {
                 Merchandise
               </button>
               <button
-                onClick={() => setActiveCategory("quantas")}
-                className={`text-lg font-consciousness pb-2 px-4 transition-all whitespace-nowrap ${
-                  activeCategory === "quantas"
-                    ? "text-primary border-b-2 border-primary font-semibold"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                Quantas
-              </button>
-              <button
                 onClick={() => setActiveCategory("digital")}
-                className={`text-lg font-consciousness pb-2 px-4 transition-all whitespace-nowrap ${
+                className={`text-lg font-consciousness pb-2 px-6 transition-all whitespace-nowrap ${
                   activeCategory === "digital"
                     ? "text-primary border-b-2 border-primary font-semibold"
                     : "text-muted-foreground hover:text-foreground"
@@ -267,58 +257,63 @@ const Store = () => {
                 </div>
               </div>
               
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
                 {digitalProducts.map((product, index) => {
                   const ProductIcon = getProductIcon(product);
                   return (
                      <Card 
                        key={product.id}
-                       className="p-4 md:p-6 bg-card/60 border-border hover:border-primary/40 transition-all duration-cosmic hover:shadow-consciousness group flex flex-col"
+                       className="p-4 bg-card/60 border-border hover:border-primary/40 transition-all duration-cosmic hover:shadow-consciousness group flex flex-col h-full"
                        style={{ animationDelay: `${index * 0.1}s` }}
                      >
-                       <div className="flex items-center justify-between mb-3">
-                         <ProductIcon className="w-6 h-6 text-primary group-hover:text-primary-glow transition-colors" />
+                       <div className="flex items-center justify-between mb-2">
+                         <ProductIcon className="w-5 h-5 text-primary group-hover:text-primary-glow transition-colors" />
                          <Badge className={`${getTypeColor(product.type)} text-xs`}>
                            {product.category}
                          </Badge>
                        </div>
                        
-                       <h3 className="text-base md:text-lg font-consciousness font-semibold text-foreground mb-2 line-clamp-2">
+                       <h3 className="text-base font-consciousness font-semibold text-foreground mb-2 line-clamp-2">
                          {product.title}
                        </h3>
                        
-                       <div className="flex-1 overflow-hidden mb-3">
-                         <div className="h-[140px] md:h-[180px] overflow-y-auto scrollbar-hide">
-                           <p className="text-xs md:text-sm text-muted-foreground font-consciousness leading-relaxed">
+                       <div className="relative mb-3 flex-1">
+                         <div 
+                           className="h-[170px] md:h-[200px] overflow-y-auto pr-2 scrollbar-thin"
+                           style={{
+                             maskImage: 'linear-gradient(to bottom, black 85%, transparent 100%)',
+                             WebkitMaskImage: 'linear-gradient(to bottom, black 85%, transparent 100%)'
+                           }}
+                         >
+                           <p className="text-xs text-muted-foreground font-consciousness leading-relaxed mb-3">
                              {product.description}
                            </p>
+                           <div className="mb-2">
+                             <h4 className="text-xs font-consciousness font-medium text-foreground mb-1">
+                               Includes:
+                             </h4>
+                             <ul className="text-xs text-muted-foreground space-y-0.5">
+                               {product.features.map((feature, idx) => (
+                                 <li key={idx} className="flex items-start gap-1.5">
+                                   <div className="w-1 h-1 bg-primary rounded-full mt-1.5 flex-shrink-0"></div>
+                                   <span>{feature}</span>
+                                 </li>
+                               ))}
+                             </ul>
+                           </div>
                          </div>
                        </div>
-
-                       <div className="mb-3">
-                         <h4 className="text-xs font-consciousness font-medium text-foreground mb-2">
-                           Includes:
-                         </h4>
-                         <ul className="text-xs text-muted-foreground space-y-1">
-                           {product.features.slice(0, 3).map((feature, idx) => (
-                             <li key={idx} className="flex items-start gap-2">
-                               <div className="w-1 h-1 bg-primary rounded-full mt-1.5 flex-shrink-0"></div>
-                               <span className="line-clamp-1">{feature}</span>
-                             </li>
-                           ))}
-                         </ul>
-                       </div>
                        
-                       <div className="flex flex-col gap-2 mt-auto">
-                         <span className="text-xl md:text-2xl font-consciousness font-bold text-primary">
+                       <div className="flex flex-col gap-2 mt-auto pt-2 border-t border-border/50">
+                         <span className="text-xl font-consciousness font-bold text-primary">
                            ${typeof product.price === 'string' ? product.price : product.price.toFixed(2)}
                          </span>
                         <Button 
                           variant={isInCart(product.id) ? "outline" : "cosmic"}
-                          className="font-consciousness w-full text-xs md:text-sm h-9"
+                          className="font-consciousness w-full text-sm h-9"
                           onClick={() => handleAddToCart(product)}
                         >
-                          <Plus className="w-3 h-3 md:w-4 md:h-4 mr-1" />
+                          <Plus className="w-4 h-4 mr-1" />
                           {isInCart(product.id) ? "Add Another" : "Add to Cart"}
                         </Button>
                       </div>
@@ -427,20 +422,6 @@ const Store = () => {
             </section>
           )}
 
-          {/* Quantas Section (Placeholder) */}
-          {activeCategory === "quantas" && (
-            <section className="mb-16">
-              <Card className="p-12 text-center border-2 bg-card/50 backdrop-blur">
-                <Package className="h-16 w-16 text-muted-foreground mx-auto mb-4" aria-hidden="true" />
-                <h3 className="text-xl font-consciousness font-semibold mb-2">
-                  Quantas Coming Soon
-                </h3>
-                <p className="text-muted-foreground font-consciousness">
-                  Exciting quantum consciousness products launching soon!
-                </p>
-              </Card>
-            </section>
-          )}
 
           <Card className="mt-16 p-6 md:p-8 bg-secondary/40 border-border" role="region" aria-label="Payment information">
             <div className="flex flex-col md:flex-row items-center md:items-start gap-4 text-center md:text-left">
