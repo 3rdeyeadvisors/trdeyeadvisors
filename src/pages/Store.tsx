@@ -11,7 +11,7 @@ import SEO from "@/components/SEO";
 import { MerchandiseCard } from "@/components/store/MerchandiseCard";
 
 const Store = () => {
-  const { addItem, items } = useCart();
+  const { addItem, items, clearCart } = useCart();
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
@@ -160,6 +160,7 @@ const Store = () => {
 
     if (success) {
       setShowSuccessMessage(true);
+      clearCart(); // Clear cart after successful payment
       toast.success("Payment successful! Thank you for your purchase!");
       window.history.replaceState({}, document.title, window.location.pathname);
     } else if (canceled) {
@@ -169,7 +170,7 @@ const Store = () => {
 
     setIsLoading(true);
     loadPrintifyProducts().finally(() => setIsLoading(false));
-  }, []);
+  }, [clearCart]);
 
   const allProducts = [...digitalProducts, ...printifyProducts];
 
