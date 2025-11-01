@@ -12,69 +12,87 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
+    apiVersion: "2023-10-16",
+  });
+
+  const supabaseClient = createClient(
+    Deno.env.get("SUPABASE_URL") ?? "",
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+    { auth: { persistSession: false } }
+  );
+
+  let event: Stripe.Event;
+
   try {
-    const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
-      apiVersion: "2023-10-16",
-    });
-
-    const supabaseClient = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
-      { auth: { persistSession: false } }
-    );
-
+    // Read raw body and signature for webhook verification
     const signature = req.headers.get("stripe-signature");
     const body = await req.text();
     
     if (!signature) {
-      throw new Error("No Stripe signature found");
+      console.error("❌ No Stripe signature found");
+      return new Response(
+        JSON.stringify({ error: "invalid signature" }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 }
+      );
     }
 
-    // Verify webhook signature (if webhook secret is configured)
+    // Verify webhook signature using async crypto (Edge runtime safe)
     const webhookSecret = Deno.env.get("STRIPE_WEBHOOK_SECRET");
-    let event: Stripe.Event;
     
-    if (webhookSecret) {
-      event = await stripe.webhooks.constructEventAsync(body, signature, webhookSecret);
-    } else {
-      // For testing without webhook secret
-      event = JSON.parse(body);
-      console.warn("Processing webhook without signature verification - not recommended for production");
+    if (!webhookSecret) {
+      console.error("❌ STRIPE_WEBHOOK_SECRET not configured");
+      return new Response(
+        JSON.stringify({ error: "webhook secret not configured" }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 500 }
+      );
     }
 
-    console.log("Processing Stripe event:", event.type);
+    event = await stripe.webhooks.constructEventAsync(body, signature, webhookSecret);
+    console.log("✅ Webhook signature verified, event type:", event.type);
 
-    // Handle checkout.session.completed event
-    if (event.type === "checkout.session.completed") {
+  } catch (verifyError) {
+    console.error("❌ Signature verification failed:", verifyError.message);
+    return new Response(
+      JSON.stringify({ error: "invalid signature" }),
+      { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 }
+    );
+  }
+
+  // Immediately acknowledge receipt to Stripe (before slow operations)
+  const responsePromise = new Response(
+    JSON.stringify({ received: true }),
+    { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200 }
+  );
+
+  // Process webhook event in background (don't block response)
+  const backgroundWork = async () => {
+    try {
+      if (event.type !== "checkout.session.completed") {
+        console.log("Ignoring event type:", event.type);
+        return;
+      }
+
       const session = event.data.object as Stripe.Checkout.Session;
-      
-      console.log("Checkout session completed:", session.id);
+      console.log("🛒 Processing checkout session:", session.id);
       console.log("Session metadata:", session.metadata);
       console.log("Customer email:", session.customer_email);
-      console.log("Customer details:", session.customer_details);
-      console.log("Shipping details:", session.shipping_details);
 
-      // Get line items to process the order
+      // Get line items
       const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
         expand: ['data.price.product'],
       });
 
-      console.log("Line items count:", lineItems.data.length);
+      console.log("📦 Line items count:", lineItems.data.length);
 
-      // Separate Printify items from digital items
+      // Separate merchandise (Printify) from digital items
       const printifyItems: any[] = [];
       const digitalItems: any[] = [];
 
       for (const item of lineItems.data) {
         const product = item.price?.product as Stripe.Product;
-        if (product && product.metadata) {
+        if (product?.metadata) {
           const metadata = product.metadata;
-          
-          console.log('Processing line item:', {
-            name: product.name,
-            metadata: metadata,
-            quantity: item.quantity
-          });
           
           if (metadata.printify_id || metadata.printify_product_id) {
             printifyItems.push({
@@ -83,7 +101,7 @@ serve(async (req) => {
               quantity: item.quantity || 1,
               item_id: metadata.item_id,
             });
-          } else {
+          } else if (metadata.item_id) {
             digitalItems.push({
               product_id: parseInt(metadata.item_id),
               quantity: item.quantity || 1,
@@ -92,122 +110,112 @@ serve(async (req) => {
         }
       }
 
-      console.log("Printify items:", printifyItems.length);
-      console.log("Digital items:", digitalItems.length);
+      console.log("🎽 Printify items:", printifyItems.length);
+      console.log("💾 Digital items:", digitalItems.length);
 
-      // Get user ID from session metadata (preferred) or customer email lookup
+      // Get user ID from metadata or email lookup
       let userId: string | null = session.metadata?.user_id || null;
       
       if (!userId && session.customer_email) {
-        console.log('Looking up user by email:', session.customer_email);
-        const { data: userData } = await supabaseClient.auth.admin.listUsers();
-        const user = userData.users.find(u => u.email === session.customer_email);
-        if (user) {
-          userId = user.id;
-          console.log('User found by email lookup:', userId);
-        } else {
-          console.warn('No user found for email:', session.customer_email);
+        try {
+          const { data: userData } = await supabaseClient.auth.admin.listUsers();
+          const user = userData.users.find(u => u.email === session.customer_email);
+          if (user) {
+            userId = user.id;
+            console.log("👤 User found by email:", userId);
+          }
+        } catch (userErr) {
+          console.error("Error looking up user:", userErr);
         }
-      } else if (userId) {
-        console.log('User ID from session metadata:', userId);
       }
 
-      // Handle Printify orders
-      if (printifyItems.length > 0 && session.shipping_details) {
-        console.log("=== Creating Printify Order ===");
-        console.log('Printify items:', JSON.stringify(printifyItems, null, 2));
-        console.log('Shipping details:', JSON.stringify(session.shipping_details, null, 2));
-        
-        const orderData = {
-          line_items: printifyItems,
-          shipping_method: 1, // Standard shipping
-          send_shipping_notification: true,
-          address_to: {
-            first_name: session.shipping_details.name?.split(' ')[0] || session.customer_details?.name?.split(' ')[0] || "Customer",
-            last_name: session.shipping_details.name?.split(' ').slice(1).join(' ') || session.customer_details?.name?.split(' ').slice(1).join(' ') || "Name",
-            email: session.customer_email || session.customer_details?.email || "",
-            phone: session.customer_details?.phone || "",
-            country: session.shipping_details.address?.country || "",
-            region: session.shipping_details.address?.state || "",
-            address1: session.shipping_details.address?.line1 || "",
-            address2: session.shipping_details.address?.line2 || "",
-            city: session.shipping_details.address?.city || "",
-            zip: session.shipping_details.address?.postal_code || "",
-          },
-        };
-
-        console.log("Printify order payload:", JSON.stringify(orderData, null, 2));
-
-        // Call create-printify-order function
-        const printifyResponse = await supabaseClient.functions.invoke('create-printify-order', {
-          body: orderData,
-        });
-
-        if (printifyResponse.error) {
-          console.error("Error creating Printify order:", printifyResponse.error);
-          throw new Error(`Failed to create Printify order: ${printifyResponse.error.message}`);
-        }
-
-        console.log("✅ Printify order created successfully!");
-        console.log("Order ID:", printifyResponse.data?.order?.id);
-        console.log("Order status:", printifyResponse.data?.order?.status);
-
-        // Update the order with user_id if available
-        if (userId && printifyResponse.data?.order?.id) {
-          console.log('Updating Printify order with user_id:', userId);
-          const { error: updateError } = await supabaseClient
-            .from('printify_orders')
-            .update({ user_id: userId })
-            .eq('printify_order_id', printifyResponse.data.order.id);
-            
-          if (updateError) {
-            console.error('Failed to update order with user_id:', updateError);
+      // Handle Printify orders (merchandise)
+      if (printifyItems.length > 0) {
+        try {
+          if (!session.shipping_details) {
+            console.error("❌ Printify items present but no shipping details!");
           } else {
-            console.log('✅ Order updated with user_id');
+            console.log("📦 Creating Printify order...");
+            
+            const orderData = {
+              line_items: printifyItems,
+              shipping_method: 1,
+              send_shipping_notification: true,
+              address_to: {
+                first_name: session.shipping_details.name?.split(' ')[0] || "Customer",
+                last_name: session.shipping_details.name?.split(' ').slice(1).join(' ') || "Name",
+                email: session.customer_email || session.customer_details?.email || "",
+                phone: session.customer_details?.phone || "",
+                country: session.shipping_details.address?.country || "",
+                region: session.shipping_details.address?.state || "",
+                address1: session.shipping_details.address?.line1 || "",
+                address2: session.shipping_details.address?.line2 || "",
+                city: session.shipping_details.address?.city || "",
+                zip: session.shipping_details.address?.postal_code || "",
+              },
+            };
+
+            const printifyResponse = await supabaseClient.functions.invoke('create-printify-order', {
+              body: orderData,
+            });
+
+            if (printifyResponse.error) {
+              console.error("❌ Error creating Printify order:", printifyResponse.error);
+            } else {
+              console.log("✅ Printify order created:", printifyResponse.data?.order?.id);
+
+              // Update order with user_id
+              if (userId && printifyResponse.data?.order?.id) {
+                await supabaseClient
+                  .from('printify_orders')
+                  .update({ user_id: userId })
+                  .eq('printify_order_id', printifyResponse.data.order.id);
+              }
+            }
           }
+        } catch (printifyErr) {
+          console.error("❌ Printify order failed:", printifyErr);
         }
-      } else if (printifyItems.length > 0 && !session.shipping_details) {
-        console.error('❌ Printify items present but no shipping details!');
       }
 
       // Record digital product purchases
       if (digitalItems.length > 0 && userId) {
-        console.log("Recording digital product purchases...");
-        
-        for (const item of digitalItems) {
-          // Check if purchase already exists
-          const { data: existingPurchase } = await supabaseClient
-            .from('user_purchases')
-            .select('id')
-            .eq('user_id', userId)
-            .eq('product_id', item.product_id)
-            .eq('stripe_session_id', session.id)
-            .single();
-
-          if (!existingPurchase) {
-            const { error: purchaseError } = await supabaseClient
+        try {
+          console.log("💾 Recording digital purchases...");
+          
+          for (const item of digitalItems) {
+            const { data: existingPurchase } = await supabaseClient
               .from('user_purchases')
-              .insert({
-                user_id: userId,
-                product_id: item.product_id,
-                stripe_session_id: session.id,
-                amount_paid: session.amount_total,
-                purchase_date: new Date().toISOString(),
-              });
+              .select('id')
+              .eq('user_id', userId)
+              .eq('product_id', item.product_id)
+              .eq('stripe_session_id', session.id)
+              .single();
 
-            if (purchaseError) {
-              console.error("Error recording purchase:", purchaseError);
-            } else {
-              console.log("Purchase recorded for product:", item.product_id);
+            if (!existingPurchase) {
+              const { error: purchaseError } = await supabaseClient
+                .from('user_purchases')
+                .insert({
+                  user_id: userId,
+                  product_id: item.product_id,
+                  stripe_session_id: session.id,
+                  amount_paid: session.amount_total,
+                  purchase_date: new Date().toISOString(),
+                });
+
+              if (purchaseError) {
+                console.error("❌ Error recording purchase:", purchaseError);
+              } else {
+                console.log("✅ Purchase recorded for product:", item.product_id);
+              }
             }
           }
+        } catch (digitalErr) {
+          console.error("❌ Digital purchase recording failed:", digitalErr);
         }
       }
 
-      // Send order confirmation emails
-      console.log("=== Sending Order Confirmation Emails ===");
-      
-      // Prepare items data for emails
+      // Prepare email items
       const emailItems = lineItems.data.map(item => {
         const product = item.price?.product as Stripe.Product;
         const isPrintify = product.metadata?.printify_id || product.metadata?.printify_product_id;
@@ -220,8 +228,10 @@ serve(async (req) => {
         };
       });
 
-      // Customer order confirmation
+      // Send customer order confirmation email
       try {
+        console.log("📧 Sending customer confirmation email...");
+        
         const orderConfirmationPayload = {
           order_id: session.id.substring(session.id.length - 8).toUpperCase(),
           customer_email: session.customer_email || session.customer_details?.email || '',
@@ -233,22 +243,23 @@ serve(async (req) => {
           shipping_address: session.shipping_details?.address || undefined
         };
 
-        console.log('Sending customer order confirmation...');
         const { error: emailError } = await supabaseClient.functions.invoke('send-order-confirmation', {
           body: orderConfirmationPayload
         });
 
         if (emailError) {
-          console.error('Failed to send order confirmation:', emailError);
+          console.error("❌ Failed to send customer confirmation:", emailError);
         } else {
-          console.log('✅ Order confirmation email sent');
+          console.log("✅ Customer confirmation email sent");
         }
       } catch (emailErr) {
-        console.error('Error sending order confirmation:', emailErr);
+        console.error("❌ Customer email failed:", emailErr);
       }
 
-      // Admin notification
+      // Send admin notification email
       try {
+        console.log("📧 Sending admin notification email...");
+        
         const adminNotificationPayload = {
           order_id: session.id.substring(session.id.length - 8).toUpperCase(),
           customer_email: session.customer_email || session.customer_details?.email || '',
@@ -258,58 +269,53 @@ serve(async (req) => {
           shipping_address: session.shipping_details?.address || undefined
         };
 
-        console.log('Sending admin notification...');
         const { error: adminEmailError } = await supabaseClient.functions.invoke('send-admin-order-notification', {
           body: adminNotificationPayload
         });
 
         if (adminEmailError) {
-          console.error('Failed to send admin notification:', adminEmailError);
+          console.error("❌ Failed to send admin notification:", adminEmailError);
         } else {
-          console.log('✅ Admin notification sent');
+          console.log("✅ Admin notification email sent");
         }
       } catch (adminErr) {
-        console.error('Error sending admin notification:', adminErr);
+        console.error("❌ Admin email failed:", adminErr);
       }
 
       // Record discount usage if applicable
       if (session.metadata?.discount_id && session.total_details?.amount_discount) {
-        console.log("Recording discount usage...");
-        
-        const { error: discountError } = await supabaseClient
-          .from('discount_usage')
-          .insert({
-            discount_id: session.metadata.discount_id,
-            user_id: userId,
-            stripe_session_id: session.id,
-            order_amount: session.amount_total || 0,
-            discount_amount: session.total_details.amount_discount,
-          });
+        try {
+          console.log("🎟️ Recording discount usage...");
+          
+          await supabaseClient
+            .from('discount_usage')
+            .insert({
+              discount_id: session.metadata.discount_id,
+              user_id: userId,
+              stripe_session_id: session.id,
+              order_amount: session.amount_total || 0,
+              discount_amount: session.total_details.amount_discount,
+            });
 
-        if (discountError) {
-          console.error("Error recording discount usage:", discountError);
+          await supabaseClient
+            .from('discount_codes')
+            .update({ current_uses: supabaseClient.sql`current_uses + 1` })
+            .eq('id', session.metadata.discount_id);
+
+          console.log("✅ Discount usage recorded");
+        } catch (discountErr) {
+          console.error("❌ Discount recording failed:", discountErr);
         }
-
-        // Increment discount usage count
-        await supabaseClient
-          .from('discount_codes')
-          .update({ current_uses: supabaseClient.sql`current_uses + 1` })
-          .eq('id', session.metadata.discount_id);
       }
+
+      console.log("✅ Webhook processing complete");
+    } catch (bgError) {
+      console.error("❌ Background processing error:", bgError);
     }
+  };
 
-    return new Response(JSON.stringify({ received: true }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-      status: 200,
-    });
-  } catch (error) {
-    console.error("Webhook error:", error);
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 400,
-      }
-    );
-  }
+  // Start background work without blocking response
+  EdgeRuntime.waitUntil(backgroundWork());
+
+  return responsePromise;
 });
