@@ -387,6 +387,9 @@ const Cart = () => {
 
     setIsLoading(true);
     try {
+      // Get current user
+      const { data: { user } } = await supabase.auth.getUser();
+      
       const checkoutItems = items.map(item => {
         const checkoutItem = {
           id: item.id,
@@ -409,7 +412,6 @@ const Cart = () => {
           title: checkoutItem.title,
           price: checkoutItem.price,
           image: checkoutItem.image,
-          images: checkoutItem.images,
           variant_id: checkoutItem.variant_id
         });
         
@@ -417,6 +419,7 @@ const Cart = () => {
       });
 
       console.log('=== Checkout Request ===');
+      console.log('User ID:', user?.id);
       console.log('Items count:', checkoutItems.length);
       console.log('Total cart value:', total);
       console.log('Discount applied:', discountApplied, discountCode);
@@ -424,7 +427,8 @@ const Cart = () => {
       const { data, error } = await supabase.functions.invoke('create-cart-checkout', {
         body: {
           items: checkoutItems,
-          discountCode: discountApplied ? discountCode : null
+          discountCode: discountApplied ? discountCode : null,
+          userId: user?.id // Pass user ID to checkout
         }
       });
 

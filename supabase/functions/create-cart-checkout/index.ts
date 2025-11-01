@@ -14,7 +14,11 @@ serve(async (req) => {
   }
 
   try {
-    const { items, discountCode } = await req.json();
+    const { items, discountCode, userId } = await req.json();
+
+    console.log('=== Checkout Session Creation ===');
+    console.log('User ID:', userId);
+    console.log('Items:', items.length);
 
     if (!items || items.length === 0) {
       throw new Error("No items provided");
@@ -243,8 +247,11 @@ serve(async (req) => {
         printify_items_count: printifyItems.length.toString(),
         discount_id: discountId || '',
         discount_code: discountCode || '',
+        user_id: userId || '', // Critical: pass user_id for webhook processing
       },
     };
+    
+    console.log('Session metadata:', sessionConfig.metadata);
 
     // Add shipping address collection for physical items
     if (hasPhysicalItems) {

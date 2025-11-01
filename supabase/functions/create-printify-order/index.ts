@@ -36,6 +36,11 @@ serve(async (req) => {
   try {
     const { line_items, shipping_method, send_shipping_notification, address_to }: OrderRequest = await req.json();
 
+    console.log('=== Printify Order Creation Request ===');
+    console.log('Line items:', JSON.stringify(line_items, null, 2));
+    console.log('Shipping method:', shipping_method);
+    console.log('Address:', JSON.stringify(address_to, null, 2));
+
     const supabaseClient = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
@@ -43,6 +48,7 @@ serve(async (req) => {
     );
 
     // Get shop ID (you might want to store this in environment variables)
+    console.log('Fetching Printify shops...');
     const printifyResponse = await fetch("https://api.printify.com/v1/shops.json", {
       headers: {
         "Authorization": `Bearer ${Deno.env.get("PRINTIFY_API_KEY")}`,
@@ -51,11 +57,14 @@ serve(async (req) => {
     });
 
     if (!printifyResponse.ok) {
+      const errorText = await printifyResponse.text();
+      console.error('Failed to fetch Printify shops:', errorText);
       throw new Error(`Printify API error: ${printifyResponse.statusText}`);
     }
 
     const shops = await printifyResponse.json();
     const shopId = shops.data[0].id;
+    console.log('Using shop ID:', shopId);
 
     // Create order in Printify
     const orderData = {
@@ -66,7 +75,7 @@ serve(async (req) => {
       address_to,
     };
 
-    console.log("Creating Printify order:", orderData);
+    console.log('Creating Printify order with data:', JSON.stringify(orderData, null, 2));
 
     const createOrderResponse = await fetch(`https://api.printify.com/v1/shops/${shopId}/orders.json`, {
       method: "POST",
@@ -79,14 +88,18 @@ serve(async (req) => {
 
     if (!createOrderResponse.ok) {
       const errorText = await createOrderResponse.text();
-      console.error("Printify order creation failed:", errorText);
-      throw new Error(`Failed to create Printify order: ${createOrderResponse.statusText}`);
+      console.error("❌ Printify order creation failed:", errorText);
+      throw new Error(`Failed to create Printify order: ${createOrderResponse.statusText} - ${errorText}`);
     }
 
     const printifyOrder = await createOrderResponse.json();
-    console.log("Printify order created:", printifyOrder);
+    console.log("✅ Printify order created successfully!");
+    console.log("Order ID:", printifyOrder.id);
+    console.log("Status:", printifyOrder.status);
+    console.log("Total price:", printifyOrder.total_price);
 
     // Store order in our database
+    console.log('Storing order in database...');
     const { data: orderRecord, error: orderError } = await supabaseClient
       .from("printify_orders")
       .insert({
@@ -100,10 +113,15 @@ serve(async (req) => {
         total_shipping: printifyOrder.total_shipping,
         total_tax: printifyOrder.total_tax,
         created_at: new Date().toISOString(),
-      });
+      })
+      .select()
+      .single();
 
     if (orderError) {
-      console.error("Database error:", orderError);
+      console.error("⚠️ Database error:", orderError);
+      // Don't throw - Printify order was created successfully
+    } else {
+      console.log("✅ Order stored in database:", orderRecord?.id);
     }
 
     return new Response(
@@ -118,7 +136,7 @@ serve(async (req) => {
       }
     );
   } catch (error) {
-    console.error("Error creating Printify order:", error);
+    console.error("❌ Error creating Printify order:", error);
     return new Response(
       JSON.stringify({ error: error.message }),
       {

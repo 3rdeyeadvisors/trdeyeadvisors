@@ -50,6 +50,9 @@ serve(async (req) => {
       
       console.log("Checkout session completed:", session.id);
       console.log("Session metadata:", session.metadata);
+      console.log("Customer email:", session.customer_email);
+      console.log("Customer details:", session.customer_details);
+      console.log("Shipping details:", session.shipping_details);
 
       // Get line items to process the order
       const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
@@ -66,6 +69,12 @@ serve(async (req) => {
         const product = item.price?.product as Stripe.Product;
         if (product && product.metadata) {
           const metadata = product.metadata;
+          
+          console.log('Processing line item:', {
+            name: product.name,
+            metadata: metadata,
+            quantity: item.quantity
+          });
           
           if (metadata.printify_id || metadata.printify_product_id) {
             printifyItems.push({
@@ -86,27 +95,36 @@ serve(async (req) => {
       console.log("Printify items:", printifyItems.length);
       console.log("Digital items:", digitalItems.length);
 
-      // Get user ID from customer email (assuming user is authenticated)
-      let userId: string | null = null;
-      if (session.customer_email) {
+      // Get user ID from session metadata (preferred) or customer email lookup
+      let userId: string | null = session.metadata?.user_id || null;
+      
+      if (!userId && session.customer_email) {
+        console.log('Looking up user by email:', session.customer_email);
         const { data: userData } = await supabaseClient.auth.admin.listUsers();
         const user = userData.users.find(u => u.email === session.customer_email);
         if (user) {
           userId = user.id;
+          console.log('User found by email lookup:', userId);
+        } else {
+          console.warn('No user found for email:', session.customer_email);
         }
+      } else if (userId) {
+        console.log('User ID from session metadata:', userId);
       }
 
       // Handle Printify orders
       if (printifyItems.length > 0 && session.shipping_details) {
-        console.log("Creating Printify order...");
+        console.log("=== Creating Printify Order ===");
+        console.log('Printify items:', JSON.stringify(printifyItems, null, 2));
+        console.log('Shipping details:', JSON.stringify(session.shipping_details, null, 2));
         
         const orderData = {
           line_items: printifyItems,
           shipping_method: 1, // Standard shipping
           send_shipping_notification: true,
           address_to: {
-            first_name: session.shipping_details.name?.split(' ')[0] || session.customer_details?.name?.split(' ')[0] || "",
-            last_name: session.shipping_details.name?.split(' ').slice(1).join(' ') || session.customer_details?.name?.split(' ').slice(1).join(' ') || "",
+            first_name: session.shipping_details.name?.split(' ')[0] || session.customer_details?.name?.split(' ')[0] || "Customer",
+            last_name: session.shipping_details.name?.split(' ').slice(1).join(' ') || session.customer_details?.name?.split(' ').slice(1).join(' ') || "Name",
             email: session.customer_email || session.customer_details?.email || "",
             phone: session.customer_details?.phone || "",
             country: session.shipping_details.address?.country || "",
@@ -118,7 +136,7 @@ serve(async (req) => {
           },
         };
 
-        console.log("Printify order data:", JSON.stringify(orderData, null, 2));
+        console.log("Printify order payload:", JSON.stringify(orderData, null, 2));
 
         // Call create-printify-order function
         const printifyResponse = await supabaseClient.functions.invoke('create-printify-order', {
@@ -130,15 +148,26 @@ serve(async (req) => {
           throw new Error(`Failed to create Printify order: ${printifyResponse.error.message}`);
         }
 
-        console.log("Printify order created successfully:", printifyResponse.data);
+        console.log("✅ Printify order created successfully!");
+        console.log("Order ID:", printifyResponse.data?.order?.id);
+        console.log("Order status:", printifyResponse.data?.order?.status);
 
         // Update the order with user_id if available
         if (userId && printifyResponse.data?.order?.id) {
-          await supabaseClient
+          console.log('Updating Printify order with user_id:', userId);
+          const { error: updateError } = await supabaseClient
             .from('printify_orders')
             .update({ user_id: userId })
             .eq('printify_order_id', printifyResponse.data.order.id);
+            
+          if (updateError) {
+            console.error('Failed to update order with user_id:', updateError);
+          } else {
+            console.log('✅ Order updated with user_id');
+          }
         }
+      } else if (printifyItems.length > 0 && !session.shipping_details) {
+        console.error('❌ Printify items present but no shipping details!');
       }
 
       // Record digital product purchases
