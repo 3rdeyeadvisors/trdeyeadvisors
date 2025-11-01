@@ -208,7 +208,7 @@ const handler = async (req: Request): Promise<Response> => {
                           <p style="color: #F5F5F5; font-size: 14px; margin: 0 0 8px 0;">
                             Questions about your order?
                           </p>
-                          <a href="mailto:support@the3rdeyeadvisors.com" style="color: hsl(217, 91%, 70%); text-decoration: underline;">support@the3rdeyeadvisors.com</a>
+                          <a href="mailto:info@the3rdeyeadvisors.com" style="color: hsl(217, 91%, 70%); text-decoration: underline;">info@the3rdeyeadvisors.com</a>
                         </td>
                       </tr>
                     </table>
@@ -239,8 +239,8 @@ const handler = async (req: Request): Promise<Response> => {
     `;
 
     const emailResponse = await resend.emails.send({
-      from: "3rdeyeadvisors <support@the3rdeyeadvisors.com>",
-      reply_to: "support@the3rdeyeadvisors.com",
+      from: "3rdeyeadvisors <info@the3rdeyeadvisors.com>",
+      reply_to: "info@the3rdeyeadvisors.com",
       to: [customer_email],
       subject: `✅ Thanks! Order #${order_id} confirmed - $${(total / 100).toFixed(2)}`,
       html: emailHtml,

@@ -100,7 +100,7 @@ const handler = async (req: Request): Promise<Response> => {
     const emailResponse = await resend.emails.send({
       from: "3rdeyeadvisors Store <notifications@the3rdeyeadvisors.com>",
       reply_to: customer_email,
-      to: ["support@the3rdeyeadvisors.com"],
+      to: ["info@the3rdeyeadvisors.com"],
       subject: `🛒 New order #${order_id} — $${(total / 100).toFixed(2)}`,
       html: emailHtml,
       tags: [{ name: 'category', value: 'admin_notification' }],
@@ -110,7 +110,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     await supabase.from('email_logs').insert({
       email_type: 'admin_notification',
-      recipient_email: 'support@the3rdeyeadvisors.com',
+      recipient_email: 'info@the3rdeyeadvisors.com',
       status: 'sent',
       edge_function_name: 'send-admin-order-notification',
       metadata: {
