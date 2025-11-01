@@ -190,7 +190,7 @@ const Store = () => {
           </div>
 
           {/* Category Bar */}
-          <div className="mb-12 overflow-x-auto scrollbar-hide">
+          <div className="mb-8 overflow-x-auto scrollbar-hide">
             <div className="flex justify-center gap-8 min-w-max px-4 md:px-0">
               <button
                 onClick={() => setActiveCategory("merchandise")}
@@ -212,6 +212,15 @@ const Store = () => {
               >
                 Digital Products
               </button>
+            </div>
+            {/* Category Description */}
+            <div className="text-center mt-4">
+              <p className="text-sm text-muted-foreground font-consciousness max-w-2xl mx-auto">
+                {activeCategory === "merchandise" 
+                  ? "Consciousness-inspired premium apparel"
+                  : "Premium guides and tools for DeFi mastery"
+                }
+              </p>
             </div>
           </div>
 
@@ -245,18 +254,6 @@ const Store = () => {
           {/* Digital Products Section */}
           {activeCategory === "digital" && (
             <section className="mb-16" aria-labelledby="digital-products-heading">
-              <div className="flex flex-col md:flex-row items-center md:items-start gap-4 mb-8 text-center md:text-left">
-                <Download className="w-8 h-8 text-primary flex-shrink-0" aria-hidden="true" />
-                <div>
-                  <h2 id="digital-products-heading" className="text-3xl font-consciousness font-bold text-foreground">
-                    Digital Products
-                  </h2>
-                  <p className="text-sm text-muted-foreground font-consciousness mt-1">
-                    Premium guides and tools for DeFi mastery
-                  </p>
-                </div>
-              </div>
-              
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
                 {digitalProducts.map((product, index) => {
                   const ProductIcon = getProductIcon(product);
@@ -330,18 +327,7 @@ const Store = () => {
           {/* Merchandise Section */}
           {activeCategory === "merchandise" && (
             <section className="mb-16" aria-labelledby="merchandise-heading">
-            <div className="flex flex-col md:flex-row items-center md:items-start md:justify-between gap-6 mb-8">
-              <div className="flex flex-col md:flex-row items-center md:items-start gap-4 text-center md:text-left">
-                <Package className="w-8 h-8 text-primary flex-shrink-0" aria-hidden="true" />
-                <div>
-                  <h2 id="merchandise-heading" className="text-3xl font-consciousness font-bold text-foreground">
-                    Merchandise
-                  </h2>
-                  <p className="text-sm text-muted-foreground font-consciousness mt-1">
-                    Consciousness-inspired premium apparel
-                  </p>
-                </div>
-              </div>
+            <div className="flex justify-end mb-8">
               {isAdmin && (
                 <Button 
                   onClick={syncPrintifyProducts} 
