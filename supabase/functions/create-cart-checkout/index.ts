@@ -239,6 +239,9 @@ serve(async (req) => {
       line_items: lineItems,
       mode: "payment",
       billing_address_collection: 'required',
+      phone_number_collection: {
+        enabled: true, // Collect phone for shipping
+      },
       automatic_tax: { enabled: true },
       success_url: `${req.headers.get("origin")}/store?success=true&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${req.headers.get("origin")}/cart?canceled=true`,
@@ -253,11 +256,12 @@ serve(async (req) => {
     
     console.log('Session metadata:', sessionConfig.metadata);
 
-    // Add shipping address collection for physical items
+    // Add shipping address collection for physical items (Printify)
     if (hasPhysicalItems) {
       sessionConfig.shipping_address_collection = {
         allowed_countries: ['US', 'CA', 'GB', 'AU', 'DE', 'FR', 'IT', 'ES', 'NL', 'BE', 'SE', 'NO', 'DK', 'FI', 'AT', 'IE', 'PT', 'PL', 'CZ', 'GR', 'HU', 'RO', 'BG', 'HR', 'SK', 'SI', 'LT', 'LV', 'EE', 'CY', 'MT', 'LU', 'IS', 'LI', 'CH', 'JP', 'SG', 'NZ', 'MX', 'BR', 'AR', 'CL', 'CO', 'PE', 'CR', 'PA', 'UY', 'EC', 'GT', 'HN', 'NI', 'SV', 'DO', 'BO', 'PY', 'VE', 'TT', 'JM', 'BS', 'BB', 'BZ', 'GY', 'SR', 'GD', 'LC', 'VC', 'AG', 'DM', 'KN', 'AW', 'CW', 'BM', 'KY', 'VG', 'TC', 'AI', 'MS', 'FK', 'GI', 'GG', 'JE', 'IM', 'FO', 'GL', 'AX'],
       };
+      console.log('✅ Shipping address collection enabled for physical items');
     }
 
     // Apply discount if valid
