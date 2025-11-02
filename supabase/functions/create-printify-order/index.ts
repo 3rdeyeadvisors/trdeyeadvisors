@@ -74,10 +74,43 @@ serve(async (req) => {
     const shopId = shops[0].id;
     console.log('Using shop ID:', shopId);
 
+    // Fetch product details for each line item to get print_provider_id
+    const enrichedLineItems = await Promise.all(
+      line_items.map(async (item) => {
+        const productResponse = await fetch(
+          `https://api.printify.com/v1/shops/${shopId}/products/${item.printify_product_id}.json`,
+          {
+            headers: {
+              "Authorization": `Bearer ${Deno.env.get("PRINTIFY_API_KEY")}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!productResponse.ok) {
+          const errorText = await productResponse.text();
+          console.error(`Failed to fetch product ${item.printify_product_id}:`, errorText);
+          throw new Error(`Failed to fetch product details: ${productResponse.statusText}`);
+        }
+
+        const product = await productResponse.json();
+        console.log(`Product ${item.printify_product_id} print_provider_id:`, product.print_provider_id);
+
+        return {
+          product_id: item.printify_product_id,
+          variant_id: item.variant_id,
+          quantity: item.quantity,
+          print_provider_id: product.print_provider_id
+        };
+      })
+    );
+
+    console.log('Enriched line items:', JSON.stringify(enrichedLineItems, null, 2));
+
     // Create order in Printify
     const orderData = {
       external_id: `order_${Date.now()}`,
-      line_items,
+      line_items: enrichedLineItems,
       shipping_method,
       send_shipping_notification,
       address_to,
