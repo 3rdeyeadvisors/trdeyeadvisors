@@ -84,26 +84,41 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
 
     try {
       // Get existing progress to check if module already completed
-      const { data: existingData } = await supabase
+      const { data: existingData, error: fetchError } = await supabase
         .from('course_progress')
         .select('completed_modules, started_at')
         .eq('user_id', user.id)
         .eq('course_id', courseId)
         .maybeSingle();
 
-      const completedModules = existingData?.completed_modules || [];
+      if (fetchError) {
+        console.error('[Progress] Error fetching existing data:', fetchError);
+        throw fetchError;
+      }
+
+      console.log('[Progress] BEFORE - Existing data:', existingData);
+      console.log('[Progress] BEFORE - Completed modules:', existingData?.completed_modules);
+
+      // Ensure we have a valid array
+      const completedModules = Array.isArray(existingData?.completed_modules) 
+        ? existingData.completed_modules 
+        : [];
+      
+      console.log('[Progress] Validated completed modules array:', completedModules);
       
       // Don't add if already completed
       if (completedModules.includes(moduleIndex)) {
-        console.log('[Progress] Module already completed');
+        console.log('[Progress] Module already completed, skipping');
         return;
       }
 
+      // Build updated modules array
       const updatedModules = [...completedModules, moduleIndex].sort((a, b) => a - b);
       const totalModules = getCourseModuleCount(courseId);
       const completionPercentage = (updatedModules.length / totalModules) * 100;
 
-      console.log('[Progress] Will upsert with:', { updatedModules, completionPercentage });
+      console.log('[Progress] AFTER - Will save these modules:', updatedModules);
+      console.log('[Progress] Completion percentage:', completionPercentage);
 
       // Use UPSERT to handle both insert and update in one operation
       const { error, data } = await supabase
@@ -126,9 +141,10 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
         throw error;
       }
       
-      console.log('[Progress] Upsert successful:', data);
+      console.log('[Progress] Upsert successful! Saved data:', data);
+      console.log('[Progress] Confirmed saved modules:', data.completed_modules);
 
-      // Update local state
+      // Update local state with the exact data from database
       setCourseProgress(prev => ({
         ...prev,
         [courseId]: data
