@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, Download } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ManualOrderProcessor } from "./ManualOrderProcessor";
+import { PrintifyProductSync } from "./PrintifyProductSync";
 
 export function OrdersManager() {
   const [orders, setOrders] = useState<any[]>([]);
@@ -63,55 +65,62 @@ export function OrdersManager() {
   }
 
   return (
-    <Card className="border-primary/20">
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle>Orders & Customers</CardTitle>
-            <CardDescription>Manage and track all orders</CardDescription>
+    <div className="space-y-6">
+      <div className="grid gap-6 md:grid-cols-2">
+        <ManualOrderProcessor />
+        <PrintifyProductSync />
+      </div>
+      
+      <Card className="border-primary/20">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle>Orders & Customers</CardTitle>
+              <CardDescription>Manage and track all orders</CardDescription>
+            </div>
+            <Button onClick={exportOrders} variant="outline" size="sm">
+              <Download className="h-4 w-4 mr-2" />
+              Export
+            </Button>
           </div>
-          <Button onClick={exportOrders} variant="outline" size="sm">
-            <Download className="h-4 w-4 mr-2" />
-            Export
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search orders..."
-            className="pl-10"
-          />
-        </div>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search orders..."
+              className="pl-10"
+            />
+          </div>
 
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Order ID</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Total</TableHead>
-              <TableHead>Date</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {filteredOrders.map((order) => (
-              <TableRow key={order.id}>
-                <TableCell className="font-mono">{order.external_id}</TableCell>
-                <TableCell>
-                  <Badge variant={order.status === "fulfilled" ? "default" : "secondary"}>
-                    {order.status}
-                  </Badge>
-                </TableCell>
-                <TableCell>${(order.total_price / 100).toFixed(2)}</TableCell>
-                <TableCell>{new Date(order.created_at).toLocaleDateString()}</TableCell>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Order ID</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Total</TableHead>
+                <TableHead>Date</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </CardContent>
-    </Card>
+            </TableHeader>
+            <TableBody>
+              {filteredOrders.map((order) => (
+                <TableRow key={order.id}>
+                  <TableCell className="font-mono">{order.external_id}</TableCell>
+                  <TableCell>
+                    <Badge variant={order.status === "fulfilled" ? "default" : "secondary"}>
+                      {order.status}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>${(order.total_price / 100).toFixed(2)}</TableCell>
+                  <TableCell>{new Date(order.created_at).toLocaleDateString()}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
