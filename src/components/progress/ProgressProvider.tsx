@@ -83,7 +83,7 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
     console.log('[Progress] Starting module completion:', { courseId, moduleIndex, userId: user.id });
 
     try {
-      // Get fresh session to ensure auth.uid() matches
+      // Get fresh session and explicitly set it on the client
       const { data: { session }, error: sessionError } = await supabase.auth.getSession();
       
       if (sessionError) {
@@ -91,12 +91,21 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
         throw sessionError;
       }
       
-      if (!session?.user) {
-        console.error('[Progress] No valid session found');
+      if (!session?.user || !session?.access_token) {
+        console.error('[Progress] No valid session or access token found');
         throw new Error('No valid session');
       }
 
       console.log('[Progress] Session verified:', session.user.id);
+      console.log('[Progress] Session access token present:', !!session.access_token);
+
+      // Explicitly set the session to ensure the access token is used
+      await supabase.auth.setSession({
+        access_token: session.access_token,
+        refresh_token: session.refresh_token
+      });
+
+      console.log('[Progress] Session explicitly set on client');
 
       // Query with fresh session user ID
       const { data: existingData, error: fetchError } = await supabase
