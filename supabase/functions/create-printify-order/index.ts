@@ -90,7 +90,20 @@ serve(async (req) => {
         if (!productResponse.ok) {
           const errorText = await productResponse.text();
           console.error(`Failed to fetch product ${item.printify_product_id}:`, errorText);
-          throw new Error(`Failed to fetch product details: ${productResponse.statusText}`);
+          
+          // Parse the error to provide a clear message
+          let errorDetails = errorText;
+          try {
+            const errorJson = JSON.parse(errorText);
+            if (errorJson.code === 8104) {
+              throw new Error(`PRODUCT MISMATCH: Printify product "${item.printify_product_id}" does not exist in your shop (Shop ID: ${shopId}). This product needs to be re-synced from Printify or removed from Stripe. Please check your Stripe product metadata.`);
+            }
+            errorDetails = errorJson.message || errorText;
+          } catch (e) {
+            // Not JSON, use raw error
+          }
+          
+          throw new Error(`Failed to fetch Printify product ${item.printify_product_id}: ${errorDetails}`);
         }
 
         const product = await productResponse.json();
