@@ -156,7 +156,14 @@ export const EnhancedContentPlayer = ({
   };
 
   const handleComplete = async () => {
-    if (!user) return;
+    if (!user) {
+      toast({
+        title: "Authentication Required",
+        description: "Please sign in to track your progress.",
+        variant: "destructive",
+      });
+      return;
+    }
 
     try {
       await updateModuleProgress(courseId, currentModuleIndex);
@@ -168,9 +175,10 @@ export const EnhancedContentPlayer = ({
         description: `You've finished "${module.title}". Keep up the great work!`,
       });
     } catch (error) {
+      console.error('Failed to mark module complete:', error);
       toast({
-        title: "Error",
-        description: "Failed to update progress. Please try again.",
+        title: "Error Saving Progress",
+        description: "Your progress couldn't be saved. Please try again or refresh the page.",
         variant: "destructive",
       });
     }

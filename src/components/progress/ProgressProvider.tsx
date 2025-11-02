@@ -46,10 +46,18 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
     if (!user) return;
 
     try {
+      // Get fresh session
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) {
+        console.error('No valid session for loading progress');
+        setLoading(false);
+        return;
+      }
+
       const { data, error } = await supabase
         .from('course_progress')
         .select('*')
-        .eq('user_id', user.id);
+        .eq('user_id', session.user.id);
 
       if (error) throw error;
 
@@ -70,70 +78,89 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
     if (!user) return;
 
     try {
-      // Always check database for existing record first
+      // Get fresh session to ensure auth.uid() matches
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) {
+        console.error('No valid session found');
+        return;
+      }
+
+      // Query with fresh session user ID
       const { data: existingData, error: fetchError } = await supabase
         .from('course_progress')
         .select('*')
-        .eq('user_id', user.id)
+        .eq('user_id', session.user.id)
         .eq('course_id', courseId)
         .maybeSingle();
 
-      if (fetchError) throw fetchError;
+      if (fetchError) {
+        console.error('Error fetching progress:', fetchError);
+        throw fetchError;
+      }
 
       const completedModules = existingData?.completed_modules || [];
       
-      if (!completedModules.includes(moduleIndex)) {
-        const updatedModules = [...completedModules, moduleIndex];
-        const totalModules = getCourseModuleCount(courseId);
-        const completionPercentage = (updatedModules.length / totalModules) * 100;
-
-        if (existingData) {
-          // Update existing record
-          const { error } = await supabase
-            .from('course_progress')
-            .update({
-              completed_modules: updatedModules,
-              last_accessed: new Date().toISOString(),
-              completion_percentage: completionPercentage,
-            })
-            .eq('user_id', user.id)
-            .eq('course_id', courseId);
-
-          if (error) throw error;
-        } else {
-          // Insert new record
-          const { error } = await supabase
-            .from('course_progress')
-            .insert({
-              user_id: user.id,
-              course_id: courseId,
-              completed_modules: updatedModules,
-              last_accessed: new Date().toISOString(),
-              completion_percentage: completionPercentage,
-              started_at: new Date().toISOString(),
-            });
-
-          if (error) throw error;
-        }
-
-        // Update local state
-        const progressData = {
-          user_id: user.id,
-          course_id: courseId,
-          completed_modules: updatedModules,
-          last_accessed: new Date().toISOString(),
-          completion_percentage: completionPercentage,
-          started_at: existingData?.started_at || new Date().toISOString(),
-        };
-
-        setCourseProgress(prev => ({
-          ...prev,
-          [courseId]: progressData
-        }));
+      // Don't add if already completed
+      if (completedModules.includes(moduleIndex)) {
+        return;
       }
+
+      const updatedModules = [...completedModules, moduleIndex].sort((a, b) => a - b);
+      const totalModules = getCourseModuleCount(courseId);
+      const completionPercentage = (updatedModules.length / totalModules) * 100;
+
+      if (existingData) {
+        // Update existing record - use session user ID
+        const { error } = await supabase
+          .from('course_progress')
+          .update({
+            completed_modules: updatedModules,
+            last_accessed: new Date().toISOString(),
+            completion_percentage: completionPercentage,
+          })
+          .eq('user_id', session.user.id)
+          .eq('course_id', courseId);
+
+        if (error) {
+          console.error('Error updating progress:', error);
+          throw error;
+        }
+      } else {
+        // Insert new record - use session user ID
+        const { error } = await supabase
+          .from('course_progress')
+          .insert({
+            user_id: session.user.id,
+            course_id: courseId,
+            completed_modules: updatedModules,
+            last_accessed: new Date().toISOString(),
+            completion_percentage: completionPercentage,
+            started_at: new Date().toISOString(),
+          });
+
+        if (error) {
+          console.error('Error inserting progress:', error);
+          throw error;
+        }
+      }
+
+      // Update local state
+      const progressData = {
+        user_id: session.user.id,
+        course_id: courseId,
+        completed_modules: updatedModules,
+        last_accessed: new Date().toISOString(),
+        completion_percentage: completionPercentage,
+        started_at: existingData?.started_at || new Date().toISOString(),
+      };
+
+      setCourseProgress(prev => ({
+        ...prev,
+        [courseId]: progressData
+      }));
+
     } catch (error) {
-      console.error('Error updating progress:', error);
-      throw error;
+      console.error('Error updating module progress:', error);
     }
   };
 
