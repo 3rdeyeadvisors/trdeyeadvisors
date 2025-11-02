@@ -58,18 +58,23 @@ serve(async (req) => {
 
     console.log("Found session:", session.id);
 
-    // Re-retrieve session with line items and customer details expanded
+    // Re-retrieve session with ALL possible expansions to see what's available
     session = await stripe.checkout.sessions.retrieve(session.id, {
-      expand: ['line_items', 'line_items.data.price.product', 'customer']
+      expand: ['line_items', 'line_items.data.price.product', 'customer', 'shipping_cost', 'total_details']
     });
     
-    console.log("Session details:", {
-      id: session.id,
-      shipping: session.shipping,
-      customer_details: session.customer_details,
-      mode: session.mode,
-      payment_status: session.payment_status
-    });
+    // Log EVERYTHING about this session to debug
+    console.log("=== FULL SESSION DEBUG ===");
+    console.log("Session ID:", session.id);
+    console.log("Mode:", session.mode);
+    console.log("Status:", session.status);
+    console.log("Payment Status:", session.payment_status);
+    console.log("Shipping:", JSON.stringify(session.shipping));
+    console.log("Customer Details:", JSON.stringify(session.customer_details));
+    console.log("Shipping Details (deprecated):", JSON.stringify((session as any).shipping_details));
+    console.log("Shipping Options:", JSON.stringify(session.shipping_options));
+    console.log("Customer Email:", session.customer_email);
+    console.log("=== END DEBUG ===");
     
     const lineItems = session.line_items?.data || [];
     
