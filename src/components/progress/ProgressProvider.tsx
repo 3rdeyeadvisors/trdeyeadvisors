@@ -86,7 +86,7 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
       // Get existing progress to check if module already completed
       const { data: existingData, error: fetchError } = await supabase
         .from('course_progress')
-        .select('completed_modules, started_at')
+        .select('*')
         .eq('user_id', user.id)
         .eq('course_id', courseId)
         .maybeSingle();
@@ -120,34 +120,61 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
       console.log('[Progress] AFTER - Will save these modules:', updatedModules);
       console.log('[Progress] Completion percentage:', completionPercentage);
 
-      // Use UPSERT to handle both insert and update in one operation
-      const { error, data } = await supabase
-        .from('course_progress')
-        .upsert({
-          user_id: user.id,
-          course_id: courseId,
-          completed_modules: updatedModules,
-          last_accessed: new Date().toISOString(),
-          completion_percentage: completionPercentage,
-          started_at: existingData?.started_at || new Date().toISOString(),
-        }, {
-          onConflict: 'user_id,course_id'
-        })
-        .select()
-        .single();
+      let resultData;
 
-      if (error) {
-        console.error('[Progress] Error upserting progress:', error);
-        throw error;
+      if (existingData) {
+        // Record exists - UPDATE it
+        console.log('[Progress] Record exists, performing UPDATE');
+        const { error: updateError, data: updateData } = await supabase
+          .from('course_progress')
+          .update({
+            completed_modules: updatedModules,
+            last_accessed: new Date().toISOString(),
+            completion_percentage: completionPercentage,
+          })
+          .eq('user_id', user.id)
+          .eq('course_id', courseId)
+          .select()
+          .single();
+
+        if (updateError) {
+          console.error('[Progress] Error updating progress:', updateError);
+          throw updateError;
+        }
+        
+        resultData = updateData;
+        console.log('[Progress] UPDATE successful! Saved data:', resultData);
+      } else {
+        // Record doesn't exist - INSERT it
+        console.log('[Progress] No existing record, performing INSERT');
+        const { error: insertError, data: insertData } = await supabase
+          .from('course_progress')
+          .insert({
+            user_id: user.id,
+            course_id: courseId,
+            completed_modules: updatedModules,
+            last_accessed: new Date().toISOString(),
+            completion_percentage: completionPercentage,
+            started_at: new Date().toISOString(),
+          })
+          .select()
+          .single();
+
+        if (insertError) {
+          console.error('[Progress] Error inserting progress:', insertError);
+          throw insertError;
+        }
+        
+        resultData = insertData;
+        console.log('[Progress] INSERT successful! Saved data:', resultData);
       }
-      
-      console.log('[Progress] Upsert successful! Saved data:', data);
-      console.log('[Progress] Confirmed saved modules:', data.completed_modules);
+
+      console.log('[Progress] Confirmed saved modules:', resultData.completed_modules);
 
       // Update local state with the exact data from database
       setCourseProgress(prev => ({
         ...prev,
-        [courseId]: data
+        [courseId]: resultData
       }));
 
       console.log('[Progress] Local state updated successfully');
