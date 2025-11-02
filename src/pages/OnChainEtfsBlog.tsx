@@ -1,7 +1,7 @@
 import { BlogSEOAutomation } from "@/components/SEOAutomation";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, User } from "lucide-react";
+import { Calendar, User, Clock } from "lucide-react";
 import { BRAND_AUTHOR } from "@/lib/constants";
 
 const OnChainEtfsBlog = () => {
@@ -150,64 +150,55 @@ const OnChainEtfsBlog = () => {
         category={blogPost.category}
         tags={blogPost.tags}
       />
-
-      <div className="container max-w-4xl mx-auto px-4 py-12">
-        <Card className="overflow-hidden border-border/50 bg-card/50 backdrop-blur-sm">
-          <div className="p-8 md:p-12 space-y-8">
-            {/* Header */}
-            <div className="space-y-6">
-              <div className="flex flex-wrap gap-2">
-                <Badge variant="outline" className="text-primary border-primary/30">
+      
+      <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-primary/5">
+        <div className="container mx-auto px-4 py-8 max-w-4xl">
+          {/* Header */}
+          <Card className="p-8 mb-8 border-border/10 bg-card/50 backdrop-blur-sm">
+            <div className="space-y-4">
+              <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+                <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">
                   {blogPost.category}
                 </Badge>
-                {blogPost.tags.slice(0, 3).map((tag) => (
-                  <Badge key={tag} variant="secondary">
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-1">
+                    <User className="w-4 h-4" />
+                    <span>{blogPost.author}</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Calendar className="w-4 h-4" />
+                    <span>{new Date(blogPost.date).toLocaleDateString()}</span>
+                  </div>
+                </div>
+              </div>
+              
+              <h1 className="text-4xl font-bold leading-tight bg-gradient-to-r from-foreground via-foreground to-primary bg-clip-text text-transparent">
+                {blogPost.title}
+              </h1>
+              
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                {blogPost.excerpt}
+              </p>
+              
+              <div className="flex flex-wrap gap-2">
+                {blogPost.tags.map((tag) => (
+                  <Badge key={tag} variant="outline" className="text-xs">
                     {tag}
                   </Badge>
                 ))}
               </div>
-
-              <h1 className="text-4xl md:text-5xl font-bold leading-tight bg-gradient-cosmic bg-clip-text text-transparent">
-                {blogPost.title}
-              </h1>
-
-              <p className="text-xl text-muted-foreground leading-relaxed">
-                {blogPost.excerpt}
-              </p>
-
-              <div className="flex items-center gap-6 text-sm text-muted-foreground border-t border-b border-border/50 py-4">
-                <div className="flex items-center gap-2">
-                  <User className="w-4 h-4" />
-                  <span>{blogPost.author}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4" />
-                  <span>{new Date(blogPost.date).toLocaleDateString('en-US', { 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
-                  })}</span>
-                </div>
-              </div>
             </div>
+          </Card>
 
-            {/* Content */}
-            <article 
-              className="prose prose-lg max-w-none
-                prose-headings:text-foreground 
-                prose-p:text-muted-foreground 
-                prose-p:leading-relaxed
-                prose-strong:text-foreground
-                prose-li:text-muted-foreground
-                prose-a:text-primary prose-a:no-underline hover:prose-a:underline"
-              dangerouslySetInnerHTML={{ 
+          {/* Main Content */}
+          <Card className="p-8 border-border/10 bg-card/50 backdrop-blur-sm">
+            <article className="prose prose-lg max-w-none prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-li:text-muted-foreground prose-h2:text-2xl prose-h2:font-bold prose-h2:mb-4 prose-h2:mt-8 prose-h3:text-xl prose-h3:font-semibold prose-h3:mb-3 prose-h3:mt-6 prose-h4:text-lg prose-h4:font-medium prose-h4:mb-2 prose-h4:mt-4">
+              <div dangerouslySetInnerHTML={{ 
                 __html: blogPost.content
-                  .replace(/\n\s+/g, '\n')
-                  .replace(/\n/g, '<br/>')
-              }} 
-            />
-          </div>
-        </Card>
+              }} />
+            </article>
+          </Card>
+        </div>
       </div>
     </>
   );
