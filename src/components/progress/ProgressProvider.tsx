@@ -89,7 +89,9 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
 
         const { error } = await supabase
           .from('course_progress')
-          .upsert(progressData);
+          .upsert(progressData, {
+            onConflict: 'user_id,course_id'
+          });
 
         if (error) throw error;
 
