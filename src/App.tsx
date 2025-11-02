@@ -52,6 +52,7 @@ import SocialBanner from "./pages/SocialBanner";
 import UploadDigitalProducts from "./pages/UploadDigitalProducts";
 import AdminUploadProducts from "./pages/AdminUploadProducts";
 import SetupStripeProducts from "./pages/SetupStripeProducts";
+import StripeDiagnostic from "./pages/StripeDiagnostic";
 import WebThreeGamingDefiConvergence from "./pages/WebThreeGamingDefiConvergence";
 import DefaiRevolution2025 from "./pages/DefaiRevolution2025";
 import DefiRegulationAmlIntegration from "./pages/DefiRegulationAmlIntegration";
@@ -161,6 +162,11 @@ const App = () => {
                   <Route path="/setup-stripe-products" element={
                     <ProtectedRoute requireRole="admin">
                       <SetupStripeProducts />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/stripe-diagnostic" element={
+                    <ProtectedRoute requireRole="admin">
+                      <StripeDiagnostic />
                     </ProtectedRoute>
                   } />
                   <Route path="/admin/email-logs" element={
