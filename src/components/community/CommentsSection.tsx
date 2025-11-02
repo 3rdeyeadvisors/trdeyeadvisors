@@ -234,14 +234,14 @@ export const CommentsSection = ({ courseId, moduleId }: CommentsSectionProps) =>
               <div className="flex items-start gap-3">
                 <Avatar className="w-8 h-8">
                   <AvatarFallback className="text-xs">
-                    {comment.profiles.display_name?.charAt(0).toUpperCase() || "U"}
+                    {comment.profiles?.display_name?.charAt(0).toUpperCase() || "U"}
                   </AvatarFallback>
                 </Avatar>
                 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
                     <span className="font-consciousness font-medium text-sm">
-                      {comment.profiles.display_name || "Anonymous"}
+                      {comment.profiles?.display_name || "Anonymous"}
                     </span>
                     <span className="text-xs text-muted-foreground">
                       {formatDistanceToNow(new Date(comment.created_at), { addSuffix: true })}

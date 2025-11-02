@@ -294,14 +294,14 @@ export const QASection = ({ courseId, moduleId }: QASectionProps) => {
               <div className="flex items-start gap-3 mb-4">
                 <Avatar className="w-8 h-8">
                   <AvatarFallback className="text-xs">
-                    {question.profiles.display_name?.charAt(0).toUpperCase() || "U"}
+                    {question.profiles?.display_name?.charAt(0).toUpperCase() || "U"}
                   </AvatarFallback>
                 </Avatar>
                 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
                     <span className="font-consciousness font-medium text-sm">
-                      {question.profiles.display_name || "Anonymous"}
+                      {question.profiles?.display_name || "Anonymous"}
                     </span>
                     <span className="text-xs text-muted-foreground">
                       {formatDistanceToNow(new Date(question.created_at), { addSuffix: true })}
@@ -341,13 +341,13 @@ export const QASection = ({ courseId, moduleId }: QASectionProps) => {
                       <div className="flex items-start gap-2">
                         <Avatar className="w-6 h-6">
                           <AvatarFallback className="text-xs">
-                            {reply.profiles.display_name?.charAt(0).toUpperCase() || "U"}
+                            {reply.profiles?.display_name?.charAt(0).toUpperCase() || "U"}
                           </AvatarFallback>
                         </Avatar>
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
                             <span className="font-consciousness font-medium text-xs">
-                              {reply.profiles.display_name || "Anonymous"}
+                              {reply.profiles?.display_name || "Anonymous"}
                             </span>
                             <span className="text-xs text-muted-foreground">
                               {formatDistanceToNow(new Date(reply.created_at), { addSuffix: true })}
