@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, ArrowRight } from "lucide-react";
-import { getBlogPosts, getBlogPostsByCategory, getPublishedDate, getBlogCategories } from "@/data/blogContent";
+import { getBlogPosts, getBlogPostsByCategory, getBlogCategories } from "@/data/blogContent";
 import SEO from "@/components/SEO";
 
 const Blog = () => {
@@ -23,16 +23,20 @@ const Blog = () => {
   console.log("Blog component - posts length:", posts.length);
   
   const now = new Date();
+  now.setHours(0, 0, 0, 0); // Reset to start of day for accurate comparison
   const cutoff = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+  
   const featuredPosts = posts.filter(post => {
-    const d = new Date(getPublishedDate(post.date));
-    return !isNaN(d.getTime()) && d >= cutoff;
+    const postDate = new Date(post.date);
+    postDate.setHours(0, 0, 0, 0);
+    return !isNaN(postDate.getTime()) && postDate >= cutoff && post.featured === true;
   });
   console.log("Featured posts (last 7 days):", featuredPosts);
   
   const regularPosts = posts.filter(post => {
-    const d = new Date(post.date);
-    return isNaN(d.getTime()) || d < cutoff;
+    const postDate = new Date(post.date);
+    postDate.setHours(0, 0, 0, 0);
+    return !isNaN(postDate.getTime()) && (postDate < cutoff || post.featured !== true);
   });
   console.log("Regular posts:", regularPosts);
 
@@ -207,7 +211,7 @@ const Blog = () => {
                         <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground mb-6">
                           <div className="flex items-center gap-2">
                             <Calendar className="w-4 h-4" />
-                            <span className="font-system">{getPublishedDate(post.date)}</span>
+                            <span className="font-system">{new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <Clock className="w-4 h-4" />
@@ -275,7 +279,7 @@ const Blog = () => {
               <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
                 <div className="flex items-center gap-2">
                   <Calendar className="w-4 h-4" />
-                  <span className="font-system">{getPublishedDate(post.date)}</span>
+                  <span className="font-system">{new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Clock className="w-4 h-4" />
