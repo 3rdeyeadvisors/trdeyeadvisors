@@ -85,7 +85,8 @@ const StripeDiagnostic = () => {
   }
 
   const coursesWithStripe = diagnostics.courses.filter((c: any) => c.stripe_price_id);
-  const coursesWithoutStripe = diagnostics.courses.filter((c: any) => !c.stripe_price_id);
+  const freeCourses = diagnostics.courses.filter((c: any) => !c.price_cents || c.price_cents === 0);
+  const coursesWithoutStripe = diagnostics.courses.filter((c: any) => !c.stripe_price_id && c.price_cents > 0);
   const totalPrintifyVariants = diagnostics.printifyProducts.reduce(
     (sum: number, p: any) => sum + (p.variants?.length || 0), 0
   );
@@ -208,9 +209,28 @@ const StripeDiagnostic = () => {
                 )}
               </div>
 
+              {freeCourses.length > 0 && (
+                <div>
+                  <h3 className="font-semibold mb-2 text-muted-foreground">Free Courses (No Stripe Required):</h3>
+                  <div className="space-y-2">
+                    {freeCourses.map((course: any) => (
+                      <div key={course.id} className="border rounded p-3 bg-muted/30">
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <p className="font-medium text-foreground">{course.title}</p>
+                            <p className="text-sm text-muted-foreground">Price: Free</p>
+                          </div>
+                          <Badge variant="secondary">Free</Badge>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {coursesWithoutStripe.length > 0 && (
                 <div>
-                  <h3 className="font-semibold mb-2 text-destructive">Courses WITHOUT Stripe Integration:</h3>
+                  <h3 className="font-semibold mb-2 text-destructive">Paid Courses WITHOUT Stripe Integration:</h3>
                   <div className="space-y-2">
                     {coursesWithoutStripe.map((course: any) => (
                       <div key={course.id} className="border border-destructive/30 rounded p-3 bg-destructive/5">
@@ -218,7 +238,7 @@ const StripeDiagnostic = () => {
                           <div>
                             <p className="font-medium text-foreground">{course.title}</p>
                             <p className="text-sm text-muted-foreground">
-                              Price: ${course.price_cents ? (course.price_cents / 100).toFixed(2) : 'Free/Not Set'}
+                              Price: ${(course.price_cents / 100).toFixed(2)}
                             </p>
                           </div>
                           {getStatusBadge(false, "Synced", "Not Synced")}
