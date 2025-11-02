@@ -83,20 +83,13 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
     console.log('[Progress] Starting module completion:', { courseId, moduleIndex, userId: user.id });
 
     try {
-      // Query with user ID
-      const { data: existingData, error: fetchError } = await supabase
+      // Get existing progress to check if module already completed
+      const { data: existingData } = await supabase
         .from('course_progress')
-        .select('*')
+        .select('completed_modules, started_at')
         .eq('user_id', user.id)
         .eq('course_id', courseId)
         .maybeSingle();
-
-      if (fetchError) {
-        console.error('[Progress] Error fetching progress:', fetchError);
-        throw fetchError;
-      }
-
-      console.log('[Progress] Existing data:', existingData);
 
       const completedModules = existingData?.completed_modules || [];
       
@@ -110,67 +103,42 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
       const totalModules = getCourseModuleCount(courseId);
       const completionPercentage = (updatedModules.length / totalModules) * 100;
 
-      console.log('[Progress] Will update with:', { updatedModules, completionPercentage });
+      console.log('[Progress] Will upsert with:', { updatedModules, completionPercentage });
 
-      if (existingData) {
-        // Update existing record
-        const { error, data } = await supabase
-          .from('course_progress')
-          .update({
-            completed_modules: updatedModules,
-            last_accessed: new Date().toISOString(),
-            completion_percentage: completionPercentage,
-          })
-          .eq('user_id', user.id)
-          .eq('course_id', courseId)
-          .select();
+      // Use UPSERT to handle both insert and update in one operation
+      const { error, data } = await supabase
+        .from('course_progress')
+        .upsert({
+          user_id: user.id,
+          course_id: courseId,
+          completed_modules: updatedModules,
+          last_accessed: new Date().toISOString(),
+          completion_percentage: completionPercentage,
+          started_at: existingData?.started_at || new Date().toISOString(),
+        }, {
+          onConflict: 'user_id,course_id'
+        })
+        .select()
+        .single();
 
-        if (error) {
-          console.error('[Progress] Error updating progress:', error);
-          throw error;
-        }
-        console.log('[Progress] Update successful:', data);
-      } else {
-        // Insert new record
-        const { error, data } = await supabase
-          .from('course_progress')
-          .insert({
-            user_id: user.id,
-            course_id: courseId,
-            completed_modules: updatedModules,
-            last_accessed: new Date().toISOString(),
-            completion_percentage: completionPercentage,
-            started_at: new Date().toISOString(),
-          })
-          .select();
-
-        if (error) {
-          console.error('[Progress] Error inserting progress:', error);
-          throw error;
-        }
-        console.log('[Progress] Insert successful:', data);
+      if (error) {
+        console.error('[Progress] Error upserting progress:', error);
+        throw error;
       }
+      
+      console.log('[Progress] Upsert successful:', data);
 
       // Update local state
-      const progressData = {
-        user_id: user.id,
-        course_id: courseId,
-        completed_modules: updatedModules,
-        last_accessed: new Date().toISOString(),
-        completion_percentage: completionPercentage,
-        started_at: existingData?.started_at || new Date().toISOString(),
-      };
-
       setCourseProgress(prev => ({
         ...prev,
-        [courseId]: progressData
+        [courseId]: data
       }));
 
       console.log('[Progress] Local state updated successfully');
 
     } catch (error) {
       console.error('[Progress] Error updating module progress:', error);
-      throw error; // Re-throw so caller can handle it
+      throw error;
     }
   };
 
