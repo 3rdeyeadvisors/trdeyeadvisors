@@ -70,7 +70,7 @@ const StripeDiagnostic = () => {
 
   const getStatusBadge = (condition: boolean, trueText: string, falseText: string) => {
     return condition ? (
-      <Badge className="bg-green-500/20 text-green-700 dark:text-green-300">{trueText}</Badge>
+      <Badge variant="secondary">{trueText}</Badge>
     ) : (
       <Badge variant="destructive">{falseText}</Badge>
     );
@@ -210,13 +210,13 @@ const StripeDiagnostic = () => {
 
               {coursesWithoutStripe.length > 0 && (
                 <div>
-                  <h3 className="font-semibold mb-2 text-orange-600">Courses WITHOUT Stripe Integration:</h3>
+                  <h3 className="font-semibold mb-2 text-destructive">Courses WITHOUT Stripe Integration:</h3>
                   <div className="space-y-2">
                     {coursesWithoutStripe.map((course: any) => (
-                      <div key={course.id} className="border border-orange-200 rounded p-3 bg-orange-50 dark:bg-orange-950/20">
+                      <div key={course.id} className="border border-destructive/30 rounded p-3 bg-destructive/5">
                         <div className="flex items-start justify-between">
                           <div>
-                            <p className="font-medium">{course.title}</p>
+                            <p className="font-medium text-foreground">{course.title}</p>
                             <p className="text-sm text-muted-foreground">
                               Price: ${course.price_cents ? (course.price_cents / 100).toFixed(2) : 'Free/Not Set'}
                             </p>
@@ -318,13 +318,13 @@ const StripeDiagnostic = () => {
           </Card>
 
           {/* Recommendations */}
-          <Card className="p-6 bg-blue-50 dark:bg-blue-950/20 border-blue-200">
+          <Card className="p-6 bg-accent/20 border-accent/50">
             <h2 className="text-2xl font-bold mb-4">Recommendations</h2>
             <ul className="space-y-2 text-sm">
               {coursesWithoutStripe.length > 0 && (
                 <li className="flex items-start gap-2">
-                  <AlertTriangle className="w-4 h-4 text-orange-500 flex-shrink-0 mt-0.5" />
-                  <span>
+                  <AlertTriangle className="w-4 h-4 text-destructive flex-shrink-0 mt-0.5" />
+                  <span className="text-foreground">
                     <strong>{coursesWithoutStripe.length} courses</strong> are missing Stripe Price IDs. 
                     Create products in Stripe and update the database with the price IDs.
                   </span>
@@ -332,10 +332,10 @@ const StripeDiagnostic = () => {
               )}
               {diagnostics.recentOrders.length === 0 && (
                 <li className="flex items-start gap-2">
-                  <AlertTriangle className="w-4 h-4 text-orange-500 flex-shrink-0 mt-0.5" />
-                  <span>
+                  <AlertTriangle className="w-4 h-4 text-destructive flex-shrink-0 mt-0.5" />
+                  <span className="text-foreground">
                     Configure webhook in Stripe Dashboard at: 
-                    <code className="ml-1 px-2 py-1 bg-muted rounded text-xs">
+                    <code className="ml-1 px-2 py-1 bg-muted rounded text-xs text-foreground">
                       https://zapbkuaejvzpqerkkcnc.supabase.co/functions/v1/stripe-webhook
                     </code>
                   </span>
@@ -343,8 +343,8 @@ const StripeDiagnostic = () => {
               )}
               {diagnostics.printifyProducts.length === 0 && (
                 <li className="flex items-start gap-2">
-                  <AlertTriangle className="w-4 h-4 text-orange-500 flex-shrink-0 mt-0.5" />
-                  <span>No Printify products found. Sync products from Printify via the Store admin panel.</span>
+                  <AlertTriangle className="w-4 h-4 text-destructive flex-shrink-0 mt-0.5" />
+                  <span className="text-foreground">No Printify products found. Sync products from Printify via the Store admin panel.</span>
                 </li>
               )}
             </ul>
