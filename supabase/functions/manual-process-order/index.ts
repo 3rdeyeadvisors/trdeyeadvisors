@@ -58,9 +58,17 @@ serve(async (req) => {
 
     console.log("Found session:", session.id);
 
-    // Re-retrieve session with line items expanded
+    // Re-retrieve session with line items and customer details expanded
     session = await stripe.checkout.sessions.retrieve(session.id, {
-      expand: ['line_items', 'line_items.data.price.product']
+      expand: ['line_items', 'line_items.data.price.product', 'customer']
+    });
+    
+    console.log("Session details:", {
+      id: session.id,
+      shipping: session.shipping,
+      customer_details: session.customer_details,
+      mode: session.mode,
+      payment_status: session.payment_status
     });
     
     const lineItems = session.line_items?.data || [];
@@ -84,17 +92,20 @@ serve(async (req) => {
       throw new Error("No Printify items found in this order");
     }
 
-    // Get shipping info from session (shipping property, not shipping_details)
-    const shipping = session.shipping;
+    // Get shipping info from session
+    // Try session.shipping first, fallback to customer_details if needed
+    const shipping = session.shipping || session.customer_details;
     
     if (!shipping?.address) {
-      throw new Error("No shipping address found");
+      console.error("Session data dump:", JSON.stringify(session, null, 2));
+      throw new Error(`No shipping address found in session. Has shipping: ${!!session.shipping}, Has customer_details: ${!!session.customer_details}`);
     }
     
     console.log("Processing order with shipping:", {
       name: shipping.name,
       country: shipping.address.country,
-      city: shipping.address.city
+      city: shipping.address.city,
+      source: session.shipping ? 'shipping' : 'customer_details'
     });
 
     // Call create-printify-order function
