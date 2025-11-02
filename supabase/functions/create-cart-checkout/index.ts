@@ -50,10 +50,10 @@ serve(async (req) => {
       }
 
       if (item.printify_id) {
-        // Validate Printify product
+        // Validate Printify product and get Stripe price info
         const { data: product, error } = await supabaseClient
           .from('printify_products')
-          .select('printify_id, title, variants, is_active')
+          .select('printify_id, title, variants, is_active, stripe_product_id, stripe_prices')
           .eq('printify_id', item.printify_id)
           .single();
 
@@ -85,10 +85,16 @@ serve(async (req) => {
           client_price: item.price,
           db_price: variant.price,
           validated_price_cents: validatedPrice,
-          quantity: item.quantity
+          quantity: item.quantity,
+          has_stripe_prices: !!product.stripe_prices
         });
 
-        return { ...item, validatedPrice, dbTitle: product.title };
+        return { 
+          ...item, 
+          validatedPrice, 
+          dbTitle: product.title,
+          stripePrices: product.stripe_prices || []
+        };
       } else {
         // Validate course/digital product
         const { data: course, error } = await supabaseClient
@@ -125,7 +131,30 @@ serve(async (req) => {
     console.log('Printify items:', printifyItems.length);
 
     // Create line items for Stripe using validated prices
-    const lineItems = validatedItems.map((item: any) => {
+    const lineItems = await Promise.all(validatedItems.map(async (item: any) => {
+      // For Printify items, check if we have pre-created Stripe prices
+      if (item.printify_id && item.stripePrices && Array.isArray(item.stripePrices)) {
+        const stripePriceData = item.stripePrices.find((sp: any) => 
+          sp.variant_id?.toString() === item.variant_id?.toString()
+        );
+        
+        if (stripePriceData?.price_id) {
+          console.log('Using pre-created Stripe price:', {
+            product: item.dbTitle,
+            variant_id: item.variant_id,
+            price_id: stripePriceData.price_id
+          });
+          
+          return {
+            price: stripePriceData.price_id,
+            quantity: item.quantity,
+          };
+        }
+      }
+
+      // Fallback to dynamic price creation for items without pre-created prices
+      console.log('Creating dynamic price for:', item.dbTitle);
+      
       // Build product name with variant info for Printify items
       let productName = item.dbTitle; // Use validated title from database
       if (item.printify_id && (item.color || item.size)) {
@@ -198,22 +227,47 @@ serve(async (req) => {
         },
         quantity: item.quantity,
       };
-    });
+    }));
 
-    // Calculate total amount
-    const totalAmount = lineItems.reduce((sum, item) => sum + (item.price_data.unit_amount * item.quantity), 0);
+    // Calculate total amount - handle both pre-created prices and dynamic prices
+    const totalAmount = await (async () => {
+      let total = 0;
+      for (const item of lineItems) {
+        if (item.price) {
+          // Pre-created Stripe price - need to fetch the price details
+          const priceDetails = await stripe.prices.retrieve(item.price);
+          total += (priceDetails.unit_amount || 0) * item.quantity;
+        } else if (item.price_data) {
+          // Dynamic price
+          total += item.price_data.unit_amount * item.quantity;
+        }
+      }
+      return total;
+    })();
     
     console.log('Checkout totals:', {
       subtotal_cents: totalAmount,
       subtotal_dollars: (totalAmount / 100).toFixed(2),
       items_count: lineItems.length,
-      line_items: lineItems.map(item => ({
-        name: item.price_data.product_data.name,
-        unit_price_cents: item.price_data.unit_amount,
-        unit_price_dollars: (item.price_data.unit_amount / 100).toFixed(2),
-        quantity: item.quantity,
-        total_cents: item.price_data.unit_amount * item.quantity
-      }))
+      line_items: lineItems.map(item => {
+        if (item.price) {
+          // Pre-created Stripe price
+          return {
+            name: 'Pre-created Stripe price',
+            price_id: item.price,
+            quantity: item.quantity
+          };
+        } else {
+          // Dynamic price
+          return {
+            name: item.price_data.product_data.name,
+            unit_price_cents: item.price_data.unit_amount,
+            unit_price_dollars: (item.price_data.unit_amount / 100).toFixed(2),
+            quantity: item.quantity,
+            total_cents: item.price_data.unit_amount * item.quantity
+          };
+        }
+      })
     });
 
     // Validate and apply discount if provided

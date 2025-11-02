@@ -92,8 +92,17 @@ const Store = () => {
       
       if (error) throw error;
       
-      toast.success(`Synced ${data.synced} products from Printify!`);
-      loadPrintifyProducts();
+      toast.success(`Synced ${data.synced} products from Printify! Now syncing to Stripe...`);
+      
+      // Now sync to Stripe
+      const { data: stripeData, error: stripeError } = await supabase.functions.invoke('sync-printify-to-stripe');
+      
+      if (stripeError) throw stripeError;
+      
+      if (stripeData.success) {
+        toast.success(`${stripeData.synced} products synced to Stripe with images!`);
+        loadPrintifyProducts();
+      }
     } catch (error) {
       console.error('Error syncing Printify products:', error);
       toast.error('Failed to sync Printify products');

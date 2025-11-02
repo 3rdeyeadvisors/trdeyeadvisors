@@ -583,6 +583,8 @@ export type Database = {
           is_active: boolean | null
           printify_id: string
           shop_id: string
+          stripe_prices: Json | null
+          stripe_product_id: string | null
           tags: string[] | null
           title: string
           updated_at: string
@@ -596,6 +598,8 @@ export type Database = {
           is_active?: boolean | null
           printify_id: string
           shop_id: string
+          stripe_prices?: Json | null
+          stripe_product_id?: string | null
           tags?: string[] | null
           title: string
           updated_at?: string
@@ -609,6 +613,8 @@ export type Database = {
           is_active?: boolean | null
           printify_id?: string
           shop_id?: string
+          stripe_prices?: Json | null
+          stripe_product_id?: string | null
           tags?: string[] | null
           title?: string
           updated_at?: string
