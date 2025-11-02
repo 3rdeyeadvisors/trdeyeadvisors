@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { ManualOrderProcessor } from "@/components/admin/ManualOrderProcessor";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -249,8 +250,12 @@ const AdminStoreDashboard = () => {
         <h1 className="text-3xl font-bold">Store Management</h1>
       </div>
 
-      <Tabs defaultValue="discounts" className="space-y-4">
+      <Tabs defaultValue="manual-process" className="space-y-4">
         <TabsList>
+          <TabsTrigger value="manual-process" className="flex items-center gap-2">
+            <ShoppingCart className="h-4 w-4" />
+            Manual Process
+          </TabsTrigger>
           <TabsTrigger value="discounts" className="flex items-center gap-2">
             <Tag className="h-4 w-4" />
             Discount Codes
@@ -268,6 +273,11 @@ const AdminStoreDashboard = () => {
             Products
           </TabsTrigger>
         </TabsList>
+
+        {/* Manual Process Tab */}
+        <TabsContent value="manual-process" className="space-y-4">
+          <ManualOrderProcessor />
+        </TabsContent>
 
         {/* Discount Codes Tab */}
         <TabsContent value="discounts" className="space-y-4">
