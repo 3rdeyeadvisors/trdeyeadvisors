@@ -22,20 +22,24 @@ const Blog = () => {
   console.log("Blog component - posts:", posts);
   console.log("Blog component - posts length:", posts.length);
   
+  // Helper to parse date strings as local dates to avoid timezone issues
+  const parseLocalDate = (dateStr: string) => {
+    const [year, month, day] = dateStr.split('-').map(Number);
+    return new Date(year, month - 1, day);
+  };
+  
   const now = new Date();
-  now.setHours(0, 0, 0, 0); // Reset to start of day for accurate comparison
+  now.setHours(0, 0, 0, 0);
   const cutoff = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
   
   const featuredPosts = posts.filter(post => {
-    const postDate = new Date(post.date);
-    postDate.setHours(0, 0, 0, 0);
+    const postDate = parseLocalDate(post.date);
     return !isNaN(postDate.getTime()) && postDate >= cutoff && post.featured === true;
   });
   console.log("Featured posts (last 7 days):", featuredPosts);
   
   const regularPosts = posts.filter(post => {
-    const postDate = new Date(post.date);
-    postDate.setHours(0, 0, 0, 0);
+    const postDate = parseLocalDate(post.date);
     return !isNaN(postDate.getTime()) && (postDate < cutoff || post.featured !== true);
   });
   console.log("Regular posts:", regularPosts);
@@ -211,7 +215,7 @@ const Blog = () => {
                         <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground mb-6">
                           <div className="flex items-center gap-2">
                             <Calendar className="w-4 h-4" />
-                            <span className="font-system">{new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+                            <span className="font-system">{parseLocalDate(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <Clock className="w-4 h-4" />
@@ -279,7 +283,7 @@ const Blog = () => {
               <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
                 <div className="flex items-center gap-2">
                   <Calendar className="w-4 h-4" />
-                  <span className="font-system">{new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+                  <span className="font-system">{parseLocalDate(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Clock className="w-4 h-4" />
