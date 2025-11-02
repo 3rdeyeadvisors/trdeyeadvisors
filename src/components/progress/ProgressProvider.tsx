@@ -75,15 +75,28 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
   };
 
   const updateModuleProgress = async (courseId: number, moduleIndex: number) => {
-    if (!user) return;
+    if (!user) {
+      console.log('[Progress] No user found');
+      throw new Error('User not authenticated');
+    }
+
+    console.log('[Progress] Starting module completion:', { courseId, moduleIndex, userId: user.id });
 
     try {
       // Get fresh session to ensure auth.uid() matches
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session?.user) {
-        console.error('No valid session found');
-        return;
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      
+      if (sessionError) {
+        console.error('[Progress] Session error:', sessionError);
+        throw sessionError;
       }
+      
+      if (!session?.user) {
+        console.error('[Progress] No valid session found');
+        throw new Error('No valid session');
+      }
+
+      console.log('[Progress] Session verified:', session.user.id);
 
       // Query with fresh session user ID
       const { data: existingData, error: fetchError } = await supabase
@@ -94,14 +107,17 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
         .maybeSingle();
 
       if (fetchError) {
-        console.error('Error fetching progress:', fetchError);
+        console.error('[Progress] Error fetching progress:', fetchError);
         throw fetchError;
       }
+
+      console.log('[Progress] Existing data:', existingData);
 
       const completedModules = existingData?.completed_modules || [];
       
       // Don't add if already completed
       if (completedModules.includes(moduleIndex)) {
+        console.log('[Progress] Module already completed');
         return;
       }
 
@@ -109,9 +125,11 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
       const totalModules = getCourseModuleCount(courseId);
       const completionPercentage = (updatedModules.length / totalModules) * 100;
 
+      console.log('[Progress] Will update with:', { updatedModules, completionPercentage });
+
       if (existingData) {
         // Update existing record - use session user ID
-        const { error } = await supabase
+        const { error, data } = await supabase
           .from('course_progress')
           .update({
             completed_modules: updatedModules,
@@ -119,15 +137,17 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
             completion_percentage: completionPercentage,
           })
           .eq('user_id', session.user.id)
-          .eq('course_id', courseId);
+          .eq('course_id', courseId)
+          .select();
 
         if (error) {
-          console.error('Error updating progress:', error);
+          console.error('[Progress] Error updating progress:', error);
           throw error;
         }
+        console.log('[Progress] Update successful:', data);
       } else {
         // Insert new record - use session user ID
-        const { error } = await supabase
+        const { error, data } = await supabase
           .from('course_progress')
           .insert({
             user_id: session.user.id,
@@ -136,12 +156,14 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
             last_accessed: new Date().toISOString(),
             completion_percentage: completionPercentage,
             started_at: new Date().toISOString(),
-          });
+          })
+          .select();
 
         if (error) {
-          console.error('Error inserting progress:', error);
+          console.error('[Progress] Error inserting progress:', error);
           throw error;
         }
+        console.log('[Progress] Insert successful:', data);
       }
 
       // Update local state
@@ -159,8 +181,11 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
         [courseId]: progressData
       }));
 
+      console.log('[Progress] Local state updated successfully');
+
     } catch (error) {
-      console.error('Error updating module progress:', error);
+      console.error('[Progress] Error updating module progress:', error);
+      throw error; // Re-throw so caller can handle it
     }
   };
 
