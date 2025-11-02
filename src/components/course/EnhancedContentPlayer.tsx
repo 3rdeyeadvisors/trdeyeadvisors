@@ -345,29 +345,16 @@ export const EnhancedContentPlayer = ({
           <Card className={`${fullscreen ? 'fixed inset-0 z-50' : ''} w-full`}>
             <div className="p-4 md:p-6">
               {module.type === 'text' && module.content.text && (
-                <>
-                  {/* Mobile View */}
-                  <div className="block md:hidden text-center">
-                    <ExpandableText 
-                      text={module.content.text}
-                      maxLines={15}
-                      className="prose prose-sm md:prose-lg max-w-none font-consciousness dark:prose-invert text-center mx-auto"
-                      expandLabel="Read Full Content"
-                      collapseLabel="Show Less"
-                      mobileOnly={true}
-                      renderMarkdown={true}
-                    />
-                  </div>
-                  
-                  {/* Desktop View */}
-                  <div 
-                    id="module-content"
-                    className="hidden md:block prose prose-lg max-w-none font-consciousness overflow-y-auto max-h-[calc(100vh-400px)] text-center mx-auto w-full max-w-full break-words overflow-x-hidden touch-pan-y"
-                    style={{ WebkitOverflowScrolling: 'touch' }}
-                  >
-                    <ReactMarkdown>{module.content.text}</ReactMarkdown>
-                  </div>
-                </>
+                <div 
+                  id="module-content"
+                  className="prose prose-sm md:prose-lg max-w-none font-consciousness overflow-y-auto max-h-[60vh] md:max-h-[calc(100vh-400px)] text-left mx-auto w-full break-words overflow-x-hidden overscroll-contain px-2 md:px-4"
+                  style={{ 
+                    WebkitOverflowScrolling: 'touch',
+                    touchAction: 'pan-y'
+                  }}
+                >
+                  <ReactMarkdown>{module.content.text}</ReactMarkdown>
+                </div>
               )}
 
               {module.type === 'video' && module.content.videoUrl && (
@@ -530,7 +517,28 @@ export const EnhancedContentPlayer = ({
         )}
       </Tabs>
 
-      <Separator className="my-8" />
+      <Separator className="my-6" />
+
+      {/* Mark Complete Button - At end of content */}
+      {!isCompleted && user && (
+        <div className="mb-6">
+          <Button 
+            onClick={handleComplete} 
+            size="lg" 
+            className="bg-awareness hover:bg-awareness/90 text-background w-full flex items-center justify-center gap-2 touch-target min-h-[44px] font-consciousness"
+          >
+            <CheckCircle className="w-5 h-5" />
+            <span>Mark Complete</span>
+          </Button>
+        </div>
+      )}
+
+      {isCompleted && (
+        <div className="mb-6 p-4 bg-awareness/10 border border-awareness/30 rounded-lg flex items-center justify-center gap-2">
+          <CheckCircle className="w-5 h-5 text-awareness" />
+          <span className="font-consciousness text-awareness font-medium">Module Completed</span>
+        </div>
+      )}
 
       {/* Enhanced Navigation */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
@@ -542,17 +550,6 @@ export const EnhancedContentPlayer = ({
           </Button>
         ) : (
           <div className="hidden sm:block" />
-        )}
-
-        {!isCompleted && user && (
-          <Button 
-            onClick={handleComplete} 
-            size="lg" 
-            className="bg-awareness hover:bg-awareness/90 text-background w-full sm:w-auto flex items-center justify-center gap-2 touch-target min-h-[44px]"
-          >
-            <CheckCircle className="w-4 h-4" />
-            <span>Mark Complete</span>
-          </Button>
         )}
 
         {hasNext ? (

@@ -135,7 +135,7 @@ const ModuleViewer = () => {
         {/* Module List Sidebar */}
         {showModuleList && (
           <Card className="mb-4 md:mb-6 p-4 md:p-6">
-            <h3 className="text-base md:text-lg font-consciousness font-semibold mb-3 md:mb-4">Course Modules</h3>
+            <h3 className="text-base md:text-lg font-consciousness font-semibold mb-3 md:mb-4 text-center md:text-left">Course Modules</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3">
               {course.modules.map((module, index) => {
                 const isCompleted = isModuleCompleted(index);
@@ -145,8 +145,12 @@ const ModuleViewer = () => {
                   <Button
                     key={module.id}
                     variant={isCurrent ? "default" : "outline"}
-                    className={`justify-start h-auto p-3 md:p-4 text-left min-h-[60px] ${
-                      isCompleted ? "border-green-500 bg-green-50 hover:bg-green-100 dark:bg-green-950/20" : ""
+                    className={`h-auto p-3 md:p-4 min-h-[60px] transition-all ${
+                      isCurrent 
+                        ? "bg-primary/10 border-primary/50 text-primary hover:bg-primary/20" 
+                        : isCompleted 
+                          ? "bg-awareness/10 border-awareness/40 hover:bg-awareness/20" 
+                          : "bg-card border-border hover:border-primary/30"
                     }`}
                     onClick={() => {
                       navigate(`/courses/${courseId}/module/${module.id}`);
@@ -156,18 +160,18 @@ const ModuleViewer = () => {
                     <div className="flex items-center gap-2 md:gap-3 w-full">
                       <div className="flex items-center gap-1 md:gap-2 flex-shrink-0">
                         {isCompleted ? (
-                          <div className="w-5 h-5 md:w-6 md:h-6 bg-green-500 rounded-full flex items-center justify-center">
+                          <div className="w-5 h-5 md:w-6 md:h-6 bg-awareness rounded-full flex items-center justify-center">
                             <span className="text-white text-xs font-bold">✓</span>
                           </div>
                         ) : (
-                          <div className="w-5 h-5 md:w-6 md:h-6 border-2 border-muted-foreground rounded-full flex items-center justify-center">
+                          <div className="w-5 h-5 md:w-6 md:h-6 border-2 border-current rounded-full flex items-center justify-center">
                             <span className="text-xs font-medium">{index + 1}</span>
                           </div>
                         )}
-                        {isCurrent && <Play className="w-3 h-3 md:w-4 md:h-4 text-primary" />}
+                        {isCurrent && <Play className="w-3 h-3 md:w-4 md:h-4" />}
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-xs md:text-sm font-medium break-words whitespace-normal overflow-wrap-anywhere">{module.title}</p>
+                      <div className="flex-1 min-w-0 text-center md:text-left">
+                        <p className="text-xs md:text-sm font-medium break-words whitespace-normal">{module.title}</p>
                         <p className="text-xs text-muted-foreground mt-1">{module.duration} min</p>
                       </div>
                     </div>

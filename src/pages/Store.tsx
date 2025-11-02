@@ -270,13 +270,13 @@ const Store = () => {
           {/* Digital Products Section */}
           {activeCategory === "digital" && (
             <section className="mb-16" aria-labelledby="digital-products-heading">
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 {digitalProducts.map((product, index) => {
                   const ProductIcon = getProductIcon(product);
                   return (
                      <Card 
                        key={product.id}
-                       className="p-5 md:p-6 bg-card/60 border-border hover:border-primary/40 transition-all duration-cosmic hover:shadow-consciousness group flex flex-col h-full text-center"
+                       className="p-4 md:p-6 bg-card/50 border-border hover:border-primary/40 transition-all duration-300 hover:shadow-lg group flex flex-col h-full"
                        style={{ animationDelay: `${index * 0.1}s` }}
                      >
                        <div className="flex items-center justify-center mb-4">
@@ -286,29 +286,29 @@ const Store = () => {
                        </div>
                        
                        <div className="flex justify-center mb-3">
-                         <ProductIcon className="w-7 h-7 md:w-8 md:h-8 text-primary group-hover:text-primary-glow transition-colors" />
+                         <ProductIcon className="w-8 h-8 md:w-10 md:h-10 text-primary group-hover:text-primary transition-colors" />
                        </div>
                        
-                       <h3 className="text-base md:text-lg font-consciousness font-semibold text-foreground mb-3 line-clamp-2 px-2">
+                       <h3 className="text-sm md:text-base font-consciousness font-semibold text-center mb-3 line-clamp-2 min-h-[2.5rem]">
                          {product.title}
                        </h3>
                        
-                       <div className="relative mb-4 flex-1 flex items-center">
+                       <div className="relative mb-4 flex-1">
                          <div 
-                           className="h-[160px] md:h-[180px] overflow-y-auto px-2 scrollbar-thin w-full"
+                           className="h-[140px] md:h-[160px] overflow-y-auto px-2 scrollbar-hide text-center"
                            style={{
                              maskImage: 'linear-gradient(to bottom, black 85%, transparent 100%)',
                              WebkitMaskImage: 'linear-gradient(to bottom, black 85%, transparent 100%)'
                            }}
                          >
-                           <p className="text-xs md:text-sm text-muted-foreground font-consciousness leading-relaxed mb-4">
+                           <p className="text-xs text-muted-foreground font-consciousness leading-relaxed mb-3">
                              {product.description}
                            </p>
                            <div className="mb-2">
-                             <h4 className="text-xs md:text-sm font-consciousness font-medium text-foreground mb-2">
+                             <h4 className="text-xs font-consciousness font-medium mb-2">
                                Includes:
                              </h4>
-                             <ul className="text-xs md:text-sm text-muted-foreground space-y-1">
+                             <ul className="text-xs text-muted-foreground space-y-1">
                                {product.features.map((feature, idx) => (
                                  <li key={idx} className="flex items-center justify-center gap-2">
                                    <div className="w-1.5 h-1.5 bg-primary rounded-full flex-shrink-0"></div>
@@ -321,12 +321,12 @@ const Store = () => {
                        </div>
                        
                        <div className="flex flex-col gap-3 mt-auto pt-4 border-t border-border/50">
-                         <span className="text-2xl md:text-3xl font-consciousness font-bold text-primary">
+                         <span className="text-2xl md:text-3xl font-consciousness font-bold text-primary text-center">
                            ${typeof product.price === 'string' ? product.price : product.price.toFixed(2)}
                          </span>
                         <Button 
                           variant={isInCart(product.id) ? "outline" : "cosmic"}
-                          className="font-consciousness w-full text-sm md:text-base h-10"
+                          className="font-consciousness w-full text-sm h-10"
                           onClick={() => handleAddToCart(product)}
                         >
                           <Plus className="w-4 h-4 mr-2" />
@@ -412,7 +412,7 @@ const Store = () => {
               }
 
               return (
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
                   {filteredProducts.map((product: any) => (
                     <MerchandiseCard 
                       key={product.id} 

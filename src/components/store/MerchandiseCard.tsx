@@ -121,7 +121,7 @@ export function MerchandiseCard({ product, onAddToCart, isInCart }: MerchandiseC
   const inCart = selectedVariant && isInCart(`${product.printify_id}-${selectedVariant.id}`);
 
   return (
-    <Card className="group overflow-hidden border-2 bg-card/50 backdrop-blur hover:border-primary/50 transition-all duration-300 flex flex-col">
+    <Card className="group overflow-hidden border bg-card/50 backdrop-blur hover:border-primary/40 transition-all duration-300 flex flex-col h-full">
       {/* Product Image */}
       <div className="relative aspect-square overflow-hidden bg-background">
         <img
@@ -137,13 +137,13 @@ export function MerchandiseCard({ product, onAddToCart, isInCart }: MerchandiseC
       </div>
 
       {/* Product Info */}
-      <div className="p-4 flex flex-col flex-1">
-        <div className="mb-3">
-          <h3 className="text-base md:text-lg font-bold mb-2 line-clamp-2">{product.title}</h3>
+      <div className="p-3 md:p-4 flex flex-col flex-1">
+        <div className="mb-3 text-center">
+          <h3 className="text-sm md:text-base font-consciousness font-semibold mb-2 line-clamp-2 min-h-[2.5rem]">{product.title}</h3>
           {product.description && (
-            <div className="relative">
+            <div className="relative mb-3">
               <div 
-                className="h-[140px] md:h-[180px] overflow-y-auto text-xs md:text-sm text-muted-foreground scrollbar-hide relative"
+                className="h-[80px] md:h-[100px] overflow-y-auto text-xs text-muted-foreground scrollbar-hide"
                 style={{
                   maskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)',
                   WebkitMaskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)'
@@ -156,7 +156,7 @@ export function MerchandiseCard({ product, onAddToCart, isInCart }: MerchandiseC
 
         {/* Color Selector */}
         <div className="space-y-1.5 mb-2">
-          <label className="text-xs font-medium">Color</label>
+          <label className="text-xs font-medium text-center block">Color</label>
           <Select value={selectedColor} onValueChange={handleColorChange}>
             <SelectTrigger className="w-full h-9 text-xs">
               <SelectValue placeholder="Select color" />
@@ -173,7 +173,7 @@ export function MerchandiseCard({ product, onAddToCart, isInCart }: MerchandiseC
 
         {/* Size Selector */}
         <div className="space-y-1.5 mb-3">
-          <label className="text-xs font-medium">Size</label>
+          <label className="text-xs font-medium text-center block">Size</label>
           <Select value={selectedSize} onValueChange={handleSizeChange}>
             <SelectTrigger className="w-full h-9 text-xs">
               <SelectValue placeholder="Select size" />
@@ -189,31 +189,29 @@ export function MerchandiseCard({ product, onAddToCart, isInCart }: MerchandiseC
         </div>
 
         {/* Price & Add to Cart */}
-        <div className="flex flex-col gap-2 mt-auto pt-3 border-t">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-lg md:text-xl font-bold text-primary">
-                ${selectedVariant?.price.toFixed(2)}
-              </p>
-              <p className="text-xs text-muted-foreground">
-                {selectedColor} / {selectedSize}
-              </p>
-            </div>
+        <div className="flex flex-col gap-2 mt-auto pt-3 border-t border-border/50">
+          <div className="text-center">
+            <p className="text-xl md:text-2xl font-consciousness font-bold text-primary mb-1">
+              ${selectedVariant?.price.toFixed(2)}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              {selectedColor} / {selectedSize}
+            </p>
           </div>
           <Button
             onClick={handleAddToCart}
             disabled={!selectedVariant || inCart}
-            className="gap-2 w-full h-9 text-xs md:text-sm"
+            className="gap-2 w-full h-10 text-xs md:text-sm font-consciousness"
             size="sm"
           >
             {inCart ? (
               <>
-                <Check className="h-3 w-3 md:h-4 md:w-4" />
+                <Check className="h-4 w-4" />
                 In Cart
               </>
             ) : (
               <>
-                <ShoppingCart className="h-3 w-3 md:h-4 md:w-4" />
+                <ShoppingCart className="h-4 w-4" />
                 Add to Cart
               </>
             )}
