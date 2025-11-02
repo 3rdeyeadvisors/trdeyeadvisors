@@ -75,15 +75,15 @@ serve(async (req) => {
 
       let session = event.data.object as Stripe.Checkout.Session;
       
-      // Retrieve full session with line items AND shipping details
+      // Retrieve full session with line items (shipping is already included)
       session = await stripe.checkout.sessions.retrieve(session.id, {
-        expand: ['line_items', 'line_items.data.price.product', 'shipping_details']
+        expand: ['line_items', 'line_items.data.price.product']
       });
       
       console.log("🛒 Processing checkout session:", session.id);
       console.log("Session metadata:", session.metadata);
       console.log("Customer email:", session.customer_email);
-      console.log("Shipping details:", session.shipping_details ? "✅ Present" : "❌ Missing");
+      console.log("Shipping info:", session.shipping ? "✅ Present" : "❌ Missing");
 
       // Line items are already expanded in the session retrieval
       const lineItems = { data: session.line_items?.data || [] };
@@ -137,13 +137,13 @@ serve(async (req) => {
       // Handle Printify orders (merchandise only)
       if (printifyItems.length > 0) {
         try {
-          if (!session.shipping_details) {
-            console.error("❌ Printify items present but no shipping details!");
+          if (!session.shipping) {
+            console.error("❌ Printify items present but no shipping info!");
             await supabaseClient.from('order_action_logs').insert({
               order_id: session.id,
               action_type: 'printify_created',
               status: 'error',
-              error_message: 'No shipping details provided'
+              error_message: 'No shipping information provided'
             });
           } else {
             console.log("📦 Creating Printify order (merchandise only)...");
@@ -153,16 +153,16 @@ serve(async (req) => {
               shipping_method: 1,
               send_shipping_notification: true,
               address_to: {
-                first_name: session.shipping_details.name?.split(' ')[0] || "Customer",
-                last_name: session.shipping_details.name?.split(' ').slice(1).join(' ') || "Name",
+                first_name: session.shipping.name?.split(' ')[0] || "Customer",
+                last_name: session.shipping.name?.split(' ').slice(1).join(' ') || "Name",
                 email: session.customer_email || session.customer_details?.email || "",
                 phone: session.customer_details?.phone || "",
-                country: session.shipping_details.address?.country || "",
-                region: session.shipping_details.address?.state || "",
-                address1: session.shipping_details.address?.line1 || "",
-                address2: session.shipping_details.address?.line2 || "",
-                city: session.shipping_details.address?.city || "",
-                zip: session.shipping_details.address?.postal_code || "",
+                country: session.shipping.address?.country || "",
+                region: session.shipping.address?.state || "",
+                address1: session.shipping.address?.line1 || "",
+                address2: session.shipping.address?.line2 || "",
+                city: session.shipping.address?.city || "",
+                zip: session.shipping.address?.postal_code || "",
               },
             };
 
@@ -333,12 +333,12 @@ serve(async (req) => {
         const orderConfirmationPayload = {
           order_id: session.id.substring(session.id.length - 8).toUpperCase(),
           customer_email: session.customer_email || session.customer_details?.email || '',
-          customer_name: session.customer_details?.name || session.shipping_details?.name || 'Customer',
+          customer_name: session.customer_details?.name || session.shipping?.name || 'Customer',
           items: emailItems,
           subtotal: session.amount_subtotal || 0,
           shipping: session.total_details?.amount_shipping || 0,
           total: session.amount_total || 0,
-          shipping_address: session.shipping_details?.address || undefined
+          shipping_address: session.shipping?.address || undefined
         };
 
         const { error: emailError } = await supabaseClient.functions.invoke('send-order-confirmation', {
@@ -361,10 +361,10 @@ serve(async (req) => {
         const adminNotificationPayload = {
           order_id: session.id.substring(session.id.length - 8).toUpperCase(),
           customer_email: session.customer_email || session.customer_details?.email || '',
-          customer_name: session.customer_details?.name || session.shipping_details?.name || 'Customer',
+          customer_name: session.customer_details?.name || session.shipping?.name || 'Customer',
           items: emailItems,
           total: session.amount_total || 0,
-          shipping_address: session.shipping_details?.address || undefined
+          shipping_address: session.shipping?.address || undefined
         };
 
         const { error: adminEmailError } = await supabaseClient.functions.invoke('send-admin-order-notification', {
@@ -388,7 +388,7 @@ serve(async (req) => {
           const digitalDeliveryPayload = {
             order_id: session.id.substring(session.id.length - 8).toUpperCase(),
             customer_email: session.customer_email || session.customer_details?.email || '',
-            customer_name: session.customer_details?.name || session.shipping_details?.name || 'Customer',
+            customer_name: session.customer_details?.name || session.shipping?.name || 'Customer',
             digital_items: digitalDownloadItems
           };
 
