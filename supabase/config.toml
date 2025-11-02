@@ -112,3 +112,6 @@ verify_jwt = false
 
 [functions.admin-ai-command]
 verify_jwt = true
+
+[functions.send-newsletter-email]
+verify_jwt = false

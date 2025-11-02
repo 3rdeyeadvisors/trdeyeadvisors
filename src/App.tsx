@@ -57,6 +57,7 @@ import WebThreeGamingDefiConvergence from "./pages/WebThreeGamingDefiConvergence
 import DefaiRevolution2025 from "./pages/DefaiRevolution2025";
 import DefiRegulationAmlIntegration from "./pages/DefiRegulationAmlIntegration";
 import LiquidStakingTokens2025 from "./pages/LiquidStakingTokens2025";
+import OnChainEtfsBlog from "./pages/OnChainEtfsBlog";
 import AdminStoreDashboard from "./pages/AdminStoreDashboard";
 import DownloadPortal from "./pages/DownloadPortal";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -108,6 +109,7 @@ const App = () => {
                   <Route path="/blog/web3-gaming-defi-convergence-2025" element={<WebThreeGamingDefiConvergence />} />
                   <Route path="/blog/defai-revolution-2025" element={<DefaiRevolution2025 />} />
                   <Route path="/blog/liquid-staking-tokens-2025" element={<LiquidStakingTokens2025 />} />
+                  <Route path="/blog/on-chain-etfs-2025" element={<OnChainEtfsBlog />} />
                   <Route path="/blog/:slug" element={<BlogPost />} />
                   <Route path="/resources" element={<Resources />} />
                   <Route path="/analytics" element={<Analytics />} />

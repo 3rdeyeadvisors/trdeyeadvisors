@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Mail, Send, AlertCircle } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
+import NewsletterSender from "@/components/admin/NewsletterSender";
 
 export function EmailCenter() {
   const [emailStats, setEmailStats] = useState({ total: 0, sent: 0, failed: 0 });
@@ -69,6 +70,8 @@ export function EmailCenter() {
 
   return (
     <div className="space-y-6">
+      <NewsletterSender />
+      
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card className="border-primary/20">
           <CardHeader>
