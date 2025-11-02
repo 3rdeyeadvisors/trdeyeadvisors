@@ -16,6 +16,7 @@ import Courses from "./pages/Courses";
 import Blog from "./pages/Blog";
 import Resources from "./pages/Resources";
 import Store from "./pages/Store";
+import MerchandiseDetail from "./pages/MerchandiseDetail";
 import Cart from "./pages/Cart";
 import Contact from "./pages/Contact";
 import Auth from "./pages/Auth";
@@ -123,6 +124,7 @@ const App = () => {
                   <Route path="/tutorials/nft-defi" element={<NftDefiTutorial />} />
                   <Route path="/tutorials/dao-participation" element={<DaoParticipationTutorial />} />
                   <Route path="/store" element={<Store />} />
+                  <Route path="/store/merchandise/:productId" element={<MerchandiseDetail />} />
                   <Route path="/cart" element={<Cart />} />
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/signin" element={<Auth />} />

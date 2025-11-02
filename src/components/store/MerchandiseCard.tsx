@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ShoppingCart, Check } from "lucide-react";
+import { ShoppingCart, Check, Eye } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -18,6 +19,7 @@ interface MerchandiseCardProps {
 }
 
 export function MerchandiseCard({ product, onAddToCart, isInCart }: MerchandiseCardProps) {
+  const navigate = useNavigate();
   const [selectedVariant, setSelectedVariant] = useState<any>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -120,10 +122,17 @@ export function MerchandiseCard({ product, onAddToCart, isInCart }: MerchandiseC
   const currentImage = product.images?.[currentImageIndex];
   const inCart = selectedVariant && isInCart(`${product.printify_id}-${selectedVariant.id}`);
 
+  const handleCardClick = () => {
+    navigate(`/store/merchandise/${product.printify_id}`);
+  };
+
   return (
     <Card className="group overflow-hidden border bg-card/50 backdrop-blur hover:border-primary/40 transition-all duration-300 flex flex-col h-full">
-      {/* Product Image */}
-      <div className="relative aspect-square overflow-hidden bg-background">
+      {/* Product Image - Clickable */}
+      <div 
+        className="relative aspect-square overflow-hidden bg-background cursor-pointer"
+        onClick={handleCardClick}
+      >
         <img
           src={currentImage?.src || product.images?.[0]?.src}
           alt={product.title}
@@ -138,20 +147,14 @@ export function MerchandiseCard({ product, onAddToCart, isInCart }: MerchandiseC
 
       {/* Product Info */}
       <div className="p-2 md:p-4 flex flex-col flex-1">
-        <div className="mb-2 text-center">
-          <h3 className="text-xs md:text-base font-consciousness font-semibold mb-2 line-clamp-2 min-h-[2rem] md:min-h-[2.5rem]">{product.title}</h3>
-          {product.description && (
-            <div className="relative mb-2">
-              <div 
-                className="h-[60px] md:h-[80px] overflow-y-auto text-xs text-muted-foreground scrollbar-hide leading-tight"
-                style={{
-                  maskImage: 'linear-gradient(to bottom, black 75%, transparent 100%)',
-                  WebkitMaskImage: 'linear-gradient(to bottom, black 75%, transparent 100%)'
-                }}
-                dangerouslySetInnerHTML={{ __html: product.description }}
-              />
-            </div>
-          )}
+        {/* Product Name - Clickable */}
+        <div className="mb-2">
+          <h3 
+            onClick={handleCardClick}
+            className="text-xs md:text-base font-consciousness font-semibold mb-2 line-clamp-2 min-h-[2rem] md:min-h-[2.5rem] cursor-pointer hover:text-primary transition-colors text-center"
+          >
+            {product.title}
+          </h3>
         </div>
 
         {/* Compact Variant Selector */}
@@ -186,11 +189,25 @@ export function MerchandiseCard({ product, onAddToCart, isInCart }: MerchandiseC
           </Select>
         </div>
 
-        {/* Price & Add to Cart */}
+        {/* Price & Buttons */}
         <div className="flex flex-col gap-1.5 mt-auto pt-2 border-t border-border/50">
           <p className="text-lg md:text-2xl font-consciousness font-bold text-primary text-center">
             ${selectedVariant?.price.toFixed(2)}
           </p>
+          
+          {/* View Details Button */}
+          <Button
+            onClick={handleCardClick}
+            variant="outline"
+            className="gap-1.5 w-full h-8 md:h-10 text-xs font-consciousness"
+            size="sm"
+          >
+            <Eye className="h-3 md:h-4 w-3 md:w-4" />
+            <span className="hidden md:inline">View Details</span>
+            <span className="md:hidden">Details</span>
+          </Button>
+
+          {/* Add to Cart Button */}
           <Button
             onClick={handleAddToCart}
             disabled={!selectedVariant || inCart}
@@ -199,7 +216,7 @@ export function MerchandiseCard({ product, onAddToCart, isInCart }: MerchandiseC
           >
             {inCart ? (
               <>
-                <Check className="h-3 h-4 md:w-4" />
+                <Check className="h-3 md:h-4 w-3 md:w-4" />
                 <span className="hidden md:inline">In Cart</span>
                 <span className="md:hidden">Added</span>
               </>
