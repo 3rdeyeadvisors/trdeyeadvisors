@@ -14,21 +14,6 @@ export interface BlogPost {
 
 export const blogPosts: BlogPost[] = [
   {
-    id: 1000010,
-    slug: "on-chain-etfs-2025",
-    title: "On-Chain ETFs: How Tokenized Funds Are Bridging DeFi and Traditional Finance in 2025",
-    excerpt: "Explore how tokenized ETFs are building bridges between decentralized finance and traditional markets, introducing billions in institutional capital to blockchain infrastructure.",
-    content: `# On-Chain ETFs: How Tokenized Funds Are Bridging DeFi and Traditional Finance in 2025
-
-Blockchain is no longer theoretical — large institutions are actually deploying on-chain ETFs. The rise of tokenized ETFs marks a structural shift as traditional finance begins integrating with decentralized infrastructure.`,
-    category: "DeFi Trends",
-    readTime: "8 min read",
-    date: "2025-11-02",
-    featured: true,
-    author: "3rdeyeadvisors Research Team",
-    tags: ["tokenized ETFs", "on-chain finance", "DeFi TradFi bridge", "BlackRock tokenization", "Ondo Finance", "institutional DeFi", "blockchain ETFs 2025"]
-  },
-  {
     id: 1000009,
     slug: "liquid-staking-tokens-2025",
     title: "Liquid Staking Tokens in 2025: The Future of DeFi Yield",
