@@ -70,25 +70,24 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
     if (!user) return;
 
     try {
-      const existingProgress = courseProgress[courseId];
-      const completedModules = existingProgress?.completed_modules || [];
+      // Always check database for existing record first
+      const { data: existingData, error: fetchError } = await supabase
+        .from('course_progress')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('course_id', courseId)
+        .maybeSingle();
+
+      if (fetchError) throw fetchError;
+
+      const completedModules = existingData?.completed_modules || [];
       
       if (!completedModules.includes(moduleIndex)) {
         const updatedModules = [...completedModules, moduleIndex];
         const totalModules = getCourseModuleCount(courseId);
         const completionPercentage = (updatedModules.length / totalModules) * 100;
 
-        const progressData = {
-          user_id: user.id,
-          course_id: courseId,
-          completed_modules: updatedModules,
-          last_accessed: new Date().toISOString(),
-          completion_percentage: completionPercentage,
-          started_at: existingProgress?.started_at || new Date().toISOString(),
-        };
-
-        // Check if record exists
-        if (existingProgress) {
+        if (existingData) {
           // Update existing record
           const { error } = await supabase
             .from('course_progress')
@@ -105,10 +104,27 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
           // Insert new record
           const { error } = await supabase
             .from('course_progress')
-            .insert(progressData);
+            .insert({
+              user_id: user.id,
+              course_id: courseId,
+              completed_modules: updatedModules,
+              last_accessed: new Date().toISOString(),
+              completion_percentage: completionPercentage,
+              started_at: new Date().toISOString(),
+            });
 
           if (error) throw error;
         }
+
+        // Update local state
+        const progressData = {
+          user_id: user.id,
+          course_id: courseId,
+          completed_modules: updatedModules,
+          last_accessed: new Date().toISOString(),
+          completion_percentage: completionPercentage,
+          started_at: existingData?.started_at || new Date().toISOString(),
+        };
 
         setCourseProgress(prev => ({
           ...prev,
