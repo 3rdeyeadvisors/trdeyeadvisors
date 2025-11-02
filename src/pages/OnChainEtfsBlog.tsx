@@ -9,8 +9,9 @@ const OnChainEtfsBlog = () => {
     title: "On-Chain ETFs: How Tokenized Funds Are Bridging DeFi and Traditional Finance in 2025",
     excerpt: "Explore how tokenized ETFs are building bridges between decentralized finance and traditional markets, introducing billions in institutional capital to blockchain infrastructure.",
     author: BRAND_AUTHOR,
-    date: "2025-01-20",
-    category: "DeFi Innovation",
+    date: "2025-11-02",
+    category: "DeFi Trends",
+    readTime: "8 min read",
     tags: [
       "tokenized ETFs",
       "on-chain finance",
@@ -124,6 +125,10 @@ const OnChainEtfsBlog = () => {
                   <div className="flex items-center gap-1">
                     <Calendar className="w-4 h-4" />
                     <span>{new Date(blogPost.date).toLocaleDateString()}</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Clock className="w-4 h-4" />
+                    <span>{blogPost.readTime}</span>
                   </div>
                 </div>
               </div>
