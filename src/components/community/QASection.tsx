@@ -8,7 +8,7 @@ import { AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
-import { HelpCircle, MessageSquare, CheckCircle, ThumbsUp } from "lucide-react";
+import { HelpCircle, MessageSquare, CheckCircle, ThumbsUp, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { formatDistanceToNow } from "date-fns";
 
@@ -342,6 +342,81 @@ export const QASection = ({ courseId, moduleId }: QASectionProps) => {
     }
   };
 
+  const handleDeleteQuestion = async (questionId: string) => {
+    const question = questions.find(q => q.id === questionId);
+    
+    if (question && question.discussion_replies && question.discussion_replies.length > 0) {
+      toast({
+        title: "Cannot Delete",
+        description: "You cannot delete a question that has replies.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!confirm("Are you sure you want to delete this question?")) {
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const { error } = await supabase
+        .from('discussions')
+        .delete()
+        .eq('id', questionId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Question Deleted!",
+        description: "Your question has been deleted.",
+      });
+      
+      await fetchQuestions();
+    } catch (error) {
+      console.error('Error deleting question:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete question. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleDeleteReply = async (replyId: string) => {
+    if (!confirm("Are you sure you want to delete this reply?")) {
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const { error } = await supabase
+        .from('discussion_replies')
+        .delete()
+        .eq('id', replyId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Reply Deleted!",
+        description: "Your reply has been deleted.",
+      });
+      
+      await fetchQuestions();
+    } catch (error) {
+      console.error('Error deleting reply:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete reply. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   if (loading) {
     return (
       <Card className="p-6">
@@ -443,19 +518,31 @@ export const QASection = ({ courseId, moduleId }: QASectionProps) => {
                         </Badge>
                       )}
                     </div>
-                    {user && question.user_id === user.id && canEdit(question.created_at) && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => {
-                          setEditingQuestionId(question.id);
-                          setEditQuestionTitle(question.title);
-                          setEditQuestionContent(question.description);
-                        }}
-                        className="h-7 text-xs"
-                      >
-                        Edit
-                      </Button>
+                    {user && question.user_id === user.id && (
+                      <div className="flex gap-1">
+                        {canEdit(question.created_at) && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              setEditingQuestionId(question.id);
+                              setEditQuestionTitle(question.title);
+                              setEditQuestionContent(question.description);
+                            }}
+                            className="h-7 text-xs"
+                          >
+                            Edit
+                          </Button>
+                        )}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleDeleteQuestion(question.id)}
+                          className="h-7 text-xs text-destructive hover:text-destructive"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                        </Button>
+                      </div>
                     )}
                   </div>
                   
@@ -543,18 +630,30 @@ export const QASection = ({ courseId, moduleId }: QASectionProps) => {
                                 </Badge>
                               )}
                             </div>
-                            {user && reply.user_id === user.id && canEdit(reply.created_at) && (
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => {
-                                  setEditingReplyId(reply.id);
-                                  setEditReplyContent(reply.content);
-                                }}
-                                className="h-6 text-xs"
-                              >
-                                Edit
-                              </Button>
+                            {user && reply.user_id === user.id && (
+                              <div className="flex gap-1">
+                                {canEdit(reply.created_at) && (
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => {
+                                      setEditingReplyId(reply.id);
+                                      setEditReplyContent(reply.content);
+                                    }}
+                                    className="h-6 text-xs"
+                                  >
+                                    Edit
+                                  </Button>
+                                )}
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => handleDeleteReply(reply.id)}
+                                  className="h-6 text-xs text-destructive hover:text-destructive"
+                                >
+                                  <Trash2 className="w-3 h-3" />
+                                </Button>
+                              </div>
                             )}
                           </div>
                           {editingReplyId === reply.id ? (

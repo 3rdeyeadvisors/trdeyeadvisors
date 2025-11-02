@@ -7,7 +7,7 @@ import { AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
-import { MessageCircle, ThumbsUp, ThumbsDown, Reply, Send } from "lucide-react";
+import { MessageCircle, ThumbsUp, Send, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { formatDistanceToNow } from "date-fns";
 
@@ -206,6 +206,54 @@ export const CommentsSection = ({ courseId, moduleId }: CommentsSectionProps) =>
     }
   };
 
+  const handleDeleteComment = async (commentId: string) => {
+    // Check if comment has replies
+    const { data: replies } = await supabase
+      .from('comments')
+      .select('id')
+      .eq('parent_id', commentId)
+      .limit(1);
+
+    if (replies && replies.length > 0) {
+      toast({
+        title: "Cannot Delete",
+        description: "You cannot delete a comment that has replies.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!confirm("Are you sure you want to delete this comment?")) {
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const { error } = await supabase
+        .from('comments')
+        .delete()
+        .eq('id', commentId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Comment Deleted!",
+        description: "Your comment has been deleted.",
+      });
+      
+      await fetchComments();
+    } catch (error) {
+      console.error('Error deleting comment:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete comment. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const handleLike = async (commentId: string) => {
     if (!user) {
       toast({
@@ -320,18 +368,30 @@ export const CommentsSection = ({ courseId, moduleId }: CommentsSectionProps) =>
                         {formatDistanceToNow(new Date(comment.created_at), { addSuffix: true })}
                       </span>
                     </div>
-                    {user && comment.user_id === user.id && canEdit(comment.created_at) && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => {
-                          setEditingCommentId(comment.id);
-                          setEditContent(comment.content);
-                        }}
-                        className="h-7 text-xs"
-                      >
-                        Edit
-                      </Button>
+                    {user && comment.user_id === user.id && (
+                      <div className="flex gap-1">
+                        {canEdit(comment.created_at) && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              setEditingCommentId(comment.id);
+                              setEditContent(comment.content);
+                            }}
+                            className="h-7 text-xs"
+                          >
+                            Edit
+                          </Button>
+                        )}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleDeleteComment(comment.id)}
+                          className="h-7 text-xs text-destructive hover:text-destructive"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                        </Button>
+                      </div>
                     )}
                   </div>
                   
