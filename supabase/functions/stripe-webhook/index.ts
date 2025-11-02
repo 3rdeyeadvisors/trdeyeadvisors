@@ -75,9 +75,9 @@ serve(async (req) => {
 
       let session = event.data.object as Stripe.Checkout.Session;
       
-      // Retrieve full session with shipping details (webhook event doesn't include them)
+      // Retrieve full session with line items AND shipping details
       session = await stripe.checkout.sessions.retrieve(session.id, {
-        expand: ['line_items', 'line_items.data.price.product']
+        expand: ['line_items', 'line_items.data.price.product', 'shipping_details']
       });
       
       console.log("🛒 Processing checkout session:", session.id);
