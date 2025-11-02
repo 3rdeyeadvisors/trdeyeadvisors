@@ -177,10 +177,14 @@ export const RatingSection = ({ courseId, moduleId }: RatingSectionProps) => {
         {[1, 2, 3, 4, 5].map((star) => (
           <Star
             key={star}
-            className={`${size} cursor-pointer transition-colors ${
+            className={`${size} transition-all ${
+              interactive ? 'cursor-pointer' : ''
+            } ${
               star <= rating
-                ? "fill-warning text-warning"
-                : "text-muted-foreground hover:text-warning"
+                ? "fill-yellow-500 text-yellow-500"
+                : interactive 
+                  ? "fill-none text-muted-foreground hover:fill-yellow-400 hover:text-yellow-400"
+                  : "fill-none text-muted-foreground"
             }`}
             onClick={interactive ? () => setSelectedRating(star) : undefined}
           />

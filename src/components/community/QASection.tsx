@@ -44,11 +44,21 @@ export const QASection = ({ courseId, moduleId }: QASectionProps) => {
   const [newQuestionTitle, setNewQuestionTitle] = useState("");
   const [newQuestionContent, setNewQuestionContent] = useState("");
   const [replyContent, setReplyContent] = useState<{ [key: string]: string }>({});
+  const [editingQuestionId, setEditingQuestionId] = useState<string | null>(null);
+  const [editQuestionTitle, setEditQuestionTitle] = useState("");
+  const [editQuestionContent, setEditQuestionContent] = useState("");
+  const [editingReplyId, setEditingReplyId] = useState<string | null>(null);
+  const [editReplyContent, setEditReplyContent] = useState("");
   const [showNewQuestion, setShowNewQuestion] = useState(false);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const { user } = useAuth();
   const { toast } = useToast();
+
+  const canEdit = (createdAt: string) => {
+    const hoursSinceCreation = (Date.now() - new Date(createdAt).getTime()) / (1000 * 60 * 60);
+    return hoursSinceCreation < 24;
+  };
 
   useEffect(() => {
     fetchQuestions();
@@ -250,6 +260,88 @@ export const QASection = ({ courseId, moduleId }: QASectionProps) => {
     }
   };
 
+  const handleEditQuestion = async (questionId: string) => {
+    if (!editQuestionTitle.trim() || !editQuestionContent.trim()) {
+      toast({
+        title: "Complete Form",
+        description: "Both title and description are required.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const { error } = await supabase
+        .from('discussions')
+        .update({
+          title: editQuestionTitle.trim(),
+          description: editQuestionContent.trim(),
+        })
+        .eq('id', questionId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Question Updated!",
+        description: "Your question has been updated successfully.",
+      });
+
+      setEditingQuestionId(null);
+      setEditQuestionTitle("");
+      setEditQuestionContent("");
+      await fetchQuestions();
+    } catch (error) {
+      console.error('Error updating question:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update question. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleEditReply = async (replyId: string) => {
+    if (!editReplyContent.trim()) {
+      toast({
+        title: "Empty Reply",
+        description: "Reply cannot be empty.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const { error } = await supabase
+        .from('discussion_replies')
+        .update({ content: editReplyContent.trim() })
+        .eq('id', replyId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Reply Updated!",
+        description: "Your reply has been updated successfully.",
+      });
+
+      setEditingReplyId(null);
+      setEditReplyContent("");
+      await fetchQuestions();
+    } catch (error) {
+      console.error('Error updating reply:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update reply. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   if (loading) {
     return (
       <Card className="p-6">
@@ -336,27 +428,82 @@ export const QASection = ({ courseId, moduleId }: QASectionProps) => {
                 </Avatar>
                 
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="font-consciousness font-medium text-sm">
-                      {question.profiles?.display_name || "Anonymous"}
-                    </span>
-                    <span className="text-xs text-muted-foreground">
-                      {formatDistanceToNow(new Date(question.created_at), { addSuffix: true })}
-                    </span>
-                    {question.is_solved && (
-                      <Badge variant="outline" className="text-xs">
-                        <CheckCircle className="w-3 h-3 mr-1" />
-                        Solved
-                      </Badge>
+                  <div className="flex items-center justify-between mb-1">
+                    <div className="flex items-center gap-2">
+                      <span className="font-consciousness font-medium text-sm">
+                        {question.profiles?.display_name || "Anonymous"}
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        {formatDistanceToNow(new Date(question.created_at), { addSuffix: true })}
+                      </span>
+                      {question.is_solved && (
+                        <Badge variant="outline" className="text-xs">
+                          <CheckCircle className="w-3 h-3 mr-1" />
+                          Solved
+                        </Badge>
+                      )}
+                    </div>
+                    {user && question.user_id === user.id && canEdit(question.created_at) && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          setEditingQuestionId(question.id);
+                          setEditQuestionTitle(question.title);
+                          setEditQuestionContent(question.description);
+                        }}
+                        className="h-7 text-xs"
+                      >
+                        Edit
+                      </Button>
                     )}
                   </div>
                   
-                  <h4 className="font-consciousness font-semibold text-foreground mb-2">
-                    {question.title}
-                  </h4>
-                  <p className="text-sm text-muted-foreground mb-3 leading-relaxed">
-                    {question.description}
-                  </p>
+                  {editingQuestionId === question.id ? (
+                    <div className="space-y-3">
+                      <Input
+                        value={editQuestionTitle}
+                        onChange={(e) => setEditQuestionTitle(e.target.value)}
+                        placeholder="Question title"
+                      />
+                      <Textarea
+                        value={editQuestionContent}
+                        onChange={(e) => setEditQuestionContent(e.target.value)}
+                        placeholder="Question description"
+                        className="min-h-[80px]"
+                      />
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          onClick={() => handleEditQuestion(question.id)}
+                          disabled={submitting || !editQuestionTitle.trim() || !editQuestionContent.trim()}
+                        >
+                          {submitting ? "Saving..." : "Save"}
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => {
+                            setEditingQuestionId(null);
+                            setEditQuestionTitle("");
+                            setEditQuestionContent("");
+                          }}
+                          disabled={submitting}
+                        >
+                          Cancel
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <h4 className="font-consciousness font-semibold text-foreground mb-2">
+                        {question.title}
+                      </h4>
+                      <p className="text-sm text-muted-foreground mb-3 leading-relaxed">
+                        {question.description}
+                      </p>
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -382,22 +529,67 @@ export const QASection = ({ courseId, moduleId }: QASectionProps) => {
                           </AvatarFallback>
                         </Avatar>
                         <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className="font-consciousness font-medium text-xs">
-                              {reply.profiles?.display_name || "Anonymous"}
-                            </span>
-                            <span className="text-xs text-muted-foreground">
-                              {formatDistanceToNow(new Date(reply.created_at), { addSuffix: true })}
-                            </span>
-                            {reply.is_solution && (
-                              <Badge variant="outline" className="text-xs bg-success/20">
-                                Solution
-                              </Badge>
+                          <div className="flex items-center justify-between mb-1">
+                            <div className="flex items-center gap-2">
+                              <span className="font-consciousness font-medium text-xs">
+                                {reply.profiles?.display_name || "Anonymous"}
+                              </span>
+                              <span className="text-xs text-muted-foreground">
+                                {formatDistanceToNow(new Date(reply.created_at), { addSuffix: true })}
+                              </span>
+                              {reply.is_solution && (
+                                <Badge variant="outline" className="text-xs bg-success/20">
+                                  Solution
+                                </Badge>
+                              )}
+                            </div>
+                            {user && reply.user_id === user.id && canEdit(reply.created_at) && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => {
+                                  setEditingReplyId(reply.id);
+                                  setEditReplyContent(reply.content);
+                                }}
+                                className="h-6 text-xs"
+                              >
+                                Edit
+                              </Button>
                             )}
                           </div>
-                          <p className="text-xs text-foreground leading-relaxed">
-                            {reply.content}
-                          </p>
+                          {editingReplyId === reply.id ? (
+                            <div className="space-y-2">
+                              <Textarea
+                                value={editReplyContent}
+                                onChange={(e) => setEditReplyContent(e.target.value)}
+                                className="min-h-[60px] text-xs"
+                              />
+                              <div className="flex gap-2">
+                                <Button
+                                  size="sm"
+                                  onClick={() => handleEditReply(reply.id)}
+                                  disabled={submitting || !editReplyContent.trim()}
+                                >
+                                  {submitting ? "Saving..." : "Save"}
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => {
+                                    setEditingReplyId(null);
+                                    setEditReplyContent("");
+                                  }}
+                                  disabled={submitting}
+                                >
+                                  Cancel
+                                </Button>
+                              </div>
+                            </div>
+                          ) : (
+                            <p className="text-xs text-foreground leading-relaxed">
+                              {reply.content}
+                            </p>
+                          )}
                         </div>
                       </div>
                     </Card>

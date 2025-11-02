@@ -30,10 +30,17 @@ interface CommentsSectionProps {
 export const CommentsSection = ({ courseId, moduleId }: CommentsSectionProps) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState("");
+  const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
+  const [editContent, setEditContent] = useState("");
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const { user } = useAuth();
   const { toast } = useToast();
+
+  const canEdit = (createdAt: string) => {
+    const hoursSinceCreation = (Date.now() - new Date(createdAt).getTime()) / (1000 * 60 * 60);
+    return hoursSinceCreation < 24;
+  };
 
   useEffect(() => {
     fetchComments();
@@ -160,6 +167,45 @@ export const CommentsSection = ({ courseId, moduleId }: CommentsSectionProps) =>
     }
   };
 
+  const handleEditComment = async (commentId: string) => {
+    if (!editContent.trim()) {
+      toast({
+        title: "Empty Comment",
+        description: "Comment cannot be empty.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const { error } = await supabase
+        .from('comments')
+        .update({ content: editContent.trim() })
+        .eq('id', commentId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Comment Updated!",
+        description: "Your comment has been updated successfully.",
+      });
+      
+      setEditingCommentId(null);
+      setEditContent("");
+      await fetchComments();
+    } catch (error) {
+      console.error('Error updating comment:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update comment. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const handleLike = async (commentId: string) => {
     if (!user) {
       toast({
@@ -265,20 +311,65 @@ export const CommentsSection = ({ courseId, moduleId }: CommentsSectionProps) =>
                 </Avatar>
                 
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="font-consciousness font-medium text-sm">
-                      {comment.profiles?.display_name || "Anonymous"}
-                    </span>
-                    <span className="text-xs text-muted-foreground">
-                      {formatDistanceToNow(new Date(comment.created_at), { addSuffix: true })}
-                    </span>
+                  <div className="flex items-center justify-between mb-1">
+                    <div className="flex items-center gap-2">
+                      <span className="font-consciousness font-medium text-sm">
+                        {comment.profiles?.display_name || "Anonymous"}
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        {formatDistanceToNow(new Date(comment.created_at), { addSuffix: true })}
+                      </span>
+                    </div>
+                    {user && comment.user_id === user.id && canEdit(comment.created_at) && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          setEditingCommentId(comment.id);
+                          setEditContent(comment.content);
+                        }}
+                        className="h-7 text-xs"
+                      >
+                        Edit
+                      </Button>
+                    )}
                   </div>
                   
-                  <p className="text-sm text-foreground mb-3 font-system leading-relaxed">
-                    {comment.content}
-                  </p>
+                  {editingCommentId === comment.id ? (
+                    <div className="space-y-2">
+                      <Textarea
+                        value={editContent}
+                        onChange={(e) => setEditContent(e.target.value)}
+                        className="min-h-[80px]"
+                      />
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          onClick={() => handleEditComment(comment.id)}
+                          disabled={submitting || !editContent.trim()}
+                        >
+                          {submitting ? "Saving..." : "Save"}
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => {
+                            setEditingCommentId(null);
+                            setEditContent("");
+                          }}
+                          disabled={submitting}
+                        >
+                          Cancel
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-sm text-foreground mb-3 font-system leading-relaxed">
+                      {comment.content}
+                    </p>
+                  )}
                   
-                  {user && (
+                  {user && !editingCommentId && (
                     <div className="flex items-center gap-1">
                       <Button
                         variant="ghost"
