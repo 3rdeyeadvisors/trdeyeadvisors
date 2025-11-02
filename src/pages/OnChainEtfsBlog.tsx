@@ -1,7 +1,8 @@
+import React from 'react';
 import { BlogSEOAutomation } from "@/components/SEOAutomation";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, User, Clock } from "lucide-react";
+import { Calendar, User, Clock, ExternalLink } from "lucide-react";
 import { BRAND_AUTHOR } from "@/lib/constants";
 
 const OnChainEtfsBlog = () => {
@@ -9,23 +10,14 @@ const OnChainEtfsBlog = () => {
     title: "On-Chain ETFs: How Tokenized Funds Are Bridging DeFi and Traditional Finance in 2025",
     excerpt: "Explore how tokenized ETFs are building bridges between decentralized finance and traditional markets, introducing billions in institutional capital to blockchain infrastructure.",
     author: BRAND_AUTHOR,
-    date: "2025-11-02",
+    publishedDate: "2025-11-02",
     category: "DeFi Trends",
-    readTime: "8 min read",
-    tags: [
-      "tokenized ETFs",
-      "on-chain finance",
-      "DeFi TradFi bridge",
-      "BlackRock tokenization",
-      "Ondo Finance",
-      "institutional DeFi",
-      "blockchain ETFs 2025",
-      "decentralized funds"
-    ],
+    tags: ["tokenized ETFs", "on-chain finance", "DeFi TradFi bridge", "BlackRock tokenization", "Ondo Finance", "institutional DeFi", "blockchain ETFs 2025"],
     content: `
-      <p>Blockchain is no longer theoretical — large institutions are actually deploying on-chain ETFs. The rise of tokenized ETFs marks a structural shift as traditional finance begins integrating with decentralized infrastructure. These aren't synthetic representations; they're ETF shares living natively on blockchain rails, enabling 24/7 settlement, transparency, and dramatically reduced costs.</p>
-
       <h2>The Shift Toward Tokenized ETFs</h2>
+      
+      <p>Blockchain is no longer theoretical — large institutions are actually deploying on-chain ETFs. The rise of tokenized ETFs marks a structural shift as traditional finance begins integrating with decentralized infrastructure. These aren't synthetic representations; they're ETF shares living natively on blockchain rails, enabling 24/7 settlement, transparency, and dramatically reduced costs.</p>
+      
       <p>Tokenized ETFs differ fundamentally from traditional ETFs. While conventional funds settle during market hours through centralized clearinghouses, tokenized versions exist as blockchain assets with continuous availability. Think of it as an ETF share that operates like a cryptocurrency — tradable anytime, verifiable on-chain, and transferable without intermediaries.</p>
       
       <p>This transformation enables characteristics impossible in traditional finance: instant global settlement, programmable compliance rules, and composability with DeFi protocols. The infrastructure isn't experimental anymore — it's production-ready and handling billions in value.</p>
@@ -50,12 +42,13 @@ const OnChainEtfsBlog = () => {
       <h2>How It Works on the Blockchain</h2>
       <p>The tokenization process follows a structured flow: asset custody, smart contract issuance, blockchain deployment, and secondary trading. Here's the simplified version:</p>
       
-      <ol>
+      <h4>Key Steps:</h4>
+      <ul>
         <li><strong>Custody:</strong> Traditional assets are held by regulated custodians.</li>
         <li><strong>Wrapping:</strong> Smart contracts create blockchain representations backed 1:1 by custodied assets.</li>
         <li><strong>Issuance:</strong> Tokens are minted on-chain, representing ownership claims on underlying assets.</li>
         <li><strong>Trading:</strong> Users transact tokens on decentralized exchanges without intermediaries.</li>
-      </ol>
+      </ul>
       
       <p>The critical distinction: <strong>mirrored ETFs</strong> simply track prices, while <strong>native on-chain ETFs</strong> represent actual ownership claims enforceable through smart contracts and legal structures.</p>
 
@@ -103,7 +96,7 @@ const OnChainEtfsBlog = () => {
         title={blogPost.title}
         excerpt={blogPost.excerpt}
         author={blogPost.author}
-        publishedDate={blogPost.date}
+        publishedDate={blogPost.publishedDate}
         category={blogPost.category}
         tags={blogPost.tags}
       />
@@ -120,15 +113,15 @@ const OnChainEtfsBlog = () => {
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-1">
                     <User className="w-4 h-4" />
-                    <span>{blogPost.author}</span>
+                    <span>{BRAND_AUTHOR}</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <Calendar className="w-4 h-4" />
-                    <span>{new Date(blogPost.date).toLocaleDateString()}</span>
+                    <span>{new Date(blogPost.publishedDate).toLocaleDateString()}</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <Clock className="w-4 h-4" />
-                    <span>{blogPost.readTime}</span>
+                    <span>8 min read</span>
                   </div>
                 </div>
               </div>
@@ -156,8 +149,43 @@ const OnChainEtfsBlog = () => {
             <article className="prose prose-lg max-w-none prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-li:text-muted-foreground prose-h2:text-2xl prose-h2:font-bold prose-h2:mb-4 prose-h2:mt-8 prose-h3:text-xl prose-h3:font-semibold prose-h3:mb-3 prose-h3:mt-6 prose-h4:text-lg prose-h4:font-medium prose-h4:mb-2 prose-h4:mt-4">
               <div dangerouslySetInnerHTML={{ 
                 __html: blogPost.content
+                  .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                  .replace(/\n\n/g, '</p><p>')
+                  .replace(/^(?!<[h|u|l])/gm, '<p>')
+                  .replace(/(?!>)$/gm, '</p>')
+                  .replace(/<p><h/g, '<h')
+                  .replace(/<\/h([1-6])><\/p>/g, '</h$1>')
+                  .replace(/<p><ul>/g, '<ul>')
+                  .replace(/<\/ul><\/p>/g, '</ul>')
+                  .replace(/<p><li>/g, '<li>')
+                  .replace(/<\/li><\/p>/g, '</li>')
               }} />
             </article>
+            
+            {/* Sources */}
+            <div className="mt-8 pt-6 border-t border-border/20">
+              <h3 className="text-lg font-semibold mb-3 text-foreground">Sources & Further Reading</h3>
+              <div className="space-y-2 text-sm">
+                <a 
+                  href="https://www.blackrock.com/corporate/newsroom/press-releases"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-primary hover:text-primary/80 transition-colors"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  BlackRock - Corporate Newsroom & Tokenization Initiatives
+                </a>
+                <a 
+                  href="https://ondo.finance/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-primary hover:text-primary/80 transition-colors"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  Ondo Finance - Institutional-Grade On-Chain Financial Products
+                </a>
+              </div>
+            </div>
           </Card>
         </div>
       </div>
