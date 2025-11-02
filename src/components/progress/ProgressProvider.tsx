@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/components/auth/AuthProvider';
+import { courseContent } from '@/data/courseContent';
 
 interface CourseProgress {
   course_id: number;
@@ -201,9 +202,8 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
   };
 
   const getCourseModuleCount = (courseId: number): number => {
-    // This would ideally come from your course data
-    // For now, using a default of 5 modules per course
-    return 5;
+    const course = courseContent.find(c => c.id === courseId);
+    return course?.modules.length || 5;
   };
 
   const value = {
