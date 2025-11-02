@@ -76,26 +76,28 @@ const Blog = () => {
     switch (category) {
       case "DeFi Education":
       case "Education": 
-        return "bg-awareness/30 text-awareness border-awareness/50 hover:bg-awareness/40";
+        return "bg-awareness/20 text-awareness-foreground border-awareness/40 hover:bg-awareness/30";
       case "Security": 
-        return "bg-primary/30 text-primary border-primary/50 hover:bg-primary/40";
+        return "bg-primary/20 text-primary-foreground border-primary/40 hover:bg-primary/30";
       case "Innovation": 
-        return "bg-accent/30 text-accent border-accent/50 hover:bg-accent/40";
+        return "bg-accent/20 text-accent-foreground border-accent/40 hover:bg-accent/30";
       case "DeFi Tools":
       case "Tools": 
-        return "bg-secondary/60 text-secondary-foreground border-secondary/50 hover:bg-secondary/70";
+        return "bg-secondary/20 text-secondary-foreground border-secondary/40 hover:bg-secondary/30";
       case "Analysis": 
-        return "bg-muted/50 text-foreground border-border hover:bg-muted/60";
+        return "bg-muted text-muted-foreground border-border hover:bg-muted/80";
       case "Web3 Gaming":
-        return "bg-accent/25 text-accent border-accent/40 hover:bg-accent/35";
+        return "bg-accent/20 text-accent-foreground border-accent/40 hover:bg-accent/30";
       case "DeFAI":
       case "DEFAI":
-        return "bg-primary text-primary-foreground border-primary/60 hover:bg-primary/90 shadow-sm backdrop-blur-sm";
+        return "bg-primary text-primary-foreground border-primary/60 hover:bg-primary/90";
       case "Regulation":
       case "Policy":
-        return "bg-primary text-primary-foreground border-primary/60 hover:bg-primary/90 shadow-sm backdrop-blur-sm";
+        return "bg-primary text-primary-foreground border-primary/60 hover:bg-primary/90";
+      case "DeFi Trends":
+        return "bg-primary text-primary-foreground border-primary/60 hover:bg-primary/90";
       default: 
-        return "bg-primary/30 text-primary border-primary/50 hover:bg-primary/40";
+        return "bg-primary/20 text-primary-foreground border-primary/40 hover:bg-primary/30";
     }
   };
 
