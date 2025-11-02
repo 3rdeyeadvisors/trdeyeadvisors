@@ -106,3 +106,6 @@ verify_jwt = false
 
 [functions.resend-digital-delivery]
 verify_jwt = false
+
+[functions.admin-ai-command]
+verify_jwt = true

@@ -57,6 +57,7 @@ import DefiRegulationAmlIntegration from "./pages/DefiRegulationAmlIntegration";
 import LiquidStakingTokens2025 from "./pages/LiquidStakingTokens2025";
 import AdminStoreDashboard from "./pages/AdminStoreDashboard";
 import DownloadPortal from "./pages/DownloadPortal";
+import AdminDashboard from "./pages/AdminDashboard";
 
 const queryClient = new QueryClient();
 
@@ -168,6 +169,11 @@ const App = () => {
                   <Route path="/admin/store" element={
                     <ProtectedRoute requireRole="admin">
                       <AdminStoreDashboard />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/admin" element={
+                    <ProtectedRoute requireRole="admin">
+                      <AdminDashboard />
                     </ProtectedRoute>
                   } />
                   <Route path="*" element={<NotFound />} />
