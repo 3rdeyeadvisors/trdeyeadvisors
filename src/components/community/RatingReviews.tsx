@@ -208,12 +208,16 @@ export const RatingReviews = ({ contentType, contentId, title }: RatingStatsProp
             onClick={() => interactive && onRatingChange?.(star)}
             disabled={!interactive}
             className={`${interactive ? 'cursor-pointer hover:scale-110' : 'cursor-default'} transition-transform`}
+            style={{ textDecoration: 'none' }}
           >
-            {star <= rating ? (
-              <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-            ) : (
-              <StarOff className="w-5 h-5 text-gray-300" />
-            )}
+            <Star 
+              className={`w-5 h-5 transition-colors ${
+                star <= rating 
+                  ? 'fill-yellow-500 text-yellow-500' 
+                  : 'fill-none text-muted-foreground'
+              }`}
+              style={{ textDecoration: 'none' }}
+            />
           </button>
         ))}
       </div>

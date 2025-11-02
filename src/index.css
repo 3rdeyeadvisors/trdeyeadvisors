@@ -334,6 +334,15 @@ body {
   }
 }
 
+/* Remove any text-decoration on Star icons */
+svg[class*="lucide-star"] {
+  text-decoration: none !important;
+}
+
+.lucide-star {
+  text-decoration: none !important;
+}
+
 /* Mobile-specific improvements */
 @media (max-width: 768px) {
   /* Better mobile scrolling */

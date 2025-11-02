@@ -186,6 +186,7 @@ export const RatingSection = ({ courseId, moduleId }: RatingSectionProps) => {
                   ? "fill-none text-muted-foreground hover:fill-yellow-400 hover:text-yellow-400"
                   : "fill-none text-muted-foreground"
             }`}
+            style={{ textDecoration: 'none' }}
             onClick={interactive ? () => setSelectedRating(star) : undefined}
           />
         ))}

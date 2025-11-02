@@ -293,11 +293,11 @@ const BlogPost = () => {
             <p className="text-muted-foreground mb-4">
               Explore our hands-on tutorials and interactive courses to master DeFi
             </p>
-            <div className="flex gap-4 justify-center">
+            <div className="flex gap-4 justify-center flex-wrap">
               <Button variant="cosmic" onClick={() => navigate("/courses")}>
                 Browse Courses
               </Button>
-              <Button variant="outline" onClick={() => navigate("/tutorials")}>
+              <Button variant="cosmic" onClick={() => navigate("/tutorials")}>
                 Tutorials
               </Button>
             </div>

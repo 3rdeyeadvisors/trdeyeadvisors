@@ -137,16 +137,16 @@ export function MerchandiseCard({ product, onAddToCart, isInCart }: MerchandiseC
       </div>
 
       {/* Product Info */}
-      <div className="p-3 md:p-4 flex flex-col flex-1">
-        <div className="mb-3 text-center">
-          <h3 className="text-sm md:text-base font-consciousness font-semibold mb-2 line-clamp-2 min-h-[2.5rem]">{product.title}</h3>
+      <div className="p-2 md:p-4 flex flex-col flex-1">
+        <div className="mb-2 text-center">
+          <h3 className="text-xs md:text-base font-consciousness font-semibold mb-2 line-clamp-2 min-h-[2rem] md:min-h-[2.5rem]">{product.title}</h3>
           {product.description && (
-            <div className="relative mb-3">
+            <div className="relative mb-2">
               <div 
-                className="h-[80px] md:h-[100px] overflow-y-auto text-xs text-muted-foreground scrollbar-hide"
+                className="h-[60px] md:h-[80px] overflow-y-auto text-xs text-muted-foreground scrollbar-hide leading-tight"
                 style={{
-                  maskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)',
-                  WebkitMaskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)'
+                  maskImage: 'linear-gradient(to bottom, black 75%, transparent 100%)',
+                  WebkitMaskImage: 'linear-gradient(to bottom, black 75%, transparent 100%)'
                 }}
                 dangerouslySetInnerHTML={{ __html: product.description }}
               />
@@ -154,65 +154,60 @@ export function MerchandiseCard({ product, onAddToCart, isInCart }: MerchandiseC
           )}
         </div>
 
-        {/* Color Selector */}
+        {/* Compact Variant Selector */}
         <div className="space-y-1.5 mb-2">
-          <label className="text-xs font-medium text-center block">Color</label>
-          <Select value={selectedColor} onValueChange={handleColorChange}>
-            <SelectTrigger className="w-full h-9 text-xs">
-              <SelectValue placeholder="Select color" />
+          <Select 
+            value={`${selectedColor} / ${selectedSize}`} 
+            onValueChange={(value) => {
+              const [color, size] = value.split(' / ');
+              setSelectedColor(color);
+              setSelectedSize(size);
+              updateSelectedVariant(color, size);
+            }}
+          >
+            <SelectTrigger className="w-full h-8 md:h-9 text-xs">
+              <SelectValue placeholder="Select variant" />
             </SelectTrigger>
             <SelectContent>
               {colors.map((color) => (
-                <SelectItem key={color} value={color} className="text-xs">
-                  {color}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        {/* Size Selector */}
-        <div className="space-y-1.5 mb-3">
-          <label className="text-xs font-medium text-center block">Size</label>
-          <Select value={selectedSize} onValueChange={handleSizeChange}>
-            <SelectTrigger className="w-full h-9 text-xs">
-              <SelectValue placeholder="Select size" />
-            </SelectTrigger>
-            <SelectContent>
-              {availableSizes.map((variant: any) => (
-                <SelectItem key={variant.id} value={variant.size} className="text-xs">
-                  {variant.size}
-                </SelectItem>
+                <div key={color}>
+                  {variantsByColor[color].map((variant: any) => (
+                    <SelectItem 
+                      key={variant.id} 
+                      value={`${color} / ${variant.size}`} 
+                      className="text-xs"
+                    >
+                      {color} / {variant.size}
+                    </SelectItem>
+                  ))}
+                </div>
               ))}
             </SelectContent>
           </Select>
         </div>
 
         {/* Price & Add to Cart */}
-        <div className="flex flex-col gap-2 mt-auto pt-3 border-t border-border/50">
-          <div className="text-center">
-            <p className="text-xl md:text-2xl font-consciousness font-bold text-primary mb-1">
-              ${selectedVariant?.price.toFixed(2)}
-            </p>
-            <p className="text-xs text-muted-foreground">
-              {selectedColor} / {selectedSize}
-            </p>
-          </div>
+        <div className="flex flex-col gap-1.5 mt-auto pt-2 border-t border-border/50">
+          <p className="text-lg md:text-2xl font-consciousness font-bold text-primary text-center">
+            ${selectedVariant?.price.toFixed(2)}
+          </p>
           <Button
             onClick={handleAddToCart}
             disabled={!selectedVariant || inCart}
-            className="gap-2 w-full h-10 text-xs md:text-sm font-consciousness"
+            className="gap-1.5 w-full h-8 md:h-10 text-xs font-consciousness"
             size="sm"
           >
             {inCart ? (
               <>
-                <Check className="h-4 w-4" />
-                In Cart
+                <Check className="h-3 h-4 md:w-4" />
+                <span className="hidden md:inline">In Cart</span>
+                <span className="md:hidden">Added</span>
               </>
             ) : (
               <>
-                <ShoppingCart className="h-4 w-4" />
-                Add to Cart
+                <ShoppingCart className="h-3 md:h-4 w-3 md:w-4" />
+                <span className="hidden md:inline">Add to Cart</span>
+                <span className="md:hidden">Add</span>
               </>
             )}
           </Button>
