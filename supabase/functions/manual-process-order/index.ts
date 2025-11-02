@@ -113,33 +113,38 @@ serve(async (req) => {
       source: session.shipping ? 'shipping' : 'customer_details'
     });
 
-    // Call create-printify-order function
-    const { data: printifyData, error: printifyError } = await supabaseClient.functions.invoke(
-      "create-printify-order",
-      {
-        body: {
-          line_items: printifyItems,
-          shipping_method: 1, // Standard shipping
-          send_shipping_notification: true,
-          address_to: {
-            first_name: shipping.name?.split(" ")[0] || "Customer",
-            last_name: shipping.name?.split(" ").slice(1).join(" ") || "",
-            email: session.customer_details?.email || session.customer_email || "",
-            phone: session.customer_details?.phone || "",
-            country: shipping.address.country || "US",
-            region: shipping.address.state || "",
-            address1: shipping.address.line1 || "",
-            address2: shipping.address.line2 || "",
-            city: shipping.address.city || "",
-            zip: shipping.address.postal_code || "",
-          },
+    // Call create-printify-order function using direct HTTP call to get proper error messages
+    const functionUrl = `${Deno.env.get("SUPABASE_URL")}/functions/v1/create-printify-order`;
+    const printifyResponse = await fetch(functionUrl, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        line_items: printifyItems,
+        shipping_method: 1, // Standard shipping
+        send_shipping_notification: true,
+        address_to: {
+          first_name: shipping.name?.split(" ")[0] || "Customer",
+          last_name: shipping.name?.split(" ").slice(1).join(" ") || "",
+          email: session.customer_details?.email || session.customer_email || "",
+          phone: session.customer_details?.phone || "",
+          country: shipping.address.country || "US",
+          region: shipping.address.state || "",
+          address1: shipping.address.line1 || "",
+          address2: shipping.address.line2 || "",
+          city: shipping.address.city || "",
+          zip: shipping.address.postal_code || "",
         },
-      }
-    );
+      }),
+    });
 
-    if (printifyError) {
-      console.error("Printify order error:", printifyError);
-      throw printifyError;
+    const printifyData = await printifyResponse.json();
+    
+    if (!printifyResponse.ok) {
+      console.error("Printify order failed:", printifyData);
+      throw new Error(printifyData.error || "Failed to create Printify order");
     }
 
     console.log("Printify order created:", printifyData);
