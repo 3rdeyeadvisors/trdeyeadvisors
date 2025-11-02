@@ -23,7 +23,7 @@ export const blogPosts: BlogPost[] = [
 Blockchain is no longer theoretical — large institutions are actually deploying on-chain ETFs. The rise of tokenized ETFs marks a structural shift as traditional finance begins integrating with decentralized infrastructure.`,
     category: "DeFi Trends",
     readTime: "8 min read",
-    date: "2025-10-30",
+    date: "2025-11-02",
     featured: true,
     author: "3rdeyeadvisors Research Team",
     tags: ["tokenized ETFs", "on-chain finance", "DeFi TradFi bridge", "BlackRock tokenization", "Ondo Finance", "institutional DeFi", "blockchain ETFs 2025"]
