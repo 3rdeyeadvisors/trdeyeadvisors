@@ -83,35 +83,11 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
     console.log('[Progress] Starting module completion:', { courseId, moduleIndex, userId: user.id });
 
     try {
-      // Get fresh session and explicitly set it on the client
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-      
-      if (sessionError) {
-        console.error('[Progress] Session error:', sessionError);
-        throw sessionError;
-      }
-      
-      if (!session?.user || !session?.access_token) {
-        console.error('[Progress] No valid session or access token found');
-        throw new Error('No valid session');
-      }
-
-      console.log('[Progress] Session verified:', session.user.id);
-      console.log('[Progress] Session access token present:', !!session.access_token);
-
-      // Explicitly set the session to ensure the access token is used
-      await supabase.auth.setSession({
-        access_token: session.access_token,
-        refresh_token: session.refresh_token
-      });
-
-      console.log('[Progress] Session explicitly set on client');
-
-      // Query with fresh session user ID
+      // Query with user ID
       const { data: existingData, error: fetchError } = await supabase
         .from('course_progress')
         .select('*')
-        .eq('user_id', session.user.id)
+        .eq('user_id', user.id)
         .eq('course_id', courseId)
         .maybeSingle();
 
@@ -137,7 +113,7 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
       console.log('[Progress] Will update with:', { updatedModules, completionPercentage });
 
       if (existingData) {
-        // Update existing record - use session user ID
+        // Update existing record
         const { error, data } = await supabase
           .from('course_progress')
           .update({
@@ -145,7 +121,7 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
             last_accessed: new Date().toISOString(),
             completion_percentage: completionPercentage,
           })
-          .eq('user_id', session.user.id)
+          .eq('user_id', user.id)
           .eq('course_id', courseId)
           .select();
 
@@ -155,11 +131,11 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
         }
         console.log('[Progress] Update successful:', data);
       } else {
-        // Insert new record - use session user ID
+        // Insert new record
         const { error, data } = await supabase
           .from('course_progress')
           .insert({
-            user_id: session.user.id,
+            user_id: user.id,
             course_id: courseId,
             completed_modules: updatedModules,
             last_accessed: new Date().toISOString(),
@@ -177,7 +153,7 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
 
       // Update local state
       const progressData = {
-        user_id: session.user.id,
+        user_id: user.id,
         course_id: courseId,
         completed_modules: updatedModules,
         last_accessed: new Date().toISOString(),
