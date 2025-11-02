@@ -41,29 +41,98 @@ export const RatingSection = ({ courseId, moduleId }: RatingSectionProps) => {
 
   const fetchRatingData = async () => {
     try {
-      // For now, return empty data until database is properly set up
-      setRatingData({
-        averageRating: 0,
-        totalRatings: 0,
-        distribution: {}
-      });
+      const contentId = moduleId || `course-${courseId}`;
+      const contentType = moduleId ? 'module' : 'course';
+
+      // Fetch all ratings for this content
+      const { data: ratings, error } = await supabase
+        .from('ratings')
+        .select('rating, review_text, user_id')
+        .eq('content_id', contentId)
+        .eq('content_type', contentType);
+
+      if (error) throw error;
+
+      if (ratings && ratings.length > 0) {
+        const total = ratings.length;
+        const sum = ratings.reduce((acc, r) => acc + r.rating, 0);
+        const avg = sum / total;
+
+        const dist: { [key: number]: number } = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+        ratings.forEach(r => {
+          dist[r.rating] = (dist[r.rating] || 0) + 1;
+        });
+
+        const userRating = ratings.find(r => r.user_id === user?.id);
+
+        setRatingData({
+          averageRating: parseFloat(avg.toFixed(1)),
+          totalRatings: total,
+          distribution: dist,
+          userRating: userRating ? {
+            rating: userRating.rating,
+            review: userRating.review_text || undefined
+          } : undefined
+        });
+      }
     } catch (error) {
       console.error('Error fetching rating data:', error);
     }
   };
 
   const handleSubmitRating = async () => {
-    if (!user || selectedRating === 0) return;
+    if (!user) {
+      toast({
+        title: "Sign In Required",
+        description: "Please sign in to rate this content.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (selectedRating === 0) {
+      toast({
+        title: "Select Rating",
+        description: "Please select a rating before submitting.",
+        variant: "destructive",
+      });
+      return;
+    }
 
     setSubmitting(true);
     try {
-      // Database operation will be implemented after migration
+      const contentId = moduleId || `course-${courseId}`;
+      const contentType = moduleId ? 'module' : 'course';
+
+      const { error } = await supabase
+        .from('ratings')
+        .upsert({
+          user_id: user.id,
+          content_id: contentId,
+          content_type: contentType,
+          rating: selectedRating,
+          review_text: review.trim() || null,
+        }, {
+          onConflict: 'user_id,content_id,content_type'
+        });
+
+      if (error) throw error;
+
       toast({
-        title: "Coming Soon",
-        description: "Rating feature will be available after database setup",
+        title: "Rating Submitted!",
+        description: "Thank you for your feedback.",
       });
+
+      setSelectedRating(0);
+      setReview("");
+      await fetchRatingData();
     } catch (error) {
       console.error('Error submitting rating:', error);
+      toast({
+        title: "Error",
+        description: "Failed to submit rating. Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setSubmitting(false);
     }

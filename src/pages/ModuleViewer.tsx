@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { EnhancedContentPlayer } from "@/components/course/EnhancedContentPlayer";
+import { CommunityTabs } from "@/components/community/CommunityTabs";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useProgress } from "@/components/progress/ProgressProvider";
 import { AuthModal } from "@/components/auth/AuthModal";
@@ -194,6 +195,19 @@ const ModuleViewer = () => {
           currentModuleIndex={currentModuleIndex}
           totalModules={course.modules.length}
         />
+
+        {/* Community Features - Only for authenticated users */}
+        <div className="mt-8 md:mt-12">
+          <Card className="p-4 md:p-6">
+            <h2 className="text-xl md:text-2xl font-consciousness font-bold text-center mb-6">
+              Community Discussion
+            </h2>
+            <CommunityTabs 
+              courseId={course.id} 
+              moduleId={currentModule.id}
+            />
+          </Card>
+        </div>
       </div>
     </div>
   );

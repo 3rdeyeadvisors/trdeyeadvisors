@@ -15,22 +15,22 @@ import { formatDistanceToNow } from "date-fns";
 interface QAItem {
   id: string;
   title: string;
-  content: string;
+  description: string;
   created_at: string;
   user_id: string;
-  is_answered: boolean;
+  is_solved: boolean;
   profiles: {
     display_name: string;
-  };
+  } | null;
   discussion_replies: Array<{
     id: string;
     content: string;
     created_at: string;
     user_id: string;
-    is_answer: boolean;
+    is_solution: boolean;
     profiles: {
       display_name: string;
-    };
+    } | null;
   }>;
 }
 
@@ -56,8 +56,57 @@ export const QASection = ({ courseId, moduleId }: QASectionProps) => {
 
   const fetchQuestions = async () => {
     try {
-      // For now, return empty array until database is properly set up
-      setQuestions([]);
+      const contentId = moduleId || `course-${courseId}`;
+      const contentType = moduleId ? 'module' : 'course';
+
+      const { data, error } = await supabase
+        .from('discussions')
+        .select('id, title, description, created_at, user_id, is_solved')
+        .eq('content_id', contentId)
+        .eq('content_type', contentType)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      
+      // Fetch profiles and replies separately
+      const questionsWithDetails = await Promise.all(
+        (data || []).map(async (question) => {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('display_name')
+            .eq('user_id', question.user_id)
+            .maybeSingle();
+          
+          const { data: replies } = await supabase
+            .from('discussion_replies')
+            .select('id, content, created_at, user_id, is_solution')
+            .eq('discussion_id', question.id)
+            .order('created_at');
+          
+          const repliesWithProfiles = await Promise.all(
+            (replies || []).map(async (reply) => {
+              const { data: replyProfile } = await supabase
+                .from('profiles')
+                .select('display_name')
+                .eq('user_id', reply.user_id)
+                .maybeSingle();
+              
+              return {
+                ...reply,
+                profiles: replyProfile
+              };
+            })
+          );
+          
+          return {
+            ...question,
+            profiles: profile,
+            discussion_replies: repliesWithProfiles
+          };
+        })
+      );
+      
+      setQuestions(questionsWithDetails);
     } catch (error) {
       console.error('Error fetching questions:', error);
     } finally {
@@ -66,28 +115,102 @@ export const QASection = ({ courseId, moduleId }: QASectionProps) => {
   };
 
   const handleSubmitQuestion = async () => {
-    if (!user || !newQuestionTitle.trim() || !newQuestionContent.trim()) return;
+    if (!user) {
+      toast({
+        title: "Sign In Required",
+        description: "Please sign in to ask questions.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!newQuestionTitle.trim() || !newQuestionContent.trim()) {
+      toast({
+        title: "Complete Form",
+        description: "Please provide both a title and description.",
+        variant: "destructive",
+      });
+      return;
+    }
 
     setSubmitting(true);
     try {
-      // Database operation will be implemented after migration
+      const contentId = moduleId || `course-${courseId}`;
+      const contentType = moduleId ? 'module' : 'course';
+
+      const { error } = await supabase
+        .from('discussions')
+        .insert({
+          title: newQuestionTitle.trim(),
+          description: newQuestionContent.trim(),
+          user_id: user.id,
+          content_id: contentId,
+          content_type: contentType,
+        });
+
+      if (error) throw error;
+
       toast({
-        title: "Coming Soon",
-        description: "Q&A feature will be available after database setup",
+        title: "Question Posted!",
+        description: "Your question has been added successfully.",
       });
+
       setNewQuestionTitle("");
       setNewQuestionContent("");
       setShowNewQuestion(false);
+      await fetchQuestions();
     } catch (error) {
       console.error('Error submitting question:', error);
+      toast({
+        title: "Error",
+        description: "Failed to post question. Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setSubmitting(false);
     }
   };
 
   const handleSubmitReply = async (questionId: string, isAnswer = false) => {
-    if (!user || !replyContent[questionId]?.trim()) return;
-    // Reply functionality will be implemented after database setup
+    if (!user) {
+      toast({
+        title: "Sign In Required",
+        description: "Please sign in to reply.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const content = replyContent[questionId]?.trim();
+    if (!content) return;
+
+    try {
+      const { error } = await supabase
+        .from('discussion_replies')
+        .insert({
+          discussion_id: questionId,
+          content: content,
+          user_id: user.id,
+          is_solution: isAnswer,
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: "Reply Posted!",
+        description: isAnswer ? "Answer submitted successfully." : "Reply added successfully.",
+      });
+
+      setReplyContent(prev => ({ ...prev, [questionId]: "" }));
+      await fetchQuestions();
+    } catch (error) {
+      console.error('Error submitting reply:', error);
+      toast({
+        title: "Error",
+        description: "Failed to post reply. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   if (loading) {
@@ -183,10 +306,10 @@ export const QASection = ({ courseId, moduleId }: QASectionProps) => {
                     <span className="text-xs text-muted-foreground">
                       {formatDistanceToNow(new Date(question.created_at), { addSuffix: true })}
                     </span>
-                    {question.is_answered && (
+                    {question.is_solved && (
                       <Badge variant="outline" className="text-xs">
                         <CheckCircle className="w-3 h-3 mr-1" />
-                        Answered
+                        Solved
                       </Badge>
                     )}
                   </div>
@@ -195,7 +318,7 @@ export const QASection = ({ courseId, moduleId }: QASectionProps) => {
                     {question.title}
                   </h4>
                   <p className="text-sm text-muted-foreground mb-3 leading-relaxed">
-                    {question.content}
+                    {question.description}
                   </p>
                 </div>
               </div>
@@ -205,15 +328,15 @@ export const QASection = ({ courseId, moduleId }: QASectionProps) => {
                 <div className="ml-11 space-y-3 mb-4">
                   {question.discussion_replies
                     .sort((a, b) => {
-                      // Show answers first
-                      if (a.is_answer && !b.is_answer) return -1;
-                      if (!a.is_answer && b.is_answer) return 1;
+                      // Show solutions first
+                      if (a.is_solution && !b.is_solution) return -1;
+                      if (!a.is_solution && b.is_solution) return 1;
                       return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
                     })
                     .map((reply) => (
                     <Card 
                       key={reply.id} 
-                      className={`p-3 ${reply.is_answer ? 'bg-success/10 border-success/30' : 'bg-muted/20'}`}
+                      className={`p-3 ${reply.is_solution ? 'bg-success/10 border-success/30' : 'bg-muted/20'}`}
                     >
                       <div className="flex items-start gap-2">
                         <Avatar className="w-6 h-6">
@@ -229,9 +352,9 @@ export const QASection = ({ courseId, moduleId }: QASectionProps) => {
                             <span className="text-xs text-muted-foreground">
                               {formatDistanceToNow(new Date(reply.created_at), { addSuffix: true })}
                             </span>
-                            {reply.is_answer && (
+                            {reply.is_solution && (
                               <Badge variant="outline" className="text-xs bg-success/20">
-                                Answer
+                                Solution
                               </Badge>
                             )}
                           </div>
@@ -266,7 +389,7 @@ export const QASection = ({ courseId, moduleId }: QASectionProps) => {
                     >
                       Reply
                     </Button>
-                    {!question.is_answered && (
+                    {!question.is_solved && (
                       <Button
                         size="sm"
                         onClick={() => handleSubmitReply(question.id, true)}

@@ -18,10 +18,8 @@ interface Comment {
   user_id: string;
   profiles: {
     display_name: string;
-  };
+  } | null;
   likes_count: number;
-  dislikes_count: number;
-  user_interaction: 'like' | 'dislike' | null;
 }
 
 interface CommentsSectionProps {
@@ -43,36 +41,139 @@ export const CommentsSection = ({ courseId, moduleId }: CommentsSectionProps) =>
 
   const fetchComments = async () => {
     try {
-      // For now, return empty array until database is properly set up
-      setComments([]);
+      const contentId = moduleId || `course-${courseId}`;
+      const contentType = moduleId ? 'module' : 'course';
+
+      const { data, error } = await supabase
+        .from('comments')
+        .select(`
+          id,
+          content,
+          created_at,
+          user_id,
+          likes_count
+        `)
+        .eq('content_id', contentId)
+        .eq('content_type', contentType)
+        .is('parent_id', null)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      
+      // Fetch profiles separately
+      const commentsWithProfiles = await Promise.all(
+        (data || []).map(async (comment) => {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('display_name')
+            .eq('user_id', comment.user_id)
+            .maybeSingle();
+          
+          return {
+            ...comment,
+            profiles: profile
+          };
+        })
+      );
+      
+      setComments(commentsWithProfiles);
     } catch (error) {
       console.error('Error fetching comments:', error);
+      toast({
+        title: "Error Loading Comments",
+        description: "Unable to load comments. Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
   };
 
   const handleSubmitComment = async () => {
-    if (!user || !newComment.trim()) return;
+    if (!user || !newComment.trim()) {
+      toast({
+        title: "Sign In Required",
+        description: "Please sign in to post comments.",
+        variant: "destructive",
+      });
+      return;
+    }
 
     setSubmitting(true);
     try {
-      // Database operation will be implemented after migration
+      const contentId = moduleId || `course-${courseId}`;
+      const contentType = moduleId ? 'module' : 'course';
+
+      const { error } = await supabase
+        .from('comments')
+        .insert({
+          content: newComment.trim(),
+          user_id: user.id,
+          content_id: contentId,
+          content_type: contentType,
+        });
+
+      if (error) throw error;
+
       toast({
-        title: "Coming Soon",
-        description: "Comments feature will be available after database setup",
+        title: "Comment Posted!",
+        description: "Your comment has been added successfully.",
       });
+      
       setNewComment("");
+      await fetchComments();
     } catch (error) {
       console.error('Error submitting comment:', error);
+      toast({
+        title: "Error",
+        description: "Failed to post comment. Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setSubmitting(false);
     }
   };
 
-  const handleLike = async (commentId: string, isLike: boolean) => {
-    if (!user) return;
-    // Like functionality will be implemented after database setup
+  const handleLike = async (commentId: string) => {
+    if (!user) {
+      toast({
+        title: "Sign In Required",
+        description: "Please sign in to like comments.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      // Check if already liked
+      const { data: existing } = await supabase
+        .from('comment_likes')
+        .select('id')
+        .eq('comment_id', commentId)
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (existing) {
+        // Unlike
+        await supabase
+          .from('comment_likes')
+          .delete()
+          .eq('comment_id', commentId)
+          .eq('user_id', user.id);
+      } else {
+        // Like
+        await supabase
+          .from('comment_likes')
+          .insert({
+            comment_id: commentId,
+            user_id: user.id,
+          });
+      }
+
+      await fetchComments();
+    } catch (error) {
+      console.error('Error liking comment:', error);
+    }
   };
 
   if (loading) {
@@ -156,24 +257,11 @@ export const CommentsSection = ({ courseId, moduleId }: CommentsSectionProps) =>
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => handleLike(comment.id, true)}
-                        className={`h-8 px-2 ${
-                          comment.user_interaction === 'like' ? 'text-primary' : 'text-muted-foreground'
-                        }`}
+                        onClick={() => handleLike(comment.id)}
+                        className="h-8 px-2 text-muted-foreground hover:text-primary"
                       >
                         <ThumbsUp className="w-3 h-3 mr-1" />
                         {comment.likes_count}
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleLike(comment.id, false)}
-                        className={`h-8 px-2 ${
-                          comment.user_interaction === 'dislike' ? 'text-destructive' : 'text-muted-foreground'
-                        }`}
-                      >
-                        <ThumbsDown className="w-3 h-3 mr-1" />
-                        {comment.dislikes_count}
                       </Button>
                     </div>
                   )}
