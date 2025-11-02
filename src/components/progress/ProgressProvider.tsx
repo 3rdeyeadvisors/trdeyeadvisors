@@ -87,13 +87,28 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
           started_at: existingProgress?.started_at || new Date().toISOString(),
         };
 
-        const { error } = await supabase
-          .from('course_progress')
-          .upsert(progressData, {
-            onConflict: 'user_id,course_id'
-          });
+        // Check if record exists
+        if (existingProgress) {
+          // Update existing record
+          const { error } = await supabase
+            .from('course_progress')
+            .update({
+              completed_modules: updatedModules,
+              last_accessed: new Date().toISOString(),
+              completion_percentage: completionPercentage,
+            })
+            .eq('user_id', user.id)
+            .eq('course_id', courseId);
 
-        if (error) throw error;
+          if (error) throw error;
+        } else {
+          // Insert new record
+          const { error } = await supabase
+            .from('course_progress')
+            .insert(progressData);
+
+          if (error) throw error;
+        }
 
         setCourseProgress(prev => ({
           ...prev,
@@ -102,6 +117,7 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
       }
     } catch (error) {
       console.error('Error updating progress:', error);
+      throw error;
     }
   };
 
