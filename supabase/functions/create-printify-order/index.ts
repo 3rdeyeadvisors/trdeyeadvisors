@@ -65,12 +65,13 @@ serve(async (req) => {
     const shops = await printifyResponse.json();
     console.log('Printify shops response:', JSON.stringify(shops, null, 2));
     
-    if (!shops || !shops.data || shops.data.length === 0) {
+    // Printify returns shops as a direct array, not wrapped in data property
+    if (!shops || !Array.isArray(shops) || shops.length === 0) {
       console.error('No Printify shops found. Full response:', JSON.stringify(shops));
       throw new Error('No Printify shops configured. Please connect a Printify shop first.');
     }
     
-    const shopId = shops.data[0].id;
+    const shopId = shops[0].id;
     console.log('Using shop ID:', shopId);
 
     // Create order in Printify
