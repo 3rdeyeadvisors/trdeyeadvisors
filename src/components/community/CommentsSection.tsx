@@ -90,10 +90,19 @@ export const CommentsSection = ({ courseId, moduleId }: CommentsSectionProps) =>
   };
 
   const handleSubmitComment = async () => {
-    if (!user || !newComment.trim()) {
+    if (!user) {
       toast({
         title: "Sign In Required",
         description: "Please sign in to post comments.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!newComment.trim()) {
+      toast({
+        title: "Empty Comment",
+        description: "Please write a comment before submitting.",
         variant: "destructive",
       });
       return;
@@ -114,6 +123,23 @@ export const CommentsSection = ({ courseId, moduleId }: CommentsSectionProps) =>
         });
 
       if (error) throw error;
+
+      // Send email notification
+      try {
+        await supabase.functions.invoke('send-community-notification', {
+          body: {
+            type: 'comment',
+            user_name: user.user_metadata?.display_name || user.email || 'Anonymous',
+            user_email: user.email || 'unknown@email.com',
+            content_id: contentId,
+            content_type: contentType,
+            content: newComment.trim()
+          }
+        });
+      } catch (emailError) {
+        console.error('Failed to send notification email:', emailError);
+        // Don't fail the comment submission if email fails
+      }
 
       toast({
         title: "Comment Posted!",

@@ -150,6 +150,24 @@ export const QASection = ({ courseId, moduleId }: QASectionProps) => {
 
       if (error) throw error;
 
+      // Send email notification
+      try {
+        await supabase.functions.invoke('send-community-notification', {
+          body: {
+            type: 'question',
+            user_name: user.user_metadata?.display_name || user.email || 'Anonymous',
+            user_email: user.email || 'unknown@email.com',
+            content_id: contentId,
+            content_type: contentType,
+            title: newQuestionTitle.trim(),
+            content: newQuestionContent.trim()
+          }
+        });
+      } catch (emailError) {
+        console.error('Failed to send notification email:', emailError);
+        // Don't fail the question submission if email fails
+      }
+
       toast({
         title: "Question Posted!",
         description: "Your question has been added successfully.",
@@ -195,6 +213,25 @@ export const QASection = ({ courseId, moduleId }: QASectionProps) => {
         });
 
       if (error) throw error;
+
+      // Send email notification
+      try {
+        const question = questions.find(q => q.id === questionId);
+        await supabase.functions.invoke('send-community-notification', {
+          body: {
+            type: 'answer',
+            user_name: user.user_metadata?.display_name || user.email || 'Anonymous',
+            user_email: user.email || 'unknown@email.com',
+            content_id: moduleId || `course-${courseId}`,
+            content_type: moduleId ? 'module' : 'course',
+            title: question?.title || 'Question',
+            content: content
+          }
+        });
+      } catch (emailError) {
+        console.error('Failed to send notification email:', emailError);
+        // Don't fail the reply submission if email fails
+      }
 
       toast({
         title: "Reply Posted!",

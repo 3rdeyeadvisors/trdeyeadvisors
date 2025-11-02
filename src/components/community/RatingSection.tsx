@@ -39,6 +39,14 @@ export const RatingSection = ({ courseId, moduleId }: RatingSectionProps) => {
     fetchRatingData();
   }, [courseId, moduleId]);
 
+  // Pre-fill user's existing rating when data loads
+  useEffect(() => {
+    if (ratingData.userRating) {
+      setSelectedRating(ratingData.userRating.rating);
+      setReview(ratingData.userRating.review || "");
+    }
+  }, [ratingData.userRating]);
+
   const fetchRatingData = async () => {
     try {
       const contentId = moduleId || `course-${courseId}`;
@@ -81,6 +89,8 @@ export const RatingSection = ({ courseId, moduleId }: RatingSectionProps) => {
   };
 
   const handleSubmitRating = async () => {
+    console.log('Submitting rating:', { selectedRating, user: !!user });
+    
     if (!user) {
       toast({
         title: "Sign In Required",
@@ -104,6 +114,8 @@ export const RatingSection = ({ courseId, moduleId }: RatingSectionProps) => {
       const contentId = moduleId || `course-${courseId}`;
       const contentType = moduleId ? 'module' : 'course';
 
+      console.log('Upserting rating:', { contentId, contentType, selectedRating });
+
       const { error } = await supabase
         .from('ratings')
         .upsert({
@@ -116,15 +128,36 @@ export const RatingSection = ({ courseId, moduleId }: RatingSectionProps) => {
           onConflict: 'user_id,content_id,content_type'
         });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Rating upsert error:', error);
+        throw error;
+      }
+
+      console.log('Rating submitted successfully');
+
+      // Send email notification
+      try {
+        await supabase.functions.invoke('send-community-notification', {
+          body: {
+            type: 'rating',
+            user_name: user.user_metadata?.display_name || user.email || 'Anonymous',
+            user_email: user.email || 'unknown@email.com',
+            content_id: contentId,
+            content_type: contentType,
+            rating: selectedRating,
+            review: review.trim() || undefined
+          }
+        });
+      } catch (emailError) {
+        console.error('Failed to send notification email:', emailError);
+        // Don't fail the rating submission if email fails
+      }
 
       toast({
         title: "Rating Submitted!",
         description: "Thank you for your feedback.",
       });
 
-      setSelectedRating(0);
-      setReview("");
       await fetchRatingData();
     } catch (error) {
       console.error('Error submitting rating:', error);
