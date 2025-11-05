@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      broadcast_email_queue: {
+        Row: {
+          created_at: string
+          cta_link: string
+          day_type: string
+          id: string
+          intro_text: string
+          market_block: string
+          scheduled_for: string
+          sent_at: string | null
+          subject_line: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          cta_link?: string
+          day_type: string
+          id?: string
+          intro_text: string
+          market_block: string
+          scheduled_for: string
+          sent_at?: string | null
+          subject_line: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          cta_link?: string
+          day_type?: string
+          id?: string
+          intro_text?: string
+          market_block?: string
+          scheduled_for?: string
+          sent_at?: string | null
+          subject_line?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       comment_likes: {
         Row: {
           comment_id: string

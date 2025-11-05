@@ -115,3 +115,9 @@ verify_jwt = true
 
 [functions.send-newsletter-email]
 verify_jwt = false
+
+[functions.3ea-broadcast]
+verify_jwt = false
+
+[functions.send-scheduled-broadcast]
+verify_jwt = false
