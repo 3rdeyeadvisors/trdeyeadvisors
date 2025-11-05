@@ -13,6 +13,7 @@ import { UserManager } from "@/components/admin/UserManager";
 import { AnalyticsHub } from "@/components/admin/AnalyticsHub";
 import { AutomationPanel } from "@/components/admin/AutomationPanel";
 import { ProductManager } from "@/components/admin/ProductManager";
+import BroadcastTester from "@/components/admin/BroadcastTester";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -68,6 +69,8 @@ const AdminDashboard = () => {
         return <OrdersManager />;
       case "email":
         return <EmailCenter />;
+      case "broadcast":
+        return <BroadcastTester />;
       case "users":
         return <UserManager />;
       case "analytics":

@@ -5,7 +5,8 @@ import {
   Users, 
   BarChart3, 
   Zap, 
-  Package 
+  Package,
+  Radio 
 } from "lucide-react";
 import {
   Sidebar,
@@ -24,6 +25,7 @@ const menuItems = [
   { id: "overview", title: "Overview", icon: LayoutDashboard },
   { id: "orders", title: "Orders & Customers", icon: ShoppingCart },
   { id: "email", title: "Email Center", icon: Mail },
+  { id: "broadcast", title: "Broadcast Tester", icon: Radio },
   { id: "users", title: "User Management", icon: Users },
   { id: "analytics", title: "Analytics & KPIs", icon: BarChart3 },
   { id: "automation", title: "Automation", icon: Zap },
