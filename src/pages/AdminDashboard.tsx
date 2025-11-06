@@ -14,6 +14,7 @@ import { AnalyticsHub } from "@/components/admin/AnalyticsHub";
 import { AutomationPanel } from "@/components/admin/AutomationPanel";
 import { ProductManager } from "@/components/admin/ProductManager";
 import BroadcastTester from "@/components/admin/BroadcastTester";
+import { BroadcastAlertsLog } from "@/components/admin/BroadcastAlertsLog";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -71,6 +72,8 @@ const AdminDashboard = () => {
         return <EmailCenter />;
       case "broadcast":
         return <BroadcastTester />;
+      case "broadcast-alerts":
+        return <BroadcastAlertsLog />;
       case "users":
         return <UserManager />;
       case "analytics":

@@ -14,6 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
+      broadcast_alerts: {
+        Row: {
+          alert_sent: boolean | null
+          alert_sent_at: string | null
+          alert_type: string
+          created_at: string
+          error_message: string | null
+          failed_payload: Json | null
+          id: string
+          missing_fields: string[] | null
+          resolved: boolean | null
+          resolved_at: string | null
+          retry_count: number | null
+          severity: string
+          timestamp: string
+        }
+        Insert: {
+          alert_sent?: boolean | null
+          alert_sent_at?: string | null
+          alert_type: string
+          created_at?: string
+          error_message?: string | null
+          failed_payload?: Json | null
+          id?: string
+          missing_fields?: string[] | null
+          resolved?: boolean | null
+          resolved_at?: string | null
+          retry_count?: number | null
+          severity?: string
+          timestamp?: string
+        }
+        Update: {
+          alert_sent?: boolean | null
+          alert_sent_at?: string | null
+          alert_type?: string
+          created_at?: string
+          error_message?: string | null
+          failed_payload?: Json | null
+          id?: string
+          missing_fields?: string[] | null
+          resolved?: boolean | null
+          resolved_at?: string | null
+          retry_count?: number | null
+          severity?: string
+          timestamp?: string
+        }
+        Relationships: []
+      }
       broadcast_email_queue: {
         Row: {
           created_at: string
@@ -50,6 +98,51 @@ export type Database = {
           sent_at?: string | null
           subject_line?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      broadcast_weekly_summary: {
+        Row: {
+          created_at: string
+          failures_count: number | null
+          id: string
+          success_rate: number | null
+          summary_sent: boolean | null
+          summary_sent_at: string | null
+          total_broadcasts_scheduled: number | null
+          total_broadcasts_sent: number | null
+          total_emails_sent: number | null
+          total_subscribers: number | null
+          week_end: string
+          week_start: string
+        }
+        Insert: {
+          created_at?: string
+          failures_count?: number | null
+          id?: string
+          success_rate?: number | null
+          summary_sent?: boolean | null
+          summary_sent_at?: string | null
+          total_broadcasts_scheduled?: number | null
+          total_broadcasts_sent?: number | null
+          total_emails_sent?: number | null
+          total_subscribers?: number | null
+          week_end: string
+          week_start: string
+        }
+        Update: {
+          created_at?: string
+          failures_count?: number | null
+          id?: string
+          success_rate?: number | null
+          summary_sent?: boolean | null
+          summary_sent_at?: string | null
+          total_broadcasts_scheduled?: number | null
+          total_broadcasts_sent?: number | null
+          total_emails_sent?: number | null
+          total_subscribers?: number | null
+          week_end?: string
+          week_start?: string
         }
         Relationships: []
       }

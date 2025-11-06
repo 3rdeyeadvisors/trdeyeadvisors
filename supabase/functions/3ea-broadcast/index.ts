@@ -28,10 +28,47 @@ const handler = async (req: Request): Promise<Response> => {
     const payload: BroadcastPayload = await req.json();
     console.log('Received broadcast content:', payload);
 
-    // Validate payload
-    if (!payload.day_type || !payload.subject_line || !payload.intro_text || !payload.market_block) {
+    // Validate payload and detect missing fields
+    const requiredFields = ['day_type', 'subject_line', 'intro_text', 'market_block'];
+    const missingFields = requiredFields.filter(field => !payload[field as keyof BroadcastPayload]);
+
+    if (missingFields.length > 0) {
+      console.error('Missing required fields:', missingFields);
+      
+      // Log alert
+      const { data: alert } = await supabase
+        .from('broadcast_alerts')
+        .insert({
+          alert_type: 'missing_field',
+          severity: 'error',
+          error_message: `Missing required fields: ${missingFields.join(', ')}`,
+          failed_payload: payload,
+          missing_fields: missingFields,
+          timestamp: new Date().toISOString(),
+        })
+        .select()
+        .single();
+
+      // Send alert email
+      if (alert) {
+        await supabase.functions.invoke('send-broadcast-alert', {
+          body: {
+            alert_id: alert.id,
+            alert_type: alert.alert_type,
+            severity: alert.severity,
+            error_message: alert.error_message,
+            failed_payload: payload,
+            missing_fields: missingFields,
+            timestamp: alert.timestamp,
+          },
+        });
+      }
+
       return new Response(
-        JSON.stringify({ error: 'Missing required fields: day_type, subject_line, intro_text, market_block' }),
+        JSON.stringify({ 
+          error: `Missing required fields: ${missingFields.join(', ')}`,
+          missing_fields: missingFields 
+        }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
@@ -68,6 +105,34 @@ const handler = async (req: Request): Promise<Response> => {
 
     if (error) {
       console.error('Error storing broadcast content:', error);
+      
+      // Log queue failure alert
+      const { data: alert } = await supabase
+        .from('broadcast_alerts')
+        .insert({
+          alert_type: 'queue_failure',
+          severity: 'error',
+          error_message: `Failed to queue broadcast: ${error.message}`,
+          failed_payload: payload,
+          timestamp: new Date().toISOString(),
+        })
+        .select()
+        .single();
+
+      // Send alert email
+      if (alert) {
+        await supabase.functions.invoke('send-broadcast-alert', {
+          body: {
+            alert_id: alert.id,
+            alert_type: alert.alert_type,
+            severity: alert.severity,
+            error_message: alert.error_message,
+            failed_payload: payload,
+            timestamp: alert.timestamp,
+          },
+        });
+      }
+      
       throw error;
     }
 
@@ -85,6 +150,41 @@ const handler = async (req: Request): Promise<Response> => {
 
   } catch (error: any) {
     console.error('Error in 3ea-broadcast:', error);
+    
+    // Log webhook failure
+    try {
+      const supabase = createClient(
+        Deno.env.get('SUPABASE_URL') ?? '',
+        Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+      );
+
+      const { data: alert } = await supabase
+        .from('broadcast_alerts')
+        .insert({
+          alert_type: 'webhook_failure',
+          severity: 'error',
+          error_message: `Webhook processing failed: ${error.message}`,
+          failed_payload: null,
+          timestamp: new Date().toISOString(),
+        })
+        .select()
+        .single();
+
+      if (alert) {
+        await supabase.functions.invoke('send-broadcast-alert', {
+          body: {
+            alert_id: alert.id,
+            alert_type: alert.alert_type,
+            severity: alert.severity,
+            error_message: alert.error_message,
+            timestamp: alert.timestamp,
+          },
+        });
+      }
+    } catch (alertError) {
+      console.error('Error logging webhook failure:', alertError);
+    }
+    
     return new Response(
       JSON.stringify({ error: error.message }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
