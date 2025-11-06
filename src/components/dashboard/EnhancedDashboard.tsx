@@ -252,9 +252,9 @@ export const EnhancedDashboard = () => {
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case "Beginner": return "text-green-600";
-      case "Intermediate": return "text-yellow-600";
-      case "Advanced": return "text-red-600";
+      case "Beginner": return "text-awareness";
+      case "Intermediate": return "text-accent";
+      case "Advanced": return "text-destructive";
       default: return "text-muted-foreground";
     }
   };
@@ -282,7 +282,7 @@ export const EnhancedDashboard = () => {
                 Level {Math.floor(totalProgress / 25) + 1}
               </Badge>
               <div className="flex items-center gap-1">
-                <Zap className="w-4 h-4 text-yellow-500" />
+                <Zap className="w-4 h-4 text-accent" />
                 <span className="text-sm">{currentStreak} day streak</span>
               </div>
             </div>
@@ -333,9 +333,9 @@ export const EnhancedDashboard = () => {
             </div>
           </Card>
 
-          <Card className="p-6 bg-gradient-to-br from-green-100 to-green-50 border-green-200">
+          <Card className="p-6 bg-card border-border">
             <div className="flex items-center gap-3">
-              <TrendingUp className="w-8 h-8 text-green-600" />
+              <TrendingUp className="w-8 h-8 text-awareness" />
               <div>
                 <p className="text-2xl font-consciousness font-bold text-foreground">
                   {quizStats.averageScore}%
@@ -347,9 +347,9 @@ export const EnhancedDashboard = () => {
             </div>
           </Card>
 
-          <Card className="p-6 bg-gradient-to-br from-yellow-100 to-yellow-50 border-yellow-200">
+          <Card className="p-6 bg-card border-border">
             <div className="flex items-center gap-3">
-              <Target className="w-8 h-8 text-yellow-600" />
+              <Target className="w-8 h-8 text-accent" />
               <div>
                 <p className="text-2xl font-consciousness font-bold text-foreground">
                   {Math.round(totalProgress)}%
@@ -466,8 +466,8 @@ export const EnhancedDashboard = () => {
                     >
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex items-center gap-2">
-                          <CheckCircle2 className="w-5 h-5 text-green-600 group-hover:scale-110 transition-transform" />
-                          <span className="text-sm font-medium text-green-600">Completed</span>
+                          <CheckCircle2 className="w-5 h-5 text-awareness group-hover:scale-110 transition-transform" />
+                          <span className="text-sm font-medium text-awareness">Completed</span>
                         </div>
                         <Badge className={getCategoryColor(course.category)}>
                           {course.category === "free" ? "Free" : course.price}
@@ -678,7 +678,7 @@ export const EnhancedDashboard = () => {
                   </div>
                   <div className="flex justify-between items-center">
                     <span>Improvement Trend</span>
-                    <span className="font-semibold text-green-600">+12%</span>
+                    <span className="font-semibold text-awareness">+12%</span>
                   </div>
                 </div>
               </Card>
