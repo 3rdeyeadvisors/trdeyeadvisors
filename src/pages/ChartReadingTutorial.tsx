@@ -139,8 +139,8 @@ const ChartReadingTutorial = () => {
             
             <Card className="p-4">
               <div className="flex items-center gap-2 mb-2">
-                <Activity className="w-5 h-5 text-gray-500" />
-                <h4 className="font-semibold text-gray-700">Sideways/Consolidation</h4>
+                <Activity className="w-5 h-5 text-muted-foreground" />
+                <h4 className="font-semibold text-foreground">Sideways/Consolidation</h4>
               </div>
               <p className="text-sm mb-2">Price moves within a range</p>
               <div className="text-xs text-muted-foreground">

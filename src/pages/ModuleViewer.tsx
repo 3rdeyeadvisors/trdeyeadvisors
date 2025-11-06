@@ -162,7 +162,7 @@ const ModuleViewer = () => {
                       <div className="flex items-center gap-1 md:gap-2 flex-shrink-0">
                         {isCompleted ? (
                           <div className="w-5 h-5 md:w-6 md:h-6 bg-awareness rounded-full flex items-center justify-center">
-                            <span className="text-white text-xs font-bold">✓</span>
+                            <span className="text-foreground text-xs font-bold">✓</span>
                           </div>
                         ) : (
                           <div className="w-5 h-5 md:w-6 md:h-6 border-2 border-current rounded-full flex items-center justify-center">

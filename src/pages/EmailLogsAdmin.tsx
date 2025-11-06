@@ -259,13 +259,13 @@ const EmailLogsAdmin = () => {
     
     if (status.isSubscribed && status.isRegistered) {
       badges.push(
-        <Badge key="both" className="bg-gradient-to-r from-primary to-accent text-white">
+        <Badge key="both" className="bg-gradient-to-r from-primary to-accent text-primary-foreground">
           Newsletter + Account
         </Badge>
       );
     } else if (status.isSubscribed) {
       badges.push(
-        <Badge key="newsletter" variant="secondary" className="bg-awareness text-white">
+        <Badge key="newsletter" variant="secondary" className="bg-awareness text-foreground">
           Newsletter Only
         </Badge>
       );
@@ -297,7 +297,7 @@ const EmailLogsAdmin = () => {
       mailchimp_sync: "bg-orange-100 text-orange-800",
     };
     return (
-      <Badge className={colors[type] || "bg-gray-100 text-gray-800"}>
+      <Badge className={colors[type] || "bg-muted text-muted-foreground"}>
         {type.replace('_', ' ')}
       </Badge>
     );
@@ -314,10 +314,10 @@ const EmailLogsAdmin = () => {
           body { margin: 0; padding: 0; }
         </style>
       </head>
-      <body style="margin: 0; padding: 0; background-color: #030717;">
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 0; padding: 0; background-color: #030717;" bgcolor="#030717">
+      <body style="margin: 0; padding: 0; background-color: hsl(222, 84%, 4.9%);">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 0; padding: 0; background-color: hsl(222, 84%, 4.9%);" bgcolor="hsl(222, 84%, 4.9%)">
           <tr>
-            <td align="center" style="padding: 0; background-color: #030717;" bgcolor="#030717">
+            <td align="center" style="padding: 0; background-color: hsl(222, 84%, 4.9%);" bgcolor="hsl(222, 84%, 4.9%)">
               <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; margin: 0 auto; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;">
                 <tr>
                   <td style="padding: 32px 20px;">
@@ -343,7 +343,7 @@ const EmailLogsAdmin = () => {
                             ${emailSubject}
                           </h2>
                           ${emailBody.split('\n\n').map(paragraph => 
-                            `<p style="color: #F5F5F5; font-size: 16px; line-height: 1.6; margin: 0 0 16px 0;">${paragraph.replace(/\n/g, '<br>')}</p>`
+                            `<p style="color: hsl(0, 0%, 95%); font-size: 16px; line-height: 1.6; margin: 0 0 16px 0;">${paragraph.replace(/\n/g, '<br>')}</p>`
                           ).join('')}
                         </td>
                       </tr>

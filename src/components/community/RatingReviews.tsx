@@ -273,7 +273,7 @@ export const RatingReviews = ({ contentType, contentId, title }: RatingStatsProp
                     <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                     <div className="flex-1 bg-muted rounded-full h-2">
                       <div
-                        className="bg-yellow-400 h-2 rounded-full"
+                        className="bg-accent h-2 rounded-full"
                         style={{
                           width: `${stats.totalReviews > 0 ? (stats.distribution[stars - 1] / stats.totalReviews) * 100 : 0}%`
                         }}

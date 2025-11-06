@@ -24,11 +24,11 @@
 
     /* Deep secondary - system dark */
     --secondary: 217 32% 12%;
-    --secondary-foreground: 0 0% 90%;
+    --secondary-foreground: 0 0% 95%;
 
-    /* Muted cosmic tones */
+    /* Muted cosmic tones - improved contrast */
     --muted: 217 32% 10%;
-    --muted-foreground: 215 20% 65%;
+    --muted-foreground: 215 20% 78%;
 
     /* Consciousness accent - electric purple */
     --accent: 271 91% 65%;
@@ -43,9 +43,9 @@
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    /* System borders and inputs */
-    --border: 217 32% 15%;
-    --input: 217 32% 12%;
+    /* System borders and inputs - improved visibility */
+    --border: 217 32% 20%;
+    --input: 217 32% 15%;
     --ring: 217 91% 60%;
 
     /* Cosmic gradients */

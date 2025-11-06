@@ -202,7 +202,7 @@ const VideoTutorials = () => {
                                 <div className="flex items-center gap-2 mt-1">
                                   <Badge 
                                     variant="secondary" 
-                                    className={`text-xs font-medium ${getPriorityColor(video.priority)} text-white border-0`}
+                                    className={`text-xs font-medium ${getPriorityColor(video.priority)} text-foreground border-0`}
                                   >
                                     {video.priority}
                                   </Badge>

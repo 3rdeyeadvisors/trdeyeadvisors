@@ -120,8 +120,8 @@ const TestDownloads = () => {
             <Card key={productId} className="overflow-hidden">
               <CardHeader className="pb-4">
                 <div className="flex items-center gap-4">
-                  <div className={`p-3 rounded-lg ${product?.color || 'bg-gray-500'} text-white`}>
-                    <IconComponent className="h-6 w-6" />
+                  <div className={`p-3 rounded-lg ${product?.color || 'bg-primary'}`}>
+                    <IconComponent className="h-6 w-6 text-primary-foreground" />
                   </div>
                   <div className="flex-1">
                     <CardTitle className="text-xl">
@@ -140,13 +140,13 @@ const TestDownloads = () => {
                     const FileIcon = getFileIcon(file.file_type);
                     
                     return (
-                      <div key={file.id} className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50 transition-colors">
+                      <div key={file.id} className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 transition-colors">
                         <div className="flex items-center gap-3">
-                          <FileIcon className="h-5 w-5 text-gray-500" />
+                          <FileIcon className="h-5 w-5 text-muted-foreground" />
                           <div>
                             <p className="font-medium">{file.file_name}</p>
                             <p className="text-sm text-muted-foreground">{file.description}</p>
-                            <p className="text-xs text-gray-400">Path: {file.file_path}</p>
+                            <p className="text-xs text-muted-foreground/70">Path: {file.file_path}</p>
                           </div>
                         </div>
                         <Button
@@ -170,7 +170,7 @@ const TestDownloads = () => {
       {productFiles.length === 0 && (
         <div className="text-center py-8">
           <p className="text-muted-foreground mb-4">No files found in the database.</p>
-          <p className="text-sm text-gray-500">Make sure the digital_product_files table has data.</p>
+          <p className="text-sm text-muted-foreground/80">Make sure the digital_product_files table has data.</p>
         </div>
       )}
     </div>

@@ -381,7 +381,6 @@ export const EnhancedContentPlayer = ({
                           variant="outline" 
                           size="sm"
                           onClick={togglePlayback}
-                          className="text-white border-white hover:bg-white hover:text-black"
                         >
                           {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
                         </Button>
@@ -389,7 +388,6 @@ export const EnhancedContentPlayer = ({
                           variant="outline" 
                           size="sm"
                           onClick={changePlaybackSpeed}
-                          className="text-white border-white hover:bg-white hover:text-black"
                         >
                           {playbackSpeed}x
                         </Button>
@@ -397,7 +395,6 @@ export const EnhancedContentPlayer = ({
                           variant="outline" 
                           size="sm"
                           onClick={toggleFullscreen}
-                          className="text-white border-white hover:bg-white hover:text-black"
                         >
                           <Maximize className="w-4 h-4" />
                         </Button>

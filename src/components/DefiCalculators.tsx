@@ -90,9 +90,9 @@ const DefiCalculators = () => {
     else riskScore += 3;
     
     const riskLevel = riskScore <= 3 ? "Low" : riskScore <= 6 ? "Medium" : "High";
-    const riskColor = riskLevel === "Low" ? "bg-green-500/20 text-green-400" : 
-                     riskLevel === "Medium" ? "bg-yellow-500/20 text-yellow-400" : 
-                     "bg-red-500/20 text-red-400";
+    const riskColor = riskLevel === "Low" ? "bg-awareness/20 text-awareness" : 
+                     riskLevel === "Medium" ? "bg-accent/20 text-accent" : 
+                     "bg-destructive/20 text-destructive";
     
     return { riskLevel, riskColor, riskScore };
   };

@@ -114,9 +114,9 @@ const SEOAutomation = ({
       {showReport && process.env.NODE_ENV === 'development' && (
         <div className="fixed bottom-4 right-4 z-50 max-w-sm">
           <div className={`p-4 rounded-lg shadow-lg ${
-            report.status === 'pass' ? 'bg-green-100 border-green-500' :
-            report.status === 'warning' ? 'bg-yellow-100 border-yellow-500' :
-            'bg-red-100 border-red-500'
+            report.status === 'pass' ? 'bg-awareness/20 border-awareness' :
+            report.status === 'warning' ? 'bg-accent/20 border-accent' :
+            'bg-destructive/20 border-destructive'
           } border`}>
             <h4 className="font-bold text-sm mb-2">SEO Automation Report</h4>
             <p className="text-xs mb-2">{report.summary}</p>

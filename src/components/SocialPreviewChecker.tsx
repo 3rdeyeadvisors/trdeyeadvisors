@@ -100,9 +100,9 @@ export const SocialPreviewChecker = () => {
         </div>
       </Card>
 
-      <Card className="p-6 bg-blue-50 border-blue-200">
-        <h3 className="text-lg font-semibold mb-2 text-blue-900">💡 Pro Tips for Link Previews</h3>
-        <ul className="space-y-2 text-sm text-blue-800">
+      <Card className="p-6 bg-primary/10 border-primary/30">
+        <h3 className="text-lg font-semibold mb-2 text-foreground">💡 Pro Tips for Link Previews</h3>
+        <ul className="space-y-2 text-sm text-muted-foreground">
           <li>• <strong>iMessage/WhatsApp:</strong> Can take 1-4 hours to update cached previews</li>
           <li>• <strong>Clear cache:</strong> Delete previous messages with your link and reshare</li>
           <li>• <strong>Test with new contacts:</strong> Fresh conversations update faster</li>

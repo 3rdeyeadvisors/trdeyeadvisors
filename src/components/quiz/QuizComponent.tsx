@@ -274,7 +274,7 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
       <Card className="p-6">
         <div className="text-center mb-6">
           <div className={`w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center ${
-            passed ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"
+            passed ? "bg-awareness/20 text-awareness" : "bg-destructive/20 text-destructive"
           }`}>
             {passed ? <Trophy className="w-8 h-8" /> : <XCircle className="w-8 h-8" />}
           </div>
@@ -299,7 +299,7 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
               <div key={question.id} className="p-4 border rounded-lg">
                 <div className="flex items-start gap-3 mb-2">
                   <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
-                    isCorrect ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"
+                    isCorrect ? "bg-awareness/20 text-awareness" : "bg-destructive/20 text-destructive"
                   }`}>
                     {isCorrect ? <CheckCircle className="w-4 h-4" /> : <XCircle className="w-4 h-4" />}
                   </div>
@@ -482,7 +482,7 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
           <Button
             onClick={handleSubmitQuiz}
             disabled={loading}
-            className="bg-green-600 hover:bg-green-700"
+            className="bg-awareness hover:bg-awareness/90"
           >
             Submit Quiz
           </Button>

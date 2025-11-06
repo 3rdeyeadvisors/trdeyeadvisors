@@ -461,7 +461,7 @@ export const EnhancedDashboard = () => {
                   {completed.map(course => (
                     <Card
                       key={course.id}
-                      className="p-6 bg-green-50 border-green-200 hover:border-green-400 transition-all cursor-pointer group"
+                      className="p-6 bg-awareness/10 border-awareness/30 hover:border-awareness/50 transition-all cursor-pointer group"
                       onClick={() => navigate(`/courses/${course.id}`)}
                     >
                       <div className="flex items-start justify-between mb-4">
@@ -597,12 +597,12 @@ export const EnhancedDashboard = () => {
                   recentActivity.map((activity) => (
                     <div key={activity.id} className="flex items-center gap-3 p-3 bg-muted/20 rounded-lg">
                       <div className={`p-2 rounded-full ${
-                        activity.passed ? "bg-green-100" : "bg-red-100"
+                        activity.passed ? "bg-awareness/20 text-awareness" : "bg-destructive/20 text-destructive"
                       }`}>
                         {activity.passed ? (
-                          <CheckCircle2 className="w-4 h-4 text-green-600" />
+                          <CheckCircle2 className="w-4 h-4" />
                         ) : (
-                          <Brain className="w-4 h-4 text-red-600" />
+                          <Brain className="w-4 h-4" />
                         )}
                       </div>
                       <div className="flex-1">

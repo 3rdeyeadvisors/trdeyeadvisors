@@ -33,9 +33,9 @@ const SEOValidator = ({
   }
 
   const getScoreColor = (score: number) => {
-    if (score >= 90) return 'text-green-600 bg-green-100';
-    if (score >= 70) return 'text-yellow-600 bg-yellow-100';
-    return 'text-red-600 bg-red-100';
+    if (score >= 90) return 'text-awareness bg-awareness/20';
+    if (score >= 70) return 'text-accent bg-accent/20';
+    return 'text-destructive bg-destructive/20';
   };
 
   const getScoreIcon = (score: number) => {
@@ -62,7 +62,7 @@ const SEOValidator = ({
 
   return (
     <div className="fixed bottom-4 right-4 z-50 max-w-sm">
-      <Card className="p-4 shadow-lg bg-white border">
+      <Card className="p-4 shadow-lg border">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             <Badge className={getScoreColor(score)}>
@@ -91,28 +91,28 @@ const SEOValidator = ({
         </div>
 
         {issues.length === 0 ? (
-          <div className="flex items-center gap-2 text-green-600">
+          <div className="flex items-center gap-2 text-awareness">
             <CheckCircle className="w-4 h-4" />
             <span className="text-sm">All SEO checks passed!</span>
           </div>
         ) : (
           <div className="space-y-2">
-            <h4 className="text-sm font-semibold text-gray-800">
+            <h4 className="text-sm font-semibold text-foreground">
               Issues Found ({issues.length})
             </h4>
             <ul className="space-y-1">
               {issues.map((issue, index) => (
                 <li key={index} className="flex items-start gap-2">
-                  <AlertTriangle className="w-3 h-3 text-yellow-500 mt-0.5 flex-shrink-0" />
-                  <span className="text-xs text-gray-700">{issue}</span>
+                  <AlertTriangle className="w-3 h-3 text-accent mt-0.5 flex-shrink-0" />
+                  <span className="text-xs text-muted-foreground">{issue}</span>
                 </li>
               ))}
             </ul>
           </div>
         )}
 
-        <div className="mt-3 pt-3 border-t border-gray-200">
-          <div className="flex justify-between text-xs text-gray-500">
+        <div className="mt-3 pt-3 border-t border-border">
+          <div className="flex justify-between text-xs text-muted-foreground">
             <span>Real-time monitoring</span>
             <span>DEV</span>
           </div>

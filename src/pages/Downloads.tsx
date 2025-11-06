@@ -175,8 +175,8 @@ const Downloads = () => {
             <Card key={purchase.id} className="overflow-hidden">
               <CardHeader className="pb-4">
                 <div className="flex items-center gap-4">
-                  <div className={`p-3 rounded-lg ${product?.color || 'bg-gray-500'} text-white`}>
-                    <IconComponent className="h-6 w-6" />
+                  <div className={`p-3 rounded-lg ${product?.color || 'bg-primary'}`}>
+                    <IconComponent className="h-6 w-6 text-primary-foreground" />
                   </div>
                   <div className="flex-1">
                     <CardTitle className="text-xl">
@@ -203,9 +203,9 @@ const Downloads = () => {
                     const FileIcon = getFileIcon(file.file_type);
                     
                     return (
-                      <div key={file.id} className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50 transition-colors">
+                      <div key={file.id} className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 transition-colors">
                         <div className="flex items-center gap-3">
-                          <FileIcon className="h-5 w-5 text-gray-500" />
+                          <FileIcon className="h-5 w-5 text-muted-foreground" />
                           <div>
                             <p className="font-medium">{file.file_name}</p>
                             <p className="text-sm text-muted-foreground">{file.description}</p>

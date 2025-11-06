@@ -152,10 +152,10 @@ export const ContentPlayer = ({
 
   const getTypeColor = (type: string) => {
     switch (type) {
-      case 'video': return 'bg-red-100 text-red-700 border-red-200';
-      case 'text': return 'bg-blue-100 text-blue-700 border-blue-200';
-      case 'interactive': return 'bg-green-100 text-green-700 border-green-200';
-      default: return 'bg-gray-100 text-gray-700 border-gray-200';
+      case 'video': return 'bg-destructive/20 text-destructive border-destructive/30';
+      case 'text': return 'bg-primary/20 text-primary border-primary/30';
+      case 'interactive': return 'bg-awareness/20 text-awareness border-awareness/30';
+      default: return 'bg-muted text-muted-foreground border-border';
     }
   };
 
@@ -173,7 +173,7 @@ export const ContentPlayer = ({
               <span className="text-sm">{module.duration} min</span>
             </div>
             {isCompleted && (
-              <Badge variant="default" className="bg-green-100 text-green-700 border-green-200">
+              <Badge variant="default" className="bg-awareness/20 text-awareness border-awareness/30">
                 <CheckCircle className="w-3 h-3 mr-1" />
                 Completed
               </Badge>
@@ -228,16 +228,16 @@ export const ContentPlayer = ({
           )}
 
           {module.type === 'video' && module.content.videoUrl && (
-            <div className="aspect-video bg-black rounded-lg flex items-center justify-center">
-              <div className="text-white text-center">
+            <div className="aspect-video bg-background/95 border-2 border-border rounded-lg flex items-center justify-center">
+              <div className="text-foreground text-center">
                 <div className="text-4xl mb-4">🎥</div>
                 <p className="text-lg">Video Player</p>
-                <p className="text-sm opacity-75">
+                <p className="text-sm text-muted-foreground">
                   In a real implementation, this would be a video player
                 </p>
                 <Button 
                   variant="outline" 
-                  className="mt-4 text-white border-white hover:bg-white hover:text-black"
+                  className="mt-4"
                   onClick={() => window.open(module.content.videoUrl, '_blank')}
                 >
                   Open Video
@@ -348,7 +348,7 @@ export const ContentPlayer = ({
           </div>
           
           {!isCompleted && user && (
-            <Button onClick={handleComplete} className="bg-green-600 hover:bg-green-700">
+            <Button onClick={handleComplete} className="bg-awareness hover:bg-awareness/90">
               <CheckCircle className="w-4 h-4 mr-2" />
               Mark Complete
             </Button>
