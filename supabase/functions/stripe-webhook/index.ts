@@ -75,15 +75,16 @@ serve(async (req) => {
 
       let session = event.data.object as Stripe.Checkout.Session;
       
-      // Retrieve full session with line items (shipping is already included)
+      // Retrieve full session with line items and shipping details
       session = await stripe.checkout.sessions.retrieve(session.id, {
-        expand: ['line_items', 'line_items.data.price.product']
+        expand: ['line_items', 'line_items.data.price.product', 'customer', 'shipping_details']
       });
       
       console.log("🛒 Processing checkout session:", session.id);
       console.log("Session metadata:", session.metadata);
       console.log("Customer email:", session.customer_email);
-      console.log("Shipping info:", session.shipping ? "✅ Present" : "❌ Missing");
+      console.log("Shipping info:", session.shipping_details ? "✅ Present" : "❌ Missing");
+      console.log("Shipping details:", JSON.stringify(session.shipping_details, null, 2));
 
       // Line items are already expanded in the session retrieval
       const lineItems = { data: session.line_items?.data || [] };
@@ -137,7 +138,8 @@ serve(async (req) => {
       // Handle Printify orders (merchandise only)
       if (printifyItems.length > 0) {
         try {
-          if (!session.shipping) {
+          const shippingInfo = session.shipping_details || session.shipping;
+          if (!shippingInfo) {
             console.error("❌ Printify items present but no shipping info!");
             await supabaseClient.from('order_action_logs').insert({
               order_id: session.id,
@@ -153,16 +155,16 @@ serve(async (req) => {
               shipping_method: 1,
               send_shipping_notification: true,
               address_to: {
-                first_name: session.shipping.name?.split(' ')[0] || "Customer",
-                last_name: session.shipping.name?.split(' ').slice(1).join(' ') || "Name",
+                first_name: shippingInfo.name?.split(' ')[0] || "Customer",
+                last_name: shippingInfo.name?.split(' ').slice(1).join(' ') || "Name",
                 email: session.customer_email || session.customer_details?.email || "",
                 phone: session.customer_details?.phone || "",
-                country: session.shipping.address?.country || "",
-                region: session.shipping.address?.state || "",
-                address1: session.shipping.address?.line1 || "",
-                address2: session.shipping.address?.line2 || "",
-                city: session.shipping.address?.city || "",
-                zip: session.shipping.address?.postal_code || "",
+                country: shippingInfo.address?.country || "",
+                region: shippingInfo.address?.state || "",
+                address1: shippingInfo.address?.line1 || "",
+                address2: shippingInfo.address?.line2 || "",
+                city: shippingInfo.address?.city || "",
+                zip: shippingInfo.address?.postal_code || "",
               },
             };
 
