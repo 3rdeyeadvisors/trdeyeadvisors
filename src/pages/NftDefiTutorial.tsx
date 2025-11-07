@@ -479,10 +479,27 @@ const NftDefiTutorial = () => {
                   </Button>
                   
                   <Button
-                    onClick={() => setCurrentStep(Math.min(steps.length - 1, currentStep + 1))}
-                    disabled={currentStep === steps.length - 1}
+                    onClick={() => {
+                      if (currentStep === steps.length - 1) {
+                        handleStepComplete(currentStep);
+                        
+                        // Save completion to localStorage
+                        const completed = JSON.parse(localStorage.getItem('completedTutorials') || '[]');
+                        if (!completed.includes('nft-defi')) {
+                          completed.push('nft-defi');
+                          localStorage.setItem('completedTutorials', JSON.stringify(completed));
+                        }
+                        
+                        toast.success("Tutorial Complete! 🎉 You're ready to explore NFT-DeFi opportunities.");
+                        setTimeout(() => {
+                          navigate('/tutorials');
+                        }, 1500);
+                      } else {
+                        setCurrentStep(Math.min(steps.length - 1, currentStep + 1));
+                      }
+                    }}
                   >
-                    Next
+                    {currentStep === steps.length - 1 ? 'Finish Tutorial' : 'Next'}
                   </Button>
                 </div>
               </div>

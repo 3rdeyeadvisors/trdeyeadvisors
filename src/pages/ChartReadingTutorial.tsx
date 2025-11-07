@@ -442,10 +442,27 @@ const ChartReadingTutorial = () => {
                   </Button>
                   
                   <Button
-                    onClick={() => setCurrentStep(Math.min(steps.length - 1, currentStep + 1))}
-                    disabled={currentStep === steps.length - 1}
+                    onClick={() => {
+                      if (currentStep === steps.length - 1) {
+                        handleStepComplete(currentStep);
+                        
+                        // Save completion to localStorage
+                        const completed = JSON.parse(localStorage.getItem('completedTutorials') || '[]');
+                        if (!completed.includes('chart-reading')) {
+                          completed.push('chart-reading');
+                          localStorage.setItem('completedTutorials', JSON.stringify(completed));
+                        }
+                        
+                        toast.success("Tutorial Complete! 🎉 You've mastered chart reading.");
+                        setTimeout(() => {
+                          navigate('/tutorials');
+                        }, 1500);
+                      } else {
+                        setCurrentStep(Math.min(steps.length - 1, currentStep + 1));
+                      }
+                    }}
                   >
-                    Next
+                    {currentStep === steps.length - 1 ? 'Finish Tutorial' : 'Next'}
                   </Button>
                 </div>
               </div>

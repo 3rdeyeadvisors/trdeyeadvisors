@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Play, Shield, TrendingUp, Calculator, AlertTriangle, Wallet, ArrowLeftRight, PieChart, Target, CheckCircle } from "lucide-react";
+import { Play, Shield, TrendingUp, Calculator, AlertTriangle, Wallet, ArrowLeftRight, PieChart, Target, CheckCircle, BarChart3, Image, Users } from "lucide-react";
 import SEO from "@/components/SEO";
 import { useToast } from "@/hooks/use-toast";
 
@@ -131,6 +131,49 @@ const VideoTutorials = () => {
           priority: "Medium"
         }
       ]
+    },
+    advanced: {
+      title: "Advanced Topics",
+      description: "Specialized tutorials for experienced DeFi users",
+      icon: BarChart3,
+      videos: [
+        {
+          id: "chart-reading",
+          title: "Chart Reading & Technical Analysis",
+          description: "Master chart patterns, indicators, and technical analysis for DeFi trading",
+          duration: "12 min",
+          difficulty: "Intermediate",
+          course: "Advanced Skills",
+          thumbnail: "/api/placeholder/400/225",
+          steps: 6,
+          icon: BarChart3,
+          priority: "Medium"
+        },
+        {
+          id: "nft-defi",
+          title: "NFT & DeFi Integration",
+          description: "Explore NFT lending, staking, and DeFi opportunities in the NFT space",
+          duration: "11 min",
+          difficulty: "Intermediate",
+          course: "Advanced Skills",
+          thumbnail: "/api/placeholder/400/225",
+          steps: 6,
+          icon: Image,
+          priority: "Medium"
+        },
+        {
+          id: "dao-participation",
+          title: "DAO Participation & Governance",
+          description: "Learn how to participate in DAOs, vote on proposals, and shape protocol futures",
+          duration: "10 min",
+          difficulty: "Intermediate",
+          course: "Advanced Skills",
+          thumbnail: "/api/placeholder/400/225",
+          steps: 6,
+          icon: Users,
+          priority: "Medium"
+        }
+      ]
     }
   };
 
@@ -204,7 +247,7 @@ const VideoTutorials = () => {
 
           {/* Category Tabs */}
           <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="mb-8">
-            <TabsList className="grid w-full grid-cols-2 mb-8">
+            <TabsList className="grid w-full grid-cols-3 mb-8">
               {Object.entries(videoCategories).map(([key, category]) => {
                 const IconComponent = category.icon;
                 return (
@@ -291,7 +334,10 @@ const VideoTutorials = () => {
                                 "yield-farming": "/tutorials/advanced-defi-protocols",
                                 "liquidity-pools": "/tutorials/first-dex-swap",
                                 "portfolio-tracking": "/tutorials/portfolio-rebalancing",
-                                "risk-assessment": "/tutorials/risk-assessment"
+                                "risk-assessment": "/tutorials/risk-assessment",
+                                "chart-reading": "/tutorials/chart-reading",
+                                "nft-defi": "/tutorials/nft-defi",
+                                "dao-participation": "/tutorials/dao-participation"
                               };
                               const route = tutorialRoutes[video.id];
                               if (route) {
