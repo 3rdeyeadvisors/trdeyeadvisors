@@ -635,7 +635,6 @@ const PortfolioRebalancingTutorial = () => {
                   
                   <Button
                     onClick={handleNext}
-                    disabled={currentStep === totalSteps}
                   >
                     {currentStep === totalSteps ? "Finish Tutorial" : "Next Step"}
                     <ArrowRight className="h-4 w-4 ml-2" />
