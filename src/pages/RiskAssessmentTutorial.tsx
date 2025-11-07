@@ -4,11 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { CheckCircle, Circle, AlertTriangle, Shield, TrendingDown, Users, ArrowLeft } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 
 const RiskAssessmentTutorial = () => {
-  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
 
@@ -198,16 +197,17 @@ const RiskAssessmentTutorial = () => {
   const progress = (completedSteps.length / steps.length) * 100;
 
   return (
-    <div className="container mx-auto px-4 py-8 mobile-typography-center">
-      <div className="mb-6">
-        <Button 
-          variant="ghost" 
-          onClick={() => navigate('/tutorials')}
-          className="mb-4"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Tutorials
-        </Button>
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
+      <div className="container mx-auto px-4 py-8 mobile-typography-center">
+        {/* Back to Tutorials Button */}
+        <div className="mb-6">
+          <Link to="/tutorials">
+            <Button variant="ghost" className="gap-2 hover:bg-muted">
+              <ArrowLeft className="w-4 h-4" />
+              Back to Tutorials
+            </Button>
+          </Link>
+        </div>
         
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -243,7 +243,7 @@ const RiskAssessmentTutorial = () => {
                 >
                   <div className="flex items-center gap-2">
                   {completedSteps.includes(index) ? (
-                      <CheckCircle className="w-4 h-4 text-success" />
+                      <CheckCircle className="w-4 h-4 text-awareness" />
                     ) : (
                       <Circle className="w-4 h-4" />
                     )}

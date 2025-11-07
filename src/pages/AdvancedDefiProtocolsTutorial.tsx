@@ -846,6 +846,16 @@ const AdvancedDefiProtocolsTutorial = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
       <div className="container mx-auto px-4 py-8 mobile-typography-center">
+        {/* Back to Tutorials Button */}
+        <div className="mb-6">
+          <Link to="/tutorials">
+            <Button variant="ghost" className="gap-2 hover:bg-muted">
+              <ArrowLeft className="h-4 w-4" />
+              Back to Tutorials
+            </Button>
+          </Link>
+        </div>
+
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
@@ -881,7 +891,7 @@ const AdvancedDefiProtocolsTutorial = () => {
                 variant={current ? "default" : completed ? "secondary" : "outline"}
                 size="sm"
                 onClick={() => setCurrentStep(step.id)}
-                className={`flex items-center gap-2 ${completed ? "bg-green-100 text-green-700 hover:bg-green-200" : ""}`}
+                className={`flex items-center gap-2 ${completed ? "bg-awareness/10 text-awareness hover:bg-awareness/20 border-awareness" : ""}`}
               >
                 <StepIcon className="h-4 w-4" />
                 <span className="hidden sm:inline">{step.title}</span>
