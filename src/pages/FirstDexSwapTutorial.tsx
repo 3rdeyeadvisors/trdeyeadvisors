@@ -376,6 +376,15 @@ const FirstDexSwapTutorial = () => {
     if (currentStep < totalSteps) {
       setCompletedSteps(prev => [...prev, currentStep]);
       setCurrentStep(currentStep + 1);
+    } else {
+      setCompletedSteps(prev => [...prev, currentStep]);
+      toast({
+        title: "Tutorial Complete! 🎉",
+        description: "Excellent work! You've mastered DEX swapping.",
+      });
+      setTimeout(() => {
+        window.location.href = "/tutorials";
+      }, 1500);
     }
   };
 

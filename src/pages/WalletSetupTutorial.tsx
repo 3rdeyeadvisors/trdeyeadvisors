@@ -218,6 +218,16 @@ const WalletSetupTutorial = () => {
     if (currentStep < totalSteps) {
       setCompletedSteps(prev => [...prev, currentStep]);
       setCurrentStep(currentStep + 1);
+    } else {
+      // On final step, show completion toast and navigate back to tutorials
+      setCompletedSteps(prev => [...prev, currentStep]);
+      toast({
+        title: "Tutorial Complete! 🎉",
+        description: "Great job! You've completed the Wallet Setup tutorial.",
+      });
+      setTimeout(() => {
+        window.location.href = "/tutorials";
+      }, 1500);
     }
   };
 

@@ -283,10 +283,19 @@ const RiskAssessmentTutorial = () => {
                   </Button>
                   
                   <Button
-                    onClick={() => setCurrentStep(Math.min(steps.length - 1, currentStep + 1))}
-                    disabled={currentStep === steps.length - 1}
+                    onClick={() => {
+                      if (currentStep === steps.length - 1) {
+                        handleStepComplete(currentStep);
+                        toast.success("Tutorial Complete! 🎉 You've mastered DeFi risk assessment.");
+                        setTimeout(() => {
+                          window.location.href = "/tutorials";
+                        }, 1500);
+                      } else {
+                        setCurrentStep(Math.min(steps.length - 1, currentStep + 1));
+                      }
+                    }}
                   >
-                    Next
+                    {currentStep === steps.length - 1 ? 'Finish Tutorial' : 'Next'}
                   </Button>
                 </div>
               </div>

@@ -515,6 +515,15 @@ const PortfolioRebalancingTutorial = () => {
     if (currentStep < totalSteps) {
       setCompletedSteps(prev => [...prev, currentStep]);
       setCurrentStep(currentStep + 1);
+    } else {
+      setCompletedSteps(prev => [...prev, currentStep]);
+      toast({
+        title: "Tutorial Complete! 🎉",
+        description: "Excellent! You've learned portfolio rebalancing strategies.",
+      });
+      setTimeout(() => {
+        window.location.href = "/tutorials";
+      }, 1500);
     }
   };
 

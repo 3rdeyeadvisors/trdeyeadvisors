@@ -536,6 +536,15 @@ const SpottingScamsTutorial = () => {
     if (currentStep < totalSteps) {
       setCompletedSteps(prev => [...prev, currentStep]);
       setCurrentStep(currentStep + 1);
+    } else {
+      setCompletedSteps(prev => [...prev, currentStep]);
+      toast({
+        title: "Tutorial Complete! 🎉",
+        description: "You're now equipped to spot and avoid DeFi scams. Stay safe!",
+      });
+      setTimeout(() => {
+        window.location.href = "/tutorials";
+      }, 1500);
     }
   };
 

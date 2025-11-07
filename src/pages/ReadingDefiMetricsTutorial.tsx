@@ -762,6 +762,15 @@ const ReadingDefiMetricsTutorial = () => {
     if (currentStep < totalSteps) {
       setCompletedSteps(prev => [...prev, currentStep]);
       setCurrentStep(currentStep + 1);
+    } else {
+      setCompletedSteps(prev => [...prev, currentStep]);
+      toast({
+        title: "Tutorial Complete! 🎉",
+        description: "Well done! You can now analyze DeFi metrics like a pro.",
+      });
+      setTimeout(() => {
+        window.location.href = "/tutorials";
+      }, 1500);
     }
   };
 
