@@ -811,11 +811,11 @@ const SpottingScamsTutorial = () => {
                                 <p className="text-sm text-muted-foreground mb-2">{analysis.what}</p>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                                   <div>
-                                    <span className="font-medium text-red-600">⚠️ Red Flag: </span>
+                                    <span className="font-medium text-destructive">⚠️ Red Flag: </span>
                                     <span>{analysis.redFlag}</span>
                                   </div>
                                   <div>
-                                    <span className="font-medium text-blue-600">🔧 Tool: </span>
+                                    <span className="font-medium text-accent">🔧 Tool: </span>
                                     <span>{analysis.tool}</span>
                                   </div>
                                 </div>
@@ -836,9 +836,9 @@ const SpottingScamsTutorial = () => {
                     <h3 className="font-semibold">Common Social Engineering Tactics:</h3>
                     <div className="grid gap-4">
                       {currentStepData.content.commonTactics?.map((tactic, index) => (
-                        <Card key={index} className="border-l-4 border-orange-300">
+                        <Card key={index} className="border-l-4 border-awareness">
                           <CardContent className="p-4">
-                            <h4 className="font-medium mb-2 text-orange-700">{tactic.tactic}</h4>
+                            <h4 className="font-medium mb-2 text-awareness">{tactic.tactic}</h4>
                             <div className="space-y-3 text-sm">
                               <div>
                                 <span className="font-medium">Scenario: </span>
@@ -849,12 +849,12 @@ const SpottingScamsTutorial = () => {
                                 <span className="text-muted-foreground">{tactic.approach}</span>
                               </div>
                               <div>
-                                <span className="font-medium text-red-600">Their goal: </span>
-                                <span className="text-red-700">{tactic.goal}</span>
+                                <span className="font-medium text-destructive">Their goal: </span>
+                                <span className="text-destructive">{tactic.goal}</span>
                               </div>
-                              <div className="p-2 bg-green-50 rounded">
-                                <span className="font-medium text-green-600">🛡️ Defense: </span>
-                                <span className="text-green-700">{tactic.defense}</span>
+                              <div className="p-2 bg-success/10 rounded">
+                                <span className="font-medium text-success">🛡️ Defense: </span>
+                                <span className="text-success">{tactic.defense}</span>
                               </div>
                             </div>
                           </CardContent>
@@ -872,19 +872,19 @@ const SpottingScamsTutorial = () => {
                             <h4 className="font-medium mb-3">{platform.platform}</h4>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                               <div>
-                                <span className="font-medium text-red-600 mb-2 block">Common Risks:</span>
+                                <span className="font-medium text-destructive mb-2 block">Common Risks:</span>
                                 <ul className="space-y-1">
                                   {platform.risks.map((risk, i) => (
                                     <li key={i} className="flex items-start gap-2">
-                                      <AlertTriangle className="h-3 w-3 text-red-500 mt-0.5 flex-shrink-0" />
+                                      <AlertTriangle className="h-3 w-3 text-destructive mt-0.5 flex-shrink-0" />
                                       <span>{risk}</span>
                                     </li>
                                   ))}
                                 </ul>
                               </div>
                               <div>
-                                <span className="font-medium text-green-600 mb-2 block">Safety Tips:</span>
-                                <p className="text-green-700">{platform.safety}</p>
+                                <span className="font-medium text-success mb-2 block">Safety Tips:</span>
+                                <p className="text-muted-foreground">{platform.safety}</p>
                               </div>
                             </div>
                           </CardContent>

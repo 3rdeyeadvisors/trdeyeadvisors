@@ -572,7 +572,7 @@ const PortfolioRebalancingTutorial = () => {
                 variant={current ? "default" : completed ? "secondary" : "outline"}
                 size="sm"
                 onClick={() => setCurrentStep(step.id)}
-                className={`flex items-center gap-2 ${completed ? "bg-green-100 text-green-700 hover:bg-green-200" : ""}`}
+                className={`flex items-center gap-2 ${completed ? "bg-success/10 text-success hover:bg-success/20 border-success" : ""}`}
               >
                 <StepIcon className="h-4 w-4" />
                 <span className="hidden sm:inline">{step.title}</span>

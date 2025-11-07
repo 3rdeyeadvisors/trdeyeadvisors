@@ -20,23 +20,23 @@ const RiskAssessmentTutorial = () => {
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">Types of DeFi Risks</h3>
           <div className="grid gap-4">
-            <Card className="p-4">
+            <Card className="p-4 border-destructive/20">
               <div className="flex items-center gap-3 mb-2">
-                <TrendingDown className="w-5 h-5 text-red-500" />
+                <TrendingDown className="w-5 h-5 text-destructive" />
                 <h4 className="font-semibold">Market Risk</h4>
               </div>
               <p className="text-sm text-muted-foreground">Price volatility, impermanent loss, liquidity risks</p>
             </Card>
-            <Card className="p-4">
+            <Card className="p-4 border-awareness/20">
               <div className="flex items-center gap-3 mb-2">
-                <Shield className="w-5 h-5 text-orange-500" />
+                <Shield className="w-5 h-5 text-awareness" />
                 <h4 className="font-semibold">Smart Contract Risk</h4>
               </div>
               <p className="text-sm text-muted-foreground">Code vulnerabilities, bugs, exploits</p>
             </Card>
-            <Card className="p-4">
+            <Card className="p-4 border-accent/20">
               <div className="flex items-center gap-3 mb-2">
-                <Users className="w-5 h-5 text-blue-500" />
+                <Users className="w-5 h-5 text-accent" />
                 <h4 className="font-semibold">Counterparty Risk</h4>
               </div>
               <p className="text-sm text-muted-foreground">Protocol governance, admin keys, centralization</p>
@@ -167,14 +167,14 @@ const RiskAssessmentTutorial = () => {
               }
             ].map((item, index) => (
               <div key={index} className={`p-3 border rounded flex items-center gap-3 ${
-                item.severity === 'high' ? 'border-red-300 bg-red-50' :
-                item.severity === 'medium' ? 'border-orange-300 bg-orange-50' :
-                'border-yellow-300 bg-yellow-50'
+                item.severity === 'high' ? 'border-destructive bg-destructive/10' :
+                item.severity === 'medium' ? 'border-awareness bg-awareness/10' :
+                'border-accent bg-accent/10'
               }`}>
                 <AlertTriangle className={`w-5 h-5 ${
-                  item.severity === 'high' ? 'text-red-500' :
-                  item.severity === 'medium' ? 'text-orange-500' :
-                  'text-yellow-500'
+                  item.severity === 'high' ? 'text-destructive' :
+                  item.severity === 'medium' ? 'text-awareness' :
+                  'text-accent'
                 }`} />
                 <span className="text-sm">{item.flag}</span>
                 <Badge variant={item.severity === 'high' ? 'destructive' : 'secondary'} className="ml-auto">
@@ -242,8 +242,8 @@ const RiskAssessmentTutorial = () => {
                   onClick={() => setCurrentStep(index)}
                 >
                   <div className="flex items-center gap-2">
-                    {completedSteps.includes(index) ? (
-                      <CheckCircle className="w-4 h-4 text-green-500" />
+                  {completedSteps.includes(index) ? (
+                      <CheckCircle className="w-4 h-4 text-success" />
                     ) : (
                       <Circle className="w-4 h-4" />
                     )}

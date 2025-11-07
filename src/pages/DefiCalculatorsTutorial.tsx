@@ -701,25 +701,25 @@ const DefiCalculatorsTutorial = () => {
                         <div className="space-y-4">
                           <h4 className="font-semibold">Impermanent Loss Results:</h4>
                           <div className="space-y-3">
-                            <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                            <div className="flex justify-between items-center p-3 bg-card rounded-lg border">
                               <span className="font-medium">IL Percentage:</span>
-                              <span className={`font-bold ${Number(ilResults.ilPercentage) < 0 ? 'text-red-600' : 'text-green-600'}`}>
+                              <span className={`font-bold ${Number(ilResults.ilPercentage) < 0 ? 'text-destructive' : 'text-success'}`}>
                                 {ilResults.ilPercentage}%
                               </span>
                             </div>
-                            <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                            <div className="flex justify-between items-center p-3 bg-card rounded-lg border">
                               <span className="font-medium">IL Amount:</span>
-                              <span className={`font-bold ${Number(ilResults.ilAmount) < 0 ? 'text-red-600' : 'text-green-600'}`}>
+                              <span className={`font-bold ${Number(ilResults.ilAmount) < 0 ? 'text-destructive' : 'text-success'}`}>
                                 ${ilResults.ilAmount}
                               </span>
                             </div>
-                            <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                            <div className="flex justify-between items-center p-3 bg-card rounded-lg border">
                               <span className="font-medium">LP Position Value:</span>
-                              <span className="font-bold text-blue-600">${ilResults.finalLpValue}</span>
+                              <span className="font-bold text-accent">${ilResults.finalLpValue}</span>
                             </div>
-                            <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                            <div className="flex justify-between items-center p-3 bg-card rounded-lg border">
                               <span className="font-medium">Hold Value:</span>
-                              <span className="font-bold text-green-600">${ilResults.finalHoldValue}</span>
+                              <span className="font-bold text-success">${ilResults.finalHoldValue}</span>
                             </div>
                           </div>
                         </div>
@@ -785,9 +785,9 @@ const DefiCalculatorsTutorial = () => {
                       {currentStepData.content.bestPractices?.map((practice, index) => (
                         <Card key={index}>
                           <CardContent className="p-4">
-                            <h4 className="font-medium mb-2 text-green-700">{practice.practice}</h4>
+                            <h4 className="font-medium mb-2 text-success">{practice.practice}</h4>
                             <p className="text-sm text-muted-foreground mb-2">{practice.reason}</p>
-                            <div className="flex items-center gap-2 text-sm text-blue-600">
+                            <div className="flex items-center gap-2 text-sm text-accent">
                               <Target className="h-3 w-3" />
                               <span>Action: {practice.action}</span>
                             </div>

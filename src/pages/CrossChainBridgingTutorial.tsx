@@ -729,9 +729,9 @@ const CrossChainBridgingTutorial = () => {
               {currentStep === 1 && (
                 <div className="space-y-6">
                   {/* What Are Bridges */}
-                  <Card className="bg-blue-50 border-blue-200">
+                  <Card className="bg-accent/10 border-accent">
                     <CardHeader className="pb-3">
-                      <CardTitle className="text-lg text-blue-800">What Are Blockchain Bridges?</CardTitle>
+                      <CardTitle className="text-lg text-foreground">What Are Blockchain Bridges?</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3 text-sm">
                       <p><strong>Definition:</strong> {currentStepData.content.whatAreBridges?.definition}</p>

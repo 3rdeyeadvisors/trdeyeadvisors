@@ -414,9 +414,9 @@ const DaoParticipationTutorial = () => {
             </div>
           </Card>
           
-          <Card className="p-4 bg-green-50 border-green-200">
-            <h4 className="font-semibold text-green-800 mb-2">Best Practices</h4>
-            <ul className="text-sm text-green-700 space-y-1">
+          <Card className="p-4 bg-success/10 border-success">
+            <h4 className="font-semibold text-foreground mb-2">Best Practices</h4>
+            <ul className="text-sm text-muted-foreground space-y-1">
               <li>• Start with smaller, established DAOs to learn</li>
               <li>• Diversify across multiple DAOs to reduce risk</li>
               <li>• Stay informed about governance developments</li>
@@ -484,8 +484,8 @@ const DaoParticipationTutorial = () => {
                   onClick={() => setCurrentStep(index)}
                 >
                   <div className="flex items-center gap-2">
-                    {completedSteps.includes(index) ? (
-                      <CheckCircle className="w-4 h-4 text-green-500" />
+                  {completedSteps.includes(index) ? (
+                      <CheckCircle className="w-4 h-4 text-success" />
                     ) : (
                       <Circle className="w-4 h-4" />
                     )}

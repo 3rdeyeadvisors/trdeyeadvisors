@@ -325,7 +325,7 @@ const WalletSetupTutorial = () => {
                 variant={current ? "default" : completed ? "secondary" : "outline"}
                 size="sm"
                 onClick={() => setCurrentStep(step.id)}
-                className={`flex items-center gap-2 ${completed ? "bg-green-100 text-green-700 hover:bg-green-200" : ""}`}
+                className={`flex items-center gap-2 ${completed ? "bg-success/10 text-success hover:bg-success/20 border-success" : ""}`}
               >
                 <StepIcon className="h-4 w-4" />
                 <span className="hidden sm:inline">{step.title}</span>
@@ -381,22 +381,22 @@ const WalletSetupTutorial = () => {
                       <CardContent>
                         <div className="grid md:grid-cols-2 gap-4">
                           <div>
-                            <h4 className="font-medium text-green-600 mb-2">Pros:</h4>
+                            <h4 className="font-medium text-success mb-2">Pros:</h4>
                             <ul className="text-sm space-y-1">
                               {wallet.pros.map((pro, i) => (
                                 <li key={i} className="flex items-center gap-2">
-                                  <CheckCircle className="h-3 w-3 text-green-500" />
+                                  <CheckCircle className="h-3 w-3 text-success" />
                                   {pro}
                                 </li>
                               ))}
                             </ul>
                           </div>
                           <div>
-                            <h4 className="font-medium text-orange-600 mb-2">Cons:</h4>
+                            <h4 className="font-medium text-awareness mb-2">Cons:</h4>
                             <ul className="text-sm space-y-1">
                               {wallet.cons.map((con, i) => (
                                 <li key={i} className="flex items-center gap-2">
-                                  <AlertTriangle className="h-3 w-3 text-orange-500" />
+                                  <AlertTriangle className="h-3 w-3 text-awareness" />
                                   {con}
                                 </li>
                               ))}
@@ -412,9 +412,9 @@ const WalletSetupTutorial = () => {
               {/* Step 2: Download */}
               {currentStep === 2 && (
                 <div className="space-y-4">
-                  <Alert className="border-orange-200 bg-orange-50">
-                    <AlertTriangle className="h-4 w-4 text-orange-600" />
-                    <AlertDescription className="text-orange-800">
+                  <Alert className="border-awareness bg-awareness/10">
+                    <AlertTriangle className="h-4 w-4 text-awareness" />
+                    <AlertDescription className="text-foreground">
                       <strong>Security Warning:</strong> Only download MetaMask from official sources to avoid scams.
                     </AlertDescription>
                   </Alert>
@@ -434,10 +434,10 @@ const WalletSetupTutorial = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <h4 className="font-medium text-red-600">Critical Warnings:</h4>
+                    <h4 className="font-medium text-destructive">Critical Warnings:</h4>
                     {currentStepData.content.warnings?.map((warning, index) => (
                       <div key={index} className="flex items-start gap-2 text-sm">
-                        <AlertTriangle className="h-4 w-4 text-red-500 mt-0.5 flex-shrink-0" />
+                        <AlertTriangle className="h-4 w-4 text-destructive mt-0.5 flex-shrink-0" />
                         <span>{warning}</span>
                       </div>
                     ))}

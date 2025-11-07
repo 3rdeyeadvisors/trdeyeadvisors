@@ -476,7 +476,7 @@ const FirstDexSwapTutorial = () => {
                 variant={current ? "default" : completed ? "secondary" : "outline"}
                 size="sm"
                 onClick={() => setCurrentStep(step.id)}
-                className={`flex items-center gap-2 ${completed ? "bg-green-100 text-green-700 hover:bg-green-200" : ""}`}
+                className={`flex items-center gap-2 ${completed ? "bg-success/10 text-success hover:bg-success/20 border-success" : ""}`}
               >
                 <StepIcon className="h-4 w-4" />
                 <span className="hidden sm:inline">{step.title}</span>
@@ -532,22 +532,22 @@ const FirstDexSwapTutorial = () => {
                       <CardContent>
                         <div className="grid md:grid-cols-2 gap-4 mb-3">
                           <div>
-                            <h4 className="font-medium text-green-600 mb-2">Pros:</h4>
+                            <h4 className="font-medium text-success mb-2">Pros:</h4>
                             <ul className="text-sm space-y-1">
                               {dex.pros.map((pro, i) => (
                                 <li key={i} className="flex items-center gap-2">
-                                  <CheckCircle className="h-3 w-3 text-green-500" />
+                                  <CheckCircle className="h-3 w-3 text-success" />
                                   {pro}
                                 </li>
                               ))}
                             </ul>
                           </div>
                           <div>
-                            <h4 className="font-medium text-orange-600 mb-2">Cons:</h4>
+                            <h4 className="font-medium text-awareness mb-2">Cons:</h4>
                             <ul className="text-sm space-y-1">
                               {dex.cons.map((con, i) => (
                                 <li key={i} className="flex items-center gap-2">
-                                  <AlertTriangle className="h-3 w-3 text-orange-500" />
+                                  <AlertTriangle className="h-3 w-3 text-awareness" />
                                   {con}
                                 </li>
                               ))}
@@ -581,15 +581,15 @@ const FirstDexSwapTutorial = () => {
                     </ol>
                   </div>
 
-                  <Alert className="border-orange-200 bg-orange-50">
-                    <Shield className="h-4 w-4 text-orange-600" />
-                    <AlertDescription className="text-orange-800">
+                  <Alert className="border-awareness bg-awareness/10">
+                    <Shield className="h-4 w-4 text-awareness" />
+                    <AlertDescription className="text-foreground">
                       <div className="space-y-2">
                         <p className="font-medium">Security Checklist:</p>
                         <ul className="space-y-1 text-sm">
                           {currentStepData.content.safetyChecks?.map((check, index) => (
                             <li key={index} className="flex items-start gap-2">
-                              <CheckCircle className="h-3 w-3 text-orange-600 mt-0.5 flex-shrink-0" />
+                              <CheckCircle className="h-3 w-3 text-awareness mt-0.5 flex-shrink-0" />
                               <span>{check}</span>
                             </li>
                           ))}
@@ -618,22 +618,22 @@ const FirstDexSwapTutorial = () => {
                         <CardContent>
                           <div className="grid md:grid-cols-2 gap-4">
                             <div>
-                              <h4 className="font-medium text-green-600 mb-2">Pros:</h4>
+                              <h4 className="font-medium text-success mb-2">Pros:</h4>
                               <ul className="text-sm space-y-1">
                                 {network.pros.map((pro, i) => (
                                   <li key={i} className="flex items-center gap-2">
-                                    <CheckCircle className="h-3 w-3 text-green-500" />
+                                    <CheckCircle className="h-3 w-3 text-success" />
                                     {pro}
                                   </li>
                                 ))}
                               </ul>
                             </div>
                             <div>
-                              <h4 className="font-medium text-orange-600 mb-2">Cons:</h4>
+                              <h4 className="font-medium text-awareness mb-2">Cons:</h4>
                               <ul className="text-sm space-y-1">
                                 {network.cons.map((con, i) => (
                                   <li key={i} className="flex items-center gap-2">
-                                    <AlertTriangle className="h-3 w-3 text-orange-500" />
+                                    <AlertTriangle className="h-3 w-3 text-awareness" />
                                     {con}
                                   </li>
                                 ))}
@@ -645,9 +645,9 @@ const FirstDexSwapTutorial = () => {
                     ))}
                   </div>
 
-                  <Card className="bg-blue-50 border-blue-200">
+                  <Card className="bg-accent/10 border-accent">
                     <CardHeader className="pb-3">
-                      <CardTitle className="text-lg text-blue-800">How to Switch Networks</CardTitle>
+                      <CardTitle className="text-lg text-foreground">How to Switch Networks</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <ol className="space-y-2 text-sm">
@@ -668,9 +668,9 @@ const FirstDexSwapTutorial = () => {
               {/* Step 4: Get Native Token */}
               {currentStep === 4 && (
                 <div className="space-y-4">
-                  <Card className="bg-blue-50 border-blue-200">
+                  <Card className="bg-accent/10 border-accent">
                     <CardHeader className="pb-3">
-                      <CardTitle className="text-lg text-blue-800 flex items-center gap-2">
+                      <CardTitle className="text-lg text-foreground flex items-center gap-2">
                         <Fuel className="h-5 w-5" />
                         Gas Requirements
                       </CardTitle>
@@ -679,19 +679,19 @@ const FirstDexSwapTutorial = () => {
                       <div className="grid grid-cols-2 gap-4 text-sm">
                         <div>
                           <p className="font-medium">Token needed:</p>
-                          <p className="text-blue-700">{currentStepData.content.requirements?.polygon.token}</p>
+                          <p className="text-accent">{currentStepData.content.requirements?.polygon.token}</p>
                         </div>
                         <div>
                           <p className="font-medium">Amount needed:</p>
-                          <p className="text-blue-700">{currentStepData.content.requirements?.polygon.amount}</p>
+                          <p className="text-accent">{currentStepData.content.requirements?.polygon.amount}</p>
                         </div>
                         <div>
                           <p className="font-medium">Approximate cost:</p>
-                          <p className="text-blue-700">{currentStepData.content.requirements?.polygon.cost}</p>
+                          <p className="text-accent">{currentStepData.content.requirements?.polygon.cost}</p>
                         </div>
                         <div>
                           <p className="font-medium">Used for:</p>
-                          <p className="text-blue-700">{currentStepData.content.requirements?.polygon.purpose}</p>
+                          <p className="text-accent">{currentStepData.content.requirements?.polygon.purpose}</p>
                         </div>
                       </div>
                     </CardContent>
@@ -733,23 +733,23 @@ const FirstDexSwapTutorial = () => {
               {/* Step 5: Choose Trade */}
               {currentStep === 5 && (
                 <div className="space-y-4">
-                  <Card className="bg-green-50 border-green-200">
+                  <Card className="bg-success/10 border-success">
                     <CardHeader className="pb-3">
-                      <CardTitle className="text-lg text-green-800">Example Trade</CardTitle>
+                      <CardTitle className="text-lg text-foreground">Example Trade</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="grid grid-cols-2 gap-4 text-sm">
                         <div>
                           <p className="font-medium">From:</p>
-                          <p className="text-green-700">{currentStepData.content.tradeExample?.amount}</p>
+                          <p className="text-success">{currentStepData.content.tradeExample?.amount}</p>
                         </div>
                         <div>
                           <p className="font-medium">To:</p>
-                          <p className="text-green-700">{currentStepData.content.tradeExample?.estimatedReceive}</p>
+                          <p className="text-success">{currentStepData.content.tradeExample?.estimatedReceive}</p>
                         </div>
                         <div>
                           <p className="font-medium">Trading Fee:</p>
-                          <p className="text-green-700">{currentStepData.content.tradeExample?.fees}</p>
+                          <p className="text-success">{currentStepData.content.tradeExample?.fees}</p>
                         </div>
                       </div>
                     </CardContent>

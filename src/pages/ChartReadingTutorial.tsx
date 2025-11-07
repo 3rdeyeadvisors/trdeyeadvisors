@@ -311,9 +311,9 @@ const ChartReadingTutorial = () => {
           <Card className="p-4">
             <h4 className="font-semibold mb-2">Entry and Exit Strategies</h4>
             <div className="grid gap-3">
-              <div className="p-3 bg-green-50 border border-green-200 rounded">
-                <h5 className="font-medium text-sm text-green-800">Entry Signals</h5>
-                <ul className="text-xs text-green-700 mt-1 space-y-1">
+              <div className="p-3 bg-success/10 border border-success rounded">
+                <h5 className="font-medium text-sm text-success">Entry Signals</h5>
+                <ul className="text-xs text-muted-foreground mt-1 space-y-1">
                   <li>• Breakout above resistance with volume</li>
                   <li>• Bounce off support level</li>
                   <li>• Pattern completion</li>
@@ -321,9 +321,9 @@ const ChartReadingTutorial = () => {
                 </ul>
               </div>
               
-              <div className="p-3 bg-red-50 border border-red-200 rounded">
-                <h5 className="font-medium text-sm text-red-800">Exit Signals</h5>
-                <ul className="text-xs text-red-700 mt-1 space-y-1">
+              <div className="p-3 bg-destructive/10 border border-destructive rounded">
+                <h5 className="font-medium text-sm text-destructive">Exit Signals</h5>
+                <ul className="text-xs text-muted-foreground mt-1 space-y-1">
                   <li>• Price hits predetermined target</li>
                   <li>• Stop loss triggered</li>
                   <li>• Pattern failure or reversal</li>

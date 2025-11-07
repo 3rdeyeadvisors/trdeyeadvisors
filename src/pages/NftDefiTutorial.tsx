@@ -20,23 +20,23 @@ const NftDefiTutorial = () => {
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">What Makes NFTs Special?</h3>
           <div className="grid gap-4">
-            <Card className="p-4">
+            <Card className="p-4 border-primary/20">
               <div className="flex items-center gap-3 mb-2">
-                <Image className="w-5 h-5 text-purple-500" />
+                <Image className="w-5 h-5 text-primary" />
                 <h4 className="font-semibold">Non-Fungible</h4>
               </div>
               <p className="text-sm text-muted-foreground">Each NFT is unique and cannot be replaced by another identical item</p>
             </Card>
-            <Card className="p-4">
+            <Card className="p-4 border-accent/20">
               <div className="flex items-center gap-3 mb-2">
-                <Lock className="w-5 h-5 text-blue-500" />
+                <Lock className="w-5 h-5 text-accent" />
                 <h4 className="font-semibold">Blockchain Verified</h4>
               </div>
               <p className="text-sm text-muted-foreground">Ownership and authenticity are verified on the blockchain</p>
             </Card>
-            <Card className="p-4">
+            <Card className="p-4 border-awareness/20">
               <div className="flex items-center gap-3 mb-2">
-                <Zap className="w-5 h-5 text-yellow-500" />
+                <Zap className="w-5 h-5 text-awareness" />
                 <h4 className="font-semibold">Programmable</h4>
               </div>
               <p className="text-sm text-muted-foreground">Smart contracts can add utility and functionality</p>
@@ -66,9 +66,9 @@ const NftDefiTutorial = () => {
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">NFT-Collateralized Lending</h3>
           
-          <Card className="p-4 bg-blue-50 border-blue-200">
-            <h4 className="font-semibold text-blue-800 mb-2">How It Works</h4>
-            <ol className="text-sm text-blue-700 space-y-1">
+          <Card className="p-4 bg-accent/10 border-accent">
+            <h4 className="font-semibold text-foreground mb-2">How It Works</h4>
+            <ol className="text-sm text-muted-foreground space-y-1">
               <li>1. Deposit your NFT as collateral</li>
               <li>2. Receive a loan in cryptocurrency (usually ETH or stablecoins)</li>
               <li>3. Pay interest over the loan period</li>
@@ -117,9 +117,9 @@ const NftDefiTutorial = () => {
           <h3 className="text-lg font-semibold">Generating Yield from NFTs</h3>
           
           <div className="grid gap-4">
-            <Card className="p-4">
+            <Card className="p-4 border-success/20">
               <div className="flex items-center gap-3 mb-2">
-                <Lock className="w-5 h-5 text-green-500" />
+                <Lock className="w-5 h-5 text-success" />
                 <h4 className="font-semibold">NFT Staking</h4>
               </div>
               <p className="text-sm text-muted-foreground mb-2">Lock your NFTs to earn token rewards</p>
@@ -130,9 +130,9 @@ const NftDefiTutorial = () => {
               </ul>
             </Card>
             
-            <Card className="p-4">
+            <Card className="p-4 border-accent/20">
               <div className="flex items-center gap-3 mb-2">
-                <Coins className="w-5 h-5 text-blue-500" />
+                <Coins className="w-5 h-5 text-accent" />
                 <h4 className="font-semibold">Liquidity Mining</h4>
               </div>
               <p className="text-sm text-muted-foreground mb-2">Provide NFT liquidity to earn trading fees</p>
@@ -143,9 +143,9 @@ const NftDefiTutorial = () => {
               </ul>
             </Card>
             
-            <Card className="p-4">
+            <Card className="p-4 border-primary/20">
               <div className="flex items-center gap-3 mb-2">
-                <TrendingUp className="w-5 h-5 text-purple-500" />
+                <TrendingUp className="w-5 h-5 text-primary" />
                 <h4 className="font-semibold">Fractionalized Ownership</h4>
               </div>
               <p className="text-sm text-muted-foreground mb-2">Own fractions of expensive NFTs</p>
@@ -157,9 +157,9 @@ const NftDefiTutorial = () => {
             </Card>
           </div>
           
-          <Card className="p-4 bg-yellow-50 border-yellow-200">
-            <h4 className="font-semibold text-yellow-800 mb-2">⚠️ Yield Farming Risks</h4>
-            <ul className="text-sm text-yellow-700 space-y-1">
+          <Card className="p-4 bg-awareness/10 border-awareness">
+            <h4 className="font-semibold text-foreground mb-2">⚠️ Yield Farming Risks</h4>
+            <ul className="text-sm text-muted-foreground space-y-1">
               <li>• Smart contract vulnerabilities</li>
               <li>• Token price volatility</li>
               <li>• Liquidity risks when unstaking</li>
@@ -316,24 +316,24 @@ const NftDefiTutorial = () => {
           <h3 className="text-lg font-semibold">NFT-Specific Risks</h3>
           
           <div className="space-y-4">
-            <Card className="p-4 bg-red-50 border-red-200">
-              <h4 className="font-semibold text-red-800 mb-2">Major Risk Categories</h4>
+            <Card className="p-4 bg-destructive/10 border-destructive">
+              <h4 className="font-semibold text-foreground mb-2">Major Risk Categories</h4>
               <div className="space-y-2">
-                <div className="p-2 border border-red-300 rounded">
-                  <h5 className="font-medium text-sm text-red-700">Liquidity Risk</h5>
-                  <p className="text-xs text-red-600">NFTs can become illiquid quickly</p>
+                <div className="p-2 border border-destructive/30 rounded">
+                  <h5 className="font-medium text-sm text-destructive">Liquidity Risk</h5>
+                  <p className="text-xs text-muted-foreground">NFTs can become illiquid quickly</p>
                 </div>
-                <div className="p-2 border border-red-300 rounded">
-                  <h5 className="font-medium text-sm text-red-700">Volatility Risk</h5>
-                  <p className="text-xs text-red-600">Prices can swing dramatically</p>
+                <div className="p-2 border border-destructive/30 rounded">
+                  <h5 className="font-medium text-sm text-destructive">Volatility Risk</h5>
+                  <p className="text-xs text-muted-foreground">Prices can swing dramatically</p>
                 </div>
-                <div className="p-2 border border-red-300 rounded">
-                  <h5 className="font-medium text-sm text-red-700">Technical Risk</h5>
-                  <p className="text-xs text-red-600">Smart contract bugs and exploits</p>
+                <div className="p-2 border border-destructive/30 rounded">
+                  <h5 className="font-medium text-sm text-destructive">Technical Risk</h5>
+                  <p className="text-xs text-muted-foreground">Smart contract bugs and exploits</p>
                 </div>
-                <div className="p-2 border border-red-300 rounded">
-                  <h5 className="font-medium text-sm text-red-700">Regulatory Risk</h5>
-                  <p className="text-xs text-red-600">Uncertain legal framework</p>
+                <div className="p-2 border border-destructive/30 rounded">
+                  <h5 className="font-medium text-sm text-destructive">Regulatory Risk</h5>
+                  <p className="text-xs text-muted-foreground">Uncertain legal framework</p>
                 </div>
               </div>
             </Card>
@@ -438,8 +438,8 @@ const NftDefiTutorial = () => {
                   onClick={() => setCurrentStep(index)}
                 >
                   <div className="flex items-center gap-2">
-                    {completedSteps.includes(index) ? (
-                      <CheckCircle className="w-4 h-4 text-green-500" />
+                  {completedSteps.includes(index) ? (
+                      <CheckCircle className="w-4 h-4 text-success" />
                     ) : (
                       <Circle className="w-4 h-4" />
                     )}
