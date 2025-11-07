@@ -904,15 +904,15 @@ const ReadingDefiMetricsTutorial = () => {
 
         {/* Completion Message */}
         {completedSteps.length === totalSteps && (
-          <Card className="bg-green-50 border-green-200">
+          <Card className="bg-awareness/10 border-awareness/20">
             <CardHeader>
-              <CardTitle className="text-green-800 flex items-center gap-2">
+              <CardTitle className="text-awareness flex items-center gap-2">
                 <CheckCircle className="h-6 w-6" />
                 DeFi Metrics Analysis Mastery Complete!
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-green-700 mb-4">
+              <p className="text-foreground mb-4">
                 You can now analyze DeFi protocols using data-driven metrics and make informed investment decisions!
               </p>
               <div className="flex gap-2">

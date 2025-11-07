@@ -689,7 +689,7 @@ const CrossChainBridgingTutorial = () => {
                 variant={current ? "default" : completed ? "secondary" : "outline"}
                 size="sm"
                 onClick={() => setCurrentStep(step.id)}
-                className={`flex items-center gap-2 ${completed ? "bg-green-100 text-green-700 hover:bg-green-200" : ""}`}
+                className={`flex items-center gap-2 ${completed ? "bg-awareness/10 text-awareness hover:bg-awareness/20 border-awareness" : ""}`}
               >
                 <StepIcon className="h-4 w-4" />
                 <span className="hidden sm:inline">{step.title}</span>
@@ -810,7 +810,7 @@ const CrossChainBridgingTutorial = () => {
                               </div>
                             </div>
                             <div className="mt-2">
-                              <span className="font-medium text-blue-600">Bridges to: </span>
+                              <span className="font-medium text-primary">Bridges to: </span>
                               <div className="flex flex-wrap gap-1 mt-1">
                                 {chain.bridgeTo.map((target, i) => (
                                   <Badge key={i} variant="secondary" className="text-xs">
@@ -867,15 +867,15 @@ const CrossChainBridgingTutorial = () => {
 
         {/* Completion Message */}
         {completedSteps.length === totalSteps && (
-          <Card className="bg-green-50 border-green-200">
+          <Card className="bg-awareness/10 border-awareness/20">
             <CardHeader>
-              <CardTitle className="text-green-800 flex items-center gap-2">
+              <CardTitle className="text-awareness flex items-center gap-2">
                 <CheckCircle className="h-6 w-6" />
                 Cross-Chain Bridging Mastery Complete!
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-green-700 mb-4">
+              <p className="text-foreground mb-4">
                 You now understand how to safely navigate the multi-chain DeFi ecosystem! 
                 You can bridge assets securely and avoid common pitfalls.
               </p>

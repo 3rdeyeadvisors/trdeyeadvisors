@@ -780,10 +780,10 @@ const FirstDexSwapTutorial = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <h4 className="font-medium text-blue-600">Beginner Tips:</h4>
+                    <h4 className="font-medium text-primary">Beginner Tips:</h4>
                     {currentStepData.content.beginnerTips?.map((tip, index) => (
                       <div key={index} className="flex items-start gap-2 text-sm">
-                        <TrendingUp className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                        <TrendingUp className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
                         <span>{tip}</span>
                       </div>
                     ))}
@@ -859,7 +859,7 @@ const FirstDexSwapTutorial = () => {
                                 <p className="text-sm text-muted-foreground">{step.description}</p>
                               </div>
                             </div>
-                            <div className="flex items-center gap-2 text-sm text-blue-600 ml-9">
+                            <div className="flex items-center gap-2 text-sm text-primary ml-9">
                               <TrendingUp className="h-3 w-3" />
                               <span>Tip: {step.tip}</span>
                             </div>
@@ -875,11 +875,11 @@ const FirstDexSwapTutorial = () => {
                       {currentStepData.content.troubleshooting?.map((issue, index) => (
                         <Card key={index}>
                           <CardContent className="p-4">
-                            <h4 className="font-medium text-orange-600 mb-2">{issue.problem}</h4>
+                            <h4 className="font-medium text-destructive mb-2">{issue.problem}</h4>
                             <ul className="space-y-1 text-sm">
                               {issue.solutions.map((solution, i) => (
                                 <li key={i} className="flex items-center gap-2">
-                                  <CheckCircle className="h-3 w-3 text-green-500" />
+                                  <CheckCircle className="h-3 w-3 text-awareness" />
                                   {solution}
                                 </li>
                               ))}
@@ -925,7 +925,7 @@ const FirstDexSwapTutorial = () => {
                         <ul className="space-y-1 text-sm">
                           {currentStepData.content.transactionExplorer?.whatToCheck.map((item, index) => (
                             <li key={index} className="flex items-center gap-2">
-                              <CheckCircle className="h-3 w-3 text-blue-500" />
+                              <CheckCircle className="h-3 w-3 text-primary" />
                               {item}
                             </li>
                           ))}
@@ -942,7 +942,7 @@ const FirstDexSwapTutorial = () => {
                           <CardContent className="p-4">
                             <h4 className="font-medium mb-2">{practice.practice}</h4>
                             <p className="text-sm text-muted-foreground mb-2">{practice.reason}</p>
-                            <div className="flex items-center gap-2 text-sm text-blue-600">
+                            <div className="flex items-center gap-2 text-sm text-primary">
                               <TrendingUp className="h-3 w-3" />
                               <span>How: {practice.how}</span>
                             </div>
@@ -952,12 +952,12 @@ const FirstDexSwapTutorial = () => {
                     </div>
                   </div>
 
-                  <Card className="bg-green-50 border-green-200">
+                  <Card className="bg-awareness/10 border-awareness/20">
                     <CardContent className="p-6 text-center">
-                      <h3 className="text-xl font-semibold text-green-800 mb-2">
+                      <h3 className="text-xl font-semibold text-awareness mb-2">
                         {currentStepData.content.congratulationsMessage}
                       </h3>
-                      <p className="text-green-700">
+                      <p className="text-foreground">
                         You now know how to safely trade on decentralized exchanges. Practice with small amounts and always prioritize security!
                       </p>
                     </CardContent>
@@ -1002,15 +1002,15 @@ const FirstDexSwapTutorial = () => {
 
         {/* Completion Message */}
         {completedSteps.length === totalSteps && (
-          <Card className="bg-green-50 border-green-200">
+          <Card className="bg-awareness/10 border-awareness/20">
             <CardHeader>
-              <CardTitle className="text-green-800 flex items-center gap-2">
+              <CardTitle className="text-awareness flex items-center gap-2">
                 <CheckCircle className="h-6 w-6" />
                 Congratulations! First DEX Swap Complete
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-green-700 mb-4">
+              <p className="text-foreground mb-4">
                 You've successfully completed your first decentralized exchange trade! 
                 You're now ready to explore the exciting world of DeFi trading.
               </p>

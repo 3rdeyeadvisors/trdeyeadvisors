@@ -22,21 +22,21 @@ const ChartReadingTutorial = () => {
           <div className="grid gap-4">
             <Card className="p-4">
               <div className="flex items-center gap-3 mb-2">
-                <LineChart className="w-5 h-5 text-blue-500" />
+                <LineChart className="w-5 h-5 text-primary" />
                 <h4 className="font-semibold">Line Charts</h4>
               </div>
               <p className="text-sm text-muted-foreground">Simple price movements over time, best for trend identification</p>
             </Card>
             <Card className="p-4">
               <div className="flex items-center gap-3 mb-2">
-                <BarChart3 className="w-5 h-5 text-green-500" />
+                <BarChart3 className="w-5 h-5 text-awareness" />
                 <h4 className="font-semibold">Candlestick Charts</h4>
               </div>
               <p className="text-sm text-muted-foreground">Shows open, high, low, close prices - most detailed view</p>
             </Card>
             <Card className="p-4">
               <div className="flex items-center gap-3 mb-2">
-                <Activity className="w-5 h-5 text-purple-500" />
+                <Activity className="w-5 h-5 text-accent" />
                 <h4 className="font-semibold">Volume Charts</h4>
               </div>
               <p className="text-sm text-muted-foreground">Trading volume indicating market strength and conviction</p>
@@ -72,20 +72,20 @@ const ChartReadingTutorial = () => {
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">Understanding Support & Resistance</h3>
           
-          <Card className="p-4 bg-green-50 border-green-200">
-            <h4 className="font-semibold text-green-800 mb-2">Support Levels</h4>
-            <p className="text-sm text-green-700">Price levels where buying pressure is strong enough to prevent further decline</p>
-            <ul className="text-xs text-green-600 mt-2 space-y-1">
+          <Card className="p-4 bg-awareness/10 border-awareness/20">
+            <h4 className="font-semibold text-awareness mb-2">Support Levels</h4>
+            <p className="text-sm text-foreground">Price levels where buying pressure is strong enough to prevent further decline</p>
+            <ul className="text-xs text-muted-foreground mt-2 space-y-1">
               <li>• Previous lows that held multiple times</li>
               <li>• Round numbers (psychological levels)</li>
               <li>• Moving averages acting as dynamic support</li>
             </ul>
           </Card>
           
-          <Card className="p-4 bg-red-50 border-red-200">
-            <h4 className="font-semibold text-red-800 mb-2">Resistance Levels</h4>
-            <p className="text-sm text-red-700">Price levels where selling pressure prevents further upward movement</p>
-            <ul className="text-xs text-red-600 mt-2 space-y-1">
+          <Card className="p-4 bg-destructive/10 border-destructive/20">
+            <h4 className="font-semibold text-destructive mb-2">Resistance Levels</h4>
+            <p className="text-sm text-foreground">Price levels where selling pressure prevents further upward movement</p>
+            <ul className="text-xs text-muted-foreground mt-2 space-y-1">
               <li>• Previous highs that rejected price</li>
               <li>• Major round numbers</li>
               <li>• Trend lines and moving averages</li>
@@ -113,8 +113,8 @@ const ChartReadingTutorial = () => {
           <div className="grid gap-4">
             <Card className="p-4">
               <div className="flex items-center gap-2 mb-2">
-                <TrendingUp className="w-5 h-5 text-green-500" />
-                <h4 className="font-semibold text-green-700">Uptrend</h4>
+                <TrendingUp className="w-5 h-5 text-awareness" />
+                <h4 className="font-semibold text-awareness">Uptrend</h4>
               </div>
               <p className="text-sm mb-2">Higher highs and higher lows</p>
               <div className="text-xs text-muted-foreground">
@@ -126,8 +126,8 @@ const ChartReadingTutorial = () => {
             
             <Card className="p-4">
               <div className="flex items-center gap-2 mb-2">
-                <TrendingUp className="w-5 h-5 text-red-500 rotate-180" />
-                <h4 className="font-semibold text-red-700">Downtrend</h4>
+                <TrendingUp className="w-5 h-5 text-destructive rotate-180" />
+                <h4 className="font-semibold text-destructive">Downtrend</h4>
               </div>
               <p className="text-sm mb-2">Lower highs and lower lows</p>
               <div className="text-xs text-muted-foreground">
@@ -225,46 +225,46 @@ const ChartReadingTutorial = () => {
           <h3 className="text-lg font-semibold">Classic Chart Patterns</h3>
           
           <div className="grid gap-4">
-            <Card className="p-4 border-green-200 bg-green-50">
-              <h4 className="font-semibold text-green-800 mb-2">Bullish Patterns</h4>
+            <Card className="p-4 border-awareness/20 bg-awareness/10">
+              <h4 className="font-semibold text-awareness mb-2">Bullish Patterns</h4>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span>Cup and Handle</span>
-                  <Badge variant="outline" className="text-green-700">Continuation</Badge>
+                  <Badge variant="outline" className="text-awareness">Continuation</Badge>
                 </div>
                 <div className="flex justify-between">
                   <span>Double Bottom</span>
-                  <Badge variant="outline" className="text-green-700">Reversal</Badge>
+                  <Badge variant="outline" className="text-awareness">Reversal</Badge>
                 </div>
                 <div className="flex justify-between">
                   <span>Ascending Triangle</span>
-                  <Badge variant="outline" className="text-green-700">Continuation</Badge>
+                  <Badge variant="outline" className="text-awareness">Continuation</Badge>
                 </div>
                 <div className="flex justify-between">
                   <span>Bull Flag</span>
-                  <Badge variant="outline" className="text-green-700">Continuation</Badge>
+                  <Badge variant="outline" className="text-awareness">Continuation</Badge>
                 </div>
               </div>
             </Card>
             
-            <Card className="p-4 border-red-200 bg-red-50">
-              <h4 className="font-semibold text-red-800 mb-2">Bearish Patterns</h4>
+            <Card className="p-4 border-destructive/20 bg-destructive/10">
+              <h4 className="font-semibold text-destructive mb-2">Bearish Patterns</h4>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span>Head and Shoulders</span>
-                  <Badge variant="outline" className="text-red-700">Reversal</Badge>
+                  <Badge variant="outline" className="text-destructive">Reversal</Badge>
                 </div>
                 <div className="flex justify-between">
                   <span>Double Top</span>
-                  <Badge variant="outline" className="text-red-700">Reversal</Badge>
+                  <Badge variant="outline" className="text-destructive">Reversal</Badge>
                 </div>
                 <div className="flex justify-between">
                   <span>Descending Triangle</span>
-                  <Badge variant="outline" className="text-red-700">Continuation</Badge>
+                  <Badge variant="outline" className="text-destructive">Continuation</Badge>
                 </div>
                 <div className="flex justify-between">
                   <span>Bear Flag</span>
-                  <Badge variant="outline" className="text-red-700">Continuation</Badge>
+                  <Badge variant="outline" className="text-destructive">Continuation</Badge>
                 </div>
               </div>
             </Card>
@@ -402,7 +402,7 @@ const ChartReadingTutorial = () => {
                 >
                   <div className="flex items-center gap-2">
                     {completedSteps.includes(index) ? (
-                      <CheckCircle className="w-4 h-4 text-green-500" />
+                      <CheckCircle className="w-4 h-4 text-awareness" />
                     ) : (
                       <Circle className="w-4 h-4" />
                     )}

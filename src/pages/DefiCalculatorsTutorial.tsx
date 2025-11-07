@@ -493,9 +493,9 @@ const DefiCalculatorsTutorial = () => {
               {currentStep === 2 && (
                 <div className="space-y-6">
                   {/* Interactive Calculator */}
-                  <Card className="bg-green-50 border-green-200">
+                  <Card className="bg-awareness/10 border-awareness/20">
                     <CardHeader className="pb-3">
-                      <CardTitle className="text-lg text-green-800 flex items-center gap-2">
+                      <CardTitle className="text-lg text-awareness flex items-center gap-2">
                         <TrendingUp className="h-5 w-5" />
                         Interactive Yield Calculator
                       </CardTitle>
@@ -553,17 +553,17 @@ const DefiCalculatorsTutorial = () => {
                         <div className="space-y-4">
                           <h4 className="font-semibold">Results:</h4>
                           <div className="space-y-3">
-                            <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                            <div className="flex justify-between items-center p-3 bg-muted rounded-lg">
                               <span className="font-medium">Final Amount:</span>
-                              <span className="text-green-600 font-bold">${yieldResults.finalAmount}</span>
+                              <span className="text-awareness font-bold">${yieldResults.finalAmount}</span>
                             </div>
-                            <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                            <div className="flex justify-between items-center p-3 bg-muted rounded-lg">
                               <span className="font-medium">Total Return:</span>
-                              <span className="text-green-600 font-bold">${yieldResults.totalReturn}</span>
+                              <span className="text-awareness font-bold">${yieldResults.totalReturn}</span>
                             </div>
-                            <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                            <div className="flex justify-between items-center p-3 bg-muted rounded-lg">
                               <span className="font-medium">Effective APY:</span>
-                              <span className="text-green-600 font-bold">{yieldResults.effectiveAPY}%</span>
+                              <span className="text-awareness font-bold">{yieldResults.effectiveAPY}%</span>
                             </div>
                           </div>
                         </div>
@@ -581,8 +581,8 @@ const DefiCalculatorsTutorial = () => {
                             <h4 className="font-medium mb-2">{input.name}</h4>
                             <p className="text-sm text-muted-foreground mb-2">{input.description}</p>
                             <div className="flex items-center justify-between text-sm">
-                              <span className="text-blue-600">Example: {input.example}</span>
-                              <span className="text-green-600">💡 {input.tips}</span>
+                              <span className="text-primary">Example: {input.example}</span>
+                              <span className="text-awareness">💡 {input.tips}</span>
                             </div>
                           </CardContent>
                         </Card>
@@ -601,12 +601,12 @@ const DefiCalculatorsTutorial = () => {
                             <p className="text-sm text-muted-foreground mb-2">{result.meaning}</p>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
                               <div className="flex items-center gap-2">
-                                <CheckCircle className="h-3 w-3 text-green-500" />
-                                <span className="text-green-600">Good: {result.goodExample}</span>
+                                <CheckCircle className="h-3 w-3 text-awareness" />
+                                <span className="text-awareness">Good: {result.goodExample}</span>
                               </div>
                               <div className="flex items-center gap-2">
-                                <AlertTriangle className="h-3 w-3 text-red-500" />
-                                <span className="text-red-600">Bad: {result.badExample}</span>
+                                <AlertTriangle className="h-3 w-3 text-destructive" />
+                                <span className="text-destructive">Bad: {result.badExample}</span>
                               </div>
                             </div>
                           </CardContent>
@@ -621,9 +621,9 @@ const DefiCalculatorsTutorial = () => {
               {currentStep === 3 && (
                 <div className="space-y-6">
                   {/* IL Explanation */}
-                  <Card className="bg-orange-50 border-orange-200">
+                  <Card className="bg-destructive/10 border-destructive/20">
                     <CardHeader className="pb-3">
-                      <CardTitle className="text-lg text-orange-800 flex items-center gap-2">
+                      <CardTitle className="text-lg text-destructive flex items-center gap-2">
                         <AlertTriangle className="h-5 w-5" />
                         What is Impermanent Loss?
                       </CardTitle>
@@ -854,15 +854,15 @@ const DefiCalculatorsTutorial = () => {
 
         {/* Completion Message */}
         {completedSteps.length === totalSteps && (
-          <Card className="bg-green-50 border-green-200">
+          <Card className="bg-awareness/10 border-awareness/20">
             <CardHeader>
-              <CardTitle className="text-green-800 flex items-center gap-2">
+              <CardTitle className="text-awareness flex items-center gap-2">
                 <CheckCircle className="h-6 w-6" />
                 Congratulations! Calculator Mastery Complete
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-green-700 mb-4">
+              <p className="text-foreground mb-4">
                 You now know how to use DeFi calculators to make informed investment decisions! 
                 You can estimate returns, calculate risks, and choose strategies wisely.
               </p>

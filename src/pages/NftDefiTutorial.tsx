@@ -369,9 +369,9 @@ const NftDefiTutorial = () => {
             </Card>
           </div>
           
-          <Card className="p-4 bg-green-50 border-green-200">
-            <h4 className="font-semibold text-green-800 mb-2">Best Practices</h4>
-            <ul className="text-sm text-green-700 space-y-1">
+          <Card className="p-4 bg-awareness/10 border-awareness/20">
+            <h4 className="font-semibold text-awareness mb-2">Best Practices</h4>
+            <ul className="text-sm text-foreground space-y-1">
               <li>• Never invest more than you can afford to lose</li>
               <li>• Keep detailed records for tax purposes</li>
               <li>• Stay informed about market trends and developments</li>

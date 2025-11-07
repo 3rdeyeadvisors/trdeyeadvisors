@@ -19,8 +19,8 @@ const DaoParticipationTutorial = () => {
       content: (
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">What is a DAO?</h3>
-          <Card className="p-4 bg-blue-50 border-blue-200">
-            <p className="text-sm text-blue-800">
+          <Card className="p-4 bg-primary/10 border-primary/20">
+            <p className="text-sm text-foreground">
               A DAO (Decentralized Autonomous Organization) is an organization represented by rules encoded as smart contracts on the blockchain, controlled by its members rather than a central authority.
             </p>
           </Card>
@@ -28,21 +28,21 @@ const DaoParticipationTutorial = () => {
           <div className="grid gap-4">
             <Card className="p-4">
               <div className="flex items-center gap-3 mb-2">
-                <Users className="w-5 h-5 text-green-500" />
+                <Users className="w-5 h-5 text-awareness" />
                 <h4 className="font-semibold">Decentralized Governance</h4>
               </div>
               <p className="text-sm text-muted-foreground">No single entity controls decisions; power is distributed among token holders</p>
             </Card>
             <Card className="p-4">
               <div className="flex items-center gap-3 mb-2">
-                <Shield className="w-5 h-5 text-blue-500" />
+                <Shield className="w-5 h-5 text-primary" />
                 <h4 className="font-semibold">Transparent Operations</h4>
               </div>
               <p className="text-sm text-muted-foreground">All activities and decisions are recorded on the blockchain</p>
             </Card>
             <Card className="p-4">
               <div className="flex items-center gap-3 mb-2">
-                <Coins className="w-5 h-5 text-purple-500" />
+                <Coins className="w-5 h-5 text-accent" />
                 <h4 className="font-semibold">Token-Based Voting</h4>
               </div>
               <p className="text-sm text-muted-foreground">Governance tokens represent voting power and membership rights</p>
@@ -112,9 +112,9 @@ const DaoParticipationTutorial = () => {
             </Card>
           </div>
           
-          <Card className="p-4 bg-yellow-50 border-yellow-200">
-            <h4 className="font-semibold text-yellow-800 mb-2">⚠️ Important Considerations</h4>
-            <ul className="text-sm text-yellow-700 space-y-1">
+          <Card className="p-4 bg-accent/10 border-accent/20">
+            <h4 className="font-semibold text-accent mb-2">⚠️ Important Considerations</h4>
+            <ul className="text-sm text-foreground space-y-1">
               <li>• Research the project thoroughly before investing</li>
               <li>• Understand the token's utility and value accrual</li>
               <li>• Consider the minimum tokens needed for meaningful participation</li>
@@ -156,21 +156,21 @@ const DaoParticipationTutorial = () => {
           <Card className="p-4">
             <h4 className="font-semibold mb-2">Types of Proposals</h4>
             <div className="grid gap-3">
-              <div className="p-3 bg-green-50 border border-green-200 rounded">
-                <h5 className="font-medium text-sm text-green-800">Parameter Changes</h5>
-                <p className="text-xs text-green-700">Adjust protocol settings like fees, rates, limits</p>
+              <div className="p-3 bg-awareness/10 border border-awareness/20 rounded">
+                <h5 className="font-medium text-sm text-awareness">Parameter Changes</h5>
+                <p className="text-xs text-foreground">Adjust protocol settings like fees, rates, limits</p>
               </div>
-              <div className="p-3 bg-blue-50 border border-blue-200 rounded">
-                <h5 className="font-medium text-sm text-blue-800">Treasury Management</h5>
-                <p className="text-xs text-blue-700">Allocate funds for development, partnerships, grants</p>
+              <div className="p-3 bg-primary/10 border border-primary/20 rounded">
+                <h5 className="font-medium text-sm text-primary">Treasury Management</h5>
+                <p className="text-xs text-foreground">Allocate funds for development, partnerships, grants</p>
               </div>
-              <div className="p-3 bg-purple-50 border border-purple-200 rounded">
-                <h5 className="font-medium text-sm text-purple-800">Protocol Upgrades</h5>
-                <p className="text-xs text-purple-700">Add new features or fix security issues</p>
+              <div className="p-3 bg-accent/10 border border-accent/20 rounded">
+                <h5 className="font-medium text-sm text-accent">Protocol Upgrades</h5>
+                <p className="text-xs text-foreground">Add new features or fix security issues</p>
               </div>
-              <div className="p-3 bg-orange-50 border border-orange-200 rounded">
-                <h5 className="font-medium text-sm text-orange-800">Emergency Actions</h5>
-                <p className="text-xs text-orange-700">Respond to urgent security threats</p>
+              <div className="p-3 bg-destructive/10 border border-destructive/20 rounded">
+                <h5 className="font-medium text-sm text-destructive">Emergency Actions</h5>
+                <p className="text-xs text-foreground">Respond to urgent security threats</p>
               </div>
             </div>
           </Card>
@@ -199,7 +199,7 @@ const DaoParticipationTutorial = () => {
           <div className="grid gap-4">
             <Card className="p-4">
               <div className="flex items-center gap-3 mb-2">
-                <Vote className="w-5 h-5 text-blue-500" />
+                <Vote className="w-5 h-5 text-primary" />
                 <h4 className="font-semibold">Voting Power</h4>
               </div>
               <p className="text-sm text-muted-foreground mb-2">Your voting power is typically proportional to your token holdings</p>
@@ -215,7 +215,7 @@ const DaoParticipationTutorial = () => {
               <div className="space-y-2">
                 <div className="flex justify-between items-center p-2 border rounded">
                   <span className="text-sm font-medium">For/Yes</span>
-                  <Badge variant="default" className="bg-green-500">Support</Badge>
+                  <Badge variant="default" className="bg-awareness">Support</Badge>
                 </div>
                 <div className="flex justify-between items-center p-2 border rounded">
                   <span className="text-sm font-medium">Against/No</span>
@@ -251,9 +251,9 @@ const DaoParticipationTutorial = () => {
             </div>
           </Card>
           
-          <Card className="p-4 bg-green-50 border-green-200">
-            <h4 className="font-semibold text-green-800 mb-2">Best Voting Practices</h4>
-            <ul className="text-sm text-green-700 space-y-1">
+          <Card className="p-4 bg-awareness/10 border-awareness/20">
+            <h4 className="font-semibold text-awareness mb-2">Best Voting Practices</h4>
+            <ul className="text-sm text-foreground space-y-1">
               <li>• Read the full proposal and discussion</li>
               <li>• Consider long-term effects, not just short-term gains</li>
               <li>• Vote based on your conviction, not following others</li>
@@ -293,17 +293,17 @@ const DaoParticipationTutorial = () => {
             <Card className="p-4">
               <h4 className="font-semibold mb-2">Contributing Skills</h4>
               <div className="grid grid-cols-2 gap-3">
-                <div className="p-3 bg-blue-50 border border-blue-200 rounded">
-                  <h5 className="font-medium text-sm text-blue-800">Technical</h5>
-                  <ul className="text-xs text-blue-700 mt-1 space-y-1">
+                <div className="p-3 bg-primary/10 border border-primary/20 rounded">
+                  <h5 className="font-medium text-sm text-primary">Technical</h5>
+                  <ul className="text-xs text-foreground mt-1 space-y-1">
                     <li>• Smart contract development</li>
                     <li>• Frontend/backend development</li>
                     <li>• Security auditing</li>
                   </ul>
                 </div>
-                <div className="p-3 bg-green-50 border border-green-200 rounded">
-                  <h5 className="font-medium text-sm text-green-800">Non-Technical</h5>
-                  <ul className="text-xs text-green-700 mt-1 space-y-1">
+                <div className="p-3 bg-awareness/10 border border-awareness/20 rounded">
+                  <h5 className="font-medium text-sm text-awareness">Non-Technical</h5>
+                  <ul className="text-xs text-foreground mt-1 space-y-1">
                     <li>• Community management</li>
                     <li>• Marketing and content</li>
                     <li>• Legal and compliance</li>

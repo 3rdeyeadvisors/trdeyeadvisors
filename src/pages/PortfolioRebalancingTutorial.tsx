@@ -648,15 +648,15 @@ const PortfolioRebalancingTutorial = () => {
 
         {/* Completion Message */}
         {completedSteps.length === totalSteps && (
-          <Card className="bg-green-50 border-green-200">
+          <Card className="bg-awareness/10 border-awareness/20">
             <CardHeader>
-              <CardTitle className="text-green-800 flex items-center gap-2">
+              <CardTitle className="text-awareness flex items-center gap-2">
                 <CheckCircle className="h-6 w-6" />
                 Portfolio Rebalancing Mastery Complete!
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-green-700 mb-4">
+              <p className="text-foreground mb-4">
                 You now understand systematic portfolio rebalancing and can optimize your DeFi investments effectively!
               </p>
               <div className="flex gap-2">
