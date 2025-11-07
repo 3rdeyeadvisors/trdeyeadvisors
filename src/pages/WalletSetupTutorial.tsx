@@ -472,16 +472,16 @@ const WalletSetupTutorial = () => {
                     </ol>
                   </div>
 
-                  <Card className="bg-blue-50 border-blue-200">
+                  <Card className="bg-primary/10 border-primary/20">
                     <CardHeader className="pb-3">
-                      <CardTitle className="text-lg text-blue-800">Password Security Tips</CardTitle>
+                      <CardTitle className="text-lg text-primary">Password Security Tips</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <ul className="space-y-2 text-sm">
                         {currentStepData.content.passwordTips?.map((tip, index) => (
                           <li key={index} className="flex items-start gap-2">
-                            <CheckCircle className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
-                            <span>{tip}</span>
+                            <CheckCircle className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+                            <span className="text-foreground">{tip}</span>
                           </li>
                         ))}
                       </ul>
@@ -493,15 +493,15 @@ const WalletSetupTutorial = () => {
               {/* Step 4: Seed Phrase */}
               {currentStep === 4 && (
                 <div className="space-y-6">
-                  <Alert className="border-red-200 bg-red-50">
-                    <Shield className="h-4 w-4 text-red-600" />
-                    <AlertDescription className="text-red-800">
-                      <strong>CRITICAL:</strong> Your seed phrase is the master key to your wallet. If someone gets it, they own your crypto forever.
+                  <Alert className="border-destructive/50 bg-destructive/10">
+                    <Shield className="h-4 w-4 text-destructive" />
+                    <AlertDescription className="text-foreground">
+                      <strong className="text-destructive">CRITICAL:</strong> Your seed phrase is the master key to your wallet. If someone gets it, they own your crypto forever.
                     </AlertDescription>
                   </Alert>
 
                   {/* Example Seed Phrase */}
-                  <Card className="border-2 border-dashed border-gray-300">
+                  <Card className="border-2 border-dashed border-border">
                     <CardHeader>
                       <div className="flex items-center justify-between">
                         <CardTitle className="text-lg">Example Seed Phrase</CardTitle>
@@ -522,11 +522,11 @@ const WalletSetupTutorial = () => {
                       {showSeedPhrase ? (
                         <div className="grid grid-cols-3 md:grid-cols-4 gap-3">
                           {currentStepData.content.seedPhrase?.map((word, index) => (
-                            <div key={index} className="flex items-center gap-2 p-2 bg-gray-100 rounded">
+                            <div key={index} className="flex items-center gap-2 p-2 bg-muted rounded">
                               <Badge variant="outline" className="text-xs w-6 h-6 flex items-center justify-center">
                                 {index + 1}
                               </Badge>
-                              <span className="text-sm font-mono">{word}</span>
+                              <span className="text-sm font-mono text-foreground">{word}</span>
                             </div>
                           ))}
                         </div>
@@ -595,9 +595,9 @@ const WalletSetupTutorial = () => {
                     </ol>
                   </div>
 
-                  <Card className="bg-green-50 border-green-200">
+                  <Card className="bg-awareness/10 border-awareness/20">
                     <CardHeader className="pb-3">
-                      <CardTitle className="text-lg text-green-800 flex items-center gap-2">
+                      <CardTitle className="text-lg text-awareness flex items-center gap-2">
                         <Globe className="h-5 w-5" />
                         {currentStepData.content.networkSetup?.name}
                       </CardTitle>
@@ -643,11 +643,11 @@ const WalletSetupTutorial = () => {
                     </div>
                   </div>
 
-                  <Alert className="border-red-200 bg-red-50">
-                    <AlertTriangle className="h-4 w-4 text-red-600" />
-                    <AlertDescription className="text-red-800">
+                  <Alert className="border-destructive/50 bg-destructive/10">
+                    <AlertTriangle className="h-4 w-4 text-destructive" />
+                    <AlertDescription className="text-foreground">
                       <div className="space-y-2">
-                        <p className="font-medium">Red Flags - Never Trust:</p>
+                        <p className="font-medium text-destructive">Red Flags - Never Trust:</p>
                         <ul className="space-y-1 text-sm">
                           {currentStepData.content.redFlags?.map((flag, index) => (
                             <li key={index} className="flex items-start gap-2">
@@ -699,15 +699,15 @@ const WalletSetupTutorial = () => {
 
         {/* Completion Message */}
         {completedSteps.length === totalSteps && (
-          <Card className="bg-green-50 border-green-200">
+          <Card className="bg-awareness/10 border-awareness/20">
             <CardHeader>
-              <CardTitle className="text-green-800 flex items-center gap-2">
+              <CardTitle className="text-awareness flex items-center gap-2">
                 <CheckCircle className="h-6 w-6" />
                 Congratulations! Wallet Setup Complete
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-green-700 mb-4">
+              <p className="text-foreground mb-4">
                 You've successfully set up your MetaMask wallet with proper security measures. 
                 You're now ready to safely explore DeFi!
               </p>
