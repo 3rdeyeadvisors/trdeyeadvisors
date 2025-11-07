@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Play, Shield, TrendingUp, Calculator, AlertTriangle, Wallet, ArrowLeftRight, PieChart, Target, CheckCircle } from "lucide-react";
 import SEO from "@/components/SEO";
@@ -151,6 +152,14 @@ const VideoTutorials = () => {
     }
   };
 
+  // Calculate total tutorials and completed count
+  const totalTutorials = Object.values(videoCategories).reduce(
+    (total, category) => total + category.videos.length,
+    0
+  );
+  const completedCount = completedTutorials.length;
+  const progressPercentage = (completedCount / totalTutorials) * 100;
+
   return (
     <>
       <SEO 
@@ -163,7 +172,7 @@ const VideoTutorials = () => {
       <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
         <div className="container mx-auto px-4 py-8 mobile-typography-center">
           {/* Header */}
-          <div className="text-center mb-12">
+          <div className="text-center mb-8">
             <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
               Tutorials
             </h1>
@@ -171,6 +180,27 @@ const VideoTutorials = () => {
               Step-by-step guides to master DeFi safely and effectively
             </p>
           </div>
+
+          {/* Progress Summary */}
+          <Card className="mb-8 bg-gradient-to-r from-primary/5 to-accent/5 border-primary/20">
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-5 w-5 text-awareness" />
+                  <h3 className="text-lg font-semibold text-foreground">Your Progress</h3>
+                </div>
+                <Badge variant="secondary" className="bg-primary/20 text-primary border-0">
+                  {completedCount} of {totalTutorials} completed
+                </Badge>
+              </div>
+              <Progress value={progressPercentage} className="h-2 mb-2" />
+              <p className="text-sm text-muted-foreground">
+                {completedCount === 0 && "Start your DeFi learning journey today!"}
+                {completedCount > 0 && completedCount < totalTutorials && `Keep going! ${totalTutorials - completedCount} tutorial${totalTutorials - completedCount === 1 ? '' : 's'} remaining.`}
+                {completedCount === totalTutorials && "🎉 Congratulations! You've completed all tutorials!"}
+              </p>
+            </CardContent>
+          </Card>
 
           {/* Category Tabs */}
           <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="mb-8">
