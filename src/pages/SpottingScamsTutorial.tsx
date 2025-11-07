@@ -538,6 +538,14 @@ const SpottingScamsTutorial = () => {
       setCurrentStep(currentStep + 1);
     } else {
       setCompletedSteps(prev => [...prev, currentStep]);
+      
+      // Save completion to localStorage
+      const completed = JSON.parse(localStorage.getItem('completedTutorials') || '[]');
+      if (!completed.includes('spotting-scams')) {
+        completed.push('spotting-scams');
+        localStorage.setItem('completedTutorials', JSON.stringify(completed));
+      }
+      
       toast({
         title: "Tutorial Complete! 🎉",
         description: "You're now equipped to spot and avoid DeFi scams. Stay safe!",

@@ -517,6 +517,14 @@ const PortfolioRebalancingTutorial = () => {
       setCurrentStep(currentStep + 1);
     } else {
       setCompletedSteps(prev => [...prev, currentStep]);
+      
+      // Save completion to localStorage
+      const completed = JSON.parse(localStorage.getItem('completedTutorials') || '[]');
+      if (!completed.includes('portfolio-tracking')) {
+        completed.push('portfolio-tracking');
+        localStorage.setItem('completedTutorials', JSON.stringify(completed));
+      }
+      
       toast({
         title: "Tutorial Complete! 🎉",
         description: "Excellent! You've learned portfolio rebalancing strategies.",

@@ -634,6 +634,14 @@ const CrossChainBridgingTutorial = () => {
       setCurrentStep(currentStep + 1);
     } else {
       setCompletedSteps(prev => [...prev, currentStep]);
+      
+      // Save completion to localStorage
+      const completed = JSON.parse(localStorage.getItem('completedTutorials') || '[]');
+      if (!completed.includes('portfolio-tracking')) {
+        completed.push('portfolio-tracking');
+        localStorage.setItem('completedTutorials', JSON.stringify(completed));
+      }
+      
       toast({
         title: "Tutorial Complete! 🎉",
         description: "Great work! You're now ready for cross-chain DeFi.",

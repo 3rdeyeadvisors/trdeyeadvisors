@@ -1,15 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Play, Shield, TrendingUp, Calculator, AlertTriangle, Wallet, ArrowLeftRight, PieChart, Target } from "lucide-react";
+import { Play, Shield, TrendingUp, Calculator, AlertTriangle, Wallet, ArrowLeftRight, PieChart, Target, CheckCircle } from "lucide-react";
 import SEO from "@/components/SEO";
 import { useToast } from "@/hooks/use-toast";
 
 const VideoTutorials = () => {
   const [selectedCategory, setSelectedCategory] = useState("immediate");
+  const [completedTutorials, setCompletedTutorials] = useState<string[]>([]);
   const { toast } = useToast();
+
+  useEffect(() => {
+    // Load completed tutorials from localStorage
+    const completed = localStorage.getItem('completedTutorials');
+    if (completed) {
+      setCompletedTutorials(JSON.parse(completed));
+    }
+  }, []);
 
   const videoCategories = {
     immediate: {
@@ -187,8 +196,9 @@ const VideoTutorials = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {category.videos.map((video) => {
                     const VideoIcon = video.icon;
+                    const isCompleted = completedTutorials.includes(video.id);
                     return (
-                      <Card key={video.id} className="group hover:shadow-cosmic transition-all duration-cosmic border border-border/50 bg-card/80 backdrop-blur-sm hover:bg-card hover:border-primary/30 h-full flex flex-col">
+                      <Card key={video.id} className={`group hover:shadow-cosmic transition-all duration-cosmic border bg-card/80 backdrop-blur-sm hover:bg-card h-full flex flex-col ${isCompleted ? 'border-awareness/50' : 'border-border/50 hover:border-primary/30'}`}>
                         <CardHeader className="pb-4">
                           <div className="flex items-start justify-between">
                             <div className="flex items-center gap-3">
@@ -196,10 +206,20 @@ const VideoTutorials = () => {
                                 <VideoIcon className="h-6 w-6 text-primary" />
                               </div>
                               <div>
-                                <CardTitle className="text-lg text-card-foreground group-hover:text-primary transition-colors">
-                                  {video.title}
-                                </CardTitle>
+                                <div className="flex items-center gap-2">
+                                  <CardTitle className="text-lg text-card-foreground group-hover:text-primary transition-colors">
+                                    {video.title}
+                                  </CardTitle>
+                                  {isCompleted && (
+                                    <CheckCircle className="h-5 w-5 text-awareness" />
+                                  )}
+                                </div>
                                 <div className="flex items-center gap-2 mt-1">
+                                  {isCompleted && (
+                                    <Badge variant="outline" className="text-xs font-medium bg-awareness/20 text-awareness border-awareness/30">
+                                      Completed
+                                    </Badge>
+                                  )}
                                   <Badge 
                                     variant="secondary" 
                                     className={`text-xs font-medium ${getPriorityColor(video.priority)} text-foreground border-0`}
@@ -255,7 +275,7 @@ const VideoTutorials = () => {
                             }}
                           >
                             <Play className="h-4 w-4 mr-2" />
-                            Start Tutorial
+                            {isCompleted ? "Review Tutorial" : "Start Tutorial"}
                           </Button>
                         </CardContent>
                       </Card>

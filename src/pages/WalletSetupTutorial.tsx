@@ -221,6 +221,14 @@ const WalletSetupTutorial = () => {
     } else {
       // On final step, show completion toast and navigate back to tutorials
       setCompletedSteps(prev => [...prev, currentStep]);
+      
+      // Save completion to localStorage
+      const completed = JSON.parse(localStorage.getItem('completedTutorials') || '[]');
+      if (!completed.includes('wallet-setup')) {
+        completed.push('wallet-setup');
+        localStorage.setItem('completedTutorials', JSON.stringify(completed));
+      }
+      
       toast({
         title: "Tutorial Complete! 🎉",
         description: "Great job! You've completed the Wallet Setup tutorial.",

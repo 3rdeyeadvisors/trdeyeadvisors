@@ -764,6 +764,14 @@ const ReadingDefiMetricsTutorial = () => {
       setCurrentStep(currentStep + 1);
     } else {
       setCompletedSteps(prev => [...prev, currentStep]);
+      
+      // Save completion to localStorage
+      const completed = JSON.parse(localStorage.getItem('completedTutorials') || '[]');
+      if (!completed.includes('risk-assessment')) {
+        completed.push('risk-assessment');
+        localStorage.setItem('completedTutorials', JSON.stringify(completed));
+      }
+      
       toast({
         title: "Tutorial Complete! 🎉",
         description: "Well done! You can now analyze DeFi metrics like a pro.",

@@ -378,6 +378,14 @@ const FirstDexSwapTutorial = () => {
       setCurrentStep(currentStep + 1);
     } else {
       setCompletedSteps(prev => [...prev, currentStep]);
+      
+      // Save completion to localStorage
+      const completed = JSON.parse(localStorage.getItem('completedTutorials') || '[]');
+      if (!completed.includes('first-dex-swap')) {
+        completed.push('first-dex-swap');
+        localStorage.setItem('completedTutorials', JSON.stringify(completed));
+      }
+      
       toast({
         title: "Tutorial Complete! 🎉",
         description: "Excellent work! You've mastered DEX swapping.",

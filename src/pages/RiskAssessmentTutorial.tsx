@@ -286,6 +286,14 @@ const RiskAssessmentTutorial = () => {
                     onClick={() => {
                       if (currentStep === steps.length - 1) {
                         handleStepComplete(currentStep);
+                        
+                        // Save completion to localStorage
+                        const completed = JSON.parse(localStorage.getItem('completedTutorials') || '[]');
+                        if (!completed.includes('risk-assessment')) {
+                          completed.push('risk-assessment');
+                          localStorage.setItem('completedTutorials', JSON.stringify(completed));
+                        }
+                        
                         toast.success("Tutorial Complete! 🎉 You've mastered DeFi risk assessment.");
                         setTimeout(() => {
                           window.location.href = "/tutorials";
