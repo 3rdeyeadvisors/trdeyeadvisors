@@ -126,8 +126,8 @@ const VideoTutorials = () => {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "Critical": return "bg-red-500/90";
-      case "High": return "bg-orange-500/90";
+      case "Critical": return "bg-destructive/90";
+      case "High": return "bg-accent/90";
       case "Medium": return "bg-primary/90";
       default: return "bg-muted-foreground/90";
     }

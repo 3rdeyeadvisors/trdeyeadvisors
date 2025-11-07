@@ -351,24 +351,24 @@ const DaoParticipationTutorial = () => {
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">DAO Security Considerations</h3>
           
-          <Card className="p-4 bg-red-50 border-red-200">
-            <h4 className="font-semibold text-red-800 mb-2">Common DAO Risks</h4>
+          <Card className="p-4 bg-destructive/10 border-destructive/20">
+            <h4 className="font-semibold text-destructive mb-2">Common DAO Risks</h4>
             <div className="space-y-2">
-              <div className="p-2 border border-red-300 rounded">
-                <h5 className="font-medium text-sm text-red-700">Governance Attacks</h5>
-                <p className="text-xs text-red-600">Malicious actors gaining control through token accumulation</p>
+              <div className="p-2 border border-destructive/30 rounded">
+                <h5 className="font-medium text-sm text-destructive">Governance Attacks</h5>
+                <p className="text-xs text-foreground/80">Malicious actors gaining control through token accumulation</p>
               </div>
-              <div className="p-2 border border-red-300 rounded">
-                <h5 className="font-medium text-sm text-red-700">Smart Contract Bugs</h5>
-                <p className="text-xs text-red-600">Vulnerabilities in governance contracts</p>
+              <div className="p-2 border border-destructive/30 rounded">
+                <h5 className="font-medium text-sm text-destructive">Smart Contract Bugs</h5>
+                <p className="text-xs text-foreground/80">Vulnerabilities in governance contracts</p>
               </div>
-              <div className="p-2 border border-red-300 rounded">
-                <h5 className="font-medium text-sm text-red-700">Low Participation</h5>
-                <p className="text-xs text-red-600">Small minorities making decisions for everyone</p>
+              <div className="p-2 border border-destructive/30 rounded">
+                <h5 className="font-medium text-sm text-destructive">Low Participation</h5>
+                <p className="text-xs text-foreground/80">Small minorities making decisions for everyone</p>
               </div>
-              <div className="p-2 border border-red-300 rounded">
-                <h5 className="font-medium text-sm text-red-700">Centralization Risks</h5>
-                <p className="text-xs text-red-600">Power concentration in few hands</p>
+              <div className="p-2 border border-destructive/30 rounded">
+                <h5 className="font-medium text-sm text-destructive">Centralization Risks</h5>
+                <p className="text-xs text-foreground/80">Power concentration in few hands</p>
               </div>
             </div>
           </Card>

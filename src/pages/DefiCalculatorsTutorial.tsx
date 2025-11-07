@@ -396,7 +396,7 @@ const DefiCalculatorsTutorial = () => {
                 variant={current ? "default" : completed ? "secondary" : "outline"}
                 size="sm"
                 onClick={() => setCurrentStep(step.id)}
-                className={`flex items-center gap-2 ${completed ? "bg-green-100 text-green-700 hover:bg-green-200" : ""}`}
+                className={`flex items-center gap-2 ${completed ? "bg-awareness/20 text-awareness hover:bg-awareness/30" : ""}`}
               >
                 <StepIcon className="h-4 w-4" />
                 <span className="hidden sm:inline">{step.title}</span>
@@ -471,15 +471,15 @@ const DefiCalculatorsTutorial = () => {
                     })}
                   </div>
 
-                  <Card className="bg-blue-50 border-blue-200">
+                  <Card className="bg-primary/10 border-primary/20">
                     <CardHeader className="pb-3">
-                      <CardTitle className="text-lg text-blue-800">Why DeFi Calculators Matter</CardTitle>
+                      <CardTitle className="text-lg text-primary">Why DeFi Calculators Matter</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <ul className="space-y-2 text-sm">
                         {currentStepData.content.whyImportant?.map((reason, index) => (
                           <li key={index} className="flex items-start gap-2">
-                            <CheckCircle className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                            <CheckCircle className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
                             <span>{reason}</span>
                           </li>
                         ))}
@@ -636,9 +636,9 @@ const DefiCalculatorsTutorial = () => {
                   </Card>
 
                   {/* Interactive IL Calculator */}
-                  <Card className="bg-red-50 border-red-200">
+                  <Card className="bg-destructive/10 border-destructive/20">
                     <CardHeader className="pb-3">
-                      <CardTitle className="text-lg text-red-800 flex items-center gap-2">
+                      <CardTitle className="text-lg text-destructive flex items-center gap-2">
                         <AlertTriangle className="h-5 w-5" />
                         Interactive Impermanent Loss Calculator
                       </CardTitle>
@@ -798,9 +798,9 @@ const DefiCalculatorsTutorial = () => {
                   </div>
 
                   {/* Red Flags */}
-                  <Alert className="border-red-200 bg-red-50">
-                    <AlertTriangle className="h-4 w-4 text-red-600" />
-                    <AlertDescription className="text-red-800">
+                  <Alert className="border-destructive/20 bg-destructive/10">
+                    <AlertTriangle className="h-4 w-4 text-destructive" />
+                    <AlertDescription className="text-destructive">
                       <div className="space-y-2">
                         <p className="font-medium">Red Flags to Avoid:</p>
                         <ul className="space-y-1 text-sm">

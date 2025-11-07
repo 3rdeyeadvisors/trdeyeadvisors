@@ -566,7 +566,7 @@ const FirstDexSwapTutorial = () => {
                         </div>
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
                           <Globe className="h-4 w-4" />
-                          <code className="bg-gray-100 px-2 py-1 rounded">{dex.url}</code>
+                          <code className="bg-muted px-2 py-1 rounded">{dex.url}</code>
                         </div>
                       </CardContent>
                     </Card>
@@ -794,9 +794,9 @@ const FirstDexSwapTutorial = () => {
               {/* Step 6: Review Transaction */}
               {currentStep === 6 && (
                 <div className="space-y-4">
-                  <Alert className="border-red-200 bg-red-50">
-                    <Eye className="h-4 w-4 text-red-600" />
-                    <AlertDescription className="text-red-800">
+                <Alert className="border-destructive/20 bg-destructive/10">
+                  <Eye className="h-4 w-4 text-destructive" />
+                  <AlertDescription className="text-destructive">
                       <strong>CRITICAL:</strong> Always review these details carefully. Once confirmed, transactions cannot be reversed!
                     </AlertDescription>
                   </Alert>
@@ -809,10 +809,10 @@ const FirstDexSwapTutorial = () => {
                           <CardContent className="p-4">
                             <div className="flex items-center justify-between mb-2">
                               <h4 className="font-medium">{item.item}</h4>
-                              <CheckCircle className="h-4 w-4 text-green-500" />
+                              <CheckCircle className="h-4 w-4 text-awareness" />
                             </div>
                             <p className="text-sm text-muted-foreground mb-2">{item.description}</p>
-                            <div className="flex items-center gap-2 text-sm text-red-600">
+                            <div className="flex items-center gap-2 text-sm text-destructive">
                               <AlertTriangle className="h-3 w-3" />
                               <span>Red flag: {item.redFlag}</span>
                             </div>
@@ -909,9 +909,9 @@ const FirstDexSwapTutorial = () => {
                     </ol>
                   </div>
 
-                  <Card className="bg-blue-50 border-blue-200">
+                  <Card className="bg-primary/10 border-primary/20">
                     <CardHeader className="pb-3">
-                      <CardTitle className="text-lg text-blue-800 flex items-center gap-2">
+                      <CardTitle className="text-lg text-primary flex items-center gap-2">
                         <Globe className="h-5 w-5" />
                         Transaction Explorer
                       </CardTitle>

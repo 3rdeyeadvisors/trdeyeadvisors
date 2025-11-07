@@ -560,7 +560,7 @@ const SpottingScamsTutorial = () => {
       case "Critical": return "text-destructive bg-destructive/10 border-destructive/50";
       case "High": return "text-destructive bg-destructive/10 border-destructive/30";
       case "Medium": return "text-accent bg-accent/10 border-accent/30";
-      default: return "text-gray-600 bg-gray-50 border-gray-200";
+      default: return "text-muted-foreground bg-muted border-border";
     }
   };
 
@@ -602,7 +602,7 @@ const SpottingScamsTutorial = () => {
                 variant={current ? "default" : completed ? "secondary" : "outline"}
                 size="sm"
                 onClick={() => setCurrentStep(step.id)}
-                className={`flex items-center gap-2 ${completed ? "bg-green-100 text-green-700 hover:bg-green-200" : ""}`}
+                className={`flex items-center gap-2 ${completed ? "bg-awareness/20 text-awareness hover:bg-awareness/30" : ""}`}
               >
                 <StepIcon className="h-4 w-4" />
                 <span className="hidden sm:inline">{step.title}</span>
@@ -715,8 +715,8 @@ const SpottingScamsTutorial = () => {
                                 </p>
                               </div>
                             </div>
-                            <div className="mt-3 p-2 bg-blue-50 rounded">
-                              <p className="text-sm text-blue-700">
+                            <div className="mt-3 p-2 bg-primary/10 rounded">
+                              <p className="text-sm text-primary">
                                 <strong>How to check:</strong> {check.howToCheck}
                               </p>
                             </div>
@@ -1044,9 +1044,9 @@ const SpottingScamsTutorial = () => {
               {/* Step 7: Emergency Response */}
               {currentStep === 7 && (
                 <div className="space-y-6">
-                  <Alert className="border-red-200 bg-red-50">
-                    <AlertTriangle className="h-4 w-4 text-red-600" />
-                    <AlertDescription className="text-red-800">
+                <Alert className="border-destructive/20 bg-destructive/10">
+                  <AlertTriangle className="h-4 w-4 text-destructive" />
+                  <AlertDescription className="text-destructive">
                       <strong>Emergency Protocol:</strong> If you suspect compromise, act immediately. Every second counts in preventing further damage.
                     </AlertDescription>
                   </Alert>
@@ -1055,10 +1055,10 @@ const SpottingScamsTutorial = () => {
                     <h3 className="font-semibold">Immediate Response Actions:</h3>
                     <div className="grid gap-4">
                       {currentStepData.content.immediateActions?.map((action, index) => (
-                        <Card key={index} className="border-l-4 border-red-300">
+                        <Card key={index} className="border-l-4 border-destructive/30">
                           <CardHeader className="pb-3">
                             <div className="flex items-center justify-between">
-                              <CardTitle className="text-lg text-red-700">{action.action}</CardTitle>
+                              <CardTitle className="text-lg text-destructive">{action.action}</CardTitle>
                               <Badge variant="destructive">{action.timeframe}</Badge>
                             </div>
                           </CardHeader>
@@ -1085,7 +1085,7 @@ const SpottingScamsTutorial = () => {
                       {currentStepData.content.preventionStrategy?.map((strategy, index) => (
                         <Card key={index}>
                           <CardHeader className="pb-3">
-                            <CardTitle className="text-lg text-green-700">{strategy.level}</CardTitle>
+                            <CardTitle className="text-lg text-awareness">{strategy.level}</CardTitle>
                           </CardHeader>
                           <CardContent>
                             <ul className="space-y-1 text-sm">
