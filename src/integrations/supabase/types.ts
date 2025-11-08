@@ -664,7 +664,7 @@ export type Database = {
           tracking_number: string | null
           tracking_url: string | null
           updated_at: string
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           address_to: Json
@@ -683,7 +683,7 @@ export type Database = {
           tracking_number?: string | null
           tracking_url?: string | null
           updated_at?: string
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           address_to?: Json
@@ -702,7 +702,7 @@ export type Database = {
           tracking_number?: string | null
           tracking_url?: string | null
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: []
       }
