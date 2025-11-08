@@ -196,13 +196,13 @@ serve(async (req) => {
         user_id: user?.id || null,
         printify_order_id: printifyOrder.id,
         external_id: orderData.external_id,
-        status: printifyOrder.status,
+        status: printifyOrder.status || 'pending',
         shipping_method: shipping_method,
         address_to: address_to,
         line_items: line_items,
-        total_price: printifyOrder.total_price,
-        total_shipping: printifyOrder.total_shipping,
-        total_tax: printifyOrder.total_tax,
+        total_price: printifyOrder.total_price || 0,
+        total_shipping: printifyOrder.total_shipping || 0,
+        total_tax: printifyOrder.total_tax || 0,
         created_at: new Date().toISOString(),
       })
       .select()
