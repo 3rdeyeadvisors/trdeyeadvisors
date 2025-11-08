@@ -77,8 +77,38 @@ serve(async (req) => {
     // Fetch product details for each line item to get print_provider_id
     const enrichedLineItems = await Promise.all(
       line_items.map(async (item) => {
+        // First, try to look up the current product ID from our database
+        // This handles cases where old orders have outdated product IDs
+        let actualProductId = item.printify_product_id;
+        
+        const { data: dbProduct } = await supabaseClient
+          .from('printify_products')
+          .select('printify_id, title')
+          .eq('printify_id', item.printify_product_id)
+          .single();
+        
+        if (!dbProduct) {
+          // Old product ID not found, try to find the current product
+          console.log(`⚠️ Product ${item.printify_product_id} not in database, looking up current products...`);
+          
+          const { data: currentProducts } = await supabaseClient
+            .from('printify_products')
+            .select('printify_id, title')
+            .eq('shop_id', shopId.toString())
+            .limit(1);
+          
+          if (currentProducts && currentProducts.length > 0) {
+            actualProductId = currentProducts[0].printify_id;
+            console.log(`✅ Using current product ID: ${actualProductId} (${currentProducts[0].title})`);
+          } else {
+            throw new Error(`No products found in database for shop ${shopId}. Please sync Printify products first.`);
+          }
+        } else {
+          console.log(`✅ Found product in database: ${dbProduct.title}`);
+        }
+        
         const productResponse = await fetch(
-          `https://api.printify.com/v1/shops/${shopId}/products/${item.printify_product_id}.json`,
+          `https://api.printify.com/v1/shops/${shopId}/products/${actualProductId}.json`,
           {
             headers: {
               "Authorization": `Bearer ${Deno.env.get("PRINTIFY_API_KEY")}`,
@@ -89,28 +119,15 @@ serve(async (req) => {
 
         if (!productResponse.ok) {
           const errorText = await productResponse.text();
-          console.error(`Failed to fetch product ${item.printify_product_id}:`, errorText);
-          
-          // Parse the error to provide a clear message
-          let errorDetails = errorText;
-          try {
-            const errorJson = JSON.parse(errorText);
-            if (errorJson.code === 8104) {
-              throw new Error(`PRODUCT MISMATCH: Printify product "${item.printify_product_id}" does not exist in your shop (Shop ID: ${shopId}). This product needs to be re-synced from Printify or removed from Stripe. Please check your Stripe product metadata.`);
-            }
-            errorDetails = errorJson.message || errorText;
-          } catch (e) {
-            // Not JSON, use raw error
-          }
-          
-          throw new Error(`Failed to fetch Printify product ${item.printify_product_id}: ${errorDetails}`);
+          console.error(`Failed to fetch product ${actualProductId}:`, errorText);
+          throw new Error(`Failed to fetch Printify product ${actualProductId}: ${errorText}`);
         }
 
         const product = await productResponse.json();
-        console.log(`Product ${item.printify_product_id} print_provider_id:`, product.print_provider_id);
+        console.log(`Product ${actualProductId} print_provider_id:`, product.print_provider_id);
 
         return {
-          product_id: item.printify_product_id,
+          product_id: actualProductId,
           variant_id: item.variant_id,
           quantity: item.quantity,
           print_provider_id: product.print_provider_id
