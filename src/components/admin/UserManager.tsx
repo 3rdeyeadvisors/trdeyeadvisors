@@ -18,11 +18,7 @@ export function UserManager() {
 
   const loadUsers = async () => {
     try {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("*, user_roles(role)")
-        .order("created_at", { ascending: false })
-        .limit(50);
+      const { data, error } = await supabase.rpc('get_user_emails_with_profiles');
 
       if (error) throw error;
       setUsers(data || []);
@@ -35,6 +31,7 @@ export function UserManager() {
 
   const filteredUsers = users.filter(user =>
     user.display_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     user.user_id?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -63,22 +60,26 @@ export function UserManager() {
           <TableHeader>
             <TableRow>
               <TableHead>Name</TableHead>
-              <TableHead>Role</TableHead>
+              <TableHead>Email</TableHead>
               <TableHead>Joined</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredUsers.map((user) => (
-              <TableRow key={user.id}>
-                <TableCell>{user.display_name || "Anonymous"}</TableCell>
-                <TableCell>
-                  <Badge variant={user.user_roles?.role === "admin" ? "default" : "secondary"}>
-                    {user.user_roles?.role || "user"}
-                  </Badge>
+            {filteredUsers.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={3} className="text-center text-muted-foreground">
+                  No users found
                 </TableCell>
-                <TableCell>{new Date(user.created_at).toLocaleDateString()}</TableCell>
               </TableRow>
-            ))}
+            ) : (
+              filteredUsers.map((user) => (
+                <TableRow key={user.user_id}>
+                  <TableCell className="font-medium">{user.display_name || "Anonymous"}</TableCell>
+                  <TableCell className="text-muted-foreground">{user.email}</TableCell>
+                  <TableCell>{new Date(user.created_at).toLocaleDateString()}</TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </CardContent>

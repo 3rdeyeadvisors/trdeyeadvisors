@@ -74,13 +74,17 @@ const App = () => {
     const search = window.location.search;
     const hash = window.location.hash;
     
-    // Only redirect on the3rdeyeadvisors.com domain
-    if (hostname.endsWith('the3rdeyeadvisors.com')) {
-      // Redirect non-www to www or http to https
-      if (hostname === 'the3rdeyeadvisors.com' || protocol === 'http:') {
-        const redirectUrl = `https://www.the3rdeyeadvisors.com${pathname}${search}${hash}`;
-        window.location.replace(redirectUrl);
-      }
+    // Redirect 3rdeyeadvisors.com (without "the") to the3rdeyeadvisors.com
+    if (hostname === '3rdeyeadvisors.com' || hostname === 'www.3rdeyeadvisors.com') {
+      const redirectUrl = `https://the3rdeyeadvisors.com${pathname}${search}${hash}`;
+      window.location.replace(redirectUrl);
+      return;
+    }
+    
+    // Ensure HTTPS on the3rdeyeadvisors.com domain
+    if (hostname.endsWith('the3rdeyeadvisors.com') && protocol === 'http:') {
+      const redirectUrl = `https://${hostname}${pathname}${search}${hash}`;
+      window.location.replace(redirectUrl);
     }
   }, []);
 

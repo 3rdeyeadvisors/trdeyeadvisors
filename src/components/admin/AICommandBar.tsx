@@ -47,13 +47,13 @@ export function AICommandBar({ onCommandExecuted }: AICommandBarProps) {
   return (
     <div className="flex gap-2 items-center">
       <div className="relative flex-1">
-        <Sparkles className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-primary" />
+        <Sparkles className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-primary z-10" />
         <Input
           value={command}
           onChange={(e) => setCommand(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleExecuteCommand()}
           placeholder='Ask AI: "show weekly sales" or "resend all failed emails"'
-          className="pl-11 bg-cosmic-deep border-primary/30 focus:border-primary"
+          className="pl-11 bg-input border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus-visible:ring-2 focus-visible:ring-ring"
         />
       </div>
       <Button 
