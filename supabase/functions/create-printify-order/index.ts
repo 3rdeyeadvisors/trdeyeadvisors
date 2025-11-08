@@ -130,6 +130,12 @@ serve(async (req) => {
         }
 
         const product = await productResponse.json();
+        
+        console.log(`Product data:`, {
+          id: actualProductId,
+          blueprint_id: product.blueprint_id,
+          print_provider_id: product.print_provider_id
+        });
 
         return {
           product_id: actualProductId,
@@ -142,6 +148,7 @@ serve(async (req) => {
     );
 
     console.log('Creating Printify order...');
+    console.log('Enriched line items:', JSON.stringify(enrichedLineItems, null, 2));
 
     // Create order in Printify
     const orderData = {
