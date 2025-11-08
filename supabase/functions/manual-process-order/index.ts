@@ -125,6 +125,8 @@ serve(async (req) => {
         line_items: printifyItems,
         shipping_method: 1, // Standard shipping
         send_shipping_notification: true,
+        customer_email: session.customer_details?.email || session.customer_email || "",
+        stripe_session_id: session.id,
         address_to: {
           first_name: shipping.name?.split(" ")[0] || "Customer",
           last_name: shipping.name?.split(" ").slice(1).join(" ") || "",
