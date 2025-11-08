@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, Download } from "lucide-react";
+import { Search, Download, RefreshCw } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ManualOrderProcessor } from "./ManualOrderProcessor";
 import { PrintifyProductSync } from "./PrintifyProductSync";
@@ -20,6 +20,7 @@ export function OrdersManager() {
   }, []);
 
   const loadOrders = async () => {
+    setLoading(true);
     try {
       const { data, error } = await supabase
         .from("printify_orders")
@@ -78,10 +79,16 @@ export function OrdersManager() {
               <CardTitle>Orders & Customers</CardTitle>
               <CardDescription>Manage and track all orders</CardDescription>
             </div>
-            <Button onClick={exportOrders} variant="outline" size="sm">
-              <Download className="h-4 w-4 mr-2" />
-              Export
-            </Button>
+            <div className="flex gap-2">
+              <Button onClick={loadOrders} variant="outline" size="sm" disabled={loading}>
+                <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+                Refresh
+              </Button>
+              <Button onClick={exportOrders} variant="outline" size="sm">
+                <Download className="h-4 w-4 mr-2" />
+                Export
+              </Button>
+            </div>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
