@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to 3rdeyeadvisors - Confirm Your Email</title>
+    <style>
+        /* Reset styles */
+        body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+        table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+        img { -ms-interpolation-mode: bicubic; border: 0; outline: none; text-decoration: none; }
+        
+        /* Global styles */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #0A0A0B;
+            color: #F5F5F5;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #1A1F2E;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #5B9FFF 0%, #D946EF 100%);
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: #FFFFFF;
+            text-shadow: 0 0 20px rgba(91, 159, 255, 0.4);
+            margin: 0;
+        }
+        
+        .content {
+            padding: 40px 30px;
+        }
+        
+        h1 {
+            color: #5B9FFF;
+            font-size: 28px;
+            margin: 0 0 20px 0;
+            font-weight: 700;
+        }
+        
+        p {
+            color: #C4C4C8;
+            font-size: 16px;
+            line-height: 1.6;
+            margin: 0 0 20px 0;
+        }
+        
+        .highlight {
+            color: #F5F5F5;
+            font-weight: 600;
+        }
+        
+        .button-container {
+            text-align: center;
+            margin: 35px 0;
+        }
+        
+        .button {
+            display: inline-block;
+            padding: 16px 40px;
+            background: linear-gradient(135deg, #5B9FFF 0%, #D946EF 100%);
+            color: #FFFFFF !important;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 18px;
+            box-shadow: 0 10px 40px -10px rgba(91, 159, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .button:hover {
+            box-shadow: 0 10px 40px -10px rgba(91, 159, 255, 0.6);
+        }
+        
+        .divider {
+            height: 1px;
+            background-color: rgba(91, 159, 255, 0.2);
+            margin: 30px 0;
+        }
+        
+        .info-box {
+            background-color: rgba(91, 159, 255, 0.1);
+            border: 1px solid rgba(91, 159, 255, 0.2);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        
+        .info-box p {
+            margin: 0;
+            color: #5B9FFF;
+            font-size: 14px;
+        }
+        
+        .footer {
+            background-color: #0A0A0B;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .footer p {
+            color: #7C7C87;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+        
+        .footer a {
+            color: #5B9FFF;
+            text-decoration: none;
+        }
+        
+        .social-links {
+            margin: 20px 0;
+        }
+        
+        .social-links a {
+            display: inline-block;
+            margin: 0 10px;
+            color: #5B9FFF;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        /* Mobile responsive */
+        @media only screen and (max-width: 600px) {
+            .content {
+                padding: 30px 20px !important;
+            }
+            
+            h1 {
+                font-size: 24px !important;
+            }
+            
+            .button {
+                padding: 14px 30px !important;
+                font-size: 16px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background-color: #0A0A0B; padding: 20px 0;">
+        <tr>
+            <td align="center">
+                <table role="presentation" cellpadding="0" cellspacing="0" class="container">
+                    <!-- Header -->
+                    <tr>
+                        <td class="header">
+                            <h2 class="logo">3rdeyeadvisors</h2>
+                            <p style="color: #FFFFFF; margin: 10px 0 0 0; font-size: 16px;">Financial Consciousness Awakened</p>
+                        </td>
+                    </tr>
+                    
+                    <!-- Main Content -->
+                    <tr>
+                        <td class="content">
+                            <h1>Welcome to Your Financial Awakening 🌟</h1>
+                            
+                            <p>
+                                You've taken the first step toward <span class="highlight">true financial sovereignty</span>. 
+                                We're excited to guide you through the DeFi landscape with consciousness and clarity.
+                            </p>
+                            
+                            <p>
+                                Before we begin your journey, please confirm your email address by clicking the button below:
+                            </p>
+                            
+                            <div class="button-container">
+                                <a href="{{ .ConfirmationURL }}" class="button">Confirm Your Email</a>
+                            </div>
+                            
+                            <div class="info-box">
+                                <p><strong>⏰ This link expires in 24 hours</strong><br>
+                                For your security, please confirm within 24 hours of receiving this email.</p>
+                            </div>
+                            
+                            <div class="divider"></div>
+                            
+                            <p style="font-size: 18px; color: #F5F5F5; font-weight: 600;">What Happens Next?</p>
+                            
+                            <p>Once confirmed, you'll gain access to:</p>
+                            <ul style="color: #C4C4C8; line-height: 1.8;">
+                                <li>🎓 <strong>Free DeFi Foundations Course</strong> - Start learning immediately</li>
+                                <li>📊 <strong>Real-Time DeFi Analytics</strong> - Market insights and data</li>
+                                <li>📚 <strong>Educational Resources</strong> - Guides, templates, and tools</li>
+                                <li>💬 <strong>Community Access</strong> - Connect with conscious investors</li>
+                                <li>📧 <strong>Weekly Insights</strong> - Exclusive market analysis</li>
+                            </ul>
+                            
+                            <div class="divider"></div>
+                            
+                            <p style="font-size: 14px; color: #7C7C87;">
+                                If the button doesn't work, copy and paste this link into your browser:<br>
+                                <a href="{{ .ConfirmationURL }}" style="color: #5B9FFF; word-break: break-all;">{{ .ConfirmationURL }}</a>
+                            </p>
+                        </td>
+                    </tr>
+                    
+                    <!-- Footer -->
+                    <tr>
+                        <td class="footer">
+                            <p style="font-size: 16px; font-weight: 600; margin-bottom: 15px;">Stay Connected</p>
+                            
+                            <div class="social-links">
+                                <a href="https://twitter.com/3rdeyeadvisors">Twitter</a> • 
+                                <a href="https://the3rdeyeadvisors.com/blog">Blog</a> • 
+                                <a href="https://the3rdeyeadvisors.com/contact">Contact</a>
+                            </div>
+                            
+                            <div class="divider" style="max-width: 400px; margin: 20px auto;"></div>
+                            
+                            <p>
+                                <strong>3rdeyeadvisors</strong><br>
+                                DeFi Education & Financial Consciousness
+                            </p>
+                            
+                            <p style="font-size: 12px; color: #5C5C66; margin-top: 20px;">
+                                You're receiving this email because you created an account at the3rdeyeadvisors.com<br>
+                                If you didn't sign up, you can safely ignore this email.
+                            </p>
+                            
+                            <p style="font-size: 12px; color: #5C5C66;">
+                                © 2025 3rdeyeadvisors. All rights reserved.
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

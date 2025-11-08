@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Magic Link - 3rdeyeadvisors</title>
+    <style>
+        /* Reset styles */
+        body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+        table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+        img { -ms-interpolation-mode: bicubic; border: 0; outline: none; text-decoration: none; }
+        
+        /* Global styles */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #0A0A0B;
+            color: #F5F5F5;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #1A1F2E;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #36C65B 0%, #5B9FFF 100%);
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: #FFFFFF;
+            text-shadow: 0 0 20px rgba(54, 198, 91, 0.4);
+            margin: 0;
+        }
+        
+        .content {
+            padding: 40px 30px;
+        }
+        
+        h1 {
+            color: #36C65B;
+            font-size: 28px;
+            margin: 0 0 20px 0;
+            font-weight: 700;
+        }
+        
+        p {
+            color: #C4C4C8;
+            font-size: 16px;
+            line-height: 1.6;
+            margin: 0 0 20px 0;
+        }
+        
+        .highlight {
+            color: #F5F5F5;
+            font-weight: 600;
+        }
+        
+        .button-container {
+            text-align: center;
+            margin: 35px 0;
+        }
+        
+        .button {
+            display: inline-block;
+            padding: 16px 40px;
+            background: linear-gradient(135deg, #36C65B 0%, #5B9FFF 100%);
+            color: #FFFFFF !important;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 18px;
+            box-shadow: 0 10px 40px -10px rgba(54, 198, 91, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .button:hover {
+            box-shadow: 0 10px 40px -10px rgba(54, 198, 91, 0.6);
+        }
+        
+        .divider {
+            height: 1px;
+            background-color: rgba(54, 198, 91, 0.2);
+            margin: 30px 0;
+        }
+        
+        .info-box {
+            background-color: rgba(54, 198, 91, 0.1);
+            border: 1px solid rgba(54, 198, 91, 0.2);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        
+        .info-box p {
+            margin: 0;
+            color: #36C65B;
+            font-size: 14px;
+        }
+        
+        .footer {
+            background-color: #0A0A0B;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .footer p {
+            color: #7C7C87;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+        
+        .footer a {
+            color: #36C65B;
+            text-decoration: none;
+        }
+        
+        /* Mobile responsive */
+        @media only screen and (max-width: 600px) {
+            .content {
+                padding: 30px 20px !important;
+            }
+            
+            h1 {
+                font-size: 24px !important;
+            }
+            
+            .button {
+                padding: 14px 30px !important;
+                font-size: 16px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background-color: #0A0A0B; padding: 20px 0;">
+        <tr>
+            <td align="center">
+                <table role="presentation" cellpadding="0" cellspacing="0" class="container">
+                    <!-- Header -->
+                    <tr>
+                        <td class="header">
+                            <h2 class="logo">3rdeyeadvisors</h2>
+                            <p style="color: #FFFFFF; margin: 10px 0 0 0; font-size: 16px;">Passwordless Sign In</p>
+                        </td>
+                    </tr>
+                    
+                    <!-- Main Content -->
+                    <tr>
+                        <td class="content">
+                            <h1>Your Magic Link is Here ✨</h1>
+                            
+                            <p>
+                                Click the button below to securely sign in to your 3rdeyeadvisors account. 
+                                No password needed!
+                            </p>
+                            
+                            <div class="button-container">
+                                <a href="{{ .ConfirmationURL }}" class="button">Sign In Now</a>
+                            </div>
+                            
+                            <div class="info-box">
+                                <p><strong>⏰ This link expires in 1 hour</strong><br>
+                                For your security, this magic link will expire in 60 minutes.</p>
+                            </div>
+                            
+                            <div class="divider"></div>
+                            
+                            <p style="font-size: 18px; color: #F5F5F5; font-weight: 600;">How Magic Links Work</p>
+                            
+                            <ul style="color: #C4C4C8; line-height: 1.8;">
+                                <li>🔒 <strong>More Secure</strong> - No password to remember or steal</li>
+                                <li>⚡ <strong>Faster</strong> - One click to sign in</li>
+                                <li>🎯 <strong>Unique</strong> - Each link works only once</li>
+                                <li>⏱️ <strong>Time-Limited</strong> - Expires automatically for security</li>
+                            </ul>
+                            
+                            <div class="divider"></div>
+                            
+                            <p>
+                                <span class="highlight">Didn't request this?</span> You can safely ignore this email. 
+                                The link will expire automatically and won't grant access to your account.
+                            </p>
+                            
+                            <p>
+                                If you're concerned about account security, contact us at 
+                                <a href="mailto:info@the3rdeyeadvisors.com" style="color: #36C65B;">info@the3rdeyeadvisors.com</a>
+                            </p>
+                            
+                            <div class="divider"></div>
+                            
+                            <p style="font-size: 14px; color: #7C7C87;">
+                                If the button doesn't work, copy and paste this link into your browser:<br>
+                                <a href="{{ .ConfirmationURL }}" style="color: #36C65B; word-break: break-all;">{{ .ConfirmationURL }}</a>
+                            </p>
+                        </td>
+                    </tr>
+                    
+                    <!-- Footer -->
+                    <tr>
+                        <td class="footer">
+                            <p style="font-size: 16px; font-weight: 600; margin-bottom: 15px;">Why Passwordless?</p>
+                            
+                            <p style="font-size: 14px; max-width: 450px; margin: 0 auto 20px auto;">
+                                Magic links eliminate password-related security risks while providing 
+                                a faster, more convenient sign-in experience. Your security is our priority.
+                            </p>
+                            
+                            <div class="divider" style="max-width: 400px; margin: 20px auto;"></div>
+                            
+                            <p>
+                                <strong>3rdeyeadvisors</strong><br>
+                                DeFi Education & Financial Consciousness
+                            </p>
+                            
+                            <p style="font-size: 12px; color: #5C5C66; margin-top: 20px;">
+                                This is an automated security email from the3rdeyeadvisors.com<br>
+                                You're receiving this because you requested a sign-in link.
+                            </p>
+                            
+                            <p style="font-size: 12px; color: #5C5C66;">
+                                © 2025 3rdeyeadvisors. All rights reserved.
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
