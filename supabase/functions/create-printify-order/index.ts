@@ -36,19 +36,13 @@ serve(async (req) => {
   try {
     const { line_items, shipping_method, send_shipping_notification, address_to }: OrderRequest = await req.json();
 
-    console.log('=== Printify Order Creation Request ===');
-    console.log('Line items:', JSON.stringify(line_items, null, 2));
-    console.log('Shipping method:', shipping_method);
-    console.log('Address:', JSON.stringify(address_to, null, 2));
-
     const supabaseClient = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
       { auth: { persistSession: false } }
     );
 
-    // Get shop ID (you might want to store this in environment variables)
-    console.log('Fetching Printify shops...');
+    // Get shop ID
     const printifyResponse = await fetch("https://api.printify.com/v1/shops.json", {
       headers: {
         "Authorization": `Bearer ${Deno.env.get("PRINTIFY_API_KEY")}`,
@@ -58,21 +52,16 @@ serve(async (req) => {
 
     if (!printifyResponse.ok) {
       const errorText = await printifyResponse.text();
-      console.error('Failed to fetch Printify shops:', errorText);
       throw new Error(`Printify API error: ${printifyResponse.statusText}`);
     }
 
     const shops = await printifyResponse.json();
-    console.log('Printify shops response:', JSON.stringify(shops, null, 2));
     
-    // Printify returns shops as a direct array, not wrapped in data property
     if (!shops || !Array.isArray(shops) || shops.length === 0) {
-      console.error('No Printify shops found. Full response:', JSON.stringify(shops));
       throw new Error('No Printify shops configured. Please connect a Printify shop first.');
     }
     
     const shopId = shops[0].id;
-    console.log('Using shop ID:', shopId);
 
     // Fetch product details for each line item to get print_provider_id
     const enrichedLineItems = await Promise.all(
@@ -91,16 +80,14 @@ serve(async (req) => {
           }
         );
 
-        // If product not found (404 or 8104 error), look up current product from database
+        // If product not found, look up current product from database
         if (!productResponse.ok) {
           const errorText = await productResponse.text();
-          console.error(`⚠️ Product ${actualProductId} not found in Printify:`, errorText);
           
           // Check if it's a "product doesn't belong to shop" error
           try {
             const errorJson = JSON.parse(errorText);
             if (errorJson.code === 8104 || productResponse.status === 404) {
-              console.log(`🔄 Looking up current product from database...`);
               
               const { data: currentProducts } = await supabaseClient
                 .from('printify_products')
@@ -111,7 +98,6 @@ serve(async (req) => {
               
               if (currentProducts && currentProducts.length > 0) {
                 actualProductId = currentProducts[0].printify_id;
-                console.log(`✅ Using current product: ${actualProductId} (${currentProducts[0].title})`);
                 
                 // Try fetching with the new product ID
                 productResponse = await fetch(
@@ -141,11 +127,9 @@ serve(async (req) => {
           }
         } else {
           productFound = true;
-          console.log(`✅ Found product ${actualProductId} in Printify`);
         }
 
         const product = await productResponse.json();
-        console.log(`Product ${actualProductId} print_provider_id:`, product.print_provider_id);
 
         return {
           product_id: actualProductId,
@@ -156,7 +140,7 @@ serve(async (req) => {
       })
     );
 
-    console.log('Enriched line items:', JSON.stringify(enrichedLineItems, null, 2));
+    console.log('Creating Printify order...');
 
     // Create order in Printify
     const orderData = {
@@ -166,8 +150,6 @@ serve(async (req) => {
       send_shipping_notification,
       address_to,
     };
-
-    console.log('Creating Printify order with data:', JSON.stringify(orderData, null, 2));
 
     const createOrderResponse = await fetch(`https://api.printify.com/v1/shops/${shopId}/orders.json`, {
       method: "POST",
@@ -185,13 +167,9 @@ serve(async (req) => {
     }
 
     const printifyOrder = await createOrderResponse.json();
-    console.log("✅ Printify order created successfully!");
-    console.log("Order ID:", printifyOrder.id);
-    console.log("Status:", printifyOrder.status);
-    console.log("Total price:", printifyOrder.total_price);
+    console.log("✅ Order created:", printifyOrder.id);
 
-    // Store order in our database
-    console.log('Storing order in database...');
+    // Store order in database
     const { data: orderRecord, error: orderError } = await supabaseClient
       .from("printify_orders")
       .insert({
@@ -210,10 +188,7 @@ serve(async (req) => {
       .single();
 
     if (orderError) {
-      console.error("⚠️ Database error:", orderError);
-      // Don't throw - Printify order was created successfully
-    } else {
-      console.log("✅ Order stored in database:", orderRecord?.id);
+      console.error("Database error:", orderError.message);
     }
 
     return new Response(
