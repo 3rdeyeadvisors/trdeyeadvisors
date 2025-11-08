@@ -126,6 +126,8 @@ serve(async (req) => {
         shipping_method: 1, // Standard shipping
         send_shipping_notification: true,
         customer_email: session.customer_details?.email || session.customer_email || "",
+        customer_name: shipping.name || "Customer",
+        amount_paid: session.amount_total || 0,
         stripe_session_id: session.id,
         address_to: {
           first_name: shipping.name?.split(" ")[0] || "Customer",

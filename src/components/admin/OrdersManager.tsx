@@ -105,22 +105,24 @@ export function OrdersManager() {
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead>Customer</TableHead>
                 <TableHead>Order ID</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Total</TableHead>
+                <TableHead>Amount</TableHead>
                 <TableHead>Date</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredOrders.map((order) => (
                 <TableRow key={order.id}>
-                  <TableCell className="font-mono">{order.external_id}</TableCell>
+                  <TableCell>{order.customer_name || 'N/A'}</TableCell>
+                  <TableCell className="font-mono text-xs">{order.external_id}</TableCell>
                   <TableCell>
                     <Badge variant={order.status === "fulfilled" ? "default" : "secondary"}>
                       {order.status}
                     </Badge>
                   </TableCell>
-                  <TableCell>${(order.total_price / 100).toFixed(2)}</TableCell>
+                  <TableCell className="font-semibold">${((order.amount_paid || order.total_price) / 100).toFixed(2)}</TableCell>
                   <TableCell>{new Date(order.created_at).toLocaleDateString()}</TableCell>
                 </TableRow>
               ))}

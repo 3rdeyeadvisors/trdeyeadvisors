@@ -15,6 +15,8 @@ interface OrderRequest {
   shipping_method: number;
   send_shipping_notification: boolean;
   customer_email: string;
+  customer_name?: string;
+  amount_paid?: number;
   stripe_session_id: string;
   address_to: {
     first_name: string;
@@ -36,7 +38,7 @@ serve(async (req) => {
   }
 
   try {
-    const { line_items, shipping_method, send_shipping_notification, address_to, customer_email, stripe_session_id }: OrderRequest = await req.json();
+    const { line_items, shipping_method, send_shipping_notification, address_to, customer_email, customer_name, amount_paid, stripe_session_id }: OrderRequest = await req.json();
 
     const supabaseClient = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
@@ -197,6 +199,9 @@ serve(async (req) => {
         printify_order_id: printifyOrder.id,
         external_id: orderData.external_id,
         status: printifyOrder.status || 'pending',
+        customer_name: customer_name || address_to.first_name + ' ' + address_to.last_name,
+        customer_email: customer_email,
+        amount_paid: amount_paid || 0,
         shipping_method: shipping_method,
         address_to: address_to,
         line_items: line_items,
