@@ -649,7 +649,10 @@ export type Database = {
       printify_orders: {
         Row: {
           address_to: Json
+          amount_paid: number | null
           created_at: string
+          customer_email: string | null
+          customer_name: string | null
           delivered_at: string | null
           external_id: string
           id: string
@@ -668,7 +671,10 @@ export type Database = {
         }
         Insert: {
           address_to: Json
+          amount_paid?: number | null
           created_at?: string
+          customer_email?: string | null
+          customer_name?: string | null
           delivered_at?: string | null
           external_id: string
           id?: string
@@ -687,7 +693,10 @@ export type Database = {
         }
         Update: {
           address_to?: Json
+          amount_paid?: number | null
           created_at?: string
+          customer_email?: string | null
+          customer_name?: string | null
           delivered_at?: string | null
           external_id?: string
           id?: string
