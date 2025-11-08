@@ -135,7 +135,8 @@ serve(async (req) => {
           product_id: actualProductId,
           variant_id: item.variant_id,
           quantity: item.quantity,
-          print_provider_id: product.print_provider_id
+          print_provider_id: product.print_provider_id,
+          blueprint_id: product.blueprint_id
         };
       })
     );
