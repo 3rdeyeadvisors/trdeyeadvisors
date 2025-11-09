@@ -78,9 +78,32 @@ Imagine you want to:
 
 DeFi makes all of this possible **without** traditional financial institutions. It's like having a bank that's run by code instead of people.
 
-## Key Takeaway
+[COMPONENT:KEY_TAKEAWAY]
+{
+  "title": "Key Takeaway",
+  "content": "DeFi isn't trying to replace all of traditional finance overnight. It's creating an alternative system that's more accessible, transparent, and efficient for many financial services."
+}
+[/COMPONENT]
 
-DeFi isn't trying to replace all of traditional finance overnight. It's creating an **alternative system** that's more accessible, transparent, and efficient for many financial services.
+[COMPONENT:COMPARISON_TABLE]
+{
+  "title": "Quick Comparison: Banking vs DeFi",
+  "items": [
+    {
+      "traditional": "Centralized control by single institution",
+      "defi": "Decentralized network with no single authority"
+    },
+    {
+      "traditional": "Limited by business hours and locations",
+      "defi": "Available 24/7 globally"
+    },
+    {
+      "traditional": "Trust required in the bank",
+      "defi": "Smart contracts handle transactions automatically"
+    }
+  ]
+}
+[/COMPONENT]
 
 *Next, we'll explore WHY DeFi exists and what problems it solves.*`
         },
@@ -134,6 +157,12 @@ DeFi wasn't created just because it could be built. It exists to solve **real pr
 - No credit checks or minimum balances
 - Same opportunities regardless of location
 - Protection against currency devaluation
+
+[COMPONENT:DID_YOU_KNOW]
+{
+  "fact": "Over 2 billion people worldwide lack access to traditional banking services, but many have smartphones and internet access - making DeFi their gateway to financial services."
+}
+[/COMPONENT]
 
 ## Problem 3: Lack of Transparency 🤔
 
@@ -210,17 +239,29 @@ Think of smart contracts as **"if-then" statements** that execute automatically:
 
 ### Example: Traditional Loan vs DeFi Loan
 
-**Traditional Loan:**
-1. Apply at bank → Wait for approval → Sign paperwork → Get money
-2. Bank employee reviews your application
-3. Multiple fees and intermediaries
-4. Takes days or weeks
+[COMPONENT:STEP_BLOCK]
+{
+  "title": "Traditional Loan Process",
+  "steps": [
+    "Apply at bank and submit documentation",
+    "Wait for employee to review your application",
+    "Sign multiple forms and pay various fees",
+    "Wait days or weeks for approval and disbursement"
+  ]
+}
+[/COMPONENT]
 
-**DeFi Loan:**
-1. Deposit collateral → Receive loan instantly
-2. Smart contract automatically checks collateral value
-3. No paperwork, credit checks, or waiting
-4. Takes minutes
+[COMPONENT:STEP_BLOCK]
+{
+  "title": "DeFi Loan Process",
+  "steps": [
+    "Deposit collateral into smart contract",
+    "Smart contract automatically verifies collateral value",
+    "Receive loan instantly to your wallet",
+    "Takes only minutes with no paperwork"
+  ]
+}
+[/COMPONENT]
 
 ## Key Blockchain Networks for DeFi
 
@@ -234,12 +275,12 @@ Think of smart contracts as **"if-then" statements** that execute automatically:
 - **Binance Smart Chain**: Lower fees, different trade-offs
 - **Solana**: Very fast, growing ecosystem
 
-## What You Need to Remember
-
-1. **Blockchain = Shared, unchangeable database**
-2. **Smart contracts = Automated agreements**
-3. **No middlemen = Lower costs and faster transactions**
-4. **Public but pseudonymous = Transparent but private**
+[COMPONENT:KEY_TAKEAWAY]
+{
+  "title": "What You Need to Remember",
+  "content": "Blockchain = Shared, unchangeable database\nSmart contracts = Automated agreements\nNo middlemen = Lower costs and faster transactions\nPublic but pseudonymous = Transparent but private"
+}
+[/COMPONENT]
 
 ## Common Misconceptions
 
@@ -380,16 +421,12 @@ Think of a DEX like a **vending machine for crypto**:
 - **Impermanent Loss**: If prices change a lot, you might have been better off just holding
 - **Smart Contract Risk**: Protocol bugs could cause losses
 
-## Putting It All Together
-
-Think of DeFi like a **financial ecosystem**:
-- **Stablecoins** = The currency everyone uses
-- **DEXs** = The markets where everything trades
-- **Lending Protocols** = The banks for saving and borrowing
-- **Yield Farms** = The investment advisors
-- **Liquidity Pools** = The market makers keeping everything liquid
-
-Each player serves a purpose, and they all work together to create a complete financial system.
+[COMPONENT:KEY_TAKEAWAY]
+{
+  "title": "Putting It All Together",
+  "content": "Think of DeFi like a financial ecosystem where:\n• Stablecoins = The currency everyone uses\n• DEXs = The markets where everything trades\n• Lending Protocols = The banks for saving and borrowing\n• Yield Farms = The investment advisors\n• Liquidity Pools = The market makers keeping everything liquid\n\nEach player serves a purpose, and they all work together to create a complete financial system."
+}
+[/COMPONENT]
 
 *Next, we'll address the risks and myths around DeFi so you can use it safely.*`
         }
@@ -409,6 +446,14 @@ Before diving into DeFi, it's crucial to understand both the **real risks** and 
 ### 1. Smart Contract Risk
 **What it is**: Bugs in code can lead to loss of funds
 **Example**: Protocol gets hacked, funds are drained
+
+[COMPONENT:ALERT]
+{
+  "type": "warning",
+  "message": "Smart contract bugs can lead to loss of funds. Always use established protocols with security audits and never invest more than you can afford to lose."
+}
+[/COMPONENT]
+
 **Mitigation**: 
 - Use established protocols with security audits
 - Don't put more than you can afford to lose
@@ -469,10 +514,18 @@ Before diving into DeFi, it's crucial to understand both the **real risks** and 
 
 ## Risk Management Best Practices 🛡️
 
-### Start Small and Learn
-1. **Begin with $10-50** to learn the interfaces
-2. **Use testnets** when available (practice with fake money)
-3. **Gradually increase** as you gain confidence
+[COMPONENT:STEP_BLOCK]
+{
+  "title": "Safe DeFi Getting Started Process",
+  "steps": [
+    "Begin with $10-50 to learn the interfaces",
+    "Use testnets when available (practice with fake money)",
+    "Gradually increase amounts as you gain confidence",
+    "Research protocols before using them",
+    "Enable all security features on your wallet"
+  ]
+}
+[/COMPONENT]
 
 ### Security Fundamentals
 1. **Use hardware wallets** for large amounts
@@ -665,22 +718,28 @@ Your wallet is your gateway to DeFi - it's like choosing the right bank, but mor
 - **Consider advanced features** like multisig
 - **Separate hot/cold** storage strategies
 
-## Quick Decision Guide 🤔
-
-**"I'm brand new and just want to try DeFi"**
-→ **MetaMask browser extension + mobile app**
-
-**"I prefer mobile and want something simple"**  
-→ **Trust Wallet**
-
-**"I have $5,000+ in crypto"**
-→ **Ledger Nano X + MetaMask**
-
-**"I'm already a Coinbase user"**
-→ **Coinbase Wallet** (then consider MetaMask later)
-
-**"I value open-source security above all"**
-→ **Trezor + MetaMask**
+[COMPONENT:FLIP_CARDS]
+{
+  "cards": [
+    {
+      "front": "I'm brand new to DeFi",
+      "back": "MetaMask browser extension + mobile app - most compatible and beginner-friendly"
+    },
+    {
+      "front": "I prefer mobile apps",
+      "back": "Trust Wallet - mobile-native with clean interface"
+    },
+    {
+      "front": "I have $5,000+ in crypto",
+      "back": "Ledger Nano X + MetaMask - maximum security for larger amounts"
+    },
+    {
+      "front": "I'm a Coinbase user",
+      "back": "Coinbase Wallet - familiar experience with exchange integration"
+    }
+  ]
+}
+[/COMPONENT]
 
 Remember: You can always **start with one wallet and add others** as your needs grow. The most important thing is to **start safely** and **learn as you go**.
 
@@ -716,25 +775,23 @@ Your seed phrase (also called recovery phrase) is:
 ### Example Seed Phrase:
 \`apple bicycle cat dog elephant forest garden house ice jungle king lemon\`
 
-## The Golden Rules (Never Break These) ⚠️
+[COMPONENT:ALERT]
+{
+  "type": "warning",
+  "message": "CRITICAL: Your seed phrase is the master key to all your crypto. Anyone with access to it can steal everything. Never share it, never type it online, never store it digitally."
+}
+[/COMPONENT]
 
-### Rule #1: NEVER Share Your Seed Phrase
-❌ **NEVER** type it into any website
-❌ **NEVER** send it via email, text, or chat
-❌ **NEVER** take a screenshot or photo
-❌ **NEVER** store it in cloud storage
-❌ **NEVER** tell anyone, even family
-
-### Rule #2: Write It Down Physically
-✅ **Write on paper** with pen/pencil
-✅ **Use metal backup** for long-term storage
-✅ **Store in multiple safe locations**
-✅ **Consider a safety deposit box** for large amounts
-
-### Rule #3: Test Your Backup
-✅ **Before sending money**, test recovery
-✅ **Use a small amount** first
-✅ **Make sure you can restore** your wallet
+[COMPONENT:STEP_BLOCK]
+{
+  "title": "The 3 Golden Rules for Seed Phrases",
+  "steps": [
+    "NEVER share your seed phrase with anyone - not via email, text, website, or even family",
+    "ALWAYS write it down physically on paper or metal - never digitally or in the cloud",
+    "ALWAYS test your backup before sending real money - make sure you can restore your wallet"
+  ]
+}
+[/COMPONENT]
 
 ## Common Mistakes That Lose Money 💸
 
@@ -754,19 +811,17 @@ Your seed phrase (also called recovery phrase) is:
 ❌ Cloud storage gets hacked constantly
 ✅ Offline storage only
 
-## How to Store Your Seed Phrase Safely 🛡️
-
-### For Beginners ($100-$5,000):
-1. **Write on paper** with permanent ink
-2. **Make 2-3 copies**
-3. **Store in different locations** (home safe, family member's house)
-4. **Laminate** to protect from water damage
-
-### For Serious Amounts ($5,000+):
-1. **Metal seed phrase backup** (fire/water resistant)
-2. **Safety deposit box**
-3. **Consider splitting** between locations
-4. **Never store all in one place**
+[COMPONENT:COMPARISON_TABLE]
+{
+  "title": "Seed Phrase Storage by Amount",
+  "items": [
+    {
+      "traditional": "For Small Amounts ($100-$5,000): Paper backup, 2-3 copies in different locations, laminate for protection",
+      "defi": "For Large Amounts ($5,000+): Metal backup plates, safety deposit box, geographic distribution, never all in one place"
+    }
+  ]
+}
+[/COMPONENT]
 
 ## Setting Up Your Seed Phrase 📋
 
@@ -784,18 +839,18 @@ Your seed phrase (also called recovery phrase) is:
 4. Confirm all wallets/addresses appear
 5. Only then add real money
 
-## Red Flags: Seed Phrase Scams 🚨
+[COMPONENT:ALERT]
+{
+  "type": "warning",
+  "message": "🚨 SCAM ALERT: Legitimate services NEVER ask for seed phrases. No real support team needs your recovery phrase. Wallets sync automatically without seed phrase entry. Anyone asking is a scammer!"
+}
+[/COMPONENT]
 
-### Someone asks for your seed phrase:
-❌ "Customer support" asking for recovery phrase
-❌ "Synchronization" or "validation" requests
-❌ "Security check" requiring seed phrase
-❌ Any website asking you to enter it
-
-### Remember:
-- **Legitimate services NEVER ask for seed phrases**
-- **No real support team needs your recovery phrase**
-- **Wallets sync automatically** without seed phrase entry
+[COMPONENT:DID_YOU_KNOW]
+{
+  "fact": "The most common way people lose crypto is by falling for fake 'customer support' scams. Real support teams will never ask for your seed phrase, private keys, or ask you to 'verify' your wallet by entering sensitive information."
+}
+[/COMPONENT]
 
 ## What if I Think My Seed Phrase is Compromised? 🚨
 
@@ -895,20 +950,25 @@ DeFi scams steal **billions** every year. But they all follow predictable patter
 3. Get people to buy in
 4. Developers disappear with the money
 
-### Red Flags:
-❌ **Anonymous team** with no real names/photos
-❌ **No working product** despite big promises
-❌ **Unrealistic returns** (1000%+ APY)
-❌ **Heavy marketing** on social media
-❌ **No token utility** beyond speculation
-❌ **Locked liquidity** for very short periods
+[COMPONENT:ALERT]
+{
+  "type": "warning",
+  "message": "⚠️ Rug Pull Warning: If a project promises 1000%+ returns, has an anonymous team, and pushes heavy marketing - it's likely a scam. Always research thoroughly before investing."
+}
+[/COMPONENT]
 
-### Protection:
-✅ **Research the team** - real names, LinkedIn profiles
-✅ **Check contract** on block explorers
-✅ **Look for audits** from reputable firms
-✅ **Start small** - never invest more than you can lose
-✅ **Verify claims** independently
+[COMPONENT:STEP_BLOCK]
+{
+  "title": "How to Spot a Rug Pull",
+  "steps": [
+    "Check if the team is anonymous or uses real identities with verifiable credentials",
+    "Look for a working product - not just promises and marketing",
+    "Be skeptical of unrealistic returns (1000%+ APY is a red flag)",
+    "Verify liquidity is locked for a reasonable period (6+ months)",
+    "Check for third-party security audits from reputable firms"
+  ]
+}
+[/COMPONENT]
 
 ## Scam Category 2: Phishing Websites 🎣
 
@@ -931,11 +991,24 @@ DeFi scams steal **billions** every year. But they all follow predictable patter
 ✅ **Read transaction details** before signing
 ✅ **Never enter seed phrase** on any website
 
-### URL Verification Checklist:
-- Is it exactly the right spelling?
-- Does it use HTTPS?
-- Does the SSL certificate match?
-- Did you get here from a trusted source?
+[COMPONENT:STEP_BLOCK]
+{
+  "title": "URL Verification Checklist",
+  "steps": [
+    "Verify the spelling is EXACTLY correct (watch for similar-looking characters)",
+    "Check that it uses HTTPS (secure connection)",
+    "Verify the SSL certificate matches the legitimate site",
+    "Confirm you arrived from a trusted source (bookmark or official link)",
+    "Look for any unusual characters or extra words in the domain"
+  ]
+}
+[/COMPONENT]
+
+[COMPONENT:DID_YOU_KNOW]
+{
+  "fact": "Phishing scammers often register domains that look almost identical to legitimate sites, like 'uniswap' vs 'umiswap' or 'metamask' vs 'metarnask'. Always bookmark the real sites and use only your bookmarks."
+}
+[/COMPONENT]
 
 ## Scam Category 3: Social Media & Discord Scams 💬
 
