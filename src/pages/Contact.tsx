@@ -70,8 +70,8 @@ const Contact = () => {
         keywords="contact 3rdeyeadvisors, DeFi education support, financial consciousness contact, crypto education inquiry"
         url="https://www.the3rdeyeadvisors.com/contact"
       />
-      <div className="min-h-screen py-20">
-      <div className="container mx-auto px-4 mobile-typography-center">
+      <div className="section-spacing">
+      <div className="container mx-auto mobile-typography-center">
         {/* Header */}
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-consciousness font-bold text-foreground mb-4">

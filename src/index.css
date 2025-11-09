@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import layout consistency system */
+@import './styles/layout-consistency.css';
+
 /* 3rdeyeadvisors Design System - Cosmic DeFi Consciousness */
 
 @layer base {
@@ -417,6 +420,37 @@ svg[class*="lucide-star"] {
   main > *:last-child {
     margin-bottom: 0 !important;
     padding-bottom: 1rem !important;
+  }
+
+  /* Mobile Footer Adjustments */
+  footer {
+    margin-top: 2rem !important;
+  }
+
+  footer .container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  /* Ensure footer columns stack properly on mobile */
+  footer .grid {
+    gap: 2rem !important;
+  }
+
+  footer h3 {
+    margin-bottom: 1rem !important;
+  }
+
+  footer ul {
+    padding-left: 0 !important;
+  }
+
+  footer a,
+  footer button {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   /* Typography Centering - All Screen Sizes */

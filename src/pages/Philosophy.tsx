@@ -54,8 +54,8 @@ const Philosophy = () => {
           }
         ]}
       />
-      <div className="min-h-screen py-20">
-      <div className="container mx-auto px-4 max-w-4xl mobile-typography-center">
+      <div className="section-spacing">
+      <div className="container mx-auto max-w-4xl mobile-typography-center">
         {/* First Strip */}
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-6xl font-consciousness font-bold text-foreground mb-8 animate-awareness-float">

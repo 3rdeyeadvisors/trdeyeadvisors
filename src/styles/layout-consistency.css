@@ -1,0 +1,408 @@
+/**
+ * Global Layout Consistency System
+ * Ensures uniform spacing, alignment, and responsiveness across all pages
+ */
+
+/* ============================================
+   CONTAINER & SPACING CONSISTENCY
+   ============================================ */
+
+/* Standard container padding across all breakpoints */
+.container {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* Consistent vertical spacing rhythm */
+.section-spacing {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+@media (min-width: 768px) {
+  .section-spacing {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-spacing {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+}
+
+/* ============================================
+   HEADER & NAVIGATION CONSISTENCY
+   ============================================ */
+
+/* Fixed header with consistent spacing */
+header,
+nav {
+  height: 4rem;
+}
+
+/* Main content padding to account for fixed header */
+main {
+  padding-top: 4rem;
+  min-height: calc(100vh - 4rem);
+}
+
+/* Navigation items touch targets */
+nav a,
+nav button {
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+}
+
+/* ============================================
+   TYPOGRAPHY CONSISTENCY
+   ============================================ */
+
+/* Consistent heading hierarchy */
+h1 {
+  font-size: 2rem;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+  line-height: 1.3;
+  margin-bottom: 1.25rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+  line-height: 1.4;
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+  h1 {
+    font-size: 2.5rem;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  h1 {
+    font-size: 3rem;
+  }
+
+  h2 {
+    font-size: 2.25rem;
+  }
+
+  h3 {
+    font-size: 1.75rem;
+  }
+}
+
+/* Consistent paragraph spacing */
+p {
+  margin-bottom: 1rem;
+  line-height: 1.7;
+}
+
+/* ============================================
+   CARD & COMPONENT CONSISTENCY
+   ============================================ */
+
+/* Standard card spacing */
+.card,
+[class*="Card"] {
+  padding: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .card,
+  [class*="Card"] {
+    padding: 2rem;
+  }
+}
+
+/* Grid consistency */
+.grid-standard {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .grid-standard {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-standard {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+  }
+}
+
+/* ============================================
+   BUTTON & INTERACTIVE ELEMENTS
+   ============================================ */
+
+/* Consistent touch targets */
+button,
+a[role="button"],
+[role="button"] {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Consistent button spacing */
+.button-group {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* ============================================
+   FORM CONSISTENCY
+   ============================================ */
+
+/* Form field spacing */
+form > * + * {
+  margin-top: 1.5rem;
+}
+
+/* Input consistency */
+input,
+textarea,
+select {
+  min-height: 44px;
+  padding: 0.75rem 1rem;
+}
+
+textarea {
+  min-height: 120px;
+}
+
+/* ============================================
+   RESPONSIVE IMAGE & MEDIA
+   ============================================ */
+
+/* Consistent image handling */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Media container aspect ratios */
+.media-16-9 {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+
+.media-4-3 {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+.media-square {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+}
+
+/* ============================================
+   ALIGNMENT UTILITIES
+   ============================================ */
+
+/* Center content utility */
+.center-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* Vertical centering */
+.vertical-center {
+  display: flex;
+  align-items: center;
+  min-height: 100%;
+}
+
+/* Horizontal centering */
+.horizontal-center {
+  display: flex;
+  justify-content: center;
+}
+
+/* ============================================
+   FOOTER CONSISTENCY
+   ============================================ */
+
+footer {
+  margin-top: 3rem;
+}
+
+@media (min-width: 768px) {
+  footer {
+    margin-top: 5rem;
+  }
+}
+
+footer .container {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+  footer .container {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+}
+
+/* Footer grid consistency */
+footer .grid {
+  gap: 2rem;
+}
+
+@media (min-width: 640px) {
+  footer .grid {
+    gap: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  footer .grid {
+    gap: 3rem;
+  }
+}
+
+/* ============================================
+   MOBILE OPTIMIZATIONS
+   ============================================ */
+
+@media (max-width: 767px) {
+  /* Reduce spacing on mobile */
+  .section-spacing {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  /* Stack elements properly */
+  .mobile-stack > * {
+    width: 100%;
+  }
+
+  /* Center mobile content */
+  .mobile-center {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Mobile-friendly padding */
+  .mobile-padding {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* Touch-friendly spacing */
+  .mobile-touch-spacing > * + * {
+    margin-top: 0.75rem;
+  }
+}
+
+/* ============================================
+   TABLET OPTIMIZATIONS
+   ============================================ */
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* Tablet-specific grid */
+  .tablet-grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Tablet spacing adjustments */
+  .tablet-spacing {
+    padding: 1.5rem;
+  }
+}
+
+/* ============================================
+   SAFE AREA HANDLING
+   ============================================ */
+
+/* iOS safe area insets */
+@supports (padding: max(0px)) {
+  .safe-area-inset-top {
+    padding-top: max(1rem, env(safe-area-inset-top));
+  }
+
+  .safe-area-inset-bottom {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+
+  .safe-area-inset-left {
+    padding-left: max(1rem, env(safe-area-inset-left));
+  }
+
+  .safe-area-inset-right {
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================ */
+
+/* Focus visible styles */
+*:focus-visible {
+  outline: 2px solid hsl(var(--primary));
+  outline-offset: 2px;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  * {
+    border-width: 2px;
+  }
+}
