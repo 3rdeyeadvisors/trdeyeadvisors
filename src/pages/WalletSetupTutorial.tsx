@@ -24,13 +24,16 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { CommunityHub } from "@/components/community/CommunityHub";
 import SEO from "@/components/SEO";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 const WalletSetupTutorial = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [showSeedPhrase, setShowSeedPhrase] = useState(false);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const { toast } = useToast();
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const totalSteps = 6;
   const progress = (currentStep / totalSteps) * 100;
@@ -215,6 +218,14 @@ const WalletSetupTutorial = () => {
   const currentStepData = steps.find(step => step.id === currentStep);
 
   const handleNext = () => {
+    if (!user) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in to progress through the tutorial",
+        variant: "destructive"
+      });
+      return;
+    }
     if (currentStep < totalSteps) {
       setCompletedSteps(prev => [...prev, currentStep]);
       setCurrentStep(currentStep + 1);
@@ -240,12 +251,28 @@ const WalletSetupTutorial = () => {
   };
 
   const handlePrevious = () => {
+    if (!user) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in to navigate the tutorial",
+        variant: "destructive"
+      });
+      return;
+    }
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
     }
   };
 
   const handleStepComplete = () => {
+    if (!user) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in to track your progress",
+        variant: "destructive"
+      });
+      return;
+    }
     setCompletedSteps(prev => [...prev, currentStep]);
     toast({
       title: "Step completed!",
@@ -308,6 +335,19 @@ const WalletSetupTutorial = () => {
       />
       <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
       <div className="container mx-auto px-4 py-8 mobile-typography-center">
+        {/* Authentication Notice */}
+        {!user && (
+          <Alert className="mb-6 border-primary/50 bg-primary/5">
+            <Lock className="h-4 w-4" />
+            <AlertDescription className="flex items-center justify-between gap-4">
+              <span>Sign in to track your progress and interact with tutorial steps</span>
+              <Button size="sm" onClick={() => navigate('/auth')} className="shrink-0">
+                Sign In
+              </Button>
+            </AlertDescription>
+          </Alert>
+        )}
+
         {/* Back to Tutorials Button */}
         <div className="mb-6">
           <Link to="/tutorials">
