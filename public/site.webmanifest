@@ -4,17 +4,17 @@
   "description": "DeFi Education & Digital Ownership Tools",
   "icons": [
     {
-      "src": "/favicon-32x32.png?v=7",
+      "src": "/favicon-32x32.png?v=8",
       "sizes": "32x32",
       "type": "image/png"
     },
     {
-      "src": "/apple-touch-icon.png?v=7",
+      "src": "/apple-touch-icon.png?v=8",
       "sizes": "180x180",
       "type": "image/png"
     },
     {
-      "src": "/favicon-512x512.png?v=7",
+      "src": "/favicon-512x512.png?v=8",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
