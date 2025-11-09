@@ -369,9 +369,7 @@ const Store = () => {
             </div>
 
             {(() => {
-              const filteredProducts = printifyProducts.filter(
-                product => product.printify_id === '6844ba70f6f4da591706ef43'
-              );
+              const filteredProducts = printifyProducts;
 
               if (isLoading) {
                 return (
