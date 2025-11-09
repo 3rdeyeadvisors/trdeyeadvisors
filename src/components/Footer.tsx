@@ -6,9 +6,9 @@ const Footer = () => {
     <footer className="bg-background/90 border-t border-border mt-12 md:mt-20">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-12 lg:py-16" style={{ paddingBottom: 'max(16px, env(safe-area-inset-bottom))' }}>
         {/* Main Footer Content */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-10 lg:gap-12 mb-4 md:mb-12">
-          {/* Brand Column - Full width on mobile */}
-          <div className="col-span-2 lg:col-span-1 text-left mb-2 md:mb-0">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-10 lg:gap-12 mb-3 md:mb-12">
+          {/* Brand Column */}
+          <div className="text-left">
             <Link to="/" className="inline-block mb-1.5 md:mb-2">
               <span className="font-consciousness font-bold text-lg md:text-xl text-primary">
                 3rdeyeadvisors
@@ -21,14 +21,14 @@ const Footer = () => {
 
           {/* Quick Links Column */}
           <div className="text-left">
-            <h3 className="font-consciousness font-semibold mb-2 md:mb-3 text-sm md:text-base text-foreground">
+            <h3 className="font-consciousness font-semibold mb-2 md:mb-3 text-base text-foreground">
               Quick Links
             </h3>
             <ul className="space-y-1.5 md:space-y-2">
               <li>
                 <Link 
                   to="/courses" 
-                  className="text-xs md:text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness inline-block leading-relaxed"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness inline-block"
                 >
                   Courses
                 </Link>
@@ -36,7 +36,7 @@ const Footer = () => {
               <li>
                 <Link 
                   to="/tutorials" 
-                  className="text-xs md:text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness inline-block leading-relaxed"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness inline-block"
                 >
                   Tutorials
                 </Link>
@@ -44,7 +44,7 @@ const Footer = () => {
               <li>
                 <Link 
                   to="/store" 
-                  className="text-xs md:text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness inline-block leading-relaxed"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness inline-block"
                 >
                   Store
                 </Link>
@@ -52,7 +52,7 @@ const Footer = () => {
               <li>
                 <Link 
                   to="/blog" 
-                  className="text-xs md:text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness inline-block leading-relaxed"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness inline-block"
                 >
                   Blog
                 </Link>
@@ -62,14 +62,14 @@ const Footer = () => {
 
           {/* Support Column */}
           <div className="text-left">
-            <h3 className="font-consciousness font-semibold mb-2 md:mb-3 text-sm md:text-base text-foreground">
+            <h3 className="font-consciousness font-semibold mb-2 md:mb-3 text-base text-foreground">
               Support
             </h3>
             <ul className="space-y-1.5 md:space-y-2">
               <li>
                 <Link 
                   to="/contact" 
-                  className="text-xs md:text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness inline-block leading-relaxed"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness inline-block"
                 >
                   Contact
                 </Link>
@@ -77,7 +77,7 @@ const Footer = () => {
               <li>
                 <Link 
                   to="/resources" 
-                  className="text-xs md:text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness inline-block leading-relaxed"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness inline-block"
                 >
                   Resources
                 </Link>
@@ -87,7 +87,7 @@ const Footer = () => {
                   href="/resources/3EA-Whitepaper-White.pdf" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="text-xs md:text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness inline-block leading-relaxed"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness inline-block"
                 >
                   Whitepaper
                 </a>
@@ -95,7 +95,7 @@ const Footer = () => {
               <li>
                 <Link 
                   to="/privacy" 
-                  className="text-xs md:text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness inline-block leading-relaxed"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness inline-block"
                 >
                   Privacy Policy
                 </Link>
@@ -103,7 +103,7 @@ const Footer = () => {
               <li>
                 <Link 
                   to="/terms" 
-                  className="text-xs md:text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness inline-block leading-relaxed"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness inline-block"
                 >
                   Terms of Service
                 </Link>
@@ -111,12 +111,12 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Social Column - Full width on mobile, centered */}
-          <div className="col-span-2 lg:col-span-1 text-center lg:text-left mt-2 md:mt-0">
-            <h3 className="font-consciousness font-semibold mb-2 md:mb-3 text-sm md:text-base text-foreground">
+          {/* Social Column */}
+          <div className="text-left">
+            <h3 className="font-consciousness font-semibold mb-2 md:mb-3 text-base text-foreground">
               Connect
             </h3>
-            <div className="flex items-center justify-center lg:justify-start gap-3 mb-2 md:mb-3">
+            <div className="flex items-center justify-start gap-3 mb-2 md:mb-3">
               <a 
                 href="mailto:info@the3rdeyeadvisors.com" 
                 className="text-muted-foreground hover:text-primary transition-colors p-2 rounded-lg hover:bg-primary/10"
