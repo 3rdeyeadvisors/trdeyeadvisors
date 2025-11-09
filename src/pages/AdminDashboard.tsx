@@ -15,6 +15,7 @@ import { AutomationPanel } from "@/components/admin/AutomationPanel";
 import { ProductManager } from "@/components/admin/ProductManager";
 import BroadcastTester from "@/components/admin/BroadcastTester";
 import { BroadcastAlertsLog } from "@/components/admin/BroadcastAlertsLog";
+import RaffleManager from "@/components/admin/RaffleManager";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -68,6 +69,8 @@ const AdminDashboard = () => {
         return <OverviewPanel />;
       case "orders":
         return <OrdersManager />;
+      case "raffles":
+        return <RaffleManager />;
       case "email":
         return <EmailCenter />;
       case "broadcast":

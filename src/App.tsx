@@ -60,6 +60,7 @@ import LiquidStakingTokens2025 from "./pages/LiquidStakingTokens2025";
 import AdminStoreDashboard from "./pages/AdminStoreDashboard";
 import DownloadPortal from "./pages/DownloadPortal";
 import AdminDashboard from "./pages/AdminDashboard";
+import Raffles from "./pages/Raffles";
 
 const queryClient = new QueryClient();
 
@@ -188,6 +189,7 @@ const App = () => {
                       <AdminDashboard />
                     </ProtectedRoute>
                   } />
+                  <Route path="/raffles" element={<Raffles />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </Layout>

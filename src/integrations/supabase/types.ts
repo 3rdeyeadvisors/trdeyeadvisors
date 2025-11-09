@@ -889,6 +889,124 @@ export type Database = {
         }
         Relationships: []
       }
+      raffle_entries: {
+        Row: {
+          created_at: string
+          entry_count: number
+          id: string
+          raffle_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          entry_count?: number
+          id?: string
+          raffle_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          entry_count?: number
+          id?: string
+          raffle_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "raffle_entries_raffle_id_fkey"
+            columns: ["raffle_id"]
+            isOneToOne: false
+            referencedRelation: "raffles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      raffle_tasks: {
+        Row: {
+          completed: boolean
+          created_at: string
+          id: string
+          raffle_id: string
+          task_type: string
+          user_id: string
+          verified_at: string | null
+        }
+        Insert: {
+          completed?: boolean
+          created_at?: string
+          id?: string
+          raffle_id: string
+          task_type: string
+          user_id: string
+          verified_at?: string | null
+        }
+        Update: {
+          completed?: boolean
+          created_at?: string
+          id?: string
+          raffle_id?: string
+          task_type?: string
+          user_id?: string
+          verified_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "raffle_tasks_raffle_id_fkey"
+            columns: ["raffle_id"]
+            isOneToOne: false
+            referencedRelation: "raffles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      raffles: {
+        Row: {
+          created_at: string
+          description: string
+          end_date: string
+          id: string
+          is_active: boolean
+          prize: string
+          prize_amount: number
+          start_date: string
+          title: string
+          updated_at: string
+          winner_selected_at: string | null
+          winner_user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          end_date: string
+          id?: string
+          is_active?: boolean
+          prize: string
+          prize_amount: number
+          start_date: string
+          title: string
+          updated_at?: string
+          winner_selected_at?: string | null
+          winner_user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          end_date?: string
+          id?: string
+          is_active?: boolean
+          prize?: string
+          prize_amount?: number
+          start_date?: string
+          title?: string
+          updated_at?: string
+          winner_selected_at?: string | null
+          winner_user_id?: string | null
+        }
+        Relationships: []
+      }
       rate_limits: {
         Row: {
           action_type: string
@@ -951,6 +1069,41 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      referrals: {
+        Row: {
+          bonus_awarded: boolean
+          created_at: string
+          id: string
+          raffle_id: string | null
+          referred_user_id: string
+          referrer_id: string
+        }
+        Insert: {
+          bonus_awarded?: boolean
+          created_at?: string
+          id?: string
+          raffle_id?: string | null
+          referred_user_id: string
+          referrer_id: string
+        }
+        Update: {
+          bonus_awarded?: boolean
+          created_at?: string
+          id?: string
+          raffle_id?: string | null
+          referred_user_id?: string
+          referrer_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referrals_raffle_id_fkey"
+            columns: ["raffle_id"]
+            isOneToOne: false
+            referencedRelation: "raffles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       security_audit_log: {
         Row: {

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, LogIn, LogOut, User, ShoppingCart, ChevronDown, ChevronRight, BookOpen, BarChart3, Package, FileText, MoreHorizontal } from "lucide-react";
+import { Menu, X, LogIn, LogOut, User, ShoppingCart, ChevronDown, ChevronRight, BookOpen, BarChart3, Package, FileText, MoreHorizontal, Gift } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/contexts/CartContext";
@@ -26,14 +26,14 @@ const Navigation = () => {
 
   // Desktop navigation - main items
   const mainNavItems = [
-    { path: "/", label: "Home" },
-    { path: "/philosophy", label: "Philosophy" },
-    { path: "/courses", label: "Courses" },
-    { path: "/tutorials", label: "Tutorials" },
-    { path: "/blog", label: "Blog" },
-    { path: "/resources", label: "Resources" },
-    { path: "/resources/3EA-Whitepaper-White.pdf", label: "Whitepaper", external: true },
-    { path: "/store", label: "Store" },
+    { path: "/", label: "Home", external: false },
+    { path: "/philosophy", label: "Philosophy", external: false },
+    { path: "/courses", label: "Courses", external: false },
+    { path: "/tutorials", label: "Tutorials", external: false },
+    { path: "/blog", label: "Blog", external: false },
+    { path: "/resources", label: "Resources", external: false },
+    { path: "/raffles", label: "Raffles", external: false },
+    { path: "/store", label: "Store", external: false },
   ];
 
   // Desktop navigation - dropdown items
@@ -51,11 +51,11 @@ const Navigation = () => {
       { path: "/store", label: "Store", icon: Package },
     ],
     learning: [
-      { path: "/courses", label: "Courses", icon: BookOpen },
-      { path: "/tutorials", label: "Tutorials", icon: BookOpen },
-      { path: "/blog", label: "Blog", icon: FileText },
-      { path: "/resources", label: "Resources", icon: FileText },
-      { path: "/resources/3EA-Whitepaper-White.pdf", label: "Whitepaper", icon: FileText, external: true },
+      { path: "/courses", label: "Courses", icon: BookOpen, external: false },
+      { path: "/tutorials", label: "Tutorials", icon: BookOpen, external: false },
+      { path: "/blog", label: "Blog", icon: FileText, external: false },
+      { path: "/resources", label: "Resources", icon: FileText, external: false },
+      { path: "/raffles", label: "Raffles", icon: Gift, external: false },
     ],
     more: [
       { path: "/analytics", label: "Analytics", icon: BarChart3 },
