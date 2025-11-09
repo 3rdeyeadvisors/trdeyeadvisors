@@ -10,7 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useNavigate } from "react-router-dom";
 
-const VideoTutorials = () => {
+const Tutorials = () => {
   const [selectedCategory, setSelectedCategory] = useState("immediate");
   const [completedTutorials, setCompletedTutorials] = useState<string[]>([]);
   const { toast } = useToast();
@@ -391,4 +391,4 @@ const VideoTutorials = () => {
   );
 };
 
-export default VideoTutorials;
+export default Tutorials;

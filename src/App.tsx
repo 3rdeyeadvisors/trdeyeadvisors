@@ -30,7 +30,7 @@ import TestDownloads from "./pages/TestDownloads";
 import Analytics from "./pages/Analytics";
 import EmailLogsAdmin from "./pages/EmailLogsAdmin";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
-import VideoTutorials from "./pages/VideoTutorials";
+import Tutorials from "./pages/Tutorials";
 import WalletSetupTutorial from "./pages/WalletSetupTutorial";
 import FirstDexSwapTutorial from "./pages/FirstDexSwapTutorial";
 import DefiCalculatorsTutorial from "./pages/DefiCalculatorsTutorial";
@@ -117,7 +117,7 @@ const App = () => {
                   <Route path="/blog/:slug" element={<BlogPost />} />
                   <Route path="/resources" element={<Resources />} />
                   <Route path="/analytics" element={<Analytics />} />
-                  <Route path="/tutorials" element={<VideoTutorials />} />
+                  <Route path="/tutorials" element={<Tutorials />} />
                   <Route path="/tutorials/wallet-setup" element={<WalletSetupTutorial />} />
                   <Route path="/tutorials/first-dex-swap" element={<FirstDexSwapTutorial />} />
                   <Route path="/tutorials/defi-calculators" element={<DefiCalculatorsTutorial />} />
