@@ -282,16 +282,22 @@ const Store = () => {
               <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
                 {digitalProducts.map((product, index) => {
                   const ProductIcon = getProductIcon(product);
+                  const displayPrice = isAdmin ? 0 : product.price;
                   return (
                      <Card 
                        key={product.id}
                        className="p-3 md:p-6 bg-card/50 border-border hover:border-primary/40 transition-all duration-300 hover:shadow-lg group flex flex-col h-full"
                        style={{ animationDelay: `${index * 0.1}s` }}
                      >
-                       <div className="flex items-center justify-center mb-3">
+                       <div className="flex items-center justify-center mb-3 gap-2">
                          <Badge className={`${getTypeColor(product.type)} text-xs px-2 py-1`}>
                            {product.category}
                          </Badge>
+                         {isAdmin && (
+                           <Badge className="bg-green-500/20 text-green-500 border-green-500/30 text-xs px-2 py-1">
+                             FREE
+                           </Badge>
+                         )}
                        </div>
                        
                        <div className="flex justify-center mb-2">
@@ -329,19 +335,19 @@ const Store = () => {
                          </div>
                        </div>
                        
-                       <div className="flex flex-col gap-2 mt-auto pt-3 border-t border-border/50">
-                         <span className="text-xl md:text-3xl font-consciousness font-bold text-primary text-center">
-                           ${typeof product.price === 'string' ? product.price : product.price.toFixed(2)}
-                         </span>
-                        <Button 
-                          variant={isInCart(product.id) ? "outline" : "cosmic"}
-                          className="font-consciousness w-full text-xs md:text-sm h-9 md:h-10"
-                          onClick={() => handleAddToCart(product)}
-                        >
-                          <Plus className="w-3 h-3 md:w-4 md:h-4 mr-1.5" />
-                          {isInCart(product.id) ? "Add Another" : "Add to Cart"}
-                        </Button>
-                      </div>
+                        <div className="flex flex-col gap-2 mt-auto pt-3 border-t border-border/50">
+                          <span className="text-xl md:text-3xl font-consciousness font-bold text-primary text-center">
+                            ${typeof displayPrice === 'string' ? displayPrice : displayPrice.toFixed(2)}
+                          </span>
+                         <Button 
+                           variant={isInCart(product.id) ? "outline" : "cosmic"}
+                           className="font-consciousness w-full text-xs md:text-sm h-9 md:h-10"
+                           onClick={() => handleAddToCart({ ...product, price: displayPrice })}
+                         >
+                           <Plus className="w-3 h-3 md:w-4 md:h-4 mr-1.5" />
+                           {isInCart(product.id) ? "Add Another" : "Add to Cart"}
+                         </Button>
+                       </div>
                      </Card>
                   );
                 })}
@@ -370,6 +376,9 @@ const Store = () => {
 
             {(() => {
               const filteredProducts = printifyProducts;
+              
+              // Helper function to get admin price
+              const getAdminPrice = (price: number) => isAdmin ? 0 : price;
 
               if (isLoading) {
                 return (
