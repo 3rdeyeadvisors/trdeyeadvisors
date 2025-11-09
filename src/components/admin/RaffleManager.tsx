@@ -704,7 +704,7 @@ const RaffleManager = () => {
                         )}
                         {raffle.winner_user_id && (
                           <>
-                            <Badge className="bg-green-500 text-white">
+                            <Badge className="bg-awareness text-accent-foreground">
                               Winner Selected ✓
                             </Badge>
                             <Button

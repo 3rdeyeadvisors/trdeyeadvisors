@@ -258,7 +258,7 @@ const Raffles = () => {
           <div className="flex items-center justify-center gap-3 mb-4">
             <Ticket className="w-10 h-10 text-primary" />
             <h1 className="text-4xl md:text-5xl font-bold">Learn to Earn</h1>
-            <Trophy className="w-10 h-10 text-yellow-500" />
+            <Trophy className="w-10 h-10 text-warning" />
           </div>
           <p className="text-xl text-muted-foreground mb-4">The Raffle Portal</p>
           <Link to="/raffle-history">
@@ -319,7 +319,7 @@ const Raffles = () => {
         ) : activeRaffle.winner_user_id ? (
           <Card className="text-center py-12">
             <CardContent>
-              <Trophy className="w-20 h-20 mx-auto mb-4 text-yellow-500" />
+              <Trophy className="w-20 h-20 mx-auto mb-4 text-warning" />
               <h2 className="text-3xl font-bold mb-4">
                 {isWinner ? "🎉 Congratulations! You Won! 🎉" : "Winner Announced!"}
               </h2>
@@ -356,7 +356,7 @@ const Raffles = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Trophy className="w-6 h-6 text-yellow-500" />
+                  <Trophy className="w-6 h-6 text-warning" />
                   Current Raffle
                 </CardTitle>
                 <CardDescription>{activeRaffle.title}</CardDescription>

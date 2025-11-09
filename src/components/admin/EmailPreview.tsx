@@ -346,10 +346,15 @@ const EmailPreview = () => {
                   </div>
                 </div>
 
-                <div className="border rounded-lg p-4 bg-white">
+                <div className="border rounded-lg p-4 bg-white overflow-auto max-h-[600px]">
                   <div
                     dangerouslySetInnerHTML={{ __html: template.html }}
                     className="email-preview"
+                    style={{ 
+                      backgroundColor: '#ffffff',
+                      color: '#000000',
+                      padding: '20px'
+                    }}
                   />
                 </div>
               </TabsContent>

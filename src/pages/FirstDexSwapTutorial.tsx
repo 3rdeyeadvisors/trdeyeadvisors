@@ -935,7 +935,7 @@ const FirstDexSwapTutorial = () => {
                     </CardHeader>
                     <CardContent>
                       <p className="text-sm mb-3">
-                        Visit <code className="bg-white px-2 py-1 rounded">{currentStepData.content.transactionExplorer?.url}</code> to verify your transaction.
+                        Visit <code className="bg-muted text-muted-foreground px-2 py-1 rounded">{currentStepData.content.transactionExplorer?.url}</code> to verify your transaction.
                       </p>
                       <div className="space-y-2">
                         <h4 className="font-medium">What to check:</h4>

@@ -30,6 +30,14 @@
     --muted: 217 32% 10%;
     --muted-foreground: 215 20% 78%;
 
+    /* Success/positive states */
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 98%;
+
+    /* Warning states */
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 98%;
+
     /* Consciousness accent - electric purple */
     --accent: 271 91% 65%;
     --accent-foreground: 0 0% 98%;

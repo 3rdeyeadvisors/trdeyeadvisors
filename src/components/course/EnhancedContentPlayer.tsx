@@ -367,8 +367,8 @@ export const EnhancedContentPlayer = ({
 
               {module.type === 'video' && module.content.videoUrl && (
                 <div className="space-y-4">
-                  <div className="aspect-video bg-black rounded-lg flex items-center justify-center relative">
-                    <div className="text-white text-center">
+                <div className="aspect-video bg-background rounded-lg flex items-center justify-center relative border border-border">
+                  <div className="text-foreground text-center">
                       <div className="text-4xl mb-4">🎥</div>
                       <p className="text-lg">Enhanced Video Player</p>
                       <p className="text-sm opacity-75 mb-4">

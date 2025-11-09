@@ -152,11 +152,11 @@ const RaffleHistory = () => {
 
   const getRaffleStatus = (raffle: RaffleHistoryItem) => {
     if (raffle.winner_user_id) {
-      return { label: "Completed", color: "bg-green-500" };
+      return { label: "Completed", color: "bg-success" };
     } else if (raffle.is_active) {
-      return { label: "Active", color: "bg-blue-500" };
+      return { label: "Active", color: "bg-primary" };
     } else {
-      return { label: "Closed", color: "bg-gray-500" };
+      return { label: "Closed", color: "bg-muted" };
     }
   };
 
@@ -218,7 +218,7 @@ const RaffleHistory = () => {
                     {raffles.filter((r) => r.winner_user_id).length}
                   </p>
                 </div>
-                <Trophy className="w-8 h-8 text-green-500" />
+                <Trophy className="w-8 h-8 text-success" />
               </div>
             </CardContent>
           </Card>
@@ -248,7 +248,7 @@ const RaffleHistory = () => {
                     ${raffles.reduce((sum, r) => sum + r.prize_amount, 0)}
                   </p>
                 </div>
-                <DollarSign className="w-8 h-8 text-yellow-500" />
+                <DollarSign className="w-8 h-8 text-warning" />
               </div>
             </CardContent>
           </Card>
@@ -327,7 +327,7 @@ const RaffleHistory = () => {
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
                           <CardTitle className="text-2xl">{raffle.title}</CardTitle>
-                          <Badge className={`${status.color} text-white`}>
+                          <Badge className={`${status.color} text-foreground`}>
                             {status.label}
                           </Badge>
                         </div>
@@ -370,7 +370,7 @@ const RaffleHistory = () => {
 
                       {raffle.winner_user_id && (
                         <div className="flex items-center gap-2">
-                          <Trophy className="w-4 h-4 text-yellow-500" />
+                          <Trophy className="w-4 h-4 text-warning" />
                           <div>
                             <p className="text-xs text-muted-foreground">Winner</p>
                             <p className="text-sm font-medium">{raffle.winner_display_name}</p>
