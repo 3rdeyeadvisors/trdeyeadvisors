@@ -8,7 +8,8 @@ import {
   Package,
   Radio,
   AlertTriangle,
-  Gift
+  Gift,
+  Eye
 } from "lucide-react";
 import {
   Sidebar,
@@ -28,6 +29,7 @@ const menuItems = [
   { id: "orders", title: "Orders & Customers", icon: ShoppingCart },
   { id: "raffles", title: "Raffle Manager", icon: Gift },
   { id: "email", title: "Email Center", icon: Mail },
+  { id: "email-preview", title: "Email Preview", icon: Eye },
   { id: "broadcast", title: "Broadcast Tester", icon: Radio },
   { id: "broadcast-alerts", title: "Broadcast Alerts", icon: AlertTriangle },
   { id: "users", title: "User Management", icon: Users },

@@ -16,6 +16,7 @@ import { ProductManager } from "@/components/admin/ProductManager";
 import BroadcastTester from "@/components/admin/BroadcastTester";
 import { BroadcastAlertsLog } from "@/components/admin/BroadcastAlertsLog";
 import RaffleManager from "@/components/admin/RaffleManager";
+import EmailPreview from "@/components/admin/EmailPreview";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -80,6 +81,8 @@ const AdminDashboard = () => {
         return <RaffleManager />;
       case "email":
         return <EmailCenter />;
+      case "email-preview":
+        return <EmailPreview />;
       case "broadcast":
         return <BroadcastTester />;
       case "broadcast-alerts":
