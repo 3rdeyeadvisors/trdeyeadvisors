@@ -978,20 +978,23 @@ const EmailLogsAdmin = () => {
 
         {/* Email Preview Dialog */}
         <Dialog open={showPreview} onOpenChange={setShowPreview}>
-          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-background">
             <DialogHeader>
               <DialogTitle>Email Preview</DialogTitle>
               <DialogDescription>
                 Preview how your email will appear to recipients
               </DialogDescription>
             </DialogHeader>
-            <div className="border rounded-lg overflow-hidden">
-              <iframe
-                srcDoc={previewHtml}
-                className="w-full h-[600px]"
-                title="Email Preview"
-                sandbox="allow-same-origin"
-              />
+            <div className="border border-border rounded-lg overflow-hidden bg-background/50 p-4">
+              <div className="bg-white rounded-lg shadow-cosmic mx-auto" style={{ maxWidth: '600px' }}>
+                <iframe
+                  srcDoc={previewHtml}
+                  className="w-full h-[600px] rounded-lg"
+                  title="Email Preview"
+                  sandbox="allow-same-origin"
+                  style={{ backgroundColor: 'transparent' }}
+                />
+              </div>
             </div>
           </DialogContent>
         </Dialog>

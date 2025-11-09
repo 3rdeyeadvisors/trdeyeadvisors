@@ -346,15 +346,16 @@ const EmailPreview = () => {
                   </div>
                 </div>
 
-                <div className="border border-border rounded-lg p-6 bg-muted overflow-auto max-h-[600px]">
+                <div className="border border-border rounded-lg p-6 bg-background/50 overflow-auto max-h-[600px]">
                   <div
                     dangerouslySetInnerHTML={{ __html: template.html }}
-                    className="email-preview bg-white rounded-lg shadow-cosmic"
+                    className="email-preview bg-white rounded-lg shadow-cosmic mx-auto"
                     style={{ 
                       backgroundColor: '#ffffff',
                       color: '#000000',
                       padding: '20px',
-                      minHeight: '400px'
+                      minHeight: '400px',
+                      maxWidth: '600px'
                     }}
                   />
                 </div>
