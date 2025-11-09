@@ -57,27 +57,27 @@ const handler = async (req: Request): Promise<Response> => {
               <meta charset="utf-8">
               <meta name="viewport" content="width=device-width, initial-scale=1.0">
             </head>
-            <body style="margin: 0; padding: 0; background-color: #f5f5f5;">
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+            <body style="margin: 0; padding: 0; background-color: #f3f4f6;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f3f4f6;">
                 <tr>
-                  <td align="center" style="padding: 20px 0;">
-                    <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; background-color: #ffffff;">
+                  <td align="center" style="padding: 40px 20px;">
+                    <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                       <!-- Header -->
                       <tr>
-                        <td style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); padding: 48px 24px; text-align: center; border-radius: 12px 12px 0 0;">
-                          <h1 style="color: #60A5FA; font-size: 36px; margin: 0 0 8px 0; font-weight: 700; text-shadow: 0 0 24px rgba(96, 165, 250, 0.4); font-family: Arial, sans-serif;">3rdeyeadvisors</h1>
-                          <p style="color: #C084FC; font-size: 18px; margin: 0; font-weight: 500; font-family: Arial, sans-serif;">Conscious DeFi Education</p>
+                        <td style="background-color: #ffffff; padding: 40px 30px; text-align: center; border-bottom: 3px solid #8B5CF6;">
+                          <h1 style="color: #8B5CF6; font-size: 32px; margin: 0 0 8px 0; font-weight: 700; font-family: Arial, sans-serif;">3rdeyeadvisors</h1>
+                          <p style="color: #6B7280; font-size: 16px; margin: 0; font-weight: 500; font-family: Arial, sans-serif;">Conscious DeFi Education</p>
                         </td>
                       </tr>
                       
                       <!-- Content -->
                       <tr>
                         <td style="padding: 40px 30px;">
-                          <h2 style="color: #60A5FA; font-size: 24px; margin: 0 0 16px 0; font-weight: 600; font-family: Arial, sans-serif;">
+                          <h2 style="color: #111827; font-size: 24px; margin: 0 0 20px 0; font-weight: 600; font-family: Arial, sans-serif;">
                             ${subject}
                           </h2>
                           ${body.split('\n\n').map(paragraph => 
-                            `<p style="color: #333333; font-size: 16px; line-height: 1.6; margin: 0 0 16px 0; font-family: Arial, sans-serif;">${paragraph.replace(/\n/g, '<br>')}</p>`
+                            `<p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 16px 0; font-family: Arial, sans-serif;">${paragraph.replace(/\n/g, '<br>')}</p>`
                           ).join('')}
                         </td>
                       </tr>
@@ -87,8 +87,8 @@ const handler = async (req: Request): Promise<Response> => {
                         <td align="center" style="padding: 0 30px 40px 30px;">
                           <table role="presentation" cellpadding="0" cellspacing="0" border="0">
                             <tr>
-                              <td style="border-radius: 8px; background: linear-gradient(45deg, #60A5FA, #C084FC);">
-                                <a href="https://the3rdeyeadvisors.com" style="display: inline-block; padding: 12px 24px; color: #ffffff; text-decoration: none; font-weight: bold; font-family: Arial, sans-serif; font-size: 16px;">Visit 3rdeyeadvisors</a>
+                              <td style="border-radius: 8px; background: #8B5CF6;">
+                                <a href="https://the3rdeyeadvisors.com" style="display: inline-block; padding: 14px 28px; color: #ffffff; text-decoration: none; font-weight: 600; font-family: Arial, sans-serif; font-size: 16px;">Visit 3rdeyeadvisors</a>
                               </td>
                             </tr>
                           </table>
@@ -97,17 +97,17 @@ const handler = async (req: Request): Promise<Response> => {
                       
                       <!-- Footer -->
                       <tr>
-                        <td style="padding: 24px 30px; border-top: 1px solid #e5e5e5;">
+                        <td style="padding: 24px 30px; background-color: #F9FAFB; border-top: 1px solid #E5E7EB; border-radius: 0 0 8px 8px;">
                           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                             <tr>
                               <td align="center">
-                                <p style="color: #94a3b8; font-size: 12px; margin: 0 0 8px 0; line-height: 1.5; font-family: Arial, sans-serif;">
+                                <p style="color: #6B7280; font-size: 13px; margin: 0 0 8px 0; line-height: 1.5; font-family: Arial, sans-serif;">
                                   You're receiving this because you're part of the 3rdeyeadvisors community.
                                 </p>
                                 <p style="margin: 0; font-family: Arial, sans-serif;">
-                                  <a href="https://the3rdeyeadvisors.com" style="color: #94a3b8; text-decoration: underline; font-size: 12px;">Visit Website</a>
-                                  <span style="color: #94a3b8; margin: 0 8px;">|</span>
-                                  <a href="https://the3rdeyeadvisors.com/contact" style="color: #94a3b8; text-decoration: underline; font-size: 12px;">Contact Us</a>
+                                  <a href="https://the3rdeyeadvisors.com" style="color: #8B5CF6; text-decoration: none; font-size: 13px; font-weight: 500;">Visit Website</a>
+                                  <span style="color: #D1D5DB; margin: 0 8px;">|</span>
+                                  <a href="https://the3rdeyeadvisors.com/contact" style="color: #8B5CF6; text-decoration: none; font-size: 13px; font-weight: 500;">Contact Us</a>
                                 </p>
                               </td>
                             </tr>
