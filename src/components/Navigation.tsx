@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, LogIn, LogOut, User, ShoppingCart, ChevronDown, ChevronRight, BookOpen, BarChart3, Package, FileText, MoreHorizontal, Gift } from "lucide-react";
+import { Menu, X, LogIn, LogOut, User, ShoppingCart, ChevronDown, ChevronRight, BookOpen, BarChart3, Package, FileText, MoreHorizontal, Gift, Home, Lightbulb } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/contexts/CartContext";
@@ -61,8 +61,8 @@ const Navigation = () => {
     more: [
       { path: "/raffle-history", label: "Raffle History", icon: Gift },
       { path: "/analytics", label: "Analytics", icon: BarChart3 },
-      { path: "/downloads", label: "Downloads" },
-      { path: "/contact", label: "Contact" },
+      { path: "/downloads", label: "Downloads", icon: Package },
+      { path: "/contact", label: "Contact", icon: FileText },
     ]
   };
 
@@ -320,7 +320,7 @@ const Navigation = () => {
               )}
 
               {/* Navigation Sections */}
-              <div className="p-4 space-y-4">
+              <div className="p-4 space-y-2">
                 {/* Home */}
                 <Link
                   to="/"
@@ -331,6 +331,7 @@ const Navigation = () => {
                   }`}
                   onClick={() => setIsOpen(false)}
                 >
+                  <Home className="w-5 h-5 flex-shrink-0" />
                   <span className="font-consciousness">Home</span>
                 </Link>
 
@@ -344,19 +345,34 @@ const Navigation = () => {
                   }`}
                   onClick={() => setIsOpen(false)}
                 >
+                  <Lightbulb className="w-5 h-5 flex-shrink-0" />
                   <span className="font-consciousness">Philosophy</span>
+                </Link>
+
+                {/* Store */}
+                <Link
+                  to="/store"
+                  className={`flex items-center space-x-3 p-3 rounded-lg transition-colors ${
+                    isActive("/store")
+                      ? "bg-primary/10 text-primary font-medium"
+                      : "text-foreground hover:bg-muted"
+                  }`}
+                  onClick={() => setIsOpen(false)}
+                >
+                  <Package className="w-5 h-5 flex-shrink-0" />
+                  <span className="font-consciousness">Store</span>
                 </Link>
 
                 {/* Learning Section */}
                 <Collapsible open={isLearningOpen} onOpenChange={setIsLearningOpen}>
                   <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors min-h-[44px]">
-                    <div className="flex items-center justify-center space-x-3 flex-1">
-                      <BookOpen className="w-5 h-5" />
+                    <div className="flex items-center space-x-3 flex-1">
+                      <BookOpen className="w-5 h-5 flex-shrink-0" />
                       <span className="font-consciousness font-medium">Learning</span>
                     </div>
                     {isLearningOpen ? <ChevronDown className="w-4 h-4 flex-shrink-0" /> : <ChevronRight className="w-4 h-4 flex-shrink-0" />}
                   </CollapsibleTrigger>
-                  <CollapsibleContent className="mt-2 space-y-1">
+                  <CollapsibleContent className="mt-1 space-y-1">
                     {mobileNavStructure.learning.map((item) => (
                       item.external ? (
                         <a
@@ -364,24 +380,24 @@ const Navigation = () => {
                           href={item.path}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center space-x-3 p-2 pl-6 rounded-lg transition-colors text-muted-foreground hover:bg-muted hover:text-foreground"
+                          className="flex items-center space-x-3 p-2.5 pl-11 rounded-lg transition-colors text-muted-foreground hover:bg-muted hover:text-foreground"
                           onClick={() => setIsOpen(false)}
                         >
-                          {item.icon && <item.icon className="w-4 h-4" />}
+                          {item.icon && <item.icon className="w-4 h-4 flex-shrink-0" />}
                           <span className="text-sm">{item.label}</span>
                         </a>
                       ) : (
                         <Link
                           key={item.path}
                           to={item.path}
-                          className={`flex items-center space-x-3 p-2 pl-6 rounded-lg transition-colors ${
+                          className={`flex items-center space-x-3 p-2.5 pl-11 rounded-lg transition-colors ${
                             isActive(item.path)
                               ? "bg-primary/10 text-primary font-medium"
                               : "text-muted-foreground hover:bg-muted hover:text-foreground"
                           }`}
                           onClick={() => setIsOpen(false)}
                         >
-                          {item.icon && <item.icon className="w-4 h-4" />}
+                          {item.icon && <item.icon className="w-4 h-4 flex-shrink-0" />}
                           <span className="text-sm">{item.label}</span>
                         </Link>
                       )
@@ -392,46 +408,30 @@ const Navigation = () => {
                 {/* More Section */}
                 <Collapsible open={isMoreOpen} onOpenChange={setIsMoreOpen}>
                   <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors min-h-[44px]">
-                    <div className="flex items-center justify-center space-x-3 flex-1">
-                      <BarChart3 className="w-5 h-5" />
+                    <div className="flex items-center space-x-3 flex-1">
+                      <MoreHorizontal className="w-5 h-5 flex-shrink-0" />
                       <span className="font-consciousness font-medium">More</span>
                     </div>
                     {isMoreOpen ? <ChevronDown className="w-4 h-4 flex-shrink-0" /> : <ChevronRight className="w-4 h-4 flex-shrink-0" />}
                   </CollapsibleTrigger>
-                  <CollapsibleContent className="mt-2 space-y-1">
+                  <CollapsibleContent className="mt-1 space-y-1">
                     {mobileNavStructure.more.map((item) => (
                       <Link
                         key={item.path}
                         to={item.path}
-                        className={`flex items-center space-x-3 p-2 pl-6 rounded-lg transition-colors ${
+                        className={`flex items-center space-x-3 p-2.5 pl-11 rounded-lg transition-colors ${
                           isActive(item.path)
                             ? "bg-primary/10 text-primary font-medium"
                             : "text-muted-foreground hover:bg-muted hover:text-foreground"
                         }`}
                         onClick={() => setIsOpen(false)}
                       >
-                        {item.icon && <item.icon className="w-4 h-4" />}
+                        {item.icon && <item.icon className="w-4 h-4 flex-shrink-0" />}
                         <span className="text-sm">{item.label}</span>
                       </Link>
                     ))}
                   </CollapsibleContent>
                 </Collapsible>
-
-                {/* Store Section */}
-                <div className="space-y-2">
-                  <Link
-                    to="/store"
-                    className={`flex items-center space-x-3 p-3 rounded-lg transition-colors ${
-                      isActive("/store")
-                        ? "bg-primary/10 text-primary font-medium"
-                        : "text-foreground hover:bg-muted"
-                    }`}
-                    onClick={() => setIsOpen(false)}
-                  >
-                    <Package className="w-5 h-5" />
-                    <span className="font-consciousness">Store</span>
-                  </Link>
-                </div>
               </div>
             </div>
           </div>
