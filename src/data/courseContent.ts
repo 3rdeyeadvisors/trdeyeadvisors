@@ -54,6 +54,9 @@ export const courseContent: CourseContentData[] = [
 
 ## Traditional Banking vs DeFi
 
+![Traditional Finance vs DeFi Comparison](/src/assets/diagrams/tradfi-vs-defi-comparison.jpg)
+*Visual comparison: See how DeFi differs from traditional banking*
+
 ### Traditional Banking 🏦
 - **Centralized**: One institution controls everything
 - **Gatekeepers**: Banks decide who gets loans, accounts, etc.
@@ -176,11 +179,15 @@ DeFi exists because the current financial system was built decades ago and hasn'
         type: "text", 
         duration: 30,
         content: {
+          heroImage: "/src/assets/diagrams/blockchain-explained.jpg",
           text: `# Blockchain Basics (Without the Tech Jargon)
 
 You don't need to understand how a car engine works to drive a car. Similarly, you don't need to be a blockchain expert to use DeFi. But understanding the basics will help you use it confidently.
 
 ## What is a Blockchain? 🔗
+
+![Blockchain Structure Explained](/src/assets/diagrams/blockchain-explained.jpg)
+*Understanding how blockchain connects data in an unchangeable chain*
 
 Think of blockchain as a **digital ledger** (like a bank's record book) with three special properties:
 
@@ -202,6 +209,10 @@ Think of blockchain as a **digital ledger** (like a bank's record book) with thr
 ## How Does This Enable DeFi?
 
 ### Smart Contracts = Automated Agreements
+
+![Smart Contract Execution Flow](/src/assets/diagrams/smart-contract-flow.jpg)
+*How smart contracts execute automatically without human intervention*
+
 Think of smart contracts as **"if-then" statements** that execute automatically:
 
 - **If** you deposit $100 and lock it for 1 year
@@ -296,6 +307,9 @@ The DeFi world has several types of "players" - think of them as different types
 
 ## 2. DEXs - Decentralized Exchanges 🔄 (The "Stock Markets")
 
+![How DEX Works](/src/assets/diagrams/dex-how-it-works.jpg)
+*Visualizing how Decentralized Exchanges use Automated Market Makers*
+
 ### What They Do
 - Allow you to trade one cryptocurrency for another
 - No central authority or order books
@@ -366,6 +380,9 @@ Think of a DEX like a **vending machine for crypto**:
 
 ## 5. Liquidity Pools 🌊 (The "Market Makers")
 
+![Liquidity Pool Mechanics](/src/assets/diagrams/liquidity-pool-mechanics.jpg)
+*Understanding how liquidity pools work with token pairs like ETH/USDC*
+
 ### What They Are
 - Collections of funds that enable DEXs to function
 - Users provide equal value of two assets (like $1000 USDC + $1000 ETH)
@@ -381,6 +398,9 @@ Think of a DEX like a **vending machine for crypto**:
 - **Smart Contract Risk**: Protocol bugs could cause losses
 
 ## Putting It All Together
+
+![DeFi Ecosystem Map](/src/assets/diagrams/defi-ecosystem-map.jpg)
+*How all the DeFi protocols connect to your wallet and work together*
 
 Think of DeFi like a **financial ecosystem**:
 - **Stablecoins** = The currency everyone uses
@@ -693,9 +713,13 @@ Remember: You can always **start with one wallet and add others** as your needs 
         type: "text",
         duration: 25,
         content: {
+          heroImage: "/src/assets/diagrams/wallet-security-layers.jpg",
           text: `# Private Keys & Seed Phrases: The Foundation of Your Security
 
 This is **THE MOST IMPORTANT** lesson in all of DeFi. Get this wrong, and you could lose everything. Get it right, and you're safer than 99% of people.
+
+![Wallet Security Layers](/src/assets/diagrams/wallet-security-layers.jpg)
+*Multiple layers of security protecting your crypto assets*
 
 ## What is a Private Key? 🔑
 
@@ -868,9 +892,13 @@ Your seed phrase is **more valuable than cash**. Treat it like you would treat a
         type: "text",
         duration: 30,
         content: {
+          heroImage: "/src/assets/diagrams/scam-warning-signs.jpg",
           text: `# Spotting DeFi Scams: Your Ultimate Protection Guide
 
 DeFi scams steal **billions** every year. But they all follow predictable patterns. Learn these patterns, and you'll be safer than 95% of users.
+
+![Common DeFi Scam Warning Signs](/src/assets/diagrams/scam-warning-signs.jpg)
+*Red flags to watch out for - knowing these can save you thousands*
 
 ## The Big Picture: Why Scams Work 🎯
 
