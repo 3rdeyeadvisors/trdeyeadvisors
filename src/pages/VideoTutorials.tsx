@@ -7,11 +7,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Play, Shield, TrendingUp, Calculator, AlertTriangle, Wallet, ArrowLeftRight, PieChart, Target, CheckCircle, BarChart3, Image, Users } from "lucide-react";
 import SEO from "@/components/SEO";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/components/auth/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 const VideoTutorials = () => {
   const [selectedCategory, setSelectedCategory] = useState("immediate");
   const [completedTutorials, setCompletedTutorials] = useState<string[]>([]);
   const { toast } = useToast();
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Load completed tutorials from localStorage
@@ -326,6 +330,16 @@ const VideoTutorials = () => {
                             className="mt-auto w-full group-hover:bg-primary group-hover:text-primary-foreground transition-all hover:shadow-cosmic border-primary/30"
                             variant="outline"
                             onClick={() => {
+                              if (!user) {
+                                toast({
+                                  title: "Sign in required",
+                                  description: "Please sign in to start tutorials",
+                                  variant: "destructive"
+                                });
+                                navigate('/auth');
+                                return;
+                              }
+                              
                               const tutorialRoutes: { [key: string]: string } = {
                                 "wallet-setup": "/tutorials/wallet-setup",
                                 "first-dex-swap": "/tutorials/first-dex-swap",
