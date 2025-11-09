@@ -4,12 +4,12 @@ import { Mail, Twitter, Github } from "lucide-react";
 const Footer = () => {
   return (
     <footer className="bg-background/90 border-t border-border mt-12 md:mt-20">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 lg:py-16" style={{ paddingBottom: 'max(32px, env(safe-area-inset-bottom))' }}>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12 lg:py-16" style={{ paddingBottom: 'max(24px, env(safe-area-inset-bottom))' }}>
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10 lg:gap-12 mb-8 md:mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10 lg:gap-12 mb-6 md:mb-12">
           {/* Brand Column */}
           <div className="text-center sm:text-left">
-            <Link to="/" className="inline-block mb-3">
+            <Link to="/" className="inline-block mb-2">
               <span className="font-consciousness font-bold text-lg md:text-xl text-primary">
                 3rdeyeadvisors
               </span>
@@ -21,10 +21,10 @@ const Footer = () => {
 
           {/* Quick Links Column */}
           <div className="text-center sm:text-left">
-            <h3 className="font-consciousness font-semibold mb-4 text-base text-foreground">
+            <h3 className="font-consciousness font-semibold mb-3 text-base text-foreground">
               Quick Links
             </h3>
-            <ul className="space-y-2.5">
+            <ul className="space-y-2">
               <li>
                 <Link 
                   to="/courses" 
@@ -62,10 +62,10 @@ const Footer = () => {
 
           {/* Support Column */}
           <div className="text-center sm:text-left">
-            <h3 className="font-consciousness font-semibold mb-4 text-base text-foreground">
+            <h3 className="font-consciousness font-semibold mb-3 text-base text-foreground">
               Support
             </h3>
-            <ul className="space-y-2.5">
+            <ul className="space-y-2">
               <li>
                 <Link 
                   to="/contact" 
@@ -113,10 +113,10 @@ const Footer = () => {
 
           {/* Social Column */}
           <div className="text-center sm:text-left">
-            <h3 className="font-consciousness font-semibold mb-4 text-base text-foreground">
+            <h3 className="font-consciousness font-semibold mb-3 text-base text-foreground">
               Connect
             </h3>
-            <div className="flex items-center justify-center sm:justify-start gap-3 mb-4">
+            <div className="flex items-center justify-center sm:justify-start gap-3 mb-3">
               <a 
                 href="mailto:info@the3rdeyeadvisors.com" 
                 className="text-muted-foreground hover:text-primary transition-colors p-2 rounded-lg hover:bg-primary/10"
@@ -161,8 +161,8 @@ const Footer = () => {
         </div>
 
         {/* Bottom Section - Copyright & Disclaimer */}
-        <div className="border-t border-border pt-6 md:pt-8">
-          <div className="flex flex-col items-center justify-center gap-2 text-center">
+        <div className="border-t border-border pt-5 md:pt-8">
+          <div className="flex flex-col items-center justify-center gap-1.5 text-center">
             <p className="text-xs text-muted-foreground/80 font-consciousness">
               © {new Date().getFullYear()} 3rdeyeadvisors. All rights reserved.
             </p>
