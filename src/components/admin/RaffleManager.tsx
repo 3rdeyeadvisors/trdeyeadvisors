@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Download, Trophy, Users, Gift, CheckCircle2, X, Loader2 } from "lucide-react";
+import { Download, Trophy, Users, Gift, CheckCircle2, X, Loader2, Trash2 } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -276,6 +276,44 @@ const RaffleManager = () => {
       toast({
         title: "Error",
         description: error.message || "Failed to select winner",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteRaffle = async (raffleId: string, raffleTitle: string) => {
+    if (!confirm(`Are you sure you want to permanently delete "${raffleTitle}"? This will remove all associated data including entries, tasks, and referrals. This cannot be undone!`)) {
+      return;
+    }
+
+    setLoading(true);
+    try {
+      // Delete associated data first (cascade should handle this, but being explicit)
+      await supabase.from('raffle_entries').delete().eq('raffle_id', raffleId);
+      await supabase.from('raffle_tasks').delete().eq('raffle_id', raffleId);
+      await supabase.from('referrals').delete().eq('raffle_id', raffleId);
+      
+      // Delete the raffle
+      const { error } = await supabase
+        .from('raffles')
+        .delete()
+        .eq('id', raffleId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Raffle Deleted",
+        description: `"${raffleTitle}" has been permanently deleted.`,
+      });
+
+      fetchRaffles();
+    } catch (error: any) {
+      console.error('Error deleting raffle:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to delete raffle",
         variant: "destructive",
       });
     } finally {
@@ -569,13 +607,23 @@ const RaffleManager = () => {
                           Check Verifications
                         </Button>
                         {!raffle.winner_user_id && (
-                          <Button
-                            size="sm"
-                            onClick={() => handleSelectWinner(raffle.id)}
-                            className="bg-yellow-500 hover:bg-yellow-600"
-                          >
-                            🏆 Select Winner
-                          </Button>
+                          <>
+                            <Button
+                              size="sm"
+                              onClick={() => handleSelectWinner(raffle.id)}
+                              className="bg-yellow-500 hover:bg-yellow-600"
+                            >
+                              🏆 Select Winner
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="destructive"
+                              onClick={() => handleDeleteRaffle(raffle.id, raffle.title)}
+                            >
+                              <Trash2 className="w-4 h-4 mr-2" />
+                              Delete
+                            </Button>
+                          </>
                         )}
                         {raffle.winner_user_id && (
                           <Badge className="bg-green-500 text-white">
