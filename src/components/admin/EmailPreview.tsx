@@ -346,14 +346,15 @@ const EmailPreview = () => {
                   </div>
                 </div>
 
-                <div className="border rounded-lg p-4 bg-white overflow-auto max-h-[600px]">
+                <div className="border border-border rounded-lg p-6 bg-muted overflow-auto max-h-[600px]">
                   <div
                     dangerouslySetInnerHTML={{ __html: template.html }}
-                    className="email-preview"
+                    className="email-preview bg-white rounded-lg shadow-cosmic"
                     style={{ 
                       backgroundColor: '#ffffff',
                       color: '#000000',
-                      padding: '20px'
+                      padding: '20px',
+                      minHeight: '400px'
                     }}
                   />
                 </div>
@@ -363,15 +364,16 @@ const EmailPreview = () => {
         </CardContent>
       </Card>
 
-      <Card className="border-blue-200 bg-blue-50">
+      <Card className="border-primary/20 bg-card">
         <CardContent className="pt-6">
           <div className="flex items-start gap-3">
-            <Mail className="w-5 h-5 text-blue-600 mt-1" />
+            <Mail className="w-5 h-5 text-primary mt-1" />
             <div>
-              <h4 className="font-semibold text-blue-900 mb-2">About Email Previews</h4>
-              <ul className="text-sm text-blue-800 space-y-1">
+              <h4 className="font-semibold text-foreground mb-2">About Email Previews</h4>
+              <ul className="text-sm text-muted-foreground space-y-1">
                 <li>• These previews show sample data - actual emails will use real raffle information</li>
                 <li>• Click "Open in New Tab" to see the full email layout in a new window</li>
+                <li>• The dark background simulates how emails appear in preview panes</li>
                 <li>• Email styling may vary slightly across different email clients</li>
                 <li>• All emails are automatically sent when raffle status changes</li>
               </ul>
