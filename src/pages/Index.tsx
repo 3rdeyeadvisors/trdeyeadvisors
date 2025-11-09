@@ -105,8 +105,8 @@ const Index = () => {
       </section>
 
       {/* Mission Statement */}
-      <section className="section-spacing bg-background">
-        <div className="container mx-auto mobile-typography-center">
+      <section className="py-12 md:py-20 lg:py-24 bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Card className="p-8 md:p-12 bg-gradient-consciousness border-primary/20 shadow-consciousness max-w-4xl mx-auto hover:shadow-[0_0_30px_hsl(var(--primary)/0.4),0_0_60px_hsl(var(--accent)/0.3)] hover:border-primary/40 transition-all duration-consciousness cursor-pointer group animate-consciousness-glow hover:animate-none">
             <div className="text-center">
               <h2 className="text-2xl md:text-3xl font-consciousness font-bold text-foreground mb-6 group-hover:text-primary-glow transition-colors duration-cosmic">
@@ -124,9 +124,9 @@ const Index = () => {
       </section>
 
       {/* Features Grid */}
-      <section className="section-spacing bg-muted/20">
-        <div className="container mx-auto mobile-typography-center">
-          <div className="text-center mb-12">
+      <section className="py-12 md:py-20 lg:py-24 bg-muted/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12 md:mb-16">
             <h2 className="text-3xl md:text-4xl font-consciousness font-bold text-foreground mb-4">
               The Path to Financial Consciousness
             </h2>
@@ -135,7 +135,7 @@ const Index = () => {
             </p>
           </div>
           
-          <div className="grid-standard">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
             {features.map((feature, index) => (
               <Card 
                 key={feature.title}
@@ -156,8 +156,8 @@ const Index = () => {
       </section>
 
       {/* Call to Action */}
-      <section className="section-spacing bg-background">
-        <div className="container mx-auto text-center mobile-typography-center">
+      <section className="py-12 md:py-20 lg:py-24 bg-background">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-consciousness font-bold text-foreground mb-8">
             Ready to Begin Your Reprogramming?
           </h2>
@@ -174,8 +174,8 @@ const Index = () => {
       </section>
 
       {/* Newsletter Signup */}
-      <section className="section-spacing bg-muted/10">
-        <div className="container mx-auto mobile-typography-center">
+      <section className="py-12 md:py-20 lg:py-24 bg-muted/10">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <NewsletterSignup variant="cosmic" />
         </div>
       </section>
