@@ -48,15 +48,27 @@ serve(async (req) => {
       throw new Error("File not found");
     }
 
-    // Check if user has purchased this product
-    const { data: purchaseData, error: purchaseError } = await supabaseClient
-      .from('user_purchases')
-      .select('*')
+    // Check if user is an admin - admins get free access
+    const { data: roleData } = await supabaseClient
+      .from('user_roles')
+      .select('role')
       .eq('user_id', user.id)
-      .eq('product_id', fileData.product_id);
+      .eq('role', 'admin')
+      .single();
 
-    if (purchaseError || !purchaseData || purchaseData.length === 0) {
-      throw new Error("Product not purchased. Please buy the product first.");
+    const isAdmin = !!roleData;
+
+    // If not admin, check if user has purchased this product
+    if (!isAdmin) {
+      const { data: purchaseData, error: purchaseError } = await supabaseClient
+        .from('user_purchases')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('product_id', fileData.product_id);
+
+      if (purchaseError || !purchaseData || purchaseData.length === 0) {
+        throw new Error("Product not purchased. Please buy the product first.");
+      }
     }
 
     // Generate signed URL for download
