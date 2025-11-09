@@ -112,11 +112,11 @@ const Footer = () => {
           </div>
 
           {/* Social Column */}
-          <div className="text-left">
+          <div className="text-center sm:text-left">
             <h3 className="font-consciousness font-semibold mb-2 md:mb-3 text-base text-foreground">
               Connect
             </h3>
-            <div className="flex items-center justify-start gap-3 mb-2 md:mb-3">
+            <div className="flex items-center justify-center sm:justify-start gap-3 mb-2 md:mb-3">
               <a 
                 href="mailto:info@the3rdeyeadvisors.com" 
                 className="text-muted-foreground hover:text-primary transition-colors p-2 rounded-lg hover:bg-primary/10"
