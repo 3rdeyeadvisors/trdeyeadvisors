@@ -74,54 +74,89 @@ const handler = async (req: Request): Promise<Response> => {
         to: [participant.email],
         subject: `⏰ ${raffle.title} Has Ended — Winner Coming Soon!`,
         html: `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-            <h1 style="color: #8B5CF6; margin-bottom: 20px;">The Wait is Almost Over ⏰</h1>
-            
-            <p style="font-size: 16px; line-height: 1.6;">
-              Hi ${participant.display_name || 'there'},
-            </p>
-            
-            <p style="font-size: 16px; line-height: 1.6;">
-              The <strong>${raffle.title}</strong> has officially ended. Thank you for participating and learning with us!
-            </p>
-            
-            <div style="background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%); color: white; padding: 30px; border-radius: 12px; margin: 30px 0; text-align: center;">
-              <h2 style="margin: 0 0 20px 0; color: white;">Raffle Complete</h2>
-              <div style="font-size: 48px; font-weight: bold; margin: 20px 0;">🪙 $${raffle.prize_amount}</div>
-              <p style="font-size: 20px; margin: 10px 0;">Prize: ${raffle.prize}</p>
-              <p style="font-size: 16px; margin: 20px 0; opacity: 0.9;">
-                ${raffle.description}
-              </p>
-            </div>
-            
-            <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin: 30px 0;">
-              <h3 style="color: #8B5CF6; margin-top: 0;">What's Next?</h3>
-              <p style="font-size: 16px; line-height: 1.6; margin-bottom: 0;">
-                🎯 We're currently verifying all entries and selecting the winner<br>
-                📧 The winner will be announced via email soon<br>
-                🌐 All results will be visible on our <a href="https://the3rdeyeadvisors.com/raffle-history" style="color: #8B5CF6; text-decoration: none;">Raffle History</a> page
-              </p>
-            </div>
-            
-            <p style="font-size: 16px; line-height: 1.6;">
-              Even if you don't win this time, your learning journey continues to pay dividends. Keep exploring DeFi with us!
-            </p>
-            
-            <div style="text-align: center; margin: 40px 0;">
-              <a href="https://the3rdeyeadvisors.com/courses" style="display: inline-block; background: #8B5CF6; color: white; padding: 16px 32px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 18px;">
-                Continue Learning →
-              </a>
-            </div>
-            
-            <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e5e5; text-align: center;">
-              <p style="font-size: 18px; font-weight: bold; color: #8B5CF6;">
-                Awareness is advantage.
-              </p>
-              <p style="font-size: 14px; color: #666;">
-                — The 3rdeyeadvisors Team
-              </p>
-            </div>
-          </div>
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          </head>
+          <body style="margin: 0; padding: 0; background-color: #f5f5f5;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td align="center" style="padding: 20px 0;">
+                  <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; background-color: #ffffff;">
+                    <tr>
+                      <td style="padding: 40px 30px;">
+                        <h1 style="color: #8B5CF6; margin: 0 0 20px 0; font-family: Arial, sans-serif;">The Wait is Almost Over ⏰</h1>
+                        
+                        <p style="font-size: 16px; line-height: 1.6; margin: 0 0 16px 0; font-family: Arial, sans-serif; color: #333333;">
+                          Hi ${participant.display_name || 'there'},
+                        </p>
+                        
+                        <p style="font-size: 16px; line-height: 1.6; margin: 0 0 30px 0; font-family: Arial, sans-serif; color: #333333;">
+                          The <strong>${raffle.title}</strong> has officially ended. Thank you for participating and learning with us!
+                        </p>
+                        
+                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%); border-radius: 12px; margin: 30px 0;">
+                          <tr>
+                            <td style="padding: 30px; text-align: center;">
+                              <h2 style="margin: 0 0 20px 0; color: #ffffff; font-family: Arial, sans-serif;">Raffle Complete</h2>
+                              <div style="font-size: 48px; font-weight: bold; margin: 20px 0; color: #ffffff;">🪙 $${raffle.prize_amount}</div>
+                              <p style="font-size: 20px; margin: 10px 0; color: #ffffff; font-family: Arial, sans-serif;">Prize: ${raffle.prize}</p>
+                              <p style="font-size: 16px; margin: 20px 0; opacity: 0.9; color: #ffffff; font-family: Arial, sans-serif;">
+                                ${raffle.description}
+                              </p>
+                            </td>
+                          </tr>
+                        </table>
+                        
+                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #f9f9f9; border-radius: 8px; margin: 30px 0;">
+                          <tr>
+                            <td style="padding: 20px;">
+                              <h3 style="color: #8B5CF6; margin: 0 0 16px 0; font-family: Arial, sans-serif;">What's Next?</h3>
+                              <p style="font-size: 16px; line-height: 1.6; margin: 0; font-family: Arial, sans-serif; color: #333333;">
+                                🎯 We're currently verifying all entries and selecting the winner<br>
+                                📧 The winner will be announced via email soon<br>
+                                🌐 All results will be visible on our <a href="https://the3rdeyeadvisors.com/raffle-history" style="color: #8B5CF6; text-decoration: none;">Raffle History</a> page
+                              </p>
+                            </td>
+                          </tr>
+                        </table>
+                        
+                        <p style="font-size: 16px; line-height: 1.6; margin: 0 0 40px 0; font-family: Arial, sans-serif; color: #333333;">
+                          Even if you don't win this time, your learning journey continues to pay dividends. Keep exploring DeFi with us!
+                        </p>
+                        
+                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                          <tr>
+                            <td align="center" style="padding: 0 0 40px 0;">
+                              <a href="https://the3rdeyeadvisors.com/courses" style="display: inline-block; background: #8B5CF6; color: #ffffff; padding: 16px 32px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 18px; font-family: Arial, sans-serif;">
+                                Continue Learning →
+                              </a>
+                            </td>
+                          </tr>
+                        </table>
+                        
+                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top: 1px solid #e5e5e5; padding-top: 20px;">
+                          <tr>
+                            <td align="center">
+                              <p style="font-size: 18px; font-weight: bold; color: #8B5CF6; margin: 0 0 8px 0; font-family: Arial, sans-serif;">
+                                Awareness is advantage.
+                              </p>
+                              <p style="font-size: 14px; color: #666666; margin: 0; font-family: Arial, sans-serif;">
+                                — The 3rdeyeadvisors Team
+                              </p>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </body>
+          </html>
         `,
       })
     );

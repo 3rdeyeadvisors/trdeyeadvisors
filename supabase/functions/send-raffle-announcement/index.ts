@@ -47,59 +47,98 @@ const handler = async (req: Request): Promise<Response> => {
         to: [subscriber.email],
         subject: "🎟 Learn to Earn — Join Our $50 Bitcoin Raffle Now",
         html: `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-            <h1 style="color: #8B5CF6; margin-bottom: 20px;">The Future Rewards Learning 🚀</h1>
-            
-            <p style="font-size: 16px; line-height: 1.6;">
-              Hi ${subscriber.name || 'there'},
-            </p>
-            
-            <p style="font-size: 16px; line-height: 1.6;">
-              The future of finance is decentralized — and now, learning it pays.
-            </p>
-            
-            <p style="font-size: 16px; line-height: 1.6;">
-              <strong>3rdeyeadvisors</strong> has officially launched the <strong>Learn-to-Earn Raffle</strong>, rewarding our community for learning and engaging in DeFi education.
-            </p>
-            
-            <div style="background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%); color: white; padding: 30px; border-radius: 12px; margin: 30px 0; text-align: center;">
-              <h2 style="margin: 0 0 20px 0; color: white;">How to Enter</h2>
-              <ul style="list-style: none; padding: 0; text-align: left; font-size: 16px; line-height: 2;">
-                <li>✅ Follow us on <strong>Instagram</strong> @3rdeyeadvisors</li>
-                <li>✅ Follow us on <strong>X</strong> @3rdeyeadvisors</li>
-                <li>✅ Subscribe to the newsletter (you're already in! 🎉)</li>
-                <li>✅ Complete the <strong>DeFi Foundations</strong> and <strong>Staying Safe with DeFi</strong> courses</li>
-                <li>✅ Rate the courses and join the discussion</li>
-              </ul>
-              
-              <div style="margin: 30px 0; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 8px;">
-                <p style="font-size: 18px; margin: 10px 0;">💡 <strong>Bonus:</strong> Each referral link shared from your dashboard earns extra entries when someone signs up.</p>
-              </div>
-              
-              <div style="font-size: 48px; font-weight: bold; margin: 20px 0;">🪙 $50</div>
-              <p style="font-size: 20px; margin: 10px 0;">Prize: Bitcoin</p>
-              <p style="font-size: 16px; margin: 10px 0;">🕒 Active Period: November 10–23, 2025</p>
-            </div>
-            
-            <div style="text-align: center; margin: 40px 0;">
-              <a href="https://the3rdeyeadvisors.com/raffles" style="display: inline-block; background: #8B5CF6; color: white; padding: 16px 32px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 18px;">
-                Join the Raffle Now →
-              </a>
-            </div>
-            
-            <p style="font-size: 16px; line-height: 1.6; font-style: italic; text-align: center; color: #666;">
-              The more you learn, the more you earn — because awareness is the real currency.
-            </p>
-            
-            <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e5e5; text-align: center;">
-              <p style="font-size: 18px; font-weight: bold; color: #8B5CF6;">
-                Awareness is advantage.
-              </p>
-              <p style="font-size: 14px; color: #666;">
-                — 3rdeyeadvisors
-              </p>
-            </div>
-          </div>
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          </head>
+          <body style="margin: 0; padding: 0; background-color: #f5f5f5;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td align="center" style="padding: 20px 0;">
+                  <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; background-color: #ffffff;">
+                    <tr>
+                      <td style="padding: 40px 30px;">
+                        <h1 style="color: #8B5CF6; margin: 0 0 20px 0; font-family: Arial, sans-serif;">The Future Rewards Learning 🚀</h1>
+                        
+                        <p style="font-size: 16px; line-height: 1.6; margin: 0 0 16px 0; font-family: Arial, sans-serif; color: #333333;">
+                          Hi ${subscriber.name || 'there'},
+                        </p>
+                        
+                        <p style="font-size: 16px; line-height: 1.6; margin: 0 0 16px 0; font-family: Arial, sans-serif; color: #333333;">
+                          The future of finance is decentralized — and now, learning it pays.
+                        </p>
+                        
+                        <p style="font-size: 16px; line-height: 1.6; margin: 0 0 30px 0; font-family: Arial, sans-serif; color: #333333;">
+                          <strong>3rdeyeadvisors</strong> has officially launched the <strong>Learn-to-Earn Raffle</strong>, rewarding our community for learning and engaging in DeFi education.
+                        </p>
+                        
+                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%); border-radius: 12px; margin: 30px 0;">
+                          <tr>
+                            <td style="padding: 30px; text-align: center;">
+                              <h2 style="margin: 0 0 20px 0; color: #ffffff; font-family: Arial, sans-serif;">How to Enter</h2>
+                              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                                <tr>
+                                  <td style="font-size: 16px; line-height: 2; color: #ffffff; font-family: Arial, sans-serif; text-align: left; padding: 0 20px;">
+                                    ✅ Follow us on <strong>Instagram</strong> @3rdeyeadvisors<br>
+                                    ✅ Follow us on <strong>X</strong> @3rdeyeadvisors<br>
+                                    ✅ Subscribe to the newsletter (you're already in! 🎉)<br>
+                                    ✅ Complete the <strong>DeFi Foundations</strong> and <strong>Staying Safe with DeFi</strong> courses<br>
+                                    ✅ Rate the courses and join the discussion
+                                  </td>
+                                </tr>
+                              </table>
+                              
+                              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 30px 0;">
+                                <tr>
+                                  <td style="padding: 20px; background: rgba(255,255,255,0.1); border-radius: 8px;">
+                                    <p style="font-size: 18px; margin: 0; color: #ffffff; font-family: Arial, sans-serif;">💡 <strong>Bonus:</strong> Each referral link shared from your dashboard earns extra entries when someone signs up.</p>
+                                  </td>
+                                </tr>
+                              </table>
+                              
+                              <div style="font-size: 48px; font-weight: bold; margin: 20px 0; color: #ffffff;">🪙 $50</div>
+                              <p style="font-size: 20px; margin: 10px 0; color: #ffffff; font-family: Arial, sans-serif;">Prize: Bitcoin</p>
+                              <p style="font-size: 16px; margin: 10px 0; color: #ffffff; font-family: Arial, sans-serif;">🕒 Active Period: November 10–23, 2025</p>
+                            </td>
+                          </tr>
+                        </table>
+                        
+                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                          <tr>
+                            <td align="center" style="padding: 40px 0;">
+                              <a href="https://the3rdeyeadvisors.com/raffles" style="display: inline-block; background: #8B5CF6; color: #ffffff; padding: 16px 32px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 18px; font-family: Arial, sans-serif;">
+                                Join the Raffle Now →
+                              </a>
+                            </td>
+                          </tr>
+                        </table>
+                        
+                        <p style="font-size: 16px; line-height: 1.6; font-style: italic; text-align: center; color: #666666; margin: 0 0 40px 0; font-family: Arial, sans-serif;">
+                          The more you learn, the more you earn — because awareness is the real currency.
+                        </p>
+                        
+                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top: 1px solid #e5e5e5; padding-top: 20px;">
+                          <tr>
+                            <td align="center">
+                              <p style="font-size: 18px; font-weight: bold; color: #8B5CF6; margin: 0 0 8px 0; font-family: Arial, sans-serif;">
+                                Awareness is advantage.
+                              </p>
+                              <p style="font-size: 14px; color: #666666; margin: 0; font-family: Arial, sans-serif;">
+                                — 3rdeyeadvisors
+                              </p>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </body>
+          </html>
         `,
       })
     );

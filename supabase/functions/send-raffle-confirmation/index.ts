@@ -33,55 +33,86 @@ const handler = async (req: Request): Promise<Response> => {
       to: [email],
       subject: "You're officially entered — 3rdeyeadvisors Learn-to-Earn Raffle 🎟",
       html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <h1 style="color: #8B5CF6; margin-bottom: 20px;">You're In! 🎉</h1>
-          
-          <p style="font-size: 16px; line-height: 1.6;">
-            Hi ${first_name || 'there'},
-          </p>
-          
-          <p style="font-size: 16px; line-height: 1.6;">
-            You've successfully joined our <strong>Learn-to-Earn Raffle</strong> — welcome to the next evolution of financial consciousness.
-          </p>
-          
-          <p style="font-size: 16px; line-height: 1.6;">
-            Each step you took — learning, sharing, and engaging — earns you energy in return. The system remembers. 🌐
-          </p>
-          
-          <div style="background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%); color: white; padding: 30px; border-radius: 12px; margin: 30px 0; text-align: center;">
-            <h2 style="margin: 0 0 20px 0; color: white;">Your Entry Details</h2>
-            <div style="font-size: 48px; font-weight: bold; margin: 20px 0;">🪙 $${prize_amount}</div>
-            <p style="font-size: 20px; margin: 10px 0;">Prize: ${prize}</p>
-            <p style="font-size: 18px; margin: 10px 0;">Your Entries: ${entry_count}</p>
-            <p style="font-size: 16px; margin: 10px 0;">⏰ Raffle Ends: ${new Date(end_date).toLocaleDateString('en-US', { 
-              month: 'long', 
-              day: 'numeric', 
-              year: 'numeric',
-              hour: 'numeric',
-              minute: '2-digit',
-              timeZoneName: 'short'
-            })}</p>
-          </div>
-          
-          <p style="font-size: 16px; line-height: 1.6;">
-            Stay tuned for updates, and keep sharing your referral link for extra entries!
-          </p>
-          
-          <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e5e5;">
-            <p style="font-size: 18px; font-weight: bold; color: #8B5CF6;">
-              Awareness is advantage.
-            </p>
-            <p style="font-size: 14px; color: #666;">
-              — The 3rdeyeadvisors Team
-            </p>
-          </div>
-          
-          <div style="margin-top: 30px; padding: 20px; background: #f9f9f9; border-radius: 8px; text-align: center;">
-            <p style="font-size: 14px; color: #666; margin: 0;">
-              Want more entries? Share your referral link from your <a href="https://the3rdeyeadvisors.com/raffles" style="color: #8B5CF6; text-decoration: none;">raffle dashboard</a>.
-            </p>
-          </div>
-        </div>
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        </head>
+        <body style="margin: 0; padding: 0; background-color: #f5f5f5;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td align="center" style="padding: 20px 0;">
+                <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; background-color: #ffffff;">
+                  <tr>
+                    <td style="padding: 40px 30px;">
+                      <h1 style="color: #8B5CF6; margin: 0 0 20px 0; font-family: Arial, sans-serif;">You're In! 🎉</h1>
+                      
+                      <p style="font-size: 16px; line-height: 1.6; margin: 0 0 16px 0; font-family: Arial, sans-serif; color: #333333;">
+                        Hi ${first_name || 'there'},
+                      </p>
+                      
+                      <p style="font-size: 16px; line-height: 1.6; margin: 0 0 16px 0; font-family: Arial, sans-serif; color: #333333;">
+                        You've successfully joined our <strong>Learn-to-Earn Raffle</strong> — welcome to the next evolution of financial consciousness.
+                      </p>
+                      
+                      <p style="font-size: 16px; line-height: 1.6; margin: 0 0 30px 0; font-family: Arial, sans-serif; color: #333333;">
+                        Each step you took — learning, sharing, and engaging — earns you energy in return. The system remembers. 🌐
+                      </p>
+                      
+                      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%); border-radius: 12px; margin: 30px 0;">
+                        <tr>
+                          <td style="padding: 30px; text-align: center;">
+                            <h2 style="margin: 0 0 20px 0; color: #ffffff; font-family: Arial, sans-serif;">Your Entry Details</h2>
+                            <div style="font-size: 48px; font-weight: bold; margin: 20px 0; color: #ffffff;">🪙 $${prize_amount}</div>
+                            <p style="font-size: 20px; margin: 10px 0; color: #ffffff; font-family: Arial, sans-serif;">Prize: ${prize}</p>
+                            <p style="font-size: 18px; margin: 10px 0; color: #ffffff; font-family: Arial, sans-serif;">Your Entries: ${entry_count}</p>
+                            <p style="font-size: 16px; margin: 10px 0; color: #ffffff; font-family: Arial, sans-serif;">⏰ Raffle Ends: ${new Date(end_date).toLocaleDateString('en-US', { 
+                              month: 'long', 
+                              day: 'numeric', 
+                              year: 'numeric',
+                              hour: 'numeric',
+                              minute: '2-digit',
+                              timeZoneName: 'short'
+                            })}</p>
+                          </td>
+                        </tr>
+                      </table>
+                      
+                      <p style="font-size: 16px; line-height: 1.6; margin: 0 0 40px 0; font-family: Arial, sans-serif; color: #333333;">
+                        Stay tuned for updates, and keep sharing your referral link for extra entries!
+                      </p>
+                      
+                      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top: 1px solid #e5e5e5; padding-top: 20px; margin-bottom: 30px;">
+                        <tr>
+                          <td align="center">
+                            <p style="font-size: 18px; font-weight: bold; color: #8B5CF6; margin: 0 0 8px 0; font-family: Arial, sans-serif;">
+                              Awareness is advantage.
+                            </p>
+                            <p style="font-size: 14px; color: #666666; margin: 0; font-family: Arial, sans-serif;">
+                              — The 3rdeyeadvisors Team
+                            </p>
+                          </td>
+                        </tr>
+                      </table>
+                      
+                      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #f9f9f9; border-radius: 8px;">
+                        <tr>
+                          <td style="padding: 20px; text-align: center;">
+                            <p style="font-size: 14px; color: #666666; margin: 0; font-family: Arial, sans-serif;">
+                              Want more entries? Share your referral link from your <a href="https://the3rdeyeadvisors.com/raffles" style="color: #8B5CF6; text-decoration: none;">raffle dashboard</a>.
+                            </p>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </body>
+        </html>
       `,
     });
 
