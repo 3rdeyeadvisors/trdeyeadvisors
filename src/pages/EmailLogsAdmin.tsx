@@ -310,71 +310,58 @@ const EmailLogsAdmin = () => {
       <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <style type="text/css">
-          body { margin: 0; padding: 0; }
-        </style>
       </head>
-      <body style="margin: 0; padding: 0; background-color: hsl(222, 84%, 4.9%);">
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 0; padding: 0; background-color: hsl(222, 84%, 4.9%);" bgcolor="hsl(222, 84%, 4.9%)">
+      <body style="margin: 0; padding: 0; background-color: #f5f5f5;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
           <tr>
-            <td align="center" style="padding: 0; background-color: hsl(222, 84%, 4.9%);" bgcolor="hsl(222, 84%, 4.9%)">
-              <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; margin: 0 auto; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;">
+            <td align="center" style="padding: 20px 0;">
+              <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; background-color: #ffffff;">
+                <!-- Header -->
                 <tr>
-                  <td style="padding: 32px 20px;">
-                    
-                    <!-- Cosmic Header -->
-                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: linear-gradient(135deg, hsl(217, 32%, 8%), hsl(217, 32%, 6%)); border-radius: 12px; border: 1px solid hsl(217, 32%, 15%);">
-                      <tr>
-                        <td style="text-align: center; padding: 48px 24px;">
-                          <h1 style="color: hsl(217, 91%, 60%); font-size: 36px; margin: 0 0 8px 0; font-weight: 700; text-shadow: 0 0 24px hsla(217, 91%, 60%, 0.4);">3rdeyeadvisors</h1>
-                          <p style="color: hsl(271, 91%, 75%); font-size: 18px; margin: 0; font-weight: 500;">Conscious DeFi Education</p>
-                        </td>
-                      </tr>
-                    </table>
-                    
-                    <!-- Spacer -->
-                    <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="height: 32px; line-height: 32px;"></td></tr></table>
-                    
-                    <!-- Email Content -->
-                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                      <tr>
-                        <td>
-                          <h2 style="color: hsl(217, 91%, 70%); font-size: 24px; margin: 0 0 16px 0; font-weight: 600;">
-                            ${emailSubject}
-                          </h2>
-                          ${emailBody.split('\n\n').map(paragraph => 
-                            `<p style="color: hsl(0, 0%, 95%); font-size: 16px; line-height: 1.6; margin: 0 0 16px 0;">${paragraph.replace(/\n/g, '<br>')}</p>`
-                          ).join('')}
-                        </td>
-                      </tr>
-                    </table>
+                  <td style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); padding: 48px 24px; text-align: center; border-radius: 12px 12px 0 0;">
+                    <h1 style="color: #60A5FA; font-size: 36px; margin: 0 0 8px 0; font-weight: 700; text-shadow: 0 0 24px rgba(96, 165, 250, 0.4); font-family: Arial, sans-serif;">3rdeyeadvisors</h1>
+                    <p style="color: #C084FC; font-size: 18px; margin: 0; font-weight: 500; font-family: Arial, sans-serif;">Conscious DeFi Education</p>
+                  </td>
+                </tr>
+                
+                <!-- Content -->
+                <tr>
+                  <td style="padding: 40px 30px;">
+                    <h2 style="color: #60A5FA; font-size: 24px; margin: 0 0 16px 0; font-weight: 600; font-family: Arial, sans-serif;">
+                      ${emailSubject}
+                    </h2>
+                    ${emailBody.split('\n\n').map(paragraph => 
+                      `<p style="color: #333333; font-size: 16px; line-height: 1.6; margin: 0 0 16px 0; font-family: Arial, sans-serif;">${paragraph.replace(/\n/g, '<br>')}</p>`
+                    ).join('')}
+                  </td>
+                </tr>
 
-                    <!-- Spacer -->
-                    <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="height: 24px; line-height: 24px;"></td></tr></table>
-
-                    <!-- CTA Button -->
-                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                <!-- CTA Button -->
+                <tr>
+                  <td align="center" style="padding: 0 30px 40px 30px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0">
                       <tr>
-                        <td align="center" style="padding: 8px;">
-                          <a href="https://the3rdeyeadvisors.com" style="background: linear-gradient(45deg, hsl(217, 91%, 60%), hsl(271, 91%, 65%)); color: hsl(0, 0%, 98%); padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block; box-shadow: 0 4px 12px hsla(217, 91%, 60%, 0.3);">Visit 3rdeyeadvisors</a>
+                        <td style="border-radius: 8px; background: linear-gradient(45deg, #60A5FA, #C084FC);">
+                          <a href="https://the3rdeyeadvisors.com" style="display: inline-block; padding: 12px 24px; color: #ffffff; text-decoration: none; font-weight: bold; font-family: Arial, sans-serif; font-size: 16px;">Visit 3rdeyeadvisors</a>
                         </td>
                       </tr>
                     </table>
-                    
-                    <!-- Spacer -->
-                    <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="height: 24px; line-height: 24px;"></td></tr></table>
-                    
-                    <!-- Footer -->
-                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top: 1px solid hsl(217, 32%, 15%);">
+                  </td>
+                </tr>
+                
+                <!-- Footer -->
+                <tr>
+                  <td style="padding: 24px 30px; border-top: 1px solid #e5e5e5;">
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                       <tr>
-                        <td style="text-align: center; padding-top: 24px;">
-                          <p style="color: hsl(215, 20%, 65%); font-size: 12px; margin: 0 0 8px 0; line-height: 1.5;">
+                        <td align="center">
+                          <p style="color: #94a3b8; font-size: 12px; margin: 0 0 8px 0; line-height: 1.5; font-family: Arial, sans-serif;">
                             You're receiving this because you're part of the 3rdeyeadvisors community.
                           </p>
-                          <p style="margin: 0;">
-                            <a href="https://the3rdeyeadvisors.com" style="color: hsl(215, 20%, 65%); text-decoration: underline; font-size: 12px;">Visit Website</a>
-                            <span style="color: hsl(215, 20%, 65%); margin: 0 8px;">|</span>
-                            <a href="https://the3rdeyeadvisors.com/contact" style="color: hsl(215, 20%, 65%); text-decoration: underline; font-size: 12px;">Contact Us</a>
+                          <p style="margin: 0; font-family: Arial, sans-serif;">
+                            <a href="https://the3rdeyeadvisors.com" style="color: #94a3b8; text-decoration: underline; font-size: 12px;">Visit Website</a>
+                            <span style="color: #94a3b8; margin: 0 8px;">|</span>
+                            <a href="https://the3rdeyeadvisors.com/contact" style="color: #94a3b8; text-decoration: underline; font-size: 12px;">Contact Us</a>
                           </p>
                         </td>
                       </tr>
