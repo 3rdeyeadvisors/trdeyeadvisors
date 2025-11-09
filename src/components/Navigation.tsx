@@ -38,7 +38,7 @@ const Navigation = () => {
 
   // Desktop navigation - dropdown items
   const moreNavItems = [
-    { path: "/raffle-history", label: "Past Raffles" },
+    { path: "/raffle-history", label: "Raffle History" },
     { path: "/analytics", label: "Analytics" },
     { path: "/downloads", label: "Downloads" },
     { path: "/contact", label: "Contact" },
@@ -59,7 +59,7 @@ const Navigation = () => {
       { path: "/raffles", label: "Raffles", icon: Gift, external: false },
     ],
     more: [
-      { path: "/raffle-history", label: "Past Raffles", icon: Gift },
+      { path: "/raffle-history", label: "Raffle History", icon: Gift },
       { path: "/analytics", label: "Analytics", icon: BarChart3 },
       { path: "/downloads", label: "Downloads" },
       { path: "/contact", label: "Contact" },
