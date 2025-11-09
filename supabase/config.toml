@@ -118,3 +118,9 @@ verify_jwt = false
 
 [functions.send-scheduled-broadcast]
 verify_jwt = false
+
+[functions.send-raffle-ended]
+verify_jwt = false
+
+[functions.send-winner-announcement]
+verify_jwt = false

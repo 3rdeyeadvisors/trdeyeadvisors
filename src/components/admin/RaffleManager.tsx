@@ -57,6 +57,8 @@ const RaffleManager = () => {
   const [verificationTasks, setVerificationTasks] = useState<VerificationTask[]>([]);
   const [loading, setLoading] = useState(false);
   const [sendingAnnouncement, setSendingAnnouncement] = useState(false);
+  const [sendingEndedNotification, setSendingEndedNotification] = useState(false);
+  const [sendingWinnerAnnouncement, setSendingWinnerAnnouncement] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -318,6 +320,64 @@ const RaffleManager = () => {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSendEndedNotification = async (raffleId: string) => {
+    if (!confirm("Send raffle ended notification to all participants?")) {
+      return;
+    }
+
+    setSendingEndedNotification(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('send-raffle-ended', {
+        body: { raffle_id: raffleId }
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Notifications Sent",
+        description: `Raffle ended notifications sent to ${data.sent} participants`,
+      });
+    } catch (error: any) {
+      console.error('Error sending ended notification:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to send notifications",
+        variant: "destructive",
+      });
+    } finally {
+      setSendingEndedNotification(false);
+    }
+  };
+
+  const handleSendWinnerAnnouncement = async (raffleId: string) => {
+    if (!confirm("Send winner announcement to all participants? This will notify the winner and all other participants.")) {
+      return;
+    }
+
+    setSendingWinnerAnnouncement(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('send-winner-announcement', {
+        body: { raffle_id: raffleId }
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Announcements Sent",
+        description: `Winner announcements sent to ${data.sent} people`,
+      });
+    } catch (error: any) {
+      console.error('Error sending winner announcement:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to send announcements",
+        variant: "destructive",
+      });
+    } finally {
+      setSendingWinnerAnnouncement(false);
     }
   };
 
@@ -606,6 +666,23 @@ const RaffleManager = () => {
                         >
                           Check Verifications
                         </Button>
+                        {!raffle.is_active && !raffle.winner_user_id && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleSendEndedNotification(raffle.id)}
+                            disabled={sendingEndedNotification}
+                          >
+                            {sendingEndedNotification ? (
+                              <>
+                                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                Sending...
+                              </>
+                            ) : (
+                              "📧 Send Ended Notice"
+                            )}
+                          </Button>
+                        )}
                         {!raffle.winner_user_id && (
                           <>
                             <Button
@@ -626,9 +703,26 @@ const RaffleManager = () => {
                           </>
                         )}
                         {raffle.winner_user_id && (
-                          <Badge className="bg-green-500 text-white">
-                            Winner Selected ✓
-                          </Badge>
+                          <>
+                            <Badge className="bg-green-500 text-white">
+                              Winner Selected ✓
+                            </Badge>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => handleSendWinnerAnnouncement(raffle.id)}
+                              disabled={sendingWinnerAnnouncement}
+                            >
+                              {sendingWinnerAnnouncement ? (
+                                <>
+                                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                  Sending...
+                                </>
+                              ) : (
+                                "🎉 Announce Winner"
+                              )}
+                            </Button>
+                          </>
                         )}
                       </div>
                     </div>
