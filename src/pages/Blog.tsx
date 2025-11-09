@@ -133,8 +133,8 @@ const Blog = () => {
           }
         ]}
       />
-      <div className="section-spacing">
-      <div className="container mx-auto mobile-typography-center">
+      <div className="py-12 md:py-20 lg:py-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-consciousness font-bold text-foreground mb-4">

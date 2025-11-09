@@ -2,9 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Import layout consistency system */
-@import './styles/layout-consistency.css';
-
 /* 3rdeyeadvisors Design System - Cosmic DeFi Consciousness */
 
 @layer base {
