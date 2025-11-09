@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { 
   ArrowLeft, 
   ArrowRight, 
@@ -19,13 +20,18 @@ import {
   Lock,
   Key,
   Globe,
-  Smartphone
+  Smartphone,
+  ChevronDown
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { CommunityHub } from "@/components/community/CommunityHub";
 import SEO from "@/components/SEO";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/components/auth/AuthProvider";
+import { KeyTakeaway } from "@/components/course/KeyTakeaway";
+import { DidYouKnow } from "@/components/course/DidYouKnow";
+import { StepBlock } from "@/components/course/StepBlock";
+import walletHeroImage from "@/assets/tutorials/wallet-setup-hero.jpg";
 
 const WalletSetupTutorial = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -358,6 +364,15 @@ const WalletSetupTutorial = () => {
           </Link>
         </div>
 
+        {/* Hero Image */}
+        <div className="mb-8 rounded-lg overflow-hidden">
+          <img 
+            src={walletHeroImage} 
+            alt="Cryptocurrency wallet setup with blockchain technology" 
+            className="w-full h-48 md:h-64 object-cover"
+          />
+        </div>
+
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
@@ -366,7 +381,7 @@ const WalletSetupTutorial = () => {
             </div>
             <div>
               <h1 className="text-3xl font-bold">Wallet Setup & Security</h1>
-              <p className="text-muted-foreground">Complete guide to setting up MetaMask safely</p>
+              <p className="text-muted-foreground">Complete guide to setting up MetaMask safely for 2025</p>
             </div>
           </div>
 
@@ -431,49 +446,57 @@ const WalletSetupTutorial = () => {
 
               {/* Step 1: Choose Wallet */}
               {currentStep === 1 && (
-                <div className="grid gap-4">
-                  {currentStepData.content.walletOptions?.map((wallet, index) => (
-                    <Card key={index} className={`${wallet.recommended ? "border-primary bg-primary/5" : ""}`}>
-                      <CardHeader className="pb-3">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <CardTitle className="text-lg">{wallet.name}</CardTitle>
-                            <CardDescription>{wallet.type}</CardDescription>
+                <div className="space-y-6">
+                  <KeyTakeaway>
+                    MetaMask is the most popular wallet for DeFi in 2025, with over 30 million active users worldwide. It's beginner-friendly, secure when used properly, and supported by virtually all DeFi platforms.
+                  </KeyTakeaway>
+
+                  <DidYouKnow fact="MetaMask now supports over 100 different blockchain networks, making it one of the most versatile wallets available." />
+
+                  <div className="grid gap-4">
+                    {currentStepData.content.walletOptions?.map((wallet, index) => (
+                      <Card key={index} className={`${wallet.recommended ? "border-primary bg-primary/5" : ""}`}>
+                        <CardHeader className="pb-3">
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <CardTitle className="text-lg">{wallet.name}</CardTitle>
+                              <CardDescription>{wallet.type}</CardDescription>
+                            </div>
+                            <div className="flex gap-2">
+                              <Badge variant="outline">{wallet.difficulty}</Badge>
+                              {wallet.recommended && <Badge>Recommended</Badge>}
+                            </div>
                           </div>
-                          <div className="flex gap-2">
-                            <Badge variant="outline">{wallet.difficulty}</Badge>
-                            {wallet.recommended && <Badge>Recommended</Badge>}
+                        </CardHeader>
+                        <CardContent>
+                          <div className="grid md:grid-cols-2 gap-4">
+                            <div>
+                              <h4 className="font-medium text-awareness mb-2">Pros:</h4>
+                              <ul className="text-sm space-y-1">
+                                {wallet.pros.map((pro, i) => (
+                                  <li key={i} className="flex items-center gap-2">
+                                    <CheckCircle className="h-3 w-3 text-awareness" />
+                                    {pro}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                            <div>
+                              <h4 className="font-medium text-destructive mb-2">Cons:</h4>
+                              <ul className="text-sm space-y-1">
+                                {wallet.cons.map((con, i) => (
+                                  <li key={i} className="flex items-center gap-2">
+                                    <AlertTriangle className="h-3 w-3 text-destructive" />
+                                    {con}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
                           </div>
-                        </div>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="grid md:grid-cols-2 gap-4">
-                          <div>
-                            <h4 className="font-medium text-awareness mb-2">Pros:</h4>
-                            <ul className="text-sm space-y-1">
-                              {wallet.pros.map((pro, i) => (
-                                <li key={i} className="flex items-center gap-2">
-                                  <CheckCircle className="h-3 w-3 text-awareness" />
-                                  {pro}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                          <div>
-                            <h4 className="font-medium text-destructive mb-2">Cons:</h4>
-                            <ul className="text-sm space-y-1">
-                              {wallet.cons.map((con, i) => (
-                                <li key={i} className="flex items-center gap-2">
-                                  <AlertTriangle className="h-3 w-3 text-destructive" />
-                                  {con}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
                 </div>
               )}
 
@@ -487,19 +510,12 @@ const WalletSetupTutorial = () => {
                     </AlertDescription>
                   </Alert>
 
-                  <div className="space-y-3">
-                    <h3 className="font-semibold">Installation Steps:</h3>
-                    <ol className="space-y-2">
-                      {currentStepData.content.instructions?.map((instruction, index) => (
-                        <li key={index} className="flex items-start gap-3">
-                          <Badge variant="outline" className="text-xs min-w-6 h-6 flex items-center justify-center">
-                            {index + 1}
-                          </Badge>
-                          <span className="text-sm">{instruction}</span>
-                        </li>
-                      ))}
-                    </ol>
-                  </div>
+                  <DidYouKnow fact="In 2024-2025, scammers created over 500 fake MetaMask websites. Always verify you're on the official metamask.io domain!" />
+
+                  <StepBlock 
+                    title="Installation Steps:"
+                    steps={currentStepData.content.instructions || []}
+                  />
 
                   <div className="space-y-2">
                     <h4 className="font-medium text-destructive">Critical Warnings:</h4>
@@ -516,19 +532,14 @@ const WalletSetupTutorial = () => {
               {/* Step 3: Create Wallet */}
               {currentStep === 3 && (
                 <div className="space-y-4">
-                  <div className="space-y-3">
-                    <h3 className="font-semibold">Setup Steps:</h3>
-                    <ol className="space-y-2">
-                      {currentStepData.content.instructions?.map((instruction, index) => (
-                        <li key={index} className="flex items-start gap-3">
-                          <Badge variant="outline" className="text-xs min-w-6 h-6 flex items-center justify-center">
-                            {index + 1}
-                          </Badge>
-                          <span className="text-sm">{instruction}</span>
-                        </li>
-                      ))}
-                    </ol>
-                  </div>
+                  <KeyTakeaway title="Password Best Practice">
+                    Use a unique password with at least 16 characters. Consider a password manager like Bitwarden or 1Password to generate and store it securely.
+                  </KeyTakeaway>
+
+                  <StepBlock 
+                    title="Setup Steps:"
+                    steps={currentStepData.content.instructions || []}
+                  />
 
                   <Card className="bg-primary/10 border-primary/20">
                     <CardHeader className="pb-3">
@@ -557,6 +568,8 @@ const WalletSetupTutorial = () => {
                       <strong className="text-destructive">CRITICAL:</strong> Your seed phrase is the master key to your wallet. If someone gets it, they own your crypto forever.
                     </AlertDescription>
                   </Alert>
+
+                  <DidYouKnow fact="Over $4.2 billion in cryptocurrency was stolen in 2024, with 67% of thefts caused by compromised seed phrases. Never share yours with anyone!" />
 
                   {/* Example Seed Phrase */}
                   <Card className="border-2 border-dashed border-border">
@@ -597,19 +610,10 @@ const WalletSetupTutorial = () => {
                   </Card>
 
                   {/* Storage Instructions */}
-                  <div className="space-y-3">
-                    <h3 className="font-semibold">Backup Instructions:</h3>
-                    <ol className="space-y-2">
-                      {currentStepData.content.instructions?.map((instruction, index) => (
-                        <li key={index} className="flex items-start gap-3">
-                          <Badge variant="outline" className="text-xs min-w-6 h-6 flex items-center justify-center">
-                            {index + 1}
-                          </Badge>
-                          <span className="text-sm">{instruction}</span>
-                        </li>
-                      ))}
-                    </ol>
-                  </div>
+                  <StepBlock 
+                    title="Backup Instructions:"
+                    steps={currentStepData.content.instructions || []}
+                  />
 
                   {/* Storage Options */}
                   <div className="space-y-3">
@@ -639,19 +643,14 @@ const WalletSetupTutorial = () => {
               {/* Step 5: Verification */}
               {currentStep === 5 && (
                 <div className="space-y-4">
-                  <div className="space-y-3">
-                    <h3 className="font-semibold">Verification Steps:</h3>
-                    <ol className="space-y-2">
-                      {currentStepData.content.instructions?.map((instruction, index) => (
-                        <li key={index} className="flex items-start gap-3">
-                          <Badge variant="outline" className="text-xs min-w-6 h-6 flex items-center justify-center">
-                            {index + 1}
-                          </Badge>
-                          <span className="text-sm">{instruction}</span>
-                        </li>
-                      ))}
-                    </ol>
-                  </div>
+                  <KeyTakeaway>
+                    Adding the Polygon network allows you to use DeFi with much lower fees than Ethereum mainnet—often just cents instead of dollars per transaction.
+                  </KeyTakeaway>
+
+                  <StepBlock 
+                    title="Verification Steps:"
+                    steps={currentStepData.content.instructions || []}
+                  />
 
                   <Card className="bg-awareness/10 border-awareness/20">
                     <CardHeader className="pb-3">
@@ -661,16 +660,7 @@ const WalletSetupTutorial = () => {
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <ol className="space-y-2 text-sm">
-                        {currentStepData.content.networkSetup?.steps.map((step, index) => (
-                          <li key={index} className="flex items-start gap-3">
-                            <Badge variant="outline" className="text-xs min-w-6 h-6 flex items-center justify-center">
-                              {index + 1}
-                            </Badge>
-                            <span>{step}</span>
-                          </li>
-                        ))}
-                      </ol>
+                      <StepBlock steps={currentStepData.content.networkSetup?.steps || []} />
                     </CardContent>
                   </Card>
                 </div>
@@ -679,6 +669,12 @@ const WalletSetupTutorial = () => {
               {/* Step 6: Security Practices */}
               {currentStep === 6 && (
                 <div className="space-y-6">
+                  <KeyTakeaway title="Security is Your Responsibility">
+                    Unlike banks, there's no "forgot password" button in crypto. You are your own bank, which means you're responsible for security. These practices will keep your funds safe.
+                  </KeyTakeaway>
+
+                  <DidYouKnow fact="Hardware wallets like Ledger or Trezor provide military-grade security for amounts over $10,000, but MetaMask is perfectly safe for everyday DeFi when following these best practices." />
+
                   <div className="space-y-4">
                     <h3 className="font-semibold">Essential Security Practices:</h3>
                     <div className="grid gap-4">
