@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { Ticket, Trophy, Share2, Clock, CheckCircle2 } from "lucide-react";
+import { Ticket, Trophy, Share2, Clock, CheckCircle2, History } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import SEO from "@/components/SEO";
 import { Link } from "react-router-dom";
@@ -260,7 +260,13 @@ const Raffles = () => {
             <h1 className="text-4xl md:text-5xl font-bold">Learn to Earn</h1>
             <Trophy className="w-10 h-10 text-yellow-500" />
           </div>
-          <p className="text-xl text-muted-foreground">The Raffle Portal</p>
+          <p className="text-xl text-muted-foreground mb-4">The Raffle Portal</p>
+          <Link to="/raffle-history">
+            <Button variant="outline" size="sm">
+              <History className="w-4 h-4 mr-2" />
+              View Raffle History
+            </Button>
+          </Link>
         </div>
 
         {/* Philosophy Section */}

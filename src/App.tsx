@@ -61,6 +61,7 @@ import AdminStoreDashboard from "./pages/AdminStoreDashboard";
 import DownloadPortal from "./pages/DownloadPortal";
 import AdminDashboard from "./pages/AdminDashboard";
 import Raffles from "./pages/Raffles";
+import RaffleHistory from "./pages/RaffleHistory";
 
 const queryClient = new QueryClient();
 
@@ -190,6 +191,7 @@ const App = () => {
                     </ProtectedRoute>
                   } />
                   <Route path="/raffles" element={<Raffles />} />
+                  <Route path="/raffle-history" element={<RaffleHistory />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </Layout>
