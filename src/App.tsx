@@ -117,19 +117,71 @@ const App = () => {
                   <Route path="/blog/:slug" element={<BlogPost />} />
                   <Route path="/resources" element={<Resources />} />
                   <Route path="/analytics" element={<Analytics />} />
-                  <Route path="/tutorials" element={<VideoTutorials />} />
-                  <Route path="/tutorials/wallet-setup" element={<WalletSetupTutorial />} />
-                  <Route path="/tutorials/first-dex-swap" element={<FirstDexSwapTutorial />} />
-                  <Route path="/tutorials/defi-calculators" element={<DefiCalculatorsTutorial />} />
-                  <Route path="/tutorials/spotting-scams" element={<SpottingScamsTutorial />} />
-                  <Route path="/tutorials/cross-chain-bridging" element={<CrossChainBridgingTutorial />} />
-                  <Route path="/tutorials/advanced-defi-protocols" element={<AdvancedDefiProtocolsTutorial />} />
-                  <Route path="/tutorials/portfolio-rebalancing" element={<PortfolioRebalancingTutorial />} />
-                  <Route path="/tutorials/reading-defi-metrics" element={<ReadingDefiMetricsTutorial />} />
-                  <Route path="/tutorials/risk-assessment" element={<RiskAssessmentTutorial />} />
-                  <Route path="/tutorials/chart-reading" element={<ChartReadingTutorial />} />
-                  <Route path="/tutorials/nft-defi" element={<NftDefiTutorial />} />
-                  <Route path="/tutorials/dao-participation" element={<DaoParticipationTutorial />} />
+                  <Route path="/tutorials" element={
+                    <ProtectedRoute>
+                      <VideoTutorials />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/tutorials/wallet-setup" element={
+                    <ProtectedRoute>
+                      <WalletSetupTutorial />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/tutorials/first-dex-swap" element={
+                    <ProtectedRoute>
+                      <FirstDexSwapTutorial />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/tutorials/defi-calculators" element={
+                    <ProtectedRoute>
+                      <DefiCalculatorsTutorial />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/tutorials/spotting-scams" element={
+                    <ProtectedRoute>
+                      <SpottingScamsTutorial />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/tutorials/cross-chain-bridging" element={
+                    <ProtectedRoute>
+                      <CrossChainBridgingTutorial />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/tutorials/advanced-defi-protocols" element={
+                    <ProtectedRoute>
+                      <AdvancedDefiProtocolsTutorial />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/tutorials/portfolio-rebalancing" element={
+                    <ProtectedRoute>
+                      <PortfolioRebalancingTutorial />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/tutorials/reading-defi-metrics" element={
+                    <ProtectedRoute>
+                      <ReadingDefiMetricsTutorial />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/tutorials/risk-assessment" element={
+                    <ProtectedRoute>
+                      <RiskAssessmentTutorial />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/tutorials/chart-reading" element={
+                    <ProtectedRoute>
+                      <ChartReadingTutorial />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/tutorials/nft-defi" element={
+                    <ProtectedRoute>
+                      <NftDefiTutorial />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/tutorials/dao-participation" element={
+                    <ProtectedRoute>
+                      <DaoParticipationTutorial />
+                    </ProtectedRoute>
+                  } />
                   <Route path="/store" element={<Store />} />
                   <Route path="/store/merchandise/:productId" element={<MerchandiseDetail />} />
                   <Route path="/cart" element={<Cart />} />
