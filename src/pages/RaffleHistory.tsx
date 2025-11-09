@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/components/auth/AuthProvider";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -25,20 +26,43 @@ interface RaffleHistoryItem {
 }
 
 const RaffleHistory = () => {
+  const { user } = useAuth();
   const [raffles, setRaffles] = useState<RaffleHistoryItem[]>([]);
   const [filteredRaffles, setFilteredRaffles] = useState<RaffleHistoryItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [sortBy, setSortBy] = useState<string>("recent");
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
+    checkAdminStatus();
     fetchRaffleHistory();
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     applyFiltersAndSort();
   }, [searchQuery, filterStatus, sortBy, raffles]);
+
+  const checkAdminStatus = async () => {
+    if (!user) {
+      setIsAdmin(false);
+      return;
+    }
+
+    try {
+      const { data } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', user.id)
+        .eq('role', 'admin')
+        .single();
+
+      setIsAdmin(!!data);
+    } catch (error) {
+      setIsAdmin(false);
+    }
+  };
 
   const fetchRaffleHistory = async () => {
     try {
@@ -198,19 +222,21 @@ const RaffleHistory = () => {
             </CardContent>
           </Card>
 
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Total Participants</p>
-                  <p className="text-3xl font-bold">
-                    {raffles.reduce((sum, r) => sum + (r.participant_count || 0), 0)}
-                  </p>
+          {isAdmin && (
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Total Participants</p>
+                    <p className="text-3xl font-bold">
+                      {raffles.reduce((sum, r) => sum + (r.participant_count || 0), 0)}
+                    </p>
+                  </div>
+                  <Users className="w-8 h-8 text-blue-500" />
                 </div>
-                <Users className="w-8 h-8 text-blue-500" />
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          )}
 
           <Card>
             <CardContent className="pt-6">
@@ -329,15 +355,17 @@ const RaffleHistory = () => {
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-2">
-                        <Users className="w-4 h-4 text-muted-foreground" />
-                        <div>
-                          <p className="text-xs text-muted-foreground">Participants</p>
-                          <p className="text-sm font-medium">
-                            {raffle.participant_count || 0} {raffle.participant_count === 1 ? 'person' : 'people'}
-                          </p>
+                      {isAdmin && (
+                        <div className="flex items-center gap-2">
+                          <Users className="w-4 h-4 text-muted-foreground" />
+                          <div>
+                            <p className="text-xs text-muted-foreground">Participants</p>
+                            <p className="text-sm font-medium">
+                              {raffle.participant_count || 0} {raffle.participant_count === 1 ? 'person' : 'people'}
+                            </p>
+                          </div>
                         </div>
-                      </div>
+                      )}
 
                       {raffle.winner_user_id && (
                         <div className="flex items-center gap-2">
