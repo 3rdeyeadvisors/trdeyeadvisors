@@ -8,6 +8,7 @@ export interface ModuleContent {
     text?: string;
     videoUrl?: string;
     embedCode?: string;
+    heroImage?: string;
     quiz?: {
       question: string;
       options: string[];

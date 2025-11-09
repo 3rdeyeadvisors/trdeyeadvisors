@@ -33,7 +33,7 @@ import {
   Monitor
 } from "lucide-react";
 import { ModuleContent } from "@/data/courseContent";
-import ReactMarkdown from "react-markdown";
+import { EnhancedMarkdownRenderer } from "./EnhancedMarkdownRenderer";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -361,7 +361,10 @@ export const EnhancedContentPlayer = ({
                     touchAction: 'pan-y'
                   }}
                 >
-                  <ReactMarkdown>{module.content.text}</ReactMarkdown>
+                  <EnhancedMarkdownRenderer 
+                    content={module.content.text} 
+                    heroImage={module.content.heroImage}
+                  />
                 </div>
               )}
 
