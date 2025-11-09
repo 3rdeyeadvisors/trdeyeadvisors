@@ -372,7 +372,7 @@ const Navigation = () => {
                     </div>
                     {isLearningOpen ? <ChevronDown className="w-4 h-4 flex-shrink-0" /> : <ChevronRight className="w-4 h-4 flex-shrink-0" />}
                   </CollapsibleTrigger>
-                  <CollapsibleContent className="mt-1 space-y-1">
+                  <CollapsibleContent className="mt-1 space-y-1 pl-8">
                     {mobileNavStructure.learning.map((item) => (
                       item.external ? (
                         <a
@@ -380,7 +380,7 @@ const Navigation = () => {
                           href={item.path}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center space-x-3 p-2.5 pl-11 rounded-lg transition-colors text-muted-foreground hover:bg-muted hover:text-foreground"
+                          className="flex items-center space-x-3 p-2.5 rounded-lg transition-colors text-muted-foreground hover:bg-muted hover:text-foreground"
                           onClick={() => setIsOpen(false)}
                         >
                           {item.icon && <item.icon className="w-4 h-4 flex-shrink-0" />}
@@ -390,7 +390,7 @@ const Navigation = () => {
                         <Link
                           key={item.path}
                           to={item.path}
-                          className={`flex items-center space-x-3 p-2.5 pl-11 rounded-lg transition-colors ${
+                          className={`flex items-center space-x-3 p-2.5 rounded-lg transition-colors ${
                             isActive(item.path)
                               ? "bg-primary/10 text-primary font-medium"
                               : "text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -414,12 +414,12 @@ const Navigation = () => {
                     </div>
                     {isMoreOpen ? <ChevronDown className="w-4 h-4 flex-shrink-0" /> : <ChevronRight className="w-4 h-4 flex-shrink-0" />}
                   </CollapsibleTrigger>
-                  <CollapsibleContent className="mt-1 space-y-1">
+                  <CollapsibleContent className="mt-1 space-y-1 pl-8">
                     {mobileNavStructure.more.map((item) => (
                       <Link
                         key={item.path}
                         to={item.path}
-                        className={`flex items-center space-x-3 p-2.5 pl-11 rounded-lg transition-colors ${
+                        className={`flex items-center space-x-3 p-2.5 rounded-lg transition-colors ${
                           isActive(item.path)
                             ? "bg-primary/10 text-primary font-medium"
                             : "text-muted-foreground hover:bg-muted hover:text-foreground"
