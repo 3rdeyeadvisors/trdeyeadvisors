@@ -68,10 +68,11 @@ const RaffleHistory = () => {
     try {
       setLoading(true);
 
-      // Fetch all raffles (active and past)
+      // Fetch raffles that have a winner or are active (excludes inactive test raffles)
       const { data: rafflesData, error: rafflesError } = await supabase
         .from('raffles')
         .select('*')
+        .or('winner_user_id.not.is.null,is_active.eq.true')
         .order('created_at', { ascending: false });
 
       if (rafflesError) throw rafflesError;
