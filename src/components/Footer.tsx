@@ -21,7 +21,7 @@ const Footer = () => {
 
           {/* Quick Links Column */}
           <div className="text-left">
-            <h3 className="font-consciousness font-semibold mb-2 md:mb-3 text-base text-foreground">
+            <h3 className="font-consciousness font-semibold mb-2 md:mb-3 text-base text-foreground text-left">
               Quick Links
             </h3>
             <ul className="space-y-1.5 md:space-y-2">
@@ -62,7 +62,7 @@ const Footer = () => {
 
           {/* Support Column */}
           <div className="text-left">
-            <h3 className="font-consciousness font-semibold mb-2 md:mb-3 text-base text-foreground">
+            <h3 className="font-consciousness font-semibold mb-2 md:mb-3 text-base text-foreground text-left">
               Support
             </h3>
             <ul className="space-y-1.5 md:space-y-2">
