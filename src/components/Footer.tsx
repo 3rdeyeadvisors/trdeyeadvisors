@@ -8,19 +8,19 @@ const Footer = () => {
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-10 lg:gap-12 mb-3 md:mb-12">
           {/* Brand Column */}
-          <div className="text-center sm:text-left">
+          <div className="text-left">
             <Link to="/" className="inline-block mb-1.5 md:mb-2">
               <span className="font-consciousness font-bold text-lg md:text-xl text-primary">
                 3rdeyeadvisors
               </span>
             </Link>
-            <p className="text-sm text-muted-foreground font-consciousness leading-snug md:leading-relaxed max-w-xs mx-auto sm:mx-0">
+            <p className="text-sm text-muted-foreground font-consciousness leading-snug md:leading-relaxed max-w-xs">
               Empowering financial consciousness through DeFi education and tools.
             </p>
           </div>
 
           {/* Quick Links Column */}
-          <div className="text-center sm:text-left">
+          <div className="text-left">
             <h3 className="font-consciousness font-semibold mb-2 md:mb-3 text-base text-foreground">
               Quick Links
             </h3>
@@ -61,7 +61,7 @@ const Footer = () => {
           </div>
 
           {/* Support Column */}
-          <div className="text-center sm:text-left">
+          <div className="text-left">
             <h3 className="font-consciousness font-semibold mb-2 md:mb-3 text-base text-foreground">
               Support
             </h3>
@@ -112,11 +112,11 @@ const Footer = () => {
           </div>
 
           {/* Social Column */}
-          <div className="text-center sm:text-left">
+          <div className="text-left">
             <h3 className="font-consciousness font-semibold mb-2 md:mb-3 text-base text-foreground">
               Connect
             </h3>
-            <div className="flex items-center justify-center sm:justify-start gap-3 mb-2 md:mb-3">
+            <div className="flex items-center justify-start gap-3 mb-2 md:mb-3">
               <a 
                 href="mailto:info@the3rdeyeadvisors.com" 
                 className="text-muted-foreground hover:text-primary transition-colors p-2 rounded-lg hover:bg-primary/10"
