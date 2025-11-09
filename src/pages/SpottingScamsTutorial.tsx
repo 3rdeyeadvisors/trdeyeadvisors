@@ -1,5 +1,10 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { KeyTakeaway } from "@/components/course/KeyTakeaway";
+import { DidYouKnow } from "@/components/course/DidYouKnow";
+import { StepBlock } from "@/components/course/StepBlock";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import scamHero from "@/assets/tutorials/scam-detection-hero.jpg";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -584,6 +589,15 @@ const SpottingScamsTutorial = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
       <div className="container mx-auto px-4 py-8 mobile-typography-center">
+        {/* Hero Image */}
+        <div className="mb-8 rounded-lg overflow-hidden">
+          <img 
+            src={scamHero} 
+            alt="Cybersecurity shield protecting against cryptocurrency scams, phishing, and fraud" 
+            className="w-full h-48 md:h-64 object-cover"
+          />
+        </div>
+
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
@@ -658,6 +672,12 @@ const SpottingScamsTutorial = () => {
               {/* Step 1: Common Scam Types */}
               {currentStep === 1 && (
                 <div className="space-y-4">
+                  <KeyTakeaway title="Critical Statistics">
+                    Over $4.6 billion was stolen through crypto scams in 2024. The vast majority could have been prevented with proper verification and security awareness.
+                  </KeyTakeaway>
+
+                  <DidYouKnow fact="Phishing websites are the #1 scam method. Scammers created over 500 fake MetaMask sites in 2024-2025 by slightly changing URLs (like 'metamasc.io' or 'metamask.com')!" />
+
                   <Alert className="border-destructive/50 bg-destructive/10">
                     <AlertTriangle className="h-4 w-4 text-destructive" />
                     <AlertDescription className="text-foreground">

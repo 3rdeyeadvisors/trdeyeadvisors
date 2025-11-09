@@ -1,5 +1,9 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { KeyTakeaway } from "@/components/course/KeyTakeaway";
+import { DidYouKnow } from "@/components/course/DidYouKnow";
+import { StepBlock } from "@/components/course/StepBlock";
+import dexSwapHero from "@/assets/tutorials/dex-swap-hero.jpg";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -468,6 +472,15 @@ const FirstDexSwapTutorial = () => {
           </Link>
         </div>
 
+        {/* Hero Image */}
+        <div className="mb-8 rounded-lg overflow-hidden">
+          <img 
+            src={dexSwapHero} 
+            alt="Decentralized exchange interface showing token swap functionality and liquidity pools" 
+            className="w-full h-48 md:h-64 object-cover"
+          />
+        </div>
+
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
@@ -541,7 +554,14 @@ const FirstDexSwapTutorial = () => {
 
               {/* Step 1: Choose DEX */}
               {currentStep === 1 && (
-                <div className="grid gap-4">
+                <div className="space-y-6">
+                  <KeyTakeaway>
+                    Over $1.8 trillion in DEX volume was traded in 2024. Uniswap alone processed over $600 billion, making it the most trusted DEX for beginners and professionals alike.
+                  </KeyTakeaway>
+
+                  <DidYouKnow fact="Modern DEXs use 'automated market makers' (AMMs) instead of traditional order books, allowing you to trade 24/7 without waiting for a buyer or seller." />
+
+                  <div className="grid gap-4">
                   {currentStepData.content.dexOptions?.map((dex, index) => (
                     <Card key={index} className={`${dex.recommended ? "border-primary bg-primary/5" : ""}`}>
                       <CardHeader className="pb-3">
@@ -589,24 +609,20 @@ const FirstDexSwapTutorial = () => {
                     </Card>
                   ))}
                 </div>
+                </div>
               )}
 
               {/* Step 2: Connect Wallet */}
               {currentStep === 2 && (
                 <div className="space-y-4">
-                  <div className="space-y-3">
-                    <h3 className="font-semibold">Connection Steps:</h3>
-                    <ol className="space-y-2">
-                      {currentStepData.content.instructions?.map((instruction, index) => (
-                        <li key={index} className="flex items-start gap-3">
-                          <Badge variant="outline" className="text-xs min-w-6 h-6 flex items-center justify-center">
-                            {index + 1}
-                          </Badge>
-                          <span className="text-sm">{instruction}</span>
-                        </li>
-                      ))}
-                    </ol>
-                  </div>
+                  <KeyTakeaway title="Safety First">
+                    Always verify the URL before connecting your wallet. Scammers create fake DEX sites that look identical to the real ones. Bookmark official DEX sites.
+                  </KeyTakeaway>
+
+                  <StepBlock 
+                    title="Connection Steps:"
+                    steps={currentStepData.content.instructions || []}
+                  />
 
                   <Alert className="border-awareness bg-awareness/10">
                     <Shield className="h-4 w-4 text-awareness" />
