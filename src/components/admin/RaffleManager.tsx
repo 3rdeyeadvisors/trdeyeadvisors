@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Download, Trophy, Users, Gift } from "lucide-react";
+import { Download, Trophy, Users, Gift, CheckCircle2, X, Loader2 } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -38,11 +38,25 @@ interface Participant {
   display_name: string;
 }
 
+interface VerificationTask {
+  id: string;
+  user_id: string;
+  task_type: string;
+  instagram_username?: string;
+  x_username?: string;
+  verification_status: string;
+  email: string;
+  display_name: string;
+  created_at: string;
+}
+
 const RaffleManager = () => {
   const { toast } = useToast();
   const [raffles, setRaffles] = useState<Raffle[]>([]);
   const [participants, setParticipants] = useState<Participant[]>([]);
+  const [verificationTasks, setVerificationTasks] = useState<VerificationTask[]>([]);
   const [loading, setLoading] = useState(false);
+  const [sendingAnnouncement, setSendingAnnouncement] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -111,6 +125,130 @@ const RaffleManager = () => {
         description: "Failed to load participants",
         variant: "destructive",
       });
+    }
+  };
+
+  const fetchVerificationTasks = async (raffleId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('raffle_tasks')
+        .select(`
+          id,
+          user_id,
+          task_type,
+          instagram_username,
+          x_username,
+          verification_status,
+          created_at,
+          profiles!inner(display_name)
+        `)
+        .eq('raffle_id', raffleId)
+        .in('task_type', ['instagram', 'x'])
+        .eq('verification_status', 'submitted')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      // Get emails
+      const { data: emailsData } = await supabase.rpc('get_user_emails_with_profiles');
+
+      const tasksWithEmails = data?.map(task => {
+        const userEmail = emailsData?.find((u: any) => u.user_id === task.user_id);
+        return {
+          ...task,
+          email: userEmail?.email || 'N/A',
+          display_name: (task.profiles as any)?.display_name || 'Anonymous',
+        };
+      }) || [];
+
+      setVerificationTasks(tasksWithEmails as VerificationTask[]);
+    } catch (error) {
+      console.error('Error fetching verification tasks:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load verification tasks",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleVerifyTask = async (taskId: string, approved: boolean) => {
+    try {
+      const newStatus = approved ? 'verified' : 'rejected';
+      
+      const { error } = await supabase
+        .from('raffle_tasks')
+        .update({ 
+          verification_status: newStatus,
+          completed: approved ? true : false,
+        })
+        .eq('id', taskId);
+
+      if (error) throw error;
+
+      // If approved, update entry count
+      if (approved) {
+        const task = verificationTasks.find(t => t.id === taskId);
+        if (task) {
+          const { data: currentEntry } = await supabase
+            .from('raffle_entries')
+            .select('entry_count')
+            .eq('raffle_id', raffles.find(r => r.is_active)?.id || '')
+            .eq('user_id', task.user_id)
+            .single();
+
+          await supabase
+            .from('raffle_entries')
+            .upsert({
+              raffle_id: raffles.find(r => r.is_active)?.id || '',
+              user_id: task.user_id,
+              entry_count: (currentEntry?.entry_count || 0) + 2,
+            }, {
+              onConflict: 'raffle_id,user_id'
+            });
+        }
+      }
+
+      toast({
+        title: approved ? "Verified ✅" : "Rejected",
+        description: `Username has been ${approved ? 'verified' : 'rejected'}`,
+      });
+
+      // Refresh the list
+      const activeRaffle = raffles.find(r => r.is_active);
+      if (activeRaffle) {
+        fetchVerificationTasks(activeRaffle.id);
+      }
+    } catch (error) {
+      console.error('Error verifying task:', error);
+      toast({
+        title: "Error",
+        description: "Failed to verify task",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleSendAnnouncement = async () => {
+    setSendingAnnouncement(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('send-raffle-announcement');
+
+      if (error) throw error;
+
+      toast({
+        title: "Announcement Sent! 🎉",
+        description: `Raffle announcement sent to ${data.sent} subscribers`,
+      });
+    } catch (error) {
+      console.error('Error sending announcement:', error);
+      toast({
+        title: "Error",
+        description: "Failed to send announcement email",
+        variant: "destructive",
+      });
+    } finally {
+      setSendingAnnouncement(false);
     }
   };
 
@@ -216,6 +354,10 @@ const RaffleManager = () => {
             <Trophy className="w-4 h-4 mr-2" />
             Manage Raffles
           </TabsTrigger>
+          <TabsTrigger value="verification">
+            <CheckCircle2 className="w-4 h-4 mr-2" />
+            Verify Usernames
+          </TabsTrigger>
           <TabsTrigger value="participants">
             <Users className="w-4 h-4 mr-2" />
             Participants
@@ -317,6 +459,27 @@ const RaffleManager = () => {
                   {loading ? "Creating..." : "Create Raffle"}
                 </Button>
               </form>
+
+              <div className="mt-8 pt-8 border-t">
+                <h3 className="text-lg font-semibold mb-4">Send Announcement Email</h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Send the raffle announcement to all newsletter subscribers and registered users.
+                </p>
+                <Button 
+                  onClick={handleSendAnnouncement}
+                  disabled={sendingAnnouncement}
+                  variant="secondary"
+                >
+                  {sendingAnnouncement ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Sending...
+                    </>
+                  ) : (
+                    "Send Raffle Announcement"
+                  )}
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
@@ -367,11 +530,88 @@ const RaffleManager = () => {
                         >
                           View Participants
                         </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => fetchVerificationTasks(raffle.id)}
+                        >
+                          Check Verifications
+                        </Button>
                       </div>
                     </div>
                   ))
                 )}
               </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="verification">
+          <Card>
+            <CardHeader>
+              <CardTitle>Username Verifications</CardTitle>
+              <CardDescription>
+                Review and verify submitted social media usernames
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {verificationTasks.length === 0 ? (
+                <p className="text-center text-muted-foreground py-8">
+                  No pending verifications. Select "Check Verifications" from the Manage tab.
+                </p>
+              ) : (
+                <div className="space-y-4">
+                  {verificationTasks.map((task) => (
+                    <div key={task.id} className="border rounded-lg p-4 space-y-3">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <h3 className="font-semibold">{task.display_name}</h3>
+                          <p className="text-sm text-muted-foreground">{task.email}</p>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Submitted: {new Date(task.created_at).toLocaleDateString()}
+                          </p>
+                        </div>
+                        <Badge variant="outline" className="capitalize">
+                          {task.task_type}
+                        </Badge>
+                      </div>
+                      
+                      <div className="bg-accent/50 p-3 rounded-lg">
+                        {task.instagram_username && (
+                          <p className="text-sm">
+                            <strong>Instagram:</strong> @{task.instagram_username}
+                          </p>
+                        )}
+                        {task.x_username && (
+                          <p className="text-sm">
+                            <strong>X:</strong> @{task.x_username}
+                          </p>
+                        )}
+                      </div>
+                      
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          onClick={() => handleVerifyTask(task.id, true)}
+                          className="flex-1"
+                        >
+                          <CheckCircle2 className="w-4 h-4 mr-2" />
+                          Verify
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          onClick={() => handleVerifyTask(task.id, false)}
+                          className="flex-1"
+                        >
+                          <X className="w-4 h-4 mr-2" />
+                          Reject
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>

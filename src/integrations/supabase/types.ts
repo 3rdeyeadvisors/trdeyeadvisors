@@ -929,28 +929,37 @@ export type Database = {
           completed: boolean
           created_at: string
           id: string
+          instagram_username: string | null
           raffle_id: string
           task_type: string
           user_id: string
+          verification_status: string | null
           verified_at: string | null
+          x_username: string | null
         }
         Insert: {
           completed?: boolean
           created_at?: string
           id?: string
+          instagram_username?: string | null
           raffle_id: string
           task_type: string
           user_id: string
+          verification_status?: string | null
           verified_at?: string | null
+          x_username?: string | null
         }
         Update: {
           completed?: boolean
           created_at?: string
           id?: string
+          instagram_username?: string | null
           raffle_id?: string
           task_type?: string
           user_id?: string
+          verification_status?: string | null
           verified_at?: string | null
+          x_username?: string | null
         }
         Relationships: [
           {

@@ -11,6 +11,7 @@ import SEO from "@/components/SEO";
 import { Link } from "react-router-dom";
 import RaffleCountdown from "@/components/raffles/RaffleCountdown";
 import RaffleShareButton from "@/components/raffles/RaffleShareButton";
+import SocialVerificationForm from "@/components/raffles/SocialVerificationForm";
 
 interface Raffle {
   id: string;
@@ -27,17 +28,23 @@ interface TaskCompletion {
   [key: string]: boolean;
 }
 
-const TASKS = [
-  { id: 'instagram_follow', label: 'Follow our Instagram: @3rdeyeadvisors', link: 'https://instagram.com/3rdeyeadvisors', entries: 1 },
-  { id: 'instagram_share', label: 'Share any post from Instagram', entries: 1 },
-  { id: 'x_follow', label: 'Follow our X page: @3rdeyeadvisors', link: 'https://x.com/3rdeyeadvisors', entries: 1 },
-  { id: 'x_retweet', label: 'Retweet any tweet from X', entries: 1 },
-  { id: 'newsletter', label: 'Subscribe to the newsletter', entries: 1, auto: true },
-  { id: 'account', label: 'Have a registered user account', entries: 1, auto: true },
-  { id: 'course_foundations', label: 'Complete "DeFi Foundations" course', entries: 1, auto: true },
-  { id: 'course_safety', label: 'Complete "Staying Safe with DeFi" course', entries: 1, auto: true },
-  { id: 'rating', label: 'Rate a course 5 stars', entries: 1, auto: true },
-  { id: 'discussion', label: 'Post in course discussion section', entries: 1, auto: true },
+interface SocialTask {
+  username?: string;
+  verification_status?: string;
+}
+
+interface SocialTasks {
+  instagram?: SocialTask;
+  x?: SocialTask;
+}
+
+const AUTO_TASKS = [
+  { id: 'newsletter', label: 'Subscribe to the newsletter', entries: 1 },
+  { id: 'account', label: 'Have a registered user account', entries: 1 },
+  { id: 'course_foundations', label: 'Complete "DeFi Foundations" course', entries: 1 },
+  { id: 'course_safety', label: 'Complete "Staying Safe with DeFi" course', entries: 1 },
+  { id: 'rating', label: 'Rate a course 5 stars', entries: 1 },
+  { id: 'discussion', label: 'Post in course discussion section', entries: 1 },
 ];
 
 const Raffles = () => {
@@ -48,6 +55,7 @@ const Raffles = () => {
   const [taskCompletion, setTaskCompletion] = useState<TaskCompletion>({});
   const [totalEntries, setTotalEntries] = useState(0);
   const [referralCount, setReferralCount] = useState(0);
+  const [socialTasks, setSocialTasks] = useState<SocialTasks>({});
 
   useEffect(() => {
     fetchActiveRaffle();
@@ -78,18 +86,34 @@ const Raffles = () => {
     if (!activeRaffle || !user) return;
 
     try {
-      // Fetch task completion
+      // Fetch task completion including social verification
       const { data: tasks } = await supabase
         .from('raffle_tasks')
-        .select('task_type, completed')
+        .select('task_type, completed, instagram_username, x_username, verification_status')
         .eq('raffle_id', activeRaffle.id)
         .eq('user_id', user.id);
 
       const completion: TaskCompletion = {};
+      const social: SocialTasks = {};
+      
       tasks?.forEach(task => {
         completion[task.task_type] = task.completed;
+        
+        if (task.task_type === 'instagram') {
+          social.instagram = {
+            username: task.instagram_username || undefined,
+            verification_status: task.verification_status || 'pending',
+          };
+        } else if (task.task_type === 'x') {
+          social.x = {
+            username: task.x_username || undefined,
+            verification_status: task.verification_status || 'pending',
+          };
+        }
       });
+      
       setTaskCompletion(completion);
+      setSocialTasks(social);
 
       // Fetch entry count
       const { data: entry } = await supabase
@@ -131,7 +155,7 @@ const Raffles = () => {
       return;
     }
 
-    const task = TASKS.find(t => t.id === taskId);
+    const task = AUTO_TASKS.find(t => t.id === taskId);
     if (!task) return;
 
     const newValue = !taskCompletion[taskId];
@@ -326,42 +350,58 @@ const Raffles = () => {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {TASKS.map((task) => (
-                      <div key={task.id} className="flex items-start space-x-3 p-3 rounded-lg hover:bg-accent/50 transition-colors">
-                        <Checkbox
-                          id={task.id}
-                          checked={taskCompletion[task.id] || false}
-                          onCheckedChange={() => handleTaskToggle(task.id)}
-                          disabled={task.auto}
-                        />
-                        <div className="flex-1">
-                          <label
-                            htmlFor={task.id}
-                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
-                          >
-                            {task.label}
-                            {task.auto && (
+                    {/* Social Media Verification Section */}
+                    <div className="space-y-3 pb-4 border-b border-border">
+                      <h3 className="text-sm font-semibold text-muted-foreground">Social Media Tasks</h3>
+                      
+                      <SocialVerificationForm
+                        raffleId={activeRaffle.id}
+                        userId={user.id}
+                        taskType="instagram"
+                        existingUsername={socialTasks.instagram?.username}
+                        verificationStatus={socialTasks.instagram?.verification_status}
+                        onSubmit={fetchUserProgress}
+                      />
+                      
+                      <SocialVerificationForm
+                        raffleId={activeRaffle.id}
+                        userId={user.id}
+                        taskType="x"
+                        existingUsername={socialTasks.x?.username}
+                        verificationStatus={socialTasks.x?.verification_status}
+                        onSubmit={fetchUserProgress}
+                      />
+                    </div>
+
+                    {/* Auto-Verified Tasks Section */}
+                    <div className="space-y-3">
+                      <h3 className="text-sm font-semibold text-muted-foreground">Learning Tasks</h3>
+                      
+                      {AUTO_TASKS.map((task) => (
+                        <div key={task.id} className="flex items-start space-x-3 p-3 rounded-lg hover:bg-accent/50 transition-colors">
+                          <Checkbox
+                            id={task.id}
+                            checked={taskCompletion[task.id] || false}
+                            onCheckedChange={() => handleTaskToggle(task.id)}
+                            disabled={true}
+                          />
+                          <div className="flex-1">
+                            <label
+                              htmlFor={task.id}
+                              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                            >
+                              {task.label}
                               <Badge variant="outline" className="ml-2 text-xs">
                                 Auto-verified
                               </Badge>
-                            )}
-                          </label>
-                          {task.link && (
-                            <a
-                              href={task.link}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-xs text-primary hover:underline flex items-center gap-1 mt-1"
-                            >
-                              Visit <Share2 className="w-3 h-3" />
-                            </a>
-                          )}
+                            </label>
+                          </div>
+                          <Badge variant="secondary" className="text-xs">
+                            +{task.entries}
+                          </Badge>
                         </div>
-                        <Badge variant="secondary" className="text-xs">
-                          +{task.entries}
-                        </Badge>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                 )}
               </CardContent>

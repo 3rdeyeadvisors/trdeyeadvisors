@@ -1,0 +1,162 @@
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { CheckCircle2, Clock, Share2 } from "lucide-react";
+
+interface SocialVerificationFormProps {
+  raffleId: string;
+  userId: string;
+  taskType: 'instagram' | 'x';
+  existingUsername?: string;
+  verificationStatus?: string;
+  onSubmit: () => void;
+}
+
+const SocialVerificationForm = ({ 
+  raffleId, 
+  userId, 
+  taskType, 
+  existingUsername,
+  verificationStatus = 'pending',
+  onSubmit 
+}: SocialVerificationFormProps) => {
+  const { toast } = useToast();
+  const [username, setUsername] = useState(existingUsername || '');
+  const [submitting, setSubmitting] = useState(false);
+
+  const platform = taskType === 'instagram' ? 'Instagram' : 'X';
+  const platformHandle = taskType === 'instagram' ? '@3rdeyeadvisors' : '@3rdeyeadvisors';
+  const platformLink = taskType === 'instagram' 
+    ? 'https://instagram.com/3rdeyeadvisors' 
+    : 'https://x.com/3rdeyeadvisors';
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!username.trim()) {
+      toast({
+        title: "Username Required",
+        description: `Please enter your ${platform} username`,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setSubmitting(true);
+
+    try {
+      const fieldName = taskType === 'instagram' ? 'instagram_username' : 'x_username';
+      
+      const { error } = await supabase
+        .from('raffle_tasks')
+        .upsert({
+          raffle_id: raffleId,
+          user_id: userId,
+          task_type: taskType,
+          [fieldName]: username.replace('@', ''), // Remove @ if user included it
+          verification_status: 'submitted',
+          completed: false,
+        }, {
+          onConflict: 'raffle_id,user_id,task_type'
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: "Submitted for Verification! ✅",
+        description: `Your ${platform} username has been submitted. We'll verify it soon.`,
+      });
+
+      onSubmit();
+    } catch (error) {
+      console.error('Error submitting username:', error);
+      toast({
+        title: "Error",
+        description: "Failed to submit username. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <Card className="p-4 bg-accent/50">
+      <div className="space-y-4">
+        <div className="flex items-start justify-between">
+          <div className="flex-1">
+            <h4 className="font-semibold text-sm mb-1">
+              {platform} Verification
+            </h4>
+            <p className="text-xs text-muted-foreground mb-2">
+              Follow {platformHandle} and share/retweet content
+            </p>
+            <a
+              href={platformLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-primary hover:underline flex items-center gap-1"
+            >
+              Visit {platform} <Share2 className="w-3 h-3" />
+            </a>
+          </div>
+          <Badge 
+            variant="secondary" 
+            className="text-xs"
+          >
+            +2 entries
+          </Badge>
+        </div>
+
+        {verificationStatus === 'verified' ? (
+          <div className="flex items-center gap-2 p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
+            <CheckCircle2 className="w-5 h-5 text-green-500" />
+            <div>
+              <p className="text-sm font-semibold text-green-500">✅ Verified</p>
+              <p className="text-xs text-muted-foreground">@{username}</p>
+            </div>
+          </div>
+        ) : verificationStatus === 'submitted' ? (
+          <div className="flex items-center gap-2 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+            <Clock className="w-5 h-5 text-yellow-500" />
+            <div>
+              <p className="text-sm font-semibold text-yellow-500">✅ Submitted for verification</p>
+              <p className="text-xs text-muted-foreground">@{username}</p>
+            </div>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-3">
+            <div className="space-y-2">
+              <Label htmlFor={`${taskType}-username`} className="text-xs">
+                Your {platform} Username
+              </Label>
+              <Input
+                id={`${taskType}-username`}
+                type="text"
+                placeholder={`your${taskType}handle`}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="h-9 text-sm"
+              />
+            </div>
+            <Button 
+              type="submit" 
+              size="sm" 
+              className="w-full"
+              disabled={submitting}
+            >
+              {submitting ? "Submitting..." : "Submit for Verification"}
+            </Button>
+          </form>
+        )}
+      </div>
+    </Card>
+  );
+};
+
+export default SocialVerificationForm;

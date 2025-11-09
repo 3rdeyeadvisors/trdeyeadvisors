@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 import { Helmet } from "react-helmet-async";
+import { supabase } from "@/integrations/supabase/client";
 
 const Auth = () => {
   const { user, signIn, signUp, resetPassword, updatePassword } = useAuth();
@@ -107,7 +108,11 @@ const Auth = () => {
     setLoading(true);
     
     try {
-      const { error } = await signUp(email, password, {
+      // Get referrer ID from URL if present
+      const urlParams = new URLSearchParams(window.location.search);
+      const referrerId = urlParams.get('ref');
+      
+      const { error, data } = await signUp(email, password, {
         emailRedirectTo: `${window.location.origin}/auth?verified=true`,
         data: {
           display_name: displayName,
@@ -121,6 +126,48 @@ const Auth = () => {
           variant: "destructive",
         });
       } else {
+        // If there's a referrer, create referral record after successful signup
+        if (referrerId && data.user) {
+          try {
+            const { data: activeRaffle } = await supabase
+              .from('raffles')
+              .select('id')
+              .eq('is_active', true)
+              .single();
+
+            if (activeRaffle) {
+              await supabase
+                .from('referrals')
+                .insert({
+                  referrer_id: referrerId,
+                  referred_user_id: data.user.id,
+                  raffle_id: activeRaffle.id,
+                  bonus_awarded: true,
+                });
+
+              // Update referrer's entry count
+              const { data: currentEntry } = await supabase
+                .from('raffle_entries')
+                .select('entry_count')
+                .eq('raffle_id', activeRaffle.id)
+                .eq('user_id', referrerId)
+                .single();
+
+              await supabase
+                .from('raffle_entries')
+                .upsert({
+                  raffle_id: activeRaffle.id,
+                  user_id: referrerId,
+                  entry_count: (currentEntry?.entry_count || 0) + 1,
+                }, {
+                  onConflict: 'raffle_id,user_id'
+                });
+            }
+          } catch (refError) {
+            console.error('Error creating referral:', refError);
+          }
+        }
+        
         toast({
           title: "Account created!",
           description: "Welcome! You can now start exploring our courses.",
