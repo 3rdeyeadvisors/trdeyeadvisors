@@ -23,6 +23,7 @@ const AdminDashboard = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [activeSection, setActiveSection] = useState("overview");
+  const [checkedUserId, setCheckedUserId] = useState<string | null>(null);
 
   useEffect(() => {
     checkAdminStatus();
@@ -34,6 +35,11 @@ const AdminDashboard = () => {
       
       if (!user) {
         navigate("/auth");
+        return;
+      }
+
+      // Only re-check if the user ID has changed
+      if (checkedUserId === user.id) {
         return;
       }
 
@@ -54,6 +60,7 @@ const AdminDashboard = () => {
         return;
       }
 
+      setCheckedUserId(user.id);
       setIsAdmin(true);
     } catch (error) {
       console.error("Error checking admin status:", error);

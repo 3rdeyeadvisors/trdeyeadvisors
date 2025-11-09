@@ -16,16 +16,16 @@ const ProtectedRoute = ({
 }: ProtectedRouteProps) => {
   const { user, loading } = useAuth();
   const [hasRole, setHasRole] = useState<boolean | null>(null);
-  const [checkingRole, setCheckingRole] = useState(false);
+  const [initialCheckDone, setInitialCheckDone] = useState(false);
 
   useEffect(() => {
     const checkUserRole = async () => {
       if (!user || !requireRole) {
         setHasRole(true);
+        setInitialCheckDone(true);
         return;
       }
 
-      setCheckingRole(true);
       try {
         const { data: roles, error } = await supabase
           .from('user_roles')
@@ -39,14 +39,17 @@ const ProtectedRoute = ({
         console.error('Error checking user role:', error);
         setHasRole(false);
       } finally {
-        setCheckingRole(false);
+        setInitialCheckDone(true);
       }
     };
 
-    checkUserRole();
-  }, [user, requireRole]);
+    // Only check on initial mount or if user ID changes
+    if (!initialCheckDone) {
+      checkUserRole();
+    }
+  }, [user?.id, requireRole, initialCheckDone]);
 
-  if (loading || checkingRole) {
+  if (loading || !initialCheckDone) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="w-8 h-8 animate-spin" />
