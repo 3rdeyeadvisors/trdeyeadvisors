@@ -22,6 +22,8 @@ interface Raffle {
   start_date: string;
   end_date: string;
   is_active: boolean;
+  winner_user_id?: string;
+  winner_selected_at?: string;
 }
 
 interface TaskCompletion {
@@ -56,6 +58,8 @@ const Raffles = () => {
   const [totalEntries, setTotalEntries] = useState(0);
   const [referralCount, setReferralCount] = useState(0);
   const [socialTasks, setSocialTasks] = useState<SocialTasks>({});
+  const [winnerDisplayName, setWinnerDisplayName] = useState<string | null>(null);
+  const [isWinner, setIsWinner] = useState(false);
 
   useEffect(() => {
     fetchActiveRaffle();
@@ -64,6 +68,13 @@ const Raffles = () => {
       fetchReferralCount();
     }
   }, [user]);
+
+  useEffect(() => {
+    if (activeRaffle?.winner_user_id && user) {
+      setIsWinner(activeRaffle.winner_user_id === user.id);
+      fetchWinnerName();
+    }
+  }, [activeRaffle, user]);
 
   const fetchActiveRaffle = async () => {
     try {
@@ -142,6 +153,22 @@ const Raffles = () => {
       setReferralCount(count || 0);
     } catch (error) {
       console.error('Error fetching referral count:', error);
+    }
+  };
+
+  const fetchWinnerName = async () => {
+    if (!activeRaffle?.winner_user_id) return;
+
+    try {
+      const { data } = await supabase
+        .from('profiles')
+        .select('display_name')
+        .eq('user_id', activeRaffle.winner_user_id)
+        .single();
+
+      setWinnerDisplayName(data?.display_name || 'Anonymous');
+    } catch (error) {
+      console.error('Error fetching winner name:', error);
     }
   };
 
@@ -281,6 +308,40 @@ const Raffles = () => {
                   <Button>Sign In to Get Notified</Button>
                 </Link>
               )}
+            </CardContent>
+          </Card>
+        ) : activeRaffle.winner_user_id ? (
+          <Card className="text-center py-12">
+            <CardContent>
+              <Trophy className="w-20 h-20 mx-auto mb-4 text-yellow-500" />
+              <h2 className="text-3xl font-bold mb-4">
+                {isWinner ? "🎉 Congratulations! You Won! 🎉" : "Winner Announced!"}
+              </h2>
+              {isWinner ? (
+                <div className="space-y-4">
+                  <p className="text-xl text-primary font-semibold">
+                    You won ${activeRaffle.prize_amount} in {activeRaffle.prize}!
+                  </p>
+                  <p className="text-muted-foreground">
+                    Check your email for instructions on claiming your prize.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <p className="text-lg text-muted-foreground">
+                    The winner of <strong>{activeRaffle.title}</strong> is:
+                  </p>
+                  <p className="text-2xl font-bold text-primary">{winnerDisplayName}</p>
+                  <p className="text-muted-foreground mt-4">
+                    Thank you for participating! Keep learning and stay tuned for the next raffle.
+                  </p>
+                </div>
+              )}
+              <div className="mt-8">
+                <Badge variant="outline" className="text-sm">
+                  Winner selected on {new Date(activeRaffle.winner_selected_at!).toLocaleDateString()}
+                </Badge>
+              </div>
             </CardContent>
           </Card>
         ) : (

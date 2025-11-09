@@ -252,6 +252,37 @@ const RaffleManager = () => {
     }
   };
 
+  const handleSelectWinner = async (raffleId: string) => {
+    if (!confirm("Are you sure you want to select a winner? This cannot be undone!")) {
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('select-raffle-winner', {
+        body: { raffle_id: raffleId }
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Winner Selected! 🎉",
+        description: `${data.winner_name} won with ${data.total_participants} total participants!`,
+      });
+
+      fetchRaffles();
+    } catch (error: any) {
+      console.error('Error selecting winner:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to select winner",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleCreateRaffle = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -515,7 +546,7 @@ const RaffleManager = () => {
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         <span>Ends: {new Date(raffle.end_date).toLocaleDateString()}</span>
                       </div>
-                      <div className="flex gap-2">
+                      <div className="flex flex-wrap gap-2">
                         <Button
                           variant="outline"
                           size="sm"
@@ -537,6 +568,20 @@ const RaffleManager = () => {
                         >
                           Check Verifications
                         </Button>
+                        {!raffle.winner_user_id && (
+                          <Button
+                            size="sm"
+                            onClick={() => handleSelectWinner(raffle.id)}
+                            className="bg-yellow-500 hover:bg-yellow-600"
+                          >
+                            🏆 Select Winner
+                          </Button>
+                        )}
+                        {raffle.winner_user_id && (
+                          <Badge className="bg-green-500 text-white">
+                            Winner Selected ✓
+                          </Badge>
+                        )}
                       </div>
                     </div>
                   ))
