@@ -127,3 +127,6 @@ verify_jwt = false
 
 [functions.manual-send-broadcast]
 verify_jwt = false
+
+[functions.send-raffle-announcement]
+verify_jwt = false
