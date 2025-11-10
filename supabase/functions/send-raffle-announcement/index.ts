@@ -108,7 +108,7 @@ const handler = async (req: Request): Promise<Response> => {
                         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                           <tr>
                             <td align="center" style="padding: 40px 0;">
-                              <a href="https://the3rdeyeadvisors.com/raffles" style="display: inline-block; background: #8B5CF6; color: #ffffff; padding: 16px 32px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 18px; font-family: Arial, sans-serif;">
+                              <a href="https://the3rdeyeadvisors.com/raffles" style="display: inline-block; background: #6D28D9; color: #ffffff; padding: 16px 32px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 18px; font-family: Arial, sans-serif;">
                                 Join the Raffle Now →
                               </a>
                             </td>
