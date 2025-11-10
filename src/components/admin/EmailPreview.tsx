@@ -39,7 +39,7 @@ const EmailPreview = () => {
                 <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; width: 100%; background-color: #ffffff; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
                   <tr>
                     <td style="padding: 50px 40px;">
-                      <h1 style="color: #6D28D9; margin: 0 0 24px 0; font-size: 32px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
+                      <h1 style="color: #3B82F6; margin: 0 0 24px 0; font-size: 32px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
                         The Future Rewards Learning 🚀
                       </h1>
                       
@@ -52,10 +52,10 @@ const EmailPreview = () => {
                       </p>
                       
                       <p style="font-size: 16px; line-height: 1.6; margin: 0 0 32px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; color: #1f2937;">
-                        <strong style="color: #6D28D9;">3rdeyeadvisors</strong> has officially launched the <strong>Learn-to-Earn Raffle</strong>, rewarding our community for learning and engaging in DeFi education.
+                        <strong style="color: #3B82F6;">3rdeyeadvisors</strong> has officially launched the <strong>Learn-to-Earn Raffle</strong>, rewarding our community for learning and engaging in DeFi education.
                       </p>
                       
-                      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #6D28D9; border-radius: 12px; margin: 30px 0;">
+                      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #3B82F6; border-radius: 12px; margin: 30px 0;">
                         <tr>
                           <td style="padding: 40px 30px; text-align: center;">
                             <h2 style="margin: 0 0 24px 0; color: #ffffff; font-size: 24px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
@@ -106,7 +106,7 @@ const EmailPreview = () => {
                       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                         <tr>
                           <td align="center" style="padding: 40px 0 30px 0;">
-                            <a href="https://the3rdeyeadvisors.com/raffles" style="display: inline-block; background-color: #6D28D9; color: #ffffff; padding: 18px 40px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 18px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
+                            <a href="https://the3rdeyeadvisors.com/raffles" style="display: inline-block; background-color: #3B82F6; color: #ffffff; padding: 18px 40px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 18px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
                               Join the Raffle Now →
                             </a>
                           </td>
@@ -120,7 +120,7 @@ const EmailPreview = () => {
                       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top: 2px solid #e5e7eb; padding-top: 24px; margin-top: 20px;">
                         <tr>
                           <td align="center">
-                            <p style="font-size: 18px; font-weight: 700; color: #6D28D9; margin: 0 0 8px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
+                            <p style="font-size: 18px; font-weight: 700; color: #3B82F6; margin: 0 0 8px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
                               Awareness is advantage.
                             </p>
                             <p style="font-size: 14px; color: #6b7280; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
@@ -144,7 +144,7 @@ const EmailPreview = () => {
       subject: "You're officially entered — 3rdeyeadvisors Learn-to-Earn Raffle 🎟",
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <h1 style="color: #8B5CF6; margin-bottom: 20px;">You're In! 🎉</h1>
+          <h1 style="color: #3B82F6; margin-bottom: 20px;">You're In! 🎉</h1>
           
           <p style="font-size: 16px; line-height: 1.6;">
             Hi ${sampleData.name},
@@ -158,7 +158,7 @@ const EmailPreview = () => {
             Each step you took — learning, sharing, and engaging — earns you energy in return. The system remembers. 🌐
           </p>
           
-          <div style="background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%); color: white; padding: 30px; border-radius: 12px; margin: 30px 0; text-align: center;">
+          <div style="background-color: #3B82F6; color: white; padding: 30px; border-radius: 12px; margin: 30px 0; text-align: center;">
             <h2 style="margin: 0 0 20px 0; color: white;">Your Entry Details</h2>
             <div style="font-size: 48px; font-weight: bold; margin: 20px 0;">🪙 $${sampleData.prize_amount}</div>
             <p style="font-size: 20px; margin: 10px 0;">Prize: ${sampleData.prize}</p>
@@ -175,7 +175,7 @@ const EmailPreview = () => {
           </p>
           
           <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e5e5;">
-            <p style="font-size: 18px; font-weight: bold; color: #8B5CF6;">
+            <p style="font-size: 18px; font-weight: bold; color: #3B82F6;">
               Awareness is advantage.
             </p>
             <p style="font-size: 14px; color: #666;">
@@ -185,7 +185,7 @@ const EmailPreview = () => {
           
           <div style="margin-top: 30px; padding: 20px; background: #f9f9f9; border-radius: 8px; text-align: center;">
             <p style="font-size: 14px; color: #666; margin: 0;">
-              Want more entries? Share your referral link from your <a href="https://the3rdeyeadvisors.com/raffles" style="color: #8B5CF6; text-decoration: none;">raffle dashboard</a>.
+              Want more entries? Share your referral link from your <a href="https://the3rdeyeadvisors.com/raffles" style="color: #3B82F6; text-decoration: none;">raffle dashboard</a>.
             </p>
           </div>
         </div>
@@ -196,7 +196,7 @@ const EmailPreview = () => {
       subject: `⏰ ${sampleData.raffle_title} Has Ended — Winner Coming Soon!`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <h1 style="color: #8B5CF6; margin-bottom: 20px;">The Wait is Almost Over ⏰</h1>
+          <h1 style="color: #3B82F6; margin-bottom: 20px;">The Wait is Almost Over ⏰</h1>
           
           <p style="font-size: 16px; line-height: 1.6;">
             Hi ${sampleData.name},
@@ -206,7 +206,7 @@ const EmailPreview = () => {
             The <strong>${sampleData.raffle_title}</strong> has officially ended. Thank you for participating and learning with us!
           </p>
           
-          <div style="background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%); color: white; padding: 30px; border-radius: 12px; margin: 30px 0; text-align: center;">
+          <div style="background-color: #3B82F6; color: white; padding: 30px; border-radius: 12px; margin: 30px 0; text-align: center;">
             <h2 style="margin: 0 0 20px 0; color: white;">Raffle Complete</h2>
             <div style="font-size: 48px; font-weight: bold; margin: 20px 0;">🪙 $${sampleData.prize_amount}</div>
             <p style="font-size: 20px; margin: 10px 0;">Prize: ${sampleData.prize}</p>
@@ -216,11 +216,11 @@ const EmailPreview = () => {
           </div>
           
           <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin: 30px 0;">
-            <h3 style="color: #8B5CF6; margin-top: 0;">What's Next?</h3>
+            <h3 style="color: #3B82F6; margin-top: 0;">What's Next?</h3>
             <p style="font-size: 16px; line-height: 1.6; margin-bottom: 0;">
               🎯 We're currently verifying all entries and selecting the winner<br>
               📧 The winner will be announced via email soon<br>
-              🌐 All results will be visible on our <a href="https://the3rdeyeadvisors.com/raffle-history" style="color: #8B5CF6; text-decoration: none;">Raffle History</a> page
+              🌐 All results will be visible on our <a href="https://the3rdeyeadvisors.com/raffle-history" style="color: #3B82F6; text-decoration: none;">Raffle History</a> page
             </p>
           </div>
           
@@ -229,13 +229,13 @@ const EmailPreview = () => {
           </p>
           
           <div style="text-align: center; margin: 40px 0;">
-            <a href="https://the3rdeyeadvisors.com/courses" style="display: inline-block; background: #8B5CF6; color: white; padding: 16px 32px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 18px;">
+            <a href="https://the3rdeyeadvisors.com/courses" style="display: inline-block; background: #3B82F6; color: white; padding: 16px 32px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 18px;">
               Continue Learning →
             </a>
           </div>
           
           <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e5e5; text-align: center;">
-            <p style="font-size: 18px; font-weight: bold; color: #8B5CF6;">
+            <p style="font-size: 18px; font-weight: bold; color: #3B82F6;">
               Awareness is advantage.
             </p>
             <p style="font-size: 14px; color: #666;">
@@ -252,7 +252,7 @@ const EmailPreview = () => {
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
           <div style="text-align: center; margin-bottom: 30px;">
             <div style="font-size: 72px; margin-bottom: 20px;">🎉🏆🎉</div>
-            <h1 style="color: #8B5CF6; margin: 0; font-size: 36px;">YOU WON!</h1>
+            <h1 style="color: #3B82F6; margin: 0; font-size: 36px;">YOU WON!</h1>
           </div>
           
           <p style="font-size: 18px; line-height: 1.6; text-align: center;">
@@ -281,7 +281,7 @@ const EmailPreview = () => {
           </p>
           
           <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e5e5; text-align: center;">
-            <p style="font-size: 18px; font-weight: bold; color: #8B5CF6;">
+            <p style="font-size: 18px; font-weight: bold; color: #3B82F6;">
               Awareness is advantage.
             </p>
             <p style="font-size: 14px; color: #666;">
@@ -296,7 +296,7 @@ const EmailPreview = () => {
       subject: `🏆 ${sampleData.raffle_title} Winner Announced!`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <h1 style="color: #8B5CF6; margin-bottom: 20px;">We Have a Winner! 🎉</h1>
+          <h1 style="color: #3B82F6; margin-bottom: 20px;">We Have a Winner! 🎉</h1>
           
           <p style="font-size: 16px; line-height: 1.6;">
             Hi ${sampleData.name},
@@ -306,7 +306,7 @@ const EmailPreview = () => {
             The <strong>${sampleData.raffle_title}</strong> has concluded and we're excited to announce the winner!
           </p>
           
-          <div style="background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%); color: white; padding: 30px; border-radius: 12px; margin: 30px 0; text-align: center;">
+          <div style="background-color: #3B82F6; color: white; padding: 30px; border-radius: 12px; margin: 30px 0; text-align: center;">
             <h2 style="margin: 0 0 20px 0; color: white;">Winner</h2>
             <div style="font-size: 48px; margin: 20px 0;">🏆</div>
             <p style="font-size: 24px; font-weight: bold; margin: 10px 0;">${sampleData.winner_name}</p>
@@ -318,22 +318,22 @@ const EmailPreview = () => {
           </p>
           
           <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin: 30px 0;">
-            <h3 style="color: #8B5CF6; margin-top: 0;">Stay Tuned!</h3>
+            <h3 style="color: #3B82F6; margin-top: 0;">Stay Tuned!</h3>
             <p style="font-size: 16px; line-height: 1.6; margin-bottom: 0;">
               🎟 More Learn-to-Earn raffles are coming<br>
               📚 Keep learning and earning entries<br>
-              🔔 Follow us on <a href="https://instagram.com/3rdeyeadvisors" style="color: #8B5CF6; text-decoration: none;">Instagram</a> and <a href="https://x.com/3rdeyeadvisors" style="color: #8B5CF6; text-decoration: none;">X</a> for updates
+              🔔 Follow us on <a href="https://instagram.com/3rdeyeadvisors" style="color: #3B82F6; text-decoration: none;">Instagram</a> and <a href="https://x.com/3rdeyeadvisors" style="color: #3B82F6; text-decoration: none;">X</a> for updates
             </p>
           </div>
           
           <div style="text-align: center; margin: 40px 0;">
-            <a href="https://the3rdeyeadvisors.com/courses" style="display: inline-block; background: #8B5CF6; color: white; padding: 16px 32px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 18px;">
+            <a href="https://the3rdeyeadvisors.com/courses" style="display: inline-block; background: #3B82F6; color: white; padding: 16px 32px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 18px;">
               Continue Learning →
             </a>
           </div>
           
           <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e5e5; text-align: center;">
-            <p style="font-size: 18px; font-weight: bold; color: #8B5CF6;">
+            <p style="font-size: 18px; font-weight: bold; color: #3B82F6;">
               Awareness is advantage.
             </p>
             <p style="font-size: 14px; color: #666;">
@@ -343,7 +343,7 @@ const EmailPreview = () => {
           
           <div style="margin-top: 30px; padding: 20px; background: #f9f9f9; border-radius: 8px; text-align: center;">
             <p style="font-size: 14px; color: #666; margin: 0;">
-              View all past winners on our <a href="https://the3rdeyeadvisors.com/raffle-history" style="color: #8B5CF6; text-decoration: none;">Raffle History</a> page.
+              View all past winners on our <a href="https://the3rdeyeadvisors.com/raffle-history" style="color: #3B82F6; text-decoration: none;">Raffle History</a> page.
             </p>
           </div>
         </div>

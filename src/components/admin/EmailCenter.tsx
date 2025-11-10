@@ -38,7 +38,7 @@ export function EmailCenter() {
             <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; background-color: #ffffff;">
               <tr>
                 <td style="padding: 40px 30px;">
-                  <h1 style="color: #8B5CF6; margin: 0 0 20px 0; font-family: Arial, sans-serif;">The Future Rewards Learning 🚀</h1>
+                  <h1 style="color: #3B82F6; margin: 0 0 20px 0; font-family: Arial, sans-serif;">The Future Rewards Learning 🚀</h1>
                   
                   <p style="font-size: 16px; line-height: 1.6; margin: 0 0 16px 0; font-family: Arial, sans-serif; color: #333333;">
                     Hi there,
@@ -52,7 +52,7 @@ export function EmailCenter() {
                     <strong>3rdeyeadvisors</strong> has officially launched the <strong>Learn-to-Earn Raffle</strong>, rewarding our community for learning and engaging in DeFi education.
                   </p>
                   
-                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #6D28D9; border-radius: 12px; margin: 30px 0;">
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #3B82F6; border-radius: 12px; margin: 30px 0;">
                     <tr>
                       <td style="padding: 30px; text-align: center;">
                         <h2 style="margin: 0 0 20px 0; color: #ffffff; font-family: Arial, sans-serif;">How to Enter</h2>
@@ -86,7 +86,7 @@ export function EmailCenter() {
                   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                     <tr>
                       <td align="center" style="padding: 40px 0;">
-                        <a href="https://the3rdeyeadvisors.com/raffles" style="display: inline-block; background: #8B5CF6; color: #ffffff; padding: 16px 32px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 18px; font-family: Arial, sans-serif;">
+                        <a href="https://the3rdeyeadvisors.com/raffles" style="display: inline-block; background: #3B82F6; color: #ffffff; padding: 16px 32px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 18px; font-family: Arial, sans-serif;">
                           Join the Raffle Now →
                         </a>
                       </td>
@@ -100,7 +100,7 @@ export function EmailCenter() {
                   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top: 1px solid #e5e5e5; padding-top: 20px;">
                     <tr>
                       <td align="center">
-                        <p style="font-size: 18px; font-weight: bold; color: #8B5CF6; margin: 0 0 8px 0; font-family: Arial, sans-serif;">
+                        <p style="font-size: 18px; font-weight: bold; color: #3B82F6; margin: 0 0 8px 0; font-family: Arial, sans-serif;">
                           Awareness is advantage.
                         </p>
                         <p style="font-size: 14px; color: #666666; margin: 0; font-family: Arial, sans-serif;">
