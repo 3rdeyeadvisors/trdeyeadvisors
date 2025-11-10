@@ -142,18 +142,11 @@ const RaffleManager = () => {
   const fetchVerificationTasks = async (raffleId: string) => {
     try {
       setRefreshingVerifications(true);
+      
+      // Fetch raffle tasks without trying to join profiles
       const { data, error } = await supabase
         .from('raffle_tasks')
-        .select(`
-          id,
-          user_id,
-          task_type,
-          instagram_username,
-          x_username,
-          verification_status,
-          created_at,
-          profiles!inner(display_name)
-        `)
+        .select('id, user_id, task_type, instagram_username, x_username, verification_status, created_at')
         .eq('raffle_id', raffleId)
         .in('task_type', ['instagram', 'x'])
         .eq('verification_status', 'submitted')
@@ -161,17 +154,22 @@ const RaffleManager = () => {
 
       if (error) throw error;
 
-      // Get emails
+      if (!data || data.length === 0) {
+        setVerificationTasks([]);
+        return;
+      }
+
+      // Get emails and display names using RPC function
       const { data: emailsData } = await supabase.rpc('get_user_emails_with_profiles');
 
-      const tasksWithEmails = data?.map(task => {
-        const userEmail = emailsData?.find((u: any) => u.user_id === task.user_id);
+      const tasksWithEmails = data.map(task => {
+        const userInfo = emailsData?.find((u: any) => u.user_id === task.user_id);
         return {
           ...task,
-          email: userEmail?.email || 'N/A',
-          display_name: (task.profiles as any)?.display_name || 'Anonymous',
+          email: userInfo?.email || 'N/A',
+          display_name: userInfo?.display_name || 'Anonymous',
         };
-      }) || [];
+      });
 
       setVerificationTasks(tasksWithEmails as VerificationTask[]);
     } catch (error) {
