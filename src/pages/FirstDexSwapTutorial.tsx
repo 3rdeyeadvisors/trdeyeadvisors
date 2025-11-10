@@ -29,12 +29,15 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
 import SEO from "@/components/SEO";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { DesktopOnlyNotice } from "@/components/DesktopOnlyNotice";
 
 const FirstDexSwapTutorial = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const [selectedDex, setSelectedDex] = useState("uniswap");
   const { toast } = useToast();
+  const isMobile = useIsMobile();
 
   const totalSteps = 8;
   const progress = (currentStep / totalSteps) * 100;

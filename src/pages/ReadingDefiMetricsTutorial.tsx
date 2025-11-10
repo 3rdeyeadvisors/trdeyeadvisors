@@ -21,11 +21,14 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { DesktopOnlyNotice } from "@/components/DesktopOnlyNotice";
 
 const ReadingDefiMetricsTutorial = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const { toast } = useToast();
+  const isMobile = useIsMobile();
 
   const totalSteps = 6;
   const progress = (currentStep / totalSteps) * 100;

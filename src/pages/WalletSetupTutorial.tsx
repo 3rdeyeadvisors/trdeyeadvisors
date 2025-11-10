@@ -32,6 +32,8 @@ import { KeyTakeaway } from "@/components/course/KeyTakeaway";
 import { DidYouKnow } from "@/components/course/DidYouKnow";
 import { StepBlock } from "@/components/course/StepBlock";
 import walletHeroImage from "@/assets/tutorials/wallet-setup-hero.jpg";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { DesktopOnlyNotice } from "@/components/DesktopOnlyNotice";
 
 const WalletSetupTutorial = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -40,6 +42,7 @@ const WalletSetupTutorial = () => {
   const { toast } = useToast();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
 
   const totalSteps = 6;
   const progress = (currentStep / totalSteps) * 100;
@@ -372,6 +375,9 @@ const WalletSetupTutorial = () => {
             className="w-full h-48 md:h-64 object-cover"
           />
         </div>
+
+        {/* Desktop Only Notice for Mobile Users */}
+        {isMobile && <DesktopOnlyNotice feature="interactive tutorial steps and wallet setup guidance" />}
 
         {/* Header */}
         <div className="mb-8">

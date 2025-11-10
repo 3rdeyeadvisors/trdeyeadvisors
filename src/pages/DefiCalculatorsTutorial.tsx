@@ -25,6 +25,8 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { DesktopOnlyNotice } from "@/components/DesktopOnlyNotice";
 
 const DefiCalculatorsTutorial = () => {
   const [currentStep, setCurrentStep] = useState(1);

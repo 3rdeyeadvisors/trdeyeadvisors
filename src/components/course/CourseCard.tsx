@@ -7,6 +7,7 @@ import { LucideIcon, CreditCard } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface Course {
   id: number;
@@ -28,6 +29,7 @@ interface CourseCardProps {
 
 export const CourseCard = ({ course, index, onStartCourse, onAuthRequired }: CourseCardProps) => {
   const { user } = useAuth();
+  const isMobile = useIsMobile();
   const [hasAccess, setHasAccess] = useState<boolean | null>(null);
   const [isCheckingAccess, setIsCheckingAccess] = useState(false);
   const [isPurchasing, setIsPurchasing] = useState(false);
@@ -114,6 +116,7 @@ export const CourseCard = ({ course, index, onStartCourse, onAuthRequired }: Cou
   };
 
   const getButtonText = () => {
+    if (isMobile) return "View on Desktop";
     if (!user) return "Start Learning";
     if (isCheckingAccess) return "Checking Access...";
     if (course.category === 'free') return user ? "Continue Learning" : "Start Learning";
@@ -167,7 +170,7 @@ export const CourseCard = ({ course, index, onStartCourse, onAuthRequired }: Cou
             size="sm"
             className="font-consciousness w-full sm:w-auto"
             onClick={handleStartCourse}
-            disabled={isCheckingAccess || isPurchasing}
+            disabled={isMobile || isCheckingAccess || isPurchasing}
           >
             {getButtonIcon()}
             {getButtonText()}

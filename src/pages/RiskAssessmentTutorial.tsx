@@ -8,10 +8,13 @@ import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { KeyTakeaway } from "@/components/course/KeyTakeaway";
 import { DidYouKnow } from "@/components/course/DidYouKnow";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { DesktopOnlyNotice } from "@/components/DesktopOnlyNotice";
 
 const RiskAssessmentTutorial = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
+  const isMobile = useIsMobile();
 
   const steps = [
     {

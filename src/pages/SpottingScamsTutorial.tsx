@@ -32,12 +32,15 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { DesktopOnlyNotice } from "@/components/DesktopOnlyNotice";
 
 const SpottingScamsTutorial = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const [selectedScamType, setSelectedScamType] = useState("phishing");
   const { toast } = useToast();
+  const isMobile = useIsMobile();
 
   const totalSteps = 7;
   const progress = (currentStep / totalSteps) * 100;

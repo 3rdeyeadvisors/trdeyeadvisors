@@ -6,11 +6,14 @@ import { Badge } from '@/components/ui/badge';
 import { CheckCircle, Circle, Users, Vote, Coins, ArrowLeft, FileText, Shield } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { useIsMobile } from "@/hooks/use-mobile";
+import { DesktopOnlyNotice } from "@/components/DesktopOnlyNotice";
 
 const DaoParticipationTutorial = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
+  const isMobile = useIsMobile();
 
   const steps = [
     {

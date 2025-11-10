@@ -6,11 +6,14 @@ import { Badge } from '@/components/ui/badge';
 import { CheckCircle, Circle, Image, Coins, Lock, ArrowLeft, Zap, TrendingUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { useIsMobile } from "@/hooks/use-mobile";
+import { DesktopOnlyNotice } from "@/components/DesktopOnlyNotice";
 
 const NftDefiTutorial = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
+  const isMobile = useIsMobile();
 
   const steps = [
     {

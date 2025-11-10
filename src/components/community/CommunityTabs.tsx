@@ -3,6 +3,8 @@ import { CommentsSection } from "./CommentsSection";
 import { RatingSection } from "./RatingSection";
 import { QASection } from "./QASection";
 import { MessageCircle, Star, HelpCircle } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { DesktopOnlyNotice } from "@/components/DesktopOnlyNotice";
 
 interface CommunityTabsProps {
   courseId: number;
@@ -10,6 +12,12 @@ interface CommunityTabsProps {
 }
 
 export const CommunityTabs = ({ courseId, moduleId }: CommunityTabsProps) => {
+  const isMobile = useIsMobile();
+  
+  if (isMobile) {
+    return <DesktopOnlyNotice feature="community interactions (comments, ratings, and Q&A)" />;
+  }
+  
   return (
     <Tabs defaultValue="comments" className="w-full">
       <TabsList className="grid w-full grid-cols-3 justify-center mx-auto">

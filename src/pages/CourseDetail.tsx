@@ -17,6 +17,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import SEO from "@/components/SEO";
 import { ExpandableText } from "@/components/ui/expandable-text";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { DesktopOnlyNotice } from "@/components/DesktopOnlyNotice";
 import {
   Accordion,
   AccordionContent,
@@ -37,6 +39,7 @@ const CourseDetail = () => {
   const [isPurchasing, setIsPurchasing] = useState(false);
   const [coursePrice, setCoursePrice] = useState<string>("");
   const { toast: useToastNotification } = useToast();
+  const isMobile = useIsMobile();
 
   const course = getCourseContent(parseInt(courseId || "0"));
   const progress = getCourseProgress(parseInt(courseId || "0"));
@@ -324,6 +327,9 @@ const CourseDetail = () => {
               {course.description}
             </p>
           </div>
+
+          {/* Desktop Only Notice for Mobile Users */}
+          {isMobile && <DesktopOnlyNotice feature="course modules and interactive learning" />}
 
           {user && (
             <ProgressBar 

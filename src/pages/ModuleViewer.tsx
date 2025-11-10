@@ -10,6 +10,8 @@ import { useProgress } from "@/components/progress/ProgressProvider";
 import { AuthModal } from "@/components/auth/AuthModal";
 import { getCourseContent } from "@/data/courseContent";
 import { ArrowLeft, BookOpen, List, Play } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { DesktopOnlyNotice } from "@/components/DesktopOnlyNotice";
 
 const ModuleViewer = () => {
   const { courseId, moduleId } = useParams();
@@ -18,6 +20,7 @@ const ModuleViewer = () => {
   const { getCourseProgress } = useProgress();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showModuleList, setShowModuleList] = useState(false);
+  const isMobile = useIsMobile();
 
   const course = getCourseContent(parseInt(courseId || "0"));
   const currentModuleIndex = course?.modules.findIndex(m => m.id === moduleId) ?? -1;
@@ -99,6 +102,9 @@ const ModuleViewer = () => {
   return (
     <div className="min-h-screen py-12 md:py-20">
       <div className="w-full px-4 md:px-6 mobile-typography-center">
+        {/* Desktop Only Notice for Mobile Users */}
+        {isMobile && <DesktopOnlyNotice feature="interactive course content and community features" />}
+        
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6 md:mb-8">
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
