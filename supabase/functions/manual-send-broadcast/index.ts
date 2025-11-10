@@ -15,7 +15,7 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { broadcast_id } = await req.json();
+    const { broadcast_id, apology_message } = await req.json();
     
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
@@ -52,6 +52,11 @@ const handler = async (req: Request): Promise<Response> => {
     const freshMarketBlock = `<h3>Top Movers</h3><ul><li><strong>Ethereum (ETH)</strong>: $${prices.ethereum.usd.toLocaleString()} ${formatChange(prices.ethereum.usd_24h_change)}</li><li><strong>Uniswap (UNI)</strong>: $${prices.uniswap.usd.toFixed(2)} ${formatChange(prices.uniswap.usd_24h_change)}</li><li><strong>Aave (AAVE)</strong>: $${prices.aave.usd.toFixed(2)} ${formatChange(prices.aave.usd_24h_change)}</li></ul>`;
 
     console.log('Fresh market block:', freshMarketBlock);
+
+    // Prepend apology message if provided
+    const finalIntroText = apology_message 
+      ? `<div style="background-color: #fef2f2; border-left: 4px solid #ef4444; padding: 15px; margin-bottom: 20px; border-radius: 4px; color: #991b1b;"><strong>Our Apologies:</strong> ${apology_message}</div>${broadcast.intro_text}`
+      : broadcast.intro_text;
 
     // Get all subscribers
     const { data: subscribers, error: subscribersError } = await supabase
@@ -156,7 +161,7 @@ const handler = async (req: Request): Promise<Response> => {
     
     <div class="content">
       <div class="intro">
-        ${broadcast.intro_text}
+        ${finalIntroText}
       </div>
       
       <div class="market-block">
