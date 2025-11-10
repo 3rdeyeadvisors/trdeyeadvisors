@@ -358,10 +358,10 @@ const Tutorials = () => {
                               };
                               const route = tutorialRoutes[video.id];
                               if (route) {
-                                window.location.href = route;
+                                navigate(route);
                               } else {
                                 toast({
-                                  title: "Coming soon",
+                                  title: "Tutorial Not Available",
                                   description: "This tutorial is being prepared. Explore other tutorials in the meantime.",
                                 });
                               }
@@ -378,16 +378,6 @@ const Tutorials = () => {
               </TabsContent>
             ))}
           </Tabs>
-
-          {/* Coming Soon Section */}
-          <Card className="mt-12 bg-gradient-to-r from-primary/5 to-purple-600/5 border-primary/20">
-            <CardHeader className="text-center">
-              <CardTitle className="text-xl">More Tutorials Coming Soon</CardTitle>
-              <CardDescription>
-                We're continuously adding new tutorials. Next up: Advanced DeFi strategies and protocol deep-dives.
-              </CardDescription>
-            </CardHeader>
-          </Card>
         </div>
       </div>
     </>
