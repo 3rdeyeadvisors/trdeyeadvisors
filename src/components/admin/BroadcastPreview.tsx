@@ -3,8 +3,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Eye, Calendar, Send, CheckCircle2 } from "lucide-react";
+import { Eye, Calendar, Send, CheckCircle2, Trash2 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useToast } from "@/hooks/use-toast";
 import {
   Dialog,
   DialogContent,
@@ -30,6 +31,8 @@ export function BroadcastPreview() {
   const [broadcasts, setBroadcasts] = useState<BroadcastEmail[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedBroadcast, setSelectedBroadcast] = useState<BroadcastEmail | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const { toast } = useToast();
 
   useEffect(() => {
     loadPendingBroadcasts();
@@ -49,6 +52,38 @@ export function BroadcastPreview() {
       console.error("Error loading broadcasts:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const deleteBroadcast = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this broadcast?")) {
+      return;
+    }
+
+    setDeletingId(id);
+    try {
+      const { error } = await supabase
+        .from("broadcast_email_queue")
+        .delete()
+        .eq("id", id);
+
+      if (error) throw error;
+
+      toast({
+        title: "Broadcast Deleted",
+        description: "The broadcast has been removed from the queue",
+      });
+
+      loadPendingBroadcasts();
+    } catch (error: any) {
+      console.error("Error deleting broadcast:", error);
+      toast({
+        title: "Delete Failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -246,17 +281,18 @@ export function BroadcastPreview() {
                         </div>
                       </div>
 
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button 
-                            variant="outline" 
-                            className="w-full"
-                            onClick={() => setSelectedBroadcast(broadcast)}
-                          >
-                            <Eye className="mr-2 h-4 w-4" />
-                            Preview Email
-                          </Button>
-                        </DialogTrigger>
+                      <div className="flex gap-2">
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button 
+                              variant="outline" 
+                              className="flex-1"
+                              onClick={() => setSelectedBroadcast(broadcast)}
+                            >
+                              <Eye className="mr-2 h-4 w-4" />
+                              Preview
+                            </Button>
+                          </DialogTrigger>
                         <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
                           <DialogHeader>
                             <DialogTitle>{broadcast.subject_line}</DialogTitle>
@@ -269,7 +305,16 @@ export function BroadcastPreview() {
                             dangerouslySetInnerHTML={{ __html: generateEmailHTML(broadcast) }}
                           />
                         </DialogContent>
-                      </Dialog>
+                        </Dialog>
+                        <Button
+                          variant="destructive"
+                          size="icon"
+                          onClick={() => deleteBroadcast(broadcast.id)}
+                          disabled={deletingId === broadcast.id}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </CardContent>
                   </Card>
                 ))
@@ -299,30 +344,40 @@ export function BroadcastPreview() {
                         </div>
                       </div>
 
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button 
-                            variant="outline" 
-                            className="w-full"
-                            onClick={() => setSelectedBroadcast(broadcast)}
-                          >
-                            <Eye className="mr-2 h-4 w-4" />
-                            Preview Email
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
-                          <DialogHeader>
-                            <DialogTitle>{broadcast.subject_line}</DialogTitle>
-                            <DialogDescription>
-                              Scheduled for {broadcast.day_type} - {new Date(broadcast.scheduled_for).toLocaleDateString()}
-                            </DialogDescription>
-                          </DialogHeader>
-                          <div 
-                            className="border rounded-lg p-4 bg-[#0a0a0a]"
-                            dangerouslySetInnerHTML={{ __html: generateEmailHTML(broadcast) }}
-                          />
-                        </DialogContent>
-                      </Dialog>
+                      <div className="flex gap-2">
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button 
+                              variant="outline" 
+                              className="flex-1"
+                              onClick={() => setSelectedBroadcast(broadcast)}
+                            >
+                              <Eye className="mr-2 h-4 w-4" />
+                              Preview
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+                            <DialogHeader>
+                              <DialogTitle>{broadcast.subject_line}</DialogTitle>
+                              <DialogDescription>
+                                Scheduled for {broadcast.day_type} - {new Date(broadcast.scheduled_for).toLocaleDateString()}
+                              </DialogDescription>
+                            </DialogHeader>
+                            <div 
+                              className="border rounded-lg p-4 bg-[#0a0a0a]"
+                              dangerouslySetInnerHTML={{ __html: generateEmailHTML(broadcast) }}
+                            />
+                          </DialogContent>
+                        </Dialog>
+                        <Button
+                          variant="destructive"
+                          size="icon"
+                          onClick={() => deleteBroadcast(broadcast.id)}
+                          disabled={deletingId === broadcast.id}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </CardContent>
                   </Card>
                 ))
