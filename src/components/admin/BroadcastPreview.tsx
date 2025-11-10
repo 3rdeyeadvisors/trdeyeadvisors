@@ -32,6 +32,7 @@ export function BroadcastPreview() {
   const [loading, setLoading] = useState(true);
   const [selectedBroadcast, setSelectedBroadcast] = useState<BroadcastEmail | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [sendingId, setSendingId] = useState<string | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -52,6 +53,37 @@ export function BroadcastPreview() {
       console.error("Error loading broadcasts:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const sendBroadcast = async (id: string) => {
+    if (!confirm("Send this broadcast to all subscribers now?")) {
+      return;
+    }
+
+    setSendingId(id);
+    try {
+      const { data, error } = await supabase.functions.invoke("manual-send-broadcast", {
+        body: { broadcast_id: id },
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Broadcast Sent!",
+        description: `Successfully sent to ${data.sent} subscribers. ${data.failed} failed.`,
+      });
+
+      loadPendingBroadcasts();
+    } catch (error: any) {
+      console.error("Error sending broadcast:", error);
+      toast({
+        title: "Send Failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setSendingId(null);
     }
   };
 
@@ -306,6 +338,15 @@ export function BroadcastPreview() {
                           />
                         </DialogContent>
                         </Dialog>
+                        <Button
+                          variant="default"
+                          className="flex-1"
+                          onClick={() => sendBroadcast(broadcast.id)}
+                          disabled={sendingId === broadcast.id}
+                        >
+                          <Send className="mr-2 h-4 w-4" />
+                          {sendingId === broadcast.id ? "Sending..." : "Send Now"}
+                        </Button>
                         <Button
                           variant="destructive"
                           size="icon"

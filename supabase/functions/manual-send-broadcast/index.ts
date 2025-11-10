@@ -15,81 +15,33 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
+    const { broadcast_id } = await req.json();
+    
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    console.log('Starting scheduled broadcast check...');
+    console.log('Manual broadcast send for:', broadcast_id);
 
-    // Get current day and date in Central Time
-    const now = new Date();
-    const centralTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/Chicago' }));
-    const dayOfWeek = centralTime.getDay(); // 0 = Sunday, 1 = Monday, etc.
-    const today = centralTime.toISOString().split('T')[0];
-
-    // Map day number to day_type
-    const dayTypeMap: { [key: number]: string } = {
-      1: 'monday',
-      3: 'wednesday',
-      5: 'friday'
-    };
-
-    const dayType = dayTypeMap[dayOfWeek];
-
-    // Only run on Mon/Wed/Fri
-    if (!dayType) {
-      console.log('Not a broadcast day, skipping...');
-      return new Response(
-        JSON.stringify({ message: 'Not a scheduled broadcast day' }),
-        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
-    console.log(`Checking for ${dayType} broadcasts scheduled for ${today}`);
-
-    // Get pending broadcast for today
-    const { data: broadcasts, error: fetchError } = await supabase
+    // Get broadcast
+    const { data: broadcast, error: fetchError } = await supabase
       .from('broadcast_email_queue')
       .select('*')
-      .eq('day_type', dayType)
-      .eq('scheduled_for', today)
-      .is('sent_at', null)
-      .order('created_at', { ascending: false })
-      .limit(1);
+      .eq('id', broadcast_id)
+      .single();
 
-    if (fetchError) {
-      console.error('Error fetching broadcasts:', fetchError);
-      throw fetchError;
+    if (fetchError || !broadcast) {
+      throw new Error('Broadcast not found');
     }
-
-    if (!broadcasts || broadcasts.length === 0) {
-      console.log('No broadcast content found for today, skipping send');
-      return new Response(
-        JSON.stringify({ message: 'No broadcast content available for today' }),
-        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
-    const broadcast = broadcasts[0];
-    console.log('Found broadcast:', broadcast);
 
     // Get all subscribers
     const { data: subscribers, error: subscribersError } = await supabase
       .from('subscribers')
       .select('email, name');
 
-    if (subscribersError) {
-      console.error('Error fetching subscribers:', subscribersError);
-      throw subscribersError;
-    }
-
-    if (!subscribers || subscribers.length === 0) {
-      console.log('No subscribers found');
-      return new Response(
-        JSON.stringify({ message: 'No subscribers to send to' }),
-        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+    if (subscribersError || !subscribers || subscribers.length === 0) {
+      throw new Error('No subscribers found');
     }
 
     console.log(`Sending to ${subscribers.length} subscribers`);
@@ -156,9 +108,6 @@ const handler = async (req: Request): Promise<Response> => {
       border-radius: 6px;
       font-weight: 600;
       transition: transform 0.2s;
-    }
-    .cta a:hover {
-      transform: translateY(-2px);
     }
     .footer {
       background-color: #0a0a0a;
@@ -228,37 +177,35 @@ const handler = async (req: Request): Promise<Response> => {
           subject: broadcast.subject_line,
           html: emailHtml,
           tags: [
-            { name: 'campaign', value: '3ea-broadcast' },
-            { name: 'day_type', value: broadcast.day_type }
+            { name: 'campaign', value: '3ea-broadcast-manual' },
+            { name: 'broadcast_id', value: broadcast_id }
           ]
         });
         
-        // Rate limit: wait 600ms between sends to stay under 2/second
+        // Rate limit: wait 600ms between sends
         await new Promise(resolve => setTimeout(resolve, 600));
 
         if (sendError) {
           console.error(`Failed to send to ${subscriber.email}:`, sendError);
           failCount++;
           
-          // Log email send failure
           await supabase.from('email_logs').insert({
             email_type: '3ea-broadcast',
-            edge_function_name: 'send-scheduled-broadcast',
+            edge_function_name: 'manual-send-broadcast',
             recipient_email: subscriber.email,
             status: 'failed',
             error_message: sendError.message,
-            metadata: { broadcast_id: broadcast.id, day_type: broadcast.day_type }
+            metadata: { broadcast_id: broadcast.id }
           });
         } else {
           successCount++;
           
-          // Log email send success
           await supabase.from('email_logs').insert({
             email_type: '3ea-broadcast',
-            edge_function_name: 'send-scheduled-broadcast',
+            edge_function_name: 'manual-send-broadcast',
             recipient_email: subscriber.email,
             status: 'sent',
-            metadata: { broadcast_id: broadcast.id, day_type: broadcast.day_type }
+            metadata: { broadcast_id: broadcast.id }
           });
         }
       } catch (error: any) {
@@ -268,30 +215,25 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     // Mark broadcast as sent
-    const { error: updateError } = await supabase
+    await supabase
       .from('broadcast_email_queue')
       .update({ sent_at: new Date().toISOString() })
       .eq('id', broadcast.id);
 
-    if (updateError) {
-      console.error('Error marking broadcast as sent:', updateError);
-    }
-
-    console.log(`Broadcast complete: ${successCount} sent, ${failCount} failed`);
+    console.log(`Manual broadcast complete: ${successCount} sent, ${failCount} failed`);
 
     return new Response(
       JSON.stringify({
         success: true,
-        message: 'Broadcast sent successfully',
+        message: 'Manual broadcast sent',
         sent: successCount,
-        failed: failCount,
-        broadcast_id: broadcast.id
+        failed: failCount
       }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
 
   } catch (error: any) {
-    console.error('Error in send-scheduled-broadcast:', error);
+    console.error('Error in manual-send-broadcast:', error);
     return new Response(
       JSON.stringify({ error: error.message }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
