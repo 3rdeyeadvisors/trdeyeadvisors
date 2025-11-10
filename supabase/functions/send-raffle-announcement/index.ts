@@ -60,17 +60,17 @@ const handler = async (req: Request): Promise<Response> => {
                   <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; background-color: #ffffff;">
                     <tr>
                       <td style="padding: 40px 30px;">
-                        <h1 style="color: #8B5CF6; margin: 0 0 20px 0; font-family: Arial, sans-serif;">The Future Rewards Learning 🚀</h1>
+                        <h1 style="color: #6D28D9; margin: 0 0 20px 0; font-family: Arial, sans-serif;">The Future Rewards Learning 🚀</h1>
                         
-                        <p style="font-size: 16px; line-height: 1.6; margin: 0 0 16px 0; font-family: Arial, sans-serif; color: #333333;">
+                        <p style="font-size: 16px; line-height: 1.6; margin: 0 0 16px 0; font-family: Arial, sans-serif; color: #1a1a1a;">
                           Hi ${subscriber.name || 'there'},
                         </p>
                         
-                        <p style="font-size: 16px; line-height: 1.6; margin: 0 0 16px 0; font-family: Arial, sans-serif; color: #333333;">
+                        <p style="font-size: 16px; line-height: 1.6; margin: 0 0 16px 0; font-family: Arial, sans-serif; color: #1a1a1a;">
                           The future of finance is decentralized — and now, learning it pays.
                         </p>
                         
-                        <p style="font-size: 16px; line-height: 1.6; margin: 0 0 30px 0; font-family: Arial, sans-serif; color: #333333;">
+                        <p style="font-size: 16px; line-height: 1.6; margin: 0 0 30px 0; font-family: Arial, sans-serif; color: #1a1a1a;">
                           <strong>3rdeyeadvisors</strong> has officially launched the <strong>Learn-to-Earn Raffle</strong>, rewarding our community for learning and engaging in DeFi education.
                         </p>
                         
@@ -115,17 +115,17 @@ const handler = async (req: Request): Promise<Response> => {
                           </tr>
                         </table>
                         
-                        <p style="font-size: 16px; line-height: 1.6; font-style: italic; text-align: center; color: #666666; margin: 0 0 40px 0; font-family: Arial, sans-serif;">
+                        <p style="font-size: 16px; line-height: 1.6; font-style: italic; text-align: center; color: #4a4a4a; margin: 0 0 40px 0; font-family: Arial, sans-serif;">
                           The more you learn, the more you earn — because awareness is the real currency.
                         </p>
                         
                         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top: 1px solid #e5e5e5; padding-top: 20px;">
                           <tr>
                             <td align="center">
-                              <p style="font-size: 18px; font-weight: bold; color: #8B5CF6; margin: 0 0 8px 0; font-family: Arial, sans-serif;">
+                              <p style="font-size: 18px; font-weight: bold; color: #6D28D9; margin: 0 0 8px 0; font-family: Arial, sans-serif;">
                                 Awareness is advantage.
                               </p>
-                              <p style="font-size: 14px; color: #666666; margin: 0; font-family: Arial, sans-serif;">
+                              <p style="font-size: 14px; color: #4a4a4a; margin: 0; font-family: Arial, sans-serif;">
                                 — 3rdeyeadvisors
                               </p>
                             </td>
