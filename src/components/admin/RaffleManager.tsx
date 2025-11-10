@@ -143,13 +143,14 @@ const RaffleManager = () => {
     try {
       setRefreshingVerifications(true);
       
-      // Fetch raffle tasks without trying to join profiles
+      // Fetch raffle tasks - only show pending submissions (not verified or rejected)
       const { data, error } = await supabase
         .from('raffle_tasks')
-        .select('id, user_id, task_type, instagram_username, x_username, verification_status, created_at')
+        .select('id, user_id, task_type, instagram_username, x_username, verification_status, completed, created_at')
         .eq('raffle_id', raffleId)
         .in('task_type', ['instagram', 'x'])
         .eq('verification_status', 'submitted')
+        .eq('completed', false)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
