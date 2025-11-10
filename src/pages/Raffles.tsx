@@ -82,9 +82,13 @@ const Raffles = () => {
         .from('raffles')
         .select('*')
         .eq('is_active', true)
-        .single();
+        .is('winner_user_id', null)
+        .gte('end_date', new Date().toISOString())
+        .order('end_date', { ascending: true })
+        .limit(1)
+        .maybeSingle();
 
-      if (error && error.code !== 'PGRST116') throw error;
+      if (error) throw error;
       setActiveRaffle(data);
     } catch (error) {
       console.error('Error fetching raffle:', error);
