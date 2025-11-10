@@ -86,7 +86,7 @@ const SocialVerificationForm = ({
   };
 
   return (
-    <Card className="p-4 bg-accent/50">
+    <Card className="p-4 bg-primary/5 border-primary/20">
       <div className="space-y-4">
         <div className="flex items-start justify-between">
           <div className="flex-1">

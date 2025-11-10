@@ -445,6 +445,7 @@ const Raffles = () => {
                     <div className="space-y-3">
                       <h3 className="text-sm font-semibold text-muted-foreground">Learning Tasks</h3>
                       
+                      <div className="max-h-[400px] md:max-h-none overflow-y-auto space-y-3 pr-2">
                       {AUTO_TASKS.map((task) => (
                         <div key={task.id} className="flex items-start space-x-3 p-3 rounded-lg hover:bg-accent/50 transition-colors">
                           <Checkbox
@@ -469,6 +470,7 @@ const Raffles = () => {
                           </Badge>
                         </div>
                       ))}
+                      </div>
                     </div>
                   </div>
                 )}
