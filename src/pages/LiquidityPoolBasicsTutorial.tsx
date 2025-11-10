@@ -548,7 +548,7 @@ const LiquidityPoolBasicsTutorial = () => {
           <Link to="/tutorials?tab=practical">
             <Button variant="ghost" className="mb-4 hover:bg-muted/50">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Tutorials
+              Back to Practical DeFi Actions
             </Button>
           </Link>
           

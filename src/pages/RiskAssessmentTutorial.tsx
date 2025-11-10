@@ -210,20 +210,20 @@ const RiskAssessmentTutorial = () => {
       <div className="container mx-auto px-4 py-8 mobile-typography-center">
         {/* Back to Tutorials Button */}
         <div className="mb-6">
-          <Link to="/tutorials">
+          <Link to="/tutorials?tab=practical">
             <Button variant="ghost" className="gap-2 hover:bg-muted">
               <ArrowLeft className="w-4 h-4" />
-              Back to Tutorials
+              Back to Practical DeFi Actions
             </Button>
           </Link>
         </div>
 
         {/* Hero Image */}
-        <div className="mb-8 rounded-lg overflow-hidden">
+        <div className="mb-8 rounded-lg overflow-hidden max-w-4xl mx-auto">
           <img 
             src={riskHero} 
             alt="DeFi risk assessment dashboard with security metrics and analysis tools" 
-            className="w-full h-48 md:h-64 object-cover"
+            className="w-full h-auto object-contain"
           />
         </div>
         

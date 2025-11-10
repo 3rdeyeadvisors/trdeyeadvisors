@@ -520,8 +520,8 @@ const PortfolioRebalancingTutorial = () => {
       
       // Save completion to localStorage
       const completed = JSON.parse(localStorage.getItem('completedTutorials') || '[]');
-      if (!completed.includes('portfolio-tracking')) {
-        completed.push('portfolio-tracking');
+      if (!completed.includes('portfolio-rebalancing')) {
+        completed.push('portfolio-rebalancing');
         localStorage.setItem('completedTutorials', JSON.stringify(completed));
       }
       
@@ -554,6 +554,16 @@ const PortfolioRebalancingTutorial = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
       <div className="container mx-auto px-4 py-8 mobile-typography-center">
+        {/* Back Button */}
+        <div className="mb-6">
+          <Link to="/tutorials?tab=practical">
+            <Button variant="ghost" className="gap-2 hover:bg-muted">
+              <ArrowLeft className="w-4 h-4" />
+              Back to Practical DeFi Actions
+            </Button>
+          </Link>
+        </div>
+
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
@@ -625,8 +635,219 @@ const PortfolioRebalancingTutorial = () => {
             <CardContent className="space-y-6">
               <p className="text-muted-foreground">{currentStepData.content.overview}</p>
 
-              {/* Step content would be implemented here for each step */}
-              {/* For brevity in this response, showing structure only */}
+              {/* Render Step-Specific Content */}
+              {currentStep === 1 && currentStepData.content.whyRebalance && (
+                <div className="space-y-4">
+                  <Alert>
+                    <AlertDescription>
+                      <strong>Why Rebalance?</strong> {currentStepData.content.whyRebalance.purpose}
+                    </AlertDescription>
+                  </Alert>
+                  
+                  <div className="grid md:grid-cols-3 gap-4">
+                    {currentStepData.content.rebalancingTriggers.map((trigger, idx) => (
+                      <Card key={idx}>
+                        <CardHeader>
+                          <CardTitle className="text-base">{trigger.trigger}</CardTitle>
+                          <CardDescription>{trigger.frequency}</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-2 text-sm">
+                          <p>{trigger.description}</p>
+                          <p className="text-xs text-muted-foreground">Best for: {trigger.bestFor}</p>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+
+                  <div className="space-y-3">
+                    <h4 className="font-semibold">Portfolio Types</h4>
+                    {currentStepData.content.portfolioTypes.map((portfolio, idx) => (
+                      <Card key={idx}>
+                        <CardContent className="pt-4">
+                          <div className="flex items-center justify-between mb-2">
+                            <h5 className="font-semibold">{portfolio.type}</h5>
+                            <Badge variant={portfolio.riskLevel === "Low" ? "default" : portfolio.riskLevel === "Medium" ? "secondary" : "destructive"}>
+                              {portfolio.riskLevel}
+                            </Badge>
+                          </div>
+                          <p className="text-sm text-muted-foreground mb-2">{portfolio.allocation}</p>
+                          <div className="flex gap-4 text-xs">
+                            <span>Frequency: {portfolio.rebalanceFreq}</span>
+                            <span>Target: {portfolio.targetAPY}</span>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {currentStep === 2 && currentStepData.content.strategies && (
+                <div className="space-y-4">
+                  {currentStepData.content.strategies.map((strategy, idx) => (
+                    <Card key={idx}>
+                      <CardHeader>
+                        <CardTitle className="text-base">{strategy.strategy}</CardTitle>
+                        <CardDescription>{strategy.description}</CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-2 text-sm">
+                        <p className="italic">Example: {strategy.example}</p>
+                        <div className="grid md:grid-cols-2 gap-2 mt-2">
+                          <div>
+                            <p className="font-semibold text-xs mb-1">Advantages:</p>
+                            <ul className="text-xs space-y-1 text-muted-foreground">
+                              {strategy.advantages.map((adv, i) => <li key={i}>• {adv}</li>)}
+                            </ul>
+                          </div>
+                          <div>
+                            <p className="font-semibold text-xs mb-1">Disadvantages:</p>
+                            <ul className="text-xs space-y-1 text-muted-foreground">
+                              {strategy.disadvantages.map((dis, i) => <li key={i}>• {dis}</li>)}
+                            </ul>
+                          </div>
+                        </div>
+                        <div className="flex gap-2 text-xs pt-2 border-t">
+                          <Badge variant="outline">Gas: {strategy.gasEfficiency}</Badge>
+                          <span className="text-muted-foreground">{strategy.bestMarkets}</span>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
+
+              {currentStep === 3 && currentStepData.content.preparationPhase && (
+                <div className="space-y-4">
+                  <h4 className="font-semibold">Preparation Phase</h4>
+                  {currentStepData.content.preparationPhase.map((phase, idx) => (
+                    <Card key={idx}>
+                      <CardHeader>
+                        <CardTitle className="text-base flex items-center gap-2">
+                          <CheckCircle className="h-4 w-4" />
+                          {phase.step}
+                        </CardTitle>
+                        <CardDescription>{phase.description}</CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-2 text-sm">
+                        <div className="flex gap-2 text-xs text-muted-foreground">
+                          <Clock className="h-3 w-3" />
+                          {phase.timeRequired}
+                        </div>
+                        <ul className="space-y-1 text-xs">
+                          {phase.actions.map((action, i) => (
+                            <li key={i} className="flex items-start gap-2">
+                              <span className="text-primary">•</span>
+                              <span>{action}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </CardContent>
+                    </Card>
+                  ))}
+
+                  <h4 className="font-semibold mt-6">Troubleshooting Common Issues</h4>
+                  {currentStepData.content.troubleshooting.map((issue, idx) => (
+                    <Card key={idx}>
+                      <CardHeader>
+                        <CardTitle className="text-base flex items-center gap-2">
+                          <AlertTriangle className="h-4 w-4 text-awareness" />
+                          {issue.issue}
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-2 text-sm">
+                        <p className="text-xs text-muted-foreground">Causes: {issue.causes.join(", ")}</p>
+                        <div>
+                          <p className="text-xs font-semibold mb-1">Solutions:</p>
+                          <ul className="space-y-1 text-xs">
+                            {issue.solutions.map((sol, i) => <li key={i}>• {sol}</li>)}
+                          </ul>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
+
+              {currentStep === 4 && currentStepData.content.advancedMethods && (
+                <div className="space-y-4">
+                  <h4 className="font-semibold">Advanced Rebalancing Techniques</h4>
+                  {currentStepData.content.advancedMethods.map((method, idx) => (
+                    <Card key={idx}>
+                      <CardHeader>
+                        <div className="flex items-center justify-between">
+                          <CardTitle className="text-base">{method.technique}</CardTitle>
+                          <Badge variant="secondary">{method.complexity}</Badge>
+                        </div>
+                        <CardDescription>{method.description}</CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-2 text-sm">
+                        <p className="text-xs">Implementation: {method.implementation}</p>
+                        <div>
+                          <p className="text-xs font-semibold mb-1">Benefits:</p>
+                          <div className="flex flex-wrap gap-2">
+                            {method.benefits.map((benefit, i) => (
+                              <Badge key={i} variant="outline">{benefit}</Badge>
+                            ))}
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+
+                  <h4 className="font-semibold mt-6">Automation Tools</h4>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    {currentStepData.content.automationTools.map((tool, idx) => (
+                      <Card key={idx}>
+                        <CardHeader>
+                          <CardTitle className="text-sm">{tool.tool}</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-2 text-xs">
+                          <p><strong>Cost:</strong> {tool.costs}</p>
+                          <p><strong>Complexity:</strong> {tool.complexity}</p>
+                          <p><strong>Reliability:</strong> {tool.reliability}</p>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {currentStep === 5 && currentStepData.content.keyMetrics && (
+                <div className="space-y-4">
+                  <h4 className="font-semibold">Key Performance Metrics</h4>
+                  {currentStepData.content.keyMetrics.map((metric, idx) => (
+                    <Card key={idx}>
+                      <CardHeader>
+                        <CardTitle className="text-base flex items-center gap-2">
+                          <Calculator className="h-4 w-4" />
+                          {metric.metric}
+                        </CardTitle>
+                        <CardDescription>{metric.description}</CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-1 text-sm">
+                        <p className="text-xs"><strong>Calculation:</strong> {metric.calculation}</p>
+                        <p className="text-xs"><strong>Target:</strong> {metric.target}</p>
+                        <p className="text-xs text-muted-foreground">{metric.interpretation}</p>
+                      </CardContent>
+                    </Card>
+                  ))}
+
+                  <h4 className="font-semibold mt-6">Benchmarking</h4>
+                  <div className="grid md:grid-cols-3 gap-4">
+                    {currentStepData.content.benchmarking.map((benchmark, idx) => (
+                      <Card key={idx}>
+                        <CardHeader>
+                          <CardTitle className="text-sm">{benchmark.benchmark}</CardTitle>
+                        </CardHeader>
+                        <CardContent className="text-xs space-y-1">
+                          <p>{benchmark.description}</p>
+                          <p className="text-muted-foreground">{benchmark.useCase}</p>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Step Navigation */}
               <div className="flex items-center justify-between pt-6 border-t">

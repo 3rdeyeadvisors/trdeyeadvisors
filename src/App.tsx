@@ -38,6 +38,7 @@ import SpottingScamsTutorial from "./pages/SpottingScamsTutorial";
 import CrossChainBridgingTutorial from "./pages/CrossChainBridgingTutorial";
 import AdvancedDefiProtocolsTutorial from "./pages/AdvancedDefiProtocolsTutorial";
 import PortfolioRebalancingTutorial from "./pages/PortfolioRebalancingTutorial";
+import PortfolioTrackingTutorial from "./pages/PortfolioTrackingTutorial";
 import LiquidityPoolBasicsTutorial from "./pages/LiquidityPoolBasicsTutorial";
 import ReadingDefiMetricsTutorial from "./pages/ReadingDefiMetricsTutorial";
 import RiskAssessmentTutorial from "./pages/RiskAssessmentTutorial";
@@ -126,6 +127,7 @@ const App = () => {
                   <Route path="/tutorials/cross-chain-bridging" element={<CrossChainBridgingTutorial />} />
                   <Route path="/tutorials/advanced-defi-protocols" element={<AdvancedDefiProtocolsTutorial />} />
                   <Route path="/tutorials/portfolio-rebalancing" element={<PortfolioRebalancingTutorial />} />
+                  <Route path="/tutorials/portfolio-tracking" element={<PortfolioTrackingTutorial />} />
                   <Route path="/tutorials/liquidity-pools" element={<LiquidityPoolBasicsTutorial />} />
                   <Route path="/tutorials/reading-defi-metrics" element={<ReadingDefiMetricsTutorial />} />
                   <Route path="/tutorials/risk-assessment" element={<RiskAssessmentTutorial />} />
