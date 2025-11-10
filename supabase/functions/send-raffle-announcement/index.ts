@@ -40,9 +40,11 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log(`Sending raffle announcement to ${subscribers.length} subscribers...`);
 
-    // Send emails in batches
-    const emailPromises = subscribers.map(subscriber => 
-      resend.emails.send({
+    // Send emails with rate limiting (600ms delay between sends)
+    const results = [];
+    for (const subscriber of subscribers) {
+      try {
+        const result = await resend.emails.send({
         from: "3rdeyeadvisors <noreply@the3rdeyeadvisors.com>",
         to: [subscriber.email],
         subject: "🎟 Learn to Earn — Join Our $50 Bitcoin Raffle Now",
@@ -132,40 +134,51 @@ const handler = async (req: Request): Promise<Response> => {
                             <td align="center" style="padding: 40px 0 30px 0;">
                               <a href="https://the3rdeyeadvisors.com/raffles" style="display: inline-block; background-color: #3B82F6; color: #ffffff; padding: 18px 40px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 18px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
                                 Join the Raffle Now →
-                              </a>
-                            </td>
-                          </tr>
-                        </table>
-                        
-                        <p style="font-size: 16px; line-height: 1.6; font-style: italic; text-align: center; color: #6b7280; margin: 0 0 40px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
-                          The more you learn, the more you earn — because awareness is the real currency.
-                        </p>
-                        
-                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top: 2px solid #e5e7eb; padding-top: 24px; margin-top: 20px;">
-                          <tr>
-                            <td align="center">
-                              <p style="font-size: 18px; font-weight: 700; color: #3B82F6; margin: 0 0 8px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
-                                Awareness is advantage.
-                              </p>
-                              <p style="font-size: 14px; color: #6b7280; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
-                                — 3rdeyeadvisors
-                              </p>
-                            </td>
-                          </tr>
-                        </table>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
-          </body>
-          </html>
+              </a>
+            </td>
+          </tr>
+        </table>
+        
+        <p style="font-size: 16px; line-height: 1.6; font-style: italic; text-align: center; color: #6b7280; margin: 0 0 40px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
+          The more you learn, the more you earn — because awareness is the real currency.
+        </p>
+        
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top: 2px solid #e5e7eb; padding-top: 24px; margin-top: 20px;">
+          <tr>
+            <td align="center">
+              <p style="font-size: 18px; font-weight: 700; color: #3B82F6; margin: 0 0 8px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
+                Awareness is advantage.
+              </p>
+              <p style="font-size: 14px; color: #6b7280; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
+                — 3rdeyeadvisors
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</td>
+</tr>
+</table>
+</body>
+</html>
         `,
-      })
-    );
-
-    const results = await Promise.allSettled(emailPromises);
+        });
+        
+        results.push({ status: 'fulfilled', value: result });
+        console.log(`✅ Sent to ${subscriber.email}`);
+        
+        // Rate limiting: wait 600ms between sends
+        await new Promise(resolve => setTimeout(resolve, 600));
+      } catch (error) {
+        results.push({ status: 'rejected', reason: error });
+        console.error(`❌ Failed to send to ${subscriber.email}:`, error);
+        
+        // Still wait on errors to maintain rate limit
+        await new Promise(resolve => setTimeout(resolve, 600));
+      }
+    }
     
     const successful = results.filter(r => r.status === 'fulfilled').length;
     const failed = results.filter(r => r.status === 'rejected').length;
