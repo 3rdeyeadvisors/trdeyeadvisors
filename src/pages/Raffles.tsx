@@ -354,16 +354,14 @@ const Raffles = () => {
             </CardContent>
           </Card>
         ) : (
-          <div className="grid lg:grid-cols-2 gap-8">
+          <>
             {/* Desktop Only Notice for Mobile Users */}
-            {isMobile && (
-              <div className="lg:col-span-2">
-                <DesktopOnlyNotice feature="raffle participation and entry tasks" />
-              </div>
-            )}
-            
-            {/* Raffle Details */}
-            <Card>
+            {isMobile ? (
+              <DesktopOnlyNotice feature="raffle participation and entry tasks" />
+            ) : (
+              <div className="grid lg:grid-cols-2 gap-8">
+                {/* Raffle Details */}
+                <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Trophy className="w-6 h-6 text-warning" />
@@ -484,6 +482,8 @@ const Raffles = () => {
               </CardContent>
             </Card>
           </div>
+            )}
+          </>
         )}
 
         {/* Legal Disclaimer */}
