@@ -49,7 +49,7 @@ const handler = async (req: Request): Promise<Response> => {
       return `<span style='color: ${color};'>${sign}${change.toFixed(1)}%</span>`;
     };
 
-    const freshMarketBlock = `<h3>Top Movers</h3><ul><li><strong>Ethereum (ETH)</strong>: $${prices.ethereum.usd.toLocaleString()} ${formatChange(prices.ethereum.usd_24h_change)}</li><li><strong>Uniswap (UNI)</strong>: $${prices.uniswap.usd.toFixed(2)} ${formatChange(prices.uniswap.usd_24h_change)}</li><li><strong>Aave (AAVE)</strong>: $${prices.aave.usd.toFixed(2)} ${formatChange(prices.aave.usd_24h_change)}</li></ul>`;
+    const freshMarketBlock = `<h3 style="color: #e5e7eb; margin-top: 0; margin-bottom: 15px;">Top Movers</h3><ul style="margin: 0; padding-left: 20px;"><li style="color: #e5e7eb; margin-bottom: 10px;"><strong style="color: #f3f4f6;">Ethereum (ETH)</strong>: <span style="color: #e5e7eb;">$${prices.ethereum.usd.toLocaleString()}</span> ${formatChange(prices.ethereum.usd_24h_change)}</li><li style="color: #e5e7eb; margin-bottom: 10px;"><strong style="color: #f3f4f6;">Uniswap (UNI)</strong>: <span style="color: #e5e7eb;">$${prices.uniswap.usd.toFixed(2)}</span> ${formatChange(prices.uniswap.usd_24h_change)}</li><li style="color: #e5e7eb; margin-bottom: 10px;"><strong style="color: #f3f4f6;">Aave (AAVE)</strong>: <span style="color: #e5e7eb;">$${prices.aave.usd.toFixed(2)}</span> ${formatChange(prices.aave.usd_24h_change)}</li></ul>`;
 
     console.log('Fresh market block:', freshMarketBlock);
 
