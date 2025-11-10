@@ -78,18 +78,25 @@ const Raffles = () => {
 
   const fetchActiveRaffle = async () => {
     try {
+      const now = new Date().toISOString();
       const { data, error } = await supabase
         .from('raffles')
         .select('*')
         .eq('is_active', true)
-        .is('winner_user_id', null)
-        .gte('end_date', new Date().toISOString())
+        .lte('start_date', now)
+        .gte('end_date', now)
         .order('end_date', { ascending: true })
         .limit(1)
         .maybeSingle();
 
       if (error) throw error;
-      setActiveRaffle(data);
+      
+      // Only show raffle if no winner has been selected
+      if (data && !data.winner_user_id) {
+        setActiveRaffle(data);
+      } else {
+        setActiveRaffle(null);
+      }
     } catch (error) {
       console.error('Error fetching raffle:', error);
     } finally {
