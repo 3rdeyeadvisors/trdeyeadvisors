@@ -12,8 +12,6 @@ import { Link } from "react-router-dom";
 import RaffleCountdown from "@/components/raffles/RaffleCountdown";
 import RaffleShareButton from "@/components/raffles/RaffleShareButton";
 import SocialVerificationForm from "@/components/raffles/SocialVerificationForm";
-import { useIsMobile } from "@/hooks/use-mobile";
-import { DesktopOnlyNotice } from "@/components/DesktopOnlyNotice";
 
 interface Raffle {
   id: string;
@@ -54,7 +52,6 @@ const AUTO_TASKS = [
 const Raffles = () => {
   const { user } = useAuth();
   const { toast } = useToast();
-  const isMobile = useIsMobile();
   const [activeRaffle, setActiveRaffle] = useState<Raffle | null>(null);
   const [loading, setLoading] = useState(true);
   const [taskCompletion, setTaskCompletion] = useState<TaskCompletion>({});
@@ -355,11 +352,7 @@ const Raffles = () => {
           </Card>
         ) : (
           <>
-            {/* Desktop Only Notice for Mobile Users */}
-            {isMobile ? (
-              <DesktopOnlyNotice feature="raffle participation and entry tasks" />
-            ) : (
-              <div className="grid lg:grid-cols-2 gap-8">
+            <div className="grid lg:grid-cols-2 gap-8">
                 {/* Raffle Details */}
                 <Card>
               <CardHeader>
@@ -480,9 +473,8 @@ const Raffles = () => {
                   </div>
                 )}
               </CardContent>
-            </Card>
-          </div>
-            )}
+              </Card>
+            </div>
           </>
         )}
 
