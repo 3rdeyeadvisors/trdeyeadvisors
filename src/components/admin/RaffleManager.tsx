@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Download, Trophy, Users, Gift, CheckCircle2, X, Loader2, Trash2 } from "lucide-react";
+import { Download, Trophy, Users, Gift, CheckCircle2, X, Loader2, Trash2, RefreshCw } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -56,6 +56,7 @@ const RaffleManager = () => {
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [verificationTasks, setVerificationTasks] = useState<VerificationTask[]>([]);
   const [loading, setLoading] = useState(false);
+  const [refreshingVerifications, setRefreshingVerifications] = useState(false);
   const [sendingAnnouncement, setSendingAnnouncement] = useState(false);
   const [sendingEndedNotification, setSendingEndedNotification] = useState(false);
   const [sendingWinnerAnnouncement, setSendingWinnerAnnouncement] = useState(false);
@@ -140,6 +141,7 @@ const RaffleManager = () => {
 
   const fetchVerificationTasks = async (raffleId: string) => {
     try {
+      setRefreshingVerifications(true);
       const { data, error } = await supabase
         .from('raffle_tasks')
         .select(`
@@ -179,6 +181,8 @@ const RaffleManager = () => {
         description: "Failed to load verification tasks",
         variant: "destructive",
       });
+    } finally {
+      setRefreshingVerifications(false);
     }
   };
 
@@ -765,10 +769,43 @@ const RaffleManager = () => {
         <TabsContent value="verification">
           <Card>
             <CardHeader>
-              <CardTitle>Username Verifications</CardTitle>
-              <CardDescription>
-                Review and verify submitted social media usernames
-              </CardDescription>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle>Username Verifications</CardTitle>
+                  <CardDescription>
+                    Review and verify submitted social media usernames
+                  </CardDescription>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    const activeRaffle = raffles.find(r => r.is_active);
+                    if (activeRaffle) {
+                      fetchVerificationTasks(activeRaffle.id);
+                    } else {
+                      toast({
+                        title: "No Active Raffle",
+                        description: "Please activate a raffle first",
+                        variant: "destructive",
+                      });
+                    }
+                  }}
+                  disabled={refreshingVerifications}
+                >
+                  {refreshingVerifications ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Refreshing...
+                    </>
+                  ) : (
+                    <>
+                      <RefreshCw className="w-4 h-4 mr-2" />
+                      Refresh
+                    </>
+                  )}
+                </Button>
+              </div>
             </CardHeader>
             <CardContent>
               {verificationTasks.length === 0 ? (
