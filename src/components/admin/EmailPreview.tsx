@@ -23,59 +23,120 @@ const EmailPreview = () => {
       title: "Raffle Announcement Email",
       subject: "🎟 Learn to Earn — Join Our $50 Bitcoin Raffle Now",
       html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <h1 style="color: #8B5CF6; margin-bottom: 20px;">The Future Rewards Learning 🚀</h1>
-          
-          <p style="font-size: 16px; line-height: 1.6;">
-            Hi ${sampleData.name},
-          </p>
-          
-          <p style="font-size: 16px; line-height: 1.6;">
-            The future of finance is decentralized — and now, learning it pays.
-          </p>
-          
-          <p style="font-size: 16px; line-height: 1.6;">
-            <strong>3rdeyeadvisors</strong> has officially launched the <strong>Learn-to-Earn Raffle</strong>, rewarding our community for learning and engaging in DeFi education.
-          </p>
-          
-          <div style="background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%); color: white; padding: 30px; border-radius: 12px; margin: 30px 0; text-align: center;">
-            <h2 style="margin: 0 0 20px 0; color: white;">How to Enter</h2>
-            <ul style="list-style: none; padding: 0; text-align: left; font-size: 16px; line-height: 2;">
-              <li>✅ Follow us on <strong>Instagram</strong> @3rdeyeadvisors</li>
-              <li>✅ Follow us on <strong>X</strong> @3rdeyeadvisors</li>
-              <li>✅ Subscribe to the newsletter (you're already in! 🎉)</li>
-              <li>✅ Complete the <strong>DeFi Foundations</strong> and <strong>Staying Safe with DeFi</strong> courses</li>
-              <li>✅ Rate the courses and join the discussion</li>
-            </ul>
-            
-            <div style="margin: 30px 0; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 8px;">
-              <p style="font-size: 18px; margin: 10px 0;">💡 <strong>Bonus:</strong> Each referral link shared from your dashboard earns extra entries when someone signs up.</p>
-            </div>
-            
-            <div style="font-size: 48px; font-weight: bold; margin: 20px 0;">🪙 $${sampleData.prize_amount}</div>
-            <p style="font-size: 20px; margin: 10px 0;">Prize: ${sampleData.prize}</p>
-            <p style="font-size: 16px; margin: 10px 0;">🕒 Active Period: November 10–23, 2025</p>
-          </div>
-          
-          <div style="text-align: center; margin: 40px 0;">
-            <a href="https://the3rdeyeadvisors.com/raffles" style="display: inline-block; background: #8B5CF6; color: white; padding: 16px 32px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 18px;">
-              Join the Raffle Now →
-            </a>
-          </div>
-          
-          <p style="font-size: 16px; line-height: 1.6; font-style: italic; text-align: center; color: #666;">
-            The more you learn, the more you earn — because awareness is the real currency.
-          </p>
-          
-          <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e5e5; text-align: center;">
-            <p style="font-size: 18px; font-weight: bold; color: #8B5CF6;">
-              Awareness is advantage.
-            </p>
-            <p style="font-size: 14px; color: #666;">
-              — 3rdeyeadvisors
-            </p>
-          </div>
-        </div>
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <style>
+            body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; }
+          </style>
+        </head>
+        <body style="margin: 0; padding: 0; background-color: #f3f4f6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f3f4f6;">
+            <tr>
+              <td align="center" style="padding: 40px 20px;">
+                <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; width: 100%; background-color: #ffffff; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                  <tr>
+                    <td style="padding: 50px 40px;">
+                      <h1 style="color: #6D28D9; margin: 0 0 24px 0; font-size: 32px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
+                        The Future Rewards Learning 🚀
+                      </h1>
+                      
+                      <p style="font-size: 16px; line-height: 1.6; margin: 0 0 16px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; color: #1f2937;">
+                        Hi <strong>${sampleData.name}</strong>,
+                      </p>
+                      
+                      <p style="font-size: 16px; line-height: 1.6; margin: 0 0 16px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; color: #1f2937;">
+                        The future of finance is decentralized — and now, learning it pays.
+                      </p>
+                      
+                      <p style="font-size: 16px; line-height: 1.6; margin: 0 0 32px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; color: #1f2937;">
+                        <strong style="color: #6D28D9;">3rdeyeadvisors</strong> has officially launched the <strong>Learn-to-Earn Raffle</strong>, rewarding our community for learning and engaging in DeFi education.
+                      </p>
+                      
+                      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #6D28D9; border-radius: 12px; margin: 30px 0;">
+                        <tr>
+                          <td style="padding: 40px 30px; text-align: center;">
+                            <h2 style="margin: 0 0 24px 0; color: #ffffff; font-size: 24px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
+                              How to Enter
+                            </h2>
+                            
+                            <div style="text-align: left; margin: 0 0 30px 0;">
+                              <p style="font-size: 16px; line-height: 2; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; margin: 8px 0;">
+                                ✅ <strong>Follow us on Instagram</strong> @3rdeyeadvisors
+                              </p>
+                              <p style="font-size: 16px; line-height: 2; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; margin: 8px 0;">
+                                ✅ <strong>Follow us on X (Twitter)</strong> @3rdeyeadvisors
+                              </p>
+                              <p style="font-size: 16px; line-height: 2; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; margin: 8px 0;">
+                                ✅ <strong>Subscribe to the newsletter</strong> (you're already in! 🎉)
+                              </p>
+                              <p style="font-size: 16px; line-height: 2; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; margin: 8px 0;">
+                                ✅ <strong>Complete the DeFi Foundations</strong> and <strong>Staying Safe with DeFi</strong> courses
+                              </p>
+                              <p style="font-size: 16px; line-height: 2; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; margin: 8px 0;">
+                                ✅ <strong>Rate the courses</strong> and join the discussion
+                              </p>
+                            </div>
+                            
+                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 24px 0;">
+                              <tr>
+                                <td style="padding: 24px; background-color: rgba(255,255,255,0.15); border-radius: 8px;">
+                                  <p style="font-size: 16px; margin: 0; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; line-height: 1.6;">
+                                    💡 <strong>Bonus:</strong> Each referral link shared from your dashboard earns extra entries when someone signs up.
+                                  </p>
+                                </td>
+                              </tr>
+                            </table>
+                            
+                            <div style="margin: 32px 0;">
+                              <div style="font-size: 56px; font-weight: 700; color: #ffffff; margin: 0 0 12px 0;">🪙 $${sampleData.prize_amount}</div>
+                              <p style="font-size: 22px; margin: 8px 0; color: #ffffff; font-weight: 600; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
+                                Prize: ${sampleData.prize}
+                              </p>
+                              <p style="font-size: 16px; margin: 8px 0; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
+                                🕒 Active Period: November 10–23, 2025
+                              </p>
+                            </div>
+                          </td>
+                        </tr>
+                      </table>
+                      
+                      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                          <td align="center" style="padding: 40px 0 30px 0;">
+                            <a href="https://the3rdeyeadvisors.com/raffles" style="display: inline-block; background-color: #6D28D9; color: #ffffff; padding: 18px 40px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 18px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
+                              Join the Raffle Now →
+                            </a>
+                          </td>
+                        </tr>
+                      </table>
+                      
+                      <p style="font-size: 16px; line-height: 1.6; font-style: italic; text-align: center; color: #6b7280; margin: 0 0 40px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
+                        The more you learn, the more you earn — because awareness is the real currency.
+                      </p>
+                      
+                      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top: 2px solid #e5e7eb; padding-top: 24px; margin-top: 20px;">
+                        <tr>
+                          <td align="center">
+                            <p style="font-size: 18px; font-weight: 700; color: #6D28D9; margin: 0 0 8px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
+                              Awareness is advantage.
+                            </p>
+                            <p style="font-size: 14px; color: #6b7280; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
+                              — 3rdeyeadvisors
+                            </p>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </body>
+        </html>
       `,
     },
     confirmation: {
