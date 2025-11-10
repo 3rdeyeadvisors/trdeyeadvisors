@@ -8,7 +8,6 @@ import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { KeyTakeaway } from "@/components/course/KeyTakeaway";
 import { DidYouKnow } from "@/components/course/DidYouKnow";
-import riskHero from "@/assets/tutorials/risk-assessment-hero.jpg";
 
 const RiskAssessmentTutorial = () => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -218,15 +217,6 @@ const RiskAssessmentTutorial = () => {
           </Link>
         </div>
 
-        {/* Hero Image */}
-        <div className="mb-8 rounded-lg overflow-hidden max-w-4xl mx-auto">
-          <img 
-            src={riskHero} 
-            alt="DeFi risk assessment dashboard with security metrics and analysis tools" 
-            className="w-full h-auto object-contain"
-          />
-        </div>
-        
         <div className="flex items-center justify-between mb-4">
           <div>
             <h1 className="text-3xl font-bold">Risk Assessment in Action</h1>
