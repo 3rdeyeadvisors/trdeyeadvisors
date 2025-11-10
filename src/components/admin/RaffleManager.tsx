@@ -48,6 +48,7 @@ interface VerificationTask {
   email: string;
   display_name: string;
   created_at: string;
+  verified_at?: string;
 }
 
 const RaffleManager = () => {
@@ -55,8 +56,10 @@ const RaffleManager = () => {
   const [raffles, setRaffles] = useState<Raffle[]>([]);
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [verificationTasks, setVerificationTasks] = useState<VerificationTask[]>([]);
+  const [verifiedTasksHistory, setVerifiedTasksHistory] = useState<VerificationTask[]>([]);
   const [loading, setLoading] = useState(false);
   const [refreshingVerifications, setRefreshingVerifications] = useState(false);
+  const [refreshingHistory, setRefreshingHistory] = useState(false);
   const [sendingAnnouncement, setSendingAnnouncement] = useState(false);
   const [sendingEndedNotification, setSendingEndedNotification] = useState(false);
   const [sendingWinnerAnnouncement, setSendingWinnerAnnouncement] = useState(false);
@@ -185,6 +188,51 @@ const RaffleManager = () => {
     }
   };
 
+  const fetchVerifiedTasksHistory = async (raffleId: string) => {
+    try {
+      setRefreshingHistory(true);
+      
+      // Fetch all verified and rejected tasks
+      const { data, error } = await supabase
+        .from('raffle_tasks')
+        .select('id, user_id, task_type, instagram_username, x_username, verification_status, completed, created_at, verified_at')
+        .eq('raffle_id', raffleId)
+        .in('task_type', ['instagram', 'x'])
+        .in('verification_status', ['verified', 'rejected'])
+        .order('verified_at', { ascending: false });
+
+      if (error) throw error;
+
+      if (!data || data.length === 0) {
+        setVerifiedTasksHistory([]);
+        return;
+      }
+
+      // Get emails and display names using RPC function
+      const { data: emailsData } = await supabase.rpc('get_user_emails_with_profiles');
+
+      const tasksWithEmails = data.map(task => {
+        const userInfo = emailsData?.find((u: any) => u.user_id === task.user_id);
+        return {
+          ...task,
+          email: userInfo?.email || 'N/A',
+          display_name: userInfo?.display_name || 'Anonymous',
+        };
+      });
+
+      setVerifiedTasksHistory(tasksWithEmails as VerificationTask[]);
+    } catch (error) {
+      console.error('Error fetching verified tasks history:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load verification history",
+        variant: "destructive",
+      });
+    } finally {
+      setRefreshingHistory(false);
+    }
+  };
+
   const handleVerifyTask = async (taskId: string, approved: boolean) => {
     try {
       const newStatus = approved ? 'verified' : 'rejected';
@@ -194,6 +242,7 @@ const RaffleManager = () => {
         .update({ 
           verification_status: newStatus,
           completed: approved ? true : false,
+          verified_at: new Date().toISOString(),
         })
         .eq('id', taskId);
 
@@ -518,6 +567,10 @@ const RaffleManager = () => {
           <TabsTrigger value="verification">
             <CheckCircle2 className="w-4 h-4 mr-2" />
             Verify Usernames
+          </TabsTrigger>
+          <TabsTrigger value="history">
+            <CheckCircle2 className="w-4 h-4 mr-2" />
+            Verified History
           </TabsTrigger>
           <TabsTrigger value="participants">
             <Users className="w-4 h-4 mr-2" />
@@ -859,6 +912,102 @@ const RaffleManager = () => {
                           <X className="w-4 h-4 mr-2" />
                           Reject
                         </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="history">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle>Verified Tasks History</CardTitle>
+                  <CardDescription>
+                    View all verified and rejected username submissions
+                  </CardDescription>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    const activeRaffle = raffles.find(r => r.is_active);
+                    if (activeRaffle) {
+                      fetchVerifiedTasksHistory(activeRaffle.id);
+                    } else {
+                      toast({
+                        title: "No Active Raffle",
+                        description: "Please activate a raffle first",
+                        variant: "destructive",
+                      });
+                    }
+                  }}
+                  disabled={refreshingHistory}
+                >
+                  {refreshingHistory ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Loading...
+                    </>
+                  ) : (
+                    <>
+                      <RefreshCw className="w-4 h-4 mr-2" />
+                      Load History
+                    </>
+                  )}
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              {verifiedTasksHistory.length === 0 ? (
+                <p className="text-center text-muted-foreground py-8">
+                  No verification history yet. Click "Load History" to view verified/rejected tasks.
+                </p>
+              ) : (
+                <div className="space-y-4">
+                  {verifiedTasksHistory.map((task) => (
+                    <div key={task.id} className="border rounded-lg p-4 space-y-3">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <h3 className="font-semibold">{task.display_name}</h3>
+                          <p className="text-sm text-muted-foreground">{task.email}</p>
+                          <div className="flex items-center gap-4 text-xs text-muted-foreground mt-1">
+                            <span>Submitted: {new Date(task.created_at).toLocaleDateString()}</span>
+                            {task.verified_at && (
+                              <span className="font-medium">
+                                {task.verification_status === 'verified' ? '✅ Verified' : '❌ Rejected'}: {new Date(task.verified_at).toLocaleString()}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex flex-col items-end gap-2">
+                          <Badge 
+                            variant={task.verification_status === 'verified' ? 'default' : 'destructive'}
+                            className="capitalize"
+                          >
+                            {task.verification_status}
+                          </Badge>
+                          <Badge variant="outline" className="capitalize">
+                            {task.task_type}
+                          </Badge>
+                        </div>
+                      </div>
+                      
+                      <div className="bg-accent/50 p-3 rounded-lg">
+                        {task.instagram_username && (
+                          <p className="text-sm">
+                            <strong>Instagram:</strong> @{task.instagram_username}
+                          </p>
+                        )}
+                        {task.x_username && (
+                          <p className="text-sm">
+                            <strong>X:</strong> @{task.x_username}
+                          </p>
+                        )}
                       </div>
                     </div>
                   ))}
