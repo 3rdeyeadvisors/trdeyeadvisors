@@ -38,36 +38,61 @@ const handler = async (req: Request): Promise<Response> => {
         <head>
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         </head>
-        <body style="margin: 0; padding: 0; background-color: #f5f5f5;">
-          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+        <body style="margin: 0; padding: 0; background-color: #030717;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 0; padding: 0; background-color: #030717;" bgcolor="#030717">
             <tr>
-              <td align="center" style="padding: 20px 0;">
-                <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; background-color: #ffffff;">
+              <td align="center" style="padding: 0; background-color: #030717;" bgcolor="#030717">
+                <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; margin: 0 auto; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;">
                   <tr>
-                    <td style="padding: 40px 30px;">
-                      <h1 style="color: #8B5CF6; margin: 0 0 20px 0; font-family: Arial, sans-serif;">You're In! 🎉</h1>
+                    <td style="padding: 32px 20px;">
                       
-                      <p style="font-size: 16px; line-height: 1.6; margin: 0 0 16px 0; font-family: Arial, sans-serif; color: #333333;">
-                        Hi ${first_name || 'there'},
-                      </p>
-                      
-                      <p style="font-size: 16px; line-height: 1.6; margin: 0 0 16px 0; font-family: Arial, sans-serif; color: #333333;">
-                        You've successfully joined our <strong>Learn-to-Earn Raffle</strong> — welcome to the next evolution of financial consciousness.
-                      </p>
-                      
-                      <p style="font-size: 16px; line-height: 1.6; margin: 0 0 30px 0; font-family: Arial, sans-serif; color: #333333;">
-                        Each step you took — learning, sharing, and engaging — earns you energy in return. The system remembers. 🌐
-                      </p>
-                      
-                      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%); border-radius: 12px; margin: 30px 0;">
+                      <!-- Header -->
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: linear-gradient(135deg, hsl(217, 32%, 8%), hsl(217, 32%, 6%)); border-radius: 12px; border: 1px solid hsl(217, 32%, 15%);">
                         <tr>
-                          <td style="padding: 30px; text-align: center;">
-                            <h2 style="margin: 0 0 20px 0; color: #ffffff; font-family: Arial, sans-serif;">Your Entry Details</h2>
-                            <div style="font-size: 48px; font-weight: bold; margin: 20px 0; color: #ffffff;">🪙 $${prize_amount}</div>
-                            <p style="font-size: 20px; margin: 10px 0; color: #ffffff; font-family: Arial, sans-serif;">Prize: ${prize}</p>
-                            <p style="font-size: 18px; margin: 10px 0; color: #ffffff; font-family: Arial, sans-serif;">Your Entries: ${entry_count}</p>
-                            <p style="font-size: 16px; margin: 10px 0; color: #ffffff; font-family: Arial, sans-serif;">⏰ Raffle Ends: ${new Date(end_date).toLocaleDateString('en-US', { 
+                          <td style="text-align: center; padding: 48px 24px;">
+                            <h1 style="color: hsl(217, 91%, 60%); font-size: 36px; margin: 0 0 8px 0; font-weight: 700; text-shadow: 0 0 24px hsla(217, 91%, 60%, 0.4);">3rdeyeadvisors</h1>
+                            <p style="color: hsl(271, 91%, 75%); font-size: 18px; margin: 0; font-weight: 500;">Raffle Confirmation</p>
+                          </td>
+                        </tr>
+                      </table>
+                      
+                      <!-- Spacer -->
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="height: 32px; line-height: 32px;"></td></tr></table>
+                      
+                      <!-- Success Message -->
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                          <td>
+                            <h2 style="color: hsl(217, 91%, 70%); font-size: 28px; margin: 0 0 16px 0; font-weight: 600;">
+                              You're In! 🎉
+                            </h2>
+                            <p style="color: #F5F5F5; font-size: 16px; line-height: 1.6; margin: 0 0 16px 0;">
+                              Hi <strong>${first_name || 'there'}</strong>,
+                            </p>
+                            <p style="color: #F5F5F5; font-size: 16px; line-height: 1.6; margin: 0 0 16px 0;">
+                              You've successfully joined the <strong style="color: hsl(217, 91%, 70%);">Learn-to-Earn Raffle</strong> — welcome to the next evolution of financial consciousness.
+                            </p>
+                            <p style="color: #F5F5F5; font-size: 16px; line-height: 1.6; margin: 0 0 24px 0;">
+                              Each step you took — learning, sharing, and engaging — earns you energy in return. The system remembers. 🌐
+                            </p>
+                          </td>
+                        </tr>
+                      </table>
+
+                      <!-- Spacer -->
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="height: 24px; line-height: 24px;"></td></tr></table>
+
+                      <!-- Entry Details -->
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: linear-gradient(135deg, hsl(271, 91%, 10%), hsl(271, 91%, 12%)); border-radius: 12px; border: 1px solid hsl(271, 91%, 25%);">
+                        <tr>
+                          <td style="padding: 32px; text-align: center;">
+                            <h2 style="margin: 0 0 20px 0; color: hsl(271, 91%, 75%); font-size: 22px; font-weight: 700;">Your Entry Details</h2>
+                            <div style="font-size: 56px; font-weight: 700; margin: 20px 0; color: #FFFFFF;">🪙 $${prize_amount}</div>
+                            <p style="font-size: 20px; margin: 10px 0; color: #FFFFFF; font-weight: 600;">Prize: ${prize}</p>
+                            <p style="font-size: 18px; margin: 10px 0; color: hsl(271, 91%, 85%);">Your Entries: <strong style="color: #FFFFFF;">${entry_count}</strong></p>
+                            <p style="font-size: 16px; margin: 16px 0 0 0; color: hsl(271, 91%, 85%);">⏰ Raffle Ends: ${new Date(end_date).toLocaleDateString('en-US', { 
                               month: 'long', 
                               day: 'numeric', 
                               year: 'numeric',
@@ -78,29 +103,33 @@ const handler = async (req: Request): Promise<Response> => {
                           </td>
                         </tr>
                       </table>
-                      
-                      <p style="font-size: 16px; line-height: 1.6; margin: 0 0 40px 0; font-family: Arial, sans-serif; color: #333333;">
-                        Stay tuned for updates, and keep sharing your referral link for extra entries!
-                      </p>
-                      
-                      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top: 1px solid #e5e5e5; padding-top: 20px; margin-bottom: 30px;">
+
+                      <!-- Spacer -->
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="height: 24px; line-height: 24px;"></td></tr></table>
+
+                      <!-- Referral CTA -->
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: linear-gradient(135deg, hsl(217, 32%, 10%), hsl(217, 32%, 12%)); border-radius: 8px; border: 1px solid hsl(217, 32%, 15%);">
                         <tr>
-                          <td align="center">
-                            <p style="font-size: 18px; font-weight: bold; color: #8B5CF6; margin: 0 0 8px 0; font-family: Arial, sans-serif;">
-                              Awareness is advantage.
-                            </p>
-                            <p style="font-size: 14px; color: #666666; margin: 0; font-family: Arial, sans-serif;">
-                              — The 3rdeyeadvisors Team
+                          <td style="padding: 20px; text-align: center;">
+                            <p style="font-size: 14px; color: #F5F5F5; margin: 0;">
+                              Want more entries? Share your referral link from your <a href="https://the3rdeyeadvisors.com/raffles" style="color: hsl(217, 91%, 70%); text-decoration: underline;">raffle dashboard</a>.
                             </p>
                           </td>
                         </tr>
                       </table>
-                      
-                      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #f9f9f9; border-radius: 8px;">
+
+                      <!-- Spacer -->
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="height: 24px; line-height: 24px;"></td></tr></table>
+
+                      <!-- Footer -->
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top: 1px solid hsl(217, 32%, 15%);">
                         <tr>
-                          <td style="padding: 20px; text-align: center;">
-                            <p style="font-size: 14px; color: #666666; margin: 0; font-family: Arial, sans-serif;">
-                              Want more entries? Share your referral link from your <a href="https://the3rdeyeadvisors.com/raffles" style="color: #8B5CF6; text-decoration: none;">raffle dashboard</a>.
+                          <td style="text-align: center; padding-top: 24px;">
+                            <p style="font-size: 18px; font-weight: 700; color: hsl(217, 91%, 70%); margin: 0 0 8px 0;">
+                              Awareness is advantage.
+                            </p>
+                            <p style="font-size: 14px; color: hsl(215, 20%, 65%); margin: 0;">
+                              — The 3rdeyeadvisors Team
                             </p>
                           </td>
                         </tr>
