@@ -33,11 +33,32 @@ export function BroadcastPreview() {
   const [selectedBroadcast, setSelectedBroadcast] = useState<BroadcastEmail | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [sendingId, setSendingId] = useState<string | null>(null);
+  const [liveMarketData, setLiveMarketData] = useState<string>("");
   const { toast } = useToast();
 
   useEffect(() => {
     loadPendingBroadcasts();
+    fetchLiveMarketData();
   }, []);
+
+  const fetchLiveMarketData = async () => {
+    try {
+      const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum,uniswap,aave&vs_currencies=usd&include_24hr_change=true');
+      const prices = await response.json();
+      
+      const formatChange = (change: number) => {
+        const color = change >= 0 ? '#10b981' : '#ef4444';
+        const sign = change >= 0 ? '+' : '';
+        return `<span style='color: ${color};'>${sign}${change.toFixed(1)}%</span>`;
+      };
+
+      const marketBlock = `<h3 style="color: #e5e7eb; margin-top: 0; margin-bottom: 15px;">Top Movers</h3><ul style="margin: 0; padding-left: 20px;"><li style="color: #e5e7eb; margin-bottom: 10px;"><strong style="color: #f3f4f6;">Ethereum (ETH)</strong>: <span style="color: #e5e7eb;">$${prices.ethereum.usd.toLocaleString()}</span> ${formatChange(prices.ethereum.usd_24h_change)}</li><li style="color: #e5e7eb; margin-bottom: 10px;"><strong style="color: #f3f4f6;">Uniswap (UNI)</strong>: <span style="color: #e5e7eb;">$${prices.uniswap.usd.toFixed(2)}</span> ${formatChange(prices.uniswap.usd_24h_change)}</li><li style="color: #e5e7eb; margin-bottom: 10px;"><strong style="color: #f3f4f6;">Aave (AAVE)</strong>: <span style="color: #e5e7eb;">$${prices.aave.usd.toFixed(2)}</span> ${formatChange(prices.aave.usd_24h_change)}</li></ul>`;
+      
+      setLiveMarketData(marketBlock);
+    } catch (error) {
+      console.error('Error fetching live market data:', error);
+    }
+  };
 
   const loadPendingBroadcasts = async () => {
     try {
@@ -214,7 +235,7 @@ export function BroadcastPreview() {
           </div>
           
           <div class="market-block">
-            ${broadcast.market_block}
+            ${liveMarketData || broadcast.market_block}
           </div>
           
           <div class="cta">
