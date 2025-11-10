@@ -124,3 +124,6 @@ verify_jwt = false
 
 [functions.send-winner-announcement]
 verify_jwt = false
+
+[functions.manual-send-broadcast]
+verify_jwt = false
