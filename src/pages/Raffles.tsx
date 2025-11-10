@@ -252,7 +252,7 @@ const Raffles = () => {
         keywords="defi raffles, crypto giveaway, learn to earn, bitcoin rewards, defi education"
       />
 
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="w-full mx-auto px-4 py-8 md:py-16 md:px-6 lg:px-8 max-w-7xl">
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-4">
@@ -270,8 +270,8 @@ const Raffles = () => {
         </div>
 
         {/* Philosophy Section */}
-        <Card className="mb-8 border-primary/20">
-          <CardContent className="pt-6">
+        <Card className="mb-8 border-primary/20 w-full">
+          <CardContent className="pt-6 px-4 md:px-6">
             <div className="prose prose-invert max-w-none">
               <p className="text-lg mb-4">
                 At <span className="font-semibold text-primary">3rdeyeadvisors</span>, we believe in <span className="font-semibold">earning after learning</span> — returning that energy back to you.
@@ -302,7 +302,7 @@ const Raffles = () => {
 
         {/* Active Raffle or Closed Message */}
         {!activeRaffle ? (
-          <Card className="text-center py-12">
+          <Card className="text-center py-12 w-full">
             <CardContent>
               <Clock className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
               <h2 className="text-2xl font-bold mb-2">Raffle Entries Currently Closed</h2>
@@ -317,7 +317,7 @@ const Raffles = () => {
             </CardContent>
           </Card>
         ) : activeRaffle.winner_user_id ? (
-          <Card className="text-center py-12">
+          <Card className="text-center py-12 w-full">
             <CardContent>
               <Trophy className="w-20 h-20 mx-auto mb-4 text-warning" />
               <h2 className="text-3xl font-bold mb-4">
@@ -352,9 +352,9 @@ const Raffles = () => {
           </Card>
         ) : (
           <>
-            <div className="grid lg:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 w-full">
                 {/* Raffle Details */}
-                <Card>
+                <Card className="w-full">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Trophy className="w-6 h-6 text-warning" />
@@ -399,7 +399,7 @@ const Raffles = () => {
             </Card>
 
             {/* Task Checklist */}
-            <Card>
+            <Card className="w-full">
               <CardHeader>
                 <CardTitle>Entry Requirements</CardTitle>
                 <CardDescription>
