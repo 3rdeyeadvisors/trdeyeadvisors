@@ -7,6 +7,7 @@ import { Mail, Send, AlertCircle, Trophy, Loader2, Eye } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 import NewsletterSender from "@/components/admin/NewsletterSender";
+import { BroadcastPreview } from "@/components/admin/BroadcastPreview";
 import {
   Dialog,
   DialogContent,
@@ -202,6 +203,8 @@ export function EmailCenter() {
 
   return (
     <div className="space-y-6">
+      <BroadcastPreview />
+      
       <NewsletterSender />
       
       <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
