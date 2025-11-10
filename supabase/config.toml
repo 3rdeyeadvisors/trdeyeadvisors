@@ -130,3 +130,6 @@ verify_jwt = false
 
 [functions.send-raffle-announcement]
 verify_jwt = false
+
+[functions.admin-mark-verified]
+verify_jwt = true

@@ -233,9 +233,30 @@ const RaffleManager = () => {
     }
   };
 
-  const handleVerifyTask = async (taskId: string, approved: boolean) => {
+  const handleVerifyTask = async (taskId: string, approved: boolean, skipEmail: boolean = false) => {
     try {
       const newStatus = approved ? 'verified' : 'rejected';
+      
+      // If skipEmail, use admin function to bypass email sending
+      if (skipEmail && approved) {
+        const { data, error } = await supabase.functions.invoke('admin-mark-verified', {
+          body: { taskIds: [taskId], skipEmail: true },
+        });
+
+        if (error) throw error;
+
+        toast({
+          title: "Verified (No Email)",
+          description: "Username verified without sending notification email",
+        });
+
+        // Refresh the list
+        const activeRaffle = raffles.find(r => r.is_active);
+        if (activeRaffle) {
+          fetchVerificationTasks(activeRaffle.id);
+        }
+        return;
+      }
       
       const { error } = await supabase
         .from('raffle_tasks')
@@ -894,23 +915,33 @@ const RaffleManager = () => {
                         )}
                       </div>
                       
-                      <div className="flex gap-2">
+                      <div className="flex flex-col gap-2">
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            onClick={() => handleVerifyTask(task.id, true)}
+                            className="flex-1"
+                          >
+                            <CheckCircle2 className="w-4 h-4 mr-2" />
+                            Verify & Email
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="destructive"
+                            onClick={() => handleVerifyTask(task.id, false)}
+                            className="flex-1"
+                          >
+                            <X className="w-4 h-4 mr-2" />
+                            Reject
+                          </Button>
+                        </div>
                         <Button
                           size="sm"
-                          onClick={() => handleVerifyTask(task.id, true)}
-                          className="flex-1"
+                          variant="outline"
+                          onClick={() => handleVerifyTask(task.id, true, true)}
+                          className="w-full"
                         >
-                          <CheckCircle2 className="w-4 h-4 mr-2" />
-                          Verify
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="destructive"
-                          onClick={() => handleVerifyTask(task.id, false)}
-                          className="flex-1"
-                        >
-                          <X className="w-4 h-4 mr-2" />
-                          Reject
+                          ✓ Verify (No Email)
                         </Button>
                       </div>
                     </div>
