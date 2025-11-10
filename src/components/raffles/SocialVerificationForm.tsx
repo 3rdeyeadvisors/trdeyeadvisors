@@ -28,6 +28,7 @@ const SocialVerificationForm = ({
   const { toast } = useToast();
   const [username, setUsername] = useState(existingUsername || '');
   const [submitting, setSubmitting] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const platform = taskType === 'instagram' ? 'Instagram' : 'X';
   const platformHandle = taskType === 'instagram' ? '@3rdeyeadvisors' : '@3rdeyeadvisors';
@@ -113,21 +114,49 @@ const SocialVerificationForm = ({
           </Badge>
         </div>
 
-        {verificationStatus === 'verified' ? (
-          <div className="flex items-center gap-2 p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
-            <CheckCircle2 className="w-5 h-5 text-green-500" />
-            <div>
-              <p className="text-sm font-semibold text-green-500">✅ Verified</p>
-              <p className="text-xs text-muted-foreground">@{username}</p>
+        {verificationStatus === 'verified' && !isEditing ? (
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
+              <CheckCircle2 className="w-5 h-5 text-green-500" />
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-green-500">✅ Verified</p>
+                <p className="text-xs text-muted-foreground">@{username}</p>
+              </div>
             </div>
+            <Button 
+              type="button"
+              variant="outline"
+              size="sm" 
+              className="w-full"
+              onClick={() => {
+                setIsEditing(true);
+                setUsername(existingUsername || '');
+              }}
+            >
+              Change Username
+            </Button>
           </div>
-        ) : verificationStatus === 'submitted' ? (
-          <div className="flex items-center gap-2 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
-            <Clock className="w-5 h-5 text-yellow-500" />
-            <div>
-              <p className="text-sm font-semibold text-yellow-500">✅ Submitted for verification</p>
-              <p className="text-xs text-muted-foreground">@{username}</p>
+        ) : verificationStatus === 'submitted' && !isEditing ? (
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+              <Clock className="w-5 h-5 text-yellow-500" />
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-yellow-500">⏳ Submitted for verification</p>
+                <p className="text-xs text-muted-foreground">@{username}</p>
+              </div>
             </div>
+            <Button 
+              type="button"
+              variant="outline"
+              size="sm" 
+              className="w-full"
+              onClick={() => {
+                setIsEditing(true);
+                setUsername(existingUsername || '');
+              }}
+            >
+              Change Username
+            </Button>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-3">
@@ -144,14 +173,31 @@ const SocialVerificationForm = ({
                 className="h-9 text-sm"
               />
             </div>
-            <Button 
-              type="submit" 
-              size="sm" 
-              className="w-full"
-              disabled={submitting}
-            >
-              {submitting ? "Submitting..." : "Submit for Verification"}
-            </Button>
+            <div className="flex gap-2">
+              {isEditing && (
+                <Button 
+                  type="button"
+                  variant="outline"
+                  size="sm" 
+                  className="flex-1"
+                  onClick={() => {
+                    setIsEditing(false);
+                    setUsername(existingUsername || '');
+                  }}
+                  disabled={submitting}
+                >
+                  Cancel
+                </Button>
+              )}
+              <Button 
+                type="submit" 
+                size="sm" 
+                className={isEditing ? "flex-1" : "w-full"}
+                disabled={submitting}
+              >
+                {submitting ? "Submitting..." : isEditing ? "Update" : "Submit for Verification"}
+              </Button>
+            </div>
           </form>
         )}
       </div>
