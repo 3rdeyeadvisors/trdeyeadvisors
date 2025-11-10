@@ -78,9 +78,7 @@ const Raffles = () => {
 
   const fetchActiveRaffle = async () => {
     try {
-      console.log('Fetching active raffle...');
       const now = new Date().toISOString();
-      console.log('Current time:', now);
       
       const { data, error } = await supabase
         .from('raffles')
@@ -88,33 +86,17 @@ const Raffles = () => {
         .eq('is_active', true)
         .order('start_date', { ascending: false })
         .limit(10);
-
-      console.log('All active raffles:', data);
       
-      if (error) {
-        console.error('Query error:', error);
-        throw error;
-      }
+      if (error) throw error;
       
-      // Filter in JavaScript to find the right raffle
+      // Filter to find the current active raffle
       const currentRaffle = data?.find(raffle => {
         const hasStarted = new Date(raffle.start_date) <= new Date(now);
         const hasNotEnded = new Date(raffle.end_date) >= new Date(now);
         const noWinner = !raffle.winner_user_id;
-        
-        console.log('Checking raffle:', {
-          title: raffle.title,
-          start: raffle.start_date,
-          end: raffle.end_date,
-          hasStarted,
-          hasNotEnded,
-          noWinner
-        });
-        
         return hasStarted && hasNotEnded && noWinner;
       });
       
-      console.log('Selected raffle:', currentRaffle);
       setActiveRaffle(currentRaffle || null);
     } catch (error) {
       console.error('Error fetching raffle:', error);
