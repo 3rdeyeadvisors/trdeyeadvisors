@@ -349,7 +349,7 @@ const Tutorials = () => {
                                 "defi-calculators": "/tutorials/defi-calculators",
                                 "spotting-scams": "/tutorials/spotting-scams",
                                 "yield-farming": "/tutorials/advanced-defi-protocols",
-                                "liquidity-pools": "/tutorials/portfolio-rebalancing",
+                                "liquidity-pools": "/tutorials/liquidity-pools",
                                 "portfolio-tracking": "/tutorials/portfolio-rebalancing",
                                 "risk-assessment": "/tutorials/risk-assessment",
                                 "chart-reading": "/tutorials/chart-reading",
