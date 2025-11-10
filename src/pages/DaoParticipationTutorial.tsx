@@ -538,7 +538,7 @@ const DaoParticipationTutorial = () => {
                         
                         toast.success("Tutorial Complete! 🎉 You're now ready to participate in DAOs.");
                         setTimeout(() => {
-                          navigate('/tutorials');
+                          navigate('/tutorials?tab=advanced');
                         }, 1500);
                       } else {
                         setCurrentStep(Math.min(steps.length - 1, currentStep + 1));

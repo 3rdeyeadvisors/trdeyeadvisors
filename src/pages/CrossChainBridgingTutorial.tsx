@@ -647,7 +647,7 @@ const CrossChainBridgingTutorial = () => {
         description: "Great work! You're now ready for cross-chain DeFi.",
       });
       setTimeout(() => {
-        window.location.href = "/tutorials";
+        window.location.href = "/tutorials?tab=advanced";
       }, 1500);
     }
   };

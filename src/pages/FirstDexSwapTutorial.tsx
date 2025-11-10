@@ -395,7 +395,7 @@ const FirstDexSwapTutorial = () => {
         description: "Excellent work! You've mastered DEX swapping.",
       });
       setTimeout(() => {
-        window.location.href = "/tutorials";
+        window.location.href = "/tutorials?tab=immediate";
       }, 1500);
     }
   };

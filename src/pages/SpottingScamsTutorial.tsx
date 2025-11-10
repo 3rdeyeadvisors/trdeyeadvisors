@@ -556,7 +556,7 @@ const SpottingScamsTutorial = () => {
         description: "You're now equipped to spot and avoid DeFi scams. Stay safe!",
       });
       setTimeout(() => {
-        window.location.href = "/tutorials";
+        window.location.href = "/tutorials?tab=immediate";
       }, 1500);
     }
   };

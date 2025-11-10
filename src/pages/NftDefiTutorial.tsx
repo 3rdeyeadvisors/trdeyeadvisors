@@ -492,7 +492,7 @@ const NftDefiTutorial = () => {
                         
                         toast.success("Tutorial Complete! 🎉 You're ready to explore NFT-DeFi opportunities.");
                         setTimeout(() => {
-                          navigate('/tutorials');
+                          navigate('/tutorials?tab=advanced');
                         }, 1500);
                       } else {
                         setCurrentStep(Math.min(steps.length - 1, currentStep + 1));

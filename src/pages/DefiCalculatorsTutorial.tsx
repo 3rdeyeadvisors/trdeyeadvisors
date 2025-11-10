@@ -314,7 +314,7 @@ const DefiCalculatorsTutorial = () => {
         description: "Great job! You now know how to use DeFi calculators effectively.",
       });
       setTimeout(() => {
-        window.location.href = "/tutorials";
+        window.location.href = "/tutorials?tab=immediate";
       }, 1500);
     }
   };

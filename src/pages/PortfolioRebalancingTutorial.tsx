@@ -530,7 +530,7 @@ const PortfolioRebalancingTutorial = () => {
         description: "Excellent! You've learned portfolio rebalancing strategies.",
       });
       setTimeout(() => {
-        window.location.href = "/tutorials";
+        window.location.href = "/tutorials?tab=practical";
       }, 1500);
     }
   };

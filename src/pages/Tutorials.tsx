@@ -11,7 +11,10 @@ import { useAuth } from "@/components/auth/AuthProvider";
 import { useNavigate } from "react-router-dom";
 
 const Tutorials = () => {
-  const [selectedCategory, setSelectedCategory] = useState("immediate");
+  // Read tab from URL parameter
+  const searchParams = new URLSearchParams(window.location.search);
+  const initialTab = searchParams.get('tab') || 'immediate';
+  const [selectedCategory, setSelectedCategory] = useState(initialTab);
   const [completedTutorials, setCompletedTutorials] = useState<string[]>([]);
   const { toast } = useToast();
   const { user } = useAuth();
@@ -346,7 +349,7 @@ const Tutorials = () => {
                                 "defi-calculators": "/tutorials/defi-calculators",
                                 "spotting-scams": "/tutorials/spotting-scams",
                                 "yield-farming": "/tutorials/advanced-defi-protocols",
-                                "liquidity-pools": "/tutorials/first-dex-swap",
+                                "liquidity-pools": "/tutorials/portfolio-rebalancing",
                                 "portfolio-tracking": "/tutorials/portfolio-rebalancing",
                                 "risk-assessment": "/tutorials/risk-assessment",
                                 "chart-reading": "/tutorials/chart-reading",

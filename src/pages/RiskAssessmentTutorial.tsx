@@ -314,7 +314,7 @@ const RiskAssessmentTutorial = () => {
                         
                         toast.success("Tutorial Complete! 🎉 You've mastered DeFi risk assessment.");
                         setTimeout(() => {
-                          window.location.href = "/tutorials";
+                          window.location.href = "/tutorials?tab=practical";
                         }, 1500);
                       } else {
                         setCurrentStep(Math.min(steps.length - 1, currentStep + 1));

@@ -455,7 +455,7 @@ const ChartReadingTutorial = () => {
                         
                         toast.success("Tutorial Complete! 🎉 You've mastered chart reading.");
                         setTimeout(() => {
-                          navigate('/tutorials');
+                          navigate('/tutorials?tab=advanced');
                         }, 1500);
                       } else {
                         setCurrentStep(Math.min(steps.length - 1, currentStep + 1));

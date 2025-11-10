@@ -251,7 +251,7 @@ const WalletSetupTutorial = () => {
         description: "Great job! You've completed the Wallet Setup tutorial.",
       });
       setTimeout(() => {
-        window.location.href = "/tutorials";
+        window.location.href = "/tutorials?tab=immediate";
       }, 1500);
     }
   };

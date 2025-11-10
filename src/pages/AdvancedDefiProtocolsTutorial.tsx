@@ -839,7 +839,7 @@ const AdvancedDefiProtocolsTutorial = () => {
         description: "Congratulations! You've mastered advanced DeFi protocols.",
       });
       setTimeout(() => {
-        window.location.href = "/tutorials";
+        window.location.href = "/tutorials?tab=practical";
       }, 1500);
     }
   };
@@ -942,10 +942,332 @@ const AdvancedDefiProtocolsTutorial = () => {
             </CardHeader>
 
             <CardContent className="space-y-6">
-              <p className="text-muted-foreground">{currentStepData.content.overview}</p>
+              <p className="text-muted-foreground leading-relaxed">{currentStepData.content.overview}</p>
 
-              {/* Content would be implemented for each step here */}
-              {/* For brevity, showing just the structure */}
+              {/* Step 1: Advanced DeFi Landscape */}
+              {currentStep === 1 && currentStepData.content.protocolCategories && (
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4">Protocol Categories</h3>
+                    <div className="grid gap-4">
+                      {currentStepData.content.protocolCategories.map((cat: any, idx: number) => (
+                        <Card key={idx} className="p-4">
+                          <h4 className="font-semibold text-primary mb-2">{cat.category}</h4>
+                          <p className="text-sm text-muted-foreground mb-3">{cat.description}</p>
+                          <div className="grid grid-cols-2 gap-2 text-sm">
+                            <div><span className="font-medium">Protocols:</span> {cat.protocols.join(', ')}</div>
+                            <div><span className="font-medium">Yields:</span> {cat.yields}</div>
+                            <div><span className="font-medium">Complexity:</span> <Badge variant="outline">{cat.complexity}</Badge></div>
+                            <div><span className="font-medium">Risks:</span> {cat.risks.join(', ')}</div>
+                          </div>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                  <Alert>
+                    <AlertTriangle className="h-4 w-4" />
+                    <AlertDescription>
+                      <strong>Risk Spectrum Allocation:</strong> Conservative (50-70%), Moderate (20-40%), Aggressive (5-15%), Experimental (1-5%)
+                    </AlertDescription>
+                  </Alert>
+                </div>
+              )}
+
+              {/* Step 2: Lending & Borrowing */}
+              {currentStep === 2 && currentStepData.content.coreProtocols && (
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4">Core Protocols</h3>
+                    <div className="grid gap-4">
+                      {currentStepData.content.coreProtocols.map((protocol: any, idx: number) => (
+                        <Card key={idx} className="p-4">
+                          <div className="flex justify-between items-start mb-2">
+                            <h4 className="font-semibold text-primary">{protocol.protocol}</h4>
+                            <Badge>{protocol.riskLevel}</Badge>
+                          </div>
+                          <p className="text-sm mb-2"><strong>Best for:</strong> {protocol.bestFor}</p>
+                          <p className="text-sm mb-2"><strong>Features:</strong> {protocol.features.join(', ')}</p>
+                          <p className="text-sm text-muted-foreground">{protocol.advantages.join(' • ')}</p>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                  {currentStepData.content.advancedStrategies && (
+                    <div>
+                      <h3 className="text-lg font-semibold mb-4">Advanced Strategies</h3>
+                      <div className="space-y-3">
+                        {currentStepData.content.advancedStrategies.map((strategy: any, idx: number) => (
+                          <Card key={idx} className="p-4">
+                            <div className="flex justify-between items-start mb-2">
+                              <h4 className="font-semibold">{strategy.strategy}</h4>
+                              <Badge variant="outline">{strategy.riskLevel}</Badge>
+                            </div>
+                            <p className="text-sm mb-2">{strategy.description}</p>
+                            <p className="text-sm text-primary mb-1"><strong>Example:</strong> {strategy.example}</p>
+                            {strategy.considerations && (
+                              <p className="text-xs text-muted-foreground">⚠️ {strategy.considerations.join(' • ')}</p>
+                            )}
+                          </Card>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Step 3: Leveraged Yield Farming */}
+              {currentStep === 3 && currentStepData.content.popularProtocols && (
+                <div className="space-y-6">
+                  <Alert className="bg-awareness/10 border-awareness">
+                    <Zap className="h-4 w-4" />
+                    <AlertDescription>
+                      <strong>Leverage amplifies both gains and losses.</strong> {currentStepData.content.leverageMechanics?.howItWorks}
+                    </AlertDescription>
+                  </Alert>
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4">Popular Protocols</h3>
+                    <div className="grid gap-4">
+                      {currentStepData.content.popularProtocols.map((protocol: any, idx: number) => (
+                        <Card key={idx} className="p-4">
+                          <div className="flex justify-between items-start mb-2">
+                            <h4 className="font-semibold text-primary">{protocol.protocol}</h4>
+                            <Badge>{protocol.riskLevel}</Badge>
+                          </div>
+                          <p className="text-sm mb-2">{protocol.specialty} (Max {protocol.maxLeverage})</p>
+                          <p className="text-xs text-muted-foreground mb-2">Pools: {protocol.supportedPools.join(', ')}</p>
+                          <p className="text-xs">{protocol.features.join(' • ')}</p>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                  {currentStepData.content.strategyTypes && (
+                    <div>
+                      <h3 className="text-lg font-semibold mb-4">Strategy Types</h3>
+                      <div className="space-y-3">
+                        {currentStepData.content.strategyTypes.map((strategy: any, idx: number) => (
+                          <Card key={idx} className="p-4">
+                            <h4 className="font-semibold mb-2">{strategy.strategy}</h4>
+                            <p className="text-sm mb-2">{strategy.description}</p>
+                            <div className="text-xs space-y-1">
+                              <p><strong>Optimal conditions:</strong> {strategy.optimalConditions}</p>
+                              <p className="text-primary"><strong>Formula:</strong> {strategy.profitFormula}</p>
+                            </div>
+                          </Card>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Step 4: Options & Derivatives */}
+              {currentStep === 4 && currentStepData.content.majorProtocols && (
+                <div className="space-y-6">
+                  {currentStepData.content.optionsBasics && (
+                    <Card className="p-4 bg-muted/50">
+                      <h3 className="font-semibold mb-2">Options Basics</h3>
+                      <div className="text-sm space-y-1">
+                        <p>{currentStepData.content.optionsBasics.definition}</p>
+                        <p><strong>Call:</strong> {currentStepData.content.optionsBasics.callOption}</p>
+                        <p><strong>Put:</strong> {currentStepData.content.optionsBasics.putOption}</p>
+                      </div>
+                    </Card>
+                  )}
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4">Major Protocols</h3>
+                    <div className="grid gap-3">
+                      {currentStepData.content.majorProtocols.map((protocol: any, idx: number) => (
+                        <Card key={idx} className="p-4">
+                          <div className="flex justify-between items-start mb-2">
+                            <h4 className="font-semibold text-primary">{protocol.protocol}</h4>
+                            <Badge>{protocol.liquidity} Liquidity</Badge>
+                          </div>
+                          <p className="text-sm mb-1">{protocol.type}</p>
+                          <p className="text-xs text-muted-foreground">Assets: {protocol.assets.join(', ')}</p>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                  {currentStepData.content.strategiesGuide && (
+                    <div>
+                      <h3 className="text-lg font-semibold mb-4">Strategies Guide</h3>
+                      <div className="space-y-3">
+                        {currentStepData.content.strategiesGuide.map((strategy: any, idx: number) => (
+                          <Card key={idx} className="p-4">
+                            <h4 className="font-semibold mb-2">{strategy.strategy}</h4>
+                            <p className="text-sm mb-2">{strategy.description}</p>
+                            <div className="text-xs space-y-1 text-muted-foreground">
+                              <p><strong>When:</strong> {strategy.when}</p>
+                              <p><strong>How:</strong> {strategy.howItWorks}</p>
+                              <p className="text-awareness"><strong>Best for:</strong> {strategy.suitability}</p>
+                            </div>
+                          </Card>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Step 5: Synthetic Assets */}
+              {currentStep === 5 && currentStepData.content.majorProtocols && (
+                <div className="space-y-6">
+                  {currentStepData.content.syntheticsExplained && (
+                    <Card className="p-4 bg-muted/50">
+                      <h3 className="font-semibold mb-2">What are Synthetics?</h3>
+                      <p className="text-sm mb-2">{currentStepData.content.syntheticsExplained.definition}</p>
+                      <p className="text-xs text-muted-foreground">Advantages: {currentStepData.content.syntheticsExplained.advantages.join(' • ')}</p>
+                    </Card>
+                  )}
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4">Major Protocols</h3>
+                    <div className="grid gap-3">
+                      {currentStepData.content.majorProtocols.map((protocol: any, idx: number) => (
+                        <Card key={idx} className="p-4">
+                          <h4 className="font-semibold text-primary mb-2">{protocol.protocol}</h4>
+                          <div className="text-sm space-y-1">
+                            <p><strong>Assets:</strong> {protocol.assets.join(', ')}</p>
+                            <p><strong>Collateral:</strong> {protocol.collateral} ({protocol.collateralRatio})</p>
+                            <p className="text-xs text-muted-foreground">{protocol.features.join(' • ')}</p>
+                          </div>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                  {currentStepData.content.useCases && (
+                    <div>
+                      <h3 className="text-lg font-semibold mb-4">Use Cases</h3>
+                      <div className="space-y-3">
+                        {currentStepData.content.useCases.map((useCase: any, idx: number) => (
+                          <Card key={idx} className="p-4">
+                            <h4 className="font-semibold mb-2">{useCase.useCase}</h4>
+                            <p className="text-sm mb-2"><strong>Example:</strong> {useCase.example}</p>
+                            <div className="text-xs">
+                              <p className="text-awareness">Benefits: {useCase.benefits.join(', ')}</p>
+                              <p className="text-destructive">Risks: {useCase.risks.join(', ')}</p>
+                            </div>
+                          </Card>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Step 6: Protocol Integration */}
+              {currentStep === 6 && currentStepData.content.integrationApproaches && (
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4">Integration Approaches</h3>
+                    <div className="space-y-3">
+                      {currentStepData.content.integrationApproaches.map((approach: any, idx: number) => (
+                        <Card key={idx} className="p-4">
+                          <div className="flex justify-between items-start mb-2">
+                            <h4 className="font-semibold">{approach.approach}</h4>
+                            <Badge>{approach.complexity}</Badge>
+                          </div>
+                          <p className="text-sm mb-2">{approach.description}</p>
+                          <p className="text-xs text-primary mb-1"><strong>Example:</strong> {approach.example}</p>
+                          <p className="text-xs text-muted-foreground">Benefits: {approach.benefits.join(' • ')}</p>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                  {currentStepData.content.advancedCombinations && (
+                    <div>
+                      <h3 className="text-lg font-semibold mb-4">Advanced Combinations</h3>
+                      <div className="space-y-3">
+                        {currentStepData.content.advancedCombinations.map((strategy: any, idx: number) => (
+                          <Card key={idx} className="p-4">
+                            <div className="flex justify-between items-start mb-2">
+                              <h4 className="font-semibold">{strategy.strategy}</h4>
+                              <Badge variant="outline">{strategy.riskLevel}</Badge>
+                            </div>
+                            <p className="text-sm mb-2">Protocols: {strategy.protocols.join(', ')}</p>
+                            <p className="text-sm text-awareness mb-1"><strong>Target Yield:</strong> {strategy.targetYield}</p>
+                            <ul className="text-xs space-y-1 list-disc list-inside text-muted-foreground">
+                              {strategy.process.map((step: string, i: number) => (
+                                <li key={i}>{step}</li>
+                              ))}
+                            </ul>
+                          </Card>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Step 7: Risk Management */}
+              {currentStep === 7 && currentStepData.content.riskCategories && (
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4">Risk Categories</h3>
+                    <div className="space-y-3">
+                      {currentStepData.content.riskCategories.map((risk: any, idx: number) => (
+                        <Card key={idx} className="p-4">
+                          <h4 className="font-semibold text-destructive mb-2">{risk.category}</h4>
+                          <p className="text-sm mb-2">{risk.description}</p>
+                          <div className="text-xs space-y-1">
+                            <p><strong>Examples:</strong> {risk.examples.join(', ')}</p>
+                            <p className="text-awareness"><strong>Mitigation:</strong> {risk.mitigation.join(' • ')}</p>
+                            <p><strong>Allocation:</strong> {risk.allocation}</p>
+                          </div>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                  {currentStepData.content.monitoringSystem && (
+                    <div>
+                      <h3 className="text-lg font-semibold mb-4">Monitoring System</h3>
+                      <div className="grid gap-3">
+                        {currentStepData.content.monitoringSystem.map((item: any, idx: number) => (
+                          <Card key={idx} className="p-4">
+                            <h4 className="font-semibold mb-1">{item.metric}</h4>
+                            <div className="text-xs space-y-1 text-muted-foreground">
+                              <p><strong>Frequency:</strong> {item.frequency}</p>
+                              <p><strong>Threshold:</strong> {item.threshold}</p>
+                              <p><strong>Tools:</strong> {item.tools.join(', ')}</p>
+                            </div>
+                          </Card>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Step 8: Portfolio Construction */}
+              {currentStep === 8 && currentStepData.content.portfolioFramework && (
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4">Portfolio Framework</h3>
+                    <div className="space-y-3">
+                      {Object.entries(currentStepData.content.portfolioFramework).map(([key, value]: [string, any]) => (
+                        <Card key={key} className="p-4">
+                          <div className="flex justify-between items-start mb-2">
+                            <h4 className="font-semibold capitalize">{key}</h4>
+                            <Badge>{value.riskLevel}</Badge>
+                          </div>
+                          <div className="text-sm space-y-1">
+                            <p><strong>Allocation:</strong> {value.allocation}</p>
+                            <p><strong>Target APY:</strong> {value.targetAPY}</p>
+                            <p className="text-xs text-muted-foreground">Strategies: {value.strategies.join(', ')}</p>
+                          </div>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                  {currentStepData.content.diversificationPrinciples && (
+                    <Alert>
+                      <Target className="h-4 w-4" />
+                      <AlertDescription>
+                        <strong>Diversification Principles:</strong> Protocol, Strategy, Chain, and Temporal diversification are essential for risk management.
+                      </AlertDescription>
+                    </Alert>
+                  )}
+                </div>
+              )}
 
               {/* Step Navigation */}
               <div className="flex items-center justify-between pt-6 border-t">

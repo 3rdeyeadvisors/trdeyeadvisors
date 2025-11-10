@@ -777,7 +777,7 @@ const ReadingDefiMetricsTutorial = () => {
         description: "Well done! You can now analyze DeFi metrics like a pro.",
       });
       setTimeout(() => {
-        window.location.href = "/tutorials";
+        window.location.href = "/tutorials?tab=practical";
       }, 1500);
     }
   };
