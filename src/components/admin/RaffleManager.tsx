@@ -73,6 +73,14 @@ const RaffleManager = () => {
     fetchRaffles();
   }, []);
 
+  useEffect(() => {
+    // Auto-fetch verification tasks when there's an active raffle
+    const activeRaffle = raffles.find(r => r.is_active);
+    if (activeRaffle) {
+      fetchVerificationTasks(activeRaffle.id);
+    }
+  }, [raffles]);
+
   const fetchRaffles = async () => {
     try {
       const { data, error } = await supabase
