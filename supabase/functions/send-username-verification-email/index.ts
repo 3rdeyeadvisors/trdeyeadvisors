@@ -39,110 +39,34 @@ const handler = async (req: Request): Promise<Response> => {
       html: `
         <!DOCTYPE html>
         <html>
-        <head>
-          <meta charset="utf-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        </head>
-        <body style="margin: 0; padding: 0; background-color: #030717;">
-          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 0; padding: 0; background-color: #030717;" bgcolor="#030717">
-            <tr>
-              <td align="center" style="padding: 0; background-color: #030717;" bgcolor="#030717">
-                <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; margin: 0 auto; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;">
-                  <tr>
-                    <td style="padding: 32px 20px;">
-                      
-                      <!-- Header -->
-                      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: linear-gradient(135deg, hsl(217, 32%, 8%), hsl(217, 32%, 6%)); border-radius: 12px; border: 1px solid hsl(217, 32%, 15%);">
-                        <tr>
-                          <td style="text-align: center; padding: 48px 24px;">
-                            <h1 style="color: hsl(217, 91%, 60%); font-size: 36px; margin: 0 0 8px 0; font-weight: 700; text-shadow: 0 0 24px hsla(217, 91%, 60%, 0.4);">3rdeyeadvisors</h1>
-                            <p style="color: hsl(271, 91%, 75%); font-size: 18px; margin: 0; font-weight: 500;">Username Verification Request</p>
-                          </td>
-                        </tr>
-                      </table>
-                      
-                      <!-- Spacer -->
-                      <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="height: 32px; line-height: 32px;"></td></tr></table>
-                      
-                      <!-- Content -->
-                      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                        <tr>
-                          <td>
-                            <h2 style="color: hsl(217, 91%, 70%); font-size: 24px; margin: 0 0 16px 0; font-weight: 600;">
-                              🔍 New ${platform} Username Submitted
-                            </h2>
-                            <p style="color: #F5F5F5; font-size: 16px; line-height: 1.6; margin: 0 0 24px 0;">
-                              A participant has submitted their ${platform} username for verification in the ${raffle_title}.
-                            </p>
-                          </td>
-                        </tr>
-                      </table>
-
-                      <!-- Verification Details -->
-                      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: linear-gradient(135deg, hsl(217, 32%, 10%), hsl(217, 32%, 12%)); border-radius: 12px; border: 1px solid hsl(217, 32%, 15%);">
-                        <tr>
-                          <td style="padding: 24px;">
-                            <h3 style="color: hsl(217, 91%, 70%); margin: 0 0 16px 0; font-size: 18px;">Submission Details</h3>
-                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                              <tr><td style="color: #F5F5F5; line-height: 1.8; font-size: 15px; padding: 8px 0; border-bottom: 1px solid hsl(217, 32%, 15%);"><strong style="color: hsl(217, 91%, 70%);">User:</strong> ${email}</td></tr>
-                              <tr><td style="color: #F5F5F5; line-height: 1.8; font-size: 15px; padding: 8px 0; border-bottom: 1px solid hsl(217, 32%, 15%);"><strong style="color: hsl(217, 91%, 70%);">Raffle:</strong> ${raffle_title}</td></tr>
-                              <tr><td style="color: #F5F5F5; line-height: 1.8; font-size: 15px; padding: 8px 0; border-bottom: 1px solid hsl(217, 32%, 15%);"><strong style="color: hsl(217, 91%, 70%);">Platform:</strong> ${platform}</td></tr>
-                              <tr><td style="color: #F5F5F5; line-height: 1.8; font-size: 15px; padding: 8px 0; border-bottom: 1px solid hsl(217, 32%, 15%);"><strong style="color: hsl(217, 91%, 70%);">Username:</strong> @${username}</td></tr>
-                              <tr><td style="color: #F5F5F5; line-height: 1.8; font-size: 15px; padding: 8px 0;"><strong style="color: hsl(217, 91%, 70%);">Submitted:</strong> ${new Date().toLocaleString()}</td></tr>
-                            </table>
-                          </td>
-                        </tr>
-                      </table>
-
-                      <!-- Spacer -->
-                      <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="height: 24px; line-height: 24px;"></td></tr></table>
-
-                      <!-- Action Required -->
-                      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: linear-gradient(135deg, hsl(45, 100%, 10%), hsl(45, 100%, 12%)); border-left: 4px solid hsl(45, 100%, 50%); border-radius: 0 8px 8px 0;">
-                        <tr>
-                          <td style="padding: 20px;">
-                            <p style="color: hsl(45, 100%, 70%); margin: 0 0 8px 0; font-weight: 600; font-size: 16px;">⚡ Action Required</p>
-                            <p style="color: #F5F5F5; margin: 0; font-size: 14px; line-height: 1.6;">
-                              Please verify this username in the Admin Raffle Manager dashboard to award entries.
-                            </p>
-                          </td>
-                        </tr>
-                      </table>
-
-                      <!-- Spacer -->
-                      <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="height: 32px; line-height: 32px;"></td></tr></table>
-
-                      <!-- CTA Button -->
-                      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                        <tr>
-                          <td align="center">
-                            <a href="https://the3rdeyeadvisors.com/admin" style="display: inline-block; background: linear-gradient(45deg, hsl(217, 91%, 60%), hsl(271, 91%, 65%)); color: hsl(0, 0%, 98%); padding: 16px 36px; text-decoration: none; border-radius: 12px; font-weight: 700; font-size: 16px; box-shadow: 0 0 30px hsla(217, 91%, 60%, 0.4), 0 8px 20px rgba(0,0,0,0.3);">
-                              Go to Admin Dashboard →
-                            </a>
-                          </td>
-                        </tr>
-                      </table>
-                      
-                      <!-- Spacer -->
-                      <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="height: 32px; line-height: 32px;"></td></tr></table>
-                      
-                      <!-- Footer -->
-                      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top: 1px solid hsl(217, 32%, 15%);">
-                        <tr>
-                          <td style="text-align: center; padding-top: 24px;">
-                            <p style="color: hsl(215, 20%, 65%); font-size: 12px; margin: 0;">
-                              Automated system notification from 3rdeyeadvisors
-                            </p>
-                          </td>
-                        </tr>
-                      </table>
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-          </table>
+        <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
+        <body style="margin:0;padding:0;background:#030717;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background:#030717"><tr><td align="center" style="padding:32px 20px">
+        <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:linear-gradient(135deg,#1a1f2e,#0f1419);border-radius:12px;border:1px solid #2a3441">
+        <tr><td style="text-align:center;padding:48px 24px">
+        <h1 style="color:#60a5fa;font-size:32px;margin:0 0 8px 0;font-weight:700">3rdeyeadvisors</h1>
+        <p style="color:#c084fc;font-size:16px;margin:0">Username Verification</p>
+        </td></tr>
+        <tr><td style="padding:0 32px 32px">
+        <h2 style="color:#60a5fa;font-size:22px;margin:0 0 16px 0">🔍 New ${platform} Username</h2>
+        <div style="background:#1e293b;padding:20px;border-radius:8px;border:1px solid #334155;margin:20px 0">
+        <p style="color:#f5f5f5;margin:8px 0"><strong style="color:#60a5fa">User:</strong> ${email}</p>
+        <p style="color:#f5f5f5;margin:8px 0"><strong style="color:#60a5fa">Raffle:</strong> ${raffle_title}</p>
+        <p style="color:#f5f5f5;margin:8px 0"><strong style="color:#60a5fa">Platform:</strong> ${platform}</p>
+        <p style="color:#f5f5f5;margin:8px 0"><strong style="color:#60a5fa">Username:</strong> @${username}</p>
+        <p style="color:#f5f5f5;margin:8px 0"><strong style="color:#60a5fa">Submitted:</strong> ${new Date().toLocaleString()}</p>
+        </div>
+        <div style="background:#422006;padding:16px;border-radius:0 8px 8px 0;border-left:4px solid #f59e0b;margin:20px 0">
+        <p style="color:#fbbf24;margin:0;font-weight:600">⚡ Action Required</p>
+        <p style="color:#f5f5f5;margin:8px 0 0;font-size:14px">Verify this username in the Admin dashboard.</p>
+        </div>
+        <table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="padding:24px 0">
+        <a href="https://the3rdeyeadvisors.com/admin" style="display:inline-block;background:linear-gradient(45deg,#3b82f6,#8b5cf6);color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700">Go to Admin Dashboard</a>
+        </td></tr></table>
+        <p style="text-align:center;color:#64748b;font-size:12px;margin:20px 0 0;border-top:1px solid #334155;padding-top:20px">Automated notification from 3rdeyeadvisors</p>
+        </td></tr>
+        </table>
+        </td></tr></table>
         </body>
         </html>
       `,

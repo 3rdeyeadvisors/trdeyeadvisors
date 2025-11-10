@@ -35,111 +35,33 @@ const handler = async (req: Request): Promise<Response> => {
       html: `
         <!DOCTYPE html>
         <html>
-        <head>
-          <meta charset="utf-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        </head>
-        <body style="margin: 0; padding: 0; background-color: #030717;">
-          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 0; padding: 0; background-color: #030717;" bgcolor="#030717">
-            <tr>
-              <td align="center" style="padding: 0; background-color: #030717;" bgcolor="#030717">
-                <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; margin: 0 auto; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;">
-                  <tr>
-                    <td style="padding: 32px 20px;">
-                      
-                      <!-- Header -->
-                      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: linear-gradient(135deg, hsl(217, 32%, 8%), hsl(217, 32%, 6%)); border-radius: 12px; border: 1px solid hsl(217, 32%, 15%);">
-                        <tr>
-                          <td style="text-align: center; padding: 48px 24px;">
-                            <h1 style="color: hsl(217, 91%, 60%); font-size: 36px; margin: 0 0 8px 0; font-weight: 700; text-shadow: 0 0 24px hsla(217, 91%, 60%, 0.4);">3rdeyeadvisors</h1>
-                            <p style="color: hsl(271, 91%, 75%); font-size: 18px; margin: 0; font-weight: 500;">Raffle Confirmation</p>
-                          </td>
-                        </tr>
-                      </table>
-                      
-                      <!-- Spacer -->
-                      <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="height: 32px; line-height: 32px;"></td></tr></table>
-                      
-                      <!-- Success Message -->
-                      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                        <tr>
-                          <td>
-                            <h2 style="color: hsl(217, 91%, 70%); font-size: 28px; margin: 0 0 16px 0; font-weight: 600;">
-                              You're In! 🎉
-                            </h2>
-                            <p style="color: #F5F5F5; font-size: 16px; line-height: 1.6; margin: 0 0 16px 0;">
-                              Hi <strong>${first_name || 'there'}</strong>,
-                            </p>
-                            <p style="color: #F5F5F5; font-size: 16px; line-height: 1.6; margin: 0 0 16px 0;">
-                              You've successfully joined the <strong style="color: hsl(217, 91%, 70%);">Learn-to-Earn Raffle</strong> — welcome to the next evolution of financial consciousness.
-                            </p>
-                            <p style="color: #F5F5F5; font-size: 16px; line-height: 1.6; margin: 0 0 24px 0;">
-                              Each step you took — learning, sharing, and engaging — earns you energy in return. The system remembers. 🌐
-                            </p>
-                          </td>
-                        </tr>
-                      </table>
-
-                      <!-- Spacer -->
-                      <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="height: 24px; line-height: 24px;"></td></tr></table>
-
-                      <!-- Entry Details -->
-                      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: linear-gradient(135deg, hsl(271, 91%, 10%), hsl(271, 91%, 12%)); border-radius: 12px; border: 1px solid hsl(271, 91%, 25%);">
-                        <tr>
-                          <td style="padding: 32px; text-align: center;">
-                            <h2 style="margin: 0 0 20px 0; color: hsl(271, 91%, 75%); font-size: 22px; font-weight: 700;">Your Entry Details</h2>
-                            <div style="font-size: 56px; font-weight: 700; margin: 20px 0; color: #FFFFFF;">🪙 $${prize_amount}</div>
-                            <p style="font-size: 20px; margin: 10px 0; color: #FFFFFF; font-weight: 600;">Prize: ${prize}</p>
-                            <p style="font-size: 18px; margin: 10px 0; color: hsl(271, 91%, 85%);">Your Entries: <strong style="color: #FFFFFF;">${entry_count}</strong></p>
-                            <p style="font-size: 16px; margin: 16px 0 0 0; color: hsl(271, 91%, 85%);">⏰ Raffle Ends: ${new Date(end_date).toLocaleDateString('en-US', { 
-                              month: 'long', 
-                              day: 'numeric', 
-                              year: 'numeric',
-                              hour: 'numeric',
-                              minute: '2-digit',
-                              timeZoneName: 'short'
-                            })}</p>
-                          </td>
-                        </tr>
-                      </table>
-
-                      <!-- Spacer -->
-                      <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="height: 24px; line-height: 24px;"></td></tr></table>
-
-                      <!-- Referral CTA -->
-                      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: linear-gradient(135deg, hsl(217, 32%, 10%), hsl(217, 32%, 12%)); border-radius: 8px; border: 1px solid hsl(217, 32%, 15%);">
-                        <tr>
-                          <td style="padding: 20px; text-align: center;">
-                            <p style="font-size: 14px; color: #F5F5F5; margin: 0;">
-                              Want more entries? Share your referral link from your <a href="https://the3rdeyeadvisors.com/raffles" style="color: hsl(217, 91%, 70%); text-decoration: underline;">raffle dashboard</a>.
-                            </p>
-                          </td>
-                        </tr>
-                      </table>
-
-                      <!-- Spacer -->
-                      <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="height: 24px; line-height: 24px;"></td></tr></table>
-
-                      <!-- Footer -->
-                      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top: 1px solid hsl(217, 32%, 15%);">
-                        <tr>
-                          <td style="text-align: center; padding-top: 24px;">
-                            <p style="font-size: 18px; font-weight: 700; color: hsl(217, 91%, 70%); margin: 0 0 8px 0;">
-                              Awareness is advantage.
-                            </p>
-                            <p style="font-size: 14px; color: hsl(215, 20%, 65%); margin: 0;">
-                              — The 3rdeyeadvisors Team
-                            </p>
-                          </td>
-                        </tr>
-                      </table>
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-          </table>
+        <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
+        <body style="margin:0;padding:0;background:#030717;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background:#030717"><tr><td align="center" style="padding:32px 20px">
+        <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:linear-gradient(135deg,#1a1f2e,#0f1419);border-radius:12px;border:1px solid #2a3441">
+        <tr><td style="text-align:center;padding:48px 24px">
+        <h1 style="color:#60a5fa;font-size:32px;margin:0 0 8px 0;font-weight:700">3rdeyeadvisors</h1>
+        <p style="color:#c084fc;font-size:16px;margin:0">Raffle Confirmation</p>
+        </td></tr>
+        <tr><td style="padding:0 32px 32px">
+        <h2 style="color:#60a5fa;font-size:26px;margin:0 0 16px 0;font-weight:700">You're In! 🎉</h2>
+        <p style="color:#f5f5f5;font-size:16px;line-height:1.6;margin:0 0 12px 0">Hi <strong>${first_name || 'there'}</strong>,</p>
+        <p style="color:#f5f5f5;font-size:16px;line-height:1.6;margin:0 0 20px 0">You've successfully joined the <strong style="color:#60a5fa">Learn-to-Earn Raffle</strong> — welcome to the next evolution of financial consciousness.</p>
+        <div style="background:linear-gradient(135deg,#581c87,#4c1d95);padding:28px;border-radius:12px;border:1px solid #7c3aed;margin:24px 0;text-align:center">
+        <h3 style="margin:0 0 16px 0;color:#c084fc;font-size:20px">Your Entry Details</h3>
+        <div style="font-size:48px;font-weight:700;margin:16px 0;color:#fff">🪙 $${prize_amount}</div>
+        <p style="font-size:18px;margin:8px 0;color:#fff;font-weight:600">Prize: ${prize}</p>
+        <p style="font-size:16px;margin:8px 0;color:#e9d5ff">Entries: <strong style="color:#fff">${entry_count}</strong></p>
+        <p style="font-size:14px;margin:12px 0 0;color:#e9d5ff">⏰ Ends: ${new Date(end_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', timeZoneName: 'short' })}</p>
+        </div>
+        <div style="background:#1e293b;padding:16px;border-radius:8px;border:1px solid #334155;margin:20px 0;text-align:center">
+        <p style="font-size:14px;color:#f5f5f5;margin:0">Want more entries? Share your referral link from your <a href="https://the3rdeyeadvisors.com/raffles" style="color:#60a5fa;text-decoration:underline">raffle dashboard</a>.</p>
+        </div>
+        <p style="text-align:center;font-size:16px;font-weight:700;color:#60a5fa;margin:24px 0 8px;border-top:1px solid #334155;padding-top:20px">Awareness is advantage.</p>
+        <p style="text-align:center;font-size:14px;color:#64748b;margin:0">— The 3rdeyeadvisors Team</p>
+        </td></tr>
+        </table>
+        </td></tr></table>
         </body>
         </html>
       `,
