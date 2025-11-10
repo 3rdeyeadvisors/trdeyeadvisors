@@ -192,28 +192,49 @@ const RaffleManager = () => {
       if (approved) {
         const task = verificationTasks.find(t => t.id === taskId);
         if (task) {
+          const activeRaffle = raffles.find(r => r.is_active);
           const { data: currentEntry } = await supabase
             .from('raffle_entries')
             .select('entry_count')
-            .eq('raffle_id', raffles.find(r => r.is_active)?.id || '')
+            .eq('raffle_id', activeRaffle?.id || '')
             .eq('user_id', task.user_id)
             .single();
 
           await supabase
             .from('raffle_entries')
             .upsert({
-              raffle_id: raffles.find(r => r.is_active)?.id || '',
+              raffle_id: activeRaffle?.id || '',
               user_id: task.user_id,
               entry_count: (currentEntry?.entry_count || 0) + 2,
             }, {
               onConflict: 'raffle_id,user_id'
             });
+
+          // Send verification email notification
+          try {
+            const username = task.task_type === 'instagram' 
+              ? task.instagram_username 
+              : task.x_username;
+
+            await supabase.functions.invoke('send-social-verification-email', {
+              body: {
+                userId: task.user_id,
+                taskType: task.task_type,
+                username: username,
+                raffleTitle: activeRaffle?.title || 'Raffle',
+              },
+            });
+            console.log('Verification email sent to user:', task.user_id);
+          } catch (emailError) {
+            console.error('Failed to send verification email:', emailError);
+            // Don't fail the verification if email fails
+          }
         }
       }
 
       toast({
         title: approved ? "Verified ✅" : "Rejected",
-        description: `Username has been ${approved ? 'verified' : 'rejected'}`,
+        description: `Username has been ${approved ? 'verified' : 'rejected'}${approved ? ' and user notified via email' : ''}`,
       });
 
       // Refresh the list
