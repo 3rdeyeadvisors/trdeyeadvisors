@@ -73,6 +73,7 @@ const SocialVerificationForm = ({
         description: `Your ${platform} username has been submitted. We'll verify it soon.`,
       });
 
+      setIsEditing(false);
       onSubmit();
     } catch (error) {
       console.error('Error submitting username:', error);
@@ -114,35 +115,21 @@ const SocialVerificationForm = ({
           </Badge>
         </div>
 
-        {verificationStatus === 'verified' && !isEditing ? (
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
-              <CheckCircle2 className="w-5 h-5 text-green-500" />
-              <div className="flex-1">
-                <p className="text-sm font-semibold text-green-500">✅ Verified</p>
-                <p className="text-xs text-muted-foreground">@{username}</p>
-              </div>
+        {verificationStatus === 'verified' ? (
+          <div className="flex items-center gap-2 p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
+            <CheckCircle2 className="w-5 h-5 text-green-500" />
+            <div>
+              <p className="text-sm font-semibold text-green-500">✅ Verified</p>
+              <p className="text-xs text-muted-foreground">@{existingUsername}</p>
             </div>
-            <Button 
-              type="button"
-              variant="outline"
-              size="sm" 
-              className="w-full"
-              onClick={() => {
-                setIsEditing(true);
-                setUsername(existingUsername || '');
-              }}
-            >
-              Change Username
-            </Button>
           </div>
         ) : verificationStatus === 'submitted' && !isEditing ? (
           <div className="space-y-2">
             <div className="flex items-center gap-2 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
               <Clock className="w-5 h-5 text-yellow-500" />
               <div className="flex-1">
-                <p className="text-sm font-semibold text-yellow-500">⏳ Submitted for verification</p>
-                <p className="text-xs text-muted-foreground">@{username}</p>
+                <p className="text-sm font-semibold text-yellow-500">⏳ Pending Verification</p>
+                <p className="text-xs text-muted-foreground">@{existingUsername}</p>
               </div>
             </div>
             <Button 
