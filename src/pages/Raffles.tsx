@@ -252,7 +252,7 @@ const Raffles = () => {
         keywords="defi raffles, crypto giveaway, learn to earn, bitcoin rewards, defi education"
       />
 
-      <div className="container mx-auto px-4 py-16">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-4">
