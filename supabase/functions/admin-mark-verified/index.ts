@@ -76,22 +76,39 @@ serve(async (req) => {
     // Update entry counts for each user
     if (updatedTasks && updatedTasks.length > 0) {
       for (const task of updatedTasks) {
-        const { data: currentEntry } = await supabaseAdmin
+        console.log(`Updating entry count for user: ${task.user_id}, raffle: ${task.raffle_id}`);
+        
+        // Use maybeSingle to avoid errors when no entry exists
+        const { data: currentEntry, error: fetchError } = await supabaseAdmin
           .from('raffle_entries')
           .select('entry_count')
           .eq('raffle_id', task.raffle_id)
           .eq('user_id', task.user_id)
-          .single();
+          .maybeSingle();
 
-        await supabaseAdmin
+        if (fetchError) {
+          console.error('Error fetching current entry:', fetchError);
+        }
+
+        const newEntryCount = (currentEntry?.entry_count || 0) + 2;
+        console.log(`Current: ${currentEntry?.entry_count || 0}, New: ${newEntryCount}`);
+
+        const { error: upsertError } = await supabaseAdmin
           .from('raffle_entries')
           .upsert({
             raffle_id: task.raffle_id,
             user_id: task.user_id,
-            entry_count: (currentEntry?.entry_count || 0) + 2,
+            entry_count: newEntryCount,
           }, {
             onConflict: 'raffle_id,user_id'
           });
+
+        if (upsertError) {
+          console.error('Error upserting entry count:', upsertError);
+          throw upsertError;
+        }
+
+        console.log(`✅ Successfully updated entry count to ${newEntryCount} for user ${task.user_id}`);
       }
     }
 

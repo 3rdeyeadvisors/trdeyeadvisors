@@ -312,7 +312,9 @@ const Raffles = () => {
     const newValue = !taskCompletion[taskId];
 
     try {
-      const { error } = await supabase
+      console.log('🎯 User toggling task:', taskId, 'New value:', newValue);
+      
+      const { error: taskError } = await supabase
         .from('raffle_tasks')
         .upsert({
           raffle_id: activeRaffle.id,
@@ -324,32 +326,49 @@ const Raffles = () => {
           onConflict: 'raffle_id,user_id,task_type'
         });
 
-      if (error) throw error;
+      if (taskError) {
+        console.error('Error updating task:', taskError);
+        throw taskError;
+      }
 
       setTaskCompletion(prev => ({ ...prev, [taskId]: newValue }));
 
-      // Update entry count
+      // Update entry count with better error handling
       const newEntries = totalEntries + (newValue ? task.entries : -task.entries);
-      await supabase
+      const finalEntries = Math.max(0, newEntries);
+      
+      console.log('🎫 Updating entry count:', {
+        current: totalEntries,
+        change: newValue ? task.entries : -task.entries,
+        new: finalEntries
+      });
+
+      const { error: entryError } = await supabase
         .from('raffle_entries')
         .upsert({
           raffle_id: activeRaffle.id,
           user_id: user.id,
-          entry_count: Math.max(0, newEntries),
+          entry_count: finalEntries,
         }, {
           onConflict: 'raffle_id,user_id'
         });
 
-      setTotalEntries(Math.max(0, newEntries));
+      if (entryError) {
+        console.error('Error updating entry count:', entryError);
+        throw entryError;
+      }
+
+      console.log('✅ Entry count updated successfully to:', finalEntries);
+      setTotalEntries(finalEntries);
 
       toast({
         title: newValue ? "Task Completed!" : "Task Unchecked",
         description: newValue 
-          ? `You earned ${task.entries} ${task.entries === 1 ? 'entry' : 'entries'}!`
-          : `${task.entries} ${task.entries === 1 ? 'entry' : 'entries'} removed.`,
+          ? `You earned ${task.entries} ${task.entries === 1 ? 'entry' : 'entries'}! Total: ${finalEntries}`
+          : `${task.entries} ${task.entries === 1 ? 'entry' : 'entries'} removed. Total: ${finalEntries}`,
       });
     } catch (error) {
-      console.error('Error updating task:', error);
+      console.error('❌ Error updating task:', error);
       toast({
         title: "Error",
         description: "Failed to update task. Please try again.",

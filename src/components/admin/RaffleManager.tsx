@@ -276,22 +276,40 @@ const RaffleManager = () => {
         const task = verificationTasks.find(t => t.id === taskId);
         if (task) {
           const activeRaffle = raffles.find(r => r.is_active);
-          const { data: currentEntry } = await supabase
+          
+          console.log('🎫 Updating entry count for user:', task.user_id);
+          
+          // Use maybeSingle to avoid errors when no entry exists
+          const { data: currentEntry, error: fetchError } = await supabase
             .from('raffle_entries')
             .select('entry_count')
             .eq('raffle_id', activeRaffle?.id || '')
             .eq('user_id', task.user_id)
-            .single();
+            .maybeSingle();
 
-          await supabase
+          if (fetchError) {
+            console.error('Error fetching current entry:', fetchError);
+          }
+
+          const newEntryCount = (currentEntry?.entry_count || 0) + 2;
+          console.log('🎫 New entry count will be:', newEntryCount);
+
+          const { error: upsertError } = await supabase
             .from('raffle_entries')
             .upsert({
               raffle_id: activeRaffle?.id || '',
               user_id: task.user_id,
-              entry_count: (currentEntry?.entry_count || 0) + 2,
+              entry_count: newEntryCount,
             }, {
               onConflict: 'raffle_id,user_id'
             });
+
+          if (upsertError) {
+            console.error('❌ Error upserting entry count:', upsertError);
+            throw upsertError;
+          }
+
+          console.log('✅ Entry count updated successfully to:', newEntryCount);
 
           // Send verification email notification
           try {
@@ -307,7 +325,7 @@ const RaffleManager = () => {
                 raffleTitle: activeRaffle?.title || 'Raffle',
               },
             });
-            console.log('Verification email sent to user:', task.user_id);
+            console.log('📧 Verification email sent to user:', task.user_id);
           } catch (emailError) {
             console.error('Failed to send verification email:', emailError);
             // Don't fail the verification if email fails
