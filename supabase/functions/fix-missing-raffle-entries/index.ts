@@ -97,6 +97,19 @@ serve(async (req) => {
         if (insertError) {
           console.error(`Failed to create entry for ${userId}:`, insertError);
         } else {
+          // Create individual tickets for each verified task
+          for (let i = 0; i < taskCount; i++) {
+            for (let j = 0; j < 2; j++) { // 2 tickets per task
+              await supabaseAdmin
+                .from('raffle_tickets')
+                .insert({
+                  user_id: userId,
+                  raffle_id: raffleId,
+                  ticket_source: 'verification',
+                  metadata: { backfilled: true }
+                });
+            }
+          }
           fixed.push({ userId, raffleId, entryCount });
         }
       }

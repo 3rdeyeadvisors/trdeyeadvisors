@@ -36,6 +36,12 @@ interface Participant {
   entry_count: number;
   email: string;
   display_name: string;
+  tickets?: Array<{
+    id: string;
+    ticket_source: string;
+    earned_at: string;
+    metadata: any;
+  }>;
 }
 
 interface VerificationTask {
@@ -108,95 +114,95 @@ const RaffleManager = () => {
   };
 
   const fetchParticipants = async (raffleId: string) => {
-    if (!raffleId) {
-      console.error('❌ No raffle ID provided');
-      toast({
-        title: "Error",
-        description: "No raffle ID provided",
-        variant: "destructive",
-      });
-      return;
-    }
-
     setLoadingParticipants(true);
-    console.log('📊 Fetching participants for raffle:', raffleId);
-    
+    console.log('🔍 Fetching participants for raffle:', raffleId);
+
     try {
-      // First get raffle entries
-      const { data: entries, error: entriesError } = await supabase
+      const { data: emailsData, error: emailsError } = await supabase
+        .rpc('get_user_emails_with_profiles');
+
+      if (emailsError) {
+        console.error('❌ RPC Error:', emailsError);
+        throw emailsError;
+      }
+
+      if (!emailsData) {
+        console.warn('⚠️ No data returned from RPC');
+        setParticipants([]);
+        toast({
+          title: "No Data",
+          description: "No participant data available",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      console.log(`📊 RPC returned ${emailsData.length} user records`);
+
+      const { data: entriesData, error: entriesError } = await supabase
         .from('raffle_entries')
         .select('user_id, entry_count')
         .eq('raffle_id', raffleId);
 
       if (entriesError) {
-        console.error('❌ Error fetching entries:', entriesError);
-        setParticipants([]);
+        console.error('❌ Entries Error:', entriesError);
         throw entriesError;
       }
 
-      console.log(`📝 Query returned ${entries?.length || 0} entries`);
+      console.log(`🎫 Found ${entriesData?.length || 0} raffle entries`);
 
-      if (!entries || entries.length === 0) {
-        console.log('⚠️ No participants found for this raffle');
-        setParticipants([]);
-        toast({
-          title: "No Participants",
-          description: "No participants have joined this raffle yet",
-        });
-        return;
+      // Fetch all tickets for this raffle
+      const { data: ticketsData, error: ticketsError } = await supabase
+        .from('raffle_tickets')
+        .select('id, user_id, ticket_source, earned_at, metadata')
+        .eq('raffle_id', raffleId)
+        .order('earned_at', { ascending: false });
+
+      if (ticketsError) {
+        console.error('❌ Tickets Error:', ticketsError);
       }
 
-      console.log(`👥 Found ${entries.length} entries, fetching user details...`);
+      console.log(`🎟️ Found ${ticketsData?.length || 0} individual tickets`);
 
-      // Get emails and display names using RPC function
-      const { data: emailsData, error: emailsError } = await supabase.rpc('get_user_emails_with_profiles');
-
-      if (emailsError) {
-        console.error('❌ Error fetching user emails:', emailsError);
-        toast({
-          title: "Warning",
-          description: "Could not fetch all user details",
-          variant: "destructive",
-        });
-      }
-
-      console.log(`📧 RPC returned ${emailsData?.length || 0} user profiles`);
-
-      if (!emailsData) {
-        console.error('❌ RPC returned no data');
-        setParticipants([]);
-        throw new Error('Failed to fetch user profiles');
-      }
-
-      const participantsWithEmails = entries.map((entry, index) => {
+      const participantsList = (entriesData || []).map(entry => {
         const userInfo = emailsData.find((u: any) => u.user_id === entry.user_id);
-        console.log(`  ${index + 1}. Mapping user ${entry.user_id} -> ${userInfo?.email || 'NOT FOUND'}`);
+        const userTickets = ticketsData?.filter(t => t.user_id === entry.user_id) || [];
+        
         return {
           user_id: entry.user_id,
           entry_count: entry.entry_count,
-          email: userInfo?.email || 'N/A',
-          display_name: userInfo?.display_name || 'Anonymous',
+          email: userInfo?.email || 'Unknown',
+          display_name: userInfo?.display_name || 'Unknown',
+          tickets: userTickets,
         };
       });
 
-      console.log('✅ Final participants array:', participantsWithEmails.length, 'participants');
-      setParticipants(participantsWithEmails);
-      
-      toast({
-        title: "Participants Loaded",
-        description: `Successfully loaded ${participantsWithEmails.length} participant${participantsWithEmails.length !== 1 ? 's' : ''}`,
-      });
+      console.log(`✅ Mapped ${participantsList.length} participants`);
+      console.log('Final participants:', participantsList);
+
+      setParticipants(participantsList);
+
+      if (participantsList.length === 0) {
+        toast({
+          title: "No Participants Yet",
+          description: "No one has entered this raffle yet",
+        });
+      } else {
+        toast({
+          title: "Participants Loaded",
+          description: `Found ${participantsList.length} participants with ${ticketsData?.length || 0} total tickets`,
+        });
+      }
     } catch (error) {
-      console.error('❌ Fatal error fetching participants:', error);
+      console.error('❌ Error in fetchParticipants:', error);
       setParticipants([]);
       toast({
         title: "Error Loading Participants",
-        description: error instanceof Error ? error.message : "Failed to load participants. Check console for details.",
+        description: "Failed to load participants. Check console for details.",
         variant: "destructive",
       });
     } finally {
       setLoadingParticipants(false);
-      console.log('🏁 fetchParticipants completed');
     }
   };
 
@@ -1192,12 +1198,13 @@ const RaffleManager = () => {
                   </p>
                 </div>
               ) : (
-                <Table>
+                 <Table>
                   <TableHeader>
                     <TableRow>
                       <TableHead>Email</TableHead>
                       <TableHead>Display Name</TableHead>
-                      <TableHead className="text-right">Entries</TableHead>
+                      <TableHead className="text-right">Total Entries</TableHead>
+                      <TableHead>Ticket Details</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -1209,6 +1216,24 @@ const RaffleManager = () => {
                         <TableCell>{participant.display_name}</TableCell>
                         <TableCell className="text-right font-semibold">
                           {participant.entry_count}
+                        </TableCell>
+                        <TableCell>
+                          {participant.tickets && participant.tickets.length > 0 ? (
+                            <div className="space-y-1">
+                              {participant.tickets.map((ticket) => (
+                                <div key={ticket.id} className="text-xs">
+                                  <Badge variant="outline" className="mr-2">
+                                    {ticket.ticket_source}
+                                  </Badge>
+                                  <span className="text-muted-foreground">
+                                    {new Date(ticket.earned_at).toLocaleString()}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <span className="text-xs text-muted-foreground">No ticket history</span>
+                          )}
                         </TableCell>
                       </TableRow>
                     ))}

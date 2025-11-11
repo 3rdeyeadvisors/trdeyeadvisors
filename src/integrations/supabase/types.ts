@@ -971,6 +971,54 @@ export type Database = {
           },
         ]
       }
+      raffle_tickets: {
+        Row: {
+          created_at: string
+          earned_at: string
+          id: string
+          metadata: Json | null
+          raffle_id: string
+          task_id: string | null
+          ticket_source: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          earned_at?: string
+          id?: string
+          metadata?: Json | null
+          raffle_id: string
+          task_id?: string | null
+          ticket_source: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          earned_at?: string
+          id?: string
+          metadata?: Json | null
+          raffle_id?: string
+          task_id?: string | null
+          ticket_source?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "raffle_tickets_raffle_id_fkey"
+            columns: ["raffle_id"]
+            isOneToOne: false
+            referencedRelation: "raffles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "raffle_tickets_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "raffle_tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       raffles: {
         Row: {
           created_at: string

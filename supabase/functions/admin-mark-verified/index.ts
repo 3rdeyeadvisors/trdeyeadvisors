@@ -110,6 +110,26 @@ serve(async (req) => {
 
         console.log(`✅ Successfully updated entry count to ${newEntryCount} for user ${task.user_id}`);
 
+        // Create 2 individual tickets for verification (tracked separately)
+        for (let i = 0; i < 2; i++) {
+          const { error: ticketError } = await supabaseAdmin
+            .from('raffle_tickets')
+            .insert({
+              user_id: task.user_id,
+              raffle_id: task.raffle_id,
+              ticket_source: 'verification',
+              task_id: task.id,
+              metadata: {
+                task_type: task.task_type,
+                username: task.task_type === 'instagram' ? task.instagram_username : task.x_username,
+              }
+            });
+
+          if (ticketError) {
+            console.error('Error creating ticket:', ticketError);
+          }
+        }
+
         // Send verification email if not skipping
         if (!skipEmail) {
           try {

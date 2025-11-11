@@ -60,6 +60,8 @@ const Raffles = () => {
   const [socialTasks, setSocialTasks] = useState<SocialTasks>({});
   const [winnerDisplayName, setWinnerDisplayName] = useState<string | null>(null);
   const [isWinner, setIsWinner] = useState(false);
+  const [hasParticipated, setHasParticipated] = useState(false);
+  const [participating, setParticipating] = useState(false);
 
   useEffect(() => {
     fetchActiveRaffle();
@@ -259,8 +261,61 @@ const Raffles = () => {
         .single();
 
       setTotalEntries(entry?.entry_count || 0);
+      setHasParticipated(!!entry); // User has entry = participated
     } catch (error) {
       console.error('Error fetching progress:', error);
+    }
+  };
+
+  const handleParticipate = async () => {
+    if (!user || !activeRaffle) {
+      toast({
+        title: "Authentication Required",
+        description: "Please sign in to participate in raffles.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (hasParticipated) {
+      toast({
+        title: "Already Participating",
+        description: "You're already in this raffle!",
+      });
+      return;
+    }
+
+    setParticipating(true);
+
+    try {
+      // Create initial ticket for participation
+      const { error: ticketError } = await supabase
+        .from('raffle_tickets')
+        .insert({
+          user_id: user.id,
+          raffle_id: activeRaffle.id,
+          ticket_source: 'participation',
+          metadata: { action: 'joined_raffle' }
+        });
+
+      if (ticketError) throw ticketError;
+
+      setHasParticipated(true);
+      setTotalEntries(1);
+
+      toast({
+        title: "✅ You've joined the raffle!",
+        description: "Complete tasks to earn more entries and increase your chances!",
+      });
+    } catch (error) {
+      console.error('Error joining raffle:', error);
+      toast({
+        title: "Error",
+        description: "Failed to join raffle. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setParticipating(false);
     }
   };
 
@@ -532,6 +587,22 @@ const Raffles = () => {
                         Including {referralCount} bonus {referralCount === 1 ? 'entry' : 'entries'} from referrals
                       </p>
                     )}
+                  </div>
+                )}
+
+                {!hasParticipated && (
+                  <div className="pt-4 border-t">
+                    <Button 
+                      onClick={handleParticipate} 
+                      disabled={participating}
+                      className="w-full"
+                      size="lg"
+                    >
+                      {participating ? "Joining..." : "🎯 Join This Raffle"}
+                    </Button>
+                    <p className="text-xs text-muted-foreground text-center mt-2">
+                      Start with 1 entry, earn more by completing tasks
+                    </p>
                   </div>
                 )}
 
