@@ -69,6 +69,39 @@ const Raffles = () => {
     }
   }, [user]);
 
+  // Real-time subscription to entry count updates
+  useEffect(() => {
+    if (!user || !activeRaffle) return;
+
+    const channel = supabase
+      .channel('raffle-entry-updates')
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'raffle_entries',
+          filter: `user_id=eq.${user.id}`,
+        },
+        (payload) => {
+          console.log('Entry count updated:', payload);
+          // Update the entry count in real-time
+          if (payload.new && 'entry_count' in payload.new) {
+            setTotalEntries(payload.new.entry_count as number);
+            toast({
+              title: "Entries Updated! 🎉",
+              description: `You now have ${payload.new.entry_count} entries!`,
+            });
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user, activeRaffle]);
+
   useEffect(() => {
     if (activeRaffle?.winner_user_id && user) {
       setIsWinner(activeRaffle.winner_user_id === user.id);

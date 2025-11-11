@@ -78,10 +78,11 @@ const RaffleManager = () => {
   }, []);
 
   useEffect(() => {
-    // Auto-fetch verification tasks when there's an active raffle
+    // Auto-fetch verification tasks and participants when there's an active raffle
     const activeRaffle = raffles.find(r => r.is_active);
     if (activeRaffle) {
       fetchVerificationTasks(activeRaffle.id);
+      fetchParticipants(activeRaffle.id);
     }
   }, [raffles]);
 
@@ -250,10 +251,11 @@ const RaffleManager = () => {
           description: "Username verified without sending notification email",
         });
 
-        // Refresh the list
+        // Refresh the list and participants
         const activeRaffle = raffles.find(r => r.is_active);
         if (activeRaffle) {
           fetchVerificationTasks(activeRaffle.id);
+          fetchParticipants(activeRaffle.id);
         }
         return;
       }
@@ -318,10 +320,11 @@ const RaffleManager = () => {
         description: `Username has been ${approved ? 'verified' : 'rejected'}${approved ? ' and user notified via email' : ''}`,
       });
 
-      // Refresh the list
+      // Refresh the list and participants
       const activeRaffle = raffles.find(r => r.is_active);
       if (activeRaffle) {
         fetchVerificationTasks(activeRaffle.id);
+        fetchParticipants(activeRaffle.id);
       }
     } catch (error) {
       console.error('Error verifying task:', error);
