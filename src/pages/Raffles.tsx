@@ -367,8 +367,8 @@ const Raffles = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 w-full">
                 {/* Raffle Details */}
                 <Card className="w-full">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+              <CardHeader className="text-center">
+                <CardTitle className="flex items-center justify-center gap-2">
                   <Trophy className="w-6 h-6 text-warning" />
                   Current Raffle
                 </CardTitle>
