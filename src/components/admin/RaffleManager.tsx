@@ -58,6 +58,7 @@ const RaffleManager = () => {
   const [verificationTasks, setVerificationTasks] = useState<VerificationTask[]>([]);
   const [verifiedTasksHistory, setVerifiedTasksHistory] = useState<VerificationTask[]>([]);
   const [loading, setLoading] = useState(false);
+  const [loadingParticipants, setLoadingParticipants] = useState(false);
   const [refreshingVerifications, setRefreshingVerifications] = useState(false);
   const [refreshingHistory, setRefreshingHistory] = useState(false);
   const [sendingAnnouncement, setSendingAnnouncement] = useState(false);
@@ -106,9 +107,20 @@ const RaffleManager = () => {
   };
 
   const fetchParticipants = async (raffleId: string) => {
+    if (!raffleId) {
+      console.error('❌ No raffle ID provided');
+      toast({
+        title: "Error",
+        description: "No raffle ID provided",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setLoadingParticipants(true);
+    console.log('📊 Fetching participants for raffle:', raffleId);
+    
     try {
-      console.log('📊 Fetching participants for raffle:', raffleId);
-      
       // First get raffle entries
       const { data: entries, error: entriesError } = await supabase
         .from('raffle_entries')
@@ -116,27 +128,48 @@ const RaffleManager = () => {
         .eq('raffle_id', raffleId);
 
       if (entriesError) {
-        console.error('Error fetching entries:', entriesError);
+        console.error('❌ Error fetching entries:', entriesError);
+        setParticipants([]);
         throw entriesError;
       }
 
+      console.log(`📝 Query returned ${entries?.length || 0} entries`);
+
       if (!entries || entries.length === 0) {
-        console.log('No participants found');
+        console.log('⚠️ No participants found for this raffle');
         setParticipants([]);
+        toast({
+          title: "No Participants",
+          description: "No participants have joined this raffle yet",
+        });
         return;
       }
 
-      console.log(`Found ${entries.length} entries, fetching user details...`);
+      console.log(`👥 Found ${entries.length} entries, fetching user details...`);
 
       // Get emails and display names using RPC function
       const { data: emailsData, error: emailsError } = await supabase.rpc('get_user_emails_with_profiles');
 
       if (emailsError) {
-        console.error('Error fetching user emails:', emailsError);
+        console.error('❌ Error fetching user emails:', emailsError);
+        toast({
+          title: "Warning",
+          description: "Could not fetch all user details",
+          variant: "destructive",
+        });
       }
 
-      const participantsWithEmails = entries.map(entry => {
-        const userInfo = emailsData?.find((u: any) => u.user_id === entry.user_id);
+      console.log(`📧 RPC returned ${emailsData?.length || 0} user profiles`);
+
+      if (!emailsData) {
+        console.error('❌ RPC returned no data');
+        setParticipants([]);
+        throw new Error('Failed to fetch user profiles');
+      }
+
+      const participantsWithEmails = entries.map((entry, index) => {
+        const userInfo = emailsData.find((u: any) => u.user_id === entry.user_id);
+        console.log(`  ${index + 1}. Mapping user ${entry.user_id} -> ${userInfo?.email || 'NOT FOUND'}`);
         return {
           user_id: entry.user_id,
           entry_count: entry.entry_count,
@@ -145,15 +178,24 @@ const RaffleManager = () => {
         };
       });
 
-      console.log('✅ Participants loaded:', participantsWithEmails.length);
+      console.log('✅ Final participants array:', participantsWithEmails.length, 'participants');
       setParticipants(participantsWithEmails);
-    } catch (error) {
-      console.error('Error fetching participants:', error);
+      
       toast({
-        title: "Error",
-        description: "Failed to load participants",
+        title: "Participants Loaded",
+        description: `Successfully loaded ${participantsWithEmails.length} participant${participantsWithEmails.length !== 1 ? 's' : ''}`,
+      });
+    } catch (error) {
+      console.error('❌ Fatal error fetching participants:', error);
+      setParticipants([]);
+      toast({
+        title: "Error Loading Participants",
+        description: error instanceof Error ? error.message : "Failed to load participants. Check console for details.",
         variant: "destructive",
       });
+    } finally {
+      setLoadingParticipants(false);
+      console.log('🏁 fetchParticipants completed');
     }
   };
 
@@ -1088,24 +1130,78 @@ const RaffleManager = () => {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle>Raffle Participants</CardTitle>
+                  <CardTitle>
+                    Raffle Participants
+                    {participants.length > 0 && (
+                      <span className="text-muted-foreground ml-2">
+                        ({participants.length})
+                      </span>
+                    )}
+                  </CardTitle>
                   <CardDescription>
                     View and export participant data
                   </CardDescription>
                 </div>
-                {participants.length > 0 && (
-                  <Button variant="outline" onClick={exportParticipants}>
-                    <Download className="w-4 h-4 mr-2" />
-                    Export CSV
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      const activeRaffle = raffles.find(r => r.is_active);
+                      if (activeRaffle) {
+                        fetchParticipants(activeRaffle.id);
+                      } else {
+                        toast({
+                          title: "No Active Raffle",
+                          description: "Please activate a raffle first",
+                          variant: "destructive",
+                        });
+                      }
+                    }}
+                    disabled={loadingParticipants}
+                  >
+                    {loadingParticipants ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Loading...
+                      </>
+                    ) : (
+                      <>
+                        <RefreshCw className="w-4 h-4 mr-2" />
+                        Refresh
+                      </>
+                    )}
                   </Button>
-                )}
+                  {participants.length > 0 && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={exportParticipants}
+                      disabled={loadingParticipants}
+                    >
+                      <Download className="w-4 h-4 mr-2" />
+                      Export CSV
+                    </Button>
+                  )}
+                </div>
               </div>
             </CardHeader>
             <CardContent>
-              {participants.length === 0 ? (
-                <p className="text-center text-muted-foreground py-8">
-                  Select a raffle from the Manage tab to view participants
-                </p>
+              {loadingParticipants ? (
+                <div className="flex items-center justify-center py-12">
+                  <div className="text-center space-y-3">
+                    <Loader2 className="w-8 h-8 animate-spin mx-auto text-primary" />
+                    <p className="text-muted-foreground">Loading participants...</p>
+                  </div>
+                </div>
+              ) : participants.length === 0 ? (
+                <div className="text-center py-12 space-y-3">
+                  <Users className="w-12 h-12 mx-auto text-muted-foreground/50" />
+                  <p className="text-muted-foreground font-medium">No participants yet</p>
+                  <p className="text-sm text-muted-foreground">
+                    Click "View Participants" from the Manage tab or use the Refresh button
+                  </p>
+                </div>
               ) : (
                 <Table>
                   <TableHeader>
