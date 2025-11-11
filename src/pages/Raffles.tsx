@@ -69,12 +69,15 @@ const Raffles = () => {
     }
   }, [user]);
 
-  // Real-time subscription to entry count updates
+  // Comprehensive real-time subscriptions for all raffle updates
   useEffect(() => {
     if (!user || !activeRaffle) return;
 
+    console.log('Setting up real-time subscriptions for user:', user.id, 'raffle:', activeRaffle.id);
+
     const channel = supabase
-      .channel('raffle-entry-updates')
+      .channel(`raffle-updates-${activeRaffle.id}-${user.id}`)
+      // Listen to entry count updates
       .on(
         'postgres_changes',
         {
@@ -84,8 +87,7 @@ const Raffles = () => {
           filter: `user_id=eq.${user.id}`,
         },
         (payload) => {
-          console.log('Entry count updated:', payload);
-          // Update the entry count in real-time
+          console.log('🎫 Entry count updated:', payload);
           if (payload.new && 'entry_count' in payload.new) {
             setTotalEntries(payload.new.entry_count as number);
             toast({
@@ -95,9 +97,86 @@ const Raffles = () => {
           }
         }
       )
-      .subscribe();
+      // Listen to INSERT for new entries
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'raffle_entries',
+          filter: `user_id=eq.${user.id}`,
+        },
+        (payload) => {
+          console.log('🎫 New entry created:', payload);
+          if (payload.new && 'entry_count' in payload.new) {
+            setTotalEntries(payload.new.entry_count as number);
+          }
+        }
+      )
+      // Listen to task verification status changes
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'raffle_tasks',
+          filter: `user_id=eq.${user.id}`,
+        },
+        (payload) => {
+          console.log('✅ Task verification updated:', payload);
+          fetchUserProgress(); // Refresh all task data
+          
+          // Show notification if task was verified
+          if (payload.new && payload.new.verification_status === 'verified' && payload.old.verification_status !== 'verified') {
+            toast({
+              title: "Username Verified! ✅",
+              description: "Your social media username has been verified. +2 entries!",
+            });
+          }
+        }
+      )
+      // Listen to new task creations
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'raffle_tasks',
+          filter: `user_id=eq.${user.id}`,
+        },
+        (payload) => {
+          console.log('📝 New task created:', payload);
+          fetchUserProgress();
+        }
+      )
+      // Listen to raffle changes (winner selection, status changes)
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'raffles',
+          filter: `id=eq.${activeRaffle.id}`,
+        },
+        (payload) => {
+          console.log('🏆 Raffle updated:', payload);
+          fetchActiveRaffle(); // Refresh raffle data
+          
+          if (payload.new && payload.new.winner_user_id && !payload.old.winner_user_id) {
+            // Winner was just selected
+            toast({
+              title: "Winner Announced! 🎉",
+              description: "The raffle winner has been selected. Check if you won!",
+            });
+          }
+        }
+      )
+      .subscribe((status) => {
+        console.log('Real-time subscription status:', status);
+      });
 
     return () => {
+      console.log('Cleaning up real-time subscriptions');
       supabase.removeChannel(channel);
     };
   }, [user, activeRaffle]);
