@@ -64,6 +64,7 @@ const RaffleManager = () => {
   const [sendingAnnouncement, setSendingAnnouncement] = useState(false);
   const [sendingEndedNotification, setSendingEndedNotification] = useState(false);
   const [sendingWinnerAnnouncement, setSendingWinnerAnnouncement] = useState(false);
+  const [fixingMissingEntries, setFixingMissingEntries] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -292,19 +293,19 @@ const RaffleManager = () => {
 
   const handleVerifyTask = async (taskId: string, approved: boolean, skipEmail: boolean = false) => {
     try {
-      const newStatus = approved ? 'verified' : 'rejected';
-      
-      // If skipEmail, use admin function to bypass email sending
-      if (skipEmail && approved) {
+      // Always use admin function for approvals to ensure entries are created with service role
+      if (approved) {
         const { data, error } = await supabase.functions.invoke('admin-mark-verified', {
-          body: { taskIds: [taskId], skipEmail: true },
+          body: { taskIds: [taskId], skipEmail },
         });
 
         if (error) throw error;
 
         toast({
-          title: "Verified (No Email)",
-          description: "Username verified without sending notification email",
+          title: "Verified ✅",
+          description: skipEmail 
+            ? "Username verified without sending notification email" 
+            : "Username verified and user notified via email",
         });
 
         // Refresh the list and participants
@@ -316,85 +317,24 @@ const RaffleManager = () => {
         return;
       }
       
+      // For rejections, just update the status
       const { error } = await supabase
         .from('raffle_tasks')
         .update({ 
-          verification_status: newStatus,
-          completed: approved ? true : false,
+          verification_status: 'rejected',
+          completed: false,
           verified_at: new Date().toISOString(),
         })
         .eq('id', taskId);
 
       if (error) throw error;
 
-      // If approved, update entry count
-      if (approved) {
-        const task = verificationTasks.find(t => t.id === taskId);
-        if (task) {
-          const activeRaffle = raffles.find(r => r.is_active);
-          
-          console.log('🎫 Updating entry count for user:', task.user_id);
-          
-          // Use maybeSingle to avoid errors when no entry exists
-          const { data: currentEntry, error: fetchError } = await supabase
-            .from('raffle_entries')
-            .select('entry_count')
-            .eq('raffle_id', activeRaffle?.id || '')
-            .eq('user_id', task.user_id)
-            .maybeSingle();
-
-          if (fetchError) {
-            console.error('Error fetching current entry:', fetchError);
-          }
-
-          const newEntryCount = (currentEntry?.entry_count || 0) + 2;
-          console.log('🎫 New entry count will be:', newEntryCount);
-
-          const { error: upsertError } = await supabase
-            .from('raffle_entries')
-            .upsert({
-              raffle_id: activeRaffle?.id || '',
-              user_id: task.user_id,
-              entry_count: newEntryCount,
-            }, {
-              onConflict: 'raffle_id,user_id'
-            });
-
-          if (upsertError) {
-            console.error('❌ Error upserting entry count:', upsertError);
-            throw upsertError;
-          }
-
-          console.log('✅ Entry count updated successfully to:', newEntryCount);
-
-          // Send verification email notification
-          try {
-            const username = task.task_type === 'instagram' 
-              ? task.instagram_username 
-              : task.x_username;
-
-            await supabase.functions.invoke('send-social-verification-email', {
-              body: {
-                userId: task.user_id,
-                taskType: task.task_type,
-                username: username,
-                raffleTitle: activeRaffle?.title || 'Raffle',
-              },
-            });
-            console.log('📧 Verification email sent to user:', task.user_id);
-          } catch (emailError) {
-            console.error('Failed to send verification email:', emailError);
-            // Don't fail the verification if email fails
-          }
-        }
-      }
-
       toast({
-        title: approved ? "Verified ✅" : "Rejected",
-        description: `Username has been ${approved ? 'verified' : 'rejected'}${approved ? ' and user notified via email' : ''}`,
+        title: "Rejected",
+        description: "Username has been rejected",
       });
 
-      // Refresh the list and participants
+      // Refresh the list
       const activeRaffle = raffles.find(r => r.is_active);
       if (activeRaffle) {
         fetchVerificationTasks(activeRaffle.id);
@@ -557,6 +497,39 @@ const RaffleManager = () => {
       });
     } finally {
       setSendingWinnerAnnouncement(false);
+    }
+  };
+
+  const handleFixMissingEntries = async () => {
+    if (!confirm("This will create missing raffle entries for all verified tasks. Continue?")) {
+      return;
+    }
+
+    setFixingMissingEntries(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('fix-missing-raffle-entries');
+
+      if (error) throw error;
+
+      toast({
+        title: "Entries Fixed! ✅",
+        description: `Created ${data.fixed} missing raffle entries`,
+      });
+
+      // Refresh participants
+      const activeRaffle = raffles.find(r => r.is_active);
+      if (activeRaffle) {
+        fetchParticipants(activeRaffle.id);
+      }
+    } catch (error: any) {
+      console.error('Error fixing entries:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to fix missing entries",
+        variant: "destructive",
+      });
+    } finally {
+      setFixingMissingEntries(false);
     }
   };
 
@@ -1170,6 +1143,22 @@ const RaffleManager = () => {
                         <RefreshCw className="w-4 h-4 mr-2" />
                         Refresh
                       </>
+                    )}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleFixMissingEntries}
+                    disabled={fixingMissingEntries}
+                    className="text-yellow-600 border-yellow-600 hover:bg-yellow-50"
+                  >
+                    {fixingMissingEntries ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Fixing...
+                      </>
+                    ) : (
+                      "🔧 Fix Missing Entries"
                     )}
                   </Button>
                   {participants.length > 0 && (

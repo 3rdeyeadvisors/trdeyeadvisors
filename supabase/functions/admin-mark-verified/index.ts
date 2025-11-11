@@ -53,7 +53,7 @@ serve(async (req) => {
       throw new Error('taskIds must be an array');
     }
 
-    console.log(`Admin ${user.email} manually marking ${taskIds.length} tasks as verified (skipEmail: ${skipEmail})`);
+    console.log(`Admin ${user.email} marking ${taskIds.length} tasks as verified (skipEmail: ${skipEmail})`);
 
     // Update tasks - use service role to bypass RLS
     const { data: updatedTasks, error: updateError } = await supabaseAdmin
@@ -64,7 +64,7 @@ serve(async (req) => {
         verified_at: new Date().toISOString(),
       })
       .in('id', taskIds)
-      .select('id, user_id, task_type, raffle_id');
+      .select('id, user_id, task_type, raffle_id, instagram_username, x_username');
 
     if (updateError) {
       console.error('Error updating tasks:', updateError);
@@ -109,6 +109,34 @@ serve(async (req) => {
         }
 
         console.log(`✅ Successfully updated entry count to ${newEntryCount} for user ${task.user_id}`);
+
+        // Send verification email if not skipping
+        if (!skipEmail) {
+          try {
+            const { data: raffleData } = await supabaseAdmin
+              .from('raffles')
+              .select('title')
+              .eq('id', task.raffle_id)
+              .single();
+
+            const username = task.task_type === 'instagram' 
+              ? task.instagram_username 
+              : task.x_username;
+
+            await supabaseAdmin.functions.invoke('send-social-verification-email', {
+              body: {
+                userId: task.user_id,
+                taskType: task.task_type,
+                username: username,
+                raffleTitle: raffleData?.title || 'Raffle',
+              },
+            });
+            console.log(`📧 Verification email sent to user ${task.user_id}`);
+          } catch (emailError) {
+            console.error('Failed to send verification email:', emailError);
+            // Don't fail the verification if email fails
+          }
+        }
       }
     }
 
@@ -116,7 +144,7 @@ serve(async (req) => {
       JSON.stringify({ 
         success: true, 
         updated: updatedTasks?.length || 0,
-        message: 'Tasks marked as verified without sending emails'
+        message: skipEmail ? 'Tasks marked as verified without sending emails' : 'Tasks verified and users notified'
       }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
