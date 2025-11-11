@@ -374,7 +374,7 @@ const Raffles = () => {
                 </CardTitle>
                 <CardDescription>{activeRaffle.title}</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-6 text-center">
                 <div>
                   <h3 className="font-semibold mb-2">Prize:</h3>
                   <p className="text-2xl font-bold text-primary">
