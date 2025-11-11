@@ -107,31 +107,45 @@ const RaffleManager = () => {
 
   const fetchParticipants = async (raffleId: string) => {
     try {
-      const { data, error } = await supabase
+      console.log('📊 Fetching participants for raffle:', raffleId);
+      
+      // First get raffle entries
+      const { data: entries, error: entriesError } = await supabase
         .from('raffle_entries')
-        .select(`
-          user_id,
-          entry_count,
-          profiles!inner(display_name)
-        `)
+        .select('user_id, entry_count')
         .eq('raffle_id', raffleId);
 
-      if (error) throw error;
+      if (entriesError) {
+        console.error('Error fetching entries:', entriesError);
+        throw entriesError;
+      }
 
-      // Get emails from auth.users
-      const userIds = data?.map(d => d.user_id) || [];
-      const { data: emailsData } = await supabase.rpc('get_user_emails_with_profiles');
+      if (!entries || entries.length === 0) {
+        console.log('No participants found');
+        setParticipants([]);
+        return;
+      }
 
-      const participantsWithEmails = data?.map(participant => {
-        const userEmail = emailsData?.find((u: any) => u.user_id === participant.user_id);
+      console.log(`Found ${entries.length} entries, fetching user details...`);
+
+      // Get emails and display names using RPC function
+      const { data: emailsData, error: emailsError } = await supabase.rpc('get_user_emails_with_profiles');
+
+      if (emailsError) {
+        console.error('Error fetching user emails:', emailsError);
+      }
+
+      const participantsWithEmails = entries.map(entry => {
+        const userInfo = emailsData?.find((u: any) => u.user_id === entry.user_id);
         return {
-          user_id: participant.user_id,
-          entry_count: participant.entry_count,
-          email: userEmail?.email || 'N/A',
-          display_name: (participant.profiles as any)?.display_name || 'Anonymous',
+          user_id: entry.user_id,
+          entry_count: entry.entry_count,
+          email: userInfo?.email || 'N/A',
+          display_name: userInfo?.display_name || 'Anonymous',
         };
-      }) || [];
+      });
 
+      console.log('✅ Participants loaded:', participantsWithEmails.length);
       setParticipants(participantsWithEmails);
     } catch (error) {
       console.error('Error fetching participants:', error);
