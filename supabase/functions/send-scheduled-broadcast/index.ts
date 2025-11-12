@@ -74,23 +74,30 @@ const handler = async (req: Request): Promise<Response> => {
     const broadcast = broadcasts[0];
     console.log('Found broadcast:', broadcast);
 
-    // Fetch fresh crypto prices from CoinGecko
-    console.log('Fetching fresh crypto prices...');
-    const priceResponse = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum,uniswap,aave&vs_currencies=usd&include_24hr_change=true');
-    const prices = await priceResponse.json();
-    
-    console.log('Current prices:', prices);
+    // Determine which content to use based on day type
+    let marketBlockContent = broadcast.market_block;
 
-    // Format prices with current data
-    const formatChange = (change: number) => {
-      const color = change >= 0 ? '#10b981' : '#ef4444';
-      const sign = change >= 0 ? '+' : '';
-      return `<span style='color: ${color};'>${sign}${change.toFixed(1)}%</span>`;
-    };
+    // Only fetch live crypto prices for Monday
+    if (dayType === 'monday') {
+      console.log('Fetching fresh crypto prices for Monday Market Movers...');
+      const priceResponse = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum,uniswap,aave&vs_currencies=usd&include_24hr_change=true');
+      const prices = await priceResponse.json();
+      
+      console.log('Current prices:', prices);
 
-    const freshMarketBlock = `<h3 style="color: #e5e7eb; margin-top: 0; margin-bottom: 15px;">Top Movers</h3><ul style="margin: 0; padding-left: 20px;"><li style="color: #e5e7eb; margin-bottom: 10px;"><strong style="color: #f3f4f6;">Ethereum (ETH)</strong>: <span style="color: #e5e7eb;">$${prices.ethereum.usd.toLocaleString()}</span> ${formatChange(prices.ethereum.usd_24h_change)}</li><li style="color: #e5e7eb; margin-bottom: 10px;"><strong style="color: #f3f4f6;">Uniswap (UNI)</strong>: <span style="color: #e5e7eb;">$${prices.uniswap.usd.toFixed(2)}</span> ${formatChange(prices.uniswap.usd_24h_change)}</li><li style="color: #e5e7eb; margin-bottom: 10px;"><strong style="color: #f3f4f6;">Aave (AAVE)</strong>: <span style="color: #e5e7eb;">$${prices.aave.usd.toFixed(2)}</span> ${formatChange(prices.aave.usd_24h_change)}</li></ul>`;
+      // Format prices with current data
+      const formatChange = (change: number) => {
+        const color = change >= 0 ? '#10b981' : '#ef4444';
+        const sign = change >= 0 ? '+' : '';
+        return `<span style='color: ${color};'>${sign}${change.toFixed(1)}%</span>`;
+      };
 
-    console.log('Fresh market block:', freshMarketBlock);
+      marketBlockContent = `<h3 style="color: #e5e7eb; margin-top: 0; margin-bottom: 15px;">Top Movers</h3><ul style="margin: 0; padding-left: 20px;"><li style="color: #e5e7eb; margin-bottom: 10px;"><strong style="color: #f3f4f6;">Ethereum (ETH)</strong>: <span style="color: #e5e7eb;">$${prices.ethereum.usd.toLocaleString()}</span> ${formatChange(prices.ethereum.usd_24h_change)}</li><li style="color: #e5e7eb; margin-bottom: 10px;"><strong style="color: #f3f4f6;">Uniswap (UNI)</strong>: <span style="color: #e5e7eb;">$${prices.uniswap.usd.toFixed(2)}</span> ${formatChange(prices.uniswap.usd_24h_change)}</li><li style="color: #e5e7eb; margin-bottom: 10px;"><strong style="color: #f3f4f6;">Aave (AAVE)</strong>: <span style="color: #e5e7eb;">$${prices.aave.usd.toFixed(2)}</span> ${formatChange(prices.aave.usd_24h_change)}</li></ul>`;
+    } else {
+      console.log(`Using stored ${dayType} content from database`);
+    }
+
+    console.log('Market block content:', marketBlockContent);
 
     // Get all subscribers
     const { data: subscribers, error: subscribersError } = await supabase
@@ -211,7 +218,7 @@ const handler = async (req: Request): Promise<Response> => {
       </div>
       
       <div class="market-block">
-        ${freshMarketBlock}
+        ${marketBlockContent}
       </div>
       
       <div class="cta">
