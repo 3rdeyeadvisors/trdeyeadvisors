@@ -70,7 +70,6 @@ const RaffleManager = () => {
   const [sendingAnnouncement, setSendingAnnouncement] = useState(false);
   const [sendingEndedNotification, setSendingEndedNotification] = useState(false);
   const [sendingWinnerAnnouncement, setSendingWinnerAnnouncement] = useState(false);
-  const [fixingMissingEntries, setFixingMissingEntries] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -506,38 +505,6 @@ const RaffleManager = () => {
     }
   };
 
-  const handleFixMissingEntries = async () => {
-    if (!confirm("This will create missing raffle entries for all verified tasks. Continue?")) {
-      return;
-    }
-
-    setFixingMissingEntries(true);
-    try {
-      const { data, error } = await supabase.functions.invoke('fix-missing-raffle-entries');
-
-      if (error) throw error;
-
-      toast({
-        title: "Entries Fixed! ✅",
-        description: `Created ${data.fixed} missing raffle entries`,
-      });
-
-      // Refresh participants
-      const activeRaffle = raffles.find(r => r.is_active);
-      if (activeRaffle) {
-        fetchParticipants(activeRaffle.id);
-      }
-    } catch (error: any) {
-      console.error('Error fixing entries:', error);
-      toast({
-        title: "Error",
-        description: error.message || "Failed to fix missing entries",
-        variant: "destructive",
-      });
-    } finally {
-      setFixingMissingEntries(false);
-    }
-  };
 
   const handleCreateRaffle = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -1149,22 +1116,6 @@ const RaffleManager = () => {
                         <RefreshCw className="w-4 h-4 mr-2" />
                         Refresh
                       </>
-                    )}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleFixMissingEntries}
-                    disabled={fixingMissingEntries}
-                    className="text-yellow-600 border-yellow-600 hover:bg-yellow-50"
-                  >
-                    {fixingMissingEntries ? (
-                      <>
-                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                        Fixing...
-                      </>
-                    ) : (
-                      "🔧 Fix Missing Entries"
                     )}
                   </Button>
                   {participants.length > 0 && (
