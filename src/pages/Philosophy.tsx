@@ -69,12 +69,12 @@ const Philosophy = () => {
         {/* Philosophy Introduction */}
         <div className="mb-16">
           <Card className="p-8 bg-card/60 border-border backdrop-blur-sm">
-            <p className="text-lg md:text-xl text-muted-foreground leading-relaxed font-consciousness mb-6">
+            <p className="text-lg md:text-xl text-muted-foreground leading-relaxed font-consciousness mb-6 text-center">
               Financial awareness isn't just about making money — it's about understanding how systems work 
               so you can make choices, not just follow rules. DeFi gives individuals a chance to reclaim that control. 
               Here, we teach you how, step by step.
             </p>
-            <p className="text-lg md:text-xl text-muted-foreground leading-relaxed font-consciousness">
+            <p className="text-lg md:text-xl text-muted-foreground leading-relaxed font-consciousness text-center">
               For too long, traditional financial institutions have programmed us to believe 
               that true financial freedom is impossible. They've conditioned us to accept 
               middlemen, hidden fees, and systems designed to extract value from our labor. 
