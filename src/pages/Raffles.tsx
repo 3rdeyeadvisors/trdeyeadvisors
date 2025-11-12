@@ -667,15 +667,9 @@ const Raffles = () => {
                 <CardDescription>{activeRaffle.title}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6 text-center">
-                {/* Countdown - Always visible */}
-                <div>
-                  <h3 className="font-semibold mb-2">Time Remaining:</h3>
-                  <RaffleCountdown endDate={activeRaffle.end_date} />
-                </div>
-
-                {/* Everything else - Only for logged-in users */}
                 {user ? (
                   <>
+                    {/* Prize */}
                     <div>
                       <h3 className="font-semibold mb-2">Prize:</h3>
                       <p className="text-2xl font-bold text-primary">
@@ -683,6 +677,13 @@ const Raffles = () => {
                       </p>
                     </div>
 
+                    {/* Countdown */}
+                    <div>
+                      <h3 className="font-semibold mb-2">Time Remaining:</h3>
+                      <RaffleCountdown endDate={activeRaffle.end_date} />
+                    </div>
+
+                    {/* User entries */}
                     <div className="pt-4 border-t">
                       <div className="flex items-center justify-between">
                         <h3 className="font-semibold">Your Entries:</h3>
@@ -698,6 +699,7 @@ const Raffles = () => {
                       )}
                     </div>
 
+                    {/* Join button */}
                     {!hasParticipated && (
                       <div className="pt-4 border-t">
                         <Button 
@@ -714,23 +716,15 @@ const Raffles = () => {
                       </div>
                     )}
 
+                    {/* Share button */}
                     <div className="pt-4">
                       <RaffleShareButton userId={user?.id} />
                     </div>
                   </>
                 ) : (
-                  <div className="pt-4 border-t">
-                    <Link to="/auth">
-                      <Button 
-                        className="w-full"
-                        size="lg"
-                      >
-                        Sign In to Join Raffle
-                      </Button>
-                    </Link>
-                    <p className="text-xs text-muted-foreground text-center mt-2">
-                      Create an account to participate
-                    </p>
+                  /* NON-LOGGED-IN: ONLY TIMER */
+                  <div>
+                    <RaffleCountdown endDate={activeRaffle.end_date} />
                   </div>
                 )}
               </CardContent>
