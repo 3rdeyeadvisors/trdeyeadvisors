@@ -74,30 +74,103 @@ const handler = async (req: Request): Promise<Response> => {
     const broadcast = broadcasts[0];
     console.log('Found broadcast:', broadcast);
 
-    // Determine which content to use based on day type
-    let marketBlockContent = broadcast.market_block;
+    // Fetch live content based on day type
+    let marketBlockContent = '';
+    let introText = broadcast.intro_text;
+    let subjectLine = broadcast.subject_line;
 
-    // Only fetch live crypto prices for Monday
     if (dayType === 'monday') {
-      console.log('Fetching fresh crypto prices for Monday Market Movers...');
-      const priceResponse = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum,uniswap,aave&vs_currencies=usd&include_24hr_change=true');
-      const prices = await priceResponse.json();
-      
-      console.log('Current prices:', prices);
+      // Monday: Fetch live crypto prices from CoinGecko
+      console.log('Fetching live crypto prices for Monday Market Movers...');
+      try {
+        const priceResponse = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum,uniswap,aave&vs_currencies=usd&include_24hr_change=true');
+        const prices = await priceResponse.json();
+        
+        console.log('Current prices:', prices);
 
-      // Format prices with current data
-      const formatChange = (change: number) => {
-        const color = change >= 0 ? '#10b981' : '#ef4444';
-        const sign = change >= 0 ? '+' : '';
-        return `<span style='color: ${color};'>${sign}${change.toFixed(1)}%</span>`;
-      };
+        const formatChange = (change: number) => {
+          const color = change >= 0 ? '#10b981' : '#ef4444';
+          const sign = change >= 0 ? '+' : '';
+          return `<span style='color: ${color};'>${sign}${change.toFixed(1)}%</span>`;
+        };
 
-      marketBlockContent = `<h3 style="color: #e5e7eb; margin-top: 0; margin-bottom: 15px;">Top Movers</h3><ul style="margin: 0; padding-left: 20px;"><li style="color: #e5e7eb; margin-bottom: 10px;"><strong style="color: #f3f4f6;">Ethereum (ETH)</strong>: <span style="color: #e5e7eb;">$${prices.ethereum.usd.toLocaleString()}</span> ${formatChange(prices.ethereum.usd_24h_change)}</li><li style="color: #e5e7eb; margin-bottom: 10px;"><strong style="color: #f3f4f6;">Uniswap (UNI)</strong>: <span style="color: #e5e7eb;">$${prices.uniswap.usd.toFixed(2)}</span> ${formatChange(prices.uniswap.usd_24h_change)}</li><li style="color: #e5e7eb; margin-bottom: 10px;"><strong style="color: #f3f4f6;">Aave (AAVE)</strong>: <span style="color: #e5e7eb;">$${prices.aave.usd.toFixed(2)}</span> ${formatChange(prices.aave.usd_24h_change)}</li></ul>`;
-    } else {
-      console.log(`Using stored ${dayType} content from database`);
+        marketBlockContent = `<h3 style="color: #e5e7eb; margin-top: 0; margin-bottom: 15px;">Top Movers</h3><ul style="margin: 0; padding-left: 20px;"><li style="color: #e5e7eb; margin-bottom: 10px;"><strong style="color: #f3f4f6;">Ethereum (ETH)</strong>: <span style="color: #e5e7eb;">$${prices.ethereum.usd.toLocaleString()}</span> ${formatChange(prices.ethereum.usd_24h_change)}</li><li style="color: #e5e7eb; margin-bottom: 10px;"><strong style="color: #f3f4f6;">Uniswap (UNI)</strong>: <span style="color: #e5e7eb;">$${prices.uniswap.usd.toFixed(2)}</span> ${formatChange(prices.uniswap.usd_24h_change)}</li><li style="color: #e5e7eb; margin-bottom: 10px;"><strong style="color: #f3f4f6;">Aave (AAVE)</strong>: <span style="color: #e5e7eb;">$${prices.aave.usd.toFixed(2)}</span> ${formatChange(prices.aave.usd_24h_change)}</li></ul>`;
+        
+        subjectLine = '3EA Market Pulse: Top Movers';
+        introText = "Here are this week's top-performing DeFi tokens and their 24-hour performance metrics.";
+      } catch (error) {
+        console.error('Error fetching crypto prices:', error);
+        marketBlockContent = broadcast.market_block; // Fallback to stored content
+      }
+    } else if (dayType === 'wednesday') {
+      // Wednesday: Generate DeFi trends using AI
+      console.log('Generating live DeFi trends for Wednesday...');
+      try {
+        const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+        const aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model: 'google/gemini-2.5-flash',
+            messages: [{
+              role: 'user',
+              content: 'Generate 3 current DeFi market trends for this week. Format as HTML with emoji icons, bold titles, and brief descriptions (2-3 sentences each). Focus on: TVL changes, cross-chain activity, gas fees, new protocols, or regulatory updates. Keep it professional and data-driven. Use <h3>, <p>, <strong> tags with dark theme colors.'
+            }],
+          }),
+        });
+
+        if (aiResponse.ok) {
+          const aiData = await aiResponse.json();
+          marketBlockContent = aiData.choices[0].message.content;
+          subjectLine = '3EA DeFi Trends: What\'s Moving This Week';
+          introText = 'Key trends shaping DeFi markets this week.';
+          console.log('Generated Wednesday trends:', marketBlockContent);
+        } else {
+          throw new Error('AI API failed');
+        }
+      } catch (error) {
+        console.error('Error generating Wednesday trends:', error);
+        marketBlockContent = broadcast.market_block; // Fallback to stored content
+      }
+    } else if (dayType === 'friday') {
+      // Friday: Generate educational content using AI
+      console.log('Generating educational content for Friday...');
+      try {
+        const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+        const aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model: 'google/gemini-2.5-flash',
+            messages: [{
+              role: 'user',
+              content: 'Create educational DeFi content explaining one core concept (choose from: yield farming, liquidity pools, gas optimization, smart contract risks, staking, governance, MEV, or layer 2 solutions). Format as HTML with: 1) 📚 emoji header with concept name, 2) "What is it?" section, 3) "Key Takeaway" section, 4) "Pro Tip" section. Use <h3>, <p>, <strong> tags. Keep it clear and beginner-friendly. Use dark theme colors (#e5e7eb, #f3f4f6).'
+            }],
+          }),
+        });
+
+        if (aiResponse.ok) {
+          const aiData = await aiResponse.json();
+          marketBlockContent = aiData.choices[0].message.content;
+          subjectLine = '3EA Learning Drop: DeFi Education';
+          introText = 'This week\'s DeFi education highlight you need to know.';
+          console.log('Generated Friday education:', marketBlockContent);
+        } else {
+          throw new Error('AI API failed');
+        }
+      } catch (error) {
+        console.error('Error generating Friday education:', error);
+        marketBlockContent = broadcast.market_block; // Fallback to stored content
+      }
     }
 
-    console.log('Market block content:', marketBlockContent);
+    console.log('Final market block content:', marketBlockContent);
 
     // Get all subscribers
     const { data: subscribers, error: subscribersError } = await supabase
@@ -126,7 +199,7 @@ const handler = async (req: Request): Promise<Response> => {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${broadcast.subject_line}</title>
+  <title>${subjectLine}</title>
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -214,7 +287,7 @@ const handler = async (req: Request): Promise<Response> => {
     
     <div class="content">
       <div class="intro">
-        ${broadcast.intro_text}
+        ${introText}
       </div>
       
       <div class="market-block">
@@ -250,7 +323,7 @@ const handler = async (req: Request): Promise<Response> => {
         const { error: sendError } = await resend.emails.send({
           from: '3rdeyeadvisors <noreply@the3rdeyeadvisors.com>',
           to: [subscriber.email],
-          subject: broadcast.subject_line,
+          subject: subjectLine,
           html: emailHtml,
           tags: [
             { name: 'campaign', value: '3ea-broadcast' },
