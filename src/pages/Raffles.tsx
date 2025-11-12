@@ -323,7 +323,22 @@ const Raffles = () => {
         return;
       }
 
-      // Create ticket (database trigger will update raffle_entries)
+      // CRITICAL FIX: Create entry first, then ticket
+      // Entry must exist before trigger can update it
+      const { error: entryError } = await supabase
+        .from('raffle_entries')
+        .insert({
+          user_id: user.id,
+          raffle_id: activeRaffle.id,
+          entry_count: 1 // Start with 1 for participation
+        });
+
+      if (entryError && !entryError.message.includes('duplicate')) {
+        console.error('❌ Entry creation error:', entryError);
+        throw entryError;
+      }
+
+      // Now create the participation ticket
       const { error: ticketError } = await supabase
         .from('raffle_tickets')
         .insert({
@@ -334,37 +349,29 @@ const Raffles = () => {
         });
 
       if (ticketError) {
-        console.error('❌ Ticket error:', ticketError);
+        console.error('❌ Ticket creation error:', ticketError);
         throw ticketError;
       }
 
-      // Wait for trigger to execute
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      // Fetch updated entry count
-      const { data: updatedEntry } = await supabase
-        .from('raffle_entries')
-        .select('entry_count')
-        .eq('raffle_id', activeRaffle.id)
-        .eq('user_id', user.id)
-        .single();
-
-      const finalCount = updatedEntry?.entry_count || 1;
+      console.log('✅ Entry and ticket created successfully');
       
       setHasParticipated(true);
-      setTotalEntries(finalCount);
+      setTotalEntries(1);
 
-      console.log('🎉 Participation complete:', finalCount);
+      console.log('🎉 Participation complete with 1 entry');
 
       toast({
         title: "✅ You've joined the raffle!",
-        description: "Complete tasks to earn more entries and increase your chances!",
+        description: "You now have 1 entry. Complete tasks to earn more!",
       });
-    } catch (error) {
-      console.error('Error joining raffle:', error);
+
+      // Refresh to get accurate count
+      await fetchUserProgress();
+    } catch (error: any) {
+      console.error('❌ Error joining raffle:', error);
       toast({
         title: "Error",
-        description: "Failed to join raffle. Please try again.",
+        description: error.message || "Failed to join raffle. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -414,6 +421,16 @@ const Raffles = () => {
       return;
     }
 
+    // Ensure user has joined raffle first
+    if (!hasParticipated) {
+      toast({
+        title: "Join Raffle First",
+        description: "Please join the raffle before completing tasks.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const task = AUTO_TASKS.find(t => t.id === taskId);
     if (!task) return;
 
@@ -435,14 +452,17 @@ const Raffles = () => {
         });
 
       if (taskError) {
-        console.error('Error updating task:', taskError);
+        console.error('❌ Task update error:', taskError);
         throw taskError;
       }
 
+      // Optimistically update UI
       setTaskCompletion(prev => ({ ...prev, [taskId]: newValue }));
 
-      // If completing task, create a ticket
+      // If completing task, create ticket and update entry count
       if (newValue) {
+        console.log('✅ Creating task completion ticket');
+        
         const { error: ticketError } = await supabase
           .from('raffle_tickets')
           .insert({
@@ -452,16 +472,32 @@ const Raffles = () => {
             metadata: { 
               task_type: taskId,
               task_label: task.label,
-              entries: task.entries 
+              entries: task.entries,
+              timestamp: new Date().toISOString()
             }
           });
 
         if (ticketError) {
-          console.error('⚠️ Ticket creation error:', ticketError);
+          console.error('❌ Ticket creation failed:', ticketError);
+          throw ticketError;
         }
+
+        console.log('✅ Ticket created, trigger will update entry count');
       } else {
-        // Manually adjust count if unchecking
-        const newCount = Math.max(0, totalEntries - task.entries);
+        // User unchecked - remove the ticket and adjust count
+        console.log('⚠️ Removing task completion ticket');
+        
+        // Delete the specific ticket
+        await supabase
+          .from('raffle_tickets')
+          .delete()
+          .eq('raffle_id', activeRaffle.id)
+          .eq('user_id', user.id)
+          .eq('ticket_source', 'task_completion')
+          .contains('metadata', { task_type: taskId });
+
+        // Manually decrement count
+        const newCount = Math.max(1, totalEntries - task.entries); // Never go below 1 (participation entry)
         await supabase
           .from('raffle_entries')
           .update({ entry_count: newCount })
@@ -471,29 +507,21 @@ const Raffles = () => {
         setTotalEntries(newCount);
       }
 
-      // Wait for trigger
-      await new Promise(resolve => setTimeout(resolve, 300));
+      // Wait a bit for trigger to execute
+      await new Promise(resolve => setTimeout(resolve, 400));
 
-      // Fetch updated count
-      const { data: entry } = await supabase
-        .from('raffle_entries')
-        .select('entry_count')
-        .eq('raffle_id', activeRaffle.id)
-        .eq('user_id', user.id)
-        .single();
+      // Refresh to get accurate count
+      await fetchUserProgress();
 
-      const updatedTotal = entry?.entry_count || 0;
-      setTotalEntries(updatedTotal);
-
-      console.log('✅ Task complete. Entry count:', updatedTotal);
+      const updatedTotal = totalEntries + (newValue ? task.entries : -task.entries);
 
       toast({
-        title: newValue ? "Task Completed!" : "Task Unchecked",
+        title: newValue ? "Task Completed! ✅" : "Task Unchecked",
         description: newValue 
-          ? `You earned ${task.entries} ${task.entries === 1 ? 'entry' : 'entries'}! Total: ${updatedTotal}`
-          : `${task.entries} ${task.entries === 1 ? 'entry' : 'entries'} removed. Total: ${updatedTotal}`,
+          ? `You earned ${task.entries} more ${task.entries === 1 ? 'entry' : 'entries'}!`
+          : `${task.entries} ${task.entries === 1 ? 'entry' : 'entries'} removed.`,
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error('❌ Error updating task:', error);
       // Revert optimistic update
       setTaskCompletion(prev => ({ ...prev, [taskId]: !newValue }));
