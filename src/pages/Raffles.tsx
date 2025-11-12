@@ -656,9 +656,9 @@ const Raffles = () => {
           </Card>
         ) : (
           <>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 w-full">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 w-full lg:items-start">
                 {/* Raffle Details */}
-                <Card className="w-full overflow-hidden">
+                <Card className="w-full overflow-hidden lg:h-full">
               <CardHeader className="text-center px-4">
                 <CardTitle className="flex items-center justify-center gap-2 text-lg sm:text-xl">
                   <Trophy className="w-5 h-5 sm:w-6 sm:h-6 text-warning flex-shrink-0" />
@@ -666,7 +666,7 @@ const Raffles = () => {
                 </CardTitle>
                 <CardDescription className="text-sm">{activeRaffle.title}</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6 text-center px-4">
+              <CardContent className="space-y-6 text-center px-4 pb-6">
                 {user ? (
                   <>
                     {/* Prize */}
@@ -744,7 +744,7 @@ const Raffles = () => {
 
             {/* Task Checklist - Only show for logged-in users */}
             {user && (
-              <Card className="w-full">
+              <Card className="w-full lg:h-full">
               <CardHeader>
                 <CardTitle>Entry Requirements</CardTitle>
                 <CardDescription>
