@@ -667,6 +667,7 @@ const Raffles = () => {
                 <CardDescription>{activeRaffle.title}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6 text-center">
+                {/* Prize - Always visible */}
                 <div>
                   <h3 className="font-semibold mb-2">Prize:</h3>
                   <p className="text-2xl font-bold text-primary">
@@ -674,11 +675,22 @@ const Raffles = () => {
                   </p>
                 </div>
 
+                {/* Countdown - Always visible */}
                 <div>
                   <h3 className="font-semibold mb-2">Time Remaining:</h3>
                   <RaffleCountdown endDate={activeRaffle.end_date} />
                 </div>
 
+                {/* Description - Always visible on mobile for context */}
+                {activeRaffle.description && (
+                  <div className="pt-2">
+                    <p className="text-sm text-muted-foreground">
+                      {activeRaffle.description}
+                    </p>
+                  </div>
+                )}
+
+                {/* User-specific section - Only for logged-in users */}
                 {user && (
                   <div className="pt-4 border-t">
                     <div className="flex items-center justify-between">
@@ -696,7 +708,22 @@ const Raffles = () => {
                   </div>
                 )}
 
-                {!hasParticipated && (
+                {/* Join button */}
+                {!user ? (
+                  <div className="pt-4 border-t">
+                    <Link to="/auth">
+                      <Button 
+                        className="w-full"
+                        size="lg"
+                      >
+                        Sign In to Join Raffle
+                      </Button>
+                    </Link>
+                    <p className="text-xs text-muted-foreground text-center mt-2">
+                      Create an account to participate and earn entries
+                    </p>
+                  </div>
+                ) : !hasParticipated ? (
                   <div className="pt-4 border-t">
                     <Button 
                       onClick={handleParticipate} 
@@ -710,8 +737,9 @@ const Raffles = () => {
                       Start with 1 entry, earn more by completing tasks
                     </p>
                   </div>
-                )}
+                ) : null}
 
+                {/* Share button - Always visible */}
                 <div className="pt-4">
                   <RaffleShareButton userId={user?.id} />
                 </div>
