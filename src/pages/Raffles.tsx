@@ -658,15 +658,15 @@ const Raffles = () => {
           <>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 w-full">
                 {/* Raffle Details */}
-                <Card className="w-full">
-              <CardHeader className="text-center">
-                <CardTitle className="flex items-center justify-center gap-2">
-                  <Trophy className="w-6 h-6 text-warning" />
-                  Current Raffle
+                <Card className="w-full overflow-hidden">
+              <CardHeader className="text-center px-4">
+                <CardTitle className="flex items-center justify-center gap-2 text-lg sm:text-xl">
+                  <Trophy className="w-5 h-5 sm:w-6 sm:h-6 text-warning flex-shrink-0" />
+                  <span className="truncate">Current Raffle</span>
                 </CardTitle>
-                <CardDescription>{activeRaffle.title}</CardDescription>
+                <CardDescription className="text-sm">{activeRaffle.title}</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6 text-center">
+              <CardContent className="space-y-6 text-center px-4">
                 {user ? (
                   <>
                     {/* Prize */}
