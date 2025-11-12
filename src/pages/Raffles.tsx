@@ -612,71 +612,29 @@ const Raffles = () => {
               </CardContent>
             </Card>
 
-            {/* How Tickets Work - Visible to Everyone */}
+            {/* Task Checklist */}
             <Card className="w-full">
               <CardHeader>
-                <CardTitle>🎟️ How to Earn Entries</CardTitle>
+                <CardTitle>Entry Requirements</CardTitle>
                 <CardDescription>
-                  More entries = better chances to win
+                  Complete tasks to earn raffle entries
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
-                {/* Social Media Tasks */}
-                <div className="space-y-3 pb-4 border-b border-border">
-                  <h3 className="text-sm font-semibold text-muted-foreground">Social Media Tasks (+2 entries each)</h3>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between items-center p-2 rounded bg-accent/30">
-                      <span>📸 Follow us on Instagram</span>
-                      <Badge variant="secondary">+2</Badge>
-                    </div>
-                    <div className="flex justify-between items-center p-2 rounded bg-accent/30">
-                      <span>🐦 Follow us on X (Twitter)</span>
-                      <Badge variant="secondary">+2</Badge>
-                    </div>
-                    {!user && (
-                      <p className="text-xs text-muted-foreground italic mt-2">
-                        Submit your username after signing in. Admin will verify within 24h.
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                {/* Auto-Verified Learning Tasks */}
-                <div className="space-y-3 pb-4 border-b border-border">
-                  <h3 className="text-sm font-semibold text-muted-foreground">Learning Tasks (+1 entry each, auto-verified)</h3>
-                  <div className="space-y-2 text-sm">
-                    {AUTO_TASKS.map((task) => (
-                      <div key={task.id} className="flex justify-between items-center p-2 rounded bg-accent/30">
-                        <span>{task.label}</span>
-                        <Badge variant="secondary">+{task.entries}</Badge>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Referral Bonus */}
-                <div className="space-y-3">
-                  <h3 className="text-sm font-semibold text-muted-foreground">Referral Bonus</h3>
-                  <div className="flex justify-between items-center p-2 rounded bg-accent/30 text-sm">
-                    <span>🔗 Each friend who joins using your link</span>
-                    <Badge variant="secondary">+1</Badge>
-                  </div>
-                </div>
-
+              <CardContent>
                 {!user ? (
-                  <div className="text-center py-4 border-t">
-                    <p className="text-sm text-muted-foreground mb-4">
-                      Ready to start earning entries?
+                  <div className="text-center py-8">
+                    <p className="text-muted-foreground mb-4">
+                      Sign in to participate in the raffle
                     </p>
                     <Link to="/auth">
-                      <Button size="lg" className="w-full">Sign In to Participate</Button>
+                      <Button>Sign In</Button>
                     </Link>
                   </div>
                 ) : (
-                  <div className="space-y-4 border-t pt-4">
+                  <div className="space-y-4">
                     {/* Social Media Verification Section */}
-                    <div className="space-y-3">
-                      <h3 className="text-sm font-semibold">Submit Your Social Media</h3>
+                    <div className="space-y-3 pb-4 border-b border-border">
+                      <h3 className="text-sm font-semibold text-muted-foreground">Social Media Tasks</h3>
                       
                       <SocialVerificationForm
                         raffleId={activeRaffle.id}
@@ -697,33 +655,41 @@ const Raffles = () => {
                       />
                     </div>
 
-                    {/* Task Completion Status */}
-                    <div className="space-y-2">
-                      <h3 className="text-sm font-semibold">Your Progress</h3>
-                      <div className="space-y-2">
-                        {AUTO_TASKS.map((task) => (
-                          <div key={task.id} className="flex items-center justify-between p-2 rounded text-sm">
-                            <div className="flex items-center gap-2">
-                              {taskCompletion[task.id] ? (
-                                <CheckCircle2 className="w-4 h-4 text-green-500" />
-                              ) : (
-                                <div className="w-4 h-4 rounded-full border-2 border-muted-foreground/30" />
-                              )}
-                              <span className={taskCompletion[task.id] ? "text-foreground" : "text-muted-foreground"}>
-                                {task.label}
-                              </span>
-                            </div>
-                            <Badge variant={taskCompletion[task.id] ? "default" : "outline"} className="text-xs">
-                              {taskCompletion[task.id] ? "✓" : `+${task.entries}`}
-                            </Badge>
+                    {/* Auto-Verified Tasks Section */}
+                    <div className="space-y-3">
+                      <h3 className="text-sm font-semibold text-muted-foreground">Learning Tasks</h3>
+                      
+                      <div className="max-h-[400px] md:max-h-none overflow-y-auto space-y-3 pr-2">
+                      {AUTO_TASKS.map((task) => (
+                        <div key={task.id} className="flex items-start space-x-3 p-3 rounded-lg hover:bg-accent/50 transition-colors">
+                          <Checkbox
+                            id={task.id}
+                            checked={taskCompletion[task.id] || false}
+                            onCheckedChange={() => handleTaskToggle(task.id)}
+                            disabled={true}
+                          />
+                          <div className="flex-1">
+                            <label
+                              htmlFor={task.id}
+                              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                            >
+                              {task.label}
+                              <Badge variant="outline" className="ml-2 text-xs">
+                                Auto-verified
+                              </Badge>
+                            </label>
                           </div>
-                        ))}
+                          <Badge variant="secondary" className="text-xs">
+                            +{task.entries}
+                          </Badge>
+                        </div>
+                      ))}
                       </div>
                     </div>
                   </div>
                 )}
               </CardContent>
-            </Card>
+              </Card>
             </div>
           </>
         )}
