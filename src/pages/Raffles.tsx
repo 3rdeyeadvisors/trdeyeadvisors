@@ -736,8 +736,9 @@ const Raffles = () => {
               </CardContent>
             </Card>
 
-            {/* Task Checklist */}
-            <Card className="w-full">
+            {/* Task Checklist - Only show for logged-in users */}
+            {user && (
+              <Card className="w-full">
               <CardHeader>
                 <CardTitle>Entry Requirements</CardTitle>
                 <CardDescription>
@@ -745,17 +746,7 @@ const Raffles = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                {!user ? (
-                  <div className="text-center py-8">
-                    <p className="text-muted-foreground mb-4">
-                      Sign in to participate in the raffle
-                    </p>
-                    <Link to="/auth">
-                      <Button>Sign In</Button>
-                    </Link>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
+                <div className="space-y-4">
                     {/* Social Media Verification Section */}
                     <div className="space-y-3 pb-4 border-b border-border">
                       <h3 className="text-sm font-semibold text-muted-foreground">Social Media Tasks</h3>
@@ -811,9 +802,9 @@ const Raffles = () => {
                       </div>
                     </div>
                   </div>
-                )}
               </CardContent>
               </Card>
+            )}
             </div>
           </>
         )}
