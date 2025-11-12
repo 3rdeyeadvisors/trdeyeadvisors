@@ -5,6 +5,8 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { EnhancedContentPlayer } from "@/components/course/EnhancedContentPlayer";
 import { CommunityTabs } from "@/components/community/CommunityTabs";
+import { ParticipantTracker } from "@/components/admin/ParticipantTracker";
+import { usePresenceTracking } from "@/hooks/usePresenceTracking";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useProgress } from "@/components/progress/ProgressProvider";
 import { AuthModal } from "@/components/auth/AuthModal";
@@ -26,6 +28,20 @@ const ModuleViewer = () => {
   const currentModuleIndex = course?.modules.findIndex(m => m.id === moduleId) ?? -1;
   const currentModule = course?.modules[currentModuleIndex];
 
+  const progress = getCourseProgress(course?.id || 0);
+
+  // Track presence
+  usePresenceTracking({
+    contentType: 'module',
+    contentId: moduleId || '',
+    progressPercentage: progress?.completion_percentage || 0,
+    metadata: { 
+      courseId: courseId,
+      moduleTitle: currentModule?.title,
+      courseTitle: course?.title
+    }
+  });
+
   useEffect(() => {
     if (!course || currentModuleIndex === -1) {
       navigate("/courses");
@@ -35,8 +51,6 @@ const ModuleViewer = () => {
   if (!course || currentModuleIndex === -1 || !currentModule) {
     return null;
   }
-
-  const progress = getCourseProgress(course.id);
   
   const handleModuleComplete = () => {
     // Content player handles the completion logic
@@ -130,12 +144,17 @@ const ModuleViewer = () => {
           </div>
 
           <div className="text-left md:text-right">
-            <h2 className="text-base md:text-lg font-consciousness font-semibold text-foreground line-clamp-1">
-              {course.title}
-            </h2>
-            <p className="text-xs md:text-sm text-muted-foreground">
-              {course.category === "free" ? "Free Course" : `${course.category} Course`}
-            </p>
+            <div className="flex items-center gap-2 justify-start md:justify-end">
+              <ParticipantTracker contentType="module" contentId={moduleId || ''} />
+              <div>
+                <h2 className="text-base md:text-lg font-consciousness font-semibold text-foreground line-clamp-1">
+                  {course.title}
+                </h2>
+                <p className="text-xs md:text-sm text-muted-foreground">
+                  {course.category === "free" ? "Free Course" : `${course.category} Course`}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
 

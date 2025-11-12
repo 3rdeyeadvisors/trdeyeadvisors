@@ -1246,6 +1246,42 @@ export type Database = {
         }
         Relationships: []
       }
+      user_presence: {
+        Row: {
+          content_id: string
+          content_type: string
+          created_at: string | null
+          id: string
+          last_seen: string | null
+          metadata: Json | null
+          progress_percentage: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          content_id: string
+          content_type: string
+          created_at?: string | null
+          id?: string
+          last_seen?: string | null
+          metadata?: Json | null
+          progress_percentage?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          content_id?: string
+          content_type?: string
+          created_at?: string | null
+          id?: string
+          last_seen?: string | null
+          metadata?: Json | null
+          progress_percentage?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_purchases: {
         Row: {
           amount_paid: number | null
@@ -1353,6 +1389,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      cleanup_old_presence: { Args: never; Returns: undefined }
       cleanup_old_rate_limits: { Args: never; Returns: undefined }
       get_average_rating: { Args: never; Returns: number }
       get_profiles_batch: {

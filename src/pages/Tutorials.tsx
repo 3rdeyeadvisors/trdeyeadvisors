@@ -9,6 +9,8 @@ import SEO from "@/components/SEO";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useNavigate } from "react-router-dom";
+import { ParticipantTracker } from "@/components/admin/ParticipantTracker";
+import { usePresenceTracking } from "@/hooks/usePresenceTracking";
 
 const Tutorials = () => {
   // Read tab from URL parameter
@@ -19,6 +21,13 @@ const Tutorials = () => {
   const { toast } = useToast();
   const { user } = useAuth();
   const navigate = useNavigate();
+
+  // Track presence
+  usePresenceTracking({
+    contentType: 'tutorial',
+    contentId: 'tutorials-page',
+    metadata: { selectedCategory }
+  });
 
   useEffect(() => {
     // Load completed tutorials from localStorage
@@ -223,9 +232,12 @@ const Tutorials = () => {
         <div className="container mx-auto px-4 py-8 mobile-typography-center">
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-              Tutorials
-            </h1>
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+                Tutorials
+              </h1>
+              <ParticipantTracker contentType="tutorial" contentId="tutorials-page" />
+            </div>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Step-by-step guides to master DeFi safely and effectively
             </p>

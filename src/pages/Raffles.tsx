@@ -301,20 +301,60 @@ const Raffles = () => {
     setParticipating(true);
 
     try {
-      // Create initial ticket for participation
+      console.log('🎯 Starting participation for user:', user.id);
+      
+      // Double-check if entry already exists
+      const { data: existingEntry } = await supabase
+        .from('raffle_entries')
+        .select('entry_count')
+        .eq('raffle_id', activeRaffle.id)
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (existingEntry) {
+        console.log('⚠️ User already has entry');
+        setHasParticipated(true);
+        setTotalEntries(existingEntry.entry_count);
+        toast({
+          title: "Already Participating",
+          description: "You're already in this raffle!",
+        });
+        setParticipating(false);
+        return;
+      }
+
+      // Create ticket (database trigger will update raffle_entries)
       const { error: ticketError } = await supabase
         .from('raffle_tickets')
         .insert({
           user_id: user.id,
           raffle_id: activeRaffle.id,
           ticket_source: 'participation',
-          metadata: { action: 'joined_raffle' }
+          metadata: { action: 'joined_raffle', timestamp: new Date().toISOString() }
         });
 
-      if (ticketError) throw ticketError;
+      if (ticketError) {
+        console.error('❌ Ticket error:', ticketError);
+        throw ticketError;
+      }
 
+      // Wait for trigger to execute
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      // Fetch updated entry count
+      const { data: updatedEntry } = await supabase
+        .from('raffle_entries')
+        .select('entry_count')
+        .eq('raffle_id', activeRaffle.id)
+        .eq('user_id', user.id)
+        .single();
+
+      const finalCount = updatedEntry?.entry_count || 1;
+      
       setHasParticipated(true);
-      setTotalEntries(1);
+      setTotalEntries(finalCount);
+
+      console.log('🎉 Participation complete:', finalCount);
 
       toast({
         title: "✅ You've joined the raffle!",
@@ -401,48 +441,73 @@ const Raffles = () => {
 
       setTaskCompletion(prev => ({ ...prev, [taskId]: newValue }));
 
-      // Update entry count with better error handling
-      const newEntries = totalEntries + (newValue ? task.entries : -task.entries);
-      const finalEntries = Math.max(0, newEntries);
-      
-      console.log('🎫 Updating entry count:', {
-        current: totalEntries,
-        change: newValue ? task.entries : -task.entries,
-        new: finalEntries
-      });
+      // If completing task, create a ticket
+      if (newValue) {
+        const { error: ticketError } = await supabase
+          .from('raffle_tickets')
+          .insert({
+            raffle_id: activeRaffle.id,
+            user_id: user.id,
+            ticket_source: 'task_completion',
+            metadata: { 
+              task_type: taskId,
+              task_label: task.label,
+              entries: task.entries 
+            }
+          });
 
-      const { error: entryError } = await supabase
-        .from('raffle_entries')
-        .upsert({
-          raffle_id: activeRaffle.id,
-          user_id: user.id,
-          entry_count: finalEntries,
-        }, {
-          onConflict: 'raffle_id,user_id'
-        });
-
-      if (entryError) {
-        console.error('Error updating entry count:', entryError);
-        throw entryError;
+        if (ticketError) {
+          console.error('⚠️ Ticket creation error:', ticketError);
+        }
+      } else {
+        // Manually adjust count if unchecking
+        const newCount = Math.max(0, totalEntries - task.entries);
+        await supabase
+          .from('raffle_entries')
+          .update({ entry_count: newCount })
+          .eq('raffle_id', activeRaffle.id)
+          .eq('user_id', user.id);
+        
+        setTotalEntries(newCount);
       }
 
-      console.log('✅ Entry count updated successfully to:', finalEntries);
-      setTotalEntries(finalEntries);
+      // Wait for trigger
+      await new Promise(resolve => setTimeout(resolve, 300));
+
+      // Fetch updated count
+      const { data: entry } = await supabase
+        .from('raffle_entries')
+        .select('entry_count')
+        .eq('raffle_id', activeRaffle.id)
+        .eq('user_id', user.id)
+        .single();
+
+      const updatedTotal = entry?.entry_count || 0;
+      setTotalEntries(updatedTotal);
+
+      console.log('✅ Task complete. Entry count:', updatedTotal);
 
       toast({
         title: newValue ? "Task Completed!" : "Task Unchecked",
         description: newValue 
-          ? `You earned ${task.entries} ${task.entries === 1 ? 'entry' : 'entries'}! Total: ${finalEntries}`
-          : `${task.entries} ${task.entries === 1 ? 'entry' : 'entries'} removed. Total: ${finalEntries}`,
+          ? `You earned ${task.entries} ${task.entries === 1 ? 'entry' : 'entries'}! Total: ${updatedTotal}`
+          : `${task.entries} ${task.entries === 1 ? 'entry' : 'entries'} removed. Total: ${updatedTotal}`,
       });
     } catch (error) {
       console.error('❌ Error updating task:', error);
+      // Revert optimistic update
+      setTaskCompletion(prev => ({ ...prev, [taskId]: !newValue }));
       toast({
         title: "Error",
         description: "Failed to update task. Please try again.",
         variant: "destructive",
       });
     }
+  };
+
+  const handleSocialVerificationSubmit = async (taskType: string, username: string) => {
+    if (!user || !activeRaffle) return;
+    console.log('Social verification submitted:', taskType, username);
   };
 
   if (loading) {

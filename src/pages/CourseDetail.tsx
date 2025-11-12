@@ -19,6 +19,8 @@ import SEO from "@/components/SEO";
 import { ExpandableText } from "@/components/ui/expandable-text";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { DesktopOnlyNotice } from "@/components/DesktopOnlyNotice";
+import { ParticipantTracker } from "@/components/admin/ParticipantTracker";
+import { usePresenceTracking } from "@/hooks/usePresenceTracking";
 import {
   Accordion,
   AccordionContent,
@@ -43,6 +45,14 @@ const CourseDetail = () => {
 
   const course = getCourseContent(parseInt(courseId || "0"));
   const progress = getCourseProgress(parseInt(courseId || "0"));
+
+  // Track presence for admins
+  usePresenceTracking({
+    contentType: 'course',
+    contentId: courseId || '0',
+    progressPercentage: progress?.completion_percentage || 0,
+    metadata: { courseTitle: course?.title }
+  });
 
   // Check payment success from URL params
   useEffect(() => {
@@ -363,9 +373,12 @@ const CourseDetail = () => {
 
         {/* Module Navigation Toggle */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-consciousness font-semibold text-foreground">
-            Course Modules
-          </h2>
+          <div className="flex items-center gap-3">
+            <h2 className="text-2xl font-consciousness font-semibold text-foreground">
+              Course Modules
+            </h2>
+            <ParticipantTracker contentType="course" contentId={courseId || '0'} />
+          </div>
           <Button
             variant="outline"
             onClick={() => setShowEnhancedNav(!showEnhancedNav)}
