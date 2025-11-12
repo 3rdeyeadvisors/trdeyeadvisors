@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { supabase } from "@/integrations/supabase/client";
 import { DollarSign, Users, BookOpen, Package, TrendingUp, TrendingDown } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { RemoveFromRaffleButton } from "./RemoveFromRaffleButton";
 
 interface MetricCard {
   title: string;
@@ -111,6 +112,17 @@ export function OverviewPanel() {
 
   return (
     <div className="space-y-6">
+      {/* Admin Quick Actions Card */}
+      <Card className="bg-gradient-to-r from-destructive/10 to-destructive/5 border-destructive/20">
+        <CardHeader>
+          <CardTitle className="text-lg">Admin Quick Actions</CardTitle>
+          <CardDescription>Remove yourself from active raffles</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <RemoveFromRaffleButton raffleId="c6008efe-7ee7-4db3-96ca-451bacc07a2a" />
+        </CardContent>
+      </Card>
+
       {aiInsight && (
         <Card className="border-primary/20 bg-gradient-to-br from-cosmic-deep to-cosmic-void">
           <CardHeader>
