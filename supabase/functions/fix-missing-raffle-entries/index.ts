@@ -12,44 +12,7 @@ serve(async (req) => {
   }
 
   try {
-    // Create client with anon key to verify the user's JWT
-    const supabaseClient = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
-      {
-        auth: {
-          autoRefreshToken: false,
-          persistSession: false
-        },
-        global: {
-          headers: { Authorization: req.headers.get('Authorization')! }
-        }
-      }
-    );
-
-    // Verify the user from their JWT
-    const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
-    
-    if (authError || !user) {
-      console.error('Auth error:', authError);
-      throw new Error('Unauthorized');
-    }
-
-    // Check if user is admin
-    const { data: roles, error: roleError } = await supabaseClient
-      .from('user_roles')
-      .select('role')
-      .eq('user_id', user.id)
-      .eq('role', 'admin');
-
-    if (roleError || !roles || roles.length === 0) {
-      console.error('Role check failed:', roleError);
-      throw new Error('User is not an admin');
-    }
-
-    console.log(`Admin ${user.email} running missing entries fix`);
-
-    // Create service role client for admin operations
+    // Create service role client for all operations
     const supabaseAdmin = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
@@ -60,6 +23,36 @@ serve(async (req) => {
         }
       }
     );
+
+    // Get and verify the JWT token
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      throw new Error('No authorization header');
+    }
+
+    const token = authHeader.replace('Bearer ', '');
+    
+    // Verify the user using service role client
+    const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
+    
+    if (authError || !user) {
+      console.error('Auth error:', authError);
+      throw new Error('Unauthorized');
+    }
+
+    // Check if user is admin
+    const { data: roles, error: roleError } = await supabaseAdmin
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', user.id)
+      .eq('role', 'admin');
+
+    if (roleError || !roles || roles.length === 0) {
+      console.error('Role check failed for user:', user.id);
+      throw new Error('User is not an admin');
+    }
+
+    console.log(`Admin ${user.email} running missing entries fix`);
 
     // Find all verified tasks that don't have corresponding entries
     const { data: verifiedTasks, error: taskError } = await supabaseAdmin
