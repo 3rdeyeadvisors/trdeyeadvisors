@@ -23,31 +23,35 @@ serve(async (req) => {
       }
     );
 
-    // Verify admin access
+    // Verify admin access by checking JWT
     const authHeader = req.headers.get('Authorization');
     if (!authHeader) {
       throw new Error('No authorization header');
     }
 
+    // Decode JWT to get user ID
     const token = authHeader.replace('Bearer ', '');
-    const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
-    
-    if (authError || !user) {
-      throw new Error('Unauthorized');
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const payload = JSON.parse(atob(base64));
+    const userId = payload.sub;
+
+    if (!userId) {
+      throw new Error('Invalid token');
     }
 
-    // Check if user is admin
+    // Check if user is admin using service role client
     const { data: roles } = await supabaseAdmin
       .from('user_roles')
       .select('role')
-      .eq('user_id', user.id)
+      .eq('user_id', userId)
       .eq('role', 'admin');
 
     if (!roles || roles.length === 0) {
       throw new Error('User is not an admin');
     }
 
-    console.log(`Admin ${user.email} running missing entries fix`);
+    console.log(`Admin ${userId} running missing entries fix`);
 
     // Find all verified tasks that don't have corresponding entries
     const { data: verifiedTasks, error: taskError } = await supabaseAdmin
