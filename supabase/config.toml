@@ -133,3 +133,6 @@ verify_jwt = false
 
 [functions.admin-mark-verified]
 verify_jwt = true
+
+[functions.fix-missing-raffle-entries]
+verify_jwt = false

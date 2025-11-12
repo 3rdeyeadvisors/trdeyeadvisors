@@ -12,6 +12,16 @@ serve(async (req) => {
   }
 
   try {
+    // Parse request body to get admin key
+    const body = await req.json();
+    const adminKey = body.adminKey;
+
+    // Verify admin key (you should set this as a secret)
+    const expectedKey = Deno.env.get('ADMIN_SECRET_KEY');
+    if (!expectedKey || adminKey !== expectedKey) {
+      throw new Error('Invalid admin key');
+    }
+
     // Create service role client for all operations
     const supabaseAdmin = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
@@ -24,35 +34,7 @@ serve(async (req) => {
       }
     );
 
-    // Get and verify the JWT token
-    const authHeader = req.headers.get('Authorization');
-    if (!authHeader) {
-      throw new Error('No authorization header');
-    }
-
-    const token = authHeader.replace('Bearer ', '');
-    
-    // Verify the user using service role client
-    const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
-    
-    if (authError || !user) {
-      console.error('Auth error:', authError);
-      throw new Error('Unauthorized');
-    }
-
-    // Check if user is admin
-    const { data: roles, error: roleError } = await supabaseAdmin
-      .from('user_roles')
-      .select('role')
-      .eq('user_id', user.id)
-      .eq('role', 'admin');
-
-    if (roleError || !roles || roles.length === 0) {
-      console.error('Role check failed for user:', user.id);
-      throw new Error('User is not an admin');
-    }
-
-    console.log(`Admin ${user.email} running missing entries fix`);
+    console.log('Admin running missing entries fix');
 
     // Find all verified tasks that don't have corresponding entries
     const { data: verifiedTasks, error: taskError } = await supabaseAdmin
