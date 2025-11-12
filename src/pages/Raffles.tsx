@@ -722,10 +722,22 @@ const Raffles = () => {
                     </div>
                   </>
                 ) : (
-                  /* NON-LOGGED-IN: ONLY TIMER */
-                  <div>
-                    <RaffleCountdown endDate={activeRaffle.end_date} />
-                  </div>
+                  /* NON-LOGGED-IN: Timer + Join Button */
+                  <>
+                    <div>
+                      <RaffleCountdown endDate={activeRaffle.end_date} />
+                    </div>
+                    <div className="pt-4 border-t">
+                      <Link to="/auth">
+                        <Button className="w-full" size="lg">
+                          Join Raffle Now
+                        </Button>
+                      </Link>
+                      <p className="text-xs text-muted-foreground text-center mt-2">
+                        Sign up or log in to participate
+                      </p>
+                    </div>
+                  </>
                 )}
               </CardContent>
             </Card>
