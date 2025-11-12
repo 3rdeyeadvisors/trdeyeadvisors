@@ -77,109 +77,122 @@ const Raffles = () => {
 
     console.log('Setting up real-time subscriptions for user:', user.id, 'raffle:', activeRaffle.id);
 
-    const channel = supabase
-      .channel(`raffle-updates-${activeRaffle.id}-${user.id}`)
-      // Listen to entry count updates
-      .on(
-        'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'raffle_entries',
-          filter: `user_id=eq.${user.id}`,
-        },
-        (payload) => {
-          console.log('🎫 Entry count updated:', payload);
-          if (payload.new && 'entry_count' in payload.new) {
-            setTotalEntries(payload.new.entry_count as number);
-            toast({
-              title: "Entries Updated! 🎉",
-              description: `You now have ${payload.new.entry_count} entries!`,
-            });
+    let channel: any = null;
+
+    try {
+      channel = supabase
+        .channel(`raffle-updates-${activeRaffle.id}-${user.id}`)
+        // Listen to entry count updates
+        .on(
+          'postgres_changes',
+          {
+            event: 'UPDATE',
+            schema: 'public',
+            table: 'raffle_entries',
+            filter: `user_id=eq.${user.id}`,
+          },
+          (payload) => {
+            console.log('🎫 Entry count updated:', payload);
+            if (payload.new && 'entry_count' in payload.new) {
+              setTotalEntries(payload.new.entry_count as number);
+              toast({
+                title: "Entries Updated! 🎉",
+                description: `You now have ${payload.new.entry_count} entries!`,
+              });
+            }
           }
-        }
-      )
-      // Listen to INSERT for new entries
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'raffle_entries',
-          filter: `user_id=eq.${user.id}`,
-        },
-        (payload) => {
-          console.log('🎫 New entry created:', payload);
-          if (payload.new && 'entry_count' in payload.new) {
-            setTotalEntries(payload.new.entry_count as number);
+        )
+        // Listen to INSERT for new entries
+        .on(
+          'postgres_changes',
+          {
+            event: 'INSERT',
+            schema: 'public',
+            table: 'raffle_entries',
+            filter: `user_id=eq.${user.id}`,
+          },
+          (payload) => {
+            console.log('🎫 New entry created:', payload);
+            if (payload.new && 'entry_count' in payload.new) {
+              setTotalEntries(payload.new.entry_count as number);
+            }
           }
-        }
-      )
-      // Listen to task verification status changes
-      .on(
-        'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'raffle_tasks',
-          filter: `user_id=eq.${user.id}`,
-        },
-        (payload) => {
-          console.log('✅ Task verification updated:', payload);
-          fetchUserProgress(); // Refresh all task data
-          
-          // Show notification if task was verified
-          if (payload.new && payload.new.verification_status === 'verified' && payload.old.verification_status !== 'verified') {
-            toast({
-              title: "Username Verified! ✅",
-              description: "Your social media username has been verified. +2 entries!",
-            });
+        )
+        // Listen to task verification status changes
+        .on(
+          'postgres_changes',
+          {
+            event: 'UPDATE',
+            schema: 'public',
+            table: 'raffle_tasks',
+            filter: `user_id=eq.${user.id}`,
+          },
+          (payload) => {
+            console.log('✅ Task verification updated:', payload);
+            fetchUserProgress(); // Refresh all task data
+            
+            // Show notification if task was verified
+            if (payload.new && payload.new.verification_status === 'verified' && payload.old.verification_status !== 'verified') {
+              toast({
+                title: "Username Verified! ✅",
+                description: "Your social media username has been verified. +2 entries!",
+              });
+            }
           }
-        }
-      )
-      // Listen to new task creations
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'raffle_tasks',
-          filter: `user_id=eq.${user.id}`,
-        },
-        (payload) => {
-          console.log('📝 New task created:', payload);
-          fetchUserProgress();
-        }
-      )
-      // Listen to raffle changes (winner selection, status changes)
-      .on(
-        'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'raffles',
-          filter: `id=eq.${activeRaffle.id}`,
-        },
-        (payload) => {
-          console.log('🏆 Raffle updated:', payload);
-          fetchActiveRaffle(); // Refresh raffle data
-          
-          if (payload.new && payload.new.winner_user_id && !payload.old.winner_user_id) {
-            // Winner was just selected
-            toast({
-              title: "Winner Announced! 🎉",
-              description: "The raffle winner has been selected. Check if you won!",
-            });
+        )
+        // Listen to new task creations
+        .on(
+          'postgres_changes',
+          {
+            event: 'INSERT',
+            schema: 'public',
+            table: 'raffle_tasks',
+            filter: `user_id=eq.${user.id}`,
+          },
+          (payload) => {
+            console.log('📝 New task created:', payload);
+            fetchUserProgress();
           }
-        }
-      )
-      .subscribe((status) => {
-        console.log('Real-time subscription status:', status);
-      });
+        )
+        // Listen to raffle changes (winner selection, status changes)
+        .on(
+          'postgres_changes',
+          {
+            event: 'UPDATE',
+            schema: 'public',
+            table: 'raffles',
+            filter: `id=eq.${activeRaffle.id}`,
+          },
+          (payload) => {
+            console.log('🏆 Raffle updated:', payload);
+            fetchActiveRaffle(); // Refresh raffle data
+            
+            if (payload.new && payload.new.winner_user_id && !payload.old.winner_user_id) {
+              // Winner was just selected
+              toast({
+                title: "Winner Announced! 🎉",
+                description: "The raffle winner has been selected. Check if you won!",
+              });
+            }
+          }
+        )
+        .subscribe((status) => {
+          console.log('Real-time subscription status:', status);
+        });
+    } catch (error) {
+      console.error('Failed to set up real-time subscriptions:', error);
+      console.log('Continuing without real-time updates - page will still work with manual refresh');
+    }
 
     return () => {
-      console.log('Cleaning up real-time subscriptions');
-      supabase.removeChannel(channel);
+      if (channel) {
+        console.log('Cleaning up real-time subscriptions');
+        try {
+          supabase.removeChannel(channel);
+        } catch (error) {
+          console.error('Error cleaning up channel:', error);
+        }
+      }
     };
   }, [user, activeRaffle]);
 
