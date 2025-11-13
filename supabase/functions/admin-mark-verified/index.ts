@@ -126,9 +126,11 @@ serve(async (req) => {
             });
 
           if (ticketError) {
-            console.error('Error creating ticket:', ticketError);
+            console.error('❌ CRITICAL: Failed to create ticket for user', task.user_id, ticketError);
+            throw new Error(`Failed to create raffle ticket: ${ticketError.message}`);
           }
         }
+        console.log(`✅ Successfully created 2 tickets for user ${task.user_id}`);
 
         // Send verification email if not skipping
         if (!skipEmail) {
