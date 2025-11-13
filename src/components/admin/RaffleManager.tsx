@@ -70,6 +70,7 @@ const RaffleManager = () => {
   const [sendingAnnouncement, setSendingAnnouncement] = useState(false);
   const [sendingEndedNotification, setSendingEndedNotification] = useState(false);
   const [sendingWinnerAnnouncement, setSendingWinnerAnnouncement] = useState(false);
+  const [repairingTickets, setRepairingTickets] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -502,6 +503,49 @@ const RaffleManager = () => {
       });
     } finally {
       setSendingWinnerAnnouncement(false);
+    }
+  };
+
+  const handleRepairTickets = async () => {
+    const activeRaffle = raffles.find(r => r.is_active);
+    
+    if (!activeRaffle) {
+      toast({
+        title: "Error",
+        description: "No active raffle found",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!confirm("This will repair missing tickets and fix entry counts. Are you sure?")) {
+      return;
+    }
+
+    setRepairingTickets(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('repair-raffle-tickets', {
+        body: { raffleId: activeRaffle.id }
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Repair Complete ✅",
+        description: `Fixed ${data.total_fixed} users with missing tickets`,
+      });
+
+      // Refresh participants to show updated data
+      await fetchParticipants(activeRaffle.id);
+    } catch (error: any) {
+      console.error('Error repairing tickets:', error);
+      toast({
+        title: "Repair Failed",
+        description: error.message || "Failed to repair tickets",
+        variant: "destructive",
+      });
+    } finally {
+      setRepairingTickets(false);
     }
   };
 
@@ -1115,6 +1159,24 @@ const RaffleManager = () => {
                       <>
                         <RefreshCw className="w-4 h-4 mr-2" />
                         Refresh
+                      </>
+                    )}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleRepairTickets}
+                    disabled={repairingTickets || loadingParticipants}
+                  >
+                    {repairingTickets ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Repairing...
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle2 className="w-4 h-4 mr-2" />
+                        Repair Data
                       </>
                     )}
                   </Button>
