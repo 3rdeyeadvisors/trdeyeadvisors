@@ -518,30 +518,36 @@ const RaffleManager = () => {
       return;
     }
 
-    if (!confirm("This will repair missing tickets and fix entry counts. Are you sure?")) {
-      return;
-    }
-
     setRepairingTickets(true);
+    
+    toast({
+      title: "Starting Repair...",
+      description: "Analyzing raffle data and fixing inconsistencies",
+    });
+    
     try {
+      console.log('🔧 Calling repair function for raffle:', activeRaffle.id);
+      
       const { data, error } = await supabase.functions.invoke('repair-raffle-tickets', {
         body: { raffleId: activeRaffle.id }
       });
+
+      console.log('🔧 Repair response:', { data, error });
 
       if (error) throw error;
 
       toast({
         title: "Repair Complete ✅",
-        description: `Fixed ${data.total_fixed} users with missing tickets`,
+        description: `Fixed ${data.total_fixed} users. ${data.repairs?.length || 0} corrections made.`,
       });
 
       // Refresh participants to show updated data
       await fetchParticipants(activeRaffle.id);
     } catch (error: any) {
-      console.error('Error repairing tickets:', error);
+      console.error('❌ Error repairing tickets:', error);
       toast({
         title: "Repair Failed",
-        description: error.message || "Failed to repair tickets",
+        description: error.message || "Failed to repair tickets. Check console for details.",
         variant: "destructive",
       });
     } finally {
