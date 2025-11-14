@@ -1,5 +1,5 @@
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
-import { createHash } from "https://deno.land/std@0.177.0/hash/mod.ts";
+import { Md5 } from "https://deno.land/std@0.160.0/hash/md5.ts";
 
 const MAILCHIMP_API_KEY = Deno.env.get("MAILCHIMP_API_KEY")!;
 const MAILCHIMP_AUDIENCE_ID = Deno.env.get("MAILCHIMP_AUDIENCE_ID") || "5eb3bda38d";
@@ -31,7 +31,9 @@ async function handler(req: Request): Promise<Response> {
   const authHeader = "Basic " + btoa(`anystring:${MAILCHIMP_API_KEY}`);
 
   // Mailchimp member hash is MD5 of the lowercase email
-  const hash = createHash("md5").update(lowerEmail).toString();
+  const md5 = new Md5();
+  md5.update(lowerEmail);
+  const hash = md5.toString();
 
   const memberUrl = `https://${MAILCHIMP_SERVER_PREFIX}.api.mailchimp.com/3.0/lists/${MAILCHIMP_AUDIENCE_ID}/members/${hash}`;
 
