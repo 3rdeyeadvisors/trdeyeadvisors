@@ -64,6 +64,7 @@ import DownloadPortal from "./pages/DownloadPortal";
 import AdminDashboard from "./pages/AdminDashboard";
 import Raffles from "./pages/Raffles";
 import RaffleHistory from "./pages/RaffleHistory";
+import AwarenessBlueprintLanding from "./pages/AwarenessBlueprintLanding";
 
 const queryClient = new QueryClient();
 
@@ -145,6 +146,7 @@ const App = () => {
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/downloads" element={<Downloads />} />
                   <Route path="/download-portal" element={<DownloadPortal />} />
+                  <Route path="/awareness-blueprint" element={<AwarenessBlueprintLanding />} />
                   <Route path="/admin/upload" element={
                     <ProtectedRoute requireRole="admin">
                       <AdminUploadContent />
