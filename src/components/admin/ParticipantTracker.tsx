@@ -101,26 +101,36 @@ export const ParticipantTracker = ({ contentType, contentId }: ParticipantTracke
 
     fetchParticipants();
 
-    // Subscribe to real-time updates
-    const channel = supabase
-      .channel(`presence-${contentType}-${contentId}`)
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'user_presence',
-          filter: `content_type=eq.${contentType},content_id=eq.${contentId}`
-        },
-        () => {
-          fetchParticipants();
-        }
-      )
-      .subscribe();
+    // Subscribe to real-time updates with error handling
+    try {
+      const channel = supabase
+        .channel(`presence-${contentType}-${contentId}`)
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'user_presence',
+            filter: `content_type=eq.${contentType},content_id=eq.${contentId}`
+          },
+          () => {
+            fetchParticipants();
+          }
+        )
+        .subscribe();
 
-    return () => {
-      supabase.removeChannel(channel);
-    };
+      return () => {
+        try {
+          supabase.removeChannel(channel);
+        } catch (error) {
+          console.debug('Error removing presence channel:', error);
+        }
+      };
+    } catch (error) {
+      console.debug('Presence realtime subscription unavailable:', error);
+      // Return empty cleanup function if subscription fails
+      return () => {};
+    }
   }, [isAdmin, contentType, contentId]);
 
   if (!isAdmin) return null;
