@@ -38,15 +38,22 @@ export const usePresenceTracking = ({
             ignoreDuplicates: false
           });
       } catch (error) {
-        console.error('Error updating presence:', error);
+        // Silently fail to prevent app crashes from WebSocket/Realtime issues
+        console.debug('Presence tracking unavailable:', error);
       }
     };
 
-    // Initial update
-    updatePresence();
+    // Initial update with error boundary
+    updatePresence().catch(() => {
+      // Silently fail on initial update
+    });
 
     // Update presence every 15 seconds
-    intervalRef.current = setInterval(updatePresence, 15000);
+    intervalRef.current = setInterval(() => {
+      updatePresence().catch(() => {
+        // Silently fail on interval updates
+      });
+    }, 15000);
 
     // Cleanup on unmount
     return () => {
@@ -54,8 +61,10 @@ export const usePresenceTracking = ({
         clearInterval(intervalRef.current);
       }
       
-      // Final update before leaving
-      updatePresence();
+      // Final update before leaving (don't await to prevent blocking unmount)
+      updatePresence().catch(() => {
+        // Silently fail on cleanup
+      });
     };
   }, [user, contentType, contentId, progressPercentage, JSON.stringify(metadata)]);
 
