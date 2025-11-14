@@ -20,38 +20,18 @@ const AwarenessBlueprintLanding = () => {
     setIsSubmitting(true);
 
     try {
-      const { error } = await supabase
-        .from("subscribers")
-        .insert([{ email: email.trim().toLowerCase() }]);
+      const { data, error } = await supabase.functions.invoke(
+        "awareness_blueprint_signup",
+        {
+          body: { email: email.trim().toLowerCase() },
+        }
+      );
 
       if (error) {
-        if (error.code === "23505") {
-          toast.error("You're already subscribed!");
-        } else {
-          throw error;
-        }
+        console.error("Signup error:", error);
+        toast.error("Something went wrong. Please try again.");
       } else {
-        // Sync to Mailchimp for automation
-        try {
-          const { error: mailchimpError } = await supabase.functions.invoke(
-            "awareness_blueprint_signup",
-            {
-              body: { email: email.trim().toLowerCase() },
-            }
-          );
-
-          if (mailchimpError) {
-            console.error("Mailchimp sync error:", mailchimpError);
-          }
-        } catch (mailchimpErr) {
-          console.error("Failed to sync with Mailchimp:", mailchimpErr);
-        }
-
-        toast.success("Success! Check your email for the download link.");
-        
-        // Open PDF in new tab as backup
-        window.open("/resources/Awareness_Blueprint_Clean.pdf", "_blank");
-        
+        toast.success("Check your inbox for The Awareness Blueprint.");
         setEmail("");
       }
     } catch (error) {
