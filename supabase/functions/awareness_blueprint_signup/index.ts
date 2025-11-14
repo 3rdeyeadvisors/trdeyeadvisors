@@ -1,9 +1,10 @@
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
 import { Md5 } from "https://deno.land/std@0.160.0/hash/md5.ts";
 
-const MAILCHIMP_API_KEY = Deno.env.get("MAILCHIMP_API_KEY")!;
+const MAILCHIMP_API_KEY = Deno.env.get("Mailchimp_Key")!;
 const MAILCHIMP_AUDIENCE_ID = Deno.env.get("MAILCHIMP_AUDIENCE_ID") || "5eb3bda38d";
-const MAILCHIMP_SERVER_PREFIX = "us3";
+// Extract datacenter from API key (format: key-dc)
+const MAILCHIMP_SERVER_PREFIX = MAILCHIMP_API_KEY.split('-').pop() || "us3";
 const MAILCHIMP_TAG_NAME = "Awareness Blueprint Subscriber";
 
 async function handler(req: Request): Promise<Response> {
