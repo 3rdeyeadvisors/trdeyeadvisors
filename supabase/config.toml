@@ -136,3 +136,6 @@ verify_jwt = true
 
 [functions.fix-missing-raffle-entries]
 verify_jwt = false
+
+[functions.awareness_blueprint_signup]
+verify_jwt = false
