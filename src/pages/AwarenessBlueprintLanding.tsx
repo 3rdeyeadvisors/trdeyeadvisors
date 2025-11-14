@@ -31,20 +31,20 @@ const AwarenessBlueprintLanding = () => {
           throw error;
         }
       } else {
-        // Send the awareness blueprint email
+        // Sync to Mailchimp for automation
         try {
-          const { error: emailError } = await supabase.functions.invoke(
-            "send-awareness-blueprint-email",
+          const { error: mailchimpError } = await supabase.functions.invoke(
+            "awareness_blueprint_signup",
             {
               body: { email: email.trim().toLowerCase() },
             }
           );
 
-          if (emailError) {
-            console.error("Email sending error:", emailError);
+          if (mailchimpError) {
+            console.error("Mailchimp sync error:", mailchimpError);
           }
-        } catch (emailErr) {
-          console.error("Failed to send email:", emailErr);
+        } catch (mailchimpErr) {
+          console.error("Failed to sync with Mailchimp:", mailchimpErr);
         }
 
         toast.success("Success! Check your email for the download link.");
