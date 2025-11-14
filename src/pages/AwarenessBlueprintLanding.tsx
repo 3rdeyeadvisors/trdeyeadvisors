@@ -31,9 +31,25 @@ const AwarenessBlueprintLanding = () => {
           throw error;
         }
       } else {
+        // Send the awareness blueprint email
+        try {
+          const { error: emailError } = await supabase.functions.invoke(
+            "send-awareness-blueprint-email",
+            {
+              body: { email: email.trim().toLowerCase() },
+            }
+          );
+
+          if (emailError) {
+            console.error("Email sending error:", emailError);
+          }
+        } catch (emailErr) {
+          console.error("Failed to send email:", emailErr);
+        }
+
         toast.success("Success! Check your email for the download link.");
         
-        // Open PDF in new tab
+        // Open PDF in new tab as backup
         window.open("/resources/Awareness_Blueprint_Clean.pdf", "_blank");
         
         setEmail("");
