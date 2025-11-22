@@ -139,3 +139,6 @@ verify_jwt = false
 
 [functions.awareness_blueprint_signup]
 verify_jwt = false
+
+[functions.upload-resource-file]
+verify_jwt = true
