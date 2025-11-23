@@ -329,7 +329,7 @@ export const CommentsSection = ({ courseId, moduleId }: CommentsSectionProps) =>
               onChange={(e) => setNewComment(e.target.value)}
               className="min-h-[100px] text-sm"
             />
-            <div className="flex justify-end">
+            <div className="flex justify-center">
               <Button
                 onClick={handleSubmitComment}
                 disabled={!newComment.trim() || submitting}
