@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { BookOpen, Wrench, Eye, Code, TrendingUp, Shield } from "lucide-react";
 import cosmicHeroBg from "@/assets/cosmic-hero-bg.jpg";
-import NewsletterSignup from "@/components/NewsletterSignup";
 
 import SEO from "@/components/SEO";
 
@@ -30,6 +30,18 @@ const Index = () => {
       description: "Navigate DeFi safely with proper risk management"
     }
   ];
+
+  // Load the form embed script
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://link.msgsndr.com/js/form_embed.js";
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
 
   return (
     <>
@@ -176,7 +188,27 @@ const Index = () => {
       {/* Newsletter Signup */}
       <section className="py-12 md:py-20 lg:py-24 bg-muted/10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <NewsletterSignup variant="cosmic" />
+          <div className="w-full max-w-[450px] mx-auto">
+            <div className="relative w-full" style={{ minHeight: "500px" }}>
+              <iframe
+                src="https://api.leadconnectorhq.com/widget/form/AiLqjZ4zEISQ2EySJ76m"
+                style={{width:"100%",height:"100%",border:"none",borderRadius:"3px"}}
+                id="inline-AiLqjZ4zEISQ2EySJ76m" 
+                data-layout="{'id':'INLINE'}"
+                data-trigger-type="alwaysShow"
+                data-trigger-value=""
+                data-activation-type="alwaysActivated"
+                data-activation-value=""
+                data-deactivation-type="neverDeactivate"
+                data-deactivation-value=""
+                data-form-name="3EA – Awareness Guide Opt-In"
+                data-height="undefined"
+                data-layout-iframe-id="inline-AiLqjZ4zEISQ2EySJ76m"
+                data-form-id="AiLqjZ4zEISQ2EySJ76m"
+                title="3EA – Awareness Guide Opt-In"
+              />
+            </div>
+          </div>
         </div>
       </section>
       </div>
