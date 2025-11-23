@@ -279,14 +279,14 @@ const Store = () => {
           {/* Digital Products Section */}
           {activeCategory === "digital" && (
             <section className="mb-16" aria-labelledby="digital-products-heading">
-              <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 {digitalProducts.map((product, index) => {
                   const ProductIcon = getProductIcon(product);
                   const displayPrice = isAdmin ? 0 : product.price;
                   return (
                      <Card 
                        key={product.id}
-                       className="p-3 md:p-6 bg-card/50 border-border hover:border-primary/40 transition-all duration-300 hover:shadow-lg group flex flex-col h-full"
+                       className="p-4 md:p-6 bg-card/50 border-border hover:border-primary/40 transition-all duration-300 hover:shadow-lg group flex flex-col h-full"
                        style={{ animationDelay: `${index * 0.1}s` }}
                      >
                        <div className="flex items-center justify-center mb-3 gap-2">
@@ -304,29 +304,29 @@ const Store = () => {
                          <ProductIcon className="w-8 h-8 md:w-10 md:h-10 text-primary group-hover:text-primary transition-colors" />
                        </div>
                        
-                       <h3 className="text-xs md:text-base font-consciousness font-semibold text-center mb-2 line-clamp-2 min-h-[2rem] md:min-h-[2.5rem]">
+                       <h3 className="text-sm md:text-base font-consciousness font-semibold text-center mb-3 line-clamp-2 min-h-[2.5rem] md:min-h-[2.5rem]">
                          {product.title}
                        </h3>
                        
-                       <div className="relative mb-3 flex-1">
+                       <div className="relative mb-4 flex-1">
                          <div 
-                           className="h-[100px] md:h-[140px] overflow-y-auto px-1 md:px-2 scrollbar-hide text-center"
+                           className="h-auto md:h-[140px] md:overflow-y-auto px-2 md:px-2 text-center"
                            style={{
                              maskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)',
                              WebkitMaskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)'
                            }}
                          >
-                           <p className="text-xs text-muted-foreground font-consciousness leading-relaxed mb-2">
+                           <p className="text-sm text-muted-foreground font-consciousness leading-relaxed mb-3">
                              {product.description}
                            </p>
-                           <div className="mb-2">
-                             <h4 className="text-xs font-consciousness font-medium mb-1">
+                           <div className="mb-3">
+                             <h4 className="text-sm font-consciousness font-medium mb-2">
                                Includes:
                              </h4>
-                             <ul className="text-xs text-muted-foreground space-y-0.5">
+                             <ul className="text-sm text-muted-foreground space-y-1">
                                {product.features.map((feature, idx) => (
-                                 <li key={idx} className="flex items-center justify-center gap-1.5">
-                                   <div className="w-1 h-1 bg-primary rounded-full flex-shrink-0"></div>
+                                 <li key={idx} className="flex items-center justify-center gap-2">
+                                   <div className="w-1.5 h-1.5 bg-primary rounded-full flex-shrink-0"></div>
                                    <span>{feature}</span>
                                  </li>
                                ))}
@@ -335,16 +335,16 @@ const Store = () => {
                          </div>
                        </div>
                        
-                        <div className="flex flex-col gap-2 mt-auto pt-3 border-t border-border/50">
-                          <span className="text-xl md:text-3xl font-consciousness font-bold text-primary text-center">
+                        <div className="flex flex-col gap-3 mt-auto pt-4 border-t border-border/50">
+                          <span className="text-2xl md:text-3xl font-consciousness font-bold text-primary text-center">
                             ${typeof displayPrice === 'string' ? displayPrice : displayPrice.toFixed(2)}
                           </span>
                          <Button 
                            variant={isInCart(product.id) ? "outline" : "cosmic"}
-                           className="font-consciousness w-full text-xs md:text-sm h-9 md:h-10"
+                           className="font-consciousness w-full text-sm md:text-sm h-11 md:h-10 touch-target"
                            onClick={() => handleAddToCart({ ...product, price: displayPrice })}
                          >
-                           <Plus className="w-3 h-3 md:w-4 md:h-4 mr-1.5" />
+                           <Plus className="w-4 h-4 md:w-4 md:h-4 mr-2" />
                            {isInCart(product.id) ? "Add Another" : "Add to Cart"}
                          </Button>
                        </div>
