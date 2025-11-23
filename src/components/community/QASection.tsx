@@ -432,67 +432,72 @@ export const QASection = ({ courseId, moduleId }: QASectionProps) => {
   }
 
   return (
-    <Card className="p-6">
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-2">
-          <HelpCircle className="w-5 h-5 text-primary" />
-          <h3 className="text-lg font-consciousness font-semibold">
-            Questions & Answers ({questions.length})
-          </h3>
+    <Card>
+      <div className="space-y-3 px-4 py-4 sm:px-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <HelpCircle className="w-5 h-5 text-primary" />
+            <h3 className="text-lg font-consciousness font-semibold">
+              Questions & Answers ({questions.length})
+            </h3>
+          </div>
+          {user && (
+            <Button
+              onClick={() => setShowNewQuestion(!showNewQuestion)}
+              variant="outline"
+              size="sm"
+              className="font-consciousness h-9 text-xs sm:text-sm"
+            >
+              Ask Question
+            </Button>
+          )}
         </div>
-        {user && (
-          <Button
-            onClick={() => setShowNewQuestion(!showNewQuestion)}
-            variant="outline"
-            className="font-consciousness"
-          >
-            Ask Question
-          </Button>
-        )}
-      </div>
 
-      {/* New Question Form */}
-      {showNewQuestion && user && (
-        <Card className="p-4 mb-6 bg-primary/5 border-primary/20">
-          <div className="space-y-3">
-            <Input
-              placeholder="Question title..."
-              value={newQuestionTitle}
-              onChange={(e) => setNewQuestionTitle(e.target.value)}
-            />
-            <Textarea
-              placeholder="Describe your question in detail..."
-              value={newQuestionContent}
-              onChange={(e) => setNewQuestionContent(e.target.value)}
-              className="min-h-[100px]"
-            />
-            <div className="flex gap-2 justify-end">
-              <Button
-                variant="outline"
-                onClick={() => setShowNewQuestion(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={handleSubmitQuestion}
-                disabled={!newQuestionTitle.trim() || !newQuestionContent.trim() || submitting}
-                className="font-consciousness"
-              >
-                {submitting ? "Posting..." : "Post Question"}
-              </Button>
+        {/* New Question Form */}
+        {showNewQuestion && user && (
+          <Card className="p-3 sm:p-4 bg-primary/5 border-primary/20">
+            <div className="space-y-3">
+              <Input
+                placeholder="Question title..."
+                value={newQuestionTitle}
+                onChange={(e) => setNewQuestionTitle(e.target.value)}
+                className="text-sm"
+              />
+              <Textarea
+                placeholder="Describe your question in detail..."
+                value={newQuestionContent}
+                onChange={(e) => setNewQuestionContent(e.target.value)}
+                className="min-h-[100px] text-sm"
+              />
+              <div className="flex gap-2 justify-end">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowNewQuestion(false)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={handleSubmitQuestion}
+                  disabled={!newQuestionTitle.trim() || !newQuestionContent.trim() || submitting}
+                  className="font-consciousness"
+                >
+                  {submitting ? "Posting..." : "Post Question"}
+                </Button>
+              </div>
             </div>
-          </div>
-        </Card>
-      )}
+          </Card>
+        )}
 
-      {/* Questions List */}
-      <div className="space-y-6">
-        {questions.length === 0 ? (
-          <div className="text-center py-8 text-muted-foreground">
-            <HelpCircle className="w-12 h-12 mx-auto mb-3 opacity-50" />
-            <p className="font-consciousness">No questions yet. Be the first to ask!</p>
-          </div>
-        ) : (
+        {/* Questions List */}
+        <div className="space-y-6 pt-2">
+          {questions.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              <HelpCircle className="w-12 h-12 mx-auto mb-3 opacity-50" />
+              <p className="font-consciousness text-sm">No questions yet. Be the first to ask!</p>
+            </div>
+          ) : (
           questions.map((question) => (
             <Card key={question.id} className="p-4">
               <div className="flex items-start gap-3 mb-4">
@@ -734,6 +739,7 @@ export const QASection = ({ courseId, moduleId }: QASectionProps) => {
             </Card>
           ))
         )}
+        </div>
       </div>
     </Card>
   );

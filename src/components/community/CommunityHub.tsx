@@ -39,17 +39,17 @@ export const CommunityHub = ({
         </CardHeader>
         <CardContent className="px-4 sm:px-6 py-4">
           <Tabs defaultValue="comments" className="w-full">
-            <TabsList className="flex w-full justify-center gap-2 p-2 bg-card/60 rounded-lg border border-border flex-wrap">
+            <TabsList className="flex flex-wrap gap-2 w-full justify-start p-2 bg-card/60 rounded-lg border border-border mb-4">
               <TabsTrigger 
                 value="comments" 
-                className="flex items-center gap-2 min-h-[44px] px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm whitespace-normal data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                className="flex items-center gap-2 min-h-[44px] px-4 py-2 rounded-full text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
               >
                 <MessageCircle className="w-4 h-4 flex-shrink-0" />
                 <span>Comments</span>
               </TabsTrigger>
               <TabsTrigger 
                 value="ratings" 
-                className="flex items-center gap-2 min-h-[44px] px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm whitespace-normal data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                className="flex items-center gap-2 min-h-[44px] px-4 py-2 rounded-full text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
               >
                 <Star className="w-4 h-4 flex-shrink-0" />
                 <span>Ratings</span>
@@ -57,7 +57,7 @@ export const CommunityHub = ({
               {showDiscussions && (
                 <TabsTrigger 
                   value="discussions" 
-                  className="flex items-center gap-2 min-h-[44px] px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm whitespace-normal data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                  className="flex items-center gap-2 min-h-[44px] px-4 py-2 rounded-full text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
                 >
                   <HelpCircle className="w-4 h-4 flex-shrink-0" />
                   <span>Q&A</span>

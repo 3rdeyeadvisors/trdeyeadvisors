@@ -105,28 +105,28 @@ export const EnhancedMarkdownRenderer = ({ content, heroImage }: EnhancedMarkdow
           remarkPlugins={[remarkGfm]}
           components={{
             h1: ({ node, ...props }) => (
-              <h1 className="text-3xl md:text-4xl font-consciousness font-bold text-foreground mb-6 mt-8" {...props} />
+              <h1 className="text-3xl md:text-4xl font-consciousness font-bold text-foreground mb-3 mt-8 break-words" {...props} />
             ),
             h2: ({ node, ...props }) => (
-              <h2 className="text-2xl md:text-3xl font-consciousness font-semibold text-foreground mb-4 mt-6" {...props} />
+              <h2 className="text-2xl md:text-3xl font-consciousness font-semibold text-foreground mb-3 mt-6 break-words" {...props} />
             ),
             h3: ({ node, ...props }) => (
-              <h3 className="text-xl md:text-2xl font-consciousness font-semibold text-foreground mb-3 mt-4" {...props} />
+              <h3 className="text-xl md:text-2xl font-consciousness font-semibold text-foreground mb-3 mt-4 break-words" {...props} />
             ),
             h4: ({ node, ...props }) => (
-              <h4 className="text-lg md:text-xl font-consciousness font-medium text-foreground mb-2 mt-3" {...props} />
+              <h4 className="text-lg md:text-xl font-consciousness font-medium text-foreground mb-3 mt-3 break-words" {...props} />
             ),
             p: ({ node, ...props }) => (
-              <p className="text-base text-foreground mb-4 leading-relaxed font-system" {...props} />
+              <p className="text-base text-foreground mb-4 leading-relaxed font-system break-words" {...props} />
             ),
             ul: ({ node, ...props }) => (
-              <ul className="list-disc list-inside mb-4 space-y-2 text-foreground ml-4" {...props} />
+              <ul className="list-disc mb-4 space-y-1 text-foreground pl-5" {...props} />
             ),
             ol: ({ node, ...props }) => (
-              <ol className="list-decimal list-inside mb-4 space-y-2 text-foreground ml-4" {...props} />
+              <ol className="list-decimal mb-4 space-y-1 text-foreground pl-5" {...props} />
             ),
             li: ({ node, ...props }) => (
-              <li className="text-base leading-relaxed font-system" {...props} />
+              <li className="text-base leading-relaxed font-system break-words" {...props} />
             ),
             blockquote: ({ node, ...props }) => (
               <Card className="my-4 border-l-4 border-primary">
@@ -159,9 +159,9 @@ export const EnhancedMarkdownRenderer = ({ content, heroImage }: EnhancedMarkdow
   };
 
   return (
-    <div className="prose prose-invert max-w-none">
+    <div className="prose prose-invert max-w-none px-4 py-4 sm:px-6 space-y-4">
       {heroImage && (
-        <div className="w-full mb-8 rounded-lg overflow-hidden">
+        <div className="w-full mb-8 rounded-lg overflow-hidden -mx-4 sm:-mx-6">
           <img 
             src={heroImage} 
             alt="Course module hero" 

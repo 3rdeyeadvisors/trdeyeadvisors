@@ -311,48 +311,49 @@ export const CommentsSection = ({ courseId, moduleId }: CommentsSectionProps) =>
   }
 
   return (
-    <Card className="p-6">
-      <div className="flex items-center gap-2 mb-6">
-        <MessageCircle className="w-5 h-5 text-primary" />
-        <h3 className="text-lg font-consciousness font-semibold">
-          Discussion ({comments.length})
-        </h3>
-      </div>
-
-      {/* Add Comment */}
-      {user && (
-        <div className="mb-6 space-y-3">
-          <Textarea
-            placeholder="Share your thoughts or ask a question..."
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            className="min-h-[100px]"
-          />
-          <div className="flex justify-end">
-            <Button
-              onClick={handleSubmitComment}
-              disabled={!newComment.trim() || submitting}
-              className="font-consciousness"
-            >
-              <Send className="w-4 h-4 mr-2" />
-              {submitting ? "Posting..." : "Post Comment"}
-            </Button>
-          </div>
+    <Card>
+      <div className="space-y-3 px-4 py-4 sm:px-6">
+        <div className="flex items-center gap-2">
+          <MessageCircle className="w-5 h-5 text-primary" />
+          <h3 className="text-lg font-consciousness font-semibold">
+            Discussion ({comments.length})
+          </h3>
         </div>
-      )}
 
-      {/* Comments List */}
-      <div className="space-y-4">
-        {comments.length === 0 ? (
-          <div className="text-center py-8 text-muted-foreground">
-            <MessageCircle className="w-12 h-12 mx-auto mb-3 opacity-50" />
-            <p className="font-consciousness">No comments yet. Be the first to start the discussion!</p>
+        {/* Add Comment */}
+        {user && (
+          <div className="space-y-3">
+            <Textarea
+              placeholder="Share your thoughts or ask a question..."
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              className="min-h-[100px] text-sm"
+            />
+            <div className="flex justify-end">
+              <Button
+                onClick={handleSubmitComment}
+                disabled={!newComment.trim() || submitting}
+                className="font-consciousness h-11"
+              >
+                <Send className="w-4 h-4 mr-2" />
+                {submitting ? "Posting..." : "Post Comment"}
+              </Button>
+            </div>
           </div>
-        ) : (
+        )}
+
+        {/* Comments List */}
+        <div className="space-y-4 pt-2">
+          {comments.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              <MessageCircle className="w-12 h-12 mx-auto mb-3 opacity-50" />
+              <p className="font-consciousness text-sm">No comments yet. Be the first to start the discussion!</p>
+            </div>
+          ) : (
           comments.map((comment) => (
-            <Card key={comment.id} className="p-4 bg-muted/20">
-              <div className="flex items-start gap-3">
-                <Avatar className="w-8 h-8">
+            <Card key={comment.id} className="p-3 sm:p-4 bg-muted/20">
+              <div className="flex items-start gap-2 sm:gap-3">
+                <Avatar className="w-8 h-8 flex-shrink-0">
                   <AvatarFallback className="text-xs">
                     {comment.profiles?.display_name?.charAt(0).toUpperCase() || "U"}
                   </AvatarFallback>
@@ -447,6 +448,7 @@ export const CommentsSection = ({ courseId, moduleId }: CommentsSectionProps) =>
             </Card>
           ))
         )}
+        </div>
       </div>
     </Card>
   );
