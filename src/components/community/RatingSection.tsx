@@ -195,20 +195,20 @@ export const RatingSection = ({ courseId, moduleId }: RatingSectionProps) => {
   };
 
   return (
-    <Card className="p-6">
-      <div className="flex items-center gap-2 mb-6">
-        <TrendingUp className="w-5 h-5 text-primary" />
-        <h3 className="text-lg font-consciousness font-semibold">
-          {moduleId ? "Module Rating" : "Course Rating"}
-        </h3>
-      </div>
+    <Card>
+      <div className="px-4 py-4 sm:px-6 space-y-4">
+        <div className="flex items-center gap-2">
+          <TrendingUp className="w-5 h-5 text-primary" />
+          <h3 className="text-lg font-consciousness font-semibold">
+            {moduleId ? "Module Rating" : "Course Rating"}
+          </h3>
+        </div>
 
-      {/* Rating Overview */}
-      {ratingData.totalRatings > 0 && (
-        <div className="mb-6 p-4 bg-muted/20 rounded-lg">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <div className="flex items-center gap-2 mb-1">
+        {/* Rating Overview */}
+        {ratingData.totalRatings > 0 && (
+          <div className="p-4 bg-muted/20 rounded-lg">
+            <div className="flex flex-col items-center text-center mb-4">
+              <div className="flex items-center justify-center gap-2 mb-1">
                 <span className="text-2xl font-consciousness font-bold">
                   {ratingData.averageRating}
                 </span>
@@ -218,75 +218,79 @@ export const RatingSection = ({ courseId, moduleId }: RatingSectionProps) => {
                 Based on {ratingData.totalRatings} rating{ratingData.totalRatings !== 1 ? 's' : ''}
               </p>
             </div>
-          </div>
 
-          {/* Rating Distribution */}
-          <div className="space-y-2">
-            {[5, 4, 3, 2, 1].map((star) => {
-              const count = ratingData.distribution[star] || 0;
-              const percentage = ratingData.totalRatings > 0 ? (count / ratingData.totalRatings) * 100 : 0;
-              
-              return (
-                <div key={star} className="flex items-center gap-2 text-sm">
-                  <span className="w-8">{star}★</span>
-                  <div className="flex-1 bg-muted rounded-full h-2">
-                    <div
-                      className="bg-warning rounded-full h-2 transition-all"
-                      style={{ width: `${percentage}%` }}
-                    />
+            {/* Rating Distribution */}
+            <div className="space-y-2">
+              {[5, 4, 3, 2, 1].map((star) => {
+                const count = ratingData.distribution[star] || 0;
+                const percentage = ratingData.totalRatings > 0 ? (count / ratingData.totalRatings) * 100 : 0;
+                
+                return (
+                  <div key={star} className="flex items-center gap-2 text-xs sm:text-sm">
+                    <span className="w-6 sm:w-8 flex-shrink-0">{star}★</span>
+                    <div className="flex-1 bg-muted rounded-full h-2">
+                      <div
+                        className="bg-warning rounded-full h-2 transition-all"
+                        style={{ width: `${percentage}%` }}
+                      />
+                    </div>
+                    <span className="w-6 sm:w-8 text-right text-muted-foreground flex-shrink-0">{count}</span>
                   </div>
-                  <span className="w-8 text-right text-muted-foreground">{count}</span>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* User Rating Form */}
-      {user && (
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-consciousness font-medium mb-2">
-              {ratingData.userRating ? "Update your rating:" : "Rate this content:"}
-            </label>
-            {renderStars(selectedRating, true, "w-6 h-6")}
+        {/* User Rating Form */}
+        {user && (
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-consciousness font-medium mb-2">
+                {ratingData.userRating ? "Update your rating:" : "Rate this content:"}
+              </label>
+              <div className="flex justify-center">
+                {renderStars(selectedRating, true, "w-6 h-6")}
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-consciousness font-medium mb-2">
+                Review (optional):
+              </label>
+              <Textarea
+                placeholder="Share your thoughts about this content..."
+                value={review}
+                onChange={(e) => setReview(e.target.value)}
+                className="min-h-[80px] text-sm"
+              />
+            </div>
+
+            <Button
+              onClick={handleSubmitRating}
+              disabled={selectedRating === 0 || submitting}
+              className="font-consciousness w-full h-11"
+            >
+              {submitting ? "Submitting..." : ratingData.userRating ? "Update Rating" : "Submit Rating"}
+            </Button>
+
+            {ratingData.userRating && (
+              <div className="text-center">
+                <Badge variant="outline" className="text-xs">
+                  You rated this {ratingData.userRating.rating}/5 stars
+                </Badge>
+              </div>
+            )}
           </div>
+        )}
 
-          <div>
-            <label className="block text-sm font-consciousness font-medium mb-2">
-              Review (optional):
-            </label>
-            <Textarea
-              placeholder="Share your thoughts about this content..."
-              value={review}
-              onChange={(e) => setReview(e.target.value)}
-              className="min-h-[80px]"
-            />
+        {!user && ratingData.totalRatings === 0 && (
+          <div className="text-center py-6 text-muted-foreground">
+            <Star className="w-12 h-12 mx-auto mb-3 opacity-50" />
+            <p className="font-consciousness text-sm">No ratings yet. Sign in to be the first to rate this content!</p>
           </div>
-
-          <Button
-            onClick={handleSubmitRating}
-            disabled={selectedRating === 0 || submitting}
-            className="font-consciousness"
-          >
-            {submitting ? "Submitting..." : ratingData.userRating ? "Update Rating" : "Submit Rating"}
-          </Button>
-
-          {ratingData.userRating && (
-            <Badge variant="outline" className="ml-2">
-              You rated this {ratingData.userRating.rating}/5 stars
-            </Badge>
-          )}
-        </div>
-      )}
-
-      {!user && ratingData.totalRatings === 0 && (
-        <div className="text-center py-6 text-muted-foreground">
-          <Star className="w-12 h-12 mx-auto mb-3 opacity-50" />
-          <p className="font-consciousness">No ratings yet. Sign in to be the first to rate this content!</p>
-        </div>
-      )}
+        )}
+      </div>
     </Card>
   );
 };
