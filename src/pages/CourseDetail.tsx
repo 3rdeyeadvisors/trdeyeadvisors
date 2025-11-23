@@ -378,21 +378,42 @@ const CourseDetail = () => {
         </div>
 
         {/* Module Navigation Toggle */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
-            <h2 className="text-2xl font-consciousness font-semibold text-foreground">
+        <div className="flex flex-col gap-3 mb-6 px-4 sm:px-6">
+          {/* Title and Metrics Row */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <h2 className="text-base sm:text-2xl font-consciousness font-semibold text-foreground whitespace-normal">
               Course Modules
             </h2>
-            <ParticipantTracker contentType="course" contentId={courseId || '0'} />
+            <div className="flex items-center gap-3">
+              <ParticipantTracker contentType="course" contentId={courseId || '0'} />
+            </div>
           </div>
-          <Button
-            variant="outline"
-            onClick={() => setShowEnhancedNav(!showEnhancedNav)}
-            className="font-consciousness"
-          >
-            <Grid3X3 className="w-4 h-4 mr-2" />
-            {showEnhancedNav ? "Simple View" : "Enhanced View"}
-          </Button>
+          
+          {/* View Toggle */}
+          <div className="flex w-full rounded-lg bg-background/40 border border-border/40 p-1 gap-2">
+            <button
+              onClick={() => setShowEnhancedNav(true)}
+              className={`flex-1 inline-flex items-center justify-center rounded-md px-3 py-2 text-xs sm:text-sm font-medium font-consciousness transition-colors ${
+                showEnhancedNav
+                  ? 'bg-primary text-primary-foreground'
+                  : 'text-muted-foreground bg-transparent'
+              }`}
+            >
+              <Grid3X3 className="w-4 h-4 mr-2 flex-shrink-0" />
+              <span className="whitespace-nowrap">Enhanced View</span>
+            </button>
+            <button
+              onClick={() => setShowEnhancedNav(false)}
+              className={`flex-1 inline-flex items-center justify-center rounded-md px-3 py-2 text-xs sm:text-sm font-medium font-consciousness transition-colors ${
+                !showEnhancedNav
+                  ? 'bg-primary text-primary-foreground'
+                  : 'text-muted-foreground bg-transparent'
+              }`}
+            >
+              <Grid3X3 className="w-4 h-4 mr-2 flex-shrink-0" />
+              <span className="whitespace-nowrap">Simple View</span>
+            </button>
+          </div>
         </div>
 
         {/* Enhanced or Simple Module Navigation */}
