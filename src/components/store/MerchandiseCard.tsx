@@ -146,12 +146,12 @@ export function MerchandiseCard({ product, onAddToCart, isInCart }: MerchandiseC
       </div>
 
       {/* Product Info */}
-      <div className="p-2 md:p-4 flex flex-col flex-1">
+      <div className="p-4 sm:p-4 flex flex-col flex-1">
         {/* Product Name - Clickable */}
-        <div className="mb-2">
+        <div className="mb-3">
           <h3 
             onClick={handleCardClick}
-            className="text-xs md:text-base font-consciousness font-semibold mb-2 line-clamp-2 min-h-[2rem] md:min-h-[2.5rem] cursor-pointer hover:text-primary transition-colors text-center"
+            className="text-sm sm:text-base font-consciousness font-semibold mb-2 line-clamp-2 min-h-[2.5rem] sm:min-h-[3rem] cursor-pointer hover:text-primary transition-colors text-left leading-tight"
           >
             {product.title}
           </h3>

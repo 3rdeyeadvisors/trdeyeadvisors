@@ -137,22 +137,22 @@ export const CourseCard = ({ course, index, onStartCourse, onAuthRequired }: Cou
 
   return (
     <Card 
-      className="p-6 bg-card/60 border-border hover:border-primary/40 transition-all duration-cosmic hover:shadow-consciousness group"
+      className="p-4 sm:p-6 bg-card/60 border-border hover:border-primary/40 transition-all duration-cosmic hover:shadow-consciousness group w-full"
       style={{ animationDelay: `${index * 0.1}s` }}
     >
-      <div className="flex items-start justify-between mb-4">
-        <course.icon className="w-8 h-8 text-primary group-hover:text-primary-glow transition-colors" />
-        <Badge className={getCategoryColor(course.category)}>
+      <div className="flex flex-col sm:flex-row items-start justify-between gap-3 sm:gap-0 mb-4">
+        <course.icon className="w-10 h-10 sm:w-8 sm:h-8 text-primary group-hover:text-primary-glow transition-colors" />
+        <Badge className={`${getCategoryColor(course.category)} text-sm px-3 py-1`}>
           {course.category === "free" ? "Free" : 
            course.category === "paid" ? course.price : "Tool"}
         </Badge>
       </div>
       
-      <h3 className="text-xl font-consciousness font-semibold text-foreground mb-3">
+      <h3 className="text-lg sm:text-xl font-consciousness font-semibold text-foreground mb-3 leading-tight">
         {course.title}
       </h3>
       
-      <p className="text-muted-foreground font-consciousness mb-4 leading-relaxed">
+      <p className="text-sm sm:text-base text-muted-foreground font-consciousness mb-4 leading-relaxed">
         {course.description}
       </p>
 
@@ -164,18 +164,16 @@ export const CourseCard = ({ course, index, onStartCourse, onAuthRequired }: Cou
       )}
       
       <div className="flex flex-col gap-3">
-        <div className="flex justify-center">
-          <Button 
-            variant={course.category === "paid" ? "cosmic" : "awareness"}
-            size="sm"
-            className="font-consciousness w-full sm:w-auto"
-            onClick={handleStartCourse}
-            disabled={isMobile || isCheckingAccess || isPurchasing}
-          >
-            {getButtonIcon()}
-            {getButtonText()}
-          </Button>
-        </div>
+        <Button 
+          variant={course.category === "paid" ? "cosmic" : "awareness"}
+          size="default"
+          className="font-consciousness w-full h-11"
+          onClick={handleStartCourse}
+          disabled={isMobile || isCheckingAccess || isPurchasing}
+        >
+          {getButtonIcon()}
+          {getButtonText()}
+        </Button>
         <div className="text-center">
           <span className="text-sm text-muted-foreground font-system">
             {course.duration}
