@@ -656,17 +656,17 @@ const Raffles = () => {
           </Card>
         ) : (
           <>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 w-full lg:items-start">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 lg:gap-8 w-full lg:items-start">
                 {/* Raffle Details */}
-                <Card className="w-full overflow-hidden lg:h-full">
-              <CardHeader className="text-center px-4">
-                <CardTitle className="flex items-center justify-center gap-2 text-lg sm:text-xl">
-                  <Trophy className="w-5 h-5 sm:w-6 sm:h-6 text-warning flex-shrink-0" />
-                  <span className="truncate">Current Raffle</span>
+                <Card className="w-full overflow-hidden">
+              <CardHeader className="text-center px-4 py-4">
+                <CardTitle className="flex flex-col sm:flex-row items-center justify-center gap-2 text-xl md:text-2xl">
+                  <Trophy className="w-6 h-6 text-warning flex-shrink-0" />
+                  <span className="text-center">Current Raffle</span>
                 </CardTitle>
-                <CardDescription className="text-sm">{activeRaffle.title}</CardDescription>
+                <CardDescription className="text-sm md:text-base mt-2">{activeRaffle.title}</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6 text-center px-4 pb-6">
+              <CardContent className="space-y-4 md:space-y-6 text-center px-4 pb-6">
                 {user ? (
                   <>
                     {/* Prize */}
@@ -685,9 +685,9 @@ const Raffles = () => {
 
                     {/* User entries */}
                     <div className="pt-4 border-t">
-                      <div className="flex items-center justify-between">
-                        <h3 className="font-semibold">Your Entries:</h3>
-                        <Badge variant="secondary" className="text-lg px-4 py-1">
+                      <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
+                        <h3 className="font-semibold text-base">Your Entries:</h3>
+                        <Badge variant="secondary" className="text-base sm:text-lg px-3 py-1.5 sm:px-4">
                           <Ticket className="w-4 h-4 mr-2" />
                           {totalEntries}
                         </Badge>
@@ -744,14 +744,14 @@ const Raffles = () => {
 
             {/* Task Checklist - Only show for logged-in users */}
             {user && (
-              <Card className="w-full lg:h-full">
-              <CardHeader>
-                <CardTitle>Entry Requirements</CardTitle>
-                <CardDescription>
+              <Card className="w-full">
+              <CardHeader className="px-4 py-4">
+                <CardTitle className="text-lg md:text-xl">Entry Requirements</CardTitle>
+                <CardDescription className="text-sm">
                   Complete tasks to earn raffle entries
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="px-4 pb-6">
                 <div className="space-y-4">
                     {/* Social Media Verification Section */}
                     <div className="space-y-3 pb-4 border-b border-border">
@@ -780,27 +780,28 @@ const Raffles = () => {
                     <div className="space-y-3">
                       <h3 className="text-sm font-semibold text-muted-foreground">Learning Tasks</h3>
                       
-                      <div className="max-h-[400px] md:max-h-none overflow-y-auto space-y-3 pr-2">
+                      <div className="max-h-[500px] overflow-y-auto space-y-2 md:space-y-3 pr-1">
                       {AUTO_TASKS.map((task) => (
-                        <div key={task.id} className="flex items-start space-x-3 p-3 rounded-lg hover:bg-accent/50 transition-colors">
+                        <div key={task.id} className="flex items-start space-x-2 md:space-x-3 p-2 md:p-3 rounded-lg hover:bg-accent/50 transition-colors">
                           <Checkbox
                             id={task.id}
                             checked={taskCompletion[task.id] || false}
                             onCheckedChange={() => handleTaskToggle(task.id)}
                             disabled={true}
+                            className="mt-0.5 flex-shrink-0"
                           />
-                          <div className="flex-1">
+                          <div className="flex-1 min-w-0">
                             <label
                               htmlFor={task.id}
-                              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                              className="text-sm font-medium leading-snug peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer block break-words"
                             >
                               {task.label}
-                              <Badge variant="outline" className="ml-2 text-xs">
+                              <Badge variant="outline" className="ml-2 text-xs inline-block">
                                 Auto-verified
                               </Badge>
                             </label>
                           </div>
-                          <Badge variant="secondary" className="text-xs">
+                          <Badge variant="secondary" className="text-xs flex-shrink-0">
                             +{task.entries}
                           </Badge>
                         </div>
