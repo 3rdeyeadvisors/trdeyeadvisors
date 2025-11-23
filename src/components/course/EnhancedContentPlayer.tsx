@@ -527,9 +527,43 @@ export const EnhancedContentPlayer = ({
 
       <Separator className="my-6" />
 
-      {/* Mark Complete Button - At end of content */}
-      {!isCompleted && user && (
-        <div className="mb-6">
+      {/* Enhanced Navigation */}
+      <div className="space-y-3">
+        {/* Previous/Next Row */}
+        <div className="flex items-center justify-between gap-3">
+          {hasPrevious ? (
+            <Button 
+              variant="outline" 
+              onClick={onPrevious} 
+              size="lg" 
+              className="flex-1 flex items-center justify-center gap-2 min-h-[44px]"
+            >
+              <ChevronLeft className="w-4 h-4" />
+              <span className="hidden sm:inline">Previous</span>
+              <span className="sm:hidden">Prev</span>
+            </Button>
+          ) : (
+            <div className="flex-1" />
+          )}
+
+          {hasNext ? (
+            <Button 
+              variant="outline"
+              onClick={onNext}
+              size="lg"
+              className="flex-1 flex items-center justify-center gap-2 min-h-[44px]"
+            >
+              <span className="hidden sm:inline">Next</span>
+              <span className="sm:hidden">Next</span>
+              <ChevronRight className="w-4 h-4" />
+            </Button>
+          ) : (
+            <div className="flex-1" />
+          )}
+        </div>
+
+        {/* Mark Complete Button */}
+        {!isCompleted && user && (
           <Button 
             onClick={handleComplete} 
             size="lg" 
@@ -538,41 +572,13 @@ export const EnhancedContentPlayer = ({
             <CheckCircle className="w-5 h-5" />
             <span>Mark Complete</span>
           </Button>
-        </div>
-      )}
-
-      {isCompleted && (
-        <div className="mb-6 p-4 bg-awareness/10 border border-awareness/30 rounded-lg flex items-center justify-center gap-2">
-          <CheckCircle className="w-5 h-5 text-awareness" />
-          <span className="font-consciousness text-awareness font-medium">Module Completed</span>
-        </div>
-      )}
-
-      {/* Enhanced Navigation */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
-        {hasPrevious ? (
-          <Button variant="outline" onClick={onPrevious} size="lg" className="w-full sm:w-auto flex items-center justify-center gap-2 min-h-[44px]">
-            <ChevronLeft className="w-4 h-4" />
-            <span className="hidden sm:inline">Previous Module</span>
-            <span className="sm:hidden">Previous</span>
-          </Button>
-        ) : (
-          <div className="hidden sm:block" />
         )}
 
-        {hasNext ? (
-          <Button 
-            variant={isCompleted ? "default" : "outline"} 
-            onClick={onNext}
-            size="lg"
-            className="w-full sm:w-auto flex items-center justify-center gap-2 min-h-[44px]"
-          >
-            <span className="hidden sm:inline">Next Module</span>
-            <span className="sm:hidden">Next</span>
-            <ChevronRight className="w-4 h-4" />
-          </Button>
-        ) : (
-          <div className="hidden sm:block" />
+        {isCompleted && (
+          <div className="p-4 bg-awareness/10 border border-awareness/30 rounded-lg flex items-center justify-center gap-2">
+            <CheckCircle className="w-5 h-5 text-awareness" />
+            <span className="font-consciousness text-awareness font-medium">Module Completed</span>
+          </div>
         )}
       </div>
     </div>

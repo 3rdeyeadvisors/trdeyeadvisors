@@ -116,7 +116,6 @@ export const CourseCard = ({ course, index, onStartCourse, onAuthRequired }: Cou
   };
 
   const getButtonText = () => {
-    if (isMobile) return "View on Desktop";
     if (!user) return "Start Learning";
     if (isCheckingAccess) return "Checking Access...";
     if (course.category === 'free') return user ? "Continue Learning" : "Start Learning";
@@ -169,11 +168,16 @@ export const CourseCard = ({ course, index, onStartCourse, onAuthRequired }: Cou
           size="default"
           className="font-consciousness w-full h-11"
           onClick={handleStartCourse}
-          disabled={isMobile || isCheckingAccess || isPurchasing}
+          disabled={isCheckingAccess || isPurchasing}
         >
           {getButtonIcon()}
           {getButtonText()}
         </Button>
+        {isMobile && (
+          <p className="text-xs text-muted-foreground text-center mt-2">
+            Desktop-optimized layout recommended
+          </p>
+        )}
         <div className="text-center">
           <span className="text-sm text-muted-foreground font-system">
             {course.duration}
