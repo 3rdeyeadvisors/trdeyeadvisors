@@ -8,11 +8,11 @@ interface KeyTakeawayProps {
 
 export const KeyTakeaway = ({ title = "Key Takeaway", children }: KeyTakeawayProps) => {
   return (
-    <Alert className="border-primary bg-primary/5 p-4 rounded-lg space-y-2">
-      <Lightbulb className="h-4 w-4 text-primary" />
+    <Alert className="border-primary bg-primary/5 px-4 py-4 sm:px-6 sm:py-5 rounded-lg space-y-3 w-full">
+      <Lightbulb className="h-4 w-4 text-primary flex-shrink-0" />
       <AlertDescription>
-        <p className="font-semibold text-primary mb-1 text-sm sm:text-base break-words">{title}</p>
-        <div className="text-foreground text-sm sm:text-base break-words">{children}</div>
+        <p className="font-semibold text-primary mb-3 text-sm sm:text-base break-words">{title}</p>
+        <div className="text-foreground text-sm sm:text-base break-words leading-relaxed">{children}</div>
       </AlertDescription>
     </Alert>
   );
