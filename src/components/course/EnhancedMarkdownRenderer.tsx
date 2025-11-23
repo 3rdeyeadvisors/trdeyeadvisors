@@ -80,11 +80,19 @@ export const EnhancedMarkdownRenderer = ({ content, heroImage }: EnhancedMarkdow
               };
               const Icon = icons[data.type as keyof typeof icons] || Info;
               
+              const alertVariant = data.type === 'warning' ? 'border-destructive bg-destructive/5' : 
+                                   data.type === 'success' ? 'border-success bg-success/5' : 
+                                   'border-accent bg-accent/5';
+              
               return (
                 <div key={index} className="my-6">
-                  <Alert className={`border-${data.type === 'warning' ? 'destructive' : data.type === 'success' ? 'awareness' : 'accent'}`}>
-                    <Icon className="h-4 w-4" />
-                    <AlertDescription>{data.message}</AlertDescription>
+                  <Alert className={`${alertVariant} px-4 py-4 sm:px-6 sm:py-5 w-full`}>
+                    <div className="flex flex-col items-center text-center space-y-3">
+                      <Icon className="h-5 w-5 flex-shrink-0" />
+                      <AlertDescription className="text-sm break-words leading-relaxed w-full">
+                        {data.message}
+                      </AlertDescription>
+                    </div>
                   </Alert>
                 </div>
               );
