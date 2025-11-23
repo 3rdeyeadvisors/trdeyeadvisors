@@ -659,14 +659,14 @@ const Raffles = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 lg:gap-8 w-full lg:items-start">
                 {/* Raffle Details */}
                 <Card className="w-full overflow-hidden">
-              <CardHeader className="text-center px-4 py-4">
-                <CardTitle className="flex flex-col sm:flex-row items-center justify-center gap-2 text-xl md:text-2xl">
+              <CardHeader className="px-4 sm:px-6 py-4 text-center">
+                <CardTitle className="flex flex-col sm:flex-row items-center justify-center gap-2 text-lg sm:text-xl md:text-2xl">
                   <Trophy className="w-6 h-6 text-warning flex-shrink-0" />
-                  <span className="text-center">Current Raffle</span>
+                  <span className="text-center leading-tight">Current Raffle</span>
                 </CardTitle>
                 <CardDescription className="text-sm md:text-base mt-2">{activeRaffle.title}</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4 md:space-y-6 text-center px-4 pb-6">
+              <CardContent className="space-y-4 md:space-y-6 text-center px-4 sm:px-6 pb-6">
                 {user ? (
                   <>
                     {/* Prize */}
@@ -745,13 +745,13 @@ const Raffles = () => {
             {/* Task Checklist - Only show for logged-in users */}
             {user && (
               <Card className="w-full">
-              <CardHeader className="px-4 py-4">
-                <CardTitle className="text-lg md:text-xl">Entry Requirements</CardTitle>
+              <CardHeader className="px-4 sm:px-6 py-4">
+                <CardTitle className="text-lg sm:text-xl">Entry Requirements</CardTitle>
                 <CardDescription className="text-sm">
                   Complete tasks to earn raffle entries
                 </CardDescription>
               </CardHeader>
-              <CardContent className="px-4 pb-6">
+              <CardContent className="px-4 sm:px-6 pb-6">
                 <div className="space-y-4">
                     {/* Social Media Verification Section */}
                     <div className="space-y-3 pb-4 border-b border-border">
