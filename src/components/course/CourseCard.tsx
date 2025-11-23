@@ -174,8 +174,8 @@ export const CourseCard = ({ course, index, onStartCourse, onAuthRequired }: Cou
           {getButtonText()}
         </Button>
         {isMobile && (
-          <p className="text-xs text-muted-foreground text-center mt-2">
-            Desktop-optimized layout recommended
+          <p className="text-xs text-muted-foreground text-center mt-1">
+            Fully usable on mobile. Best experience on desktop.
           </p>
         )}
         <div className="text-center">

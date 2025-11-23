@@ -266,17 +266,17 @@ const Tutorials = () => {
 
           {/* Category Tabs */}
           <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="mb-8">
-            <TabsList className="grid w-full grid-cols-3 mb-8 h-auto gap-2 p-2 bg-card/60">
+            <TabsList className="flex flex-wrap gap-2 w-full p-2 bg-card/60 rounded-lg border border-border justify-center mb-8">
               {Object.entries(videoCategories).map(([key, category]) => {
                 const IconComponent = category.icon;
                 return (
                   <TabsTrigger 
                     key={key} 
                     value={key} 
-                    className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground whitespace-normal sm:whitespace-nowrap"
+                    className="flex items-center gap-2 min-h-[44px] px-4 py-2 rounded-full text-sm whitespace-normal data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:font-semibold"
                   >
                     <IconComponent className="h-4 w-4 shrink-0" />
-                    <span className="text-center sm:text-left leading-tight">{category.title}</span>
+                    <span>{category.title}</span>
                   </TabsTrigger>
                 );
               })}

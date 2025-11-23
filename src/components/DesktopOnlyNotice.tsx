@@ -1,5 +1,4 @@
 import { Monitor } from "lucide-react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 interface DesktopOnlyNoticeProps {
   feature?: string;
@@ -7,13 +6,10 @@ interface DesktopOnlyNoticeProps {
 
 export const DesktopOnlyNotice = ({ feature = "full functionality" }: DesktopOnlyNoticeProps) => {
   return (
-    <Alert className="mb-6">
-      <Monitor className="h-4 w-4" />
-      <AlertTitle>Desktop Experience Required</AlertTitle>
-      <AlertDescription>
-        For the best experience, {feature} is available on desktop and tablet devices only. 
-        You can browse content on mobile, but please switch to a larger screen to interact with courses, tutorials, and raffles.
-      </AlertDescription>
-    </Alert>
+    <div className="text-center py-3 px-4 mb-4 bg-muted/30 rounded-lg border border-border">
+      <p className="text-xs sm:text-sm text-muted-foreground">
+        Fully usable on mobile. For the best experience, we recommend using a desktop or laptop.
+      </p>
+    </div>
   );
 };
