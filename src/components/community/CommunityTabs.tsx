@@ -20,20 +20,27 @@ export const CommunityTabs = ({ courseId, moduleId }: CommunityTabsProps) => {
   
   return (
     <Tabs defaultValue="comments" className="w-full">
-      <TabsList className="grid w-full grid-cols-3 justify-center mx-auto">
-        <TabsTrigger value="comments" className="flex items-center justify-center gap-2 min-h-[44px]">
+      <TabsList className="flex w-full justify-center gap-2 p-2 bg-card/60 rounded-lg border border-border flex-wrap">
+        <TabsTrigger 
+          value="comments" 
+          className="flex items-center justify-center gap-2 min-h-[44px] px-4 py-2 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+        >
           <MessageCircle className="w-4 h-4" />
-          <span className="hidden sm:inline">Discussion</span>
-          <span className="sm:hidden">Chat</span>
+          <span className="text-sm">Discussion</span>
         </TabsTrigger>
-        <TabsTrigger value="rating" className="flex items-center justify-center gap-2 min-h-[44px]">
+        <TabsTrigger 
+          value="rating" 
+          className="flex items-center justify-center gap-2 min-h-[44px] px-4 py-2 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+        >
           <Star className="w-4 h-4" />
-          <span className="hidden sm:inline">Rating</span>
-          <span className="sm:hidden">Rate</span>
+          <span className="text-sm">Rating</span>
         </TabsTrigger>
-        <TabsTrigger value="qa" className="flex items-center justify-center gap-2 min-h-[44px]">
+        <TabsTrigger 
+          value="qa" 
+          className="flex items-center justify-center gap-2 min-h-[44px] px-4 py-2 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+        >
           <HelpCircle className="w-4 h-4" />
-          Q&A
+          <span className="text-sm">Q&A</span>
         </TabsTrigger>
       </TabsList>
       
