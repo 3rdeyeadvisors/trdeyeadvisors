@@ -41,7 +41,6 @@ interface DiscussionReply {
   is_solution: boolean;
   likes_count: number;
   created_at: string;
-  user_liked?: boolean;
 }
 
 interface QADiscussionsProps {
@@ -117,11 +116,7 @@ export const QADiscussions = ({ contentType, contentId, title }: QADiscussionsPr
 
       if (error) throw error;
 
-      // No longer need individual profile lookups - will use batch profiles
-      setReplies((allReplies || []).map(reply => ({
-        ...reply,
-        user_liked: false // TODO: Check if user liked this reply
-      })));
+      setReplies(allReplies || []);
 
       // Increment view count
       await supabase
