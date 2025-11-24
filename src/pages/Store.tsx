@@ -202,8 +202,8 @@ const Store = () => {
         url="https://www.the3rdeyeadvisors.com/store"
         type="website"
       />
-      <div className="py-12 md:py-20 lg:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="py-12 md:py-20 lg:py-24 w-full overflow-x-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-4xl md:text-5xl font-consciousness font-bold text-foreground mb-4">
@@ -215,11 +215,11 @@ const Store = () => {
           </div>
 
           {/* Category Bar */}
-          <div className="mb-8">
-            <div className="flex justify-center gap-4 md:gap-8 px-4">
+          <div className="mb-8 w-full">
+            <div className="flex justify-center gap-2 sm:gap-4 md:gap-8 px-2 sm:px-4 w-full overflow-x-auto">
               <button
                 onClick={() => setActiveCategory("merchandise")}
-                className={`text-base md:text-lg font-consciousness pb-2 px-4 md:px-6 transition-all whitespace-nowrap ${
+                className={`text-sm sm:text-base md:text-lg font-consciousness pb-2 px-3 sm:px-4 md:px-6 transition-all whitespace-nowrap min-h-[44px] touch-manipulation ${
                   activeCategory === "merchandise"
                     ? "text-primary border-b-2 border-primary font-semibold"
                     : "text-muted-foreground hover:text-foreground"
@@ -229,7 +229,7 @@ const Store = () => {
               </button>
               <button
                 onClick={() => setActiveCategory("digital")}
-                className={`text-base md:text-lg font-consciousness pb-2 px-4 md:px-6 transition-all whitespace-nowrap ${
+                className={`text-sm sm:text-base md:text-lg font-consciousness pb-2 px-3 sm:px-4 md:px-6 transition-all whitespace-nowrap min-h-[44px] touch-manipulation ${
                   activeCategory === "digital"
                     ? "text-primary border-b-2 border-primary font-semibold"
                     : "text-muted-foreground hover:text-foreground"

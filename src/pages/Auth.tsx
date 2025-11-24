@@ -380,8 +380,8 @@ const Auth = () => {
       <Helmet>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
-      <div className="min-h-screen flex items-center justify-center bg-gradient-cosmic px-4">
-        <Card className="w-full max-w-md">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-cosmic px-4 py-8 w-full overflow-x-hidden">
+        <Card className="w-full max-w-md mx-auto">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl font-bold">Welcome to 3rdeyeadvisors</CardTitle>
             <CardDescription>

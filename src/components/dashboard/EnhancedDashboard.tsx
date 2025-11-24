@@ -260,24 +260,24 @@ export const EnhancedDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen py-20">
-      <div className="container mx-auto px-4 max-w-6xl">
+    <div className="min-h-screen py-20 w-full overflow-x-hidden">
+      <div className="container mx-auto px-4 max-w-6xl w-full">
         {/* Enhanced Header */}
-        <div className="flex items-center gap-6 mb-8">
-          <Avatar className="w-20 h-20">
+        <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 mb-6 sm:mb-8 w-full">
+          <Avatar className="w-16 h-16 sm:w-20 sm:h-20">
             <AvatarImage src="" />
-            <AvatarFallback className="bg-primary/10 text-primary text-2xl font-consciousness">
+            <AvatarFallback className="bg-primary/10 text-primary text-xl sm:text-2xl font-consciousness">
               {user.email?.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
-          <div className="flex-1">
-            <h1 className="text-4xl font-consciousness font-bold text-foreground mb-2">
+          <div className="flex-1 text-center sm:text-left w-full">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-consciousness font-bold text-foreground mb-2">
               Welcome back!
             </h1>
-            <p className="text-muted-foreground font-consciousness text-lg">
+            <p className="text-muted-foreground font-consciousness text-base sm:text-lg">
               Continue your DeFi learning journey
             </p>
-            <div className="flex items-center gap-4 mt-2">
+            <div className="flex items-center justify-center sm:justify-start gap-3 sm:gap-4 mt-2 flex-wrap">
               <Badge variant="outline" className="text-sm">
                 Level {Math.floor(totalProgress / 25) + 1}
               </Badge>
@@ -290,71 +290,71 @@ export const EnhancedDashboard = () => {
         </div>
 
         {/* Enhanced Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
-          <Card className="p-6 bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
-            <div className="flex items-center gap-3">
-              <BookOpen className="w-8 h-8 text-primary" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6 mb-6 md:mb-8 w-full">
+          <Card className="p-4 sm:p-6 bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <BookOpen className="w-6 h-6 sm:w-8 sm:h-8 text-primary flex-shrink-0" />
               <div>
-                <p className="text-2xl font-consciousness font-bold text-foreground">
+                <p className="text-xl sm:text-2xl font-consciousness font-bold text-foreground">
                   {enrolledCourses}
                 </p>
-                <p className="text-sm text-muted-foreground font-consciousness">
+                <p className="text-xs sm:text-sm text-muted-foreground font-consciousness">
                   Courses Enrolled
                 </p>
               </div>
             </div>
           </Card>
 
-          <Card className="p-6 bg-gradient-to-br from-awareness/10 to-awareness/5 border-awareness/20">
-            <div className="flex items-center gap-3">
-              <Trophy className="w-8 h-8 text-awareness" />
+          <Card className="p-4 sm:p-6 bg-gradient-to-br from-awareness/10 to-awareness/5 border-awareness/20">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <Trophy className="w-6 h-6 sm:w-8 sm:h-8 text-awareness flex-shrink-0" />
               <div>
-                <p className="text-2xl font-consciousness font-bold text-foreground">
+                <p className="text-xl sm:text-2xl font-consciousness font-bold text-foreground">
                   {completedCourses}
                 </p>
-                <p className="text-sm text-muted-foreground font-consciousness">
+                <p className="text-xs sm:text-sm text-muted-foreground font-consciousness">
                   Completed
                 </p>
               </div>
             </div>
           </Card>
 
-          <Card className="p-6 bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
-            <div className="flex items-center gap-3">
-              <Brain className="w-8 h-8 text-accent" />
+          <Card className="p-4 sm:p-6 bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <Brain className="w-6 h-6 sm:w-8 sm:h-8 text-accent flex-shrink-0" />
               <div>
-                <p className="text-2xl font-consciousness font-bold text-foreground">
+                <p className="text-xl sm:text-2xl font-consciousness font-bold text-foreground">
                   {quizStats.passedQuizzes}
                 </p>
-                <p className="text-sm text-muted-foreground font-consciousness">
+                <p className="text-xs sm:text-sm text-muted-foreground font-consciousness">
                   Quizzes Passed
                 </p>
               </div>
             </div>
           </Card>
 
-          <Card className="p-6 bg-card border-border">
-            <div className="flex items-center gap-3">
-              <TrendingUp className="w-8 h-8 text-awareness" />
+          <Card className="p-4 sm:p-6 bg-card border-border">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <TrendingUp className="w-6 h-6 sm:w-8 sm:h-8 text-awareness flex-shrink-0" />
               <div>
-                <p className="text-2xl font-consciousness font-bold text-foreground">
+                <p className="text-xl sm:text-2xl font-consciousness font-bold text-foreground">
                   {quizStats.averageScore}%
                 </p>
-                <p className="text-sm text-muted-foreground font-consciousness">
+                <p className="text-xs sm:text-sm text-muted-foreground font-consciousness">
                   Avg. Quiz Score
                 </p>
               </div>
             </div>
           </Card>
 
-          <Card className="p-6 bg-card border-border">
-            <div className="flex items-center gap-3">
-              <Target className="w-8 h-8 text-accent" />
+          <Card className="p-4 sm:p-6 bg-card border-border">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <Target className="w-6 h-6 sm:w-8 sm:h-8 text-accent flex-shrink-0" />
               <div>
-                <p className="text-2xl font-consciousness font-bold text-foreground">
+                <p className="text-xl sm:text-2xl font-consciousness font-bold text-foreground">
                   {Math.round(totalProgress)}%
                 </p>
-                <p className="text-sm text-muted-foreground font-consciousness">
+                <p className="text-xs sm:text-sm text-muted-foreground font-consciousness">
                   Overall Progress
                 </p>
               </div>
@@ -363,9 +363,9 @@ export const EnhancedDashboard = () => {
         </div>
 
         {/* Progress Overview */}
-        <Card className="p-6 mb-8">
-          <h3 className="text-lg font-consciousness font-semibold mb-4">Weekly Learning Activity</h3>
-          <div className="grid grid-cols-7 gap-4">
+        <Card className="p-4 sm:p-6 mb-6 md:mb-8 w-full overflow-x-auto">
+          <h3 className="text-base sm:text-lg font-consciousness font-semibold mb-3 sm:mb-4">Weekly Learning Activity</h3>
+          <div className="grid grid-cols-7 gap-2 sm:gap-4 min-w-[280px]">
             {weeklyProgress.map((day, index) => (
               <div key={index} className="text-center">
                 <p className="text-sm font-medium mb-2">{day.day}</p>
@@ -384,30 +384,30 @@ export const EnhancedDashboard = () => {
         </Card>
 
         {/* Main Content with Enhanced Tabs */}
-        <Tabs defaultValue="progress" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="progress" className="font-consciousness">
+        <Tabs defaultValue="progress" className="space-y-4 sm:space-y-6 w-full">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 h-auto">
+            <TabsTrigger value="progress" className="font-consciousness text-xs sm:text-sm py-2 sm:py-3">
               Course Progress
             </TabsTrigger>
-            <TabsTrigger value="achievements" className="font-consciousness">
+            <TabsTrigger value="achievements" className="font-consciousness text-xs sm:text-sm py-2 sm:py-3">
               Achievements
             </TabsTrigger>
-            <TabsTrigger value="activity" className="font-consciousness">
+            <TabsTrigger value="activity" className="font-consciousness text-xs sm:text-sm py-2 sm:py-3">
               Recent Activity
             </TabsTrigger>
-            <TabsTrigger value="analytics" className="font-consciousness">
+            <TabsTrigger value="analytics" className="font-consciousness text-xs sm:text-sm py-2 sm:py-3">
               Analytics
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="progress" className="space-y-6">
+          <TabsContent value="progress" className="space-y-4 sm:space-y-6 w-full">
             {/* Continue Learning Section */}
             {inProgress.length > 0 && (
-              <div>
-                <h2 className="text-xl font-consciousness font-semibold text-foreground mb-4">
+              <div className="w-full">
+                <h2 className="text-lg sm:text-xl font-consciousness font-semibold text-foreground mb-3 sm:mb-4">
                   Continue Learning
                 </h2>
-                <div className="grid md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 w-full">
                   {inProgress.map(course => (
                     <Card 
                       key={course.id}
