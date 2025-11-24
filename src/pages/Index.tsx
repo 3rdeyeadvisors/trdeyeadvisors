@@ -1,33 +1,56 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { BookOpen, Wrench, Eye, Code, TrendingUp, Shield } from "lucide-react";
+import { BookOpen, Users, Lightbulb, Repeat, TrendingUp, Globe, Cloud, Rocket, ArrowRight } from "lucide-react";
 import cosmicHeroBg from "@/assets/cosmic-hero-bg.jpg";
 import NewsletterSignup from "@/components/NewsletterSignup";
 
 import SEO from "@/components/SEO";
 
 const Index = () => {
-  const features = [
+  const awarenessSteps = [
     {
-      icon: Eye,
-      title: "Awareness",
-      description: "Break free from traditional financial programming"
+      icon: BookOpen,
+      title: "Learn",
+      description: "Study decentralized systems without hype or confusion"
     },
     {
-      icon: Code,
-      title: "Understanding",
-      description: "Master the mechanics of decentralized protocols"
+      icon: Users,
+      title: "Participate",
+      description: "Engage with the community and real-world protocols"
     },
     {
       icon: TrendingUp,
-      title: "Evolution",
-      description: "Transform your relationship with money and wealth"
+      title: "Earn",
+      description: "Gain rewards for learning and contributing knowledge"
     },
     {
-      icon: Shield,
-      title: "Security",
-      description: "Navigate DeFi safely with proper risk management"
+      icon: Lightbulb,
+      title: "Grow",
+      description: "Expand your awareness and financial understanding"
+    },
+    {
+      icon: Repeat,
+      title: "Repeat",
+      description: "Continue the cycle of conscious evolution"
+    }
+  ];
+
+  const vaultLayers = [
+    {
+      icon: Globe,
+      title: "Earth Vault",
+      description: "Foundation level: Master basic concepts and earn learning rewards. Build your knowledge base through clear, practical education."
+    },
+    {
+      icon: Cloud,
+      title: "Sky Vault",
+      description: "Intermediate level: Deepen your understanding of protocols and earn advanced rewards for comprehension and participation."
+    },
+    {
+      icon: Rocket,
+      title: "Cosmos Vault",
+      description: "Expert level: Achieve mastery of decentralized systems and earn the highest learning rewards for teaching and leading others."
     }
   ];
 
@@ -73,9 +96,7 @@ const Index = () => {
           </div>
           
           <p className="text-xl md:text-2xl text-muted-foreground font-consciousness mb-12 max-w-3xl mx-auto leading-relaxed">
-            This is not financial advice. This is consciousness expansion. 
-            Break free from programmed limitations and discover true financial sovereignty 
-            through decentralized finance education.
+            Understand how decentralized systems really work — without hype, noise, or confusion.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center w-full">
@@ -90,65 +111,65 @@ const Index = () => {
               </Button>
             </Link>
             
-            <Link to="/resources" className="w-full sm:w-auto flex justify-center">
+            <Link to="/raffles" className="w-full sm:w-auto flex justify-center">
               <Button 
                 variant="awareness" 
                 size="lg" 
                 className="text-lg px-8 py-6 font-consciousness animate-consciousness-glow w-full sm:w-auto"
                 style={{ animationDelay: "0.3s" }}
               >
-                <Wrench className="w-6 h-6 mr-3" />
-                Access Utilities
+                <Users className="w-6 h-6 mr-3" />
+                Join the Movement
               </Button>
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Mission Statement */}
+      {/* What is 3EA? */}
       <section className="py-12 md:py-20 lg:py-24 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Card className="p-8 md:p-12 bg-gradient-consciousness border-primary/20 shadow-consciousness max-w-4xl mx-auto hover:shadow-[0_0_30px_hsl(var(--primary)/0.4),0_0_60px_hsl(var(--accent)/0.3)] hover:border-primary/40 transition-all duration-consciousness cursor-pointer group animate-consciousness-glow hover:animate-none">
             <div className="text-center">
               <h2 className="text-2xl md:text-3xl font-consciousness font-bold text-foreground mb-6 group-hover:text-primary-glow transition-colors duration-cosmic">
-                Our Mission
+                What is 3EA?
               </h2>
               <p className="text-lg text-foreground/90 font-consciousness leading-relaxed drop-shadow-sm group-hover:text-foreground transition-colors duration-cosmic">
-                We exist to reprogram the financial consciousness of those ready to evolve beyond 
-                traditional systems. Through education, tools, and resources, we guide you toward 
-                genuine financial sovereignty in the decentralized economy. No hype. No promises. 
-                Only knowledge, awareness, and the tools to rewrite your financial reality.
+                3EA is a conscious financial awareness movement focused on clarity, education, and decentralized participation. 
+                We cut through the noise to help you understand how new financial systems work—not through hype or promises, 
+                but through genuine learning and conscious evolution. This is about awakening awareness and building real knowledge 
+                in a world shifting toward decentralized protocols.
               </p>
             </div>
           </Card>
         </div>
       </section>
 
-      {/* Features Grid */}
+      {/* The Awareness Engine */}
       <section className="py-12 md:py-20 lg:py-24 bg-muted/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12 md:mb-16">
             <h2 className="text-3xl md:text-4xl font-consciousness font-bold text-foreground mb-4">
-              The Path to Financial Consciousness
+              The Awareness Engine
             </h2>
             <p className="text-xl text-muted-foreground font-consciousness max-w-2xl mx-auto">
-              Four pillars that form the foundation of your DeFi education journey
+              A continuous cycle of learning, participation, and growth
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-            {features.map((feature, index) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 md:gap-8">
+            {awarenessSteps.map((step, index) => (
               <Card 
-                key={feature.title}
+                key={step.title}
                 className="p-6 bg-card/60 border-border hover:border-primary/40 transition-all duration-cosmic hover:shadow-consciousness group text-center"
-                style={{ animationDelay: `${index * 0.2}s` }}
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <feature.icon className="w-12 h-12 text-primary group-hover:text-primary-glow transition-colors mx-auto mb-4" />
+                <step.icon className="w-12 h-12 text-primary group-hover:text-primary-glow transition-colors mx-auto mb-4" />
                 <h3 className="text-xl font-consciousness font-semibold text-foreground mb-3">
-                  {feature.title}
+                  {step.title}
                 </h3>
-                <p className="text-muted-foreground font-consciousness">
-                  {feature.description}
+                <p className="text-muted-foreground font-consciousness text-sm">
+                  {step.description}
                 </p>
               </Card>
             ))}
@@ -156,25 +177,95 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Call to Action */}
+      {/* The Vault Layers */}
       <section className="py-12 md:py-20 lg:py-24 bg-background">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-consciousness font-bold text-foreground mb-8">
-            Ready to Begin Your Reprogramming?
-          </h2>
-          <p className="text-lg text-muted-foreground font-consciousness mb-8 max-w-2xl mx-auto">
-            Start with our philosophy, explore our courses, or dive into the resource hub. 
-            The system is waiting to be rewritten.
-          </p>
-          <Link to="/philosophy">
-            <Button variant="system" size="lg" className="font-consciousness">
-              Explore Our Philosophy
-            </Button>
-          </Link>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12 md:mb-16">
+            <h2 className="text-3xl md:text-4xl font-consciousness font-bold text-foreground mb-4">
+              The Vault Layers
+            </h2>
+            <p className="text-xl text-muted-foreground font-consciousness max-w-2xl mx-auto">
+              Earn rewards for learning, not for financial returns
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+            {vaultLayers.map((vault, index) => (
+              <Card 
+                key={vault.title}
+                className="p-8 bg-gradient-consciousness border-primary/20 shadow-consciousness hover:shadow-[0_0_30px_hsl(var(--primary)/0.4),0_0_60px_hsl(var(--accent)/0.3)] hover:border-primary/40 transition-all duration-consciousness group text-center"
+                style={{ animationDelay: `${index * 0.2}s` }}
+              >
+                <vault.icon className="w-16 h-16 text-primary group-hover:text-primary-glow transition-colors mx-auto mb-6" />
+                <h3 className="text-2xl font-consciousness font-bold text-foreground mb-4 group-hover:text-primary-glow transition-colors duration-cosmic">
+                  {vault.title}
+                </h3>
+                <p className="text-foreground/90 font-consciousness leading-relaxed">
+                  {vault.description}
+                </p>
+              </Card>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Newsletter Signup - Mailchimp Connected */}
+      {/* Why This Matters */}
+      <section className="py-12 md:py-20 lg:py-24 bg-muted/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Card className="p-8 md:p-12 bg-card/60 border-border max-w-4xl mx-auto">
+            <div className="text-center">
+              <h2 className="text-2xl md:text-3xl font-consciousness font-bold text-foreground mb-6">
+                Why This Matters
+              </h2>
+              <p className="text-lg text-muted-foreground font-consciousness leading-relaxed mb-6">
+                The world is shifting into new financial systems—decentralized, transparent, and powered by code rather than institutions. 
+                Financial awareness isn't just about making money; it's about understanding the rules of the game and participating consciously.
+              </p>
+              <p className="text-lg text-muted-foreground font-consciousness leading-relaxed">
+                Those who learn how these systems work will navigate the future with clarity and confidence. 
+                Those who don't will remain stuck in outdated patterns. The choice is yours—awaken your awareness or stay programmed.
+              </p>
+            </div>
+          </Card>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section className="py-12 md:py-20 lg:py-24 bg-background">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-consciousness font-bold text-foreground mb-8">
+            Ready to Begin Your Journey?
+          </h2>
+          <p className="text-lg text-muted-foreground font-consciousness mb-8 max-w-2xl mx-auto">
+            Start learning about decentralized systems today. No hype. No confusion. Just clear, conscious education.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center w-full">
+            <Link to="/courses" className="w-full sm:w-auto flex justify-center">
+              <Button 
+                variant="cosmic" 
+                size="lg" 
+                className="text-lg px-8 py-6 font-consciousness w-full sm:w-auto"
+              >
+                <BookOpen className="w-6 h-6 mr-3" />
+                Begin Learning
+              </Button>
+            </Link>
+            
+            <Link to="/tutorials" className="w-full sm:w-auto flex justify-center">
+              <Button 
+                variant="system" 
+                size="lg" 
+                className="text-lg px-8 py-6 font-consciousness w-full sm:w-auto"
+              >
+                <ArrowRight className="w-6 h-6 mr-3" />
+                Explore Tutorials
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Newsletter Signup */}
       <section className="py-12 md:py-20 lg:py-24 bg-muted/10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <NewsletterSignup variant="cosmic" />
