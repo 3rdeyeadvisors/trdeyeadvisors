@@ -485,15 +485,15 @@ const Cart = () => {
   }
 
   return (
-    <div className="min-h-screen py-20">
-      <div className="container mx-auto px-4 mobile-typography-center">
-        <h2 className="text-4xl md:text-5xl font-consciousness font-bold text-foreground mb-8">
+    <div className="min-h-screen py-20 w-full overflow-x-hidden">
+      <div className="container mx-auto px-4 mobile-typography-center w-full max-w-6xl">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-consciousness font-bold text-foreground mb-6 sm:mb-8">
           Shopping Cart
         </h2>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 w-full">
           {/* Cart Items */}
-          <div className="lg:col-span-2 space-y-4">
+          <div className="lg:col-span-2 space-y-3 sm:space-y-4 w-full">
             {items.map((item) => <CartItem key={item.id} item={item} />)}
           </div>
 

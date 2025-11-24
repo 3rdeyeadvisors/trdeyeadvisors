@@ -377,8 +377,8 @@ const Profile = () => {
   const achievements = getAchievements();
 
   return (
-    <div className="min-h-screen py-20">
-      <div className="container mx-auto px-4 max-w-4xl">
+    <div className="min-h-screen py-20 w-full overflow-x-hidden">
+      <div className="container mx-auto px-4 max-w-4xl w-full">
         {/* Profile Header */}
         <Card className="mb-8">
           <CardContent className="p-8">

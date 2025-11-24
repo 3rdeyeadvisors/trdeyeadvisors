@@ -213,8 +213,8 @@ export default function MerchandiseDetail() {
         image={productImages[0]?.src}
       />
       
-      <div className="min-h-screen py-20">
-        <div className="container mx-auto px-4">
+      <div className="min-h-screen py-20 w-full overflow-x-hidden">
+        <div className="container mx-auto px-4 w-full max-w-7xl">
           {/* Back Button */}
           <Button
             variant="ghost"
@@ -226,7 +226,7 @@ export default function MerchandiseDetail() {
           </Button>
 
           {/* Product Detail */}
-          <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-12 w-full">
             {/* Image Gallery */}
             <div className="space-y-4">
               <Card className="overflow-hidden">
@@ -289,9 +289,9 @@ export default function MerchandiseDetail() {
             </div>
 
             {/* Product Info */}
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6 w-full">
               <div>
-                <h1 className="text-3xl md:text-4xl font-consciousness font-bold mb-4">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-consciousness font-bold mb-3 sm:mb-4 break-words">
                   {product.title}
                 </h1>
                 <p className="text-3xl font-consciousness font-bold text-primary">
@@ -351,7 +351,7 @@ export default function MerchandiseDetail() {
               <Button
                 onClick={handleAddToCart}
                 disabled={!selectedVariant || inCart}
-                className="w-full gap-2 h-12 text-base font-consciousness"
+                className="w-full gap-2 h-11 sm:h-12 text-sm sm:text-base font-consciousness touch-manipulation"
                 size="lg"
               >
                 {inCart ? (
