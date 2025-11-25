@@ -1,23 +1,24 @@
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, Circle, Users, Vote, Coins, ArrowLeft, FileText, Shield } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Users, Vote, Coins, FileText, Shield } from 'lucide-react';
 import { toast } from 'sonner';
 import { useIsMobile } from "@/hooks/use-mobile";
 import { DesktopOnlyNotice } from "@/components/DesktopOnlyNotice";
+import { TutorialHeader } from "@/components/course/TutorialHeader";
+import { StepNavigation } from "@/components/course/StepNavigation";
 
 const DaoParticipationTutorial = () => {
-  const navigate = useNavigate();
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const isMobile = useIsMobile();
 
   const steps = [
     {
+      id: 1,
       title: "Understanding DAOs",
+      icon: Users,
+      duration: "5 min",
       description: "Learn the fundamentals of Decentralized Autonomous Organizations",
       content: (
         <div className="space-y-4">
@@ -77,7 +78,10 @@ const DaoParticipationTutorial = () => {
       )
     },
     {
+      id: 2,
       title: "Getting Governance Tokens",
+      icon: Coins,
+      duration: "4 min",
       description: "Acquire tokens to participate in DAO governance",
       content: (
         <div className="space-y-4">
@@ -128,7 +132,10 @@ const DaoParticipationTutorial = () => {
       )
     },
     {
+      id: 3,
       title: "Understanding Proposals",
+      icon: FileText,
+      duration: "6 min",
       description: "Learn how to read and evaluate governance proposals",
       content: (
         <div className="space-y-4">
@@ -193,7 +200,10 @@ const DaoParticipationTutorial = () => {
       )
     },
     {
+      id: 4,
       title: "Voting Process",
+      icon: Vote,
+      duration: "5 min",
       description: "Learn how to cast votes and understand voting mechanisms",
       content: (
         <div className="space-y-4">
@@ -268,7 +278,10 @@ const DaoParticipationTutorial = () => {
       )
     },
     {
+      id: 5,
       title: "Active Participation",
+      icon: Users,
+      duration: "4 min",
       description: "Engage meaningfully in DAO communities and discussions",
       content: (
         <div className="space-y-4">
@@ -348,7 +361,10 @@ const DaoParticipationTutorial = () => {
       )
     },
     {
+      id: 6,
       title: "DAO Security and Best Practices",
+      icon: Shield,
+      duration: "4 min",
       description: "Protect yourself and contribute to DAO security",
       content: (
         <div className="space-y-4">
