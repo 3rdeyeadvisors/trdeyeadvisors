@@ -302,8 +302,40 @@ body, html {
   
   [class*="bg-green"] {
     background-color: hsl(var(--awareness) / 0.1) !important;
+  /* Tutorial and Course Content Scrolling */
+  .tutorial-content-area,
+  .course-content-area {
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: calc(100vh - 400px);
   }
-  
+
+  /* Mobile adjustments */
+  @media (max-width: 768px) {
+    .tutorial-content-area,
+    .course-content-area {
+      max-height: calc(100vh - 300px);
+    }
+  }
+
+  /* Module title boxes - consistent styling */
+  .module-title-box {
+    @apply p-4 md:p-6 rounded-lg border bg-card transition-all;
+  }
+
+  .module-title-box.completed {
+    @apply bg-awareness/5 border-awareness/30;
+  }
+
+  .module-title-box.active {
+    @apply border-primary/50 ring-2 ring-primary/20;
+  }
+
+  .module-title-box:not(.completed):hover {
+    @apply border-primary/30 shadow-md;
+  }
+}
+
   [class*="text-green"] {
     color: hsl(var(--awareness)) !important;
   }

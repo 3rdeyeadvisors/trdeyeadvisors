@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { KeyTakeaway } from "@/components/course/KeyTakeaway";
 import { DidYouKnow } from "@/components/course/DidYouKnow";
 import { StepBlock } from "@/components/course/StepBlock";
+import { TutorialHeader } from "@/components/course/TutorialHeader";
+import { StepNavigation } from "@/components/course/StepNavigation";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import scamHero from "@/assets/tutorials/scam-detection-hero.jpg";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";

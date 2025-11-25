@@ -31,6 +31,8 @@ import { useAuth } from "@/components/auth/AuthProvider";
 import { KeyTakeaway } from "@/components/course/KeyTakeaway";
 import { DidYouKnow } from "@/components/course/DidYouKnow";
 import { StepBlock } from "@/components/course/StepBlock";
+import { TutorialHeader } from "@/components/course/TutorialHeader";
+import { StepNavigation } from "@/components/course/StepNavigation";
 import walletHeroImage from "@/assets/tutorials/wallet-setup-hero.jpg";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { DesktopOnlyNotice } from "@/components/DesktopOnlyNotice";
@@ -343,12 +345,12 @@ const WalletSetupTutorial = () => {
         ]}
       />
       <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
-      <div className="container mx-auto px-4 py-8 mobile-typography-center">
+      <div className="container mx-auto px-4 py-6 md:py-8">
         {/* Authentication Notice */}
         {!user && (
           <Alert className="mb-6 border-primary/50 bg-primary/5">
             <Lock className="h-4 w-4" />
-            <AlertDescription className="flex items-center justify-between gap-4">
+            <AlertDescription className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
               <span>Sign in to track your progress and interact with tutorial steps</span>
               <Button size="sm" onClick={() => navigate('/auth')} className="shrink-0">
                 Sign In
@@ -357,18 +359,19 @@ const WalletSetupTutorial = () => {
           </Alert>
         )}
 
-        {/* Back to Tutorials Button */}
-        <div className="mb-6">
-          <Link to="/tutorials">
-            <Button variant="ghost" className="gap-2 hover:bg-muted">
-              <ArrowLeft className="h-4 w-4" />
-              Back to Tutorials
-            </Button>
-          </Link>
-        </div>
+        {/* Tutorial Header with Back Button */}
+        <TutorialHeader
+          title="Wallet Setup & Security"
+          icon={Wallet}
+          difficulty="Beginner"
+          duration="15 min"
+          currentStep={currentStep}
+          totalSteps={totalSteps}
+          completedSteps={completedSteps}
+        />
 
         {/* Hero Image */}
-        <div className="mb-8 rounded-lg overflow-hidden">
+        <div className="mb-6 md:mb-8 rounded-lg overflow-hidden">
           <img 
             src={walletHeroImage} 
             alt="Cryptocurrency wallet setup with blockchain technology" 
@@ -379,50 +382,18 @@ const WalletSetupTutorial = () => {
         {/* Desktop Only Notice for Mobile Users */}
         {isMobile && <DesktopOnlyNotice feature="interactive tutorial steps and wallet setup guidance" />}
 
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="p-2 rounded-lg bg-primary/10">
-              <Wallet className="h-6 w-6 text-primary" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold">Wallet Setup & Security</h1>
-              <p className="text-muted-foreground">Complete guide to setting up MetaMask safely for 2025</p>
-            </div>
-          </div>
-
-          {/* Progress */}
-          <div className="space-y-2">
-            <div className="flex justify-between text-sm">
-              <span>Step {currentStep} of {totalSteps}</span>
-              <span>{Math.round(progress)}% Complete</span>
-            </div>
-            <Progress value={progress} className="h-2" />
-          </div>
-        </div>
-
         {/* Step Navigation */}
-        <div className="flex flex-wrap gap-2 mb-8">
-          {steps.map((step) => {
-            const StepIcon = step.icon;
-            const completed = isStepCompleted(step.id);
-            const current = step.id === currentStep;
-            
-            return (
-              <Button
-                key={step.id}
-                variant={current ? "default" : completed ? "secondary" : "outline"}
-                size="sm"
-                onClick={() => setCurrentStep(step.id)}
-                className={`flex items-center gap-2 ${completed ? "bg-awareness/10 text-awareness hover:bg-awareness/20 border-awareness" : ""}`}
-              >
-                <StepIcon className="h-4 w-4" />
-                <span className="hidden sm:inline">{step.title}</span>
-                <span className="sm:hidden">{step.id}</span>
-                {completed && <CheckCircle className="h-3 w-3" />}
-              </Button>
-            );
-          })}
+        <div className="mb-6 md:mb-8">
+          <StepNavigation
+            steps={steps}
+            currentStep={currentStep}
+            completedSteps={completedSteps}
+            onStepChange={setCurrentStep}
+            onPrevious={handlePrevious}
+            onNext={handleNext}
+            onMarkComplete={handleStepComplete}
+            isAuthenticated={!!user}
+          />
         </div>
 
         {/* Current Step Content */}
@@ -722,36 +693,7 @@ const WalletSetupTutorial = () => {
                 </div>
               )}
 
-              {/* Step Completion */}
-              <div className="flex items-center justify-between pt-6 border-t">
-                <Button
-                  variant="outline"
-                  onClick={handlePrevious}
-                  disabled={currentStep === 1}
-                >
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Previous
-                </Button>
-
-                <div className="flex gap-2">
-                  {!isStepCompleted(currentStep) && (
-                    <Button
-                      variant="secondary"
-                      onClick={handleStepComplete}
-                    >
-                      <CheckCircle className="h-4 w-4 mr-2" />
-                      Mark Complete
-                    </Button>
-                  )}
-                  
-                  <Button
-                    onClick={handleNext}
-                  >
-                    {currentStep === totalSteps ? "Finish Tutorial" : "Next Step"}
-                    <ArrowRight className="h-4 w-4 ml-2" />
-                  </Button>
-                </div>
-              </div>
+              {/* Step Completion - Removed, using StepNavigation component instead */}
             </CardContent>
           </Card>
         )}
