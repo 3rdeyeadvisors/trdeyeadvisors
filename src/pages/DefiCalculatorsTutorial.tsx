@@ -1,13 +1,19 @@
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { 
+  ArrowLeft,
+  ArrowRight,
   Calculator, 
   TrendingUp, 
-  AlertTriangle, 
+  AlertTriangle,
+  CheckCircle,
   DollarSign,
   Percent,
   Clock,
@@ -18,6 +24,7 @@ import {
   Settings
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Link } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { DesktopOnlyNotice } from "@/components/DesktopOnlyNotice";
 import { TutorialHeader } from "@/components/course/TutorialHeader";

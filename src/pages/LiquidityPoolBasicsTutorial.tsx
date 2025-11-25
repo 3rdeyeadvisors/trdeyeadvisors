@@ -1,10 +1,16 @@
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { 
+  ArrowLeft,
+  ArrowRight,
   Droplets,
   TrendingUp, 
-  AlertTriangle, 
+  AlertTriangle,
+  CheckCircle,
   DollarSign,
   Shield,
   Calculator,
@@ -12,6 +18,7 @@ import {
   Target
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Link } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { DesktopOnlyNotice } from "@/components/DesktopOnlyNotice";
 import { TutorialHeader } from "@/components/course/TutorialHeader";
