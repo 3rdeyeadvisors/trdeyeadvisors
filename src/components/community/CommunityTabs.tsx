@@ -20,39 +20,39 @@ export const CommunityTabs = ({ courseId, moduleId }: CommunityTabsProps) => {
       </div>
       
       <Tabs defaultValue="comments" className="w-full">
-        <TabsList className="mt-4 flex flex-wrap justify-center w-full rounded-lg bg-background/40 border border-border/40 p-2 gap-2">
+        <TabsList className="mt-6 mb-4 flex flex-wrap justify-center w-full rounded-lg bg-card/60 border border-border p-3 gap-3">
           <TabsTrigger 
             value="comments" 
-            className="inline-flex items-center justify-center gap-2 rounded-md px-4 py-2.5 min-h-[44px] text-xs sm:text-sm font-medium text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-transparent"
+            className="inline-flex items-center justify-center gap-2 rounded-md px-5 py-3 min-h-[44px] text-sm font-medium data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-transparent data-[state=inactive]:text-muted-foreground hover:text-foreground transition-colors"
           >
             <MessageCircle className="w-4 h-4 flex-shrink-0" />
             <span>Discussion</span>
           </TabsTrigger>
           <TabsTrigger 
             value="rating" 
-            className="inline-flex items-center justify-center gap-2 rounded-md px-4 py-2.5 min-h-[44px] text-xs sm:text-sm font-medium text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-transparent"
+            className="inline-flex items-center justify-center gap-2 rounded-md px-5 py-3 min-h-[44px] text-sm font-medium data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-transparent data-[state=inactive]:text-muted-foreground hover:text-foreground transition-colors"
           >
             <Star className="w-4 h-4 flex-shrink-0" />
             <span>Rating</span>
           </TabsTrigger>
           <TabsTrigger 
             value="qa" 
-            className="inline-flex items-center justify-center gap-2 rounded-md px-4 py-2.5 min-h-[44px] text-xs sm:text-sm font-medium text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-transparent"
+            className="inline-flex items-center justify-center gap-2 rounded-md px-5 py-3 min-h-[44px] text-sm font-medium data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-transparent data-[state=inactive]:text-muted-foreground hover:text-foreground transition-colors"
           >
             <HelpCircle className="w-4 h-4 flex-shrink-0" />
             <span>Q&A</span>
           </TabsTrigger>
         </TabsList>
         
-        <TabsContent value="comments" className="mt-0">
+        <TabsContent value="comments" className="mt-6 space-y-4">
           <CommentsSection courseId={courseId} moduleId={moduleId} />
         </TabsContent>
         
-        <TabsContent value="rating" className="mt-0">
+        <TabsContent value="rating" className="mt-6 space-y-4">
           <RatingSection courseId={courseId} moduleId={moduleId} />
         </TabsContent>
         
-        <TabsContent value="qa" className="mt-0">
+        <TabsContent value="qa" className="mt-6 space-y-4">
           <QASection courseId={courseId} moduleId={moduleId} />
         </TabsContent>
       </Tabs>
