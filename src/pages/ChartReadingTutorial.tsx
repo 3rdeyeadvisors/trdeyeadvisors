@@ -1,23 +1,24 @@
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, Circle, TrendingUp, BarChart3, LineChart, ArrowLeft, Activity } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { TrendingUp, BarChart3, LineChart, Activity } from 'lucide-react';
 import { toast } from 'sonner';
 import { useIsMobile } from "@/hooks/use-mobile";
 import { DesktopOnlyNotice } from "@/components/DesktopOnlyNotice";
+import { TutorialHeader } from "@/components/course/TutorialHeader";
+import { StepNavigation } from "@/components/course/StepNavigation";
 
 const ChartReadingTutorial = () => {
-  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const isMobile = useIsMobile();
 
   const steps = [
     {
+      id: 0,
       title: "Chart Types and Timeframes",
+      icon: LineChart,
+      duration: "5 min",
       description: "Understanding different chart types and when to use them",
       content: (
         <div className="space-y-4">
@@ -69,7 +70,10 @@ const ChartReadingTutorial = () => {
       )
     },
     {
+      id: 1,
       title: "Support and Resistance Levels",
+      icon: BarChart3,
+      duration: "4 min",
       description: "Identify key price levels that act as barriers",
       content: (
         <div className="space-y-4">
@@ -107,7 +111,10 @@ const ChartReadingTutorial = () => {
       )
     },
     {
+      id: 2,
       title: "Trend Analysis",
+      icon: TrendingUp,
+      duration: "5 min",
       description: "Identify and follow market trends",
       content: (
         <div className="space-y-4">
@@ -167,7 +174,10 @@ const ChartReadingTutorial = () => {
       )
     },
     {
+      id: 3,
       title: "Technical Indicators",
+      icon: Activity,
+      duration: "6 min",
       description: "Using indicators to confirm signals and timing",
       content: (
         <div className="space-y-4">
@@ -221,7 +231,10 @@ const ChartReadingTutorial = () => {
       )
     },
     {
+      id: 4,
       title: "Chart Patterns",
+      icon: BarChart3,
+      duration: "5 min",
       description: "Recognize common patterns that predict price movements",
       content: (
         <div className="space-y-4">
@@ -287,7 +300,10 @@ const ChartReadingTutorial = () => {
       )
     },
     {
+      id: 5,
       title: "Risk Management Through Charts",
+      icon: LineChart,
+      duration: "4 min",
       description: "Use charts to manage position size and risk",
       content: (
         <div className="space-y-4">
@@ -357,121 +373,60 @@ const ChartReadingTutorial = () => {
     }
   };
 
-  const progress = (completedSteps.length / steps.length) * 100;
+  const handleNext = () => {
+    if (currentStep < steps.length - 1) {
+      setCurrentStep(currentStep + 1);
+    } else {
+      handleStepComplete(currentStep);
+      const completed = JSON.parse(localStorage.getItem('completedTutorials') || '[]');
+      if (!completed.includes('chart-reading')) {
+        completed.push('chart-reading');
+        localStorage.setItem('completedTutorials', JSON.stringify(completed));
+      }
+      toast.success("Tutorial Complete! 🎉");
+      setTimeout(() => window.location.href = "/tutorials", 1500);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
 
   return (
     <div className="container mx-auto px-4 py-8 mobile-typography-center">
-      <div className="mb-6">
-        <Button 
-          variant="ghost" 
-          onClick={() => navigate('/tutorials')}
-          className="mb-4"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Tutorials
-        </Button>
-        
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h1 className="text-3xl font-bold">Advanced Chart Reading</h1>
-            <p className="text-muted-foreground">Master technical analysis for better trading decisions</p>
-          </div>
-          <Badge variant="secondary">Medium Priority</Badge>
-        </div>
-        
-        <div className="mb-6">
-          <div className="flex justify-between text-sm mb-2">
-            <span>Progress</span>
-            <span>{completedSteps.length}/{steps.length} steps completed</span>
-          </div>
-          <Progress value={progress} className="w-full" />
-        </div>
-      </div>
+      <TutorialHeader
+        title="Chart Reading Mastery"
+        icon={TrendingUp}
+        difficulty="Intermediate"
+        duration="30 min"
+        currentStep={currentStep + 1}
+        totalSteps={steps.length}
+        completedSteps={completedSteps}
+      />
 
-      <div className="grid lg:grid-cols-4 gap-6">
-        <div className="lg:col-span-1">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Tutorial Steps</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              {steps.map((step, index) => (
-                <div
-                  key={index}
-                  className={`p-3 rounded cursor-pointer transition-colors ${
-                    currentStep === index ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'
-                  }`}
-                  onClick={() => setCurrentStep(index)}
-                >
-                  <div className="flex items-center gap-2">
-                    {completedSteps.includes(index) ? (
-                      <CheckCircle className="w-4 h-4 text-awareness" />
-                    ) : (
-                      <Circle className="w-4 h-4" />
-                    )}
-                    <span className="text-sm font-medium">{step.title}</span>
-                  </div>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-        </div>
+      <StepNavigation
+        steps={steps}
+        currentStep={currentStep}
+        completedSteps={completedSteps}
+        onStepChange={setCurrentStep}
+        onNext={handleNext}
+        onPrevious={handlePrevious}
+        onMarkComplete={() => handleStepComplete(currentStep)}
+        isAuthenticated={true}
+      />
 
-        <div className="lg:col-span-3">
-          <Card>
-            <CardHeader>
-              <CardTitle>{steps[currentStep].title}</CardTitle>
-              <CardDescription>{steps[currentStep].description}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              {steps[currentStep].content}
-              
-              <div className="flex justify-between mt-6">
-                <Button
-                  variant="outline"
-                  onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
-                  disabled={currentStep === 0}
-                >
-                  Previous
-                </Button>
-                
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    onClick={() => handleStepComplete(currentStep)}
-                    disabled={completedSteps.includes(currentStep)}
-                  >
-                    {completedSteps.includes(currentStep) ? 'Completed' : 'Mark Complete'}
-                  </Button>
-                  
-                  <Button
-                    onClick={() => {
-                      if (currentStep === steps.length - 1) {
-                        handleStepComplete(currentStep);
-                        
-                        // Save completion to localStorage
-                        const completed = JSON.parse(localStorage.getItem('completedTutorials') || '[]');
-                        if (!completed.includes('chart-reading')) {
-                          completed.push('chart-reading');
-                          localStorage.setItem('completedTutorials', JSON.stringify(completed));
-                        }
-                        
-                        toast.success("Tutorial Complete! 🎉 You've mastered chart reading.");
-                        setTimeout(() => {
-                          navigate('/tutorials?tab=advanced');
-                        }, 1500);
-                      } else {
-                        setCurrentStep(Math.min(steps.length - 1, currentStep + 1));
-                      }
-                    }}
-                  >
-                    {currentStep === steps.length - 1 ? 'Finish Tutorial' : 'Next'}
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+      <div className="tutorial-content-area">
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>{steps[currentStep].title}</CardTitle>
+            <CardDescription>Learn essential chart reading techniques</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {steps[currentStep].content}
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
