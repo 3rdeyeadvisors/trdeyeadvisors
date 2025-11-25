@@ -158,7 +158,7 @@ const AdLanding = () => {
               <Button 
                 onClick={handleStartLearning}
                 size="lg"
-                variant="awareness"
+                variant="cosmic"
                 className="w-full sm:w-auto text-base sm:text-lg px-8 py-6 h-auto min-h-[44px] touch-manipulation"
               >
                 Begin Your Awareness Journey
