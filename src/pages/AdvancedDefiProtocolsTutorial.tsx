@@ -827,17 +827,18 @@ const AdvancedDefiProtocolsTutorial = () => {
       
       // Save completion to localStorage
       const completed = JSON.parse(localStorage.getItem('completedTutorials') || '[]');
-      if (!completed.includes('yield-farming')) {
-        completed.push('yield-farming');
+      if (!completed.includes('advanced-defi-protocols')) {
+        completed.push('advanced-defi-protocols');
         localStorage.setItem('completedTutorials', JSON.stringify(completed));
       }
       
       toast({
         title: "Tutorial Complete! 🎉",
-        description: "Congratulations! You've mastered advanced DeFi protocols.",
+        description: "You've mastered advanced DeFi protocols. Ready to explore more?",
       });
+      
       setTimeout(() => {
-        window.location.href = "/tutorials?tab=practical";
+        window.location.href = '/tutorials?tab=advanced';
       }, 1500);
     }
   };
@@ -846,6 +847,10 @@ const AdvancedDefiProtocolsTutorial = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
     }
+  };
+
+  const handleStepChange = (stepId: number) => {
+    setCurrentStep(stepId);
   };
 
   const handleStepComplete = () => {
@@ -860,62 +865,16 @@ const AdvancedDefiProtocolsTutorial = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
-      <div className="container mx-auto px-4 py-8 mobile-typography-center">
-        {/* Back to Tutorials Button */}
-        <div className="mb-6">
-          <Link to="/tutorials">
-            <Button variant="ghost" className="gap-2 hover:bg-muted">
-              <ArrowLeft className="h-4 w-4" />
-              Back to Tutorials
-            </Button>
-          </Link>
-        </div>
-
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="p-2 rounded-lg bg-primary/10">
-              <Building2 className="h-6 w-6 text-primary" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold">Advanced DeFi Protocols</h1>
-              <p className="text-muted-foreground">Master complex DeFi strategies and protocols</p>
-            </div>
-          </div>
-
-          {/* Progress */}
-          <div className="space-y-2">
-            <div className="flex justify-between text-sm">
-              <span>Step {currentStep} of {totalSteps}</span>
-              <span>{Math.round(progress)}% Complete</span>
-            </div>
-            <Progress value={progress} className="h-2" />
-          </div>
-        </div>
-
-        {/* Step Navigation */}
-        <div className="flex flex-wrap gap-2 mb-8">
-          {steps.map((step) => {
-            const StepIcon = step.icon;
-            const completed = isStepCompleted(step.id);
-            const current = step.id === currentStep;
-            
-            return (
-              <Button
-                key={step.id}
-                variant={current ? "default" : completed ? "secondary" : "outline"}
-                size="sm"
-                onClick={() => setCurrentStep(step.id)}
-                className={`flex items-center gap-2 ${completed ? "bg-awareness/10 text-awareness hover:bg-awareness/20 border-awareness" : ""}`}
-              >
-                <StepIcon className="h-4 w-4" />
-                <span className="hidden sm:inline">{step.title}</span>
-                <span className="sm:hidden">{step.id}</span>
-                {completed && <CheckCircle className="h-3 w-3" />}
-              </Button>
-            );
-          })}
-        </div>
+      <div className="container mx-auto px-4 py-8">
+        <TutorialHeader
+          title="Advanced DeFi Protocols"
+          icon={Building2}
+          difficulty="Advanced"
+          duration="40 min"
+          currentStep={currentStep}
+          totalSteps={totalSteps}
+          completedSteps={completedSteps}
+        />
 
         {/* Current Step Content */}
         {currentStepData && (
@@ -1267,64 +1226,20 @@ const AdvancedDefiProtocolsTutorial = () => {
                 </div>
               )}
 
-              {/* Step Navigation */}
-              <div className="flex items-center justify-between pt-6 border-t">
-                <Button
-                  variant="outline"
-                  onClick={handlePrevious}
-                  disabled={currentStep === 1}
-                >
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Previous
-                </Button>
-
-                <div className="flex gap-2">
-                  {!isStepCompleted(currentStep) && (
-                    <Button
-                      variant="secondary"
-                      onClick={handleStepComplete}
-                    >
-                      <CheckCircle className="h-4 w-4 mr-2" />
-                      Mark Complete
-                    </Button>
-                  )}
-                  
-                  <Button
-                    onClick={handleNext}
-                  >
-                    {currentStep === totalSteps ? "Finish Tutorial" : "Next Step"}
-                    <ArrowRight className="h-4 w-4 ml-2" />
-                  </Button>
-                </div>
-              </div>
             </CardContent>
           </Card>
         )}
 
-        {/* Completion Message */}
-        {completedSteps.length === totalSteps && (
-          <Card className="bg-awareness/10 border-awareness/20">
-            <CardHeader>
-              <CardTitle className="text-awareness flex items-center gap-2">
-                <CheckCircle className="h-6 w-6" />
-                Advanced DeFi Protocols Mastery Complete!
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-foreground mb-4">
-                You now understand advanced DeFi protocols and can implement sophisticated strategies safely!
-              </p>
-              <div className="flex gap-2">
-                <Button asChild>
-                  <Link to="/tutorials">Back to Tutorials</Link>
-                </Button>
-                <Button variant="outline" asChild>
-                  <Link to="/courses">Continue Learning</Link>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        )}
+        <StepNavigation
+          steps={steps}
+          currentStep={currentStep}
+          completedSteps={completedSteps}
+          onStepChange={handleStepChange}
+          onPrevious={handlePrevious}
+          onNext={handleNext}
+          onMarkComplete={handleStepComplete}
+          isAuthenticated={true}
+        />
       </div>
     </div>
   );
