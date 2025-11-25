@@ -449,128 +449,77 @@ const DaoParticipationTutorial = () => {
     }
   ];
 
-  const handleStepComplete = (stepIndex: number) => {
-    if (!completedSteps.includes(stepIndex)) {
-      setCompletedSteps([...completedSteps, stepIndex]);
-      toast.success(`Step ${stepIndex + 1} completed!`);
+  const totalSteps = steps.length;
+
+  const handleNext = () => {
+    if (currentStep < totalSteps) {
+      setCompletedSteps(prev => [...prev, currentStep]);
+      setCurrentStep(currentStep + 1);
+    } else {
+      setCompletedSteps(prev => [...prev, currentStep]);
+      
+      const completed = JSON.parse(localStorage.getItem('completedTutorials') || '[]');
+      if (!completed.includes('dao-participation')) {
+        completed.push('dao-participation');
+        localStorage.setItem('completedTutorials', JSON.stringify(completed));
+      }
+      
+      toast.success('Tutorial Complete!', {
+        description: 'You now understand how to participate in DAOs.'
+      });
+      setTimeout(() => window.location.href = '/tutorials', 2000);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
+  const handleStepChange = (stepId: number) => {
+    setCurrentStep(stepId);
+  };
+
+  const handleStepComplete = () => {
+    if (!completedSteps.includes(currentStep)) {
+      setCompletedSteps([...completedSteps, currentStep]);
+      toast.success('Step Completed!');
     }
   };
 
   const progress = (completedSteps.length / steps.length) * 100;
 
   return (
-    <div className="container mx-auto px-4 py-8 mobile-typography-center">
-      <div className="mb-6">
-        <Button 
-          variant="ghost" 
-          onClick={() => navigate('/tutorials')}
-          className="mb-4"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Tutorials
-        </Button>
-        
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h1 className="text-3xl font-bold">DAO Participation</h1>
-            <p className="text-muted-foreground">Learn to participate effectively in decentralized governance</p>
-          </div>
-          <Badge variant="secondary">Medium Priority</Badge>
-        </div>
-        
-        <div className="mb-6">
-          <div className="flex justify-between text-sm mb-2">
-            <span>Progress</span>
-            <span>{completedSteps.length}/{steps.length} steps completed</span>
-          </div>
-          <Progress value={progress} className="w-full" />
-        </div>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
+      <div className="container mx-auto px-4 py-8">
+        <TutorialHeader
+          title="DAO Participation Guide"
+          icon={Users}
+          difficulty="Intermediate"
+          duration="28 min"
+          currentStep={currentStep}
+          totalSteps={totalSteps}
+          completedSteps={completedSteps}
+        />
 
-      <div className="grid lg:grid-cols-4 gap-6">
-        <div className="lg:col-span-1">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Tutorial Steps</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              {steps.map((step, index) => (
-                <div
-                  key={index}
-                  className={`p-3 rounded cursor-pointer transition-colors ${
-                    currentStep === index ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'
-                  }`}
-                  onClick={() => setCurrentStep(index)}
-                >
-                  <div className="flex items-center gap-2">
-                  {completedSteps.includes(index) ? (
-                      <CheckCircle className="w-4 h-4 text-success" />
-                    ) : (
-                      <Circle className="w-4 h-4" />
-                    )}
-                    <span className="text-sm font-medium">{step.title}</span>
-                  </div>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-        </div>
+        {/* Content */}
+        <Card className="mb-8">
+          <CardContent className="p-6 tutorial-content-area">
+            {steps[currentStep - 1]?.content}
+          </CardContent>
+        </Card>
 
-        <div className="lg:col-span-3">
-          <Card>
-            <CardHeader>
-              <CardTitle>{steps[currentStep].title}</CardTitle>
-              <CardDescription>{steps[currentStep].description}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              {steps[currentStep].content}
-              
-              <div className="flex justify-between mt-6">
-                <Button
-                  variant="outline"
-                  onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
-                  disabled={currentStep === 0}
-                >
-                  Previous
-                </Button>
-                
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    onClick={() => handleStepComplete(currentStep)}
-                    disabled={completedSteps.includes(currentStep)}
-                  >
-                    {completedSteps.includes(currentStep) ? 'Completed' : 'Mark Complete'}
-                  </Button>
-                  
-                  <Button
-                    onClick={() => {
-                      if (currentStep === steps.length - 1) {
-                        handleStepComplete(currentStep);
-                        
-                        // Save completion to localStorage
-                        const completed = JSON.parse(localStorage.getItem('completedTutorials') || '[]');
-                        if (!completed.includes('dao-participation')) {
-                          completed.push('dao-participation');
-                          localStorage.setItem('completedTutorials', JSON.stringify(completed));
-                        }
-                        
-                        toast.success("Tutorial Complete! 🎉 You're now ready to participate in DAOs.");
-                        setTimeout(() => {
-                          navigate('/tutorials?tab=advanced');
-                        }, 1500);
-                      } else {
-                        setCurrentStep(Math.min(steps.length - 1, currentStep + 1));
-                      }
-                    }}
-                  >
-                    {currentStep === steps.length - 1 ? 'Finish Tutorial' : 'Next'}
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        <StepNavigation
+          steps={steps}
+          currentStep={currentStep}
+          completedSteps={completedSteps}
+          onStepChange={handleStepChange}
+          onPrevious={handlePrevious}
+          onNext={handleNext}
+          onMarkComplete={handleStepComplete}
+          isAuthenticated={true}
+        />
       </div>
     </div>
   );
