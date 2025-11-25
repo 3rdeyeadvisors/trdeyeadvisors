@@ -19,12 +19,15 @@ import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { DesktopOnlyNotice } from "@/components/DesktopOnlyNotice";
+import { TutorialHeader } from "@/components/course/TutorialHeader";
+import { StepNavigation } from "@/components/course/StepNavigation";
 
 const PortfolioTrackingTutorial = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const { toast } = useToast();
   const isMobile = useIsMobile();
+  const isAuthenticated = true; // All users can access tutorials
 
   const totalSteps = 6;
   const progress = ((completedSteps.length) / totalSteps) * 100;
@@ -34,6 +37,7 @@ const PortfolioTrackingTutorial = () => {
       id: 1,
       title: "Why Track Your DeFi Portfolio?",
       icon: PieChart,
+      duration: "5 min",
       content: (
         <div className="space-y-4">
           <Alert>
@@ -98,6 +102,7 @@ const PortfolioTrackingTutorial = () => {
       id: 2,
       title: "Choose Your Tracking Tools",
       icon: BarChart3,
+      duration: "6 min",
       content: (
         <div className="space-y-4">
           <h4 className="font-semibold">Top DeFi Portfolio Trackers</h4>
@@ -163,6 +168,7 @@ const PortfolioTrackingTutorial = () => {
       id: 3,
       title: "Connect Your Wallets",
       icon: Shield,
+      duration: "5 min",
       content: (
         <div className="space-y-4">
           <Alert>
@@ -233,6 +239,7 @@ const PortfolioTrackingTutorial = () => {
       id: 4,
       title: "Organize Your Dashboard",
       icon: PieChart,
+      duration: "5 min",
       content: (
         <div className="space-y-4">
           <h4 className="font-semibold">Create a Tracking System</h4>
@@ -301,6 +308,7 @@ const PortfolioTrackingTutorial = () => {
       id: 5,
       title: "Daily Tracking Routine",
       icon: RefreshCw,
+      duration: "4 min",
       content: (
         <div className="space-y-4">
           <Alert>
@@ -369,6 +377,7 @@ const PortfolioTrackingTutorial = () => {
       id: 6,
       title: "Advanced Tracking & Tax Prep",
       icon: TrendingUp,
+      duration: "6 min",
       content: (
         <div className="space-y-4">
           <h4 className="font-semibold">Export for Tax Reporting</h4>
