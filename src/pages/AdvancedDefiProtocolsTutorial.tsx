@@ -1,16 +1,11 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { 
-  ArrowLeft, 
-  ArrowRight, 
   TrendingUp,
   Shield, 
   AlertTriangle, 
-  CheckCircle, 
   Zap,
   DollarSign,
   Target,
@@ -20,9 +15,10 @@ import {
   RefreshCw
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { Link } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { DesktopOnlyNotice } from "@/components/DesktopOnlyNotice";
+import { TutorialHeader } from "@/components/course/TutorialHeader";
+import { StepNavigation } from "@/components/course/StepNavigation";
 
 const AdvancedDefiProtocolsTutorial = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -31,7 +27,6 @@ const AdvancedDefiProtocolsTutorial = () => {
   const isMobile = useIsMobile();
 
   const totalSteps = 8;
-  const progress = (currentStep / totalSteps) * 100;
 
   const steps = [
     {
@@ -944,7 +939,7 @@ const AdvancedDefiProtocolsTutorial = () => {
               </div>
             </CardHeader>
 
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-6 tutorial-content-area">
               <p className="text-muted-foreground leading-relaxed">{currentStepData.content.overview}</p>
 
               {/* Step 1: Advanced DeFi Landscape */}
