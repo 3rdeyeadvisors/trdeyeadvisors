@@ -177,16 +177,16 @@ const AdLanding = () => {
               </h2>
             </div>
 
-            <Card className="border-awareness/30 bg-card backdrop-blur w-full">
+            <Card className="border-primary/30 bg-card backdrop-blur w-full">
               <CardContent className="p-8 sm:p-10 md:p-12">
                 <p className="text-base sm:text-lg md:text-xl text-card-foreground leading-relaxed mb-6">
                   3EA is not a trading group or hype project. We don't promise overnight riches or "secret strategies."
                 </p>
                 <p className="text-base sm:text-lg md:text-xl text-card-foreground leading-relaxed mb-6">
-                  We are a <span className="font-consciousness font-bold text-awareness-glow">conscious learning movement</span> that teaches how the new financial system is being built — so you understand what's happening, rather than being left behind or manipulated by those who profit from your confusion.
+                  We are a <span className="font-consciousness font-bold text-primary-glow">conscious learning movement</span> that teaches how the new financial system is being built — so you understand what's happening, rather than being left behind or manipulated by those who profit from your confusion.
                 </p>
                 <p className="text-base sm:text-lg md:text-xl text-card-foreground leading-relaxed">
-                  This is about <span className="font-consciousness font-bold text-awareness-glow">awareness</span>, not speculation. About <span className="font-consciousness font-bold text-awareness-glow">education</span>, not exploitation. About building <span className="font-consciousness font-bold text-awareness-glow">clarity</span> in a world designed to keep you uncertain.
+                  This is about <span className="font-consciousness font-bold text-primary-glow">awareness</span>, not speculation. About <span className="font-consciousness font-bold text-primary-glow">education</span>, not exploitation. About building <span className="font-consciousness font-bold text-primary-glow">clarity</span> in a world designed to keep you uncertain.
                 </p>
               </CardContent>
             </Card>
