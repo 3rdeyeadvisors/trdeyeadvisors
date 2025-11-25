@@ -562,22 +562,22 @@ export const EnhancedContentPlayer = ({
           )}
         </div>
 
-        {/* Mark Complete Button */}
+        {/* Mark Complete Button - Enhanced */}
         {!isCompleted && user && (
           <Button 
             onClick={handleComplete} 
             size="lg" 
-            className="bg-awareness hover:bg-awareness/90 text-background w-full flex items-center justify-center gap-2 touch-target min-h-[44px] font-consciousness"
+            className="bg-awareness hover:bg-awareness/90 text-foreground w-full flex items-center justify-center gap-2 min-h-[48px] font-medium shadow-lg hover:shadow-awareness/20 transition-all"
           >
             <CheckCircle className="w-5 h-5" />
-            <span>Mark Complete</span>
+            <span>Mark Module Complete</span>
           </Button>
         )}
 
         {isCompleted && (
-          <div className="p-4 bg-awareness/10 border border-awareness/30 rounded-lg flex items-center justify-center gap-2">
-            <CheckCircle className="w-5 h-5 text-awareness" />
-            <span className="font-consciousness text-awareness font-medium">Module Completed</span>
+          <div className="p-4 md:p-5 bg-awareness/10 border-2 border-awareness/30 rounded-lg flex items-center justify-center gap-3">
+            <CheckCircle className="w-6 h-6 text-awareness" />
+            <span className="font-medium text-awareness text-base md:text-lg">Module Completed ✓</span>
           </div>
         )}
       </div>

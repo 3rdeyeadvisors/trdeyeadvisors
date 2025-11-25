@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { KeyTakeaway } from "@/components/course/KeyTakeaway";
 import { DidYouKnow } from "@/components/course/DidYouKnow";
 import { StepBlock } from "@/components/course/StepBlock";
+import { TutorialHeader } from "@/components/course/TutorialHeader";
+import { StepNavigation } from "@/components/course/StepNavigation";
 import dexSwapHero from "@/assets/tutorials/dex-swap-hero.jpg";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -1001,36 +1003,7 @@ const FirstDexSwapTutorial = () => {
                 </div>
               )}
 
-              {/* Step Navigation */}
-              <div className="flex items-center justify-between pt-6 border-t">
-                <Button
-                  variant="outline"
-                  onClick={handlePrevious}
-                  disabled={currentStep === 1}
-                >
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Previous
-                </Button>
-
-                <div className="flex gap-2">
-                  {!isStepCompleted(currentStep) && (
-                    <Button
-                      variant="secondary"
-                      onClick={handleStepComplete}
-                    >
-                      <CheckCircle className="h-4 w-4 mr-2" />
-                      Mark Complete
-                    </Button>
-                  )}
-                  
-                  <Button
-                    onClick={handleNext}
-                  >
-                    {currentStep === totalSteps ? "Finish Tutorial" : "Next Step"}
-                    <ArrowRight className="h-4 w-4 ml-2" />
-                  </Button>
-                </div>
-              </div>
+              {/* Bottom Navigation - Removed, using StepNavigation component at top */}
             </CardContent>
           </Card>
         )}
