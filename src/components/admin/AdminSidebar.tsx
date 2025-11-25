@@ -9,7 +9,8 @@ import {
   Radio,
   AlertTriangle,
   Gift,
-  Eye
+  Eye,
+  Activity
 } from "lucide-react";
 import {
   Sidebar,
@@ -28,6 +29,7 @@ const menuItems = [
   { id: "overview", title: "Overview", icon: LayoutDashboard },
   { id: "orders", title: "Orders & Customers", icon: ShoppingCart },
   { id: "raffles", title: "Raffle Manager", icon: Gift },
+  { id: "participation", title: "Tutorial/Course Participation", icon: Activity },
   { id: "email", title: "Email Center", icon: Mail },
   { id: "email-preview", title: "Email Preview", icon: Eye },
   { id: "broadcast", title: "Broadcast Tester", icon: Radio },
