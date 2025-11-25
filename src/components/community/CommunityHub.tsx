@@ -39,17 +39,17 @@ export const CommunityHub = ({
         </CardHeader>
         <CardContent className="px-4 sm:px-6 py-5">
           <Tabs defaultValue="comments" className="w-full">
-            <TabsList className="flex flex-wrap gap-2 w-full justify-center p-2.5 bg-card/60 rounded-lg border border-border mb-6">
+            <TabsList className="flex flex-wrap gap-3 w-full justify-center p-3 bg-background/60 rounded-lg border border-border mb-8">
               <TabsTrigger 
                 value="comments" 
-                className="flex items-center justify-center gap-2 min-h-[44px] px-5 py-2.5 rounded-full text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                className="flex items-center justify-center gap-2 min-h-[44px] px-6 py-3 rounded-md text-sm font-medium data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-transparent data-[state=inactive]:text-muted-foreground hover:text-foreground transition-colors"
               >
                 <MessageCircle className="w-4 h-4 flex-shrink-0" />
                 <span>Comments</span>
               </TabsTrigger>
               <TabsTrigger 
                 value="ratings" 
-                className="flex items-center justify-center gap-2 min-h-[44px] px-5 py-2.5 rounded-full text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                className="flex items-center justify-center gap-2 min-h-[44px] px-6 py-3 rounded-md text-sm font-medium data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-transparent data-[state=inactive]:text-muted-foreground hover:text-foreground transition-colors"
               >
                 <Star className="w-4 h-4 flex-shrink-0" />
                 <span>Ratings</span>
@@ -57,7 +57,7 @@ export const CommunityHub = ({
               {showDiscussions && (
                 <TabsTrigger 
                   value="discussions" 
-                  className="flex items-center justify-center gap-2 min-h-[44px] px-5 py-2.5 rounded-full text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                  className="flex items-center justify-center gap-2 min-h-[44px] px-6 py-3 rounded-md text-sm font-medium data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-transparent data-[state=inactive]:text-muted-foreground hover:text-foreground transition-colors"
                 >
                   <HelpCircle className="w-4 h-4 flex-shrink-0" />
                   <span>Q&A</span>

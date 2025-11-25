@@ -296,17 +296,17 @@ const Tutorials = () => {
                     return (
                       <Card key={video.id} className={`group hover:shadow-cosmic transition-all duration-cosmic border bg-card/80 backdrop-blur-sm hover:bg-card h-full flex flex-col ${isCompleted ? 'border-awareness/50' : 'border-border/50 hover:border-primary/30'}`}>
                         <CardHeader className="pb-4">
-                          <div className="flex items-center gap-4">
+                          <div className="flex items-start gap-4">
                             <div className="p-3 rounded-lg bg-primary/20 group-hover:bg-primary/30 transition-colors shrink-0">
                               <VideoIcon className="h-6 w-6 text-primary" />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2 mb-2">
-                                <CardTitle className="text-lg text-card-foreground group-hover:text-primary transition-colors">
+                              <div className="flex items-start gap-2 mb-3">
+                                <CardTitle className="text-lg text-card-foreground group-hover:text-primary transition-colors flex-1">
                                   {video.title}
                                 </CardTitle>
                                 {isCompleted && (
-                                  <CheckCircle className="h-5 w-5 text-awareness shrink-0" />
+                                  <CheckCircle className="h-5 w-5 text-awareness shrink-0 mt-0.5" />
                                 )}
                               </div>
                               <div className="flex flex-wrap items-center gap-2">
