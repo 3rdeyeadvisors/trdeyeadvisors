@@ -8,6 +8,8 @@ import { AuthModal } from "@/components/auth/AuthModal";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { BookOpen } from "lucide-react";
 import SEO from "@/components/SEO";
+import { ParticipantTracker } from "@/components/admin/ParticipantTracker";
+import { usePresenceTracking } from "@/hooks/usePresenceTracking";
 
 const Courses = () => {
   const [activeFilter, setActiveFilter] = useState("all");
@@ -15,6 +17,13 @@ const Courses = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate();
+
+  // Track presence
+  usePresenceTracking({
+    contentType: 'course',
+    contentId: 'courses-page',
+    metadata: { activeFilter, searchQuery }
+  });
 
   const courses = [
     {
@@ -200,9 +209,12 @@ const Courses = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-consciousness font-bold text-foreground mb-6">
-            Courses & Tools
-          </h1>
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <h1 className="text-4xl md:text-5xl font-consciousness font-bold text-foreground">
+              Courses & Tools
+            </h1>
+            <ParticipantTracker contentType="course" contentId="courses-page" />
+          </div>
           {!user && (
             <div className="flex justify-center mb-6">
               <Button

@@ -17,6 +17,7 @@ import BroadcastTester from "@/components/admin/BroadcastTester";
 import { BroadcastAlertsLog } from "@/components/admin/BroadcastAlertsLog";
 import RaffleManager from "@/components/admin/RaffleManager";
 import EmailPreview from "@/components/admin/EmailPreview";
+import { TutorialCourseParticipation } from "@/components/admin/TutorialCourseParticipation";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -95,6 +96,8 @@ const AdminDashboard = () => {
         return <AutomationPanel />;
       case "products":
         return <ProductManager />;
+      case "participation":
+        return <TutorialCourseParticipation />;
       default:
         return <OverviewPanel />;
     }
