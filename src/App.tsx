@@ -65,6 +65,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import Raffles from "./pages/Raffles";
 import RaffleHistory from "./pages/RaffleHistory";
 import AwarenessBlueprintLanding from "./pages/AwarenessBlueprintLanding";
+import AdLanding from "./pages/AdLanding";
 import UploadResourceFile from "./pages/UploadResourceFile";
 
 const queryClient = new QueryClient();
@@ -148,6 +149,7 @@ const App = () => {
                   <Route path="/downloads" element={<Downloads />} />
                   <Route path="/download-portal" element={<DownloadPortal />} />
                   <Route path="/awareness-blueprint" element={<AwarenessBlueprintLanding />} />
+                  <Route path="/start" element={<AdLanding />} />
                   <Route path="/admin/upload-resource" element={
                     <ProtectedRoute requireRole="admin">
                       <UploadResourceFile />
