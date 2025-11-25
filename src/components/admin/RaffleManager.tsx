@@ -18,6 +18,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { FixTicketMismatchButton } from "./FixTicketMismatchButton";
 
 interface Raffle {
   id: string;
@@ -1186,6 +1187,17 @@ const RaffleManager = () => {
                       </>
                     )}
                   </Button>
+                  {raffles.find(r => r.is_active) && (
+                    <FixTicketMismatchButton 
+                      raffleId={raffles.find(r => r.is_active)!.id}
+                      onFixed={() => {
+                        const activeRaffle = raffles.find(r => r.is_active);
+                        if (activeRaffle) {
+                          fetchParticipants(activeRaffle.id);
+                        }
+                      }}
+                    />
+                  )}
                   {participants.length > 0 && (
                     <Button
                       variant="outline"
