@@ -296,39 +296,37 @@ const Tutorials = () => {
                     return (
                       <Card key={video.id} className={`group hover:shadow-cosmic transition-all duration-cosmic border bg-card/80 backdrop-blur-sm hover:bg-card h-full flex flex-col ${isCompleted ? 'border-awareness/50' : 'border-border/50 hover:border-primary/30'}`}>
                         <CardHeader className="pb-4">
-                          <div className="flex items-start justify-between">
-                            <div className="flex items-center gap-3">
-                              <div className="p-2 rounded-lg bg-primary/20 group-hover:bg-primary/30 transition-colors">
-                                <VideoIcon className="h-6 w-6 text-primary" />
+                          <div className="flex items-center gap-4">
+                            <div className="p-3 rounded-lg bg-primary/20 group-hover:bg-primary/30 transition-colors shrink-0">
+                              <VideoIcon className="h-6 w-6 text-primary" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 mb-2">
+                                <CardTitle className="text-lg text-card-foreground group-hover:text-primary transition-colors">
+                                  {video.title}
+                                </CardTitle>
+                                {isCompleted && (
+                                  <CheckCircle className="h-5 w-5 text-awareness shrink-0" />
+                                )}
                               </div>
-                              <div>
-                                <div className="flex items-center gap-2">
-                                  <CardTitle className="text-lg text-card-foreground group-hover:text-primary transition-colors">
-                                    {video.title}
-                                  </CardTitle>
-                                  {isCompleted && (
-                                    <CheckCircle className="h-5 w-5 text-awareness" />
-                                  )}
-                                </div>
-                                <div className="flex items-center gap-2 mt-1">
-                                  {isCompleted && (
-                                    <Badge variant="outline" className="text-xs font-medium bg-awareness/20 text-awareness border-awareness/30">
-                                      Completed
-                                    </Badge>
-                                  )}
-                                  <Badge 
-                                    variant="secondary" 
-                                    className={`text-xs font-medium ${getPriorityColor(video.priority)} text-foreground border-0`}
-                                  >
-                                    {video.priority}
+                              <div className="flex flex-wrap items-center gap-2">
+                                {isCompleted && (
+                                  <Badge variant="outline" className="text-xs font-medium bg-awareness/20 text-awareness border-awareness/30">
+                                    Completed
                                   </Badge>
-                                  <Badge 
-                                    variant="outline" 
-                                    className={`text-xs font-medium ${getDifficultyColor(video.difficulty)} border-0`}
-                                  >
-                                    {video.difficulty}
-                                  </Badge>
-                                </div>
+                                )}
+                                <Badge 
+                                  variant="secondary" 
+                                  className={`text-xs font-medium ${getPriorityColor(video.priority)} text-foreground border-0`}
+                                >
+                                  {video.priority}
+                                </Badge>
+                                <Badge 
+                                  variant="outline" 
+                                  className={`text-xs font-medium ${getDifficultyColor(video.difficulty)} border-0`}
+                                >
+                                  {video.difficulty}
+                                </Badge>
                               </div>
                             </div>
                           </div>

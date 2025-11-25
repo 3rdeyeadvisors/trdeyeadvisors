@@ -13,31 +13,31 @@ export const CommunityTabs = ({ courseId, moduleId }: CommunityTabsProps) => {
   return (
     <div className="w-full">
       {/* Softer notice for mobile users */}
-      <div className="text-center py-2 px-4 mb-4 bg-muted/30 rounded-lg border border-border md:hidden">
-        <p className="text-xs text-muted-foreground">
+      <div className="text-center py-3 px-4 mb-4 bg-muted/30 rounded-lg border border-border md:hidden">
+        <p className="text-xs text-muted-foreground leading-relaxed">
           Fully usable on mobile. For the best experience, we recommend using a desktop or laptop.
         </p>
       </div>
       
       <Tabs defaultValue="comments" className="w-full">
-        <TabsList className="mt-4 flex w-full rounded-lg bg-background/40 border border-border/40 p-1 gap-2">
+        <TabsList className="mt-4 flex flex-wrap justify-center w-full rounded-lg bg-background/40 border border-border/40 p-2 gap-2">
           <TabsTrigger 
             value="comments" 
-            className="flex-1 inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-xs sm:text-sm font-medium text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-transparent"
+            className="inline-flex items-center justify-center gap-2 rounded-md px-4 py-2.5 min-h-[44px] text-xs sm:text-sm font-medium text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-transparent"
           >
             <MessageCircle className="w-4 h-4 flex-shrink-0" />
             <span>Discussion</span>
           </TabsTrigger>
           <TabsTrigger 
             value="rating" 
-            className="flex-1 inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-xs sm:text-sm font-medium text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-transparent"
+            className="inline-flex items-center justify-center gap-2 rounded-md px-4 py-2.5 min-h-[44px] text-xs sm:text-sm font-medium text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-transparent"
           >
             <Star className="w-4 h-4 flex-shrink-0" />
             <span>Rating</span>
           </TabsTrigger>
           <TabsTrigger 
             value="qa" 
-            className="flex-1 inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-xs sm:text-sm font-medium text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-transparent"
+            className="inline-flex items-center justify-center gap-2 rounded-md px-4 py-2.5 min-h-[44px] text-xs sm:text-sm font-medium text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-transparent"
           >
             <HelpCircle className="w-4 h-4 flex-shrink-0" />
             <span>Q&A</span>
