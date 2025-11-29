@@ -694,16 +694,16 @@ const SpottingScamsTutorial = () => {
                     {currentStepData.content.scamTypes?.map((scam, index) => (
                       <Card key={index} className={`border-l-4 ${getDangerColor(scam.danger)}`}>
                         <CardHeader className="pb-3">
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <CardTitle className="text-lg">{scam.name}</CardTitle>
-                              <CardDescription>{scam.description}</CardDescription>
+                          <div className="flex flex-col gap-3">
+                            <div className="min-w-0">
+                              <CardTitle className="text-lg break-words">{scam.name}</CardTitle>
+                              <CardDescription className="break-words">{scam.description}</CardDescription>
                             </div>
-                            <div className="flex gap-2">
-                              <Badge variant={scam.frequency === "Very Common" ? "destructive" : "secondary"}>
+                            <div className="flex flex-wrap gap-2">
+                              <Badge variant={scam.frequency === "Very Common" ? "destructive" : "secondary"} className="whitespace-nowrap">
                                 {scam.frequency}
                               </Badge>
-                              <Badge variant={scam.danger === "Critical" ? "destructive" : scam.danger === "High" ? "default" : "secondary"}>
+                              <Badge variant={scam.danger === "Critical" ? "destructive" : scam.danger === "High" ? "default" : "secondary"} className="whitespace-nowrap">
                                 {scam.danger} Risk
                               </Badge>
                             </div>
@@ -848,20 +848,20 @@ const SpottingScamsTutorial = () => {
                               <Badge variant="outline" className="text-xs min-w-6 h-6 flex items-center justify-center">
                                 {index + 1}
                               </Badge>
-                              <div className="flex-1">
-                                <h4 className="font-medium mb-2">{analysis.step}</h4>
-                                <p className="text-sm text-muted-foreground mb-2">{analysis.what}</p>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-                                  <div>
-                                    <span className="font-medium text-destructive">⚠️ Red Flag: </span>
-                                    <span>{analysis.redFlag}</span>
-                                  </div>
-                                  <div>
-                                    <span className="font-medium text-accent">🔧 Tool: </span>
-                                    <span>{analysis.tool}</span>
-                                  </div>
+                            <div className="flex-1 min-w-0">
+                              <h4 className="font-medium mb-2 break-words">{analysis.step}</h4>
+                              <p className="text-sm text-muted-foreground mb-2 break-words">{analysis.what}</p>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                                <div className="min-w-0">
+                                  <span className="font-medium text-destructive">⚠️ Red Flag: </span>
+                                  <span className="break-words">{analysis.redFlag}</span>
+                                </div>
+                                <div className="min-w-0">
+                                  <span className="font-medium text-accent">🔧 Tool: </span>
+                                  <span className="break-words">{analysis.tool}</span>
                                 </div>
                               </div>
+                            </div>
                             </div>
                           </CardContent>
                         </Card>
@@ -880,23 +880,23 @@ const SpottingScamsTutorial = () => {
                       {currentStepData.content.commonTactics?.map((tactic, index) => (
                         <Card key={index} className="border-l-4 border-awareness">
                           <CardContent className="p-4">
-                            <h4 className="font-medium mb-2 text-awareness">{tactic.tactic}</h4>
+                            <h4 className="font-medium mb-2 text-awareness break-words">{tactic.tactic}</h4>
                             <div className="space-y-3 text-sm">
-                              <div>
+                              <div className="min-w-0">
                                 <span className="font-medium">Scenario: </span>
-                                <span className="text-muted-foreground">{tactic.scenario}</span>
+                                <span className="text-muted-foreground break-words">{tactic.scenario}</span>
                               </div>
-                              <div>
+                              <div className="min-w-0">
                                 <span className="font-medium">Their approach: </span>
-                                <span className="text-muted-foreground">{tactic.approach}</span>
+                                <span className="text-muted-foreground break-words">{tactic.approach}</span>
                               </div>
-                              <div>
+                              <div className="min-w-0">
                                 <span className="font-medium text-destructive">Their goal: </span>
-                                <span className="text-destructive">{tactic.goal}</span>
+                                <span className="text-destructive break-words">{tactic.goal}</span>
                               </div>
                               <div className="p-2 bg-success/10 rounded">
                                 <span className="font-medium text-success">🛡️ Defense: </span>
-                                <span className="text-success">{tactic.defense}</span>
+                                <span className="text-success break-words">{tactic.defense}</span>
                               </div>
                             </div>
                           </CardContent>
@@ -911,22 +911,22 @@ const SpottingScamsTutorial = () => {
                       {currentStepData.content.platforms?.map((platform, index) => (
                         <Card key={index}>
                           <CardContent className="p-4">
-                            <h4 className="font-medium mb-3">{platform.platform}</h4>
+                            <h4 className="font-medium mb-3 break-words">{platform.platform}</h4>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-                              <div>
+                              <div className="min-w-0">
                                 <span className="font-medium text-destructive mb-2 block">Common Risks:</span>
                                 <ul className="space-y-1">
                                   {platform.risks.map((risk, i) => (
                                     <li key={i} className="flex items-start gap-2">
                                       <AlertTriangle className="h-3 w-3 text-destructive mt-0.5 flex-shrink-0" />
-                                      <span>{risk}</span>
+                                      <span className="break-words">{risk}</span>
                                     </li>
                                   ))}
                                 </ul>
                               </div>
-                              <div>
+                              <div className="min-w-0">
                                 <span className="font-medium text-success mb-2 block">Safety Tips:</span>
-                                <p className="text-muted-foreground">{platform.safety}</p>
+                                <p className="text-muted-foreground break-words">{platform.safety}</p>
                               </div>
                             </div>
                           </CardContent>
@@ -946,29 +946,29 @@ const SpottingScamsTutorial = () => {
                       {currentStepData.content.securityLayers?.map((layer, index) => (
                         <Card key={index}>
                           <CardHeader className="pb-3">
-                            <CardTitle className="text-lg flex items-center gap-2">
-                              <Shield className="h-5 w-5 text-primary" />
-                              {layer.layer}
+                            <CardTitle className="text-lg flex items-start gap-2">
+                              <Shield className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                              <span className="break-words">{layer.layer}</span>
                             </CardTitle>
                           </CardHeader>
                           <CardContent>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              <div>
+                              <div className="min-w-0">
                                 <h4 className="font-medium mb-2">Security Checks:</h4>
                                 <ul className="space-y-1 text-sm">
                                   {layer.checks.map((check, i) => (
                                     <li key={i} className="flex items-start gap-2">
                                       <CheckCircle className="h-3 w-3 text-awareness mt-0.5 flex-shrink-0" />
-                                      <span>{check}</span>
+                                      <span className="break-words">{check}</span>
                                     </li>
                                   ))}
                                 </ul>
                               </div>
-                              <div>
+                              <div className="min-w-0">
                                 <h4 className="font-medium mb-2">Recommended Tools:</h4>
                                 <div className="flex flex-wrap gap-2">
                                   {layer.tools.map((tool, i) => (
-                                    <Badge key={i} variant="outline" className="text-xs">
+                                    <Badge key={i} variant="outline" className="text-xs whitespace-nowrap">
                                       {tool}
                                     </Badge>
                                   ))}
@@ -987,15 +987,15 @@ const SpottingScamsTutorial = () => {
                       {currentStepData.content.regularMaintenance?.map((maintenance, index) => (
                         <Card key={index}>
                           <CardContent className="p-4">
-                            <div className="flex items-center justify-between mb-3">
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
                               <h4 className="font-medium">{maintenance.frequency}</h4>
-                              <Badge variant="outline">{maintenance.time}</Badge>
+                              <Badge variant="outline" className="w-fit">{maintenance.time}</Badge>
                             </div>
                             <ul className="space-y-1 text-sm">
                               {maintenance.tasks.map((task, i) => (
                                 <li key={i} className="flex items-start gap-2">
                                   <Clock className="h-3 w-3 text-primary mt-0.5 flex-shrink-0" />
-                                  <span>{task}</span>
+                                  <span className="break-words">{task}</span>
                                 </li>
                               ))}
                             </ul>
@@ -1016,23 +1016,23 @@ const SpottingScamsTutorial = () => {
                       {currentStepData.content.researchChecklist?.map((category, index) => (
                         <Card key={index}>
                           <CardHeader className="pb-3">
-                            <CardTitle className="text-lg">{category.category}</CardTitle>
+                            <CardTitle className="text-lg break-words">{category.category}</CardTitle>
                           </CardHeader>
                           <CardContent>
                             <div className="space-y-4">
-                              <div>
+                              <div className="min-w-0">
                                 <h4 className="font-medium mb-2">Key Questions:</h4>
                                 <ul className="space-y-1 text-sm">
                                   {category.checks.map((check, i) => (
                                     <li key={i} className="flex items-start gap-2">
                                       <Search className="h-3 w-3 text-primary mt-0.5 flex-shrink-0" />
-                                      <span>{check}</span>
+                                      <span className="break-words">{check}</span>
                                     </li>
                                   ))}
                                 </ul>
                               </div>
                               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                <div>
+                                <div className="min-w-0">
                                   <h4 className="font-medium text-destructive mb-2">Red Flags:</h4>
                                   <div className="flex flex-wrap gap-1">
                                     {category.redFlags.map((flag, i) => (
@@ -1042,7 +1042,7 @@ const SpottingScamsTutorial = () => {
                                     ))}
                                   </div>
                                 </div>
-                                <div>
+                                <div className="min-w-0">
                                   <h4 className="font-medium text-primary mb-2">Research Tools:</h4>
                                   <div className="flex flex-wrap gap-1">
                                     {category.tools.map((tool, i) => (
@@ -1066,14 +1066,14 @@ const SpottingScamsTutorial = () => {
                       {currentStepData.content.verificationTools?.map((tool, index) => (
                         <Card key={index}>
                           <CardContent className="p-4">
-                            <div className="flex items-center justify-between mb-2">
-                              <h4 className="font-medium">{tool.tool}</h4>
-                              <Badge variant="outline">{tool.url}</Badge>
+                            <div className="flex flex-col gap-2 mb-2">
+                              <h4 className="font-medium break-words">{tool.tool}</h4>
+                              <Badge variant="outline" className="w-fit text-xs break-all">{tool.url}</Badge>
                             </div>
-                            <p className="text-sm text-muted-foreground mb-2">{tool.purpose}</p>
-                            <div className="flex items-center gap-2 text-sm text-primary">
-                              <ExternalLink className="h-3 w-3" />
-                              <span>Usage: {tool.usage}</span>
+                            <p className="text-sm text-muted-foreground mb-2 break-words">{tool.purpose}</p>
+                            <div className="flex items-start gap-2 text-sm text-primary">
+                              <ExternalLink className="h-3 w-3 flex-shrink-0 mt-0.5" />
+                              <span className="break-words">Usage: {tool.usage}</span>
                             </div>
                           </CardContent>
                         </Card>
@@ -1099,19 +1099,19 @@ const SpottingScamsTutorial = () => {
                       {currentStepData.content.immediateActions?.map((action, index) => (
                         <Card key={index} className="border-l-4 border-destructive/30">
                           <CardHeader className="pb-3">
-                            <div className="flex items-center justify-between">
-                              <CardTitle className="text-lg text-destructive">{action.action}</CardTitle>
-                              <Badge variant="destructive">{action.timeframe}</Badge>
+                            <div className="flex flex-col gap-2">
+                              <CardTitle className="text-lg text-destructive break-words">{action.action}</CardTitle>
+                              <Badge variant="destructive" className="w-fit whitespace-nowrap">{action.timeframe}</Badge>
                             </div>
                           </CardHeader>
                           <CardContent>
                             <ol className="space-y-2 text-sm">
                               {action.steps.map((step, i) => (
                                 <li key={i} className="flex items-start gap-3">
-                                  <Badge variant="outline" className="text-xs min-w-6 h-6 flex items-center justify-center">
+                                  <Badge variant="outline" className="text-xs min-w-6 h-6 flex items-center justify-center flex-shrink-0">
                                     {i + 1}
                                   </Badge>
-                                  <span>{step}</span>
+                                  <span className="break-words">{step}</span>
                                 </li>
                               ))}
                             </ol>
@@ -1134,7 +1134,7 @@ const SpottingScamsTutorial = () => {
                               {strategy.measures.map((measure, i) => (
                                 <li key={i} className="flex items-start gap-2">
                                   <Shield className="h-3 w-3 text-awareness mt-0.5 flex-shrink-0" />
-                                  <span>{measure}</span>
+                                  <span className="break-words">{measure}</span>
                                 </li>
                               ))}
                             </ul>
@@ -1150,15 +1150,15 @@ const SpottingScamsTutorial = () => {
                       {currentStepData.content.recoveryOptions?.map((option, index) => (
                         <Card key={index}>
                           <CardContent className="p-4">
-                            <h4 className="font-medium mb-2 text-destructive">{option.scenario}</h4>
+                            <h4 className="font-medium mb-2 text-destructive break-words">{option.scenario}</h4>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-                              <div>
+                              <div className="min-w-0">
                                 <span className="font-medium text-primary">Recovery: </span>
-                                <span>{option.recovery}</span>
+                                <span className="break-words">{option.recovery}</span>
                               </div>
-                              <div>
+                              <div className="min-w-0">
                                 <span className="font-medium text-awareness">Prevention: </span>
-                                <span>{option.prevention}</span>
+                                <span className="break-words">{option.prevention}</span>
                               </div>
                             </div>
                           </CardContent>
