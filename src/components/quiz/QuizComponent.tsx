@@ -252,15 +252,23 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
         <RadioGroup
           value={userAnswer?.toString()}
           onValueChange={(value) => handleAnswerChange(question.id, parseInt(value))}
-          className="space-y-2 sm:space-y-3 w-full"
+          className="space-y-3 sm:space-y-3 w-full"
         >
           {question.options.map((option, index) => (
-            <div key={index} className="flex items-start space-x-2 sm:space-x-3 p-2 sm:p-3 rounded-lg hover:bg-muted/50 transition-colors w-full max-w-full">
-              <RadioGroupItem value={index.toString()} id={`${question.id}-${index}`} className="mt-0.5 shrink-0" />
-              <Label htmlFor={`${question.id}-${index}`} className="cursor-pointer text-xs sm:text-sm md:text-base leading-relaxed break-words flex-1 min-w-0">
+            <Label 
+              key={index} 
+              htmlFor={`${question.id}-${index}`}
+              className="flex items-start space-x-3 sm:space-x-4 p-4 sm:p-4 rounded-lg border-2 border-border hover:border-primary/50 hover:bg-muted/50 transition-all cursor-pointer w-full max-w-full min-h-[56px] sm:min-h-[60px]"
+            >
+              <RadioGroupItem 
+                value={index.toString()} 
+                id={`${question.id}-${index}`} 
+                className="mt-1 shrink-0 w-5 h-5 sm:w-5 sm:h-5" 
+              />
+              <span className="text-sm sm:text-base md:text-base leading-relaxed break-words flex-1 min-w-0 pt-0.5">
                 {option}
-              </Label>
-            </div>
+              </span>
+            </Label>
           ))}
         </RadioGroup>
       );
@@ -268,9 +276,13 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
 
     if (question.type === 'multiple') {
       return (
-        <div className="space-y-2 sm:space-y-3 w-full">
+        <div className="space-y-3 sm:space-y-3 w-full">
           {question.options.map((option, index) => (
-            <div key={index} className="flex items-start space-x-2 sm:space-x-3 p-2 sm:p-3 rounded-lg hover:bg-muted/50 transition-colors w-full max-w-full">
+            <Label
+              key={index}
+              htmlFor={`${question.id}-${index}`}
+              className="flex items-start space-x-3 sm:space-x-4 p-4 sm:p-4 rounded-lg border-2 border-border hover:border-primary/50 hover:bg-muted/50 transition-all cursor-pointer w-full max-w-full min-h-[56px] sm:min-h-[60px]"
+            >
               <Checkbox
                 id={`${question.id}-${index}`}
                 checked={userAnswer ? userAnswer.includes(index) : false}
@@ -282,12 +294,12 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
                     handleAnswerChange(question.id, currentAnswers.filter((i: number) => i !== index));
                   }
                 }}
-                className="mt-0.5 shrink-0"
+                className="mt-1 shrink-0 w-5 h-5 sm:w-5 sm:h-5"
               />
-              <Label htmlFor={`${question.id}-${index}`} className="cursor-pointer text-xs sm:text-sm md:text-base leading-relaxed break-words flex-1 min-w-0">
+              <span className="text-sm sm:text-base md:text-base leading-relaxed break-words flex-1 min-w-0 pt-0.5">
                 {option}
-              </Label>
-            </div>
+              </span>
+            </Label>
           ))}
         </div>
       );
