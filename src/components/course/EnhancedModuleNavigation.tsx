@@ -129,27 +129,27 @@ export const EnhancedModuleNavigation = ({
               <Button
                 key={module.id}
                 variant={isCurrent ? "default" : "ghost"}
-                className={`w-full justify-start h-auto p-3 ${
+                className={`w-full justify-start h-auto p-4 ${
                   isCompleted ? "border-awareness bg-awareness/10 hover:bg-awareness/20" : ""
                 }`}
                 onClick={() => handleModuleClick(module.id)}
               >
-                <div className="flex items-center gap-3 w-full">
-                  <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3 w-full min-h-[44px]">
+                  <div className="flex items-center gap-2 flex-shrink-0">
                   {isCompleted ? (
-                      <CheckCircle2 className="w-5 h-5 text-awareness" />
+                      <CheckCircle2 className="w-5 h-5 text-awareness flex-shrink-0" />
                     ) : (
-                      <div className="w-5 h-5 border-2 border-muted-foreground rounded-full flex items-center justify-center">
+                      <div className="w-5 h-5 border-2 border-muted-foreground rounded-full flex items-center justify-center flex-shrink-0">
                         <span className="text-xs">{index + 1}</span>
                       </div>
                     )}
-                    <Icon className="w-4 h-4" />
+                    <Icon className="w-4 h-4 flex-shrink-0" />
                   </div>
                   <div className="text-left flex-1 min-w-0">
-                    <p className="text-sm font-medium line-clamp-1">{module.title}</p>
-                    <p className="text-xs text-muted-foreground">{module.duration} min</p>
+                    <p className="text-sm font-medium line-clamp-2">{module.title}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{module.duration} min</p>
                   </div>
-                  {isCurrent && <Play className="w-4 h-4 text-primary" />}
+                  {isCurrent && <Play className="w-4 h-4 text-primary flex-shrink-0" />}
                 </div>
               </Button>
             );
@@ -277,18 +277,18 @@ export const EnhancedModuleNavigation = ({
           return (
             <Card
               key={module.id}
-              className={`p-4 cursor-pointer transition-all hover:shadow-md ${
+              className={`p-3 sm:p-4 cursor-pointer transition-all hover:shadow-md ${
                 isCurrent ? "border-primary bg-primary/5" : ""
               } ${isCompleted ? "border-awareness bg-awareness/10" : ""}`}
               onClick={() => handleModuleClick(module.id)}
             >
-              <div className="flex items-start gap-3">
+              <div className="flex items-start gap-2 sm:gap-3">
                 {/* Status Icon */}
-                <div className="flex items-center justify-center mt-1">
+                <div className="flex items-center justify-center mt-0.5 flex-shrink-0">
                   {isCompleted ? (
-                    <CheckCircle2 className="w-6 h-6 text-awareness" />
+                    <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6 text-awareness" />
                   ) : (
-                    <div className="w-6 h-6 border-2 border-muted-foreground rounded-full flex items-center justify-center">
+                    <div className="w-5 h-5 sm:w-6 sm:h-6 border-2 border-muted-foreground rounded-full flex items-center justify-center">
                       <span className="text-xs font-medium">{moduleIndex + 1}</span>
                     </div>
                   )}
@@ -296,25 +296,25 @@ export const EnhancedModuleNavigation = ({
 
                 {/* Content */}
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <Badge variant="outline" className={getTypeColor(module.type)}>
+                  <div className="flex items-start justify-between mb-2 gap-2">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+                      <Badge variant="outline" className={`${getTypeColor(module.type)} text-xs`}>
                         <Icon className="w-3 h-3 mr-1" />
                         {module.type}
                       </Badge>
-                      <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                      <div className="flex items-center gap-1 text-xs sm:text-sm text-muted-foreground">
                         <Clock className="w-3 h-3" />
                         {module.duration}m
                       </div>
                     </div>
                     {isCurrent && (
-                      <Badge variant="default" className="text-xs">
+                      <Badge variant="default" className="text-xs flex-shrink-0">
                         Current
                       </Badge>
                     )}
                   </div>
 
-                  <h4 className="font-semibold text-foreground mb-2 line-clamp-2">
+                  <h4 className="font-semibold text-sm sm:text-base text-foreground mb-2 line-clamp-2">
                     {module.title}
                   </h4>
 
@@ -331,15 +331,15 @@ export const EnhancedModuleNavigation = ({
                 </div>
 
                 {/* Action Icon */}
-                <div className="flex items-center justify-center mt-1">
+                <div className="flex items-center justify-center mt-0.5 flex-shrink-0">
                   {isCompleted ? (
                     <Badge variant="outline" className="text-xs bg-awareness/20 border-awareness text-awareness">
                       Done
                     </Badge>
                   ) : isCurrent ? (
-                    <Play className="w-5 h-5 text-primary" />
+                    <Play className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
                   ) : (
-                    <div className="w-5 h-5" />
+                    <div className="w-4 h-4 sm:w-5 sm:h-5" />
                   )}
                 </div>
               </div>
