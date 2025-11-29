@@ -12,19 +12,19 @@ export const FlipCard = ({ front, back }: FlipCardProps) => {
 
   return (
     <Card 
-      className="cursor-pointer hover:shadow-lg transition-all min-h-[120px] relative"
+      className="cursor-pointer hover:shadow-lg hover:border-primary/50 transition-all min-h-[140px] relative border-muted"
       onClick={() => setIsFlipped(!isFlipped)}
     >
-      <CardContent className="p-6 flex flex-col items-center justify-center text-center min-h-[120px]">
+      <CardContent className="px-4 py-4 sm:px-6 sm:py-5 flex flex-col items-center justify-center text-center min-h-[140px]">
         {!isFlipped ? (
           <>
-            <p className="font-semibold text-lg mb-2">{front}</p>
+            <p className="font-semibold text-foreground text-sm sm:text-base mb-3 break-words">{front}</p>
             <RotateCw className="h-4 w-4 text-muted-foreground mt-2" />
             <p className="text-xs text-muted-foreground mt-1">Click to reveal</p>
           </>
         ) : (
           <>
-            <p className="text-muted-foreground">{back}</p>
+            <p className="text-foreground text-sm sm:text-base mb-3 break-words leading-relaxed">{back}</p>
             <RotateCw className="h-4 w-4 text-muted-foreground mt-2" />
             <p className="text-xs text-muted-foreground mt-1">Click to flip back</p>
           </>
