@@ -511,7 +511,7 @@ const DefiCalculatorsTutorial = () => {
                   {/* Interactive Calculator */}
                   <Card className="bg-awareness/10 border-awareness/20">
                     <CardHeader className="pb-3">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center justify-center gap-2">
                         <div className="p-2 rounded-lg bg-awareness/10 flex-shrink-0">
                           <TrendingUp className="h-5 w-5 text-awareness" />
                         </div>
