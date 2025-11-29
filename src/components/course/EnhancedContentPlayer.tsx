@@ -117,7 +117,13 @@ export const EnhancedContentPlayer = ({
         if (contentElement) {
           const scrollTop = contentElement.scrollTop;
           const scrollHeight = contentElement.scrollHeight - contentElement.clientHeight;
-          const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+          let progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+          
+          // Consider >= 97% as 100% complete due to browser rounding issues
+          if (progress >= 97) {
+            progress = 100;
+          }
+          
           setReadingProgress(Math.min(progress, 100));
         }
       };
