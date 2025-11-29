@@ -638,12 +638,12 @@ const SpottingScamsTutorial = () => {
                 variant={current ? "default" : completed ? "secondary" : "outline"}
                 size="sm"
                 onClick={() => setCurrentStep(step.id)}
-                className={`flex items-center gap-2 ${completed ? "bg-awareness/20 text-awareness hover:bg-awareness/30" : ""}`}
+                className={`flex items-center gap-2 rounded-full px-4 ${completed ? "bg-awareness/20 text-awareness hover:bg-awareness/30" : ""}`}
               >
-                <StepIcon className="h-4 w-4" />
-                <span className="hidden sm:inline">{step.title}</span>
+                <StepIcon className="h-4 w-4 flex-shrink-0" />
+                <span className="hidden sm:inline whitespace-nowrap">{step.title}</span>
                 <span className="sm:hidden">{step.id}</span>
-                {completed && <CheckCircle className="h-3 w-3" />}
+                {completed && <CheckCircle className="h-3 w-3 flex-shrink-0" />}
               </Button>
             );
           })}
@@ -711,13 +711,13 @@ const SpottingScamsTutorial = () => {
                         </CardHeader>
                         <CardContent>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                            <div>
+                            <div className="min-w-0">
                               <p className="font-medium mb-1">Scammer's goal:</p>
-                              <p className="text-muted-foreground">{scam.goal}</p>
+                              <p className="text-muted-foreground break-words">{scam.goal}</p>
                             </div>
-                            <div>
+                            <div className="min-w-0">
                               <p className="font-medium mb-1">Example:</p>
-                              <p className="text-destructive">{scam.example}</p>
+                              <p className="text-destructive break-words">{scam.example}</p>
                             </div>
                           </div>
                         </CardContent>
@@ -738,27 +738,27 @@ const SpottingScamsTutorial = () => {
                           <CardContent className="p-4">
                             <h4 className="font-medium mb-3">{check.check}</h4>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                              <div className="space-y-2">
+                              <div className="space-y-2 min-w-0">
                                 <div className="flex items-center gap-2">
-                                  <CheckCircle className="h-3 w-3 text-awareness" />
+                                  <CheckCircle className="h-3 w-3 text-awareness flex-shrink-0" />
                                   <span className="font-medium text-awareness">Legitimate:</span>
                                 </div>
-                                <p className="text-foreground bg-awareness/10 p-2 rounded font-mono">
+                                <p className="text-foreground bg-awareness/10 p-2 rounded font-mono text-xs break-all">
                                   {check.legitimate}
                                 </p>
                               </div>
-                              <div className="space-y-2">
+                              <div className="space-y-2 min-w-0">
                                 <div className="flex items-center gap-2">
-                                  <AlertTriangle className="h-3 w-3 text-destructive" />
+                                  <AlertTriangle className="h-3 w-3 text-destructive flex-shrink-0" />
                                   <span className="font-medium text-destructive">Scam:</span>
                                 </div>
-                                <p className="text-foreground bg-destructive/10 p-2 rounded font-mono">
+                                <p className="text-foreground bg-destructive/10 p-2 rounded font-mono text-xs break-all">
                                   {check.scam}
                                 </p>
                               </div>
                             </div>
                             <div className="mt-3 p-2 bg-primary/10 rounded">
-                              <p className="text-sm text-primary">
+                              <p className="text-sm text-primary break-words">
                                 <strong>How to check:</strong> {check.howToCheck}
                               </p>
                             </div>
@@ -776,17 +776,17 @@ const SpottingScamsTutorial = () => {
                           <CardContent className="p-4">
                             <h4 className="font-medium mb-2">{item.element}</h4>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm mb-3">
-                              <div>
+                              <div className="min-w-0">
                                 <span className="font-medium text-awareness">✓ Legitimate: </span>
-                                <span>{item.legitimate}</span>
+                                <span className="break-words">{item.legitimate}</span>
                               </div>
-                              <div>
+                              <div className="min-w-0">
                                 <span className="font-medium text-destructive">✗ Scam: </span>
-                                <span>{item.scam}</span>
+                                <span className="break-words">{item.scam}</span>
                               </div>
                             </div>
                             <div className="p-2 bg-accent/10 rounded">
-                              <p className="text-sm text-foreground">
+                              <p className="text-sm text-foreground break-words">
                                 <strong className="text-accent">💡 Tip:</strong> {item.tip}
                               </p>
                             </div>
@@ -808,28 +808,28 @@ const SpottingScamsTutorial = () => {
                         <Card key={index} className="border-l-4 border-destructive/50">
                           <CardContent className="p-4">
                             <h4 className="font-medium mb-2 text-destructive">{request.type}</h4>
-                            <p className="text-sm text-muted-foreground mb-3">{request.description}</p>
+                            <p className="text-sm text-muted-foreground mb-3 break-words">{request.description}</p>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
-                              <div>
+                              <div className="min-w-0">
                                 <div className="flex items-center gap-1 mb-1">
-                                  <AlertTriangle className="h-3 w-3 text-destructive" />
+                                  <AlertTriangle className="h-3 w-3 text-destructive flex-shrink-0" />
                                   <span className="font-medium text-destructive">Red Flag:</span>
                                 </div>
-                                <p className="text-foreground">{request.redFlag}</p>
+                                <p className="text-foreground break-words">{request.redFlag}</p>
                               </div>
-                              <div>
+                              <div className="min-w-0">
                                 <div className="flex items-center gap-1 mb-1">
-                                  <CheckCircle className="h-3 w-3 text-awareness" />
+                                  <CheckCircle className="h-3 w-3 text-awareness flex-shrink-0" />
                                   <span className="font-medium text-awareness">Safe:</span>
                                 </div>
-                                <p className="text-foreground">{request.safe}</p>
+                                <p className="text-foreground break-words">{request.safe}</p>
                               </div>
-                              <div>
+                              <div className="min-w-0">
                                 <div className="flex items-center gap-1 mb-1">
-                                  <Shield className="h-3 w-3 text-primary" />
+                                  <Shield className="h-3 w-3 text-primary flex-shrink-0" />
                                   <span className="font-medium text-primary">Action:</span>
                                 </div>
-                                <p className="text-foreground">{request.action}</p>
+                                <p className="text-foreground break-words">{request.action}</p>
                               </div>
                             </div>
                           </CardContent>
@@ -1170,34 +1170,39 @@ const SpottingScamsTutorial = () => {
               )}
 
               {/* Step Navigation */}
-              <div className="flex items-center justify-between pt-6 border-t">
-                <Button
-                  variant="outline"
-                  onClick={handlePrevious}
-                  disabled={currentStep === 1}
-                >
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Previous
-                </Button>
-
+              <div className="flex flex-col gap-3 pt-6 border-t">
                 <div className="flex gap-2">
-                  {!isStepCompleted(currentStep) && (
-                    <Button
-                      variant="secondary"
-                      onClick={handleStepComplete}
-                    >
-                      <CheckCircle className="h-4 w-4 mr-2" />
-                      Mark Complete
-                    </Button>
-                  )}
-                  
+                  <Button
+                    variant="outline"
+                    onClick={handlePrevious}
+                    disabled={currentStep === 1}
+                    className="flex-1 min-h-[44px]"
+                  >
+                    <ArrowLeft className="h-4 w-4 mr-2" />
+                    <span className="hidden sm:inline">Previous</span>
+                    <span className="sm:hidden">Prev</span>
+                  </Button>
+
                   <Button
                     onClick={handleNext}
+                    className="flex-1 min-h-[44px]"
                   >
-                    {currentStep === totalSteps ? "Finish Tutorial" : "Next Step"}
+                    <span className="hidden sm:inline">{currentStep === totalSteps ? "Finish Tutorial" : "Next Step"}</span>
+                    <span className="sm:hidden">Next</span>
                     <ArrowRight className="h-4 w-4 ml-2" />
                   </Button>
                 </div>
+
+                {!isStepCompleted(currentStep) && (
+                  <Button
+                    variant="secondary"
+                    onClick={handleStepComplete}
+                    className="w-full min-h-[44px]"
+                  >
+                    <CheckCircle className="h-4 w-4 mr-2" />
+                    Mark Complete
+                  </Button>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -1217,11 +1222,11 @@ const SpottingScamsTutorial = () => {
                 You now have the essential skills to identify and avoid DeFi scams! 
                 Stay vigilant, trust your instincts, and always prioritize security over profit.
               </p>
-              <div className="flex gap-2">
-                <Button asChild>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <Button asChild className="w-full sm:w-auto">
                   <Link to="/tutorials">Back to Tutorials</Link>
                 </Button>
-                <Button variant="outline" asChild>
+                <Button variant="outline" asChild className="w-full sm:w-auto">
                   <Link to="/courses">Continue Learning DeFi</Link>
                 </Button>
               </div>
