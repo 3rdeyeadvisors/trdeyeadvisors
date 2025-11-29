@@ -959,10 +959,10 @@ const DefiCalculatorsTutorial = () => {
 
         {/* Completion Message */}
         {completedSteps.length === totalSteps && (
-          <Card className="bg-awareness/10 border-awareness/20">
+          <Card className="bg-awareness/10 border-awareness/20 mt-8">
             <CardHeader>
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-awareness/10">
+                <div className="p-2 rounded-lg bg-awareness/10 flex-shrink-0">
                   <CheckCircle className="h-6 w-6 text-awareness" />
                 </div>
                 <CardTitle className="text-awareness">Congratulations! Calculator Mastery Complete</CardTitle>
@@ -973,11 +973,11 @@ const DefiCalculatorsTutorial = () => {
                 You now know how to use DeFi calculators to make informed investment decisions! 
                 You can estimate returns, calculate risks, and choose strategies wisely.
               </p>
-              <div className="flex gap-2">
-                <Button asChild>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <Button asChild className="w-full sm:w-auto">
                   <Link to="/tutorials">Back to Tutorials</Link>
                 </Button>
-                <Button variant="outline" asChild>
+                <Button variant="outline" asChild className="w-full sm:w-auto">
                   <Link to="/courses">Apply Your Knowledge</Link>
                 </Button>
               </div>
