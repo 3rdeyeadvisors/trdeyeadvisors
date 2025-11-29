@@ -200,10 +200,10 @@ const ChartReadingTutorial = () => {
             <Card className="p-4">
               <h4 className="font-semibold mb-2">RSI (Relative Strength Index)</h4>
               <p className="text-sm text-muted-foreground mb-2">Measures overbought/oversold conditions (0-100)</p>
-              <div className="flex gap-2">
-                <Badge variant="destructive">Oversold: &lt;30</Badge>
-                <Badge variant="secondary">Neutral: 30-70</Badge>
-                <Badge variant="destructive">Overbought: &gt;70</Badge>
+              <div className="flex flex-wrap gap-2">
+                <Badge variant="destructive" className="whitespace-nowrap">Oversold: &lt;30</Badge>
+                <Badge variant="secondary" className="whitespace-nowrap">Neutral: 30-70</Badge>
+                <Badge variant="destructive" className="whitespace-nowrap">Overbought: &gt;70</Badge>
               </div>
             </Card>
             
@@ -244,21 +244,21 @@ const ChartReadingTutorial = () => {
             <Card className="p-4 border-awareness/20 bg-awareness/10">
               <h4 className="font-semibold text-awareness mb-2">Bullish Patterns</h4>
               <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
+                <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2">
                   <span>Cup and Handle</span>
-                  <Badge variant="outline" className="text-awareness">Continuation</Badge>
+                  <Badge variant="outline" className="text-awareness whitespace-nowrap w-fit">Continuation</Badge>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2">
                   <span>Double Bottom</span>
-                  <Badge variant="outline" className="text-awareness">Reversal</Badge>
+                  <Badge variant="outline" className="text-awareness whitespace-nowrap w-fit">Reversal</Badge>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2">
                   <span>Ascending Triangle</span>
-                  <Badge variant="outline" className="text-awareness">Continuation</Badge>
+                  <Badge variant="outline" className="text-awareness whitespace-nowrap w-fit">Continuation</Badge>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2">
                   <span>Bull Flag</span>
-                  <Badge variant="outline" className="text-awareness">Continuation</Badge>
+                  <Badge variant="outline" className="text-awareness whitespace-nowrap w-fit">Continuation</Badge>
                 </div>
               </div>
             </Card>
@@ -266,21 +266,21 @@ const ChartReadingTutorial = () => {
             <Card className="p-4 border-destructive/20 bg-destructive/10">
               <h4 className="font-semibold text-destructive mb-2">Bearish Patterns</h4>
               <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
+                <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2">
                   <span>Head and Shoulders</span>
-                  <Badge variant="outline" className="text-destructive">Reversal</Badge>
+                  <Badge variant="outline" className="text-destructive whitespace-nowrap w-fit">Reversal</Badge>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2">
                   <span>Double Top</span>
-                  <Badge variant="outline" className="text-destructive">Reversal</Badge>
+                  <Badge variant="outline" className="text-destructive whitespace-nowrap w-fit">Reversal</Badge>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2">
                   <span>Descending Triangle</span>
-                  <Badge variant="outline" className="text-destructive">Continuation</Badge>
+                  <Badge variant="outline" className="text-destructive whitespace-nowrap w-fit">Continuation</Badge>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2">
                   <span>Bear Flag</span>
-                  <Badge variant="outline" className="text-destructive">Continuation</Badge>
+                  <Badge variant="outline" className="text-destructive whitespace-nowrap w-fit">Continuation</Badge>
                 </div>
               </div>
             </Card>
