@@ -531,21 +531,22 @@ const DefiCalculatorsTutorial = () => {
                               className="mt-1"
                             />
                           </div>
-                          <div>
-                            <Label htmlFor="apy">APY (%)</Label>
-                            <div className="mt-1 space-y-2">
-                              <div className="text-center text-sm font-medium text-primary mb-1">
-                                {yieldInputs.apy}% APY
-                              </div>
-                              <Slider
-                                value={[yieldInputs.apy]}
-                                onValueChange={(value) => setYieldInputs({...yieldInputs, apy: value[0]})}
-                                max={100}
-                                min={1}
-                                step={0.5}
-                              />
-                            </div>
-                          </div>
+                           <div>
+                             <Label htmlFor="apy">APY (%)</Label>
+                             <div className="mt-1 space-y-2">
+                               <div className="text-center text-sm font-medium text-primary mb-1">
+                                 {yieldInputs.apy}% APY
+                               </div>
+                               <Slider
+                                 value={[yieldInputs.apy]}
+                                 onValueChange={(value) => setYieldInputs({...yieldInputs, apy: value[0]})}
+                                 max={100}
+                                 min={1}
+                                 step={0.5}
+                                 className="[&_[role=slider]]:!h-2 [&_[role=slider]]:!w-2 sm:[&_[role=slider]]:!h-4 sm:[&_[role=slider]]:!w-4"
+                               />
+                             </div>
+                           </div>
                           <div>
                             <Label htmlFor="compound">Compound Period (times/year)</Label>
                             <Input
@@ -700,6 +701,7 @@ const DefiCalculatorsTutorial = () => {
                                 max={200}
                                 min={-50}
                                 step={1}
+                                className="[&_[role=slider]]:!h-2 [&_[role=slider]]:!w-2 sm:[&_[role=slider]]:!h-4 sm:[&_[role=slider]]:!w-4"
                               />
                             </div>
                           </div>
@@ -715,6 +717,7 @@ const DefiCalculatorsTutorial = () => {
                                 max={200}
                                 min={-50}
                                 step={1}
+                                className="[&_[role=slider]]:!h-2 [&_[role=slider]]:!w-2 sm:[&_[role=slider]]:!h-4 sm:[&_[role=slider]]:!w-4"
                               />
                             </div>
                           </div>
