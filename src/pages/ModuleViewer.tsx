@@ -162,7 +162,7 @@ const ModuleViewer = () => {
         {showModuleList && (
           <Card className="mb-4 md:mb-6 p-4 md:p-6">
             <h3 className="text-base md:text-lg font-consciousness font-semibold mb-3 md:mb-4 text-center md:text-left">Course Modules</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {course.modules.map((module, index) => {
                 const isCompleted = isModuleCompleted(index);
                 const isCurrent = index === currentModuleIndex;
@@ -171,7 +171,7 @@ const ModuleViewer = () => {
                   <Button
                     key={module.id}
                     variant={isCurrent ? "default" : "outline"}
-                    className={`h-auto p-3 transition-all ${
+                    className={`h-auto p-3 transition-all justify-start text-left ${
                       isCurrent 
                         ? "bg-primary/10 border-primary/50 text-primary hover:bg-primary/20" 
                         : isCompleted 
@@ -183,28 +183,26 @@ const ModuleViewer = () => {
                       setShowModuleList(false);
                     }}
                   >
-                    <div className="flex items-center gap-2 w-full">
+                    <div className="flex items-start gap-2 w-full overflow-hidden">
                       {/* Status icon */}
-                      <div className="flex-shrink-0">
-                        {isCompleted ? (
-                          <div className="w-5 h-5 bg-awareness rounded-full flex items-center justify-center">
-                            <span className="text-foreground text-xs font-bold">✓</span>
-                          </div>
-                        ) : (
-                          <div className="w-5 h-5 border-2 border-current rounded-full flex items-center justify-center">
-                            <span className="text-xs font-medium">{index + 1}</span>
-                          </div>
-                        )}
-                      </div>
+                      {isCompleted ? (
+                        <div className="w-5 h-5 bg-awareness rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <span className="text-foreground text-xs font-bold">✓</span>
+                        </div>
+                      ) : (
+                        <div className="w-5 h-5 border-2 border-current rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <span className="text-xs font-medium">{index + 1}</span>
+                        </div>
+                      )}
                       
                       {/* Content */}
-                      <div className="flex-1 min-w-0 text-left">
-                        <p className="text-sm font-medium leading-tight break-words">{module.title}</p>
-                        <p className="text-xs text-muted-foreground mt-0.5">{module.duration} min</p>
+                      <div className="flex-1 min-w-0 overflow-hidden">
+                        <p className="text-sm font-medium leading-tight line-clamp-2">{module.title}</p>
+                        <p className="text-xs text-muted-foreground mt-1">{module.duration} min</p>
                       </div>
                       
                       {/* Play icon */}
-                      {isCurrent && <Play className="w-4 h-4 flex-shrink-0" />}
+                      {isCurrent && <Play className="w-4 h-4 flex-shrink-0 mt-0.5" />}
                     </div>
                   </Button>
                 );
