@@ -240,7 +240,7 @@ const ChartReadingTutorial = () => {
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">Classic Chart Patterns</h3>
           
-          <div className="grid gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Card className="p-4 border-awareness/20 bg-awareness/10">
               <h4 className="font-semibold text-awareness mb-2">Bullish Patterns</h4>
               <div className="space-y-2 text-sm">
