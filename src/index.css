@@ -623,13 +623,16 @@ svg[class*="lucide-star"] {
     min-height: 44px;
   }
 
-  /* Force small slider thumbs on mobile - aggressive approach */
+  /* Force small slider thumbs on mobile - target Radix UI specifically */
   @media (max-width: 640px) {
-    [role="slider"] {
-      width: 8px !important;
-      height: 8px !important;
-      transform: scale(0.4) !important;
-      transform-origin: center !important;
+    [data-radix-slider-thumb],
+    span[role="slider"] {
+      width: 10px !important;
+      height: 10px !important;
+      min-width: 10px !important;
+      min-height: 10px !important;
+      max-width: 10px !important;
+      max-height: 10px !important;
     }
   }
 }
