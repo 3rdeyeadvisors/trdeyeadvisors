@@ -55,19 +55,10 @@ export const EnhancedModuleNavigation = ({
   const course = getCourseContent(courseId);
   const progress = getCourseProgress(courseId);
 
-  console.log('[ModuleNav] Rendering with progress:', {
-    courseId,
-    currentModuleId,
-    progressData: progress,
-    completedModules: progress?.completed_modules
-  });
-
   if (!course) return null;
 
   const isModuleCompleted = (moduleIndex: number) => {
-    const completed = progress?.completed_modules?.includes(moduleIndex) || false;
-    console.log('[ModuleNav] Check if module', moduleIndex, 'is completed:', completed, 'Array:', progress?.completed_modules);
-    return completed;
+    return progress?.completed_modules?.includes(moduleIndex) || false;
   };
 
   const getModuleProgress = (moduleIndex: number) => {
