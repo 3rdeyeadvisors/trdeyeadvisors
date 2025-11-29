@@ -282,53 +282,45 @@ export const EnhancedModuleNavigation = ({
               } ${isCompleted ? "border-awareness bg-awareness/10" : ""}`}
               onClick={() => handleModuleClick(module.id)}
             >
-              <div className="flex items-start gap-3">
-                {/* Status Icon */}
-                <div className="flex items-center justify-center flex-shrink-0">
+              {/* Top Row: Checkmark and Current Badge */}
+              <div className="flex items-start justify-between gap-2 mb-3">
+                <div className="flex items-center gap-2 flex-shrink-0">
                   {isCompleted ? (
-                    <CheckCircle2 className="w-6 h-6 text-awareness" />
+                    <CheckCircle2 className="w-5 h-5 text-awareness" />
                   ) : (
-                    <div className="w-6 h-6 border-2 border-muted-foreground rounded-full flex items-center justify-center">
+                    <div className="w-5 h-5 border-2 border-muted-foreground rounded-full flex items-center justify-center">
                       <span className="text-xs font-medium">{moduleIndex + 1}</span>
                     </div>
                   )}
+                  <Badge variant="outline" className={`${getTypeColor(module.type)} text-xs`}>
+                    <Icon className="w-3 h-3 mr-1" />
+                    {module.type}
+                  </Badge>
                 </div>
+                {isCurrent && (
+                  <Badge variant="default" className="text-xs">
+                    Current
+                  </Badge>
+                )}
+              </div>
 
-                {/* Content */}
-                <div className="flex-1 min-w-0 pr-2">
-                  {/* Top Row: Type badge, duration, and current badge */}
-                  <div className="flex items-center flex-wrap gap-2 mb-2">
-                    <Badge variant="outline" className={`${getTypeColor(module.type)} text-xs whitespace-nowrap`}>
-                      <Icon className="w-3 h-3 mr-1" />
-                      {module.type}
-                    </Badge>
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground whitespace-nowrap">
-                      <Clock className="w-3 h-3" />
-                      {module.duration}m
-                    </div>
-                    {isCurrent && (
-                      <Badge variant="default" className="text-xs ml-auto">
-                        Current
-                      </Badge>
-                    )}
+              {/* Title */}
+              <h4 className="font-semibold text-sm leading-snug text-foreground mb-2">
+                {module.title}
+              </h4>
+
+              {/* Bottom Row: Duration and Progress */}
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                  <Clock className="w-3 h-3" />
+                  {module.duration}m
+                </div>
+                {moduleProgress > 0 && (
+                  <div className="flex items-center gap-2 flex-1 max-w-[120px]">
+                    <Progress value={moduleProgress} className="h-1.5 flex-1" />
+                    <span className="text-xs text-muted-foreground whitespace-nowrap">{moduleProgress}%</span>
                   </div>
-
-                  {/* Title */}
-                  <h4 className="font-semibold text-sm leading-tight text-foreground mb-2 break-words">
-                    {module.title}
-                  </h4>
-
-                  {/* Progress Bar */}
-                  {moduleProgress > 0 && (
-                    <div className="space-y-1">
-                      <div className="flex justify-between text-xs text-muted-foreground">
-                        <span>Progress</span>
-                        <span>{moduleProgress}%</span>
-                      </div>
-                      <Progress value={moduleProgress} className="h-1.5" />
-                    </div>
-                  )}
-                </div>
+                )}
               </div>
             </Card>
           );
