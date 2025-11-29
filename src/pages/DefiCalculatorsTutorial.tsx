@@ -515,7 +515,7 @@ const DefiCalculatorsTutorial = () => {
                         <div className="p-2 rounded-lg bg-awareness/10 flex-shrink-0">
                           <TrendingUp className="h-5 w-5 text-awareness" />
                         </div>
-                        <CardTitle className="text-lg text-awareness leading-tight">Interactive Yield Calculator</CardTitle>
+                        <CardTitle className="text-lg text-awareness leading-tight self-center my-0">Interactive Yield Calculator</CardTitle>
                       </div>
                     </CardHeader>
                     <CardContent className="space-y-4">
@@ -687,7 +687,7 @@ const DefiCalculatorsTutorial = () => {
                         <div className="p-2 rounded-lg bg-destructive/10 flex-shrink-0">
                           <AlertTriangle className="h-5 w-5 text-destructive" />
                         </div>
-                        <CardTitle className="text-lg text-destructive leading-tight">Interactive Impermanent Loss Calculator</CardTitle>
+                        <CardTitle className="text-lg text-destructive leading-tight self-center my-0">Interactive Impermanent Loss Calculator</CardTitle>
                       </div>
                     </CardHeader>
                     <CardContent className="space-y-4">
