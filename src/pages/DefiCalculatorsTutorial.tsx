@@ -433,10 +433,10 @@ const DefiCalculatorsTutorial = () => {
           <Card className="mb-8">
             <CardHeader>
               <div className="flex items-center gap-3 mb-3">
-                <div className="p-2 rounded-lg bg-primary/10">
+                <div className="p-2 rounded-lg bg-primary/10 flex-shrink-0">
                   <currentStepData.icon className="h-5 w-5 text-primary" />
                 </div>
-                <CardTitle>{currentStepData.title}</CardTitle>
+                <CardTitle className="leading-tight">{currentStepData.title}</CardTitle>
               </div>
               <CardDescription className="mb-3">
                 Estimated time: {currentStepData.duration}
@@ -462,10 +462,10 @@ const DefiCalculatorsTutorial = () => {
                         <Card key={index}>
                           <CardHeader className="pb-3 space-y-3">
                             <div className="flex items-center gap-3">
-                              <div className="p-2 rounded-lg bg-primary/10">
+                              <div className="p-2 rounded-lg bg-primary/10 flex-shrink-0">
                                 <CalcIcon className="h-5 w-5 text-primary" />
                               </div>
-                              <CardTitle className="text-lg">{calc.name}</CardTitle>
+                              <CardTitle className="text-lg leading-tight">{calc.name}</CardTitle>
                             </div>
                             <Badge variant="outline" className="w-fit">{calc.difficulty}</Badge>
                             <CardDescription>{calc.purpose}</CardDescription>
@@ -512,10 +512,10 @@ const DefiCalculatorsTutorial = () => {
                   <Card className="bg-awareness/10 border-awareness/20">
                     <CardHeader className="pb-3">
                       <div className="flex items-center gap-3">
-                        <div className="p-2 rounded-lg bg-awareness/10">
+                        <div className="p-2 rounded-lg bg-awareness/10 flex-shrink-0">
                           <TrendingUp className="h-5 w-5 text-awareness" />
                         </div>
-                        <CardTitle className="text-lg text-awareness">Interactive Yield Calculator</CardTitle>
+                        <CardTitle className="text-lg text-awareness leading-tight">Interactive Yield Calculator</CardTitle>
                       </div>
                     </CardHeader>
                     <CardContent className="space-y-4">
@@ -643,10 +643,10 @@ const DefiCalculatorsTutorial = () => {
                   <Card className="bg-destructive/10 border-destructive/20">
                     <CardHeader className="pb-3">
                       <div className="flex items-center gap-3">
-                        <div className="p-2 rounded-lg bg-destructive/10">
+                        <div className="p-2 rounded-lg bg-destructive/10 flex-shrink-0">
                           <AlertTriangle className="h-5 w-5 text-destructive" />
                         </div>
-                        <CardTitle className="text-lg text-destructive">What is Impermanent Loss?</CardTitle>
+                        <CardTitle className="text-lg text-destructive leading-tight">What is Impermanent Loss?</CardTitle>
                       </div>
                     </CardHeader>
                     <CardContent className="space-y-3 text-sm">
@@ -660,10 +660,10 @@ const DefiCalculatorsTutorial = () => {
                   <Card className="bg-destructive/10 border-destructive/20">
                     <CardHeader className="pb-3">
                       <div className="flex items-center gap-3">
-                        <div className="p-2 rounded-lg bg-destructive/10">
+                        <div className="p-2 rounded-lg bg-destructive/10 flex-shrink-0">
                           <AlertTriangle className="h-5 w-5 text-destructive" />
                         </div>
-                        <CardTitle className="text-lg text-destructive">Interactive Impermanent Loss Calculator</CardTitle>
+                        <CardTitle className="text-lg text-destructive leading-tight">Interactive Impermanent Loss Calculator</CardTitle>
                       </div>
                     </CardHeader>
                     <CardContent className="space-y-4">
