@@ -511,10 +511,12 @@ const DefiCalculatorsTutorial = () => {
                   {/* Interactive Calculator */}
                   <Card className="bg-awareness/10 border-awareness/20">
                     <CardHeader className="pb-3">
-                      <CardTitle className="text-lg text-awareness flex items-center gap-2">
-                        <TrendingUp className="h-5 w-5" />
-                        Interactive Yield Calculator
-                      </CardTitle>
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 rounded-lg bg-awareness/10">
+                          <TrendingUp className="h-5 w-5 text-awareness" />
+                        </div>
+                        <CardTitle className="text-lg text-awareness">Interactive Yield Calculator</CardTitle>
+                      </div>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -639,10 +641,12 @@ const DefiCalculatorsTutorial = () => {
                   {/* IL Explanation */}
                   <Card className="bg-destructive/10 border-destructive/20">
                     <CardHeader className="pb-3">
-                      <CardTitle className="text-lg text-destructive flex items-center gap-2">
-                        <AlertTriangle className="h-5 w-5" />
-                        What is Impermanent Loss?
-                      </CardTitle>
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 rounded-lg bg-destructive/10">
+                          <AlertTriangle className="h-5 w-5 text-destructive" />
+                        </div>
+                        <CardTitle className="text-lg text-destructive">What is Impermanent Loss?</CardTitle>
+                      </div>
                     </CardHeader>
                     <CardContent className="space-y-3 text-sm">
                       <p><strong>Definition:</strong> {currentStepData.content.whatIsIL?.definition}</p>
@@ -654,10 +658,12 @@ const DefiCalculatorsTutorial = () => {
                   {/* Interactive IL Calculator */}
                   <Card className="bg-destructive/10 border-destructive/20">
                     <CardHeader className="pb-3">
-                      <CardTitle className="text-lg text-destructive flex items-center gap-2">
-                        <AlertTriangle className="h-5 w-5" />
-                        Interactive Impermanent Loss Calculator
-                      </CardTitle>
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 rounded-lg bg-destructive/10">
+                          <AlertTriangle className="h-5 w-5 text-destructive" />
+                        </div>
+                        <CardTitle className="text-lg text-destructive">Interactive Impermanent Loss Calculator</CardTitle>
+                      </div>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -877,10 +883,12 @@ const DefiCalculatorsTutorial = () => {
         {completedSteps.length === totalSteps && (
           <Card className="bg-awareness/10 border-awareness/20">
             <CardHeader>
-              <CardTitle className="text-awareness flex items-center gap-2">
-                <CheckCircle className="h-6 w-6" />
-                Congratulations! Calculator Mastery Complete
-              </CardTitle>
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-awareness/10">
+                  <CheckCircle className="h-6 w-6 text-awareness" />
+                </div>
+                <CardTitle className="text-awareness">Congratulations! Calculator Mastery Complete</CardTitle>
+              </div>
             </CardHeader>
             <CardContent>
               <p className="text-foreground mb-4">
