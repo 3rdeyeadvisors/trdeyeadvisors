@@ -136,6 +136,13 @@ export const EnhancedContentPlayer = ({
 
   const loadModuleQuiz = async () => {
     try {
+      // First, check if module has a quiz in courseContent
+      if (module.content.quiz) {
+        setQuiz(module.content.quiz);
+        return;
+      }
+
+      // Fall back to database quiz
       const { data, error } = await supabase
         .from('quizzes_public')
         .select('*')
@@ -145,16 +152,24 @@ export const EnhancedContentPlayer = ({
 
       if (error && error.code !== 'PGRST116') throw error;
       
-      if (data) {
-        setQuiz({
-          id: data.id,
-          title: data.title,
-          description: data.description,
-          questions: Array.isArray(data.questions) ? data.questions : [],
-          passingScore: data.passing_score,
-          timeLimit: data.time_limit,
-          maxAttempts: data.max_attempts
-        });
+      if (data && data.questions) {
+        // Validate that the quiz has the correct structure
+        const questions = data.questions as any[];
+        const hasCorrectStructure = Array.isArray(questions) && 
+          questions.length > 0 &&
+          questions[0].correctAnswers !== undefined;
+
+        if (hasCorrectStructure) {
+          setQuiz({
+            id: data.id,
+            title: data.title,
+            description: data.description,
+            questions: questions,
+            passingScore: data.passing_score || 70,
+            timeLimit: data.time_limit,
+            maxAttempts: data.max_attempts || 3
+          });
+        }
       }
     } catch (error) {
       console.error('Error loading quiz:', error);
