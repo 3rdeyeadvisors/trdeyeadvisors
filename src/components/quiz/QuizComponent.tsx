@@ -140,6 +140,12 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
     let earnedPoints = 0;
 
     quiz.questions.forEach(question => {
+      // Validate question structure
+      if (!question.correctAnswers || !Array.isArray(question.correctAnswers)) {
+        console.error('Invalid question structure:', question);
+        return;
+      }
+
       totalPoints += question.points;
       const userAnswer = answers[question.id];
       
@@ -160,7 +166,7 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
       }
     });
 
-    return Math.round((earnedPoints / totalPoints) * 100);
+    return totalPoints > 0 ? Math.round((earnedPoints / totalPoints) * 100) : 0;
   };
 
   const handleSubmitQuiz = async () => {
@@ -175,32 +181,36 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
 
     setLoading(true);
     
-    // Calculate score before submission
-    const finalScore = calculateScore();
-    const passed = finalScore >= quiz.passingScore;
-    const timeTaken = quiz.timeLimit ? (quiz.timeLimit * 60) - (timeLeft || 0) : null;
-
-    console.log('Submitting quiz:', { finalScore, passed, answersCount: Object.keys(answers).length });
-
     try {
-      const { error } = await supabase
-        .from('quiz_attempts')
-        .insert({
-          user_id: user.id,
-          quiz_id: quiz.id,
-          answers,
-          score: finalScore,
-          passed,
-          time_taken: timeTaken,
-          completed_at: new Date().toISOString()
-        });
+      // Calculate score before submission
+      const finalScore = calculateScore();
+      const passed = finalScore >= quiz.passingScore;
+      const timeTaken = quiz.timeLimit ? (quiz.timeLimit * 60) - (timeLeft || 0) : null;
 
-      if (error) {
-        console.error('Supabase error:', error);
-        throw error;
+      console.log('Submitting quiz:', { finalScore, passed, answersCount: Object.keys(answers).length });
+
+      // Try to save to database, but don't fail if it doesn't work (for courseContent quizzes)
+      try {
+        const { error } = await supabase
+          .from('quiz_attempts')
+          .insert({
+            user_id: user.id,
+            quiz_id: quiz.id,
+            answers,
+            score: finalScore,
+            passed,
+            time_taken: timeTaken,
+            completed_at: new Date().toISOString()
+          });
+
+        if (error) {
+          console.log('Could not save quiz to database (this is OK for courseContent quizzes):', error.message);
+        }
+      } catch (dbError) {
+        console.log('Database save skipped for courseContent quiz');
       }
 
-      // Set results state BEFORE showing toast
+      // Set results state - this should always happen
       setScore(finalScore);
       setShowResults(true);
       setQuizStarted(false);
@@ -218,18 +228,19 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
       });
 
       onComplete?.(passed, finalScore);
-      await loadAttempts();
-    } catch (error) {
-      console.error('Error submitting quiz:', error);
       
-      // Even if submission fails, show results locally
-      setScore(finalScore);
-      setShowResults(true);
-      setQuizStarted(false);
+      // Try to reload attempts (may not work for courseContent quizzes)
+      try {
+        await loadAttempts();
+      } catch (e) {
+        console.log('Could not reload attempts');
+      }
+    } catch (error) {
+      console.error('Error calculating quiz score:', error);
       
       toast({
-        title: "⚠️ Submission Error",
-        description: "Your answers were calculated but couldn't be saved. Results are shown below.",
+        title: "⚠️ Quiz Error",
+        description: "There was an error processing your quiz. Please try again.",
         variant: "destructive",
         duration: 6000,
       });
@@ -245,6 +256,15 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
   };
 
   const renderQuestion = (question: Question) => {
+    // Validate question structure
+    if (!question || !question.options || !Array.isArray(question.options)) {
+      return (
+        <div className="p-4 border border-destructive rounded-lg bg-destructive/10">
+          <p className="text-sm text-destructive">Error: Invalid question structure</p>
+        </div>
+      );
+    }
+
     const userAnswer = answers[question.id];
 
     if (question.type === 'single' || question.type === 'true-false') {
