@@ -80,17 +80,21 @@ export const EnhancedMarkdownRenderer = ({ content, heroImage }: EnhancedMarkdow
               };
               const Icon = icons[data.type as keyof typeof icons] || Info;
               
-              const alertVariant = data.type === 'warning' ? 'border-destructive bg-destructive/5' : 
-                                   data.type === 'success' ? 'border-success bg-success/5' : 
-                                   'border-accent bg-accent/5';
+              const alertVariant = data.type === 'warning' ? 'border-destructive/50 bg-destructive/10' : 
+                                   data.type === 'success' ? 'border-awareness/50 bg-awareness/10' : 
+                                   'border-accent/50 bg-accent/10';
+              
+              const iconColor = data.type === 'warning' ? 'text-destructive' :
+                               data.type === 'success' ? 'text-awareness' :
+                               'text-accent';
               
               return (
                 <div key={index} className="my-6">
-                  <Alert className={`${alertVariant} px-4 py-4 sm:px-6 sm:py-5 w-full`}>
+                  <Alert className={`${alertVariant} px-4 py-4 sm:px-6 sm:py-5 w-full rounded-lg`}>
                     <div className="flex flex-col items-center text-center space-y-3">
-                      <Icon className="h-5 w-5 flex-shrink-0" />
-                      <AlertDescription className="text-sm break-words leading-relaxed w-full">
-                        {data.message}
+                      <Icon className={`h-5 w-5 flex-shrink-0 ${iconColor}`} />
+                      <AlertDescription className="w-full">
+                        <div className="text-foreground text-sm sm:text-base break-words leading-relaxed">{data.message}</div>
                       </AlertDescription>
                     </div>
                   </Alert>
