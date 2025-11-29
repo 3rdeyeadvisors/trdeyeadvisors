@@ -873,7 +873,82 @@ With proper education, security practices, and gradual exposure, DeFi can be a v
 
 **Remember**: The goal isn't to avoid all risk (that's impossible), but to **understand and manage** the risks you're taking.
 
-*Congratulations! You've completed the DeFi Foundations course. You now have the knowledge to safely explore the DeFi ecosystem.*`
+*Congratulations! You've completed the DeFi Foundations course. You now have the knowledge to safely explore the DeFi ecosystem.*`,
+          quiz: {
+            id: "quiz-1-5",
+            title: "DeFi Risks and Myths - Knowledge Check",
+            description: "Test your understanding of real DeFi risks, common myths, and risk management best practices.",
+            passingScore: 70,
+            timeLimit: 10,
+            maxAttempts: 3,
+            questions: [
+              {
+                id: "q1-5-1",
+                question: "Which of the following are REAL risks in DeFi that you should take seriously? (Select all that apply)",
+                type: "multiple",
+                options: [
+                  "Smart contract bugs leading to loss of funds",
+                  "User error like sending funds to wrong addresses",
+                  "It's only for tech experts (this is a myth)",
+                  "Market volatility causing significant price changes"
+                ],
+                correctAnswers: [0, 1, 3],
+                explanation: "Smart contract risk, user error, and market volatility are all real risks. However, 'DeFi is only for tech experts' is a myth - modern DeFi interfaces are often easier to use than traditional banking.",
+                points: 15
+              },
+              {
+                id: "q1-5-2",
+                question: "What is 'Impermanent Loss' in DeFi?",
+                type: "single",
+                options: [
+                  "A temporary network outage that causes transactions to fail",
+                  "When providing liquidity, price changes can reduce your total value compared to just holding",
+                  "A scam that causes you to lose all your funds permanently",
+                  "The fee charged by DEXs for trading"
+                ],
+                correctAnswers: [1],
+                explanation: "Impermanent loss occurs when you provide liquidity and price changes reduce your total value compared to just holding the assets. It's called 'impermanent' because the loss only becomes permanent when you withdraw.",
+                points: 10
+              },
+              {
+                id: "q1-5-3",
+                question: "Which statement about DeFi security is TRUE?",
+                type: "single",
+                options: [
+                  "DeFi is completely unregulated so it's always dangerous",
+                  "All DeFi protocols are scams and Ponzi schemes",
+                  "Many DeFi protocols are more transparent than traditional finance because transactions are public",
+                  "You need at least $10,000 to safely use DeFi"
+                ],
+                correctAnswers: [2],
+                explanation: "Many DeFi protocols are actually more transparent than traditional finance because all transactions are public on the blockchain. The code is often open-source and audited by security firms.",
+                points: 10
+              },
+              {
+                id: "q1-5-4",
+                question: "What is the recommended approach for getting started with DeFi safely?",
+                type: "single",
+                options: [
+                  "Invest all your savings immediately to maximize returns",
+                  "Start with $10-50 to learn, use testnets when available, and gradually increase amounts",
+                  "Wait until you have at least $50,000 before trying DeFi",
+                  "Only use DeFi if you have a computer science degree"
+                ],
+                correctAnswers: [1],
+                explanation: "The safest approach is to start small ($10-50), use testnets (practice with fake money) when available, and gradually increase amounts as you gain confidence and understanding.",
+                points: 10
+              },
+              {
+                id: "q1-5-5",
+                question: "True or False: Most DeFi runs on networks that use 99% less energy than Bitcoin mining.",
+                type: "true-false",
+                options: ["True", "False"],
+                correctAnswers: [0],
+                explanation: "True! While Bitcoin mining is energy-intensive, most DeFi runs on networks like Ethereum (which switched to Proof-of-Stake) that use 99% less energy than Bitcoin.",
+                points: 10
+              }
+            ]
+          }
         },
         resources: [
           {
