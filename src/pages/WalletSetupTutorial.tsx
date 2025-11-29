@@ -571,13 +571,13 @@ const WalletSetupTutorial = () => {
                     </CardHeader>
                     <CardContent>
                       {showSeedPhrase ? (
-                        <div className="grid grid-cols-3 md:grid-cols-4 gap-3">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-3">
                           {currentStepData.content.seedPhrase?.map((word, index) => (
-                            <div key={index} className="flex items-center gap-2 p-2 bg-muted rounded">
-                              <Badge variant="outline" className="text-xs w-6 h-6 flex items-center justify-center">
+                            <div key={index} className="flex items-center gap-2 p-2 bg-muted rounded min-w-0">
+                              <Badge variant="outline" className="text-xs min-w-6 w-6 h-6 flex-shrink-0 flex items-center justify-center">
                                 {index + 1}
                               </Badge>
-                              <span className="text-sm font-mono text-foreground">{word}</span>
+                              <span className="text-sm font-mono text-foreground truncate flex-1">{word}</span>
                             </div>
                           ))}
                         </div>
