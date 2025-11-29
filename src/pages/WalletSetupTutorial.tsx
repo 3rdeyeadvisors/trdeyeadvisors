@@ -399,75 +399,77 @@ const WalletSetupTutorial = () => {
         {/* Current Step Content */}
         {currentStepData && (
           <Card className="mb-8">
-            <CardHeader>
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div className="flex items-center gap-3 flex-1 min-w-0">
-                  <div className="p-2 rounded-lg bg-primary/10 flex-shrink-0">
-                    <currentStepData.icon className="h-5 w-5 text-primary" />
+            <CardHeader className="p-3 md:p-6">
+              <div className="flex flex-col gap-3">
+                <div className="flex flex-col items-center gap-3 md:flex-row md:justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-primary/10 flex items-center justify-center">
+                      <currentStepData.icon className="h-5 w-5 text-primary" />
+                    </div>
+                    <div className="text-center sm:text-left">
+                      <CardTitle className="text-base md:text-xl break-words">{currentStepData.title}</CardTitle>
+                      <CardDescription className="text-xs md:text-sm">
+                        Estimated time: {currentStepData.duration}
+                      </CardDescription>
+                    </div>
                   </div>
-                  <div className="min-w-0 flex-1">
-                    <CardTitle className="truncate">{currentStepData.title}</CardTitle>
-                    <CardDescription>
-                      Estimated time: {currentStepData.duration}
-                    </CardDescription>
-                  </div>
+                  <Badge 
+                    variant={isStepCompleted(currentStep) ? "default" : "secondary"}
+                    className="w-fit text-xs mx-auto sm:mx-0"
+                  >
+                    {isStepCompleted(currentStep) ? "Completed" : "In Progress"}
+                  </Badge>
                 </div>
-                <Badge 
-                  variant={isStepCompleted(currentStep) ? "default" : "secondary"}
-                  className="whitespace-nowrap w-fit"
-                >
-                  {isStepCompleted(currentStep) ? "Completed" : "In Progress"}
-                </Badge>
               </div>
             </CardHeader>
 
-            <CardContent className="space-y-6">
-              <p className="text-muted-foreground">{currentStepData.content.overview}</p>
+            <CardContent className="space-y-4 md:space-y-6 p-3 md:p-6">
+              <p className="text-sm md:text-base text-muted-foreground text-center sm:text-left">{currentStepData.content.overview}</p>
 
               {/* Step 1: Choose Wallet */}
               {currentStep === 1 && (
-                <div className="space-y-6">
+                <div className="space-y-4 md:space-y-6">
                   <KeyTakeaway>
                     MetaMask is the most popular wallet for DeFi in 2025, with over 30 million active users worldwide. It's beginner-friendly, secure when used properly, and supported by virtually all DeFi platforms.
                   </KeyTakeaway>
 
                   <DidYouKnow fact="MetaMask now supports over 100 different blockchain networks, making it one of the most versatile wallets available." />
 
-                  <div className="grid gap-4">
+                  <div className="grid gap-3 md:gap-4">
                     {currentStepData.content.walletOptions?.map((wallet, index) => (
                       <Card key={index} className={`${wallet.recommended ? "border-primary bg-primary/5" : ""}`}>
-                        <CardHeader className="pb-3">
-                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                        <CardHeader className="pb-2 md:pb-3 p-3 md:p-6">
+                          <div className="flex flex-col gap-2 md:gap-3 text-center sm:text-left">
                             <div className="flex-1">
-                              <CardTitle className="text-lg">{wallet.name}</CardTitle>
-                              <CardDescription>{wallet.type}</CardDescription>
+                              <CardTitle className="text-base md:text-lg break-words">{wallet.name}</CardTitle>
+                              <CardDescription className="text-xs md:text-sm break-words">{wallet.type}</CardDescription>
                             </div>
-                            <div className="flex flex-wrap gap-2">
-                              <Badge variant="outline" className="whitespace-nowrap">{wallet.difficulty}</Badge>
-                              {wallet.recommended && <Badge className="whitespace-nowrap">Recommended</Badge>}
+                            <div className="flex flex-wrap gap-1.5 md:gap-2 justify-center sm:justify-start">
+                              <Badge variant="outline" className="text-[10px] md:text-xs whitespace-nowrap">{wallet.difficulty}</Badge>
+                              {wallet.recommended && <Badge className="text-[10px] md:text-xs whitespace-nowrap">Recommended</Badge>}
                             </div>
                           </div>
                         </CardHeader>
-                        <CardContent>
-                          <div className="grid md:grid-cols-2 gap-4">
-                            <div>
-                              <h4 className="font-medium text-awareness mb-2">Pros:</h4>
-                              <ul className="text-sm space-y-1">
+                        <CardContent className="p-3 md:p-6 pt-0">
+                          <div className="grid md:grid-cols-2 gap-3 md:gap-4">
+                            <div className="text-center sm:text-left">
+                              <h4 className="font-medium text-awareness mb-1.5 md:mb-2 text-xs md:text-sm">Pros:</h4>
+                              <ul className="text-xs md:text-sm space-y-0.5 md:space-y-1">
                                 {wallet.pros.map((pro, i) => (
-                                  <li key={i} className="flex items-center gap-2">
-                                    <CheckCircle className="h-3 w-3 text-awareness" />
-                                    {pro}
+                                  <li key={i} className="flex items-center gap-1.5 md:gap-2 justify-center sm:justify-start">
+                                    <CheckCircle className="h-2.5 w-2.5 md:h-3 md:w-3 text-awareness flex-shrink-0" />
+                                    <span className="break-words">{pro}</span>
                                   </li>
                                 ))}
                               </ul>
                             </div>
-                            <div>
-                              <h4 className="font-medium text-destructive mb-2">Cons:</h4>
-                              <ul className="text-sm space-y-1">
+                            <div className="text-center sm:text-left">
+                              <h4 className="font-medium text-destructive mb-1.5 md:mb-2 text-xs md:text-sm">Cons:</h4>
+                              <ul className="text-xs md:text-sm space-y-0.5 md:space-y-1">
                                 {wallet.cons.map((con, i) => (
-                                  <li key={i} className="flex items-center gap-2">
-                                    <AlertTriangle className="h-3 w-3 text-destructive" />
-                                    {con}
+                                  <li key={i} className="flex items-center gap-1.5 md:gap-2 justify-center sm:justify-start">
+                                    <AlertTriangle className="h-2.5 w-2.5 md:h-3 md:w-3 text-destructive flex-shrink-0" />
+                                    <span className="break-words">{con}</span>
                                   </li>
                                 ))}
                               </ul>
@@ -482,10 +484,10 @@ const WalletSetupTutorial = () => {
 
               {/* Step 2: Download */}
               {currentStep === 2 && (
-                <div className="space-y-4">
-                  <Alert className="border-destructive/50 bg-destructive/10">
-                    <AlertTriangle className="h-4 w-4 text-destructive" />
-                    <AlertDescription className="text-foreground">
+                <div className="space-y-3 md:space-y-4">
+                  <Alert className="border-destructive/50 bg-destructive/10 p-3 md:p-4">
+                    <AlertTriangle className="h-3 w-3 md:h-4 md:w-4 text-destructive mx-auto sm:mx-0" />
+                    <AlertDescription className="text-foreground text-xs md:text-sm text-center sm:text-left">
                       <strong>Security Warning:</strong> Only download MetaMask from official sources to avoid scams.
                     </AlertDescription>
                   </Alert>
@@ -497,12 +499,12 @@ const WalletSetupTutorial = () => {
                     steps={currentStepData.content.instructions || []}
                   />
 
-                  <div className="space-y-2">
-                    <h4 className="font-medium text-destructive">Critical Warnings:</h4>
+                  <div className="space-y-1.5 md:space-y-2 text-center sm:text-left">
+                    <h4 className="font-medium text-destructive text-xs md:text-sm">Critical Warnings:</h4>
                     {currentStepData.content.warnings?.map((warning, index) => (
-                      <div key={index} className="flex items-start gap-2 text-sm">
-                        <AlertTriangle className="h-4 w-4 text-destructive mt-0.5 flex-shrink-0" />
-                        <span>{warning}</span>
+                      <div key={index} className="flex items-start gap-1.5 md:gap-2 text-xs md:text-sm justify-center sm:justify-start">
+                        <AlertTriangle className="h-3 w-3 md:h-4 md:w-4 text-destructive mt-0.5 flex-shrink-0" />
+                        <span className="break-words text-left">{warning}</span>
                       </div>
                     ))}
                   </div>
@@ -511,7 +513,7 @@ const WalletSetupTutorial = () => {
 
               {/* Step 3: Create Wallet */}
               {currentStep === 3 && (
-                <div className="space-y-4">
+                <div className="space-y-3 md:space-y-4">
                   <KeyTakeaway title="Password Best Practice">
                     Use a unique password with at least 16 characters. Consider a password manager like Bitwarden or 1Password to generate and store it securely.
                   </KeyTakeaway>
@@ -522,15 +524,15 @@ const WalletSetupTutorial = () => {
                   />
 
                   <Card className="bg-primary/10 border-primary/20">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="text-lg text-primary">Password Security Tips</CardTitle>
+                    <CardHeader className="pb-2 md:pb-3 p-3 md:p-6 text-center sm:text-left">
+                      <CardTitle className="text-base md:text-lg text-primary">Password Security Tips</CardTitle>
                     </CardHeader>
-                    <CardContent>
-                      <ul className="space-y-2 text-sm">
+                    <CardContent className="p-3 md:p-6 pt-0">
+                      <ul className="space-y-1.5 md:space-y-2 text-xs md:text-sm">
                         {currentStepData.content.passwordTips?.map((tip, index) => (
-                          <li key={index} className="flex items-start gap-2">
-                            <CheckCircle className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                            <span className="text-foreground">{tip}</span>
+                          <li key={index} className="flex items-start gap-1.5 md:gap-2 justify-center sm:justify-start">
+                            <CheckCircle className="h-3 w-3 md:h-4 md:w-4 text-primary mt-0.5 flex-shrink-0" />
+                            <span className="text-foreground break-words text-left">{tip}</span>
                           </li>
                         ))}
                       </ul>
