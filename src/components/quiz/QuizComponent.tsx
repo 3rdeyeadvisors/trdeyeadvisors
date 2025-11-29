@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -163,12 +164,23 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
   };
 
   const handleSubmitQuiz = async () => {
-    if (!user) return;
+    if (!user) {
+      toast({
+        title: "Authentication Required",
+        description: "Please sign in to submit the quiz.",
+        variant: "destructive"
+      });
+      return;
+    }
 
     setLoading(true);
+    
+    // Calculate score before submission
     const finalScore = calculateScore();
     const passed = finalScore >= quiz.passingScore;
     const timeTaken = quiz.timeLimit ? (quiz.timeLimit * 60) - (timeLeft || 0) : null;
+
+    console.log('Submitting quiz:', { finalScore, passed, answersCount: Object.keys(answers).length });
 
     try {
       const { error } = await supabase
@@ -183,28 +195,43 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
           completed_at: new Date().toISOString()
         });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
 
+      // Set results state BEFORE showing toast
       setScore(finalScore);
       setShowResults(true);
       setQuizStarted(false);
       
+      console.log('Quiz submitted successfully, showing results');
+      
+      // Show prominent toast notification
       toast({
-        title: passed ? "Quiz Passed! 🎉" : "Quiz Complete",
+        title: passed ? "🎉 Quiz Passed!" : "📝 Quiz Submitted",
         description: passed 
-          ? `Great job! You scored ${finalScore}%` 
-          : `You scored ${finalScore}%. Passing score is ${quiz.passingScore}%`,
-        variant: passed ? "default" : "destructive"
+          ? `Excellent work! You scored ${finalScore}% (passing: ${quiz.passingScore}%)` 
+          : `You scored ${finalScore}%. You need ${quiz.passingScore}% to pass. ${canTakeQuiz() ? 'You can try again!' : ''}`,
+        variant: passed ? "default" : "destructive",
+        duration: 5000,
       });
 
       onComplete?.(passed, finalScore);
       await loadAttempts();
     } catch (error) {
       console.error('Error submitting quiz:', error);
+      
+      // Even if submission fails, show results locally
+      setScore(finalScore);
+      setShowResults(true);
+      setQuizStarted(false);
+      
       toast({
-        title: "Error",
-        description: "Failed to submit quiz. Please try again.",
-        variant: "destructive"
+        title: "⚠️ Submission Error",
+        description: "Your answers were calculated but couldn't be saved. Results are shown below.",
+        variant: "destructive",
+        duration: 6000,
       });
     } finally {
       setLoading(false);
@@ -270,20 +297,45 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
   const renderResults = () => {
     const passed = score >= quiz.passingScore;
     
+    console.log('Rendering results:', { score, passed, questionsLength: quiz.questions.length });
+    
     return (
-      <Card className="p-6">
-        <div className="text-center mb-6">
-          <div className={`w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center ${
-            passed ? "bg-awareness/20 text-awareness" : "bg-destructive/20 text-destructive"
+      <Card className="p-4 sm:p-6 border-2 border-primary/20 shadow-lg">
+        {/* Prominent Results Header */}
+        <div className="text-center mb-6 p-4 rounded-lg" style={{
+          background: passed 
+            ? 'linear-gradient(135deg, rgba(var(--awareness), 0.1), rgba(var(--awareness), 0.05))' 
+            : 'linear-gradient(135deg, rgba(var(--destructive), 0.1), rgba(var(--destructive), 0.05))'
+        }}>
+          <div className={`w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 rounded-full flex items-center justify-center border-4 ${
+            passed ? "bg-awareness/20 text-awareness border-awareness/40" : "bg-destructive/20 text-destructive border-destructive/40"
           }`}>
-            {passed ? <Trophy className="w-8 h-8" /> : <XCircle className="w-8 h-8" />}
+            {passed ? <Trophy className="w-8 h-8 sm:w-10 sm:h-10" /> : <XCircle className="w-8 h-8 sm:w-10 sm:h-10" />}
           </div>
-          <h3 className="text-2xl font-bold mb-2">
-            {passed ? "Congratulations!" : "Keep Practicing"}
+          <Badge className={`text-sm sm:text-base mb-3 ${passed ? 'bg-awareness text-white' : 'bg-destructive text-white'}`}>
+            {passed ? "✅ QUIZ PASSED" : "📝 QUIZ COMPLETE"}
+          </Badge>
+          <h3 className="text-2xl sm:text-3xl font-consciousness font-bold mb-3">
+            {passed ? "Congratulations!" : "Good Effort!"}
           </h3>
-          <p className="text-muted-foreground mb-4">
-            You scored {score}% (Passing: {quiz.passingScore}%)
+          <div className="text-3xl sm:text-4xl font-bold mb-2">
+            {score}%
+          </div>
+          <p className="text-sm sm:text-base text-muted-foreground">
+            {passed 
+              ? `You passed! (Required: ${quiz.passingScore}%)` 
+              : `You need ${quiz.passingScore}% to pass. ${canTakeQuiz() ? 'You can try again!' : ''}`
+            }
           </p>
+        </div>
+
+        {/* Detailed Results Section */}
+        <Separator className="my-6" />
+        
+        <div className="mb-4">
+          <h4 className="text-lg sm:text-xl font-consciousness font-semibold text-center mb-4">
+            📊 Answer Review
+          </h4>
         </div>
 
         <div className="space-y-4">
@@ -296,28 +348,53 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
               : question.correctAnswers.includes(userAnswer);
 
             return (
-              <div key={question.id} className="p-4 border rounded-lg">
-                <div className="flex items-start gap-3 mb-2">
-                  <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
-                    isCorrect ? "bg-awareness/20 text-awareness" : "bg-destructive/20 text-destructive"
+              <div key={question.id} className={`p-4 border-2 rounded-lg ${
+                isCorrect ? 'border-awareness/30 bg-awareness/5' : 'border-destructive/30 bg-destructive/5'
+              }`}>
+                <div className="flex items-start gap-3 mb-3">
+                  <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 ${
+                    isCorrect ? "bg-awareness text-white" : "bg-destructive text-white"
                   }`}>
                     {isCorrect ? <CheckCircle className="w-4 h-4" /> : <XCircle className="w-4 h-4" />}
                   </div>
-                  <h4 className="font-medium">Question {index + 1}</h4>
-                </div>
-                <p className="mb-3">{question.question}</p>
-                
-                {!isCorrect && (
-                  <div className="bg-muted p-3 rounded">
-                    <p className="text-sm font-medium mb-1">Correct Answer:</p>
-                    <p className="text-sm">
-                      {question.correctAnswers.map(ans => question.options[ans]).join(', ')}
-                    </p>
-                    {question.explanation && (
-                      <p className="text-sm text-muted-foreground mt-2">{question.explanation}</p>
-                    )}
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h4 className="font-semibold text-sm sm:text-base">Question {index + 1}</h4>
+                      <Badge variant={isCorrect ? "default" : "destructive"} className="text-xs">
+                        {isCorrect ? "Correct" : "Incorrect"}
+                      </Badge>
+                    </div>
                   </div>
-                )}
+                </div>
+                
+                <p className="mb-3 text-sm sm:text-base font-medium">{question.question}</p>
+                
+                <div className="space-y-2">
+                  {userAnswer !== undefined && (
+                    <div className="text-sm">
+                      <span className="font-medium">Your Answer: </span>
+                      <span className={isCorrect ? "text-awareness" : "text-destructive"}>
+                        {question.type === 'multiple' && Array.isArray(userAnswer)
+                          ? userAnswer.map(ans => question.options[ans]).join(', ')
+                          : question.options[userAnswer]}
+                      </span>
+                    </div>
+                  )}
+                  
+                  {!isCorrect && (
+                    <div className="bg-muted/50 p-3 rounded border border-border">
+                      <p className="text-sm font-semibold text-awareness mb-1">✓ Correct Answer:</p>
+                      <p className="text-sm font-medium">
+                        {question.correctAnswers.map(ans => question.options[ans]).join(', ')}
+                      </p>
+                      {question.explanation && (
+                        <div className="mt-2 pt-2 border-t border-border">
+                          <p className="text-sm text-muted-foreground italic">{question.explanation}</p>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
             );
           })}
