@@ -269,79 +269,79 @@ const CourseDetail = () => {
         </Button>
 
         {/* Course Header */}
-        <div className="mb-8 mobile-typography-center">
-          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
-            <div className="flex items-center gap-4">
-              <BookOpen className="w-8 h-8 text-primary" />
-              <Badge className={getCategoryColor(course.category)}>
+        <div className="mb-6 sm:mb-8 text-center sm:text-left">
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
+            <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-3 sm:gap-4">
+              <BookOpen className="w-6 h-6 sm:w-8 sm:h-8 text-primary flex-shrink-0" />
+              <Badge className={`${getCategoryColor(course.category)} text-xs sm:text-sm`}>
                 {course.category === "free" ? "Free Course" : "Paid Course"}
               </Badge>
             </div>
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <Clock className="w-4 h-4" />
-              <span className="font-system">{course.estimatedTime}</span>
+            <div className="flex items-center justify-center sm:justify-end gap-2 text-muted-foreground">
+              <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" />
+              <span className="font-system text-xs sm:text-sm">{course.estimatedTime}</span>
             </div>
           </div>
 
           {/* Payment Gate for Paid Courses */}
           {course.category === 'paid' && hasAccess === false && user && (
-            <Card className="p-6 mb-6 bg-primary/10 border-primary/30 text-center">
-              <Lock className="w-12 h-12 text-primary mx-auto mb-4" />
-              <h3 className="text-xl font-consciousness font-semibold text-primary mb-2">
+            <Card className="p-4 sm:p-6 mb-4 sm:mb-6 bg-primary/10 border-primary/30 text-center">
+              <Lock className="w-10 h-10 sm:w-12 sm:h-12 text-primary mx-auto mb-3 sm:mb-4" />
+              <h3 className="text-lg sm:text-xl font-consciousness font-semibold text-primary mb-2 break-words px-2">
                 Premium Course Access Required
               </h3>
-              <p className="text-muted-foreground font-consciousness mb-4">
+              <p className="text-muted-foreground font-consciousness mb-3 sm:mb-4 text-sm sm:text-base break-words leading-relaxed px-2">
                 This is a paid course. Purchase access to unlock all modules and track your progress.
               </p>
               <Button
                 onClick={handlePurchaseCourse}
                 disabled={isPurchasing}
-                className="bg-primary hover:bg-primary/90 font-consciousness w-full sm:w-auto flex items-center justify-center mx-auto"
+                className="bg-primary hover:bg-primary/90 font-consciousness w-full sm:w-auto flex items-center justify-center mx-auto min-h-[44px] text-sm sm:text-base"
                 size="lg"
               >
-                <CreditCard className="w-5 h-5 mr-2" />
-                {isPurchasing ? "Opening Checkout..." : `Purchase Course - ${coursePrice}`}
+                <CreditCard className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                <span className="break-words">{isPurchasing ? "Opening Checkout..." : `Purchase Course - ${coursePrice}`}</span>
               </Button>
             </Card>
           )}
 
           {/* Start Learning Button - Only for users with access */}
           {user && hasAccess && (
-            <div className="mb-6 flex justify-center sm:justify-start">
+            <div className="mb-4 sm:mb-6 flex justify-center sm:justify-start px-2 sm:px-0">
               <Button
                 onClick={() => navigate(`/courses/${courseId}/module/${course.modules[0]?.id}`)}
-                className="bg-primary hover:bg-primary/90 font-consciousness w-full sm:w-auto flex items-center justify-center"
+                className="bg-primary hover:bg-primary/90 font-consciousness w-full sm:w-auto flex items-center justify-center min-h-[44px] text-sm sm:text-base"
                 size="lg"
               >
-                <Play className="w-5 h-5 mr-2" />
-                {progress?.completion_percentage ? "Continue Learning" : "Start Learning"}
+                <Play className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                <span className="break-words">{progress?.completion_percentage ? "Continue Learning" : "Start Learning"}</span>
               </Button>
             </div>
           )}
 
-          <h1 className="text-3xl md:text-4xl font-consciousness font-bold text-foreground mb-4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-consciousness font-bold text-foreground mb-3 sm:mb-4 break-words leading-tight px-2 sm:px-0">
             {course.title}
           </h1>
 
           {/* Mobile: Expandable text, Desktop: Full text */}
-          <div className="mb-6">
+          <div className="mb-4 sm:mb-6 px-2 sm:px-0">
             <div className="block md:hidden">
               <ExpandableText 
                 text={course.description}
                 maxLines={3}
-                className="text-lg text-muted-foreground font-consciousness leading-relaxed"
+                className="text-base sm:text-lg text-muted-foreground font-consciousness leading-relaxed break-words"
                 mobileOnly={true}
               />
             </div>
-            <p className="hidden md:block text-lg text-muted-foreground font-consciousness leading-relaxed">
+            <p className="hidden md:block text-lg text-muted-foreground font-consciousness leading-relaxed break-words">
               {course.description}
             </p>
           </div>
 
           {/* Softer notice for mobile users */}
           {isMobile && (
-            <div className="text-center py-3 px-4 mb-4 bg-muted/30 rounded-lg border border-border">
-              <p className="text-xs sm:text-sm text-muted-foreground">
+            <div className="text-center py-2.5 sm:py-3 px-3 sm:px-4 mb-3 sm:mb-4 bg-muted/30 rounded-lg border border-border mx-2 sm:mx-0">
+              <p className="text-xs sm:text-sm text-muted-foreground break-words leading-relaxed">
                 Fully usable on mobile. For the best experience, we recommend using a desktop or laptop.
               </p>
             </div>
@@ -355,20 +355,20 @@ const CourseDetail = () => {
           )}
 
           {!user && (
-            <Card className="p-6 mb-6 bg-awareness/10 border-awareness/30">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="font-consciousness font-semibold text-foreground mb-2">
+            <Card className="p-4 sm:p-6 mb-4 sm:mb-6 bg-awareness/10 border-awareness/30 mx-2 sm:mx-0">
+              <div className="flex flex-col sm:flex-row items-center sm:items-center justify-between gap-3 sm:gap-4 text-center sm:text-left">
+                <div className="flex-1">
+                  <h3 className="font-consciousness font-semibold text-foreground mb-2 text-sm sm:text-base break-words">
                     Track Your Progress
                   </h3>
-                  <p className="text-muted-foreground font-consciousness">
+                  <p className="text-muted-foreground font-consciousness text-xs sm:text-sm break-words leading-relaxed">
                     Sign in to save your progress and earn completion badges.
                   </p>
                 </div>
                 <Button
                   variant="awareness"
                   onClick={() => setShowAuthModal(true)}
-                  className="font-consciousness"
+                  className="font-consciousness w-full sm:w-auto min-h-[44px] text-sm sm:text-base"
                 >
                   Sign In
                 </Button>
@@ -378,40 +378,40 @@ const CourseDetail = () => {
         </div>
 
         {/* Module Navigation Toggle */}
-        <div className="flex flex-col gap-3 mb-6 px-4 sm:px-6">
+        <div className="flex flex-col gap-2.5 sm:gap-3 mb-4 sm:mb-6 px-3 sm:px-4 md:px-6">
           {/* Title and Metrics Row */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <h2 className="text-base sm:text-2xl font-consciousness font-semibold text-foreground whitespace-normal">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 sm:gap-3 text-center sm:text-left">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-consciousness font-semibold text-foreground break-words">
               Course Modules
             </h2>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center justify-center sm:justify-end gap-2 sm:gap-3">
               <ParticipantTracker contentType="course" contentId={courseId || '0'} />
             </div>
           </div>
           
           {/* View Toggle */}
-          <div className="flex w-full rounded-lg bg-background/40 border border-border/40 p-1 gap-2">
+          <div className="flex w-full rounded-lg bg-background/40 border border-border/40 p-1 gap-1.5 sm:gap-2">
             <button
               onClick={() => setShowEnhancedNav(true)}
-              className={`flex-1 inline-flex items-center justify-center rounded-md px-3 py-2 text-xs sm:text-sm font-medium font-consciousness transition-colors ${
+              className={`flex-1 inline-flex items-center justify-center rounded-md px-2 sm:px-3 py-2.5 sm:py-2 text-xs sm:text-sm font-medium font-consciousness transition-colors min-h-[44px] ${
                 showEnhancedNav
                   ? 'bg-primary text-primary-foreground'
                   : 'text-muted-foreground bg-transparent'
               }`}
             >
-              <Grid3X3 className="w-4 h-4 mr-2 flex-shrink-0" />
-              <span className="whitespace-nowrap">Enhanced View</span>
+              <Grid3X3 className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2 flex-shrink-0" />
+              <span className="whitespace-nowrap break-words">Enhanced View</span>
             </button>
             <button
               onClick={() => setShowEnhancedNav(false)}
-              className={`flex-1 inline-flex items-center justify-center rounded-md px-3 py-2 text-xs sm:text-sm font-medium font-consciousness transition-colors ${
+              className={`flex-1 inline-flex items-center justify-center rounded-md px-2 sm:px-3 py-2.5 sm:py-2 text-xs sm:text-sm font-medium font-consciousness transition-colors min-h-[44px] ${
                 !showEnhancedNav
                   ? 'bg-primary text-primary-foreground'
                   : 'text-muted-foreground bg-transparent'
               }`}
             >
-              <Grid3X3 className="w-4 h-4 mr-2 flex-shrink-0" />
-              <span className="whitespace-nowrap">Simple View</span>
+              <Grid3X3 className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2 flex-shrink-0" />
+              <span className="whitespace-nowrap break-words">Simple View</span>
             </button>
           </div>
         </div>

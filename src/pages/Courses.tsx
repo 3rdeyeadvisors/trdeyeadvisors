@@ -208,60 +208,60 @@ const Courses = () => {
       <div className="py-12 md:py-20 lg:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-3 mb-6">
-            <h1 className="text-4xl md:text-5xl font-consciousness font-bold text-foreground">
+        <div className="text-center mb-8 md:mb-12">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-consciousness font-bold text-foreground break-words">
               Courses & Tools
             </h1>
             <ParticipantTracker contentType="course" contentId="courses-page" />
           </div>
           {!user && (
-            <div className="flex justify-center mb-6">
+            <div className="flex justify-center mb-4 sm:mb-6">
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => setShowAuthModal(true)}
-                className="font-consciousness"
+                className="font-consciousness text-xs sm:text-sm min-h-[44px] px-3 sm:px-4"
               >
-                <LogIn className="w-4 h-4 mr-2" />
+                <LogIn className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-2" />
                 Track Progress
               </Button>
             </div>
           )}
-          <p className="text-xl text-muted-foreground font-consciousness max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg md:text-xl text-muted-foreground font-consciousness max-w-2xl mx-auto px-3 sm:px-4 break-words leading-relaxed">
             Reprogram your understanding with our curated learning resources and practical tools
           </p>
           {user && (
-            <p className="text-awareness font-consciousness mt-2">
+            <p className="text-awareness font-consciousness mt-2 text-sm sm:text-base break-words">
               Welcome back! Your progress is being tracked.
             </p>
           )}
         </div>
 
         {/* Search Bar */}
-        <div className="max-w-md mx-auto mb-8">
+        <div className="max-w-md mx-auto mb-6 sm:mb-8 px-2 sm:px-0">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-3.5 h-3.5 sm:w-4 sm:h-4 text-muted-foreground" />
             <Input
               placeholder="Search courses..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 font-consciousness"
+              className="pl-9 sm:pl-10 font-consciousness text-sm sm:text-base min-h-[44px]"
             />
           </div>
         </div>
 
         {/* Filters */}
-        <div className="flex flex-wrap justify-center gap-4 mb-12">
+        <div className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4 mb-8 md:mb-12 px-2 sm:px-4">
           {filters.map((filter) => (
             <Button
               key={filter.id}
               variant={activeFilter === filter.id ? "cosmic" : "system"}
               onClick={() => setActiveFilter(filter.id)}
-              className="font-consciousness"
+              className="font-consciousness text-xs sm:text-sm min-h-[40px] sm:min-h-[44px] px-3 sm:px-4"
             >
-              <Filter className="w-4 h-4 mr-2" />
-              {filter.label}
+              <Filter className="w-3 h-3 sm:w-4 sm:h-4 mr-1.5 sm:mr-2" />
+              <span className="break-words">{filter.label}</span>
             </Button>
           ))}
         </div>
