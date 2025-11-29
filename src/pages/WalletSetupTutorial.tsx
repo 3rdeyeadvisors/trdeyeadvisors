@@ -400,19 +400,22 @@ const WalletSetupTutorial = () => {
         {currentStepData && (
           <Card className="mb-8">
             <CardHeader>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-primary/10">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <div className="p-2 rounded-lg bg-primary/10 flex-shrink-0">
                     <currentStepData.icon className="h-5 w-5 text-primary" />
                   </div>
-                  <div>
-                    <CardTitle>{currentStepData.title}</CardTitle>
+                  <div className="min-w-0 flex-1">
+                    <CardTitle className="truncate">{currentStepData.title}</CardTitle>
                     <CardDescription>
                       Estimated time: {currentStepData.duration}
                     </CardDescription>
                   </div>
                 </div>
-                <Badge variant={isStepCompleted(currentStep) ? "default" : "secondary"}>
+                <Badge 
+                  variant={isStepCompleted(currentStep) ? "default" : "secondary"}
+                  className="whitespace-nowrap w-fit"
+                >
                   {isStepCompleted(currentStep) ? "Completed" : "In Progress"}
                 </Badge>
               </div>
@@ -434,14 +437,14 @@ const WalletSetupTutorial = () => {
                     {currentStepData.content.walletOptions?.map((wallet, index) => (
                       <Card key={index} className={`${wallet.recommended ? "border-primary bg-primary/5" : ""}`}>
                         <CardHeader className="pb-3">
-                          <div className="flex items-center justify-between">
-                            <div>
+                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                            <div className="flex-1">
                               <CardTitle className="text-lg">{wallet.name}</CardTitle>
                               <CardDescription>{wallet.type}</CardDescription>
                             </div>
-                            <div className="flex gap-2">
-                              <Badge variant="outline">{wallet.difficulty}</Badge>
-                              {wallet.recommended && <Badge>Recommended</Badge>}
+                            <div className="flex flex-wrap gap-2">
+                              <Badge variant="outline" className="whitespace-nowrap">{wallet.difficulty}</Badge>
+                              {wallet.recommended && <Badge className="whitespace-nowrap">Recommended</Badge>}
                             </div>
                           </div>
                         </CardHeader>
@@ -599,12 +602,15 @@ const WalletSetupTutorial = () => {
                       {currentStepData.content.storageOptions?.map((option, index) => (
                         <Card key={index}>
                           <CardContent className="p-4">
-                            <div className="flex items-center justify-between mb-2">
-                              <h4 className="font-medium">{option.method}</h4>
-                              <Badge variant={
-                                option.security === "Excellent" ? "default" : 
-                                option.security === "Good" ? "secondary" : "outline"
-                              }>
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+                              <h4 className="font-medium flex-1">{option.method}</h4>
+                              <Badge 
+                                variant={
+                                  option.security === "Excellent" ? "default" : 
+                                  option.security === "Good" ? "secondary" : "outline"
+                                }
+                                className="whitespace-nowrap w-fit"
+                              >
                                 {option.security}
                               </Badge>
                             </div>
@@ -658,12 +664,15 @@ const WalletSetupTutorial = () => {
                       {currentStepData.content.practices?.map((practice, index) => (
                         <Card key={index}>
                           <CardContent className="p-4">
-                            <div className="flex items-center justify-between mb-2">
-                              <h4 className="font-medium">{practice.title}</h4>
-                              <Badge variant={
-                                practice.importance === "Critical" ? "destructive" : 
-                                practice.importance === "High" ? "default" : "secondary"
-                              }>
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+                              <h4 className="font-medium flex-1">{practice.title}</h4>
+                              <Badge 
+                                variant={
+                                  practice.importance === "Critical" ? "destructive" : 
+                                  practice.importance === "High" ? "default" : "secondary"
+                                }
+                                className="whitespace-nowrap w-fit"
+                              >
                                 {practice.importance}
                               </Badge>
                             </div>
