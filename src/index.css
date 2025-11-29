@@ -623,11 +623,13 @@ svg[class*="lucide-star"] {
     min-height: 44px;
   }
 
-  /* Force small slider thumbs on mobile */
+  /* Force small slider thumbs on mobile - aggressive approach */
   @media (max-width: 640px) {
     [role="slider"] {
       width: 8px !important;
       height: 8px !important;
+      transform: scale(0.4) !important;
+      transform-origin: center !important;
     }
   }
 }
