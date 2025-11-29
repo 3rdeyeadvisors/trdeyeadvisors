@@ -432,25 +432,23 @@ const DefiCalculatorsTutorial = () => {
         {currentStepData && (
           <Card className="mb-8">
             <CardHeader>
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div className="flex items-center gap-3 flex-1 min-w-0">
-                  <div className="p-2 rounded-lg bg-primary/10 flex-shrink-0">
-                    <currentStepData.icon className="h-5 w-5 text-primary" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <CardTitle className="truncate">{currentStepData.title}</CardTitle>
-                    <CardDescription>
-                      Estimated time: {currentStepData.duration}
-                    </CardDescription>
-                  </div>
+              <div className="flex items-start gap-3 mb-2">
+                <div className="p-2 rounded-lg bg-primary/10 flex-shrink-0">
+                  <currentStepData.icon className="h-5 w-5 text-primary" />
                 </div>
-                <Badge 
-                  variant={isStepCompleted(currentStep) ? "default" : "secondary"}
-                  className="whitespace-nowrap w-fit"
-                >
-                  {isStepCompleted(currentStep) ? "Completed" : "In Progress"}
-                </Badge>
+                <div className="flex-1 min-w-0">
+                  <CardTitle className="mb-1">{currentStepData.title}</CardTitle>
+                  <CardDescription>
+                    Estimated time: {currentStepData.duration}
+                  </CardDescription>
+                </div>
               </div>
+              <Badge 
+                variant={isStepCompleted(currentStep) ? "default" : "secondary"}
+                className="w-fit"
+              >
+                {isStepCompleted(currentStep) ? "Completed" : "In Progress"}
+              </Badge>
             </CardHeader>
 
             <CardContent className="space-y-6">
@@ -465,21 +463,19 @@ const DefiCalculatorsTutorial = () => {
                       return (
                         <Card key={index}>
                           <CardHeader className="pb-3">
-                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                              <div className="flex items-center gap-3 flex-1 min-w-0">
-                                <div className="p-2 rounded-lg bg-primary/10 flex-shrink-0">
-                                  <CalcIcon className="h-5 w-5 text-primary" />
-                                </div>
-                                <div className="min-w-0 flex-1">
-                                  <CardTitle className="text-lg">{calc.name}</CardTitle>
-                                  <CardDescription>{calc.purpose}</CardDescription>
-                                </div>
+                            <div className="flex items-start gap-3 mb-2">
+                              <div className="p-2 rounded-lg bg-primary/10 flex-shrink-0">
+                                <CalcIcon className="h-5 w-5 text-primary" />
                               </div>
-                              <Badge variant="outline" className="whitespace-nowrap w-fit">{calc.difficulty}</Badge>
+                              <div className="flex-1 min-w-0">
+                                <CardTitle className="text-lg mb-1">{calc.name}</CardTitle>
+                                <CardDescription className="text-left">{calc.purpose}</CardDescription>
+                              </div>
                             </div>
+                            <Badge variant="outline" className="w-fit">{calc.difficulty}</Badge>
                           </CardHeader>
                           <CardContent>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div className="space-y-3 text-sm text-left">
                               <div>
                                 <p className="font-medium mb-1">When to use:</p>
                                 <p className="text-muted-foreground">{calc.when}</p>
@@ -758,21 +754,26 @@ const DefiCalculatorsTutorial = () => {
                       {currentStepData.content.ilScenarios?.map((scenario, index) => (
                         <Card key={index}>
                           <CardContent className="p-4">
-                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
-                              <h4 className="font-medium flex-1">{scenario.scenario}</h4>
-                              <Badge 
-                                variant={Number(scenario.il.replace('%', '')) === 0 ? "default" : Number(scenario.il.replace('%', '')) > -3 ? "secondary" : "destructive"}
-                                className="whitespace-nowrap w-fit"
-                              >
-                                {scenario.il} IL
-                              </Badge>
+                            <div className="space-y-3">
+                              <div className="flex items-center justify-between gap-3">
+                                <h4 className="font-medium">{scenario.scenario}</h4>
+                                <Badge 
+                                  variant={Number(scenario.il.replace('%', '')) === 0 ? "default" : Number(scenario.il.replace('%', '')) > -3 ? "secondary" : "destructive"}
+                                  className="whitespace-nowrap flex-shrink-0"
+                                >
+                                  {scenario.il} IL
+                                </Badge>
+                              </div>
+                              <div className="grid grid-cols-2 gap-2 text-sm text-left">
+                                <div>
+                                  <span className="text-muted-foreground">Token A:</span> {scenario.tokenA}
+                                </div>
+                                <div>
+                                  <span className="text-muted-foreground">Token B:</span> {scenario.tokenB}
+                                </div>
+                              </div>
+                              <p className="text-sm text-muted-foreground text-left">{scenario.meaning}</p>
                             </div>
-                            <div className="grid grid-cols-3 gap-2 text-sm mb-2">
-                              <span>Token A: {scenario.tokenA}</span>
-                              <span>Token B: {scenario.tokenB}</span>
-                              <span>IL: {scenario.il}</span>
-                            </div>
-                            <p className="text-sm text-muted-foreground">{scenario.meaning}</p>
                           </CardContent>
                         </Card>
                       ))}
