@@ -381,7 +381,7 @@ const DefiCalculatorsTutorial = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
-      <div className="container mx-auto px-4 py-8 mobile-typography-center">
+      <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
@@ -432,19 +432,22 @@ const DefiCalculatorsTutorial = () => {
         {currentStepData && (
           <Card className="mb-8">
             <CardHeader>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-primary/10">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <div className="p-2 rounded-lg bg-primary/10 flex-shrink-0">
                     <currentStepData.icon className="h-5 w-5 text-primary" />
                   </div>
-                  <div>
-                    <CardTitle>{currentStepData.title}</CardTitle>
+                  <div className="min-w-0 flex-1">
+                    <CardTitle className="truncate">{currentStepData.title}</CardTitle>
                     <CardDescription>
                       Estimated time: {currentStepData.duration}
                     </CardDescription>
                   </div>
                 </div>
-                <Badge variant={isStepCompleted(currentStep) ? "default" : "secondary"}>
+                <Badge 
+                  variant={isStepCompleted(currentStep) ? "default" : "secondary"}
+                  className="whitespace-nowrap w-fit"
+                >
                   {isStepCompleted(currentStep) ? "Completed" : "In Progress"}
                 </Badge>
               </div>
@@ -462,17 +465,17 @@ const DefiCalculatorsTutorial = () => {
                       return (
                         <Card key={index}>
                           <CardHeader className="pb-3">
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-3">
-                                <div className="p-2 rounded-lg bg-primary/10">
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                              <div className="flex items-center gap-3 flex-1 min-w-0">
+                                <div className="p-2 rounded-lg bg-primary/10 flex-shrink-0">
                                   <CalcIcon className="h-5 w-5 text-primary" />
                                 </div>
-                                <div>
+                                <div className="min-w-0 flex-1">
                                   <CardTitle className="text-lg">{calc.name}</CardTitle>
                                   <CardDescription>{calc.purpose}</CardDescription>
                                 </div>
                               </div>
-                              <Badge variant="outline">{calc.difficulty}</Badge>
+                              <Badge variant="outline" className="whitespace-nowrap w-fit">{calc.difficulty}</Badge>
                             </div>
                           </CardHeader>
                           <CardContent>
@@ -755,9 +758,12 @@ const DefiCalculatorsTutorial = () => {
                       {currentStepData.content.ilScenarios?.map((scenario, index) => (
                         <Card key={index}>
                           <CardContent className="p-4">
-                            <div className="flex items-center justify-between mb-2">
-                              <h4 className="font-medium">{scenario.scenario}</h4>
-                              <Badge variant={Number(scenario.il.replace('%', '')) === 0 ? "default" : Number(scenario.il.replace('%', '')) > -3 ? "secondary" : "destructive"}>
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+                              <h4 className="font-medium flex-1">{scenario.scenario}</h4>
+                              <Badge 
+                                variant={Number(scenario.il.replace('%', '')) === 0 ? "default" : Number(scenario.il.replace('%', '')) > -3 ? "secondary" : "destructive"}
+                                className="whitespace-nowrap w-fit"
+                              >
                                 {scenario.il} IL
                               </Badge>
                             </div>
