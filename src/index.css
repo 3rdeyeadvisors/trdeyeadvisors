@@ -622,4 +622,12 @@ svg[class*="lucide-star"] {
     padding: 0.75rem 1rem;
     min-height: 44px;
   }
+
+  /* Force small slider thumbs on mobile */
+  @media (max-width: 640px) {
+    [role="slider"] {
+      width: 8px !important;
+      height: 8px !important;
+    }
+  }
 }
