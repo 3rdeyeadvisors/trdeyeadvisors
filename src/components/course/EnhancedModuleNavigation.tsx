@@ -277,44 +277,44 @@ export const EnhancedModuleNavigation = ({
           return (
             <Card
               key={module.id}
-              className={`p-3 sm:p-4 cursor-pointer transition-all hover:shadow-md ${
+              className={`p-4 cursor-pointer transition-all hover:shadow-md ${
                 isCurrent ? "border-primary bg-primary/5" : ""
               } ${isCompleted ? "border-awareness bg-awareness/10" : ""}`}
               onClick={() => handleModuleClick(module.id)}
             >
-              <div className="flex items-start gap-2 sm:gap-3">
+              <div className="flex items-start gap-3">
                 {/* Status Icon */}
-                <div className="flex items-center justify-center mt-0.5 flex-shrink-0">
+                <div className="flex items-center justify-center flex-shrink-0">
                   {isCompleted ? (
-                    <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6 text-awareness" />
+                    <CheckCircle2 className="w-6 h-6 text-awareness" />
                   ) : (
-                    <div className="w-5 h-5 sm:w-6 sm:h-6 border-2 border-muted-foreground rounded-full flex items-center justify-center">
+                    <div className="w-6 h-6 border-2 border-muted-foreground rounded-full flex items-center justify-center">
                       <span className="text-xs font-medium">{moduleIndex + 1}</span>
                     </div>
                   )}
                 </div>
 
                 {/* Content */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-start justify-between mb-2 gap-2">
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-                      <Badge variant="outline" className={`${getTypeColor(module.type)} text-xs`}>
-                        <Icon className="w-3 h-3 mr-1" />
-                        {module.type}
-                      </Badge>
-                      <div className="flex items-center gap-1 text-xs sm:text-sm text-muted-foreground">
-                        <Clock className="w-3 h-3" />
-                        {module.duration}m
-                      </div>
+                <div className="flex-1 min-w-0 pr-2">
+                  {/* Top Row: Type badge, duration, and current badge */}
+                  <div className="flex items-center flex-wrap gap-2 mb-2">
+                    <Badge variant="outline" className={`${getTypeColor(module.type)} text-xs whitespace-nowrap`}>
+                      <Icon className="w-3 h-3 mr-1" />
+                      {module.type}
+                    </Badge>
+                    <div className="flex items-center gap-1 text-xs text-muted-foreground whitespace-nowrap">
+                      <Clock className="w-3 h-3" />
+                      {module.duration}m
                     </div>
                     {isCurrent && (
-                      <Badge variant="default" className="text-xs flex-shrink-0">
+                      <Badge variant="default" className="text-xs ml-auto">
                         Current
                       </Badge>
                     )}
                   </div>
 
-                  <h4 className="font-semibold text-sm sm:text-base text-foreground mb-2 line-clamp-2">
+                  {/* Title */}
+                  <h4 className="font-semibold text-sm leading-tight text-foreground mb-2 break-words">
                     {module.title}
                   </h4>
 
@@ -327,19 +327,6 @@ export const EnhancedModuleNavigation = ({
                       </div>
                       <Progress value={moduleProgress} className="h-1.5" />
                     </div>
-                  )}
-                </div>
-
-                {/* Action Icon */}
-                <div className="flex items-center justify-center mt-0.5 flex-shrink-0">
-                  {isCompleted ? (
-                    <Badge variant="outline" className="text-xs bg-awareness/20 border-awareness text-awareness">
-                      Done
-                    </Badge>
-                  ) : isCurrent ? (
-                    <Play className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
-                  ) : (
-                    <div className="w-4 h-4 sm:w-5 sm:h-5" />
                   )}
                 </div>
               </div>
