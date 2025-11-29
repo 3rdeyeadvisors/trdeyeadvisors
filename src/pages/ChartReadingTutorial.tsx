@@ -242,45 +242,45 @@ const ChartReadingTutorial = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Card className="p-4 border-awareness/20 bg-awareness/10">
-              <h4 className="font-semibold text-awareness mb-2">Bullish Patterns</h4>
-              <div className="space-y-2 text-sm">
-                <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2">
-                  <span>Cup and Handle</span>
-                  <Badge variant="outline" className="text-awareness whitespace-nowrap w-fit">Continuation</Badge>
+              <h4 className="font-semibold text-awareness mb-3">Bullish Patterns</h4>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between gap-2 p-2 bg-background/20 rounded">
+                  <span className="text-sm font-medium">Cup and Handle</span>
+                  <Badge variant="outline" className="text-awareness border-awareness/50 whitespace-nowrap text-xs">Continuation</Badge>
                 </div>
-                <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2">
-                  <span>Double Bottom</span>
-                  <Badge variant="outline" className="text-awareness whitespace-nowrap w-fit">Reversal</Badge>
+                <div className="flex items-center justify-between gap-2 p-2 bg-background/20 rounded">
+                  <span className="text-sm font-medium">Double Bottom</span>
+                  <Badge variant="outline" className="text-awareness border-awareness/50 whitespace-nowrap text-xs">Reversal</Badge>
                 </div>
-                <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2">
-                  <span>Ascending Triangle</span>
-                  <Badge variant="outline" className="text-awareness whitespace-nowrap w-fit">Continuation</Badge>
+                <div className="flex items-center justify-between gap-2 p-2 bg-background/20 rounded">
+                  <span className="text-sm font-medium">Ascending Triangle</span>
+                  <Badge variant="outline" className="text-awareness border-awareness/50 whitespace-nowrap text-xs">Continuation</Badge>
                 </div>
-                <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2">
-                  <span>Bull Flag</span>
-                  <Badge variant="outline" className="text-awareness whitespace-nowrap w-fit">Continuation</Badge>
+                <div className="flex items-center justify-between gap-2 p-2 bg-background/20 rounded">
+                  <span className="text-sm font-medium">Bull Flag</span>
+                  <Badge variant="outline" className="text-awareness border-awareness/50 whitespace-nowrap text-xs">Continuation</Badge>
                 </div>
               </div>
             </Card>
             
             <Card className="p-4 border-destructive/20 bg-destructive/10">
-              <h4 className="font-semibold text-destructive mb-2">Bearish Patterns</h4>
-              <div className="space-y-2 text-sm">
-                <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2">
-                  <span>Head and Shoulders</span>
-                  <Badge variant="outline" className="text-destructive whitespace-nowrap w-fit">Reversal</Badge>
+              <h4 className="font-semibold text-destructive mb-3">Bearish Patterns</h4>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between gap-2 p-2 bg-background/20 rounded">
+                  <span className="text-sm font-medium">Head and Shoulders</span>
+                  <Badge variant="outline" className="text-destructive border-destructive/50 whitespace-nowrap text-xs">Reversal</Badge>
                 </div>
-                <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2">
-                  <span>Double Top</span>
-                  <Badge variant="outline" className="text-destructive whitespace-nowrap w-fit">Reversal</Badge>
+                <div className="flex items-center justify-between gap-2 p-2 bg-background/20 rounded">
+                  <span className="text-sm font-medium">Double Top</span>
+                  <Badge variant="outline" className="text-destructive border-destructive/50 whitespace-nowrap text-xs">Reversal</Badge>
                 </div>
-                <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2">
-                  <span>Descending Triangle</span>
-                  <Badge variant="outline" className="text-destructive whitespace-nowrap w-fit">Continuation</Badge>
+                <div className="flex items-center justify-between gap-2 p-2 bg-background/20 rounded">
+                  <span className="text-sm font-medium">Descending Triangle</span>
+                  <Badge variant="outline" className="text-destructive border-destructive/50 whitespace-nowrap text-xs">Continuation</Badge>
                 </div>
-                <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2">
-                  <span>Bear Flag</span>
-                  <Badge variant="outline" className="text-destructive whitespace-nowrap w-fit">Continuation</Badge>
+                <div className="flex items-center justify-between gap-2 p-2 bg-background/20 rounded">
+                  <span className="text-sm font-medium">Bear Flag</span>
+                  <Badge variant="outline" className="text-destructive border-destructive/50 whitespace-nowrap text-xs">Continuation</Badge>
                 </div>
               </div>
             </Card>
