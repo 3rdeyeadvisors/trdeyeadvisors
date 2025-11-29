@@ -114,20 +114,20 @@ const ModuleViewer = () => {
   }
 
   return (
-    <div className="min-h-screen py-12 md:py-20">
-      <div className="w-full px-4 md:px-6 mobile-typography-center">
+    <div className="min-h-screen py-8 sm:py-12 md:py-20">
+      <div className="w-full px-3 sm:px-4 md:px-6 text-center sm:text-left">
         {/* Desktop Only Notice for Mobile Users */}
         {isMobile && <DesktopOnlyNotice feature="interactive course content and community features" />}
         
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6 md:mb-8">
-          <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 sm:gap-4 mb-4 sm:mb-6 md:mb-8">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 md:gap-4 justify-center sm:justify-start">
             <Button
               variant="outline"
               onClick={() => navigate(`/courses/${courseId}`)}
-              className="font-consciousness text-sm md:text-base"
+              className="font-consciousness text-xs sm:text-sm md:text-base min-h-[40px] sm:min-h-[44px] w-full sm:w-auto"
             >
-              <ArrowLeft className="w-4 h-4 mr-2" />
+              <ArrowLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2" />
               <span className="hidden sm:inline">Back to Course</span>
               <span className="sm:hidden">Back</span>
             </Button>
@@ -135,22 +135,22 @@ const ModuleViewer = () => {
             <Button
               variant="ghost"
               onClick={() => setShowModuleList(!showModuleList)}
-              className="font-consciousness text-sm md:text-base"
+              className="font-consciousness text-xs sm:text-sm md:text-base min-h-[40px] sm:min-h-[44px] w-full sm:w-auto"
             >
-              <List className="w-4 h-4 mr-2" />
+              <List className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2" />
               <span className="hidden sm:inline">All Modules</span>
               <span className="sm:hidden">Modules</span>
             </Button>
           </div>
 
-          <div className="text-left md:text-right">
-            <div className="flex items-center gap-2 justify-start md:justify-end">
+          <div className="text-center md:text-right px-2 sm:px-0">
+            <div className="flex flex-col sm:flex-row items-center gap-2 justify-center md:justify-end">
               <ParticipantTracker contentType="module" contentId={moduleId || ''} />
               <div>
-                <h2 className="text-base md:text-lg font-consciousness font-semibold text-foreground line-clamp-1">
+                <h2 className="text-sm sm:text-base md:text-lg font-consciousness font-semibold text-foreground line-clamp-1 break-words">
                   {course.title}
                 </h2>
-                <p className="text-xs md:text-sm text-muted-foreground">
+                <p className="text-xs md:text-sm text-muted-foreground break-words">
                   {course.category === "free" ? "Free Course" : `${course.category} Course`}
                 </p>
               </div>
@@ -160,9 +160,9 @@ const ModuleViewer = () => {
 
         {/* Module List Sidebar */}
         {showModuleList && (
-          <Card className="mb-4 md:mb-6 p-4 md:p-6">
-            <h3 className="text-base md:text-lg font-consciousness font-semibold mb-3 md:mb-4 text-center md:text-left">Course Modules</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <Card className="mb-3 sm:mb-4 md:mb-6 p-3 sm:p-4 md:p-6">
+            <h3 className="text-sm sm:text-base md:text-lg font-consciousness font-semibold mb-2.5 sm:mb-3 md:mb-4 text-center md:text-left break-words">Course Modules</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-3">
               {course.modules.map((module, index) => {
                 const isCompleted = isModuleCompleted(index);
                 const isCurrent = index === currentModuleIndex;
@@ -171,7 +171,7 @@ const ModuleViewer = () => {
                   <Button
                     key={module.id}
                     variant={isCurrent ? "default" : "outline"}
-                    className={`h-auto p-3 transition-all justify-start text-left ${
+                    className={`h-auto p-2.5 sm:p-3 transition-all justify-start text-left min-h-[64px] ${
                       isCurrent 
                         ? "bg-primary/10 border-primary/50 text-primary hover:bg-primary/20" 
                         : isCompleted 
@@ -186,23 +186,23 @@ const ModuleViewer = () => {
                     <div className="flex items-start gap-2 w-full">
                       {/* Status icon */}
                       {isCompleted ? (
-                        <div className="w-5 h-5 bg-awareness rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                          <span className="text-foreground text-xs font-bold">✓</span>
+                        <div className="w-4 h-4 sm:w-5 sm:h-5 bg-awareness rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 sm:mt-1">
+                          <span className="text-foreground text-[10px] sm:text-xs font-bold">✓</span>
                         </div>
                       ) : (
-                        <div className="w-5 h-5 border-2 border-current rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                          <span className="text-xs font-medium">{index + 1}</span>
+                        <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-current rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 sm:mt-1">
+                          <span className="text-[10px] sm:text-xs font-medium">{index + 1}</span>
                         </div>
                       )}
                       
                       {/* Content */}
-                      <div className="flex-1 pr-2">
-                        <p className="text-sm font-medium leading-snug whitespace-normal break-words">{module.title}</p>
-                        <p className="text-xs text-muted-foreground mt-1">{module.duration} min</p>
+                      <div className="flex-1 pr-1 sm:pr-2">
+                        <p className="text-xs sm:text-sm font-medium leading-snug whitespace-normal break-words">{module.title}</p>
+                        <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 sm:mt-1">{module.duration} min</p>
                       </div>
                       
                       {/* Play icon */}
-                      {isCurrent && <Play className="w-4 h-4 flex-shrink-0 mt-1" />}
+                      {isCurrent && <Play className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0 mt-0.5 sm:mt-1" />}
                     </div>
                   </Button>
                 );
@@ -225,9 +225,9 @@ const ModuleViewer = () => {
         />
 
         {/* Community Features - Only for authenticated users */}
-        <div className="mt-8 md:mt-12">
-          <Card className="p-4 md:p-6">
-            <h2 className="text-xl md:text-2xl font-consciousness font-bold text-center mb-6">
+        <div className="mt-6 sm:mt-8 md:mt-12 px-2 sm:px-0">
+          <Card className="p-3 sm:p-4 md:p-6">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-consciousness font-bold text-center mb-4 sm:mb-6 break-words">
               Community Discussion
             </h2>
             <CommunityTabs 
