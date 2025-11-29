@@ -129,27 +129,33 @@ export const EnhancedModuleNavigation = ({
               <Button
                 key={module.id}
                 variant={isCurrent ? "default" : "ghost"}
-                className={`w-full justify-start h-auto p-4 ${
+                className={`w-full justify-start h-auto py-3 px-4 ${
                   isCompleted ? "border-awareness bg-awareness/10 hover:bg-awareness/20" : ""
                 }`}
                 onClick={() => handleModuleClick(module.id)}
               >
-                <div className="flex items-center gap-3 w-full min-h-[44px]">
-                  <div className="flex items-center gap-2 flex-shrink-0">
-                  {isCompleted ? (
+                <div className="flex flex-col gap-2 w-full text-left">
+                  {/* Top row: checkmark and badge */}
+                  <div className="flex items-center gap-2">
+                    {isCompleted ? (
                       <CheckCircle2 className="w-5 h-5 text-awareness flex-shrink-0" />
                     ) : (
                       <div className="w-5 h-5 border-2 border-muted-foreground rounded-full flex items-center justify-center flex-shrink-0">
                         <span className="text-xs">{index + 1}</span>
                       </div>
                     )}
-                    <Icon className="w-4 h-4 flex-shrink-0" />
+                    <Badge variant="outline" className={`${getTypeColor(module.type)} text-xs`}>
+                      <Icon className="w-3 h-3 mr-1" />
+                      {module.type}
+                    </Badge>
+                    {isCurrent && <Play className="w-4 h-4 text-primary ml-auto" />}
                   </div>
-                  <div className="text-left flex-1 min-w-0">
-                    <p className="text-sm font-medium line-clamp-2">{module.title}</p>
-                    <p className="text-xs text-muted-foreground mt-1">{module.duration} min</p>
-                  </div>
-                  {isCurrent && <Play className="w-4 h-4 text-primary flex-shrink-0" />}
+                  
+                  {/* Title */}
+                  <p className="text-sm font-medium leading-snug pl-7">{module.title}</p>
+                  
+                  {/* Duration */}
+                  <p className="text-xs text-muted-foreground pl-7">{module.duration} min</p>
                 </div>
               </Button>
             );
