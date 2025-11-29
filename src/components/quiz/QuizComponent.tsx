@@ -252,11 +252,12 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
         <RadioGroup
           value={userAnswer?.toString()}
           onValueChange={(value) => handleAnswerChange(question.id, parseInt(value))}
+          className="space-y-2 sm:space-y-3 w-full"
         >
           {question.options.map((option, index) => (
-            <div key={index} className="flex items-center space-x-2">
-              <RadioGroupItem value={index.toString()} id={`${question.id}-${index}`} />
-              <Label htmlFor={`${question.id}-${index}`} className="cursor-pointer">
+            <div key={index} className="flex items-start space-x-2 sm:space-x-3 p-2 sm:p-3 rounded-lg hover:bg-muted/50 transition-colors w-full max-w-full">
+              <RadioGroupItem value={index.toString()} id={`${question.id}-${index}`} className="mt-0.5 shrink-0" />
+              <Label htmlFor={`${question.id}-${index}`} className="cursor-pointer text-xs sm:text-sm md:text-base leading-relaxed break-words flex-1 min-w-0">
                 {option}
               </Label>
             </div>
@@ -267,9 +268,9 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
 
     if (question.type === 'multiple') {
       return (
-        <div className="space-y-3">
+        <div className="space-y-2 sm:space-y-3 w-full">
           {question.options.map((option, index) => (
-            <div key={index} className="flex items-center space-x-2">
+            <div key={index} className="flex items-start space-x-2 sm:space-x-3 p-2 sm:p-3 rounded-lg hover:bg-muted/50 transition-colors w-full max-w-full">
               <Checkbox
                 id={`${question.id}-${index}`}
                 checked={userAnswer ? userAnswer.includes(index) : false}
@@ -281,8 +282,9 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
                     handleAnswerChange(question.id, currentAnswers.filter((i: number) => i !== index));
                   }
                 }}
+                className="mt-0.5 shrink-0"
               />
-              <Label htmlFor={`${question.id}-${index}`} className="cursor-pointer">
+              <Label htmlFor={`${question.id}-${index}`} className="cursor-pointer text-xs sm:text-sm md:text-base leading-relaxed break-words flex-1 min-w-0">
                 {option}
               </Label>
             </div>
@@ -300,28 +302,28 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
     console.log('Rendering results:', { score, passed, questionsLength: quiz.questions.length });
     
     return (
-      <Card className="p-4 sm:p-6 border-2 border-primary/20 shadow-lg">
+      <Card className="p-3 sm:p-6 border-2 border-primary/20 shadow-lg w-full max-w-full overflow-hidden">
         {/* Prominent Results Header */}
-        <div className="text-center mb-6 p-4 rounded-lg" style={{
+        <div className="text-center mb-4 sm:mb-6 p-3 sm:p-4 rounded-lg" style={{
           background: passed 
             ? 'linear-gradient(135deg, rgba(var(--awareness), 0.1), rgba(var(--awareness), 0.05))' 
             : 'linear-gradient(135deg, rgba(var(--destructive), 0.1), rgba(var(--destructive), 0.05))'
         }}>
-          <div className={`w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 rounded-full flex items-center justify-center border-4 ${
+          <div className={`w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 mx-auto mb-3 sm:mb-4 rounded-full flex items-center justify-center border-2 sm:border-4 ${
             passed ? "bg-awareness/20 text-awareness border-awareness/40" : "bg-destructive/20 text-destructive border-destructive/40"
           }`}>
-            {passed ? <Trophy className="w-8 h-8 sm:w-10 sm:h-10" /> : <XCircle className="w-8 h-8 sm:w-10 sm:h-10" />}
+            {passed ? <Trophy className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10" /> : <XCircle className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10" />}
           </div>
-          <Badge className={`text-sm sm:text-base mb-3 ${passed ? 'bg-awareness text-white' : 'bg-destructive text-white'}`}>
+          <Badge className={`text-xs sm:text-sm md:text-base mb-2 sm:mb-3 ${passed ? 'bg-awareness text-white' : 'bg-destructive text-white'}`}>
             {passed ? "✅ QUIZ PASSED" : "📝 QUIZ COMPLETE"}
           </Badge>
-          <h3 className="text-2xl sm:text-3xl font-consciousness font-bold mb-3">
+          <h3 className="text-xl sm:text-2xl md:text-3xl font-consciousness font-bold mb-2 sm:mb-3 break-words">
             {passed ? "Congratulations!" : "Good Effort!"}
           </h3>
-          <div className="text-3xl sm:text-4xl font-bold mb-2">
+          <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">
             {score}%
           </div>
-          <p className="text-sm sm:text-base text-muted-foreground">
+          <p className="text-xs sm:text-sm md:text-base text-muted-foreground px-2 break-words">
             {passed 
               ? `You passed! (Required: ${quiz.passingScore}%)` 
               : `You need ${quiz.passingScore}% to pass. ${canTakeQuiz() ? 'You can try again!' : ''}`
@@ -330,15 +332,15 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
         </div>
 
         {/* Detailed Results Section */}
-        <Separator className="my-6" />
+        <Separator className="my-4 sm:my-6" />
         
-        <div className="mb-4">
-          <h4 className="text-lg sm:text-xl font-consciousness font-semibold text-center mb-4">
+        <div className="mb-3 sm:mb-4">
+          <h4 className="text-base sm:text-lg md:text-xl font-consciousness font-semibold text-center mb-3 sm:mb-4 break-words">
             📊 Answer Review
           </h4>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4 w-full max-w-full">
           {quiz.questions.map((question, index) => {
             const userAnswer = answers[question.id];
             const isCorrect = question.type === 'multiple' 
@@ -348,32 +350,32 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
               : question.correctAnswers.includes(userAnswer);
 
             return (
-              <div key={question.id} className={`p-4 border-2 rounded-lg ${
+              <div key={question.id} className={`p-3 sm:p-4 border-2 rounded-lg w-full max-w-full overflow-hidden ${
                 isCorrect ? 'border-awareness/30 bg-awareness/5' : 'border-destructive/30 bg-destructive/5'
               }`}>
-                <div className="flex items-start gap-3 mb-3">
-                  <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 ${
+                <div className="flex items-start gap-2 sm:gap-3 mb-2 sm:mb-3">
+                  <div className={`w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center shrink-0 ${
                     isCorrect ? "bg-awareness text-white" : "bg-destructive text-white"
                   }`}>
-                    {isCorrect ? <CheckCircle className="w-4 h-4" /> : <XCircle className="w-4 h-4" />}
+                    {isCorrect ? <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4" /> : <XCircle className="w-3 h-3 sm:w-4 sm:h-4" />}
                   </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h4 className="font-semibold text-sm sm:text-base">Question {index + 1}</h4>
-                      <Badge variant={isCorrect ? "default" : "destructive"} className="text-xs">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-1 sm:gap-2 mb-1">
+                      <h4 className="font-semibold text-xs sm:text-sm md:text-base break-words">Question {index + 1}</h4>
+                      <Badge variant={isCorrect ? "default" : "destructive"} className="text-[10px] sm:text-xs shrink-0">
                         {isCorrect ? "Correct" : "Incorrect"}
                       </Badge>
                     </div>
                   </div>
                 </div>
                 
-                <p className="mb-3 text-sm sm:text-base font-medium">{question.question}</p>
+                <p className="mb-2 sm:mb-3 text-xs sm:text-sm md:text-base font-medium break-words leading-relaxed">{question.question}</p>
                 
-                <div className="space-y-2">
+                <div className="space-y-2 w-full max-w-full overflow-hidden">
                   {userAnswer !== undefined && (
-                    <div className="text-sm">
+                    <div className="text-xs sm:text-sm break-words">
                       <span className="font-medium">Your Answer: </span>
-                      <span className={isCorrect ? "text-awareness" : "text-destructive"}>
+                      <span className={`${isCorrect ? "text-awareness" : "text-destructive"} break-words`}>
                         {question.type === 'multiple' && Array.isArray(userAnswer)
                           ? userAnswer.map(ans => question.options[ans]).join(', ')
                           : question.options[userAnswer]}
@@ -382,14 +384,14 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
                   )}
                   
                   {!isCorrect && (
-                    <div className="bg-muted/50 p-3 rounded border border-border">
-                      <p className="text-sm font-semibold text-awareness mb-1">✓ Correct Answer:</p>
-                      <p className="text-sm font-medium">
+                    <div className="bg-muted/50 p-2 sm:p-3 rounded border border-border w-full max-w-full overflow-hidden">
+                      <p className="text-xs sm:text-sm font-semibold text-awareness mb-1 break-words">✓ Correct Answer:</p>
+                      <p className="text-xs sm:text-sm font-medium break-words leading-relaxed">
                         {question.correctAnswers.map(ans => question.options[ans]).join(', ')}
                       </p>
                       {question.explanation && (
                         <div className="mt-2 pt-2 border-t border-border">
-                          <p className="text-sm text-muted-foreground italic">{question.explanation}</p>
+                          <p className="text-xs sm:text-sm text-muted-foreground italic break-words leading-relaxed">{question.explanation}</p>
                         </div>
                       )}
                     </div>
@@ -400,11 +402,11 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
           })}
         </div>
 
-        <div className="flex justify-center gap-4 mt-6">
+        <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mt-4 sm:mt-6 w-full">
           {canTakeQuiz() && !passed && (
-            <Button onClick={startQuiz} variant="outline">
-              <RotateCcw className="w-4 h-4 mr-2" />
-              Try Again ({quiz.maxAttempts - attempts.length} attempts left)
+            <Button onClick={startQuiz} variant="outline" className="w-full sm:w-auto text-xs sm:text-sm">
+              <RotateCcw className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
+              Try Again ({quiz.maxAttempts - attempts.length} left)
             </Button>
           )}
         </div>
@@ -513,19 +515,19 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
   const progress = ((currentQuestion + 1) / quiz.questions.length) * 100;
 
   return (
-    <Card className="p-6">
+    <Card className="p-3 sm:p-6 w-full max-w-full overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h2 className="text-xl font-bold">{quiz.title}</h2>
-          <p className="text-sm text-muted-foreground">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 mb-4 sm:mb-6">
+        <div className="text-center sm:text-left">
+          <h2 className="text-base sm:text-xl font-bold break-words">{quiz.title}</h2>
+          <p className="text-xs sm:text-sm text-muted-foreground">
             Question {currentQuestion + 1} of {quiz.questions.length}
           </p>
         </div>
         {timeLeft !== null && (
-          <div className="flex items-center gap-2">
-            <Clock className="w-5 h-5" />
-            <span className={timeLeft < 300 ? "text-red-600 font-bold" : ""}>
+          <div className="flex items-center justify-center sm:justify-end gap-2">
+            <Clock className="w-4 h-4 sm:w-5 sm:h-5" />
+            <span className={`text-sm sm:text-base ${timeLeft < 300 ? "text-red-600 font-bold" : ""}`}>
               {formatTime(timeLeft)}
             </span>
           </div>
@@ -533,25 +535,28 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
       </div>
 
       {/* Progress */}
-      <Progress value={progress} className="mb-6" />
+      <Progress value={progress} className="mb-4 sm:mb-6" />
 
       {/* Question */}
-      <div className="mb-6">
-        <h3 className="text-lg font-semibold mb-4">{currentQuestionData.question}</h3>
-        {renderQuestion(currentQuestionData)}
+      <div className="mb-4 sm:mb-6 w-full max-w-full overflow-hidden">
+        <h3 className="text-sm sm:text-lg font-semibold mb-3 sm:mb-4 break-words leading-relaxed">{currentQuestionData.question}</h3>
+        <div className="w-full max-w-full overflow-hidden">
+          {renderQuestion(currentQuestionData)}
+        </div>
       </div>
 
       {/* Navigation */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <Button
           variant="outline"
           onClick={handlePrevious}
           disabled={currentQuestion === 0}
+          className="w-full sm:w-auto text-xs sm:text-sm order-2 sm:order-1"
         >
           Previous
         </Button>
 
-        <div className="text-sm text-muted-foreground">
+        <div className="text-xs sm:text-sm text-muted-foreground text-center order-1 sm:order-2">
           {Object.keys(answers).length} of {quiz.questions.length} answered
         </div>
 
@@ -559,12 +564,12 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
           <Button
             onClick={handleSubmitQuiz}
             disabled={loading}
-            className="bg-awareness hover:bg-awareness/90"
+            className="bg-awareness hover:bg-awareness/90 w-full sm:w-auto text-xs sm:text-sm order-3"
           >
             Submit Quiz
           </Button>
         ) : (
-          <Button onClick={handleNext}>
+          <Button onClick={handleNext} className="w-full sm:w-auto text-xs sm:text-sm order-3">
             Next
           </Button>
         )}
