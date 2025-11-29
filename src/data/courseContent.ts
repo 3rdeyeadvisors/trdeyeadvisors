@@ -674,7 +674,82 @@ Think of a DEX like a **vending machine for crypto**:
 }
 [/COMPONENT]
 
-*Next, we'll address the risks and myths around DeFi so you can use it safely.*`
+*Next, we'll address the risks and myths around DeFi so you can use it safely.*`,
+          quiz: {
+            id: "quiz-1-4",
+            title: "DeFi Key Players - Knowledge Check",
+            description: "Test your understanding of the major players in the DeFi ecosystem including stablecoins, DEXs, and lending protocols.",
+            passingScore: 70,
+            timeLimit: 10,
+            maxAttempts: 3,
+            questions: [
+              {
+                id: "q1-4-1",
+                question: "What is the primary purpose of stablecoins in DeFi?",
+                type: "single",
+                options: [
+                  "To make maximum profits through price speculation",
+                  "To provide price stability by being pegged to fiat currencies like USD",
+                  "To replace all traditional currencies immediately",
+                  "To increase transaction fees"
+                ],
+                correctAnswers: [1],
+                explanation: "Stablecoins are designed to maintain a stable value by being pegged to fiat currencies like USD. They provide a stable medium of exchange within the volatile crypto ecosystem.",
+                points: 10
+              },
+              {
+                id: "q1-4-2",
+                question: "Which of the following are examples of popular stablecoins? (Select all that apply)",
+                type: "multiple",
+                options: [
+                  "USDC (USD Coin)",
+                  "Bitcoin",
+                  "USDT (Tether)",
+                  "DAI"
+                ],
+                correctAnswers: [0, 2, 3],
+                explanation: "USDC, USDT, and DAI are all stablecoins pegged to the US Dollar. Bitcoin is a cryptocurrency but not a stablecoin - its price fluctuates significantly.",
+                points: 15
+              },
+              {
+                id: "q1-4-3",
+                question: "What makes a Decentralized Exchange (DEX) different from traditional exchanges like Coinbase?",
+                type: "single",
+                options: [
+                  "DEXs are slower and more expensive",
+                  "DEXs allow direct peer-to-peer trading without a middleman controlling your funds",
+                  "DEXs require more paperwork and KYC verification",
+                  "DEXs can only trade Bitcoin"
+                ],
+                correctAnswers: [1],
+                explanation: "DEXs enable direct peer-to-peer trading without a centralized company controlling your funds. You maintain custody of your assets throughout the trading process.",
+                points: 10
+              },
+              {
+                id: "q1-4-4",
+                question: "How do DeFi lending protocols like Aave and Compound work?",
+                type: "single",
+                options: [
+                  "They require credit checks and employment verification",
+                  "They use smart contracts to automate lending and borrowing with collateral",
+                  "They only work with traditional bank accounts",
+                  "They manually approve each loan application"
+                ],
+                correctAnswers: [1],
+                explanation: "DeFi lending protocols use smart contracts to automatically facilitate lending and borrowing. You provide collateral, and the smart contract handles everything instantly without credit checks or manual approval.",
+                points: 10
+              },
+              {
+                id: "q1-4-5",
+                question: "True or False: In DeFi lending, you can earn interest by depositing your crypto into lending pools.",
+                type: "true-false",
+                options: ["True", "False"],
+                correctAnswers: [0],
+                explanation: "True! You can earn interest by depositing your crypto into lending pools. Borrowers pay interest to use your deposited funds, and that interest is passed on to you as the lender.",
+                points: 10
+              }
+            ]
+          }
         }
       },
       {
