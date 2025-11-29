@@ -846,21 +846,23 @@ const DefiCalculatorsTutorial = () => {
               )}
 
               {/* Step Navigation */}
-              <div className="flex items-center justify-between pt-6 border-t">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-6 border-t">
                 <Button
                   variant="outline"
                   onClick={handlePrevious}
                   disabled={currentStep === 1}
+                  className="w-full sm:w-auto"
                 >
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Previous
                 </Button>
 
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                   {!isStepCompleted(currentStep) && (
                     <Button
                       variant="secondary"
                       onClick={handleStepComplete}
+                      className="w-full sm:w-auto"
                     >
                       <CheckCircle className="h-4 w-4 mr-2" />
                       Mark Complete
@@ -869,6 +871,7 @@ const DefiCalculatorsTutorial = () => {
                   
                   <Button
                     onClick={handleNext}
+                    className="w-full sm:w-auto"
                   >
                     {currentStep === totalSteps ? "Finish Tutorial" : "Next Step"}
                     <ArrowRight className="h-4 w-4 ml-2" />
