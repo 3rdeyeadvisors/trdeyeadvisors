@@ -534,6 +534,9 @@ const DefiCalculatorsTutorial = () => {
                           <div>
                             <Label htmlFor="apy">APY (%)</Label>
                             <div className="mt-1 space-y-2">
+                              <div className="text-center text-sm font-medium text-primary mb-1">
+                                {yieldInputs.apy}% APY
+                              </div>
                               <Slider
                                 value={[yieldInputs.apy]}
                                 onValueChange={(value) => setYieldInputs({...yieldInputs, apy: value[0]})}
@@ -541,9 +544,6 @@ const DefiCalculatorsTutorial = () => {
                                 min={1}
                                 step={0.5}
                               />
-                              <div className="text-center text-sm text-muted-foreground">
-                                {yieldInputs.apy}% APY
-                              </div>
                             </div>
                           </div>
                           <div>
@@ -691,6 +691,9 @@ const DefiCalculatorsTutorial = () => {
                           <div>
                             <Label htmlFor="priceChangeA">Token A Price Change (%)</Label>
                             <div className="mt-1 space-y-2">
+                              <div className="text-center text-sm font-medium text-primary mb-1">
+                                {ilInputs.priceChangeA > 0 ? '+' : ''}{ilInputs.priceChangeA}%
+                              </div>
                               <Slider
                                 value={[ilInputs.priceChangeA]}
                                 onValueChange={(value) => setIlInputs({...ilInputs, priceChangeA: value[0]})}
@@ -698,14 +701,14 @@ const DefiCalculatorsTutorial = () => {
                                 min={-50}
                                 step={1}
                               />
-                              <div className="text-center text-sm text-muted-foreground">
-                                {ilInputs.priceChangeA > 0 ? '+' : ''}{ilInputs.priceChangeA}%
-                              </div>
                             </div>
                           </div>
                           <div>
                             <Label htmlFor="priceChangeB">Token B Price Change (%)</Label>
                             <div className="mt-1 space-y-2">
+                              <div className="text-center text-sm font-medium text-primary mb-1">
+                                {ilInputs.priceChangeB > 0 ? '+' : ''}{ilInputs.priceChangeB}%
+                              </div>
                               <Slider
                                 value={[ilInputs.priceChangeB]}
                                 onValueChange={(value) => setIlInputs({...ilInputs, priceChangeB: value[0]})}
@@ -713,9 +716,6 @@ const DefiCalculatorsTutorial = () => {
                                 min={-50}
                                 step={1}
                               />
-                              <div className="text-center text-sm text-muted-foreground">
-                                {ilInputs.priceChangeB > 0 ? '+' : ''}{ilInputs.priceChangeB}%
-                              </div>
                             </div>
                           </div>
                         </div>
