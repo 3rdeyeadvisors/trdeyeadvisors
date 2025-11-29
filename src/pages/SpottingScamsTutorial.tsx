@@ -655,7 +655,7 @@ const SpottingScamsTutorial = () => {
             <CardHeader className="p-4 md:p-6">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
                 <div className="flex items-center gap-2 md:gap-3 justify-center sm:justify-start mx-auto sm:mx-0">
-                  <div className="p-1.5 md:p-2 rounded-lg bg-destructive/10 flex-shrink-0">
+                  <div className="p-1.5 md:p-2 rounded-lg bg-destructive/10 flex-shrink-0 flex items-center justify-center">
                     <currentStepData.icon className="h-4 w-4 md:h-5 md:w-5 text-destructive" />
                   </div>
                   <div className="text-center sm:text-left">
