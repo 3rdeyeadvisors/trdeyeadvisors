@@ -486,27 +486,27 @@ const FirstDexSwapTutorial = () => {
           />
         </div>
 
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="p-2 rounded-lg bg-primary/10">
-              <ArrowLeftRight className="h-6 w-6 text-primary" />
+          {/* Header */}
+          <div className="mb-8">
+            <div className="flex items-center gap-3 mb-4 text-center sm:text-left flex-col sm:flex-row">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <ArrowLeftRight className="h-5 w-5 md:h-6 md:w-6 text-primary" />
+              </div>
+              <div>
+                <h1 className="text-2xl md:text-3xl font-bold">Your First DEX Swap</h1>
+                <p className="text-sm md:text-base text-muted-foreground">Step-by-step guide to safe decentralized trading</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-3xl font-bold">Your First DEX Swap</h1>
-              <p className="text-muted-foreground">Step-by-step guide to safe decentralized trading</p>
-            </div>
-          </div>
 
-          {/* Progress */}
-          <div className="space-y-2">
-            <div className="flex justify-between text-sm">
-              <span>Step {currentStep} of {totalSteps}</span>
-              <span>{Math.round(progress)}% Complete</span>
+            {/* Progress */}
+            <div className="space-y-2">
+              <div className="flex justify-between text-xs md:text-sm">
+                <span>Step {currentStep} of {totalSteps}</span>
+                <span>{Math.round(progress)}% Complete</span>
+              </div>
+              <Progress value={progress} className="h-2" />
             </div>
-            <Progress value={progress} className="h-2" />
           </div>
-        </div>
 
         {/* Step Navigation */}
         <div className="flex flex-wrap gap-2 mb-8">
@@ -535,68 +535,70 @@ const FirstDexSwapTutorial = () => {
         {/* Current Step Content */}
         {currentStepData && (
           <Card className="mb-8">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-primary/10">
-                    <currentStepData.icon className="h-5 w-5 text-primary" />
+            <CardHeader className="p-3 md:p-6">
+              <div className="flex flex-col gap-3">
+                <div className="flex flex-col items-center gap-3 md:flex-row md:justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-primary/10 flex items-center justify-center">
+                      <currentStepData.icon className="h-5 w-5 text-primary" />
+                    </div>
+                    <div className="text-center sm:text-left">
+                      <CardTitle className="text-base md:text-xl break-words">{currentStepData.title}</CardTitle>
+                      <CardDescription className="text-xs md:text-sm">
+                        Estimated time: {currentStepData.duration}
+                      </CardDescription>
+                    </div>
                   </div>
-                  <div>
-                    <CardTitle>{currentStepData.title}</CardTitle>
-                    <CardDescription>
-                      Estimated time: {currentStepData.duration}
-                    </CardDescription>
-                  </div>
+                  <Badge variant={isStepCompleted(currentStep) ? "default" : "secondary"} className="w-fit text-xs mx-auto sm:mx-0">
+                    {isStepCompleted(currentStep) ? "Completed" : "In Progress"}
+                  </Badge>
                 </div>
-                <Badge variant={isStepCompleted(currentStep) ? "default" : "secondary"}>
-                  {isStepCompleted(currentStep) ? "Completed" : "In Progress"}
-                </Badge>
               </div>
             </CardHeader>
 
-            <CardContent className="space-y-6">
-              <p className="text-muted-foreground">{currentStepData.content.overview}</p>
+            <CardContent className="space-y-4 md:space-y-6 p-3 md:p-6">
+              <p className="text-sm md:text-base text-muted-foreground text-center sm:text-left">{currentStepData.content.overview}</p>
 
               {/* Step 1: Choose DEX */}
               {currentStep === 1 && (
-                <div className="space-y-6">
+                <div className="space-y-4 md:space-y-6">
                   <KeyTakeaway>
                     Over $1.8 trillion in DEX volume was traded in 2024. Uniswap alone processed over $600 billion, making it the most trusted DEX for beginners and professionals alike.
                   </KeyTakeaway>
 
                   <DidYouKnow fact="Modern DEXs use 'automated market makers' (AMMs) instead of traditional order books, allowing you to trade 24/7 without waiting for a buyer or seller." />
 
-                  <div className="grid gap-4">
+                  <div className="grid gap-3 md:gap-4">
                   {currentStepData.content.dexOptions?.map((dex, index) => (
                     <Card key={index} className={`${dex.recommended ? "border-primary bg-primary/5" : ""}`}>
-                      <CardHeader className="pb-3">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <CardTitle className="text-lg">{dex.name}</CardTitle>
-                            <CardDescription>{dex.network} • {dex.fees} fees</CardDescription>
+                      <CardHeader className="pb-2 md:pb-3 p-3 md:p-6">
+                        <div className="flex flex-col gap-2 text-center sm:text-left md:flex-row md:items-center md:justify-between">
+                          <div className="min-w-0">
+                            <CardTitle className="text-base md:text-lg break-words">{dex.name}</CardTitle>
+                            <CardDescription className="text-xs md:text-sm break-words">{dex.network} • {dex.fees} fees</CardDescription>
                           </div>
-                          <div className="flex gap-2">
-                            <Badge variant="outline">{dex.difficulty}</Badge>
-                            {dex.recommended && <Badge>Recommended</Badge>}
+                          <div className="flex flex-wrap gap-1.5 md:gap-2 justify-center sm:justify-start">
+                            <Badge variant="outline" className="text-[10px] md:text-xs whitespace-nowrap">{dex.difficulty}</Badge>
+                            {dex.recommended && <Badge className="text-[10px] md:text-xs whitespace-nowrap">Recommended</Badge>}
                           </div>
                         </div>
                       </CardHeader>
-                      <CardContent>
-                        <div className="grid md:grid-cols-2 gap-4 mb-3">
-                          <div>
-                            <h4 className="font-medium text-success mb-2">Pros:</h4>
-                            <ul className="text-sm space-y-1">
+                      <CardContent className="p-3 md:p-6 pt-0">
+                        <div className="grid md:grid-cols-2 gap-3 md:gap-4 mb-2 md:mb-3">
+                          <div className="text-center sm:text-left">
+                            <h4 className="font-medium text-success mb-1.5 md:mb-2 text-xs md:text-sm">Pros:</h4>
+                            <ul className="text-xs md:text-sm space-y-0.5 md:space-y-1">
                               {dex.pros.map((pro, i) => (
-                                <li key={i} className="flex items-center gap-2">
-                                  <CheckCircle className="h-3 w-3 text-success" />
-                                  {pro}
+                                <li key={i} className="flex items-center gap-1.5 md:gap-2 justify-center sm:justify-start">
+                                  <CheckCircle className="h-2.5 w-2.5 md:h-3 md:w-3 text-success flex-shrink-0" />
+                                  <span className="break-words text-left">{pro}</span>
                                 </li>
                               ))}
                             </ul>
                           </div>
-                          <div>
-                            <h4 className="font-medium text-awareness mb-2">Cons:</h4>
-                            <ul className="text-sm space-y-1">
+                          <div className="text-center sm:text-left">
+                            <h4 className="font-medium text-awareness mb-1.5 md:mb-2 text-xs md:text-sm">Cons:</h4>
+                            <ul className="text-xs md:text-sm space-y-0.5 md:space-y-1">
                               {dex.cons.map((con, i) => (
                                 <li key={i} className="flex items-center gap-2">
                                   <AlertTriangle className="h-3 w-3 text-awareness" />

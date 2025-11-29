@@ -557,19 +557,19 @@ const LiquidityPoolBasicsTutorial = () => {
             </Button>
           </Link>
           
-          <div className="flex items-center gap-4 mb-4">
-            <div className="p-3 rounded-xl bg-primary/10">
-              <Droplets className="h-8 w-8 text-primary" />
+          <div className="flex items-center gap-3 md:gap-4 mb-4 flex-col sm:flex-row text-center sm:text-left">
+            <div className="p-2 md:p-3 rounded-xl bg-primary/10">
+              <Droplets className="h-6 w-6 md:h-8 md:w-8 text-primary" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-foreground">Liquidity Pool Basics</h1>
-              <p className="text-muted-foreground">Understanding and participating in liquidity pools safely</p>
+              <h1 className="text-2xl md:text-3xl font-bold text-foreground">Liquidity Pool Basics</h1>
+              <p className="text-sm md:text-base text-muted-foreground">Understanding and participating in liquidity pools safely</p>
             </div>
           </div>
 
           {/* Progress Bar */}
           <div className="space-y-2">
-            <div className="flex justify-between text-sm">
+            <div className="flex justify-between text-xs md:text-sm">
               <span className="text-muted-foreground">
                 Step {currentStep} of {totalSteps}
               </span>
@@ -581,19 +581,21 @@ const LiquidityPoolBasicsTutorial = () => {
 
         {/* Current Step Card */}
         <Card className="mb-6 border-primary/20 shadow-lg">
-          <CardHeader className="border-b border-border/50 bg-gradient-to-br from-card via-card to-primary/5">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-primary/10">
-                  <StepIcon className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <CardTitle className="text-xl">{currentStepData.title}</CardTitle>
-                  <CardDescription className="flex items-center gap-2 mt-1">
-                    <Badge variant="outline" className="text-xs">
-                      {currentStepData.duration}
-                    </Badge>
-                  </CardDescription>
+          <CardHeader className="border-b border-border/50 bg-gradient-to-br from-card via-card to-primary/5 p-3 md:p-6">
+            <div className="flex flex-col gap-3">
+              <div className="flex flex-col items-center gap-3 md:flex-row md:justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <StepIcon className="h-5 w-5 md:h-6 md:w-6 text-primary" />
+                  </div>
+                  <div className="text-center sm:text-left">
+                    <CardTitle className="text-base md:text-xl break-words">{currentStepData.title}</CardTitle>
+                    <CardDescription className="flex items-center gap-2 mt-1 justify-center sm:justify-start">
+                      <Badge variant="outline" className="text-[10px] md:text-xs">
+                        {currentStepData.duration}
+                      </Badge>
+                    </CardDescription>
+                  </div>
                 </div>
               </div>
             </div>
