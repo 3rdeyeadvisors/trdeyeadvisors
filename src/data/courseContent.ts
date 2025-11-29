@@ -464,7 +464,82 @@ Think of smart contracts as **"if-then" statements** that execute automatically:
 ❌ "It's not secure"
 ✅ When used properly, it's often more secure than traditional systems
 
-*Next, we'll explore the key players in the DeFi ecosystem and what they do.*`
+*Next, we'll explore the key players in the DeFi ecosystem and what they do.*`,
+          quiz: {
+            id: "quiz-1-3",
+            title: "Blockchain Basics - Knowledge Check",
+            description: "Test your understanding of blockchain technology and how it enables DeFi.",
+            passingScore: 70,
+            timeLimit: 10,
+            maxAttempts: 3,
+            questions: [
+              {
+                id: "q1-3-1",
+                question: "Which of the following are key properties of blockchain? (Select all that apply)",
+                type: "multiple",
+                options: [
+                  "Shared & Public - thousands of computers keep identical copies",
+                  "Unchangeable - transactions cannot be deleted or modified",
+                  "Centralized - controlled by one organization",
+                  "No Central Authority - decisions made by consensus"
+                ],
+                correctAnswers: [0, 1, 3],
+                explanation: "Blockchain is shared/public, unchangeable, and has no central authority. It is specifically NOT centralized - that's the opposite of blockchain's core principle.",
+                points: 15
+              },
+              {
+                id: "q1-3-2",
+                question: "What are smart contracts best described as?",
+                type: "single",
+                options: [
+                  "Physical legal documents stored digitally",
+                  "Automated 'if-then' statements that execute without human intervention",
+                  "Contracts that require lawyers to approve",
+                  "Traditional bank agreements on the blockchain"
+                ],
+                correctAnswers: [1],
+                explanation: "Smart contracts are automated 'if-then' statements that execute automatically when conditions are met, without requiring human intervention or approval.",
+                points: 10
+              },
+              {
+                id: "q1-3-3",
+                question: "In a DeFi loan process, what happens after you deposit collateral?",
+                type: "single",
+                options: [
+                  "A bank employee reviews your application",
+                  "You must wait several days for approval",
+                  "Smart contract automatically verifies collateral and provides loan instantly",
+                  "You need to submit paperwork and credit history"
+                ],
+                correctAnswers: [2],
+                explanation: "In DeFi, smart contracts automatically verify your collateral and provide the loan instantly - no waiting, paperwork, or human review required.",
+                points: 10
+              },
+              {
+                id: "q1-3-4",
+                question: "Which blockchain is described as the most popular for DeFi applications?",
+                type: "single",
+                options: [
+                  "Bitcoin",
+                  "Ethereum",
+                  "Solana",
+                  "Binance Smart Chain"
+                ],
+                correctAnswers: [1],
+                explanation: "Ethereum is the most popular blockchain for DeFi applications, often compared to the 'iPhone' of blockchains due to its extensive app ecosystem.",
+                points: 10
+              },
+              {
+                id: "q1-3-5",
+                question: "True or False: Using DeFi apps is often more complicated than traditional banking.",
+                type: "true-false",
+                options: ["True", "False"],
+                correctAnswers: [1],
+                explanation: "This is false. Using DeFi apps is often simpler than traditional banking, despite the common misconception that blockchain technology is too complicated for regular people.",
+                points: 10
+              }
+            ]
+          }
         },
         resources: [
           {
