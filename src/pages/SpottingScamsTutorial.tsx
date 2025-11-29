@@ -654,18 +654,18 @@ const SpottingScamsTutorial = () => {
           <Card className="mb-8">
             <CardHeader className="p-4 md:p-6">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-                <div className="flex items-center gap-2 md:gap-3">
+                <div className="flex items-center gap-2 md:gap-3 justify-center sm:justify-start mx-auto sm:mx-0">
                   <div className="p-1.5 md:p-2 rounded-lg bg-destructive/10 flex-shrink-0">
                     <currentStepData.icon className="h-4 w-4 md:h-5 md:w-5 text-destructive" />
                   </div>
-                  <div>
+                  <div className="text-center sm:text-left">
                     <CardTitle className="text-base md:text-xl">{currentStepData.title}</CardTitle>
                     <CardDescription className="text-xs md:text-sm">
                       Estimated time: {currentStepData.duration}
                     </CardDescription>
                   </div>
                 </div>
-                <Badge variant={isStepCompleted(currentStep) ? "default" : "secondary"} className="w-fit text-xs">
+                <Badge variant={isStepCompleted(currentStep) ? "default" : "secondary"} className="w-fit text-xs mx-auto sm:mx-0">
                   {isStepCompleted(currentStep) ? "Completed" : "In Progress"}
                 </Badge>
               </div>
