@@ -171,7 +171,7 @@ const ModuleViewer = () => {
                   <Button
                     key={module.id}
                     variant={isCurrent ? "default" : "outline"}
-                    className={`h-auto p-3 md:p-4 min-h-[60px] transition-all ${
+                    className={`h-auto p-4 transition-all ${
                       isCurrent 
                         ? "bg-primary/10 border-primary/50 text-primary hover:bg-primary/20" 
                         : isCompleted 
@@ -183,22 +183,25 @@ const ModuleViewer = () => {
                       setShowModuleList(false);
                     }}
                   >
-                    <div className="flex items-center gap-2 md:gap-3 w-full">
-                      <div className="flex items-center gap-1 md:gap-2 flex-shrink-0">
+                    <div className="flex flex-col gap-2 w-full text-left">
+                      {/* Top row: checkmark and play icon */}
+                      <div className="flex items-center gap-2">
                         {isCompleted ? (
-                          <div className="w-5 h-5 md:w-6 md:h-6 bg-awareness rounded-full flex items-center justify-center">
+                          <div className="w-5 h-5 bg-awareness rounded-full flex items-center justify-center flex-shrink-0">
                             <span className="text-foreground text-xs font-bold">✓</span>
                           </div>
                         ) : (
-                          <div className="w-5 h-5 md:w-6 md:h-6 border-2 border-current rounded-full flex items-center justify-center">
+                          <div className="w-5 h-5 border-2 border-current rounded-full flex items-center justify-center flex-shrink-0">
                             <span className="text-xs font-medium">{index + 1}</span>
                           </div>
                         )}
-                        {isCurrent && <Play className="w-3 h-3 md:w-4 md:h-4" />}
+                        {isCurrent && <Play className="w-4 h-4 ml-auto" />}
                       </div>
-                      <div className="flex-1 min-w-0 text-center md:text-left">
-                        <p className="text-xs md:text-sm font-medium break-words whitespace-normal">{module.title}</p>
-                        <p className="text-xs text-muted-foreground mt-1">{module.duration} min</p>
+                      
+                      {/* Title and duration stacked */}
+                      <div className="flex flex-col gap-1 pl-7">
+                        <p className="text-sm font-medium leading-snug">{module.title}</p>
+                        <p className="text-xs text-muted-foreground">{module.duration} min</p>
                       </div>
                     </div>
                   </Button>
