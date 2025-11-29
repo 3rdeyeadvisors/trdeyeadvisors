@@ -1,4 +1,24 @@
 // Course content structure with actual content
+export interface QuizQuestion {
+  id: string;
+  question: string;
+  type: 'single' | 'multiple' | 'true-false';
+  options: string[];
+  correctAnswers: number[];
+  explanation?: string;
+  points: number;
+}
+
+export interface Quiz {
+  id: string;
+  title: string;
+  description?: string;
+  questions: QuizQuestion[];
+  passingScore: number;
+  timeLimit?: number;
+  maxAttempts: number;
+}
+
 export interface ModuleContent {
   id: string;
   title: string;
@@ -9,11 +29,7 @@ export interface ModuleContent {
     videoUrl?: string;
     embedCode?: string;
     heroImage?: string;
-    quiz?: {
-      question: string;
-      options: string[];
-      correctAnswer: number;
-    };
+    quiz?: Quiz;
   };
   resources?: {
     title: string;
@@ -105,7 +121,82 @@ DeFi makes all of this possible **without** traditional financial institutions. 
 }
 [/COMPONENT]
 
-*Next, we'll explore WHY DeFi exists and what problems it solves.*`
+*Next, we'll explore WHY DeFi exists and what problems it solves.*`,
+          quiz: {
+            id: "quiz-1-1",
+            title: "What is DeFi? - Knowledge Check",
+            description: "Test your understanding of DeFi basics and how it compares to traditional finance.",
+            passingScore: 70,
+            timeLimit: 10,
+            maxAttempts: 3,
+            questions: [
+              {
+                id: "q1-1-1",
+                question: "What does DeFi stand for?",
+                type: "single",
+                options: [
+                  "Digital Finance",
+                  "Decentralized Finance",
+                  "Definitive Finance",
+                  "Distributed Finance"
+                ],
+                correctAnswers: [1],
+                explanation: "DeFi stands for Decentralized Finance - a financial system that operates without traditional centralized intermediaries like banks.",
+                points: 10
+              },
+              {
+                id: "q1-1-2",
+                question: "Which of the following are advantages of DeFi over traditional banking? (Select all that apply)",
+                type: "multiple",
+                options: [
+                  "Available 24/7 globally",
+                  "Lower fees due to automation",
+                  "Requires no internet connection",
+                  "Open access to anyone with internet"
+                ],
+                correctAnswers: [0, 1, 3],
+                explanation: "DeFi offers 24/7 availability, lower fees through automation, and open access to anyone with internet. However, it does require an internet connection to operate.",
+                points: 15
+              },
+              {
+                id: "q1-1-3",
+                question: "In traditional banking, who controls the financial system?",
+                type: "single",
+                options: [
+                  "The customers collectively",
+                  "Centralized institutions like banks",
+                  "Smart contracts",
+                  "No one - it's completely decentralized"
+                ],
+                correctAnswers: [1],
+                explanation: "Traditional banking is centralized, meaning single institutions (banks) control the system and make decisions about who gets access to financial services.",
+                points: 10
+              },
+              {
+                id: "q1-1-4",
+                question: "True or False: DeFi uses smart contracts to handle transactions automatically without human intervention.",
+                type: "true-false",
+                options: ["True", "False"],
+                correctAnswers: [0],
+                explanation: "This is true. Smart contracts are self-executing code that automatically handles transactions in DeFi, eliminating the need for human intermediaries.",
+                points: 10
+              },
+              {
+                id: "q1-1-5",
+                question: "What is the main goal of DeFi?",
+                type: "single",
+                options: [
+                  "To completely eliminate all traditional banks immediately",
+                  "To create an alternative financial system that's more accessible and transparent",
+                  "To make everyone rich quickly",
+                  "To replace all forms of currency with cryptocurrency"
+                ],
+                correctAnswers: [1],
+                explanation: "DeFi aims to create an alternative financial system that's more accessible, transparent, and efficient - not to instantly replace all traditional finance.",
+                points: 10
+              }
+            ]
+          }
         },
         resources: [
           {

@@ -245,40 +245,6 @@ export const ContentPlayer = ({
               </div>
             </div>
           )}
-
-          {module.type === 'interactive' && module.content.quiz && (
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Interactive Quiz</h3>
-              <div className="p-4 bg-muted rounded-lg">
-                <p className="mb-4 font-medium">{module.content.quiz.question}</p>
-                <div className="space-y-2">
-                  {module.content.quiz.options.map((option, index) => (
-                    <Button
-                      key={index}
-                      variant="outline"
-                      className="w-full justify-start"
-                      onClick={() => {
-                        if (index === module.content.quiz!.correctAnswer) {
-                          toast({
-                            title: "Correct! 🎉",
-                            description: "Great job! You got the right answer.",
-                          });
-                        } else {
-                          toast({
-                            title: "Not quite right",
-                            description: "Try again! Think about what we just covered.",
-                            variant: "destructive",
-                          });
-                        }
-                      }}
-                    >
-                      {option}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       </Card>
 
