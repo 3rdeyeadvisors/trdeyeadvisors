@@ -531,22 +531,46 @@ const DefiCalculatorsTutorial = () => {
                               className="mt-1"
                             />
                           </div>
-                           <div>
-                             <Label htmlFor="apy">APY (%)</Label>
-                             <div className="mt-1 space-y-2">
-                               <div className="text-center text-sm font-medium text-primary mb-1">
-                                 {yieldInputs.apy}% APY
-                               </div>
-                               <Slider
-                                 value={[yieldInputs.apy]}
-                                 onValueChange={(value) => setYieldInputs({...yieldInputs, apy: value[0]})}
-                                 max={100}
-                                 min={1}
-                                 step={0.5}
-                                 className="[&_[role=slider]]:!h-2 [&_[role=slider]]:!w-2 sm:[&_[role=slider]]:!h-4 sm:[&_[role=slider]]:!w-4"
-                               />
-                             </div>
-                           </div>
+                          <div>
+                            <Label htmlFor="apy">APY (%)</Label>
+                            <div className="mt-1 space-y-2">
+                              <div className="flex items-center gap-2">
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => setYieldInputs({...yieldInputs, apy: Math.max(1, yieldInputs.apy - 0.5)})}
+                                  className="h-8 w-8 p-0"
+                                >
+                                  -
+                                </Button>
+                                <div className="flex-1 text-center">
+                                  <Input
+                                    id="apy"
+                                    type="number"
+                                    value={yieldInputs.apy}
+                                    onChange={(e) => setYieldInputs({...yieldInputs, apy: Number(e.target.value)})}
+                                    min={1}
+                                    max={100}
+                                    step={0.5}
+                                    className="text-center"
+                                  />
+                                </div>
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => setYieldInputs({...yieldInputs, apy: Math.min(100, yieldInputs.apy + 0.5)})}
+                                  className="h-8 w-8 p-0"
+                                >
+                                  +
+                                </Button>
+                              </div>
+                              <div className="text-center text-sm font-medium text-primary">
+                                {yieldInputs.apy}% APY
+                              </div>
+                            </div>
+                          </div>
                           <div>
                             <Label htmlFor="compound">Compound Period (times/year)</Label>
                             <Input
@@ -692,33 +716,81 @@ const DefiCalculatorsTutorial = () => {
                           <div>
                             <Label htmlFor="priceChangeA">Token A Price Change (%)</Label>
                             <div className="mt-1 space-y-2">
-                              <div className="text-center text-sm font-medium text-primary mb-1">
+                              <div className="flex items-center gap-2">
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => setIlInputs({...ilInputs, priceChangeA: Math.max(-50, ilInputs.priceChangeA - 1)})}
+                                  className="h-8 w-8 p-0"
+                                >
+                                  -
+                                </Button>
+                                <div className="flex-1 text-center">
+                                  <Input
+                                    id="priceChangeA"
+                                    type="number"
+                                    value={ilInputs.priceChangeA}
+                                    onChange={(e) => setIlInputs({...ilInputs, priceChangeA: Number(e.target.value)})}
+                                    min={-50}
+                                    max={200}
+                                    step={1}
+                                    className="text-center"
+                                  />
+                                </div>
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => setIlInputs({...ilInputs, priceChangeA: Math.min(200, ilInputs.priceChangeA + 1)})}
+                                  className="h-8 w-8 p-0"
+                                >
+                                  +
+                                </Button>
+                              </div>
+                              <div className="text-center text-sm font-medium text-primary">
                                 {ilInputs.priceChangeA > 0 ? '+' : ''}{ilInputs.priceChangeA}%
                               </div>
-                              <Slider
-                                value={[ilInputs.priceChangeA]}
-                                onValueChange={(value) => setIlInputs({...ilInputs, priceChangeA: value[0]})}
-                                max={200}
-                                min={-50}
-                                step={1}
-                                className="[&_[role=slider]]:!h-2 [&_[role=slider]]:!w-2 sm:[&_[role=slider]]:!h-4 sm:[&_[role=slider]]:!w-4"
-                              />
                             </div>
                           </div>
                           <div>
                             <Label htmlFor="priceChangeB">Token B Price Change (%)</Label>
                             <div className="mt-1 space-y-2">
-                              <div className="text-center text-sm font-medium text-primary mb-1">
+                              <div className="flex items-center gap-2">
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => setIlInputs({...ilInputs, priceChangeB: Math.max(-50, ilInputs.priceChangeB - 1)})}
+                                  className="h-8 w-8 p-0"
+                                >
+                                  -
+                                </Button>
+                                <div className="flex-1 text-center">
+                                  <Input
+                                    id="priceChangeB"
+                                    type="number"
+                                    value={ilInputs.priceChangeB}
+                                    onChange={(e) => setIlInputs({...ilInputs, priceChangeB: Number(e.target.value)})}
+                                    min={-50}
+                                    max={200}
+                                    step={1}
+                                    className="text-center"
+                                  />
+                                </div>
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => setIlInputs({...ilInputs, priceChangeB: Math.min(200, ilInputs.priceChangeB + 1)})}
+                                  className="h-8 w-8 p-0"
+                                >
+                                  +
+                                </Button>
+                              </div>
+                              <div className="text-center text-sm font-medium text-primary">
                                 {ilInputs.priceChangeB > 0 ? '+' : ''}{ilInputs.priceChangeB}%
                               </div>
-                              <Slider
-                                value={[ilInputs.priceChangeB]}
-                                onValueChange={(value) => setIlInputs({...ilInputs, priceChangeB: value[0]})}
-                                max={200}
-                                min={-50}
-                                step={1}
-                                className="[&_[role=slider]]:!h-2 [&_[role=slider]]:!w-2 sm:[&_[role=slider]]:!h-4 sm:[&_[role=slider]]:!w-4"
-                              />
                             </div>
                           </div>
                         </div>
