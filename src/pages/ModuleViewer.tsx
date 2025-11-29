@@ -183,26 +183,26 @@ const ModuleViewer = () => {
                       setShowModuleList(false);
                     }}
                   >
-                    <div className="flex items-start gap-2 w-full overflow-hidden">
+                    <div className="flex items-start gap-2 w-full">
                       {/* Status icon */}
                       {isCompleted ? (
-                        <div className="w-5 h-5 bg-awareness rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <div className="w-5 h-5 bg-awareness rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                           <span className="text-foreground text-xs font-bold">✓</span>
                         </div>
                       ) : (
-                        <div className="w-5 h-5 border-2 border-current rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <div className="w-5 h-5 border-2 border-current rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                           <span className="text-xs font-medium">{index + 1}</span>
                         </div>
                       )}
                       
                       {/* Content */}
-                      <div className="flex-1 min-w-0 overflow-hidden">
-                        <p className="text-sm font-medium leading-tight line-clamp-2">{module.title}</p>
+                      <div className="flex-1 pr-2">
+                        <p className="text-sm font-medium leading-snug whitespace-normal break-words">{module.title}</p>
                         <p className="text-xs text-muted-foreground mt-1">{module.duration} min</p>
                       </div>
                       
                       {/* Play icon */}
-                      {isCurrent && <Play className="w-4 h-4 flex-shrink-0 mt-0.5" />}
+                      {isCurrent && <Play className="w-4 h-4 flex-shrink-0 mt-1" />}
                     </div>
                   </Button>
                 );
