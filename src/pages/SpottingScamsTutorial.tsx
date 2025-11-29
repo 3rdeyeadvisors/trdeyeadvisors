@@ -841,13 +841,13 @@ const SpottingScamsTutorial = () => {
                   </div>
 
                   <div className="space-y-3 md:space-y-4">
-                    <h3 className="font-semibold text-sm md:text-base">Transaction Analysis Steps:</h3>
+                    <h3 className="font-semibold text-sm md:text-base text-center sm:text-left">Transaction Analysis Steps:</h3>
                     <div className="grid gap-2.5 md:gap-3">
                       {currentStepData.content.transactionAnalysis?.map((analysis, index) => (
                         <Card key={index}>
                           <CardContent className="p-3 md:p-4 text-center sm:text-left">
-                            <div className="flex items-start gap-2">
-                              <Badge variant="outline" className="text-[10px] md:text-xs min-w-5 h-5 md:min-w-6 md:h-6 flex items-center justify-center flex-shrink-0 mx-auto sm:mx-0">
+                            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-2">
+                              <Badge variant="outline" className="text-[10px] md:text-xs min-w-5 h-5 md:min-w-6 md:h-6 flex items-center justify-center flex-shrink-0">
                                 {index + 1}
                               </Badge>
                               <div className="flex-1 min-w-0">
