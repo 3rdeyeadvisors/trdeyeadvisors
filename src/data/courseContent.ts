@@ -287,7 +287,87 @@ DeFi wasn't created just because it could be built. It exists to solve **real pr
 
 DeFi exists because the current financial system was built decades ago and hasn't kept up with technology. It's like using dial-up internet when fiber optic is available.
 
-*Next, we'll cover the blockchain basics you need to understand how DeFi actually works.*`
+*Next, we'll cover the blockchain basics you need to understand how DeFi actually works.*`,
+          quiz: {
+            id: "quiz-1-2",
+            title: "Why DeFi Exists - Knowledge Check",
+            description: "Test your understanding of the key problems that DeFi solves in traditional finance.",
+            passingScore: 70,
+            timeLimit: 10,
+            maxAttempts: 3,
+            questions: [
+              {
+                id: "q1-2-1",
+                question: "What is the typical cost range for international wire transfers in traditional finance?",
+                type: "single",
+                options: [
+                  "$1-5 per transaction",
+                  "$15-50+ per transaction",
+                  "$100-200 per transaction",
+                  "Free in most cases"
+                ],
+                correctAnswers: [1],
+                explanation: "Traditional international wire transfers typically cost $15-50 or more per transaction, whereas DeFi cross-border transfers are often under $5.",
+                points: 10
+              },
+              {
+                id: "q1-2-2",
+                question: "How many people worldwide lack access to traditional banking services?",
+                type: "single",
+                options: [
+                  "500 million people",
+                  "1 billion people",
+                  "2 billion people",
+                  "5 billion people"
+                ],
+                correctAnswers: [2],
+                explanation: "Over 2 billion people worldwide lack access to traditional banking services, yet many have smartphones and internet access - making DeFi their potential gateway to financial services.",
+                points: 10
+              },
+              {
+                id: "q1-2-3",
+                question: "Which of the following are problems that DeFi solves? (Select all that apply)",
+                type: "multiple",
+                options: [
+                  "High transaction fees",
+                  "Lack of transparency in traditional banking",
+                  "Slow transaction settlement times",
+                  "Guaranteed profits for all investors"
+                ],
+                correctAnswers: [0, 1, 2],
+                explanation: "DeFi addresses high fees, lack of transparency, and slow settlement times. However, it does NOT guarantee profits - DeFi still involves risks and market volatility.",
+                points: 15
+              },
+              {
+                id: "q1-2-4",
+                question: "What does DeFi require for someone to access financial services?",
+                type: "single",
+                options: [
+                  "A bank account and good credit history",
+                  "Only an internet connection and smartphone",
+                  "Government-issued ID and proof of income",
+                  "A minimum deposit of $1000"
+                ],
+                correctAnswers: [1],
+                explanation: "DeFi only requires an internet connection and a smartphone - no credit checks, minimum balances, or traditional banking requirements needed.",
+                points: 10
+              },
+              {
+                id: "q1-2-5",
+                question: "How long do international transfers typically take in traditional banking systems?",
+                type: "single",
+                options: [
+                  "Seconds to minutes",
+                  "1-2 hours",
+                  "3-7 days",
+                  "Instantly"
+                ],
+                correctAnswers: [2],
+                explanation: "Traditional international transfers typically take 3-7 days to complete, while DeFi transactions happen in seconds to minutes regardless of location.",
+                points: 10
+              }
+            ]
+          }
         }
       },
       {
