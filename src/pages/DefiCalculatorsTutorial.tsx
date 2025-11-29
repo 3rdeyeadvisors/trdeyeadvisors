@@ -432,17 +432,15 @@ const DefiCalculatorsTutorial = () => {
         {currentStepData && (
           <Card className="mb-8">
             <CardHeader>
-              <div className="flex items-start gap-3 mb-2">
-                <div className="p-2 rounded-lg bg-primary/10 flex-shrink-0">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="p-2 rounded-lg bg-primary/10">
                   <currentStepData.icon className="h-5 w-5 text-primary" />
                 </div>
-                <div className="flex-1 min-w-0">
-                  <CardTitle className="mb-1">{currentStepData.title}</CardTitle>
-                  <CardDescription>
-                    Estimated time: {currentStepData.duration}
-                  </CardDescription>
-                </div>
+                <CardTitle>{currentStepData.title}</CardTitle>
               </div>
+              <CardDescription className="mb-3">
+                Estimated time: {currentStepData.duration}
+              </CardDescription>
               <Badge 
                 variant={isStepCompleted(currentStep) ? "default" : "secondary"}
                 className="w-fit"
@@ -462,20 +460,18 @@ const DefiCalculatorsTutorial = () => {
                       const CalcIcon = calc.icon;
                       return (
                         <Card key={index}>
-                          <CardHeader className="pb-3">
-                            <div className="flex items-start gap-3 mb-2">
-                              <div className="p-2 rounded-lg bg-primary/10 flex-shrink-0">
+                          <CardHeader className="pb-3 space-y-3">
+                            <div className="flex items-center gap-3">
+                              <div className="p-2 rounded-lg bg-primary/10">
                                 <CalcIcon className="h-5 w-5 text-primary" />
                               </div>
-                              <div className="flex-1 min-w-0">
-                                <CardTitle className="text-lg mb-1">{calc.name}</CardTitle>
-                                <CardDescription className="text-left">{calc.purpose}</CardDescription>
-                              </div>
+                              <CardTitle className="text-lg">{calc.name}</CardTitle>
                             </div>
                             <Badge variant="outline" className="w-fit">{calc.difficulty}</Badge>
+                            <CardDescription>{calc.purpose}</CardDescription>
                           </CardHeader>
                           <CardContent>
-                            <div className="space-y-3 text-sm text-left">
+                            <div className="space-y-3 text-sm">
                               <div>
                                 <p className="font-medium mb-1">When to use:</p>
                                 <p className="text-muted-foreground">{calc.when}</p>
@@ -753,27 +749,25 @@ const DefiCalculatorsTutorial = () => {
                     <div className="grid gap-3">
                       {currentStepData.content.ilScenarios?.map((scenario, index) => (
                         <Card key={index}>
-                          <CardContent className="p-4">
-                            <div className="space-y-3">
-                              <div className="flex items-center justify-between gap-3">
-                                <h4 className="font-medium">{scenario.scenario}</h4>
-                                <Badge 
-                                  variant={Number(scenario.il.replace('%', '')) === 0 ? "default" : Number(scenario.il.replace('%', '')) > -3 ? "secondary" : "destructive"}
-                                  className="whitespace-nowrap flex-shrink-0"
-                                >
-                                  {scenario.il} IL
-                                </Badge>
-                              </div>
-                              <div className="grid grid-cols-2 gap-2 text-sm text-left">
-                                <div>
-                                  <span className="text-muted-foreground">Token A:</span> {scenario.tokenA}
-                                </div>
-                                <div>
-                                  <span className="text-muted-foreground">Token B:</span> {scenario.tokenB}
-                                </div>
-                              </div>
-                              <p className="text-sm text-muted-foreground text-left">{scenario.meaning}</p>
+                          <CardContent className="p-4 space-y-3">
+                            <div className="flex items-center justify-between gap-3">
+                              <h4 className="font-medium">{scenario.scenario}</h4>
+                              <Badge 
+                                variant={Number(scenario.il.replace('%', '')) === 0 ? "default" : Number(scenario.il.replace('%', '')) > -3 ? "secondary" : "destructive"}
+                                className="whitespace-nowrap"
+                              >
+                                {scenario.il} IL
+                              </Badge>
                             </div>
+                            <div className="grid grid-cols-2 gap-2 text-sm">
+                              <div>
+                                <span className="text-muted-foreground">Token A:</span> {scenario.tokenA}
+                              </div>
+                              <div>
+                                <span className="text-muted-foreground">Token B:</span> {scenario.tokenB}
+                              </div>
+                            </div>
+                            <p className="text-sm text-muted-foreground">{scenario.meaning}</p>
                           </CardContent>
                         </Card>
                       ))}
