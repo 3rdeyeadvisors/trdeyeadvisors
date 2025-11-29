@@ -432,7 +432,7 @@ const DefiCalculatorsTutorial = () => {
         {currentStepData && (
           <Card className="mb-8">
             <CardHeader>
-              <div className="flex items-center gap-3 mb-3">
+              <div className="flex items-center gap-2 mb-3">
                 <div className="p-2 rounded-lg bg-primary/10 flex-shrink-0">
                   <currentStepData.icon className="h-5 w-5 text-primary" />
                 </div>
@@ -461,7 +461,7 @@ const DefiCalculatorsTutorial = () => {
                       return (
                         <Card key={index}>
                           <CardHeader className="pb-3 space-y-3">
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-2">
                               <div className="p-2 rounded-lg bg-primary/10 flex-shrink-0">
                                 <CalcIcon className="h-5 w-5 text-primary" />
                               </div>
@@ -511,7 +511,7 @@ const DefiCalculatorsTutorial = () => {
                   {/* Interactive Calculator */}
                   <Card className="bg-awareness/10 border-awareness/20">
                     <CardHeader className="pb-3">
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2">
                         <div className="p-2 rounded-lg bg-awareness/10 flex-shrink-0">
                           <TrendingUp className="h-5 w-5 text-awareness" />
                         </div>
@@ -642,7 +642,7 @@ const DefiCalculatorsTutorial = () => {
                   {/* IL Explanation */}
                   <Card className="bg-destructive/10 border-destructive/20">
                     <CardHeader className="pb-3">
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2">
                         <div className="p-2 rounded-lg bg-destructive/10 flex-shrink-0">
                           <AlertTriangle className="h-5 w-5 text-destructive" />
                         </div>
@@ -659,7 +659,7 @@ const DefiCalculatorsTutorial = () => {
                   {/* Interactive IL Calculator */}
                   <Card className="bg-destructive/10 border-destructive/20">
                     <CardHeader className="pb-3">
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2">
                         <div className="p-2 rounded-lg bg-destructive/10 flex-shrink-0">
                           <AlertTriangle className="h-5 w-5 text-destructive" />
                         </div>
