@@ -173,19 +173,12 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
       console.log('[Progress] Confirmed saved modules:', resultData.completed_modules);
 
       // Update local state with the exact data from database
-      setCourseProgress(prev => {
-        const updated = {
-          ...prev,
-          [courseId]: resultData
-        };
-        console.log('[Progress] Local state being updated to:', updated);
-        return updated;
-      });
+      setCourseProgress(prev => ({
+        ...prev,
+        [courseId]: resultData
+      }));
 
       console.log('[Progress] Local state updated successfully');
-
-      // Force a small delay to ensure state propagation
-      await new Promise(resolve => setTimeout(resolve, 100));
 
     } catch (error) {
       console.error('[Progress] Error updating module progress:', error);
