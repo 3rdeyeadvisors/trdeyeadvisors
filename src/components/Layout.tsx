@@ -8,8 +8,16 @@ interface LayoutProps {
   children: ReactNode;
 }
 
+// Routes that should render without Layout (nav/footer)
+const STANDALONE_ROUTES = ['/rosa-birthday'];
+
 const Layout = ({ children }: LayoutProps) => {
   const location = useLocation();
+  
+  // Check if this is a standalone route
+  if (STANDALONE_ROUTES.includes(location.pathname)) {
+    return <>{children}</>;
+  }
   
   // Generate canonical URL - normalize path and ensure proper domain
   // Keep trailing slash only for homepage, remove for all other pages
