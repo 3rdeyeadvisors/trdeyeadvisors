@@ -1,7 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { ShoppingCart, Download, Package, FileText, Calculator, TrendingUp, CheckCircle, X, Plus, RefreshCw, Shield } from "lucide-react";
+import { Package, CheckCircle, X, RefreshCw, Shield } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
@@ -16,45 +15,8 @@ const Store = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-  const [purchasedProduct, setPurchasedProduct] = useState<string>("");
   const [printifyProducts, setPrintifyProducts] = useState<any[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [activeCategory, setActiveCategory] = useState<"merchandise" | "digital">("merchandise");
-  const [digitalProducts] = useState([
-    {
-      id: 1,
-      title: "Complete DeFi Mastery eBook",
-      description: "200+ page comprehensive guide covering every aspect of decentralized finance",
-      price: 47,
-      type: "digital",
-      category: "eBook",
-      icon: FileText,
-      features: ["200+ pages", "12 chapters", "Case studies", "Lifetime updates"],
-      files: ["Complete DeFi eBook (PDF)", "Quick Reference Card (PDF)"]
-    },
-    {
-      id: 2,
-      title: "DeFi Portfolio Tracker Template",
-      description: "Excel/Google Sheets template for tracking your DeFi positions and yields",
-      price: 27,
-      type: "digital",
-      category: "Template",
-      icon: Calculator,
-      features: ["Multi-chain support", "Auto calculations", "Risk assessment", "Tax reporting"],
-      files: ["Portfolio Tracker (Excel)", "Setup Guide (PDF)"]
-    },
-    {
-      id: 3,
-      title: "Yield Farming Strategy Guide",
-      description: "Advanced strategies and frameworks for sustainable yield generation",
-      price: 67,
-      type: "digital",
-      category: "Guide",
-      icon: TrendingUp,
-      features: ["10 proven strategies", "Risk frameworks", "ROI calculators", "Guided tutorials"],
-      files: ["Strategy Guide (PDF)", "ROI Calculator (Excel)"]
-    }
-  ]);
 
   const handleAddToCart = (product: any) => {
     console.log('Adding to cart:', product);
@@ -181,72 +143,26 @@ const Store = () => {
     loadPrintifyProducts().finally(() => setIsLoading(false));
   }, [clearCart]);
 
-  const allProducts = [...digitalProducts, ...printifyProducts];
-
-  const getProductIcon = (product: any) => {
-    return product.icon;
-  };
-
-  const getTypeColor = (type: string) => {
-    return type === "digital" 
-      ? "bg-primary/20 text-primary border-primary/30"
-      : "bg-accent/20 text-accent border-accent/30";
-  };
 
   return (
     <>
       <SEO 
-        title="DeFi Education Store | 3rdeyeadvisors"
-        description="Premium DeFi courses, guides, and educational materials. Get access to expert cryptocurrency training and blockchain education resources."
-        keywords="DeFi courses, crypto education store, blockchain training materials, DeFi guides"
+        title="Store | 3rdeyeadvisors"
+        description="Consciousness-inspired merchandise and premium apparel. Support your journey with 3rd Eye Advisors branded products."
+        keywords="consciousness merchandise, spiritual apparel, 3rd eye advisors store"
         url="https://www.the3rdeyeadvisors.com/store"
         type="website"
       />
       <div className="py-12 md:py-20 lg:py-24 w-full overflow-x-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           {/* Header */}
-          <div className="text-center mb-8">
+          <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-consciousness font-bold text-foreground mb-4">
               Store
             </h1>
             <p className="text-xl text-muted-foreground font-consciousness max-w-2xl mx-auto">
-              Digital resources and consciousness-inspired merchandise to support your journey
+              Consciousness-inspired merchandise to support your journey
             </p>
-          </div>
-
-          {/* Category Bar */}
-          <div className="mb-8 w-full">
-            <div className="flex justify-center gap-2 sm:gap-4 md:gap-8 px-2 sm:px-4 w-full overflow-x-auto">
-              <button
-                onClick={() => setActiveCategory("merchandise")}
-                className={`text-sm sm:text-base md:text-lg font-consciousness pb-2 px-3 sm:px-4 md:px-6 transition-all whitespace-nowrap min-h-[44px] touch-manipulation ${
-                  activeCategory === "merchandise"
-                    ? "text-primary border-b-2 border-primary font-semibold"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                Merchandise
-              </button>
-              <button
-                onClick={() => setActiveCategory("digital")}
-                className={`text-sm sm:text-base md:text-lg font-consciousness pb-2 px-3 sm:px-4 md:px-6 transition-all whitespace-nowrap min-h-[44px] touch-manipulation ${
-                  activeCategory === "digital"
-                    ? "text-primary border-b-2 border-primary font-semibold"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                Digital Products
-              </button>
-            </div>
-            {/* Category Description */}
-            <div className="text-center mt-4">
-              <p className="text-sm text-muted-foreground font-consciousness max-w-2xl mx-auto">
-                {activeCategory === "merchandise" 
-                  ? "Consciousness-inspired premium apparel"
-                  : "Premium guides and tools for DeFi mastery"
-                }
-              </p>
-            </div>
           </div>
 
           {/* Success Message */}
@@ -276,88 +192,8 @@ const Store = () => {
             </Card>
           )}
 
-          {/* Digital Products Section */}
-          {activeCategory === "digital" && (
-            <section className="mb-16" aria-labelledby="digital-products-heading">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                {digitalProducts.map((product, index) => {
-                  const ProductIcon = getProductIcon(product);
-                  const displayPrice = isAdmin ? 0 : product.price;
-                  return (
-                     <Card 
-                       key={product.id}
-                       className="p-4 md:p-6 bg-card/50 border-border hover:border-primary/40 transition-all duration-300 hover:shadow-lg group flex flex-col h-full"
-                       style={{ animationDelay: `${index * 0.1}s` }}
-                     >
-                       <div className="flex items-center justify-center mb-3 gap-2">
-                         <Badge className={`${getTypeColor(product.type)} text-xs px-2 py-1`}>
-                           {product.category}
-                         </Badge>
-                         {isAdmin && (
-                           <Badge className="bg-green-500/20 text-green-500 border-green-500/30 text-xs px-2 py-1">
-                             FREE
-                           </Badge>
-                         )}
-                       </div>
-                       
-                       <div className="flex justify-center mb-2">
-                         <ProductIcon className="w-8 h-8 md:w-10 md:h-10 text-primary group-hover:text-primary transition-colors" />
-                       </div>
-                       
-                       <h3 className="text-sm md:text-base font-consciousness font-semibold text-center mb-3 line-clamp-2 min-h-[2.5rem] md:min-h-[2.5rem]">
-                         {product.title}
-                       </h3>
-                       
-                       <div className="relative mb-4 flex-1">
-                         <div 
-                           className="h-auto md:h-[140px] md:overflow-y-auto px-2 md:px-2 text-center"
-                           style={{
-                             maskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)',
-                             WebkitMaskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)'
-                           }}
-                         >
-                           <p className="text-sm text-muted-foreground font-consciousness leading-relaxed mb-3">
-                             {product.description}
-                           </p>
-                           <div className="mb-3">
-                             <h4 className="text-sm font-consciousness font-medium mb-2">
-                               Includes:
-                             </h4>
-                             <ul className="text-sm text-muted-foreground space-y-1">
-                               {product.features.map((feature, idx) => (
-                                 <li key={idx} className="flex items-center justify-center gap-2">
-                                   <div className="w-1.5 h-1.5 bg-primary rounded-full flex-shrink-0"></div>
-                                   <span>{feature}</span>
-                                 </li>
-                               ))}
-                             </ul>
-                           </div>
-                         </div>
-                       </div>
-                       
-                        <div className="flex flex-col gap-3 mt-auto pt-4 border-t border-border/50">
-                          <span className="text-2xl md:text-3xl font-consciousness font-bold text-primary text-center">
-                            ${typeof displayPrice === 'string' ? displayPrice : displayPrice.toFixed(2)}
-                          </span>
-                         <Button 
-                           variant={isInCart(product.id) ? "outline" : "cosmic"}
-                           className="font-consciousness w-full text-sm md:text-sm h-11 md:h-10 touch-target"
-                           onClick={() => handleAddToCart({ ...product, price: displayPrice })}
-                         >
-                           <Plus className="w-4 h-4 md:w-4 md:h-4 mr-2" />
-                           {isInCart(product.id) ? "Add Another" : "Add to Cart"}
-                         </Button>
-                       </div>
-                     </Card>
-                  );
-                })}
-              </div>
-            </section>
-          )}
-
           {/* Merchandise Section */}
-          {activeCategory === "merchandise" && (
-            <section className="mb-16" aria-labelledby="merchandise-heading">
+          <section className="mb-16" aria-labelledby="merchandise-heading">
             <div className="flex justify-end mb-8">
               {isAdmin && (
                 <Button 
@@ -440,9 +276,7 @@ const Store = () => {
                 </div>
               );
             })()}
-            </section>
-          )}
-
+          </section>
 
           <Card className="mt-16 p-6 md:p-8 bg-secondary/40 border-border" role="region" aria-label="Payment information">
             <div className="flex flex-col md:flex-row items-center md:items-start gap-4 text-center md:text-left">
@@ -452,7 +286,7 @@ const Store = () => {
                   Secure Payment Processing
                 </h3>
                 <p className="text-muted-foreground font-consciousness leading-relaxed">
-                  All digital products are delivered instantly via email. Merchandise is automatically fulfilled with 5-7 business day processing and shipping. We accept all major payment methods.
+                  Merchandise is automatically fulfilled with 5-7 business day processing and shipping. We accept all major payment methods.
                 </p>
               </div>
             </div>
