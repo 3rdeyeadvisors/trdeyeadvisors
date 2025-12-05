@@ -168,7 +168,7 @@ export function MerchandiseCard({ product, onAddToCart, isInCart }: MerchandiseC
         </div>
 
         {/* Compact Variant Selector - only show if product has variants with sizes */}
-        {hasSizeVariants && (
+        {hasSizeVariants ? (
           <div className="space-y-1.5 mb-2">
             <Select 
               value={`${selectedColor} / ${selectedSize}`} 
@@ -199,6 +199,9 @@ export function MerchandiseCard({ product, onAddToCart, isInCart }: MerchandiseC
               </SelectContent>
             </Select>
           </div>
+        ) : (
+          /* Spacer for single-variant products to maintain card alignment */
+          <div className="h-8 md:h-9 mb-2" />
         )}
 
         {/* Price & Buttons */}
