@@ -126,7 +126,6 @@ serve(async (req) => {
       'order:updated', 
       'order:shipment:created',
       'order:shipment:delivered',
-      'order:send-to-production',
     ];
 
     const registeredWebhooks = [];
