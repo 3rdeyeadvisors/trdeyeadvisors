@@ -200,8 +200,10 @@ export function MerchandiseCard({ product, onAddToCart, isInCart }: MerchandiseC
             </Select>
           </div>
         ) : (
-          /* Spacer for single-variant products to maintain card alignment */
-          <div className="h-8 md:h-9 mb-2" />
+          /* Single variant label for products without size options */
+          <div className="h-8 md:h-9 mb-2 flex items-center justify-center">
+            <span className="text-xs text-muted-foreground/70 font-consciousness">One Size</span>
+          </div>
         )}
 
         {/* Price & Buttons */}
