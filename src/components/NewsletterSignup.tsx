@@ -120,7 +120,7 @@ const NewsletterSignup = ({ variant = "default", className = "" }: NewsletterSig
             </h3>
             <p className="text-muted-foreground font-consciousness leading-relaxed">
               Join 10,000+ conscious investors receiving exclusive insights, market analysis, 
-              and educational content delivered to your inbox weekly.
+              and educational content.
             </p>
           </div>
 
