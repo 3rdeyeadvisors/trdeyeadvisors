@@ -23,23 +23,28 @@ export function MerchandiseCard({ product, onAddToCart, isInCart }: MerchandiseC
   const [selectedVariant, setSelectedVariant] = useState<any>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  // Group variants by color
-  const variantsByColor = product.variants?.reduce((acc: any, variant: any) => {
-    const [color, size] = variant.title.split(' / ');
-    if (!acc[color]) {
-      acc[color] = [];
-    }
-    acc[color].push({ ...variant, color, size });
-    return acc;
-  }, {});
+  // Check if product has color/size variants or single variant
+  const hasSizeVariants = product.variants?.some((v: any) => v.title.includes(' / '));
+  
+  // Group variants by color (only if has size variants)
+  const variantsByColor = hasSizeVariants 
+    ? product.variants?.reduce((acc: any, variant: any) => {
+        const [color, size] = variant.title.split(' / ');
+        if (!acc[color]) {
+          acc[color] = [];
+        }
+        acc[color].push({ ...variant, color, size });
+        return acc;
+      }, {})
+    : null;
 
-  const colors = Object.keys(variantsByColor || {});
-  const defaultColor = colors[0];
+  const colors = variantsByColor ? Object.keys(variantsByColor) : [];
+  const defaultColor = colors[0] || '';
   const [selectedColor, setSelectedColor] = useState(defaultColor);
   
   // Get sizes for selected color
   const availableSizes = variantsByColor?.[selectedColor] || [];
-  const [selectedSize, setSelectedSize] = useState(availableSizes[0]?.size);
+  const [selectedSize, setSelectedSize] = useState(availableSizes[0]?.size || '');
 
   // Update selected variant when color or size changes
   const updateSelectedVariant = (color: string, size: string) => {
@@ -58,18 +63,24 @@ export function MerchandiseCard({ product, onAddToCart, isInCart }: MerchandiseC
   };
 
   // Initialize first variant
-  if (!selectedVariant && availableSizes.length > 0) {
-    const firstVariant = product.variants?.find((v: any) => 
-      v.title === `${selectedColor} / ${selectedSize}`
-    );
-    if (firstVariant) {
+  if (!selectedVariant) {
+    // For single-variant products (like journals), just use the first variant
+    if (!hasSizeVariants && product.variants?.length > 0) {
+      const firstVariant = product.variants[0];
       setSelectedVariant(firstVariant);
-      // Set the correct image for the first variant
-      const colorImageIndex = product.images?.findIndex((img: any) => 
-        img.variant_ids?.includes(firstVariant.id)
+    } else if (availableSizes.length > 0) {
+      const firstVariant = product.variants?.find((v: any) => 
+        v.title === `${selectedColor} / ${selectedSize}`
       );
-      if (colorImageIndex !== -1) {
-        setCurrentImageIndex(colorImageIndex);
+      if (firstVariant) {
+        setSelectedVariant(firstVariant);
+        // Set the correct image for the first variant
+        const colorImageIndex = product.images?.findIndex((img: any) => 
+          img.variant_ids?.includes(firstVariant.id)
+        );
+        if (colorImageIndex !== -1) {
+          setCurrentImageIndex(colorImageIndex);
+        }
       }
     }
   }
@@ -156,37 +167,39 @@ export function MerchandiseCard({ product, onAddToCart, isInCart }: MerchandiseC
           </h3>
         </div>
 
-        {/* Compact Variant Selector */}
-        <div className="space-y-1.5 mb-2">
-          <Select 
-            value={`${selectedColor} / ${selectedSize}`} 
-            onValueChange={(value) => {
-              const [color, size] = value.split(' / ');
-              setSelectedColor(color);
-              setSelectedSize(size);
-              updateSelectedVariant(color, size);
-            }}
-          >
-            <SelectTrigger className="w-full h-8 md:h-9 text-xs">
-              <SelectValue placeholder="Select variant" />
-            </SelectTrigger>
-            <SelectContent>
-              {colors.map((color) => (
-                <div key={color}>
-                  {variantsByColor[color].map((variant: any) => (
-                    <SelectItem 
-                      key={variant.id} 
-                      value={`${color} / ${variant.size}`} 
-                      className="text-xs"
-                    >
-                      {color} / {variant.size}
-                    </SelectItem>
-                  ))}
-                </div>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        {/* Compact Variant Selector - only show if product has variants with sizes */}
+        {hasSizeVariants && (
+          <div className="space-y-1.5 mb-2">
+            <Select 
+              value={`${selectedColor} / ${selectedSize}`} 
+              onValueChange={(value) => {
+                const [color, size] = value.split(' / ');
+                setSelectedColor(color);
+                setSelectedSize(size);
+                updateSelectedVariant(color, size);
+              }}
+            >
+              <SelectTrigger className="w-full h-8 md:h-9 text-xs">
+                <SelectValue placeholder="Select variant" />
+              </SelectTrigger>
+              <SelectContent>
+                {colors.map((color) => (
+                  <div key={color}>
+                    {variantsByColor[color].map((variant: any) => (
+                      <SelectItem 
+                        key={variant.id} 
+                        value={`${color} / ${variant.size}`} 
+                        className="text-xs"
+                      >
+                        {color} / {variant.size}
+                      </SelectItem>
+                    ))}
+                  </div>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
 
         {/* Price & Buttons */}
         <div className="flex flex-col gap-1.5 mt-auto pt-2 border-t border-border/50">

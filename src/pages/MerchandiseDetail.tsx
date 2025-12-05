@@ -25,23 +25,30 @@ export default function MerchandiseDetail() {
   const [selectedVariant, setSelectedVariant] = useState<any>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  // Group variants by color
+  // Get variants from product
   const variants = (product?.variants as any[]) || [];
-  const variantsByColor = variants.reduce((acc: any, variant: any) => {
-    const [color, size] = variant.title.split(' / ');
-    if (!acc[color]) {
-      acc[color] = [];
-    }
-    acc[color].push({ ...variant, color, size });
-    return acc;
-  }, {});
+  
+  // Check if product has color/size variants or single variant
+  const hasSizeVariants = variants.some((v: any) => v.title.includes(' / '));
+  
+  // Group variants by color (only if has size variants)
+  const variantsByColor = hasSizeVariants
+    ? variants.reduce((acc: any, variant: any) => {
+        const [color, size] = variant.title.split(' / ');
+        if (!acc[color]) {
+          acc[color] = [];
+        }
+        acc[color].push({ ...variant, color, size });
+        return acc;
+      }, {})
+    : null;
 
-  const colors = Object.keys(variantsByColor || {});
-  const defaultColor = colors[0];
+  const colors = variantsByColor ? Object.keys(variantsByColor) : [];
+  const defaultColor = colors[0] || '';
   const [selectedColor, setSelectedColor] = useState(defaultColor);
   
   const availableSizes = variantsByColor?.[selectedColor] || [];
-  const [selectedSize, setSelectedSize] = useState(availableSizes[0]?.size);
+  const [selectedSize, setSelectedSize] = useState(availableSizes[0]?.size || '');
 
   useEffect(() => {
     loadProduct();
@@ -66,33 +73,44 @@ export default function MerchandiseDetail() {
       const productImages = (data?.images as any[]) || [];
       
       if (productVariants.length > 0) {
-        const variantsByColor = productVariants.reduce((acc: any, variant: any) => {
-          const [color, size] = variant.title.split(' / ');
-          if (!acc[color]) {
-            acc[color] = [];
-          }
-          acc[color].push({ ...variant, color, size });
-          return acc;
-        }, {});
+        const hasSizeVariants = productVariants.some((v: any) => v.title.includes(' / '));
         
-        const colors = Object.keys(variantsByColor || {});
-        const defaultColor = colors[0];
-        setSelectedColor(defaultColor);
-        
-        const firstVariant = productVariants.find((v: any) => 
-          v.title.startsWith(defaultColor)
-        );
-        if (firstVariant) {
-          const [, size] = firstVariant.title.split(' / ');
-          setSelectedSize(size);
+        if (!hasSizeVariants) {
+          // Single variant product (like journals)
+          const firstVariant = productVariants[0];
           setSelectedVariant(firstVariant);
+          setSelectedColor('');
+          setSelectedSize('');
+        } else {
+          // Multi-variant product with color/size
+          const variantsByColor = productVariants.reduce((acc: any, variant: any) => {
+            const [color, size] = variant.title.split(' / ');
+            if (!acc[color]) {
+              acc[color] = [];
+            }
+            acc[color].push({ ...variant, color, size });
+            return acc;
+          }, {});
           
-          // Set the correct image for the first variant
-          const colorImageIndex = productImages.findIndex((img: any) => 
-            img.variant_ids?.includes(firstVariant.id)
+          const colors = Object.keys(variantsByColor || {});
+          const defaultColor = colors[0];
+          setSelectedColor(defaultColor);
+          
+          const firstVariant = productVariants.find((v: any) => 
+            v.title.startsWith(defaultColor)
           );
-          if (colorImageIndex !== -1) {
-            setCurrentImageIndex(colorImageIndex);
+          if (firstVariant) {
+            const [, size] = firstVariant.title.split(' / ');
+            setSelectedSize(size);
+            setSelectedVariant(firstVariant);
+            
+            // Set the correct image for the first variant
+            const colorImageIndex = productImages.findIndex((img: any) => 
+              img.variant_ids?.includes(firstVariant.id)
+            );
+            if (colorImageIndex !== -1) {
+              setCurrentImageIndex(colorImageIndex);
+            }
           }
         }
       }
@@ -307,45 +325,47 @@ export default function MerchandiseDetail() {
                 />
               )}
 
-              {/* Variant Selection */}
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-consciousness font-medium mb-2">
-                    Color: <span className="text-foreground">{selectedColor}</span>
-                  </label>
-                  <div className="flex flex-wrap gap-2">
-                    {colors.map((color) => (
-                      <Button
-                        key={color}
-                        variant={selectedColor === color ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => handleColorChange(color)}
-                        className="min-w-[80px]"
-                      >
-                        {color}
-                      </Button>
-                    ))}
+              {/* Variant Selection - only show for products with color/size variants */}
+              {hasSizeVariants && (
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-consciousness font-medium mb-2">
+                      Color: <span className="text-foreground">{selectedColor}</span>
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                      {colors.map((color) => (
+                        <Button
+                          key={color}
+                          variant={selectedColor === color ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => handleColorChange(color)}
+                          className="min-w-[80px]"
+                        >
+                          {color}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-consciousness font-medium mb-2">
+                      Size: <span className="text-foreground">{selectedSize}</span>
+                    </label>
+                    <Select value={selectedSize} onValueChange={handleSizeChange}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select size" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {availableSizes.map((variant: any) => (
+                          <SelectItem key={variant.id} value={variant.size}>
+                            {variant.size}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
-
-                <div>
-                  <label className="block text-sm font-consciousness font-medium mb-2">
-                    Size: <span className="text-foreground">{selectedSize}</span>
-                  </label>
-                  <Select value={selectedSize} onValueChange={handleSizeChange}>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select size" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {availableSizes.map((variant: any) => (
-                        <SelectItem key={variant.id} value={variant.size}>
-                          {variant.size}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
+              )}
 
               {/* Add to Cart */}
               <Button
