@@ -160,9 +160,13 @@ const Store = () => {
             <h1 className="text-4xl md:text-5xl font-consciousness font-bold text-foreground mb-4">
               Store
             </h1>
-            <p className="text-xl text-muted-foreground font-consciousness max-w-2xl mx-auto">
+            <p className="text-xl text-muted-foreground font-consciousness max-w-2xl mx-auto mb-4">
               Consciousness-inspired merchandise to support your journey
             </p>
+            <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full">
+              <Package className="w-4 h-4" />
+              <span className="text-sm font-consciousness font-medium">Free Shipping on All Orders</span>
+            </div>
           </div>
 
           {/* Success Message */}
