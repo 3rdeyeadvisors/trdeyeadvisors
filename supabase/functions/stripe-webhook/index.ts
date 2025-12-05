@@ -382,50 +382,6 @@ serve(async (req) => {
         console.error("❌ Admin email failed:", adminErr);
       }
 
-      // Send digital delivery email if there are digital items
-      if (digitalDownloadItems.length > 0) {
-        try {
-          console.log("📧 Sending digital delivery email...");
-          
-          const digitalDeliveryPayload = {
-            order_id: session.id.substring(session.id.length - 8).toUpperCase(),
-            customer_email: session.customer_email || session.customer_details?.email || '',
-            customer_name: session.customer_details?.name || session.shipping?.name || 'Customer',
-            digital_items: digitalDownloadItems
-          };
-
-          const { error: digitalEmailError } = await supabaseClient.functions.invoke('send-digital-delivery-email', {
-            body: digitalDeliveryPayload
-          });
-
-          if (digitalEmailError) {
-            console.error("❌ Failed to send digital delivery email:", digitalEmailError);
-            await supabaseClient.from('order_action_logs').insert({
-              order_id: session.id,
-              action_type: 'digital_email_sent',
-              status: 'error',
-              error_message: digitalEmailError.message
-            });
-          } else {
-            console.log("✅ Digital delivery email sent");
-            await supabaseClient.from('order_action_logs').insert({
-              order_id: session.id,
-              action_type: 'digital_email_sent',
-              status: 'success',
-              metadata: { items_count: digitalDownloadItems.length }
-            });
-          }
-        } catch (digitalEmailErr) {
-          console.error("❌ Digital delivery email failed:", digitalEmailErr);
-          await supabaseClient.from('order_action_logs').insert({
-            order_id: session.id,
-            action_type: 'digital_email_sent',
-            status: 'error',
-            error_message: digitalEmailErr.message
-          });
-        }
-      }
-
       // Record discount usage if applicable
       if (session.metadata?.discount_id && session.total_details?.amount_discount) {
         try {
