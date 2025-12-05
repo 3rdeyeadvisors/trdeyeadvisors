@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { ManualOrderProcessor } from "@/components/admin/ManualOrderProcessor";
 import { ProductCleanup } from "@/components/admin/ProductCleanup";
+import { PrintifyWebhookSetup } from "@/components/admin/PrintifyWebhookSetup";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -277,6 +278,7 @@ const AdminStoreDashboard = () => {
 
         {/* Manual Process Tab */}
         <TabsContent value="manual-process" className="space-y-4">
+          <PrintifyWebhookSetup />
           <ProductCleanup />
           <ManualOrderProcessor />
         </TabsContent>
