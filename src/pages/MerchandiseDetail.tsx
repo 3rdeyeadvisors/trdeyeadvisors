@@ -37,7 +37,7 @@ export default function MerchandiseDetail() {
   }, {});
 
   const colors = Object.keys(variantsByColor || {});
-  const defaultColor = colors.includes('White') ? 'White' : colors[0];
+  const defaultColor = colors[0];
   const [selectedColor, setSelectedColor] = useState(defaultColor);
   
   const availableSizes = variantsByColor?.[selectedColor] || [];
@@ -76,7 +76,7 @@ export default function MerchandiseDetail() {
         }, {});
         
         const colors = Object.keys(variantsByColor || {});
-        const defaultColor = colors.includes('White') ? 'White' : colors[0];
+        const defaultColor = colors[0];
         setSelectedColor(defaultColor);
         
         const firstVariant = productVariants.find((v: any) => 
