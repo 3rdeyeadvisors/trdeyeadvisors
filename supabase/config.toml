@@ -133,3 +133,6 @@ verify_jwt = false
 
 [functions.register-printify-webhook]
 verify_jwt = true
+
+[functions.tiktok-conversion]
+verify_jwt = false
