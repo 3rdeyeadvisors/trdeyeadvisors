@@ -44,15 +44,6 @@ verify_jwt = true
 [functions.sync-printify-to-stripe]
 verify_jwt = true
 
-[functions.download-digital-product]
-verify_jwt = false
-
-[functions.upload-sample-content]
-verify_jwt = true
-
-[functions.upload-digital-products]
-verify_jwt = true
-
 [functions.generate-social-banner]
 verify_jwt = false
 
@@ -96,15 +87,6 @@ verify_jwt = false
 verify_jwt = false
 
 [functions.send-admin-order-notification]
-verify_jwt = false
-
-[functions.send-digital-delivery-email]
-verify_jwt = false
-
-[functions.download-digital-file]
-verify_jwt = false
-
-[functions.resend-digital-delivery]
 verify_jwt = false
 
 [functions.admin-ai-command]

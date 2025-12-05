@@ -24,9 +24,6 @@ import ResetPassword from "./pages/ResetPassword";
 import CourseDetail from "./pages/CourseDetail";
 import ModuleViewer from "./pages/ModuleViewer";
 import Dashboard from "./pages/Dashboard";
-import Downloads from "./pages/Downloads";
-import AdminUploadContent from "./pages/AdminUploadContent";
-import TestDownloads from "./pages/TestDownloads";
 import Analytics from "./pages/Analytics";
 import EmailLogsAdmin from "./pages/EmailLogsAdmin";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
@@ -51,8 +48,6 @@ import BlogPost from "./pages/BlogPost";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import SocialBanner from "./pages/SocialBanner";
-import UploadDigitalProducts from "./pages/UploadDigitalProducts";
-import AdminUploadProducts from "./pages/AdminUploadProducts";
 import SetupStripeProducts from "./pages/SetupStripeProducts";
 import StripeDiagnostic from "./pages/StripeDiagnostic";
 import WebThreeGamingDefiConvergence from "./pages/WebThreeGamingDefiConvergence";
@@ -60,7 +55,6 @@ import DefaiRevolution2025 from "./pages/DefaiRevolution2025";
 import DefiRegulationAmlIntegration from "./pages/DefiRegulationAmlIntegration";
 import LiquidStakingTokens2025 from "./pages/LiquidStakingTokens2025";
 import AdminStoreDashboard from "./pages/AdminStoreDashboard";
-import DownloadPortal from "./pages/DownloadPortal";
 import AdminDashboard from "./pages/AdminDashboard";
 import Raffles from "./pages/Raffles";
 import RaffleHistory from "./pages/RaffleHistory";
@@ -148,8 +142,6 @@ const App = () => {
                       <Route path="/auth" element={<Auth />} />
                       <Route path="/reset-password" element={<ResetPassword />} />
                       <Route path="/dashboard" element={<Dashboard />} />
-                      <Route path="/downloads" element={<Downloads />} />
-                      <Route path="/download-portal" element={<DownloadPortal />} />
                       <Route path="/awareness-blueprint" element={<AwarenessBlueprintLanding />} />
                       <Route path="/start" element={<AdLanding />} />
                       <Route path="/admin/upload-resource" element={
@@ -157,30 +149,10 @@ const App = () => {
                           <UploadResourceFile />
                         </ProtectedRoute>
                       } />
-                      <Route path="/admin/upload" element={
-                        <ProtectedRoute requireRole="admin">
-                          <AdminUploadContent />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/test-downloads" element={
-                        <ProtectedRoute requireRole="admin">
-                          <TestDownloads />
-                        </ProtectedRoute>
-                      } />
                       <Route path="/profile" element={<Profile />} />
                       <Route path="/privacy" element={<PrivacyPolicy />} />
                       <Route path="/terms" element={<TermsOfService />} />
                       <Route path="/social-banner" element={<SocialBanner />} />
-                      <Route path="/upload-digital-products" element={
-                        <ProtectedRoute requireRole="admin">
-                          <UploadDigitalProducts />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/admin/upload-products" element={
-                        <ProtectedRoute requireRole="admin">
-                          <AdminUploadProducts />
-                        </ProtectedRoute>
-                      } />
                       <Route path="/setup-stripe-products" element={
                         <ProtectedRoute requireRole="admin">
                           <SetupStripeProducts />
