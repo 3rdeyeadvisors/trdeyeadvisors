@@ -391,10 +391,10 @@ export default function MerchandiseDetail() {
               <Card className="p-4 bg-secondary/40">
                 <h3 className="font-consciousness font-semibold mb-2">Product Details</h3>
                 <ul className="text-sm text-muted-foreground space-y-1">
-                  <li>• Premium quality materials</li>
+                  <li>• Premium eco-friendly materials</li>
                   <li>• 5-7 business day processing and shipping</li>
                   <li>• Secure payment processing</li>
-                  <li>• Multiple colors and sizes available</li>
+                  <li>• Free shipping</li>
                 </ul>
               </Card>
             </div>
