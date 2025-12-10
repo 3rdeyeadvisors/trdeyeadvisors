@@ -91,21 +91,21 @@ const Index = () => {
       title: "Earth Vault",
       subtitle: "Foundation Level",
       description: "Master basic concepts and earn learning rewards. Build your knowledge base through clear, practical education.",
-      features: ["Wallet setup basics", "Understanding blockchain", "Security fundamentals"]
+      features: ["Wallet setup & security", "Blockchain fundamentals", "Crypto basics"]
     },
     {
       icon: Cloud,
       title: "Sky Vault",
       subtitle: "Intermediate Level",
       description: "Deepen your understanding of protocols and earn advanced rewards for comprehension and participation.",
-      features: ["DeFi protocols deep-dive", "Yield strategies", "Risk management"]
+      features: ["DeFi protocol deep-dives", "Yield & staking strategies", "Risk management"]
     },
     {
       icon: Rocket,
       title: "Cosmos Vault",
       subtitle: "Expert Level",
       description: "Achieve mastery of decentralized systems and earn the highest learning rewards.",
-      features: ["Advanced strategies", "Protocol governance", "Teaching others"]
+      features: ["Advanced trading strategies", "Protocol governance", "Community leadership"]
     }
   ];
 
@@ -324,25 +324,25 @@ const Index = () => {
               {vaultLayers.map((vault, index) => (
                 <Card 
                   key={vault.title}
-                  className="p-6 md:p-8 bg-gradient-consciousness border-primary/20 shadow-consciousness hover:shadow-[0_0_30px_hsl(var(--primary)/0.4),0_0_60px_hsl(var(--accent)/0.3)] hover:border-primary/40 transition-all duration-consciousness group"
+                  className="p-6 md:p-8 bg-card border-border/50 shadow-lg hover:shadow-consciousness hover:border-primary/40 transition-all duration-consciousness group"
                   style={{ animationDelay: `${index * 0.2}s` }}
                 >
                   <div className="text-center mb-6">
                     <vault.icon className="w-14 h-14 md:w-16 md:h-16 text-primary group-hover:text-primary-glow transition-colors mx-auto mb-4" />
-                    <span className="text-xs uppercase tracking-wider text-primary/70 font-consciousness">
+                    <span className="text-xs uppercase tracking-wider text-primary font-consciousness font-medium">
                       {vault.subtitle}
                     </span>
                     <h3 className="text-xl md:text-2xl font-consciousness font-bold text-foreground mt-1 group-hover:text-primary-glow transition-colors duration-cosmic">
                       {vault.title}
                     </h3>
                   </div>
-                  <p className="text-foreground/90 font-consciousness leading-relaxed text-center mb-6">
+                  <p className="text-muted-foreground font-consciousness leading-relaxed text-center mb-6">
                     {vault.description}
                   </p>
-                  <ul className="space-y-2">
+                  <ul className="space-y-3">
                     {vault.features.map((feature, i) => (
-                      <li key={i} className="flex items-center text-sm text-muted-foreground font-consciousness">
-                        <CheckCircle2 className="w-4 h-4 text-primary mr-2 flex-shrink-0" />
+                      <li key={i} className="flex items-center text-sm text-foreground/80 font-consciousness bg-muted/30 rounded-md px-3 py-2">
+                        <CheckCircle2 className="w-4 h-4 text-primary mr-3 flex-shrink-0" />
                         {feature}
                       </li>
                     ))}
