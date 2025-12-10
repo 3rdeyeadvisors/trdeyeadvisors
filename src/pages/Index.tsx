@@ -324,7 +324,7 @@ const Index = () => {
               {vaultLayers.map((vault, index) => (
                 <Card 
                   key={vault.title}
-                  className="p-6 md:p-8 bg-card border-border/50 shadow-lg hover:shadow-consciousness hover:border-primary/40 transition-all duration-consciousness group"
+                  className="p-6 md:p-8 bg-gradient-consciousness border-primary/20 shadow-consciousness hover:shadow-[0_0_30px_hsl(var(--primary)/0.4),0_0_60px_hsl(var(--accent)/0.3)] hover:border-primary/40 transition-all duration-consciousness group"
                   style={{ animationDelay: `${index * 0.2}s` }}
                 >
                   <div className="text-center mb-6">
@@ -336,12 +336,12 @@ const Index = () => {
                       {vault.title}
                     </h3>
                   </div>
-                  <p className="text-muted-foreground font-consciousness leading-relaxed text-center mb-6">
+                  <p className="text-foreground/90 font-consciousness leading-relaxed text-center mb-6">
                     {vault.description}
                   </p>
                   <ul className="space-y-3">
                     {vault.features.map((feature, i) => (
-                      <li key={i} className="flex items-center text-sm text-foreground/80 font-consciousness bg-muted/30 rounded-md px-3 py-2">
+                      <li key={i} className="flex items-center text-sm text-foreground/90 font-consciousness bg-background/20 backdrop-blur-sm rounded-md px-3 py-2 border border-primary/10">
                         <CheckCircle2 className="w-4 h-4 text-primary mr-3 flex-shrink-0" />
                         {feature}
                       </li>
