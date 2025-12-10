@@ -328,10 +328,10 @@ const Index = () => {
                   style={{ animationDelay: `${index * 0.2}s` }}
                 >
                   <div className="text-center mb-6">
-                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-background/30 backdrop-blur-sm flex items-center justify-center mx-auto mb-4 border border-foreground/20">
-                      <vault.icon className="w-8 h-8 md:w-10 md:h-10 text-foreground group-hover:text-primary-glow transition-colors" />
+                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-background/50 backdrop-blur-sm flex items-center justify-center mx-auto mb-4 border border-accent/30">
+                      <vault.icon className="w-8 h-8 md:w-10 md:h-10 text-accent group-hover:text-accent-glow transition-colors" />
                     </div>
-                    <span className="inline-block text-xs uppercase tracking-wider text-foreground bg-primary/20 px-3 py-1 rounded-full font-consciousness font-medium">
+                    <span className="inline-block text-xs uppercase tracking-wider text-accent-foreground bg-accent/30 px-3 py-1 rounded-full font-consciousness font-medium">
                       {vault.subtitle}
                     </span>
                     <h3 className="text-xl md:text-2xl font-consciousness font-bold text-foreground mt-3 group-hover:text-primary-glow transition-colors duration-cosmic">
@@ -343,8 +343,8 @@ const Index = () => {
                   </p>
                   <ul className="space-y-3">
                     {vault.features.map((feature, i) => (
-                      <li key={i} className="flex items-center text-sm text-foreground font-consciousness bg-background/30 backdrop-blur-sm rounded-md px-3 py-2 border border-foreground/10">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400 mr-3 flex-shrink-0" />
+                      <li key={i} className="flex items-center text-sm text-foreground font-consciousness bg-background/40 backdrop-blur-sm rounded-md px-3 py-2 border border-accent/20">
+                        <CheckCircle2 className="w-4 h-4 text-accent mr-3 flex-shrink-0" />
                         {feature}
                       </li>
                     ))}
