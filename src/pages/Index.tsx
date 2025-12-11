@@ -324,13 +324,13 @@ const Index = () => {
               {vaultLayers.map((vault, index) => (
                 <Card 
                   key={vault.title}
-                  className="p-6 md:p-8 bg-gradient-consciousness border-primary/20 shadow-consciousness hover:shadow-[0_0_30px_hsl(var(--primary)/0.4),0_0_60px_hsl(var(--accent)/0.3)] hover:border-primary/40 transition-all duration-consciousness group"
+                  className="relative p-6 md:p-8 bg-gradient-consciousness border-primary/20 shadow-consciousness hover:shadow-[0_0_30px_hsl(var(--primary)/0.4),0_0_60px_hsl(var(--accent)/0.3)] hover:border-primary/40 transition-all duration-consciousness group"
                   style={{ animationDelay: `${index * 0.2}s` }}
                 >
-                  <div className="text-center mb-6 relative">
-                    <span className="absolute -top-2 -right-2 md:top-0 md:right-0 text-xs uppercase tracking-wider text-primary-foreground bg-primary px-3 py-1 rounded-full font-consciousness font-semibold shadow-lg">
-                      Coming Soon
-                    </span>
+                  <span className="absolute top-4 right-4 text-xs uppercase tracking-wider text-primary-foreground bg-primary px-3 py-1 rounded-full font-consciousness font-semibold shadow-lg z-10">
+                    Coming Soon
+                  </span>
+                  <div className="text-center mb-6">
                     <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-background/50 backdrop-blur-sm flex items-center justify-center mx-auto mb-4 border border-accent/30">
                       <vault.icon className="w-8 h-8 md:w-10 md:h-10 text-accent group-hover:text-accent-glow transition-colors" />
                     </div>
