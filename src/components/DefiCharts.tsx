@@ -737,76 +737,82 @@ export const DefiCharts = () => {
 
         {/* Risk Distribution - Hidden on mobile */}
         <Card className="hidden md:flex md:flex-col">
-          <CardHeader className="text-center">
-            <CardTitle className="flex items-center justify-center">
-              <PieChartIcon className="w-5 h-5 mr-2" />
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <PieChartIcon className="w-4 h-4 text-primary" />
+              </div>
               Risk Distribution
             </CardTitle>
-            <CardDescription>Portfolio risk allocation across DeFi</CardDescription>
+            <CardDescription className="text-sm">Portfolio risk allocation across DeFi protocols</CardDescription>
           </CardHeader>
-          <CardContent className="py-2">
-            <div className="flex flex-col md:flex-row md:justify-center md:items-center gap-4 md:gap-8">
-              {/* Chart Container */}
-              <div className="flex justify-center flex-shrink-0">
-                <div className="w-[280px] h-[280px] md:w-[320px] md:h-[320px] lg:w-[340px] lg:h-[340px]">
+          <CardContent className="pt-0">
+            <div className="flex flex-col lg:flex-row lg:items-center gap-6">
+              {/* Chart Container with center label */}
+              <div className="relative flex justify-center flex-shrink-0">
+                <div className="w-[200px] h-[200px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
                         data={data.riskDistribution}
                         cx="50%"
                         cy="50%"
-                        innerRadius="60%"
-                        outerRadius="85%"
-                        paddingAngle={2}
+                        innerRadius="65%"
+                        outerRadius="90%"
+                        paddingAngle={3}
                         dataKey="value"
                         label={false}
                         labelLine={false}
+                        strokeWidth={0}
                       >
                         {data.riskDistribution.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
                       </Pie>
-                      <Tooltip formatter={(value) => [`${value}%`, 'Allocation']} />
+                      <Tooltip 
+                        formatter={(value) => [`${value}%`, 'Allocation']} 
+                        contentStyle={{ 
+                          backgroundColor: 'hsl(var(--card))', 
+                          border: '1px solid hsl(var(--border))',
+                          borderRadius: '8px'
+                        }}
+                      />
                     </PieChart>
                   </ResponsiveContainer>
                 </div>
+                {/* Center label */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                  <span className="text-2xl font-bold text-foreground">100%</span>
+                  <span className="text-xs text-muted-foreground">Allocated</span>
+                </div>
               </div>
               
-              {/* Legend */}
-              <div className="flex-shrink-0">
-                {/* Mobile: 2-column grid */}
-                <div className="grid grid-cols-2 gap-x-4 gap-y-2 md:hidden">
-                  {data.riskDistribution.map((entry, index) => (
-                    <div key={index} className="flex items-center gap-2 min-w-0">
-                      <div 
-                        className="w-3 h-3 rounded-full flex-shrink-0" 
-                        style={{ backgroundColor: entry.color }}
-                      />
-                      <div className="flex flex-col min-w-0">
-                        <span className="text-xs font-medium truncate">{entry.name}</span>
-                        <span className="text-xs text-muted-foreground font-mono">{entry.value}%</span>
+              {/* Legend with progress bars */}
+              <div className="flex-1 space-y-3">
+                {data.riskDistribution.map((entry, index) => (
+                  <div key={index} className="space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <div 
+                          className="w-2.5 h-2.5 rounded-full flex-shrink-0" 
+                          style={{ backgroundColor: entry.color }}
+                        />
+                        <span className="text-sm font-medium text-foreground">{entry.name}</span>
                       </div>
+                      <span className="text-sm font-mono font-semibold text-foreground">{entry.value}%</span>
                     </div>
-                  ))}
-                </div>
-                
-                {/* Desktop: Clean table-like structure */}
-                <div className="hidden md:block min-w-[200px]">
-                  <div className="space-y-2">
-                    {data.riskDistribution.map((entry, index) => (
-                      <div key={index} className="flex items-center justify-between py-1 px-2 rounded-md hover:bg-muted/50 transition-colors">
-                        <div className="flex items-center gap-3">
-                          <div 
-                            className="w-3 h-3 rounded-full flex-shrink-0" 
-                            style={{ backgroundColor: entry.color }}
-                          />
-                          <span className="text-sm font-medium">{entry.name}</span>
-                        </div>
-                        <span className="text-sm text-muted-foreground font-mono ml-4">{entry.value}%</span>
-                      </div>
-                    ))}
+                    {/* Progress bar */}
+                    <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+                      <div 
+                        className="h-full rounded-full transition-all duration-500"
+                        style={{ 
+                          width: `${entry.value}%`, 
+                          backgroundColor: entry.color 
+                        }}
+                      />
+                    </div>
                   </div>
-                </div>
+                ))}
               </div>
             </div>
           </CardContent>
