@@ -148,8 +148,8 @@ const Store = () => {
     <>
       <SEO 
         title="Store | 3rdeyeadvisors"
-        description="Consciousness-inspired merchandise and premium apparel. Support your journey with 3rd Eye Advisors branded products."
-        keywords="consciousness merchandise, spiritual apparel, 3rd eye advisors store"
+        description="Consciousness-inspired merchandise and premium apparel. Support your journey with 3rdeyeadvisors branded products."
+        keywords="consciousness merchandise, spiritual apparel, 3rdeyeadvisors store"
         url="https://www.the3rdeyeadvisors.com/store"
         type="website"
       />

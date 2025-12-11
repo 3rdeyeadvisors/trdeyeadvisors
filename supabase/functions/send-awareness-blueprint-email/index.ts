@@ -24,7 +24,7 @@ const handler = async (req: Request): Promise<Response> => {
     console.log("Sending Awareness Blueprint email to:", email);
 
     const emailResponse = await resend.emails.send({
-      from: "3rd Eye Advisors <onboarding@resend.dev>",
+      from: "3rdeyeadvisors <onboarding@resend.dev>",
       to: [email],
       subject: "Your Awareness Blueprint (Download Inside)",
       html: `
@@ -58,7 +58,7 @@ const handler = async (req: Request): Promise<Response> => {
           <hr style="border: none; border-top: 1px solid #eee; margin: 32px 0;" />
           
           <p style="color: #999; font-size: 12px; line-height: 1.4;">
-            3rd Eye Advisors<br/>
+            3rdeyeadvisors<br/>
             <a href="https://the3rdeyeadvisors.com" style="color: #999;">the3rdeyeadvisors.com</a>
           </p>
         </div>
