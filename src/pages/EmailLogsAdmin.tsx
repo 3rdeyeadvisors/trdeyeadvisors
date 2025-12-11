@@ -58,7 +58,7 @@ const EmailLogsAdmin = () => {
   const [selectedEmails, setSelectedEmails] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [emailSubject, setEmailSubject] = useState("Welcome to 3rd Eye Advisors");
+  const [emailSubject, setEmailSubject] = useState("Welcome to 3rdeyeadvisors");
   const [emailBody, setEmailBody] = useState("");
   const [previewHtml, setPreviewHtml] = useState("");
   const [showPreview, setShowPreview] = useState(false);

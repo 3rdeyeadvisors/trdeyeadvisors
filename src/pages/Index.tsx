@@ -230,7 +230,7 @@ const Index = () => {
                   What is 3EA?
                 </h2>
                 <p className="text-lg md:text-xl text-foreground/90 font-consciousness leading-relaxed mb-6">
-                  3EA (3rd Eye Advisors) is a conscious financial awareness movement focused on clarity, education, and decentralized participation.
+                  3EA (3rdeyeadvisors) is a conscious financial awareness movement focused on clarity, education, and decentralized participation.
                 </p>
                 <p className="text-base md:text-lg text-muted-foreground font-consciousness leading-relaxed">
                   We cut through the noise to help you understand how new financial systems work—not through hype or promises, 
