@@ -146,7 +146,7 @@ const saveCachedData = (data: DefiData) => {
 export const DefiCharts = () => {
   const { toast } = useToast();
   const [data, setData] = useState<DefiData | null>(() => loadCachedData());
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => !loadCachedData()); // Only show loading if no cache
   const [error, setError] = useState<string | null>(null);
   const [selectedMetric, setSelectedMetric] = useState<'totalTvl' | 'volume' | 'yield'>('totalTvl');
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
@@ -158,10 +158,14 @@ export const DefiCharts = () => {
   const [nextRefreshTime, setNextRefreshTime] = useState<Date | null>(null);
   const [countdownSeconds, setCountdownSeconds] = useState<number>(0);
   const [refreshCooldown, setRefreshCooldown] = useState<number>(0);
+  const [retryCount, setRetryCount] = useState(0);
 
-  const fetchDefiData = async (forceRefresh: boolean = false) => {
+  const fetchDefiData = async (forceRefresh: boolean = false, isRetry: boolean = false) => {
     try {
-      setLoading(true);
+      // Only show loading spinner if we don't have any data yet
+      if (!data) {
+        setLoading(true);
+      }
       setError(null);
       
       // Add force parameter if manual refresh is requested
@@ -178,6 +182,7 @@ export const DefiCharts = () => {
         setData(response);
         saveCachedData(response); // Cache successful response
         setLastUpdated(new Date());
+        setRetryCount(0); // Reset retry count on success
         
         // Set next refresh time and reset countdown
         const nextRefresh = new Date(Date.now() + 300000); // 5 minutes from now
@@ -201,16 +206,27 @@ export const DefiCharts = () => {
     } catch (err) {
       console.error('Error fetching DeFi data:', err);
       
+      // Auto-retry up to 3 times on initial load failure
+      if (!isRetry && retryCount < 3 && !data) {
+        console.log(`Retrying fetch (attempt ${retryCount + 1}/3)...`);
+        setRetryCount(prev => prev + 1);
+        setTimeout(() => fetchDefiData(forceRefresh, true), 2000); // Retry after 2 seconds
+        return;
+      }
+      
       // Use cached data if available, otherwise use fallback
       const cachedData = loadCachedData();
-      if (cachedData) {
+      if (cachedData && !data) {
         console.log('Using cached data from previous successful fetch');
         setError('Using cached data due to network issues.');
         setData(cachedData);
-      } else {
+      } else if (!data) {
         console.log('No cached data available, using fallback');
         setError('Using sample data - no cached data available.');
         setData(generateFallbackData());
+      } else {
+        // We already have data, just show the error message
+        setError('Network issue - showing previous data.');
       }
       
       // Set next refresh time
@@ -234,14 +250,19 @@ export const DefiCharts = () => {
   };
 
   useEffect(() => {
+    // Fetch fresh data (will show cached data immediately if available)
     fetchDefiData();
     
     // Set initial next refresh time
     const nextRefresh = new Date(Date.now() + 300000); // 5 minutes from now
     setNextRefreshTime(nextRefresh);
     
-    // Update data every 5 minutes
-    const interval = setInterval(() => fetchDefiData(), 300000);
+    // Update data every 5 minutes (300000ms)
+    const interval = setInterval(() => {
+      console.log('Auto-refreshing DeFi data...');
+      fetchDefiData();
+    }, 300000);
+    
     return () => clearInterval(interval);
   }, []);
 
