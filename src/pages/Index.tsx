@@ -185,9 +185,9 @@ const Index = () => {
         </section>
 
         {/* What You'll Learn Section */}
-        <section className="py-10 md:py-20 bg-background">
+        <section className="py-8 md:py-20 bg-background">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-6 md:mb-12">
+            <div className="text-center mb-5 md:mb-12">
               <h2 className="text-2xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-2 md:mb-5">
                 What You'll Learn
               </h2>
@@ -200,13 +200,13 @@ const Index = () => {
               {whatYoullLearn.map((item, index) => (
                 <Card 
                   key={item.title}
-                  className="p-5 md:p-6 bg-card border-border hover:border-primary/60 transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 group"
+                  className="p-4 md:p-6 bg-card border-border hover:border-primary/60 transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 group"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-primary/20 flex items-center justify-center mb-3 md:mb-4 group-hover:bg-primary/30 transition-colors">
                     <item.icon className="w-5 h-5 md:w-6 md:h-6 text-primary" />
                   </div>
-                  <h3 className="text-base md:text-lg font-consciousness font-semibold text-foreground mb-2">
+                  <h3 className="text-base md:text-lg font-consciousness font-semibold text-foreground mb-1.5 md:mb-2">
                     {item.title}
                   </h3>
                   <p className="text-sm text-foreground/70 font-consciousness leading-relaxed">
@@ -219,9 +219,9 @@ const Index = () => {
         </section>
 
         {/* What is 3EA? */}
-        <section className="py-10 md:py-20 bg-background">
+        <section className="py-8 md:py-20 bg-background">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Card className="p-5 md:p-10 bg-card border-border">
+            <Card className="p-4 md:p-10 bg-card border-border">
               <div className="text-center">
                 <div className="w-10 h-10 md:w-16 md:h-16 rounded-2xl bg-primary/20 flex items-center justify-center mx-auto mb-3 md:mb-6">
                   <Target className="w-5 h-5 md:w-8 md:h-8 text-primary" />
@@ -229,10 +229,10 @@ const Index = () => {
                 <h2 className="text-xl md:text-3xl lg:text-4xl font-consciousness font-bold text-foreground mb-2 md:mb-5">
                   What is 3EA?
                 </h2>
-                <p className="text-base md:text-xl text-foreground/90 font-consciousness leading-relaxed mb-3 md:mb-4">
+                <p className="text-sm md:text-xl text-foreground/90 font-consciousness leading-relaxed mb-2 md:mb-4">
                   3EA (3rdeyeadvisors) is a conscious financial awareness movement focused on clarity, education, and decentralized participation.
                 </p>
-                <p className="text-sm md:text-lg text-foreground/70 font-consciousness leading-relaxed">
+                <p className="text-xs md:text-lg text-foreground/70 font-consciousness leading-relaxed">
                   We cut through the noise to help you understand how new financial systems work—not through hype or promises, 
                   but through genuine learning and conscious evolution.
                 </p>
@@ -242,7 +242,7 @@ const Index = () => {
         </section>
 
         {/* Platform Features */}
-        <section className="py-10 md:py-20 bg-background">
+        <section className="py-8 md:py-20 bg-background">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-5 md:mb-12">
               <h2 className="text-2xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-2 md:mb-5">
@@ -253,20 +253,20 @@ const Index = () => {
               </p>
             </div>
             
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 md:gap-6">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
               {platformFeatures.map((feature, index) => (
                 <Card 
                   key={feature.title}
-                  className="p-4 md:p-6 bg-card border-border hover:border-primary/60 transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 group text-center"
+                  className="p-3 md:p-6 bg-card border-border hover:border-primary/60 transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 group text-center"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-primary/20 flex items-center justify-center mx-auto mb-2 md:mb-4 group-hover:bg-primary/30 transition-colors">
-                    <feature.icon className="w-5 h-5 md:w-6 md:h-6 text-primary" />
+                  <div className="w-9 h-9 md:w-12 md:h-12 rounded-xl bg-primary/20 flex items-center justify-center mx-auto mb-2 md:mb-4 group-hover:bg-primary/30 transition-colors">
+                    <feature.icon className="w-4 h-4 md:w-6 md:h-6 text-primary" />
                   </div>
-                  <h3 className="text-sm md:text-lg font-consciousness font-semibold text-foreground mb-1 md:mb-2">
+                  <h3 className="text-xs md:text-lg font-consciousness font-semibold text-foreground mb-1 md:mb-2">
                     {feature.title}
                   </h3>
-                  <p className="text-xs md:text-sm text-foreground/70 font-consciousness">
+                  <p className="text-[10px] md:text-sm text-foreground/70 font-consciousness leading-tight">
                     {feature.description}
                   </p>
                 </Card>
@@ -276,7 +276,7 @@ const Index = () => {
         </section>
 
         {/* The Awareness Engine */}
-        <section className="py-10 md:py-20 bg-background">
+        <section className="py-8 md:py-20 bg-background">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-5 md:mb-12">
               <h2 className="text-2xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-2 md:mb-5">
@@ -287,15 +287,15 @@ const Index = () => {
               </p>
             </div>
             
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 md:gap-5">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-5">
               {awarenessSteps.map((step, index) => (
                 <Card 
                   key={step.title}
                   className="p-3 md:p-5 bg-card border-border hover:border-primary/60 transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 group text-center"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  <step.icon className="w-8 h-8 md:w-10 md:h-10 text-primary mx-auto mb-2 md:mb-3" />
-                  <h3 className="text-sm md:text-lg font-consciousness font-semibold text-foreground mb-1 md:mb-2">
+                  <step.icon className="w-7 h-7 md:w-10 md:h-10 text-primary mx-auto mb-2 md:mb-3" />
+                  <h3 className="text-xs md:text-lg font-consciousness font-semibold text-foreground mb-1 md:mb-2">
                     {step.title}
                   </h3>
                   <p className="text-[10px] md:text-sm text-foreground/70 font-consciousness leading-tight md:leading-normal">
@@ -308,7 +308,7 @@ const Index = () => {
         </section>
 
         {/* The Vault Layers */}
-        <section className="py-10 md:py-20 bg-background">
+        <section className="py-8 md:py-20 bg-background">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-5 md:mb-12">
               <h2 className="text-2xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-2 md:mb-5">
@@ -358,9 +358,9 @@ const Index = () => {
         </section>
 
         {/* Why This Matters */}
-        <section className="py-10 md:py-20 bg-background">
+        <section className="py-8 md:py-20 bg-background">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Card className="p-5 md:p-10 bg-card border-border">
+            <Card className="p-4 md:p-10 bg-card border-border">
               <div className="text-center">
                 <div className="w-10 h-10 md:w-14 md:h-14 rounded-2xl bg-primary/20 flex items-center justify-center mx-auto mb-3 md:mb-6">
                   <Zap className="w-5 h-5 md:w-7 md:h-7 text-primary" />
@@ -368,10 +368,10 @@ const Index = () => {
                 <h2 className="text-xl md:text-3xl lg:text-4xl font-consciousness font-bold text-foreground mb-2 md:mb-5">
                   Why This Matters
                 </h2>
-                <p className="text-sm md:text-lg text-foreground/80 font-consciousness leading-relaxed mb-3 md:mb-4">
+                <p className="text-xs md:text-lg text-foreground/80 font-consciousness leading-relaxed mb-2 md:mb-4">
                   The world is shifting into new financial systems—decentralized, transparent, and powered by code rather than institutions.
                 </p>
-                <p className="text-sm md:text-lg text-foreground/70 font-consciousness leading-relaxed">
+                <p className="text-xs md:text-lg text-foreground/70 font-consciousness leading-relaxed">
                   Those who learn how these systems work will navigate the future with clarity.
                   <span className="text-primary font-semibold"> The choice is yours.</span>
                 </p>
@@ -381,12 +381,12 @@ const Index = () => {
         </section>
 
         {/* Final CTA */}
-        <section className="py-10 md:py-20 bg-background">
+        <section className="py-8 md:py-20 bg-background">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-2xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-2 md:mb-5">
+            <h2 className="text-xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-2 md:mb-5">
               Ready to Begin Your Journey?
             </h2>
-            <p className="text-base md:text-xl text-foreground/80 font-consciousness mb-5 md:mb-10 max-w-2xl mx-auto">
+            <p className="text-sm md:text-xl text-foreground/80 font-consciousness mb-5 md:mb-10 max-w-2xl mx-auto">
               Start learning today. No hype. No confusion. Just clear education.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center items-center w-full">
@@ -394,9 +394,9 @@ const Index = () => {
                 <Button 
                   variant="cosmic" 
                   size="lg" 
-                  className="text-base md:text-lg px-6 md:px-8 py-5 md:py-6 font-consciousness w-full sm:w-auto"
+                  className="text-sm md:text-lg px-5 md:px-8 py-4 md:py-6 font-consciousness w-full sm:w-auto"
                 >
-                  <BookOpen className="w-5 h-5 md:w-6 md:h-6 mr-2 md:mr-3" />
+                  <BookOpen className="w-4 h-4 md:w-6 md:h-6 mr-2 md:mr-3" />
                   Begin Learning
                 </Button>
               </Link>
@@ -405,9 +405,9 @@ const Index = () => {
                 <Button 
                   variant="system" 
                   size="lg" 
-                  className="text-base md:text-lg px-6 md:px-8 py-5 md:py-6 font-consciousness w-full sm:w-auto"
+                  className="text-sm md:text-lg px-5 md:px-8 py-4 md:py-6 font-consciousness w-full sm:w-auto"
                 >
-                  <ArrowRight className="w-5 h-5 md:w-6 md:h-6 mr-2 md:mr-3" />
+                  <ArrowRight className="w-4 h-4 md:w-6 md:h-6 mr-2 md:mr-3" />
                   Explore Tutorials
                 </Button>
               </Link>
@@ -416,7 +416,7 @@ const Index = () => {
         </section>
 
         {/* Newsletter Signup */}
-        <section className="py-10 md:py-20 bg-background">
+        <section className="py-8 md:py-20 bg-background">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <NewsletterSignup variant="cosmic" />
           </div>
