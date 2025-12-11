@@ -187,8 +187,8 @@ const Index = () => {
         {/* What You'll Learn Section */}
         <section className="py-10 md:py-20 bg-background">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-8 md:mb-12">
-              <h2 className="text-2xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-3 md:mb-5">
+            <div className="text-center mb-6 md:mb-12">
+              <h2 className="text-2xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-2 md:mb-5">
                 What You'll Learn
               </h2>
               <p className="text-base md:text-xl text-foreground/80 font-consciousness max-w-2xl mx-auto">
@@ -196,7 +196,7 @@ const Index = () => {
               </p>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
               {whatYoullLearn.map((item, index) => (
                 <Card 
                   key={item.title}
@@ -221,12 +221,12 @@ const Index = () => {
         {/* What is 3EA? */}
         <section className="py-10 md:py-20 bg-background">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Card className="p-6 md:p-10 bg-card border-border">
+            <Card className="p-5 md:p-10 bg-card border-border">
               <div className="text-center">
-                <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-primary/20 flex items-center justify-center mx-auto mb-4 md:mb-6">
-                  <Target className="w-6 h-6 md:w-8 md:h-8 text-primary" />
+                <div className="w-10 h-10 md:w-16 md:h-16 rounded-2xl bg-primary/20 flex items-center justify-center mx-auto mb-3 md:mb-6">
+                  <Target className="w-5 h-5 md:w-8 md:h-8 text-primary" />
                 </div>
-                <h2 className="text-xl md:text-3xl lg:text-4xl font-consciousness font-bold text-foreground mb-3 md:mb-5">
+                <h2 className="text-xl md:text-3xl lg:text-4xl font-consciousness font-bold text-foreground mb-2 md:mb-5">
                   What is 3EA?
                 </h2>
                 <p className="text-base md:text-xl text-foreground/90 font-consciousness leading-relaxed mb-3 md:mb-4">
@@ -244,8 +244,8 @@ const Index = () => {
         {/* Platform Features */}
         <section className="py-10 md:py-20 bg-background">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-8 md:mb-12">
-              <h2 className="text-2xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-3 md:mb-5">
+            <div className="text-center mb-5 md:mb-12">
+              <h2 className="text-2xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-2 md:mb-5">
                 Everything You Need to Succeed
               </h2>
               <p className="text-base md:text-xl text-foreground/80 font-consciousness max-w-2xl mx-auto">
@@ -253,7 +253,7 @@ const Index = () => {
               </p>
             </div>
             
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 md:gap-6">
               {platformFeatures.map((feature, index) => (
                 <Card 
                   key={feature.title}
@@ -278,8 +278,8 @@ const Index = () => {
         {/* The Awareness Engine */}
         <section className="py-10 md:py-20 bg-background">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-8 md:mb-12">
-              <h2 className="text-2xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-3 md:mb-5">
+            <div className="text-center mb-5 md:mb-12">
+              <h2 className="text-2xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-2 md:mb-5">
                 The Awareness Engine
               </h2>
               <p className="text-base md:text-xl text-foreground/80 font-consciousness max-w-2xl mx-auto">
@@ -287,7 +287,7 @@ const Index = () => {
               </p>
             </div>
             
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-5">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 md:gap-5">
               {awarenessSteps.map((step, index) => (
                 <Card 
                   key={step.title}
@@ -310,8 +310,8 @@ const Index = () => {
         {/* The Vault Layers */}
         <section className="py-10 md:py-20 bg-background">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-8 md:mb-12">
-              <h2 className="text-2xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-3 md:mb-5">
+            <div className="text-center mb-5 md:mb-12">
+              <h2 className="text-2xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-2 md:mb-5">
                 The Vault Layers
               </h2>
               <p className="text-base md:text-xl text-foreground/80 font-consciousness max-w-2xl mx-auto">
@@ -319,33 +319,33 @@ const Index = () => {
               </p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6">
               {vaultLayers.map((vault, index) => (
                 <Card 
                   key={vault.title}
-                  className="relative p-5 md:p-6 bg-card border-border hover:border-primary/60 transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 group"
+                  className="relative p-4 md:p-6 bg-card border-border hover:border-primary/60 transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 group"
                   style={{ animationDelay: `${index * 0.2}s` }}
                 >
-                  <span className="absolute top-3 right-3 md:top-4 md:right-4 text-[9px] md:text-[10px] uppercase tracking-wider text-primary bg-primary/20 border border-primary/40 px-2 py-1 rounded font-consciousness font-medium">
+                  <span className="absolute top-2 right-2 md:top-4 md:right-4 text-[8px] md:text-[10px] uppercase tracking-wider text-primary bg-primary/20 border border-primary/40 px-1.5 py-0.5 md:px-2 md:py-1 rounded font-consciousness font-medium">
                     Coming Soon
                   </span>
-                  <div className="text-center mb-4 md:mb-5 pt-2">
-                    <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-primary/20 flex items-center justify-center mx-auto mb-3 md:mb-4">
-                      <vault.icon className="w-6 h-6 md:w-7 md:h-7 text-primary" />
+                  <div className="text-center mb-3 md:mb-5 pt-1">
+                    <div className="w-10 h-10 md:w-14 md:h-14 rounded-2xl bg-primary/20 flex items-center justify-center mx-auto mb-2 md:mb-4">
+                      <vault.icon className="w-5 h-5 md:w-7 md:h-7 text-primary" />
                     </div>
-                    <span className="inline-block text-[10px] md:text-[11px] uppercase tracking-wider text-primary bg-primary/15 px-2 md:px-3 py-1 rounded-full font-consciousness font-medium">
+                    <span className="inline-block text-[9px] md:text-[11px] uppercase tracking-wider text-primary bg-primary/15 px-2 md:px-3 py-0.5 md:py-1 rounded-full font-consciousness font-medium">
                       {vault.subtitle}
                     </span>
-                    <h3 className="text-lg md:text-xl font-consciousness font-bold text-foreground mt-2 md:mt-3">
+                    <h3 className="text-base md:text-xl font-consciousness font-bold text-foreground mt-1.5 md:mt-3">
                       {vault.title}
                     </h3>
                   </div>
-                  <p className="text-xs md:text-sm text-foreground/75 font-consciousness leading-relaxed text-center mb-4 md:mb-5">
+                  <p className="text-xs md:text-sm text-foreground/75 font-consciousness leading-relaxed text-center mb-3 md:mb-5">
                     {vault.description}
                   </p>
-                  <ul className="space-y-2">
+                  <ul className="space-y-1.5 md:space-y-2">
                     {vault.features.map((feature, i) => (
-                      <li key={i} className="flex items-center text-xs md:text-sm text-foreground/85 font-consciousness bg-background rounded-lg px-3 py-2">
+                      <li key={i} className="flex items-center text-xs md:text-sm text-foreground/85 font-consciousness bg-background rounded-lg px-2.5 py-1.5 md:px-3 md:py-2">
                         <CheckCircle2 className="w-3.5 h-3.5 md:w-4 md:h-4 text-primary mr-2 md:mr-3 flex-shrink-0" />
                         {feature}
                       </li>
@@ -360,12 +360,12 @@ const Index = () => {
         {/* Why This Matters */}
         <section className="py-10 md:py-20 bg-background">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Card className="p-6 md:p-10 bg-card border-border">
+            <Card className="p-5 md:p-10 bg-card border-border">
               <div className="text-center">
-                <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-primary/20 flex items-center justify-center mx-auto mb-4 md:mb-6">
-                  <Zap className="w-6 h-6 md:w-7 md:h-7 text-primary" />
+                <div className="w-10 h-10 md:w-14 md:h-14 rounded-2xl bg-primary/20 flex items-center justify-center mx-auto mb-3 md:mb-6">
+                  <Zap className="w-5 h-5 md:w-7 md:h-7 text-primary" />
                 </div>
-                <h2 className="text-xl md:text-3xl lg:text-4xl font-consciousness font-bold text-foreground mb-3 md:mb-5">
+                <h2 className="text-xl md:text-3xl lg:text-4xl font-consciousness font-bold text-foreground mb-2 md:mb-5">
                   Why This Matters
                 </h2>
                 <p className="text-sm md:text-lg text-foreground/80 font-consciousness leading-relaxed mb-3 md:mb-4">
@@ -383,10 +383,10 @@ const Index = () => {
         {/* Final CTA */}
         <section className="py-10 md:py-20 bg-background">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-2xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-3 md:mb-5">
+            <h2 className="text-2xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-2 md:mb-5">
               Ready to Begin Your Journey?
             </h2>
-            <p className="text-base md:text-xl text-foreground/80 font-consciousness mb-6 md:mb-10 max-w-2xl mx-auto">
+            <p className="text-base md:text-xl text-foreground/80 font-consciousness mb-5 md:mb-10 max-w-2xl mx-auto">
               Start learning today. No hype. No confusion. Just clear education.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center items-center w-full">
@@ -416,7 +416,7 @@ const Index = () => {
         </section>
 
         {/* Newsletter Signup */}
-        <section className="py-14 md:py-20 bg-background">
+        <section className="py-10 md:py-20 bg-background">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <NewsletterSignup variant="cosmic" />
           </div>
