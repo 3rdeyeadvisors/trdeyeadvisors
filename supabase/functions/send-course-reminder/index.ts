@@ -133,7 +133,7 @@ const handler = async (req: Request): Promise<Response> => {
               </p>
               
               <div style="text-align: center; margin: 32px 0;">
-                <a href="https://the3rdeyeadvisors.com/courses" style="background: linear-gradient(45deg, hsl(217, 91%, 60%), hsl(271, 91%, 65%)); color: hsl(222, 84%, 4.9%); padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block; font-size: 16px;">
+                <a href="https://the3rdeyeadvisors.com/courses" style="background: linear-gradient(45deg, #3b82f6, #8b5cf6); color: #ffffff; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block; font-size: 16px;">
                   Start Learning Now
                 </a>
               </div>
