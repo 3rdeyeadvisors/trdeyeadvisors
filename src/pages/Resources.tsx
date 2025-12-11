@@ -116,61 +116,59 @@ const Resources = () => {
         </div>
 
         {/* Resource Categories */}
-        <div className="space-y-12 mb-16">
+        <div className="grid gap-12 mb-16">
           {resourceCategories.map((category, categoryIndex) => (
-            <div key={category.title} className="space-y-6">
+            <section key={category.title} className="space-y-6">
               {/* Category Header */}
-              <div className="flex flex-col md:flex-row items-center md:items-center gap-4 mb-6 text-center md:text-left">
-                <category.icon className="w-8 h-8 text-primary" />
+              <div className="flex flex-col md:flex-row items-center md:items-start gap-3 pb-4 border-b border-border/50 text-center md:text-left">
+                <div className="p-2.5 rounded-lg bg-primary/10">
+                  <category.icon className="w-6 h-6 text-primary" />
+                </div>
                 <div>
-                  <h2 className="text-2xl font-consciousness font-bold text-foreground">
+                  <h2 className="text-xl font-consciousness font-bold text-foreground">
                     {category.title}
                   </h2>
-                  <p className="text-muted-foreground font-consciousness">
+                  <p className="text-sm text-muted-foreground font-consciousness">
                     {category.description}
                   </p>
                 </div>
               </div>
 
-              {/* Resources Grid */}
-              <div className="grid md:grid-cols-2 gap-6">
+              {/* Resources Grid - 3 columns on desktop */}
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {category.resources.map((resource, index) => (
                   <Card 
                     key={resource.name}
-                    className="p-6 bg-card/60 border-border hover:border-primary/40 transition-all duration-cosmic hover:shadow-consciousness group"
-                    style={{ animationDelay: `${(categoryIndex * 4 + index) * 0.1}s` }}
+                    className="p-5 bg-card/60 border-border hover:border-primary/40 transition-all duration-300 hover:shadow-lg group flex flex-col"
                   >
-                    <div className="flex items-start justify-between mb-3">
-                      <h3 className="text-lg font-consciousness font-semibold text-foreground group-hover:text-primary transition-colors">
+                    <div className="flex items-start justify-between gap-2 mb-2">
+                      <h3 className="text-base font-consciousness font-semibold text-foreground group-hover:text-primary transition-colors leading-tight">
                         {resource.name}
                       </h3>
-                      <div className="flex items-center gap-2">
-                        {resource.verified && (
-                          <Badge className="bg-awareness/20 text-awareness border-awareness/30">
-                            Verified
-                          </Badge>
-                        )}
-                        <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
-                      </div>
+                      {resource.verified && (
+                        <Badge className="bg-awareness/20 text-awareness border-awareness/30 text-xs shrink-0">
+                          Verified
+                        </Badge>
+                      )}
                     </div>
                     
-                    <p className="text-muted-foreground font-consciousness mb-4 leading-relaxed">
+                    <p className="text-sm text-muted-foreground font-consciousness mb-4 leading-relaxed flex-1">
                       {resource.description}
                     </p>
                     
                     <Button 
-                      variant="system" 
+                      variant="outline" 
                       size="sm" 
-                      className="w-full font-consciousness group-hover:border-primary/40"
+                      className="w-full font-consciousness text-sm group-hover:border-primary/60 group-hover:text-primary"
                       onClick={() => window.open(resource.url, '_blank')}
                     >
                       Access Resource
-                      <ExternalLink className="w-4 h-4 ml-2" />
+                      <ExternalLink className="w-3.5 h-3.5 ml-2" />
                     </Button>
                   </Card>
                 ))}
               </div>
-            </div>
+            </section>
           ))}
         </div>
 
