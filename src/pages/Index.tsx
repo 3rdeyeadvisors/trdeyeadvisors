@@ -291,10 +291,10 @@ const Index = () => {
               {awarenessSteps.map((step, index) => (
                 <Card 
                   key={step.title}
-                  className="p-5 bg-card border-border hover:border-accent/60 transition-all duration-300 hover:shadow-xl hover:shadow-accent/20 group text-center"
+                  className="p-5 bg-card border-border hover:border-primary/60 transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 group text-center"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  <step.icon className="w-10 h-10 text-accent mx-auto mb-3" />
+                  <step.icon className="w-10 h-10 text-primary mx-auto mb-3" />
                   <h3 className="text-base md:text-lg font-consciousness font-semibold text-foreground mb-2">
                     {step.title}
                   </h3>
@@ -323,17 +323,17 @@ const Index = () => {
               {vaultLayers.map((vault, index) => (
                 <Card 
                   key={vault.title}
-                  className="relative p-6 bg-card border-border hover:border-accent/60 transition-all duration-300 hover:shadow-xl hover:shadow-accent/20 group"
+                  className="relative p-6 bg-card border-border hover:border-primary/60 transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 group"
                   style={{ animationDelay: `${index * 0.2}s` }}
                 >
-                  <span className="absolute top-4 right-4 text-[10px] uppercase tracking-wider text-accent bg-accent/20 border border-accent/40 px-2 py-1 rounded font-consciousness font-medium">
+                  <span className="absolute top-4 right-4 text-[10px] uppercase tracking-wider text-primary bg-primary/20 border border-primary/40 px-2 py-1 rounded font-consciousness font-medium">
                     Coming Soon
                   </span>
                   <div className="text-center mb-5 pt-2">
-                    <div className="w-14 h-14 rounded-2xl bg-accent/20 flex items-center justify-center mx-auto mb-4">
-                      <vault.icon className="w-7 h-7 text-accent" />
+                    <div className="w-14 h-14 rounded-2xl bg-primary/20 flex items-center justify-center mx-auto mb-4">
+                      <vault.icon className="w-7 h-7 text-primary" />
                     </div>
-                    <span className="inline-block text-[11px] uppercase tracking-wider text-accent bg-accent/15 px-3 py-1 rounded-full font-consciousness font-medium">
+                    <span className="inline-block text-[11px] uppercase tracking-wider text-primary bg-primary/15 px-3 py-1 rounded-full font-consciousness font-medium">
                       {vault.subtitle}
                     </span>
                     <h3 className="text-xl font-consciousness font-bold text-foreground mt-3">
@@ -346,7 +346,7 @@ const Index = () => {
                   <ul className="space-y-2">
                     {vault.features.map((feature, i) => (
                       <li key={i} className="flex items-center text-sm text-foreground/85 font-consciousness bg-background rounded-lg px-3 py-2">
-                        <CheckCircle2 className="w-4 h-4 text-accent mr-3 flex-shrink-0" />
+                        <CheckCircle2 className="w-4 h-4 text-primary mr-3 flex-shrink-0" />
                         {feature}
                       </li>
                     ))}
@@ -362,8 +362,8 @@ const Index = () => {
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <Card className="p-8 md:p-12 bg-card border-border">
               <div className="text-center">
-                <div className="w-14 h-14 rounded-2xl bg-awareness/20 flex items-center justify-center mx-auto mb-6">
-                  <Zap className="w-7 h-7 text-awareness" />
+                <div className="w-14 h-14 rounded-2xl bg-primary/20 flex items-center justify-center mx-auto mb-6">
+                  <Zap className="w-7 h-7 text-primary" />
                 </div>
                 <h2 className="text-2xl md:text-3xl lg:text-4xl font-consciousness font-bold text-foreground mb-5">
                   Why This Matters
