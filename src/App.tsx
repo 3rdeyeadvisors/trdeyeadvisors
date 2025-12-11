@@ -61,7 +61,7 @@ import RaffleHistory from "./pages/RaffleHistory";
 import AwarenessBlueprintLanding from "./pages/AwarenessBlueprintLanding";
 import AdLanding from "./pages/AdLanding";
 import UploadResourceFile from "./pages/UploadResourceFile";
-import RosaBirthday from "./pages/RosaBirthday";
+
 
 const queryClient = new QueryClient();
 
@@ -104,7 +104,7 @@ const App = () => {
               <Layout>
                 <Routes>
                   <Route path="/" element={<Index />} />
-                  <Route path="/rosa-birthday" element={<RosaBirthday />} />
+                  
                       <Route path="/philosophy" element={<Philosophy />} />
                       <Route path="/courses" element={<Courses />} />
                       <Route path="/courses/:courseId" element={<CourseDetail />} />
