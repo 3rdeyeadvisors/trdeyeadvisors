@@ -38,68 +38,135 @@ let cachedData: DefiData | null = null;
 let cacheTimestamp = 0;
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
+// Color palette for categories
+const categoryColors: Record<string, string> = {
+  'CEX': '#ef4444',
+  'Lending': '#8b5cf6',
+  'Liquid Staking': '#06b6d4',
+  'DEX': '#10b981',
+  'CDP': '#f59e0b',
+  'Bridge': '#ec4899',
+  'Derivatives': '#6366f1',
+  'Yield': '#84cc16',
+  'RWA': '#14b8a6',
+  'Other': '#64748b'
+};
+
 async function fetchDefiLlamaData(): Promise<DefiData> {
-  console.log('Fetching fresh DeFi data from APIs...');
+  console.log('Fetching fresh DeFi data from DefiLlama APIs...');
 
   try {
-    // Fetch current TVL data from DefiLlama
-    const [protocolsResponse, chainsResponse, volumeResponse] = await Promise.all([
+    // Fetch data from multiple endpoints in parallel
+    const [protocolsResponse, tvlHistoryResponse, volumeResponse, yieldsResponse] = await Promise.all([
       fetch('https://api.llama.fi/protocols'),
-      fetch('https://api.llama.fi/v2/chains'),
-      fetch('https://api.llama.fi/overview/dexs?excludeTotalDataChart=true&excludeTotalDataChartBreakdown=true')
+      fetch('https://api.llama.fi/v2/historicalChainTvl'),
+      fetch('https://api.llama.fi/overview/dexs?excludeTotalDataChart=true&excludeTotalDataChartBreakdown=true'),
+      fetch('https://yields.llama.fi/pools')
     ]);
 
-    const protocols = await protocolsResponse.json() as DefiProtocol[];
-    const chains = await chainsResponse.json();
+    const protocols = await protocolsResponse.json() as any[];
+    const tvlHistory = await tvlHistoryResponse.json() as any[];
     const volumeData = await volumeResponse.json();
+    const yieldsData = await yieldsResponse.json();
 
-    // Calculate total TVL
+    // Calculate total TVL from all protocols
     const totalTvl = protocols.reduce((sum, protocol) => sum + (protocol.tvl || 0), 0);
+    console.log(`Total TVL from ${protocols.length} protocols: $${(totalTvl / 1e9).toFixed(2)}B`);
 
-    // Calculate total 24h volume from DEX data
-    const totalVolume24h = volumeData.totalVolume24h || 50000000000; // Fallback
+    // Get total 24h volume from DEX data
+    const totalVolume24h = volumeData.total24h || volumeData.totalVolume24h || 0;
+    console.log(`Total 24h DEX Volume: $${(totalVolume24h / 1e9).toFixed(2)}B`);
 
-    // Get top protocols by TVL
-    const topProtocols = protocols
-      .filter(p => p.tvl > 0)
+    // Calculate average yield from top stable pools (more accurate)
+    let averageYield = 8.5; // Default fallback
+    if (yieldsData?.data && Array.isArray(yieldsData.data)) {
+      const stablePools = yieldsData.data
+        .filter((pool: any) => 
+          pool.stablecoin === true && 
+          pool.tvlUsd > 1000000 && // Only pools with > $1M TVL
+          pool.apy > 0 && 
+          pool.apy < 50 // Filter out unrealistic APYs
+        )
+        .slice(0, 100);
+      
+      if (stablePools.length > 0) {
+        averageYield = stablePools.reduce((sum: number, pool: any) => sum + pool.apy, 0) / stablePools.length;
+      }
+      console.log(`Average stable yield from ${stablePools.length} pools: ${averageYield.toFixed(2)}%`);
+    }
+
+    // Get top 10 protocols by TVL with accurate data
+    const topProtocols: DefiProtocol[] = protocols
+      .filter(p => p.tvl > 0 && p.name)
       .sort((a, b) => b.tvl - a.tvl)
       .slice(0, 10)
       .map(protocol => ({
-        ...protocol,
-        change_1d: protocol.change_1d || (Math.random() - 0.5) * 10, // Fallback for missing data
-        change_7d: protocol.change_7d || (Math.random() - 0.5) * 20,
-        category: protocol.category || 'DeFi'
+        id: protocol.id || protocol.slug || protocol.name.toLowerCase(),
+        name: protocol.name,
+        tvl: protocol.tvl,
+        change_1d: typeof protocol.change_1d === 'number' ? protocol.change_1d : 0,
+        change_7d: typeof protocol.change_7d === 'number' ? protocol.change_7d : 0,
+        category: protocol.category || 'Other',
+        mcap: protocol.mcap
       }));
 
-    // Generate historical data (last 30 days) - simplified version
-    const historicalData = Array.from({ length: 30 }, (_, i) => {
-      const date = new Date();
-      date.setDate(date.getDate() - (29 - i));
-      const variation = 1 + (Math.random() - 0.5) * 0.2; // ±10% variation
-      
-      return {
-        date: date.toISOString().split('T')[0],
-        totalTvl: Math.floor(totalTvl * variation),
-        volume: Math.floor(totalVolume24h * variation),
-        yield: 5 + Math.random() * 10 // 5-15% yield range
-      };
-    });
+    console.log(`Top protocols: ${topProtocols.map(p => `${p.name}($${(p.tvl/1e9).toFixed(1)}B)`).join(', ')}`);
 
-    // Risk distribution based on protocol categories
-    const categoryTvl = topProtocols.reduce((acc, protocol) => {
+    // Generate historical data from actual TVL history
+    const historicalData = [];
+    if (Array.isArray(tvlHistory) && tvlHistory.length > 0) {
+      // Get last 30 days of data
+      const last30Days = tvlHistory.slice(-30);
+      for (const entry of last30Days) {
+        const date = new Date(entry.date * 1000).toISOString().split('T')[0];
+        historicalData.push({
+          date,
+          totalTvl: entry.tvl || 0,
+          volume: totalVolume24h * (0.8 + Math.random() * 0.4), // Approximate daily volume variation
+          yield: averageYield * (0.9 + Math.random() * 0.2) // Small variation around average
+        });
+      }
+    }
+    
+    // Fallback if no historical data
+    if (historicalData.length === 0) {
+      for (let i = 29; i >= 0; i--) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        historicalData.push({
+          date: date.toISOString().split('T')[0],
+          totalTvl: totalTvl * (0.95 + Math.random() * 0.1),
+          volume: totalVolume24h * (0.8 + Math.random() * 0.4),
+          yield: averageYield * (0.9 + Math.random() * 0.2)
+        });
+      }
+    }
+
+    // Calculate risk distribution from TOP PROTOCOLS ONLY (so it sums to 100%)
+    const topProtocolsTotalTvl = topProtocols.reduce((sum, p) => sum + p.tvl, 0);
+    const categoryTvl: Record<string, number> = {};
+    
+    for (const protocol of topProtocols) {
       const category = protocol.category || 'Other';
-      acc[category] = (acc[category] || 0) + protocol.tvl;
-      return acc;
-    }, {} as Record<string, number>);
+      categoryTvl[category] = (categoryTvl[category] || 0) + protocol.tvl;
+    }
 
-    const riskDistribution = Object.entries(categoryTvl).map(([name, value], index) => ({
-      name,
-      value: Math.round(value / totalTvl * 100),
-      color: ['#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ef4444'][index % 5]
-    }));
+    // Convert to percentages (will sum to 100% since we use topProtocolsTotalTvl)
+    const riskDistribution = Object.entries(categoryTvl)
+      .map(([name, tvl]) => ({
+        name,
+        value: Math.round((tvl / topProtocolsTotalTvl) * 100),
+        color: categoryColors[name] || categoryColors['Other']
+      }))
+      .sort((a, b) => b.value - a.value);
 
-    // Calculate average yield (simplified calculation)
-    const averageYield = historicalData[historicalData.length - 1]?.yield || 8.5;
+    // Ensure percentages sum to exactly 100% (handle rounding)
+    const totalPercent = riskDistribution.reduce((sum, item) => sum + item.value, 0);
+    if (totalPercent !== 100 && riskDistribution.length > 0) {
+      riskDistribution[0].value += (100 - totalPercent);
+    }
+
+    console.log(`Risk distribution: ${riskDistribution.map(r => `${r.name}:${r.value}%`).join(', ')}`);
 
     const result: DefiData = {
       totalTvl,
@@ -110,7 +177,6 @@ async function fetchDefiLlamaData(): Promise<DefiData> {
       riskDistribution
     };
 
-    console.log(`Fetched data: TVL: $${(totalTvl / 1e9).toFixed(2)}B, Protocols: ${topProtocols.length}`);
     return result;
 
   } catch (error) {
@@ -118,8 +184,8 @@ async function fetchDefiLlamaData(): Promise<DefiData> {
     
     // Return fallback data if APIs fail
     return {
-      totalTvl: 200000000000, // $200B fallback
-      totalVolume24h: 50000000000, // $50B fallback
+      totalTvl: 200000000000,
+      totalVolume24h: 50000000000,
       averageYield: 8.5,
       protocols: [
         { id: 'lido', name: 'Lido', tvl: 32000000000, change_1d: 2.1, change_7d: 5.3, category: 'Liquid Staking' },
@@ -135,11 +201,11 @@ async function fetchDefiLlamaData(): Promise<DefiData> {
         yield: 7 + Math.random() * 4
       })),
       riskDistribution: [
-        { name: 'Liquid Staking', value: 35, color: '#8b5cf6' },
-        { name: 'Lending', value: 25, color: '#06b6d4' },
-        { name: 'DEX', value: 20, color: '#10b981' },
-        { name: 'CDP', value: 15, color: '#f59e0b' },
-        { name: 'Other', value: 5, color: '#ef4444' }
+        { name: 'Liquid Staking', value: 38, color: '#06b6d4' },
+        { name: 'Lending', value: 31, color: '#8b5cf6' },
+        { name: 'DEX', value: 14, color: '#10b981' },
+        { name: 'CDP', value: 12, color: '#f59e0b' },
+        { name: 'Other', value: 5, color: '#64748b' }
       ]
     };
   }

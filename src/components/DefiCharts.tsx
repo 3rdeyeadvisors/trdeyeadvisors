@@ -742,9 +742,9 @@ export const DefiCharts = () => {
               <div className="p-2 rounded-lg bg-primary/10">
                 <PieChartIcon className="w-4 h-4 text-primary" />
               </div>
-              Risk Distribution
+              Category Distribution
             </CardTitle>
-            <CardDescription className="text-sm">Portfolio risk allocation across DeFi protocols</CardDescription>
+            <CardDescription className="text-sm">TVL breakdown by category (Top 10 Protocols)</CardDescription>
           </CardHeader>
           <CardContent className="pt-0">
             <div className="flex flex-col lg:flex-row lg:items-center gap-6">
@@ -770,7 +770,7 @@ export const DefiCharts = () => {
                         ))}
                       </Pie>
                       <Tooltip 
-                        formatter={(value) => [`${value}%`, 'Allocation']} 
+                        formatter={(value) => [`${value}%`, 'TVL Share']} 
                         contentStyle={{ 
                           backgroundColor: 'hsl(var(--card))', 
                           border: '1px solid hsl(var(--border))',
@@ -780,10 +780,12 @@ export const DefiCharts = () => {
                     </PieChart>
                   </ResponsiveContainer>
                 </div>
-                {/* Center label */}
+                {/* Center label - show actual total */}
                 <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                  <span className="text-2xl font-bold text-foreground">100%</span>
-                  <span className="text-xs text-muted-foreground">Allocated</span>
+                  <span className="text-2xl font-bold text-foreground">
+                    {data.riskDistribution.reduce((sum, item) => sum + item.value, 0)}%
+                  </span>
+                  <span className="text-xs text-muted-foreground">Top 10 TVL</span>
                 </div>
               </div>
               
