@@ -118,9 +118,34 @@ const generateFallbackData = (): DefiData => {
   };
 };
 
+// Cache key for localStorage
+const DEFI_DATA_CACHE_KEY = 'defi-charts-cached-data';
+
+// Load cached data from localStorage
+const loadCachedData = (): DefiData | null => {
+  try {
+    const cached = localStorage.getItem(DEFI_DATA_CACHE_KEY);
+    if (cached) {
+      return JSON.parse(cached);
+    }
+  } catch (e) {
+    console.warn('Failed to load cached DeFi data:', e);
+  }
+  return null;
+};
+
+// Save data to localStorage cache
+const saveCachedData = (data: DefiData) => {
+  try {
+    localStorage.setItem(DEFI_DATA_CACHE_KEY, JSON.stringify(data));
+  } catch (e) {
+    console.warn('Failed to cache DeFi data:', e);
+  }
+};
+
 export const DefiCharts = () => {
   const { toast } = useToast();
-  const [data, setData] = useState<DefiData | null>(null);
+  const [data, setData] = useState<DefiData | null>(() => loadCachedData());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedMetric, setSelectedMetric] = useState<'totalTvl' | 'volume' | 'yield'>('totalTvl');
@@ -151,6 +176,7 @@ export const DefiCharts = () => {
       if (response && response.protocols && Array.isArray(response.protocols)) {
         console.log('API returned protocols:', response.protocols.length);
         setData(response);
+        saveCachedData(response); // Cache successful response
         setLastUpdated(new Date());
         
         // Set next refresh time and reset countdown
@@ -169,18 +195,25 @@ export const DefiCharts = () => {
           setRefreshCooldown(10);
         }
       } else {
-        console.warn('Invalid response structure, using fallback data');
+        console.warn('Invalid response structure');
         throw new Error('Invalid data structure received');
       }
     } catch (err) {
-      console.error('Error fetching DeFi data, using fallback:', err);
-      setError('Using sample data due to network issues.');
-      const fallbackData = generateFallbackData();
-      console.log('Using fallback protocols:', fallbackData.protocols.length);
-      setData(fallbackData);
-      setLastUpdated(new Date());
+      console.error('Error fetching DeFi data:', err);
       
-      // Set next refresh time even for fallback
+      // Use cached data if available, otherwise use fallback
+      const cachedData = loadCachedData();
+      if (cachedData) {
+        console.log('Using cached data from previous successful fetch');
+        setError('Using cached data due to network issues.');
+        setData(cachedData);
+      } else {
+        console.log('No cached data available, using fallback');
+        setError('Using sample data - no cached data available.');
+        setData(generateFallbackData());
+      }
+      
+      // Set next refresh time
       const nextRefresh = new Date(Date.now() + 300000); // 5 minutes from now
       setNextRefreshTime(nextRefresh);
       
@@ -188,7 +221,7 @@ export const DefiCharts = () => {
       if (forceRefresh) {
         toast({
           title: "Refresh failed",
-          description: "Using cached data due to network issues",
+          description: cachedData ? "Using cached data due to network issues" : "Using sample data",
           variant: "destructive"
         });
         
