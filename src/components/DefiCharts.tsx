@@ -496,66 +496,135 @@ export const DefiCharts = () => {
       </div>
 
       {/* Time Series Chart - Hidden on mobile */}
-      <Card className="hidden md:block">
-        <CardHeader>
+      <Card className="hidden md:block overflow-hidden">
+        <CardHeader className="pb-2">
           <div className="flex flex-col md:flex-row items-center md:items-center justify-between gap-4 text-center md:text-left">
-            <div>
-              <CardTitle>Market Trends (30 Days)</CardTitle>
-              <CardDescription>Track key DeFi metrics over time</CardDescription>
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20">
+                <Activity className="w-5 h-5 text-primary" />
+              </div>
+              <div>
+                <CardTitle className="text-xl">Market Trends</CardTitle>
+                <CardDescription className="text-sm">30-day performance across key DeFi metrics</CardDescription>
+              </div>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-1.5 p-1 bg-muted/50 rounded-lg">
               <Button
-                variant={selectedMetric === 'totalTvl' ? 'default' : 'outline'}
+                variant={selectedMetric === 'totalTvl' ? 'default' : 'ghost'}
                 size="sm"
                 onClick={() => setSelectedMetric('totalTvl')}
+                className={`text-xs px-3 ${selectedMetric === 'totalTvl' ? 'shadow-sm' : 'hover:bg-background/80'}`}
               >
+                <DollarSign className="w-3.5 h-3.5 mr-1.5" />
                 TVL
               </Button>
               <Button
-                variant={selectedMetric === 'volume' ? 'default' : 'outline'}
+                variant={selectedMetric === 'volume' ? 'default' : 'ghost'}
                 size="sm"
                 onClick={() => setSelectedMetric('volume')}
+                className={`text-xs px-3 ${selectedMetric === 'volume' ? 'shadow-sm' : 'hover:bg-background/80'}`}
               >
+                <BarChart3 className="w-3.5 h-3.5 mr-1.5" />
                 Volume
               </Button>
               <Button
-                variant={selectedMetric === 'yield' ? 'default' : 'outline'}
+                variant={selectedMetric === 'yield' ? 'default' : 'ghost'}
                 size="sm"
                 onClick={() => setSelectedMetric('yield')}
+                className={`text-xs px-3 ${selectedMetric === 'yield' ? 'shadow-sm' : 'hover:bg-background/80'}`}
               >
+                <Percent className="w-3.5 h-3.5 mr-1.5" />
                 Yield
               </Button>
             </div>
           </div>
         </CardHeader>
-        <CardContent>
-          <ResponsiveContainer width="100%" height={280}>
-            <AreaChart data={data.historicalData}>
-              <CartesianGrid strokeDasharray="3 3" />
+        <CardContent className="pt-4">
+          <ResponsiveContainer width="100%" height={320}>
+            <AreaChart data={data.historicalData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+              <defs>
+                <linearGradient id="marketTrendGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.4} />
+                  <stop offset="50%" stopColor="hsl(var(--primary))" stopOpacity={0.15} />
+                  <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0.02} />
+                </linearGradient>
+                <filter id="glow">
+                  <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                  <feMerge>
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+              </defs>
+              <CartesianGrid 
+                strokeDasharray="3 3" 
+                stroke="hsl(var(--border))" 
+                strokeOpacity={0.5}
+                vertical={false}
+              />
               <XAxis 
                 dataKey="date" 
-                tickFormatter={(value) => new Date(value).toLocaleDateString()}
-                fontSize={12}
+                tickFormatter={(value) => {
+                  const date = new Date(value);
+                  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                }}
+                fontSize={11}
+                stroke="hsl(var(--muted-foreground))"
+                tickLine={false}
+                axisLine={{ stroke: 'hsl(var(--border))', strokeOpacity: 0.5 }}
+                dy={8}
               />
               <YAxis 
                 tickFormatter={(value) => 
-                  selectedMetric === 'yield' ? `${value}%` : formatCurrency(value)
+                  selectedMetric === 'yield' ? `${value.toFixed(1)}%` : formatCurrency(value)
                 }
-                fontSize={12}
+                fontSize={11}
+                stroke="hsl(var(--muted-foreground))"
+                tickLine={false}
+                axisLine={false}
+                dx={-5}
+                width={70}
               />
               <Tooltip 
-                labelFormatter={(value) => new Date(value).toLocaleDateString()}
-                formatter={(value) => [
-                  selectedMetric === 'yield' ? `${value}%` : formatCurrency(Number(value)),
-                  selectedMetric === 'totalTvl' ? 'TVL' : selectedMetric.toUpperCase()
-                ]}
+                cursor={{ stroke: 'hsl(var(--primary))', strokeWidth: 1, strokeDasharray: '4 4', strokeOpacity: 0.5 }}
+                content={({ active, payload, label }) => {
+                  if (active && payload && payload.length) {
+                    const value = payload[0].value as number;
+                    const date = new Date(label);
+                    return (
+                      <div className="bg-popover/95 backdrop-blur-sm border border-border rounded-lg shadow-xl p-3 min-w-[160px]">
+                        <p className="text-xs text-muted-foreground mb-1.5 font-medium">
+                          {date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+                        </p>
+                        <div className="flex items-center gap-2">
+                          <div className="w-2.5 h-2.5 rounded-full bg-primary shadow-sm shadow-primary/50" />
+                          <span className="text-sm text-muted-foreground">
+                            {selectedMetric === 'totalTvl' ? 'TVL' : selectedMetric === 'volume' ? 'Volume' : 'Avg Yield'}:
+                          </span>
+                          <span className="text-sm font-bold text-foreground ml-auto">
+                            {selectedMetric === 'yield' ? `${value.toFixed(2)}%` : formatCurrency(value)}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  }
+                  return null;
+                }}
               />
               <Area
                 type="monotone"
                 dataKey={selectedMetric}
                 stroke="hsl(var(--primary))"
-                fill="hsl(var(--primary))"
-                fillOpacity={0.2}
+                strokeWidth={2.5}
+                fill="url(#marketTrendGradient)"
+                dot={false}
+                activeDot={{ 
+                  r: 6, 
+                  fill: 'hsl(var(--primary))', 
+                  stroke: 'hsl(var(--background))', 
+                  strokeWidth: 3,
+                  filter: 'url(#glow)'
+                }}
               />
             </AreaChart>
           </ResponsiveContainer>
