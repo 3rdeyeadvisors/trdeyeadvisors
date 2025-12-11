@@ -327,7 +327,7 @@ const Index = () => {
                   className="relative p-6 md:p-8 bg-gradient-consciousness border-primary/20 shadow-consciousness hover:shadow-[0_0_30px_hsl(var(--primary)/0.4),0_0_60px_hsl(var(--accent)/0.3)] hover:border-primary/40 transition-all duration-consciousness group"
                   style={{ animationDelay: `${index * 0.2}s` }}
                 >
-                  <span className="absolute top-4 right-4 text-xs uppercase tracking-wider text-primary-foreground bg-primary px-3 py-1 rounded-full font-consciousness font-semibold shadow-lg z-10">
+                  <span className="absolute top-3 left-3 text-[10px] uppercase tracking-wider text-primary-foreground bg-primary/90 px-2 py-0.5 rounded-full font-consciousness font-semibold shadow-lg z-10">
                     Coming Soon
                   </span>
                   <div className="text-center mb-6">
