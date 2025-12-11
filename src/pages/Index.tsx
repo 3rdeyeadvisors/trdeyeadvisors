@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { 
   BookOpen, Users, Lightbulb, Repeat, TrendingUp, Globe, Cloud, Rocket, ArrowRight,
-  Shield, Wallet, LineChart, GraduationCap, Video, FileText, CheckCircle2, Zap, Target
+  Shield, Wallet, LineChart, GraduationCap, Layers, FileText, CheckCircle2, Zap, Target
 } from "lucide-react";
 import cosmicHeroBg from "@/assets/cosmic-hero-bg.jpg";
 import NewsletterSignup from "@/components/NewsletterSignup";
@@ -36,7 +36,7 @@ const Index = () => {
 
   const platformFeatures = [
     {
-      icon: Video,
+      icon: Layers,
       title: "Step-by-Step Courses",
       description: "Structured learning paths from beginner to advanced"
     },
@@ -185,7 +185,7 @@ const Index = () => {
         </section>
 
         {/* What You'll Learn Section */}
-        <section className="py-20 md:py-28 bg-secondary/50">
+        <section className="py-20 md:py-28 bg-background">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-14">
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-5">
@@ -200,7 +200,7 @@ const Index = () => {
               {whatYoullLearn.map((item, index) => (
                 <Card 
                   key={item.title}
-                  className="p-6 bg-background border-border hover:border-primary/60 transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 group"
+                  className="p-6 bg-card border-border hover:border-primary/60 transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 group"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center mb-4 group-hover:bg-primary/30 transition-colors">
@@ -221,7 +221,7 @@ const Index = () => {
         {/* What is 3EA? */}
         <section className="py-20 md:py-28 bg-background">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Card className="p-8 md:p-12 bg-secondary border-primary/40 shadow-xl shadow-primary/10">
+            <Card className="p-8 md:p-12 bg-card border-border">
               <div className="text-center">
                 <div className="w-16 h-16 rounded-2xl bg-primary/20 flex items-center justify-center mx-auto mb-6">
                   <Target className="w-8 h-8 text-primary" />
@@ -242,7 +242,7 @@ const Index = () => {
         </section>
 
         {/* Platform Features */}
-        <section className="py-20 md:py-28 bg-secondary/50">
+        <section className="py-20 md:py-28 bg-background">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-14">
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-5">
@@ -257,7 +257,7 @@ const Index = () => {
               {platformFeatures.map((feature, index) => (
                 <Card 
                   key={feature.title}
-                  className="p-6 bg-background border-border hover:border-primary/60 transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 group text-center"
+                  className="p-6 bg-card border-border hover:border-primary/60 transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 group text-center"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/30 transition-colors">
@@ -291,7 +291,7 @@ const Index = () => {
               {awarenessSteps.map((step, index) => (
                 <Card 
                   key={step.title}
-                  className="p-5 bg-secondary border-border hover:border-accent/60 transition-all duration-300 hover:shadow-xl hover:shadow-accent/20 group text-center"
+                  className="p-5 bg-card border-border hover:border-accent/60 transition-all duration-300 hover:shadow-xl hover:shadow-accent/20 group text-center"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <step.icon className="w-10 h-10 text-accent mx-auto mb-3" />
@@ -308,7 +308,7 @@ const Index = () => {
         </section>
 
         {/* The Vault Layers */}
-        <section className="py-20 md:py-28 bg-secondary/50">
+        <section className="py-20 md:py-28 bg-background">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-14">
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-5">
@@ -323,7 +323,7 @@ const Index = () => {
               {vaultLayers.map((vault, index) => (
                 <Card 
                   key={vault.title}
-                  className="relative p-6 bg-background border-border hover:border-accent/60 transition-all duration-300 hover:shadow-xl hover:shadow-accent/20 group"
+                  className="relative p-6 bg-card border-border hover:border-accent/60 transition-all duration-300 hover:shadow-xl hover:shadow-accent/20 group"
                   style={{ animationDelay: `${index * 0.2}s` }}
                 >
                   <span className="absolute top-4 right-4 text-[10px] uppercase tracking-wider text-accent bg-accent/20 border border-accent/40 px-2 py-1 rounded font-consciousness font-medium">
@@ -345,7 +345,7 @@ const Index = () => {
                   </p>
                   <ul className="space-y-2">
                     {vault.features.map((feature, i) => (
-                      <li key={i} className="flex items-center text-sm text-foreground/85 font-consciousness bg-secondary rounded-lg px-3 py-2">
+                      <li key={i} className="flex items-center text-sm text-foreground/85 font-consciousness bg-background rounded-lg px-3 py-2">
                         <CheckCircle2 className="w-4 h-4 text-accent mr-3 flex-shrink-0" />
                         {feature}
                       </li>
@@ -360,7 +360,7 @@ const Index = () => {
         {/* Why This Matters */}
         <section className="py-20 md:py-28 bg-background">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Card className="p-8 md:p-12 bg-secondary border-border">
+            <Card className="p-8 md:p-12 bg-card border-border">
               <div className="text-center">
                 <div className="w-14 h-14 rounded-2xl bg-awareness/20 flex items-center justify-center mx-auto mb-6">
                   <Zap className="w-7 h-7 text-awareness" />
@@ -382,7 +382,7 @@ const Index = () => {
         </section>
 
         {/* Final CTA */}
-        <section className="py-20 md:py-28 bg-secondary/50">
+        <section className="py-20 md:py-28 bg-background">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-5">
               Ready to Begin Your Journey?
