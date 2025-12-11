@@ -37,17 +37,55 @@ interface DefiData {
   }>;
 }
 
-// Fallback data in case of API errors
+// Deterministic pseudo-random based on seed (for consistent results)
+const seededRandom = (seed: number): number => {
+  const x = Math.sin(seed) * 10000;
+  return x - Math.floor(x);
+};
+
+// Generate deterministic trend bars based on protocol data
+const generateTrendBars = (protocolId: string, change7d: number, barCount: number): number[] => {
+  const bars: number[] = [];
+  const isPositive = change7d >= 0;
+  const baseHeight = isPositive ? 12 : 8;
+  const changeImpact = Math.abs(change7d) / 10; // Normalize change impact
+  
+  // Create a seed from protocol ID
+  let seed = 0;
+  for (let i = 0; i < protocolId.length; i++) {
+    seed += protocolId.charCodeAt(i);
+  }
+  
+  for (let i = 0; i < barCount; i++) {
+    // Deterministic height based on position, protocol seed, and trend direction
+    const variation = seededRandom(seed + i * 100);
+    const trendFactor = isPositive 
+      ? 0.5 + (i / barCount) * 0.5 // Upward trend
+      : 0.5 + ((barCount - 1 - i) / barCount) * 0.5; // Downward trend
+    
+    const height = baseHeight * trendFactor + variation * 8 * (1 + changeImpact);
+    bars.push(Math.max(3, Math.min(24, height)));
+  }
+  
+  return bars;
+};
+
+// Fallback data in case of API errors (deterministic, no Math.random)
 const generateFallbackData = (): DefiData => {
   const historicalData = Array.from({ length: 30 }, (_, i) => {
     const date = new Date();
     date.setDate(date.getDate() - (29 - i));
     
+    // Deterministic variations based on day index
+    const tvlVariation = 0.95 + seededRandom(i) * 0.1;
+    const volumeVariation = 0.8 + seededRandom(i + 100) * 0.4;
+    const yieldVariation = 0.9 + seededRandom(i + 200) * 0.2;
+    
     return {
       date: date.toISOString().split('T')[0],
-      totalTvl: 180000000000 + Math.random() * 40000000000, // $180B - $220B
-      volume: 40000000000 + Math.random() * 20000000000, // $40B - $60B  
-      yield: 6 + Math.random() * 8 // 6% - 14%
+      totalTvl: 200000000000 * tvlVariation,
+      volume: 50000000000 * volumeVariation,
+      yield: 8.5 * yieldVariation
     };
   });
 
@@ -63,9 +101,11 @@ const generateFallbackData = (): DefiData => {
   ];
 
   const riskDistribution = [
-    { name: 'Low Risk', value: 45, color: 'hsl(var(--awareness))' },
-    { name: 'Medium Risk', value: 35, color: 'hsl(var(--accent))' },
-    { name: 'High Risk', value: 20, color: 'hsl(var(--destructive))' }
+    { name: 'Liquid Staking', value: 38, color: '#06b6d4' },
+    { name: 'Lending', value: 31, color: '#8b5cf6' },
+    { name: 'DEX', value: 18, color: '#10b981' },
+    { name: 'CDP', value: 8, color: '#f59e0b' },
+    { name: 'Yield', value: 5, color: '#84cc16' }
   ];
 
   return {
@@ -599,22 +639,19 @@ export const DefiCharts = () => {
                                         </div>
                                       </div>
                                       
-                                      {/* Visual trend line */}
+                                      {/* Visual trend line - deterministic based on protocol data */}
                                       <div className="flex w-16 h-8 items-end justify-between">
-                                        {Array.from({ length: 7 }, (_, i) => {
-                                          const height = Math.max(3, Math.random() * 20 + (protocol.change_7d >= 0 ? 6 : -4));
-                                          return (
-                                            <div
-                                              key={i}
-                                              className="w-1.5 rounded-sm"
-                                              style={{ 
-                                                height: `${Math.abs(height)}px`,
-                                                backgroundColor: getProtocolColor(protocol.category),
-                                                opacity: 0.4 + (i * 0.08)
-                                              }}
-                                            />
-                                          );
-                                        })}
+                                        {generateTrendBars(protocol.id, protocol.change_7d, 7).map((height, i) => (
+                                          <div
+                                            key={i}
+                                            className="w-1.5 rounded-sm"
+                                            style={{ 
+                                              height: `${height}px`,
+                                              backgroundColor: getProtocolColor(protocol.category),
+                                              opacity: 0.4 + (i * 0.08)
+                                            }}
+                                          />
+                                        ))}
                                       </div>
                                     </div>
                                   </div>
@@ -700,22 +737,19 @@ export const DefiCharts = () => {
                             </div>
                           </div>
 
-                          {/* Mini trend visualization */}
+                          {/* Mini trend visualization - deterministic */}
                           <div className="flex w-full h-6 items-end justify-center gap-0.5 mx-auto max-w-48">
-                            {Array.from({ length: 12 }, (_, i) => {
-                              const height = Math.max(2, Math.random() * 16 + (protocol.change_7d >= 0 ? 4 : -2));
-                              return (
-                                <div
-                                  key={i}
-                                  className="flex-1 rounded-sm"
-                                  style={{ 
-                                    height: `${Math.abs(height)}px`,
-                                    backgroundColor: getProtocolColor(protocol.category),
-                                    opacity: 0.3 + (i * 0.05)
-                                  }}
-                                />
-                              );
-                            })}
+                            {generateTrendBars(protocol.id, protocol.change_7d, 12).map((height, i) => (
+                              <div
+                                key={i}
+                                className="flex-1 rounded-sm"
+                                style={{ 
+                                  height: `${height}px`,
+                                  backgroundColor: getProtocolColor(protocol.category),
+                                  opacity: 0.3 + (i * 0.05)
+                                }}
+                              />
+                            ))}
                           </div>
                         </div>
                       </div>

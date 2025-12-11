@@ -49,25 +49,34 @@ const categoryColors: Record<string, string> = {
   'Derivatives': '#6366f1',
   'Yield': '#84cc16',
   'RWA': '#14b8a6',
+  'Restaking': '#a855f7',
   'Other': '#64748b'
 };
+
+// Deterministic pseudo-random based on seed (for consistent results)
+function seededRandom(seed: number): number {
+  const x = Math.sin(seed) * 10000;
+  return x - Math.floor(x);
+}
 
 async function fetchDefiLlamaData(): Promise<DefiData> {
   console.log('Fetching fresh DeFi data from DefiLlama APIs...');
 
   try {
     // Fetch data from multiple endpoints in parallel
-    const [protocolsResponse, tvlHistoryResponse, volumeResponse, yieldsResponse] = await Promise.all([
+    const [protocolsResponse, tvlHistoryResponse, volumeResponse, yieldsResponse, dexHistoryResponse] = await Promise.all([
       fetch('https://api.llama.fi/protocols'),
       fetch('https://api.llama.fi/v2/historicalChainTvl'),
       fetch('https://api.llama.fi/overview/dexs?excludeTotalDataChart=true&excludeTotalDataChartBreakdown=true'),
-      fetch('https://yields.llama.fi/pools')
+      fetch('https://yields.llama.fi/pools'),
+      fetch('https://api.llama.fi/overview/dexs?excludeTotalDataChartBreakdown=true') // Includes historical chart
     ]);
 
     const protocols = await protocolsResponse.json() as any[];
     const tvlHistory = await tvlHistoryResponse.json() as any[];
     const volumeData = await volumeResponse.json();
     const yieldsData = await yieldsResponse.json();
+    const dexHistoryData = await dexHistoryResponse.json();
 
     // Calculate total TVL from all protocols
     const totalTvl = protocols.reduce((sum, protocol) => sum + (protocol.tvl || 0), 0);
@@ -112,6 +121,16 @@ async function fetchDefiLlamaData(): Promise<DefiData> {
 
     console.log(`Top protocols: ${topProtocols.map(p => `${p.name}($${(p.tvl/1e9).toFixed(1)}B)`).join(', ')}`);
 
+    // Build historical volume map from DEX data if available
+    const volumeHistoryMap: Record<string, number> = {};
+    if (dexHistoryData?.totalDataChart && Array.isArray(dexHistoryData.totalDataChart)) {
+      for (const [timestamp, volume] of dexHistoryData.totalDataChart) {
+        const date = new Date(timestamp * 1000).toISOString().split('T')[0];
+        volumeHistoryMap[date] = volume;
+      }
+      console.log(`Loaded ${Object.keys(volumeHistoryMap).length} days of historical volume data`);
+    }
+
     // Generate historical data from actual TVL history
     const historicalData = [];
     if (Array.isArray(tvlHistory) && tvlHistory.length > 0) {
@@ -119,25 +138,40 @@ async function fetchDefiLlamaData(): Promise<DefiData> {
       const last30Days = tvlHistory.slice(-30);
       for (const entry of last30Days) {
         const date = new Date(entry.date * 1000).toISOString().split('T')[0];
+        const historicalVolume = volumeHistoryMap[date] || totalVolume24h;
+        
+        // Use deterministic yield variation based on date (not random)
+        const dayOfYear = Math.floor(entry.date / 86400);
+        const yieldVariation = 0.95 + (seededRandom(dayOfYear) * 0.1); // ±5% deterministic variation
+        
         historicalData.push({
           date,
           totalTvl: entry.tvl || 0,
-          volume: totalVolume24h * (0.8 + Math.random() * 0.4), // Approximate daily volume variation
-          yield: averageYield * (0.9 + Math.random() * 0.2) // Small variation around average
+          volume: historicalVolume,
+          yield: averageYield * yieldVariation
         });
       }
     }
     
-    // Fallback if no historical data
+    // Fallback if no historical data - use deterministic values
     if (historicalData.length === 0) {
+      console.log('No historical TVL data available, generating deterministic fallback');
       for (let i = 29; i >= 0; i--) {
         const date = new Date();
         date.setDate(date.getDate() - i);
+        const dateStr = date.toISOString().split('T')[0];
+        const daysSeed = Math.floor(date.getTime() / 86400000);
+        
+        // Deterministic variations based on day
+        const tvlVariation = 0.97 + (seededRandom(daysSeed) * 0.06);
+        const volumeVariation = 0.85 + (seededRandom(daysSeed + 1000) * 0.3);
+        const yieldVariation = 0.95 + (seededRandom(daysSeed + 2000) * 0.1);
+        
         historicalData.push({
-          date: date.toISOString().split('T')[0],
-          totalTvl: totalTvl * (0.95 + Math.random() * 0.1),
-          volume: totalVolume24h * (0.8 + Math.random() * 0.4),
-          yield: averageYield * (0.9 + Math.random() * 0.2)
+          date: dateStr,
+          totalTvl: totalTvl * tvlVariation,
+          volume: totalVolume24h * volumeVariation,
+          yield: averageYield * yieldVariation
         });
       }
     }
@@ -182,11 +216,15 @@ async function fetchDefiLlamaData(): Promise<DefiData> {
   } catch (error) {
     console.error('Error fetching DeFi data:', error);
     
-    // Return fallback data if APIs fail
+    // Return deterministic fallback data if APIs fail
+    const fallbackTvl = 200000000000;
+    const fallbackVolume = 50000000000;
+    const fallbackYield = 8.5;
+    
     return {
-      totalTvl: 200000000000,
-      totalVolume24h: 50000000000,
-      averageYield: 8.5,
+      totalTvl: fallbackTvl,
+      totalVolume24h: fallbackVolume,
+      averageYield: fallbackYield,
       protocols: [
         { id: 'lido', name: 'Lido', tvl: 32000000000, change_1d: 2.1, change_7d: 5.3, category: 'Liquid Staking' },
         { id: 'aave', name: 'Aave', tvl: 18000000000, change_1d: -1.2, change_7d: 3.1, category: 'Lending' },
@@ -194,12 +232,15 @@ async function fetchDefiLlamaData(): Promise<DefiData> {
         { id: 'uniswap', name: 'Uniswap', tvl: 12000000000, change_1d: 1.5, change_7d: 4.2, category: 'DEX' },
         { id: 'compound', name: 'Compound', tvl: 8000000000, change_1d: -0.5, change_7d: 1.8, category: 'Lending' }
       ],
-      historicalData: Array.from({ length: 30 }, (_, i) => ({
-        date: new Date(Date.now() - (29 - i) * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-        totalTvl: 200000000000 + Math.random() * 20000000000,
-        volume: 50000000000 + Math.random() * 10000000000,
-        yield: 7 + Math.random() * 4
-      })),
+      historicalData: Array.from({ length: 30 }, (_, i) => {
+        const daysSeed = i;
+        return {
+          date: new Date(Date.now() - (29 - i) * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+          totalTvl: fallbackTvl * (0.97 + seededRandom(daysSeed) * 0.06),
+          volume: fallbackVolume * (0.85 + seededRandom(daysSeed + 1000) * 0.3),
+          yield: fallbackYield * (0.95 + seededRandom(daysSeed + 2000) * 0.1)
+        };
+      }),
       riskDistribution: [
         { name: 'Liquid Staking', value: 38, color: '#06b6d4' },
         { name: 'Lending', value: 31, color: '#8b5cf6' },
