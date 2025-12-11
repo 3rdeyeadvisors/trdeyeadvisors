@@ -29,7 +29,7 @@ const handler = async (req: Request): Promise<Response> => {
     console.log("Sending raffle confirmation email to:", email);
 
     const emailResponse = await resend.emails.send({
-      from: "3rdeyeadvisors <noreply@the3rdeyeadvisors.com>",
+      from: "3rdeyeadvisors <info@the3rdeyeadvisors.com>",
       to: [email],
       subject: "You're officially entered — 3rdeyeadvisors Learn-to-Earn Raffle 🎟",
       html: `

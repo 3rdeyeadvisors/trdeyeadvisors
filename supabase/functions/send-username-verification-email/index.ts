@@ -33,7 +33,7 @@ const handler = async (req: Request): Promise<Response> => {
     const adminEmail = "info@the3rdeyeadvisors.com";
 
     const adminEmailResponse = await resend.emails.send({
-      from: "3rdeyeadvisors <noreply@the3rdeyeadvisors.com>",
+      from: "3rdeyeadvisors <info@the3rdeyeadvisors.com>",
       to: [adminEmail],
       subject: `🔍 New ${platform} Username Submitted - ${raffle_title}`,
       html: `

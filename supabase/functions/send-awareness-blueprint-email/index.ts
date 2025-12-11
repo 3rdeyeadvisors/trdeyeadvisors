@@ -24,7 +24,7 @@ const handler = async (req: Request): Promise<Response> => {
     console.log("Sending Awareness Blueprint email to:", email);
 
     const emailResponse = await resend.emails.send({
-      from: "3rdeyeadvisors <noreply@the3rdeyeadvisors.com>",
+      from: "3rdeyeadvisors <info@the3rdeyeadvisors.com>",
       to: [email],
       subject: "Your Awareness Blueprint (Download Inside)",
       html: `

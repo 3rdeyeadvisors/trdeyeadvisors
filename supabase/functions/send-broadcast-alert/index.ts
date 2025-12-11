@@ -99,7 +99,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send alert email
     const { data: emailData, error: emailError } = await resend.emails.send({
-      from: '3rdeyeadvisors Alerts <noreply@the3rdeyeadvisors.com>',
+      from: '3rdeyeadvisors Alerts <info@the3rdeyeadvisors.com>',
       to: ['3rdeyeadvisors@gmail.com'],
       subject: '⚠️ 3EA DeFi Broadcast Issue Detected',
       html: emailHtml,
