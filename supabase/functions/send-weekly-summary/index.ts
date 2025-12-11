@@ -221,7 +221,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send summary email
     const { data: emailData, error: emailError } = await resend.emails.send({
-      from: '3rdeyeadvisors Reports <noreply@the3rdeyeadvisors.com>',
+      from: '3rdeyeadvisors Reports <info@the3rdeyeadvisors.com>',
       to: ['3rdeyeadvisors@gmail.com'],
       subject: `📊 3EA DeFi Broadcast Weekly Summary - ${successRate}% Success Rate`,
       html: emailHtml,

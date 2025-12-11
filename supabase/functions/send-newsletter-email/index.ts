@@ -59,7 +59,7 @@ const handler = async (req: Request): Promise<Response> => {
       const firstName = subscriber.name ? subscriber.name.split(" ")[0] : "Reader";
       
       return resend.emails.send({
-        from: "3rdeyeadvisors <noreply@the3rdeyeadvisors.com>",
+        from: "3rdeyeadvisors <info@the3rdeyeadvisors.com>",
         to: [subscriber.email],
         subject: `New Blog Post: ${blogTitle}`,
         html: `

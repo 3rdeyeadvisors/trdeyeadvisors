@@ -321,7 +321,7 @@ const handler = async (req: Request): Promise<Response> => {
     for (const subscriber of subscribers) {
       try {
         const { error: sendError } = await resend.emails.send({
-          from: '3rdeyeadvisors <noreply@the3rdeyeadvisors.com>',
+          from: '3rdeyeadvisors <info@the3rdeyeadvisors.com>',
           to: [subscriber.email],
           subject: subjectLine,
           html: emailHtml,

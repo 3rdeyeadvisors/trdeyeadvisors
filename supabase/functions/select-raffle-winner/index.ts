@@ -79,7 +79,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send winner notification
     await resend.emails.send({
-      from: "3rdeyeadvisors <noreply@the3rdeyeadvisors.com>",
+      from: "3rdeyeadvisors <info@the3rdeyeadvisors.com>",
       to: [winnerEmail?.email || ''],
       subject: "🎉 YOU WON! 3rdeyeadvisors Raffle Winner",
       html: `
@@ -133,7 +133,7 @@ const handler = async (req: Request): Promise<Response> => {
       
       if (email) {
         await resend.emails.send({
-          from: "3rdeyeadvisors <noreply@the3rdeyeadvisors.com>",
+          from: "3rdeyeadvisors <info@the3rdeyeadvisors.com>",
           to: [email],
           subject: "Raffle Results - Thank You for Participating!",
           html: `

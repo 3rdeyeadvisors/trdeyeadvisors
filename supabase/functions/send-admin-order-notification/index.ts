@@ -98,7 +98,7 @@ const handler = async (req: Request): Promise<Response> => {
     `;
 
     const emailResponse = await resend.emails.send({
-      from: "3rdeyeadvisors Store <notifications@the3rdeyeadvisors.com>",
+      from: "3rdeyeadvisors Store <info@the3rdeyeadvisors.com>",
       reply_to: customer_email,
       to: ["info@the3rdeyeadvisors.com"],
       subject: `🛒 New order #${order_id} — $${(total / 100).toFixed(2)}`,

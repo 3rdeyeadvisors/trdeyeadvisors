@@ -45,7 +45,7 @@ const handler = async (req: Request): Promise<Response> => {
     for (const subscriber of subscribers) {
       try {
         const result = await resend.emails.send({
-        from: "3rdeyeadvisors <noreply@the3rdeyeadvisors.com>",
+        from: "3rdeyeadvisors <info@the3rdeyeadvisors.com>",
         to: [subscriber.email],
         subject: "🎟 Learn to Earn — Join Our $50 Bitcoin Raffle Now",
         html: `
