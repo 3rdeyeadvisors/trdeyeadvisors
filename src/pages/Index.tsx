@@ -185,31 +185,31 @@ const Index = () => {
         </section>
 
         {/* What You'll Learn Section */}
-        <section className="py-16 md:py-24 lg:py-32 bg-background">
+        <section className="py-20 md:py-28 bg-card/30">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12 md:mb-16">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-4">
+            <div className="text-center mb-14">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-5">
                 What You'll Learn
               </h2>
-              <p className="text-lg md:text-xl text-muted-foreground font-consciousness max-w-2xl mx-auto">
+              <p className="text-lg md:text-xl text-foreground/70 font-consciousness max-w-2xl mx-auto">
                 Practical skills for navigating the decentralized future
               </p>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {whatYoullLearn.map((item, index) => (
                 <Card 
                   key={item.title}
-                  className="p-6 md:p-8 bg-card/60 border-border hover:border-primary/40 transition-all duration-cosmic hover:shadow-consciousness group"
+                  className="p-6 bg-card border-border/50 hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 group"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mb-5 group-hover:bg-primary/20 transition-colors">
-                    <item.icon className="w-7 h-7 text-primary group-hover:text-primary-glow transition-colors" />
+                  <div className="w-12 h-12 rounded-xl bg-primary/15 flex items-center justify-center mb-4 group-hover:bg-primary/25 transition-colors">
+                    <item.icon className="w-6 h-6 text-primary" />
                   </div>
-                  <h3 className="text-xl font-consciousness font-semibold text-foreground mb-3">
+                  <h3 className="text-lg font-consciousness font-semibold text-foreground mb-2">
                     {item.title}
                   </h3>
-                  <p className="text-muted-foreground font-consciousness leading-relaxed">
+                  <p className="text-sm text-foreground/60 font-consciousness leading-relaxed">
                     {item.description}
                   </p>
                 </Card>
@@ -219,23 +219,22 @@ const Index = () => {
         </section>
 
         {/* What is 3EA? */}
-        <section className="py-16 md:py-24 lg:py-32 bg-muted/20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Card className="p-8 md:p-12 lg:p-16 bg-gradient-consciousness border-primary/20 shadow-consciousness max-w-5xl mx-auto hover:shadow-[0_0_30px_hsl(var(--primary)/0.4),0_0_60px_hsl(var(--accent)/0.3)] hover:border-primary/40 transition-all duration-consciousness cursor-pointer group animate-consciousness-glow hover:animate-none">
+        <section className="py-20 md:py-28 bg-background">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <Card className="p-8 md:p-12 bg-card border-primary/30 shadow-lg shadow-primary/5">
               <div className="text-center">
-                <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-8 group-hover:bg-primary/20 transition-colors">
-                  <Target className="w-10 h-10 text-primary" />
+                <div className="w-16 h-16 rounded-2xl bg-primary/15 flex items-center justify-center mx-auto mb-6">
+                  <Target className="w-8 h-8 text-primary" />
                 </div>
-                <h2 className="text-2xl md:text-3xl lg:text-4xl font-consciousness font-bold text-foreground mb-6 group-hover:text-primary-glow transition-colors duration-cosmic">
+                <h2 className="text-2xl md:text-3xl lg:text-4xl font-consciousness font-bold text-foreground mb-5">
                   What is 3EA?
                 </h2>
-                <p className="text-lg md:text-xl text-foreground/90 font-consciousness leading-relaxed mb-6">
+                <p className="text-lg md:text-xl text-foreground/85 font-consciousness leading-relaxed mb-4">
                   3EA (3rdeyeadvisors) is a conscious financial awareness movement focused on clarity, education, and decentralized participation.
                 </p>
-                <p className="text-base md:text-lg text-muted-foreground font-consciousness leading-relaxed">
+                <p className="text-base md:text-lg text-foreground/60 font-consciousness leading-relaxed">
                   We cut through the noise to help you understand how new financial systems work—not through hype or promises, 
-                  but through genuine learning and conscious evolution. This is about awakening awareness and building real knowledge 
-                  in a world shifting toward decentralized protocols.
+                  but through genuine learning and conscious evolution.
                 </p>
               </div>
             </Card>
@@ -243,31 +242,31 @@ const Index = () => {
         </section>
 
         {/* Platform Features */}
-        <section className="py-16 md:py-24 lg:py-32 bg-background">
+        <section className="py-20 md:py-28 bg-card/30">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12 md:mb-16">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-4">
+            <div className="text-center mb-14">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-5">
                 Everything You Need to Succeed
               </h2>
-              <p className="text-lg md:text-xl text-muted-foreground font-consciousness max-w-2xl mx-auto">
+              <p className="text-lg md:text-xl text-foreground/70 font-consciousness max-w-2xl mx-auto">
                 A complete learning platform designed for your success
               </p>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {platformFeatures.map((feature, index) => (
                 <Card 
                   key={feature.title}
-                  className="p-6 bg-card border-border hover:border-primary/30 transition-all duration-cosmic hover:shadow-lg group text-center"
+                  className="p-6 bg-card border-border/50 hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 group text-center"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
+                  <div className="w-12 h-12 rounded-xl bg-primary/15 flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/25 transition-colors">
                     <feature.icon className="w-6 h-6 text-primary" />
                   </div>
                   <h3 className="text-lg font-consciousness font-semibold text-foreground mb-2">
                     {feature.title}
                   </h3>
-                  <p className="text-sm text-muted-foreground font-consciousness">
+                  <p className="text-sm text-foreground/60 font-consciousness">
                     {feature.description}
                   </p>
                 </Card>
@@ -277,29 +276,29 @@ const Index = () => {
         </section>
 
         {/* The Awareness Engine */}
-        <section className="py-16 md:py-24 lg:py-32 bg-muted/20">
+        <section className="py-20 md:py-28 bg-background">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12 md:mb-16">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-4">
+            <div className="text-center mb-14">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-5">
                 The Awareness Engine
               </h2>
-              <p className="text-lg md:text-xl text-muted-foreground font-consciousness max-w-2xl mx-auto">
+              <p className="text-lg md:text-xl text-foreground/70 font-consciousness max-w-2xl mx-auto">
                 A continuous cycle of learning, participation, and growth
               </p>
             </div>
             
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6 lg:gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-5">
               {awarenessSteps.map((step, index) => (
                 <Card 
                   key={step.title}
-                  className="p-5 md:p-6 bg-card/60 border-border hover:border-primary/40 transition-all duration-cosmic hover:shadow-consciousness group text-center"
+                  className="p-5 bg-card border-border/50 hover:border-accent/50 transition-all duration-300 hover:shadow-lg hover:shadow-accent/10 group text-center"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  <step.icon className="w-10 h-10 md:w-12 md:h-12 text-primary group-hover:text-primary-glow transition-colors mx-auto mb-3 md:mb-4" />
-                  <h3 className="text-lg md:text-xl font-consciousness font-semibold text-foreground mb-2 md:mb-3">
+                  <step.icon className="w-10 h-10 text-accent mx-auto mb-3" />
+                  <h3 className="text-base md:text-lg font-consciousness font-semibold text-foreground mb-2">
                     {step.title}
                   </h3>
-                  <p className="text-xs md:text-sm text-muted-foreground font-consciousness">
+                  <p className="text-xs md:text-sm text-foreground/60 font-consciousness">
                     {step.description}
                   </p>
                 </Card>
@@ -309,44 +308,44 @@ const Index = () => {
         </section>
 
         {/* The Vault Layers */}
-        <section className="py-16 md:py-24 lg:py-32 bg-background">
+        <section className="py-20 md:py-28 bg-card/30">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12 md:mb-16">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-4">
+            <div className="text-center mb-14">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-5">
                 The Vault Layers
               </h2>
-              <p className="text-lg md:text-xl text-muted-foreground font-consciousness max-w-2xl mx-auto">
+              <p className="text-lg md:text-xl text-foreground/70 font-consciousness max-w-2xl mx-auto">
                 Progress through levels as you build your knowledge
               </p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {vaultLayers.map((vault, index) => (
                 <Card 
                   key={vault.title}
-                  className="relative p-6 md:p-8 bg-gradient-consciousness border-primary/20 shadow-consciousness hover:shadow-[0_0_30px_hsl(var(--primary)/0.4),0_0_60px_hsl(var(--accent)/0.3)] hover:border-primary/40 transition-all duration-consciousness group"
+                  className="relative p-6 bg-card border-border/50 hover:border-accent/50 transition-all duration-300 hover:shadow-lg hover:shadow-accent/10 group"
                   style={{ animationDelay: `${index * 0.2}s` }}
                 >
-                  <span className="absolute top-3 left-3 text-[10px] uppercase tracking-wider text-primary-foreground bg-primary/90 px-2 py-0.5 rounded-full font-consciousness font-semibold shadow-lg z-10">
+                  <span className="absolute top-4 right-4 text-[10px] uppercase tracking-wider text-foreground bg-accent/20 border border-accent/30 px-2 py-1 rounded font-consciousness font-medium">
                     Coming Soon
                   </span>
-                  <div className="text-center mb-6">
-                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-background/50 backdrop-blur-sm flex items-center justify-center mx-auto mb-4 border border-accent/30">
-                      <vault.icon className="w-8 h-8 md:w-10 md:h-10 text-accent group-hover:text-accent-glow transition-colors" />
+                  <div className="text-center mb-5 pt-2">
+                    <div className="w-14 h-14 rounded-2xl bg-accent/15 flex items-center justify-center mx-auto mb-4">
+                      <vault.icon className="w-7 h-7 text-accent" />
                     </div>
-                    <span className="inline-block text-xs uppercase tracking-wider text-accent-foreground bg-accent/30 px-3 py-1 rounded-full font-consciousness font-medium">
+                    <span className="inline-block text-[11px] uppercase tracking-wider text-accent bg-accent/10 px-3 py-1 rounded-full font-consciousness font-medium">
                       {vault.subtitle}
                     </span>
-                    <h3 className="text-xl md:text-2xl font-consciousness font-bold text-foreground mt-3 group-hover:text-primary-glow transition-colors duration-cosmic">
+                    <h3 className="text-xl font-consciousness font-bold text-foreground mt-3">
                       {vault.title}
                     </h3>
                   </div>
-                  <p className="text-foreground/90 font-consciousness leading-relaxed text-center mb-6">
+                  <p className="text-sm text-foreground/70 font-consciousness leading-relaxed text-center mb-5">
                     {vault.description}
                   </p>
-                  <ul className="space-y-3">
+                  <ul className="space-y-2">
                     {vault.features.map((feature, i) => (
-                      <li key={i} className="flex items-center text-sm text-foreground font-consciousness bg-background/40 backdrop-blur-sm rounded-md px-3 py-2 border border-accent/20">
+                      <li key={i} className="flex items-center text-sm text-foreground/80 font-consciousness bg-background/50 rounded-lg px-3 py-2">
                         <CheckCircle2 className="w-4 h-4 text-accent mr-3 flex-shrink-0" />
                         {feature}
                       </li>
@@ -359,23 +358,23 @@ const Index = () => {
         </section>
 
         {/* Why This Matters */}
-        <section className="py-16 md:py-24 lg:py-32 bg-muted/20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Card className="p-8 md:p-12 lg:p-16 bg-card/60 border-border max-w-5xl mx-auto">
+        <section className="py-20 md:py-28 bg-background">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <Card className="p-8 md:p-12 bg-card border-border/50">
               <div className="text-center">
-                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-8">
-                  <Zap className="w-8 h-8 text-primary" />
+                <div className="w-14 h-14 rounded-2xl bg-awareness/15 flex items-center justify-center mx-auto mb-6">
+                  <Zap className="w-7 h-7 text-awareness" />
                 </div>
-                <h2 className="text-2xl md:text-3xl lg:text-4xl font-consciousness font-bold text-foreground mb-6">
+                <h2 className="text-2xl md:text-3xl lg:text-4xl font-consciousness font-bold text-foreground mb-5">
                   Why This Matters
                 </h2>
-                <p className="text-lg md:text-xl text-muted-foreground font-consciousness leading-relaxed mb-6">
+                <p className="text-base md:text-lg text-foreground/70 font-consciousness leading-relaxed mb-4">
                   The world is shifting into new financial systems—decentralized, transparent, and powered by code rather than institutions. 
-                  Financial awareness isn't just about making money; it's about understanding the rules of the game and participating consciously.
+                  Financial awareness isn't just about making money; it's about understanding the rules of the game.
                 </p>
-                <p className="text-base md:text-lg text-muted-foreground font-consciousness leading-relaxed">
+                <p className="text-base md:text-lg text-foreground/60 font-consciousness leading-relaxed">
                   Those who learn how these systems work will navigate the future with clarity and confidence. 
-                  Those who don't will remain stuck in outdated patterns. <span className="text-primary font-semibold">The choice is yours—awaken your awareness or stay programmed.</span>
+                  <span className="text-primary font-semibold"> The choice is yours—awaken your awareness or stay programmed.</span>
                 </p>
               </div>
             </Card>
@@ -383,15 +382,15 @@ const Index = () => {
         </section>
 
         {/* Final CTA */}
-        <section className="py-16 md:py-24 lg:py-32 bg-background">
+        <section className="py-20 md:py-28 bg-card/30">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-6">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-5">
               Ready to Begin Your Journey?
             </h2>
-            <p className="text-lg md:text-xl text-muted-foreground font-consciousness mb-10 max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-foreground/70 font-consciousness mb-10 max-w-2xl mx-auto">
               Start learning about decentralized systems today. No hype. No confusion. Just clear, conscious education.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center w-full">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center w-full">
               <Link to="/courses" className="w-full sm:w-auto flex justify-center">
                 <Button 
                   variant="cosmic" 
@@ -418,7 +417,7 @@ const Index = () => {
         </section>
 
         {/* Newsletter Signup */}
-        <section className="py-16 md:py-24 lg:py-32 bg-muted/10">
+        <section className="py-20 md:py-28 bg-background">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <NewsletterSignup variant="cosmic" />
           </div>
