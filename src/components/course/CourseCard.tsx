@@ -101,17 +101,13 @@ export const CourseCard = ({ course, index, onStartCourse, onAuthRequired }: Cou
   };
 
   const handleStartCourse = () => {
-    if (!user) {
-      onAuthRequired();
-      return;
-    }
-
-    // For paid courses, check if user has access
-    if (course.category === 'paid' && hasAccess === false) {
+    // For paid courses without access, check auth first then purchase
+    if (course.category === 'paid' && user && hasAccess === false) {
       handlePurchaseCourse();
       return;
     }
 
+    // Allow all users (including visitors) to view course details
     onStartCourse(course.id);
   };
 
