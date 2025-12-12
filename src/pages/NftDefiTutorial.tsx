@@ -455,7 +455,7 @@ const NftDefiTutorial = () => {
                   className={`p-3 rounded cursor-pointer transition-colors ${
                     currentStep === index ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'
                   }`}
-                  onClick={() => setCurrentStep(index)}
+                  onClick={() => handleStepChange(index)}
                 >
                   <div className="flex items-center gap-2">
                   {completedSteps.includes(index) ? (
@@ -483,8 +483,14 @@ const NftDefiTutorial = () => {
               <div className="flex justify-between mt-6">
                 <Button
                   variant="outline"
-                  onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
-                  disabled={currentStep === 0}
+                  onClick={() => {
+                    if (!user) {
+                      toast.error("Sign in required", { description: "Please sign in to navigate the tutorial" });
+                      return;
+                    }
+                    setCurrentStep(Math.max(0, currentStep - 1));
+                  }}
+                  disabled={currentStep === 0 || !user}
                 >
                   Previous
                 </Button>
@@ -500,6 +506,10 @@ const NftDefiTutorial = () => {
                   
                   <Button
                     onClick={() => {
+                      if (!user) {
+                        toast.error("Sign in required", { description: "Please sign in to progress through the tutorial" });
+                        return;
+                      }
                       if (currentStep === steps.length - 1) {
                         handleStepComplete(currentStep);
                         
@@ -518,6 +528,7 @@ const NftDefiTutorial = () => {
                         setCurrentStep(Math.min(steps.length - 1, currentStep + 1));
                       }
                     }}
+                    disabled={!user}
                   >
                     {currentStep === steps.length - 1 ? 'Finish Tutorial' : 'Next'}
                   </Button>

@@ -54,7 +54,7 @@ export const StepNavigation = ({
                   ${completed ? "bg-awareness/10 text-awareness hover:bg-awareness/20 border-awareness" : ""}
                   ${current ? "ring-2 ring-primary" : ""}
                 `}
-                disabled={!isAuthenticated}
+                disabled={!isAuthenticated && step.id !== 1}
               >
                 <StepIcon className="h-4 w-4 shrink-0" />
                 <span className="flex-1 text-left truncate">{step.title}</span>
