@@ -26,13 +26,15 @@ import {
   DollarSign,
   TrendingUp,
   Eye,
-  RefreshCw
+  RefreshCw,
+  Lock
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SEO from "@/components/SEO";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { DesktopOnlyNotice } from "@/components/DesktopOnlyNotice";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 const FirstDexSwapTutorial = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -40,6 +42,8 @@ const FirstDexSwapTutorial = () => {
   const [selectedDex, setSelectedDex] = useState("uniswap");
   const { toast } = useToast();
   const isMobile = useIsMobile();
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const totalSteps = 8;
   const progress = (currentStep / totalSteps) * 100;
@@ -382,6 +386,10 @@ const FirstDexSwapTutorial = () => {
   const currentStepData = steps.find(step => step.id === currentStep);
 
   const handleNext = () => {
+    if (!user) {
+      toast({ title: "Sign in required", description: "Please sign in to progress through the tutorial", variant: "destructive" });
+      return;
+    }
     if (currentStep < totalSteps) {
       setCompletedSteps(prev => [...prev, currentStep]);
       setCurrentStep(currentStep + 1);
@@ -406,12 +414,20 @@ const FirstDexSwapTutorial = () => {
   };
 
   const handlePrevious = () => {
+    if (!user) {
+      toast({ title: "Sign in required", description: "Please sign in to navigate the tutorial", variant: "destructive" });
+      return;
+    }
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
     }
   };
 
   const handleStepComplete = () => {
+    if (!user) {
+      toast({ title: "Sign in required", description: "Please sign in to track your progress", variant: "destructive" });
+      return;
+    }
     setCompletedSteps(prev => [...prev, currentStep]);
     toast({
       title: "Step completed!",
