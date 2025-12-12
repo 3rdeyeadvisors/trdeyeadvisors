@@ -958,14 +958,14 @@ const AdvancedDefiProtocolsTutorial = () => {
                     <h3 className="text-lg font-semibold mb-4">Protocol Categories</h3>
                     <div className="grid gap-4">
                       {currentStepData.content.protocolCategories.map((cat: any, idx: number) => (
-                        <Card key={idx} className="p-4">
-                          <h4 className="font-semibold text-primary mb-2">{cat.category}</h4>
-                          <p className="text-sm text-muted-foreground mb-3">{cat.description}</p>
-                          <div className="grid grid-cols-2 gap-2 text-sm">
-                            <div><span className="font-medium">Protocols:</span> {cat.protocols.join(', ')}</div>
+                        <Card key={idx} className="p-3 md:p-4">
+                          <h4 className="font-semibold text-primary mb-2 text-sm md:text-base">{cat.category}</h4>
+                          <p className="text-xs md:text-sm text-muted-foreground mb-3">{cat.description}</p>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs md:text-sm">
+                            <div className="break-words"><span className="font-medium">Protocols:</span> {cat.protocols.join(', ')}</div>
                             <div><span className="font-medium">Yields:</span> {cat.yields}</div>
-                            <div><span className="font-medium">Complexity:</span> <Badge variant="outline">{cat.complexity}</Badge></div>
-                            <div><span className="font-medium">Risks:</span> {cat.risks.join(', ')}</div>
+                            <div className="flex items-center gap-1 flex-wrap"><span className="font-medium">Complexity:</span> <Badge variant="outline" className="text-xs">{cat.complexity}</Badge></div>
+                            <div className="break-words"><span className="font-medium">Risks:</span> {cat.risks.join(', ')}</div>
                           </div>
                         </Card>
                       ))}
@@ -987,14 +987,14 @@ const AdvancedDefiProtocolsTutorial = () => {
                     <h3 className="text-lg font-semibold mb-4">Core Protocols</h3>
                     <div className="grid gap-4">
                       {currentStepData.content.coreProtocols.map((protocol: any, idx: number) => (
-                        <Card key={idx} className="p-4">
-                          <div className="flex justify-between items-start mb-2">
-                            <h4 className="font-semibold text-primary">{protocol.protocol}</h4>
-                            <Badge>{protocol.riskLevel}</Badge>
+                        <Card key={idx} className="p-3 md:p-4">
+                          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-2">
+                            <h4 className="font-semibold text-primary text-sm md:text-base">{protocol.protocol}</h4>
+                            <Badge className="w-fit text-xs">{protocol.riskLevel}</Badge>
                           </div>
-                          <p className="text-sm mb-2"><strong>Best for:</strong> {protocol.bestFor}</p>
-                          <p className="text-sm mb-2"><strong>Features:</strong> {protocol.features.join(', ')}</p>
-                          <p className="text-sm text-muted-foreground">{protocol.advantages.join(' • ')}</p>
+                          <p className="text-xs md:text-sm mb-2"><strong>Best for:</strong> {protocol.bestFor}</p>
+                          <p className="text-xs md:text-sm mb-2 break-words"><strong>Features:</strong> {protocol.features.join(', ')}</p>
+                          <p className="text-xs text-muted-foreground break-words">{protocol.advantages.join(' • ')}</p>
                         </Card>
                       ))}
                     </div>
@@ -1004,15 +1004,15 @@ const AdvancedDefiProtocolsTutorial = () => {
                       <h3 className="text-lg font-semibold mb-4">Advanced Strategies</h3>
                       <div className="space-y-3">
                         {currentStepData.content.advancedStrategies.map((strategy: any, idx: number) => (
-                          <Card key={idx} className="p-4">
-                            <div className="flex justify-between items-start mb-2">
-                              <h4 className="font-semibold">{strategy.strategy}</h4>
-                              <Badge variant="outline">{strategy.riskLevel}</Badge>
+                          <Card key={idx} className="p-3 md:p-4">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-2">
+                              <h4 className="font-semibold text-sm md:text-base">{strategy.strategy}</h4>
+                              <Badge variant="outline" className="w-fit text-xs">{strategy.riskLevel}</Badge>
                             </div>
-                            <p className="text-sm mb-2">{strategy.description}</p>
-                            <p className="text-sm text-primary mb-1"><strong>Example:</strong> {strategy.example}</p>
+                            <p className="text-xs md:text-sm mb-2">{strategy.description}</p>
+                            <p className="text-xs md:text-sm text-primary mb-1 break-words"><strong>Example:</strong> {strategy.example}</p>
                             {strategy.considerations && (
-                              <p className="text-xs text-muted-foreground">⚠️ {strategy.considerations.join(' • ')}</p>
+                              <p className="text-xs text-muted-foreground break-words">⚠️ {strategy.considerations.join(' • ')}</p>
                             )}
                           </Card>
                         ))}
@@ -1035,14 +1035,14 @@ const AdvancedDefiProtocolsTutorial = () => {
                     <h3 className="text-lg font-semibold mb-4">Popular Protocols</h3>
                     <div className="grid gap-4">
                       {currentStepData.content.popularProtocols.map((protocol: any, idx: number) => (
-                        <Card key={idx} className="p-4">
-                          <div className="flex justify-between items-start mb-2">
-                            <h4 className="font-semibold text-primary">{protocol.protocol}</h4>
-                            <Badge>{protocol.riskLevel}</Badge>
+                        <Card key={idx} className="p-3 md:p-4">
+                          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-2">
+                            <h4 className="font-semibold text-primary text-sm md:text-base">{protocol.protocol}</h4>
+                            <Badge className="w-fit text-xs">{protocol.riskLevel}</Badge>
                           </div>
-                          <p className="text-sm mb-2">{protocol.specialty} (Max {protocol.maxLeverage})</p>
-                          <p className="text-xs text-muted-foreground mb-2">Pools: {protocol.supportedPools.join(', ')}</p>
-                          <p className="text-xs">{protocol.features.join(' • ')}</p>
+                          <p className="text-xs md:text-sm mb-2">{protocol.specialty} (Max {protocol.maxLeverage})</p>
+                          <p className="text-xs text-muted-foreground mb-2 break-words">Pools: {protocol.supportedPools.join(', ')}</p>
+                          <p className="text-xs break-words">{protocol.features.join(' • ')}</p>
                         </Card>
                       ))}
                     </div>
@@ -1084,13 +1084,13 @@ const AdvancedDefiProtocolsTutorial = () => {
                     <h3 className="text-lg font-semibold mb-4">Major Protocols</h3>
                     <div className="grid gap-3">
                       {currentStepData.content.majorProtocols.map((protocol: any, idx: number) => (
-                        <Card key={idx} className="p-4">
-                          <div className="flex justify-between items-start mb-2">
-                            <h4 className="font-semibold text-primary">{protocol.protocol}</h4>
-                            <Badge>{protocol.liquidity} Liquidity</Badge>
+                        <Card key={idx} className="p-3 md:p-4">
+                          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-2">
+                            <h4 className="font-semibold text-primary text-sm md:text-base">{protocol.protocol}</h4>
+                            <Badge className="w-fit text-xs">{protocol.liquidity} Liquidity</Badge>
                           </div>
-                          <p className="text-sm mb-1">{protocol.type}</p>
-                          <p className="text-xs text-muted-foreground">Assets: {protocol.assets.join(', ')}</p>
+                          <p className="text-xs md:text-sm mb-1">{protocol.type}</p>
+                          <p className="text-xs text-muted-foreground break-words">Assets: {protocol.assets.join(', ')}</p>
                         </Card>
                       ))}
                     </div>
@@ -1100,13 +1100,13 @@ const AdvancedDefiProtocolsTutorial = () => {
                       <h3 className="text-lg font-semibold mb-4">Strategies Guide</h3>
                       <div className="space-y-3">
                         {currentStepData.content.strategiesGuide.map((strategy: any, idx: number) => (
-                          <Card key={idx} className="p-4">
-                            <h4 className="font-semibold mb-2">{strategy.strategy}</h4>
-                            <p className="text-sm mb-2">{strategy.description}</p>
+                          <Card key={idx} className="p-3 md:p-4">
+                            <h4 className="font-semibold mb-2 text-sm md:text-base">{strategy.strategy}</h4>
+                            <p className="text-xs md:text-sm mb-2">{strategy.description}</p>
                             <div className="text-xs space-y-1 text-muted-foreground">
-                              <p><strong>When:</strong> {strategy.when}</p>
-                              <p><strong>How:</strong> {strategy.howItWorks}</p>
-                              <p className="text-awareness"><strong>Best for:</strong> {strategy.suitability}</p>
+                              <p className="break-words"><strong>When:</strong> {strategy.when}</p>
+                              <p className="break-words"><strong>How:</strong> {strategy.howItWorks}</p>
+                              <p className="text-awareness break-words"><strong>Best for:</strong> {strategy.suitability}</p>
                             </div>
                           </Card>
                         ))}
@@ -1120,22 +1120,22 @@ const AdvancedDefiProtocolsTutorial = () => {
               {currentStep === 5 && currentStepData.content.majorProtocols && (
                 <div className="space-y-6">
                   {currentStepData.content.syntheticsExplained && (
-                    <Card className="p-4 bg-muted/50">
-                      <h3 className="font-semibold mb-2">What are Synthetics?</h3>
-                      <p className="text-sm mb-2">{currentStepData.content.syntheticsExplained.definition}</p>
-                      <p className="text-xs text-muted-foreground">Advantages: {currentStepData.content.syntheticsExplained.advantages.join(' • ')}</p>
+                    <Card className="p-3 md:p-4 bg-muted/50">
+                      <h3 className="font-semibold mb-2 text-sm md:text-base">What are Synthetics?</h3>
+                      <p className="text-xs md:text-sm mb-2">{currentStepData.content.syntheticsExplained.definition}</p>
+                      <p className="text-xs text-muted-foreground break-words">Advantages: {currentStepData.content.syntheticsExplained.advantages.join(' • ')}</p>
                     </Card>
                   )}
                   <div>
                     <h3 className="text-lg font-semibold mb-4">Major Protocols</h3>
                     <div className="grid gap-3">
                       {currentStepData.content.majorProtocols.map((protocol: any, idx: number) => (
-                        <Card key={idx} className="p-4">
-                          <h4 className="font-semibold text-primary mb-2">{protocol.protocol}</h4>
-                          <div className="text-sm space-y-1">
-                            <p><strong>Assets:</strong> {protocol.assets.join(', ')}</p>
-                            <p><strong>Collateral:</strong> {protocol.collateral} ({protocol.collateralRatio})</p>
-                            <p className="text-xs text-muted-foreground">{protocol.features.join(' • ')}</p>
+                        <Card key={idx} className="p-3 md:p-4">
+                          <h4 className="font-semibold text-primary mb-2 text-sm md:text-base">{protocol.protocol}</h4>
+                          <div className="text-xs md:text-sm space-y-1">
+                            <p className="break-words"><strong>Assets:</strong> {protocol.assets.join(', ')}</p>
+                            <p className="break-words"><strong>Collateral:</strong> {protocol.collateral} ({protocol.collateralRatio})</p>
+                            <p className="text-xs text-muted-foreground break-words">{protocol.features.join(' • ')}</p>
                           </div>
                         </Card>
                       ))}
@@ -1146,12 +1146,12 @@ const AdvancedDefiProtocolsTutorial = () => {
                       <h3 className="text-lg font-semibold mb-4">Use Cases</h3>
                       <div className="space-y-3">
                         {currentStepData.content.useCases.map((useCase: any, idx: number) => (
-                          <Card key={idx} className="p-4">
-                            <h4 className="font-semibold mb-2">{useCase.useCase}</h4>
-                            <p className="text-sm mb-2"><strong>Example:</strong> {useCase.example}</p>
-                            <div className="text-xs">
-                              <p className="text-awareness">Benefits: {useCase.benefits.join(', ')}</p>
-                              <p className="text-destructive">Risks: {useCase.risks.join(', ')}</p>
+                          <Card key={idx} className="p-3 md:p-4">
+                            <h4 className="font-semibold mb-2 text-sm md:text-base">{useCase.useCase}</h4>
+                            <p className="text-xs md:text-sm mb-2 break-words"><strong>Example:</strong> {useCase.example}</p>
+                            <div className="text-xs space-y-1">
+                              <p className="text-awareness break-words">Benefits: {useCase.benefits.join(', ')}</p>
+                              <p className="text-destructive break-words">Risks: {useCase.risks.join(', ')}</p>
                             </div>
                           </Card>
                         ))}
@@ -1168,14 +1168,14 @@ const AdvancedDefiProtocolsTutorial = () => {
                     <h3 className="text-lg font-semibold mb-4">Integration Approaches</h3>
                     <div className="space-y-3">
                       {currentStepData.content.integrationApproaches.map((approach: any, idx: number) => (
-                        <Card key={idx} className="p-4">
-                          <div className="flex justify-between items-start mb-2">
-                            <h4 className="font-semibold">{approach.approach}</h4>
-                            <Badge>{approach.complexity}</Badge>
+                        <Card key={idx} className="p-3 md:p-4">
+                          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-2">
+                            <h4 className="font-semibold text-sm md:text-base">{approach.approach}</h4>
+                            <Badge className="w-fit text-xs">{approach.complexity}</Badge>
                           </div>
-                          <p className="text-sm mb-2">{approach.description}</p>
-                          <p className="text-xs text-primary mb-1"><strong>Example:</strong> {approach.example}</p>
-                          <p className="text-xs text-muted-foreground">Benefits: {approach.benefits.join(' • ')}</p>
+                          <p className="text-xs md:text-sm mb-2">{approach.description}</p>
+                          <p className="text-xs text-primary mb-1 break-words"><strong>Example:</strong> {approach.example}</p>
+                          <p className="text-xs text-muted-foreground break-words">Benefits: {approach.benefits.join(' • ')}</p>
                         </Card>
                       ))}
                     </div>
@@ -1185,16 +1185,16 @@ const AdvancedDefiProtocolsTutorial = () => {
                       <h3 className="text-lg font-semibold mb-4">Advanced Combinations</h3>
                       <div className="space-y-3">
                         {currentStepData.content.advancedCombinations.map((strategy: any, idx: number) => (
-                          <Card key={idx} className="p-4">
-                            <div className="flex justify-between items-start mb-2">
-                              <h4 className="font-semibold">{strategy.strategy}</h4>
-                              <Badge variant="outline">{strategy.riskLevel}</Badge>
+                          <Card key={idx} className="p-3 md:p-4">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-2">
+                              <h4 className="font-semibold text-sm md:text-base">{strategy.strategy}</h4>
+                              <Badge variant="outline" className="w-fit text-xs">{strategy.riskLevel}</Badge>
                             </div>
-                            <p className="text-sm mb-2">Protocols: {strategy.protocols.join(', ')}</p>
-                            <p className="text-sm text-awareness mb-1"><strong>Target Yield:</strong> {strategy.targetYield}</p>
+                            <p className="text-xs md:text-sm mb-2 break-words">Protocols: {strategy.protocols.join(', ')}</p>
+                            <p className="text-xs md:text-sm text-awareness mb-1"><strong>Target Yield:</strong> {strategy.targetYield}</p>
                             <ul className="text-xs space-y-1 list-disc list-inside text-muted-foreground">
                               {strategy.process.map((step: string, i: number) => (
-                                <li key={i}>{step}</li>
+                                <li key={i} className="break-words">{step}</li>
                               ))}
                             </ul>
                           </Card>
@@ -1212,12 +1212,12 @@ const AdvancedDefiProtocolsTutorial = () => {
                     <h3 className="text-lg font-semibold mb-4">Risk Categories</h3>
                     <div className="space-y-3">
                       {currentStepData.content.riskCategories.map((risk: any, idx: number) => (
-                        <Card key={idx} className="p-4">
-                          <h4 className="font-semibold text-destructive mb-2">{risk.category}</h4>
-                          <p className="text-sm mb-2">{risk.description}</p>
+                        <Card key={idx} className="p-3 md:p-4">
+                          <h4 className="font-semibold text-destructive mb-2 text-sm md:text-base">{risk.category}</h4>
+                          <p className="text-xs md:text-sm mb-2">{risk.description}</p>
                           <div className="text-xs space-y-1">
-                            <p><strong>Examples:</strong> {risk.examples.join(', ')}</p>
-                            <p className="text-awareness"><strong>Mitigation:</strong> {risk.mitigation.join(' • ')}</p>
+                            <p className="break-words"><strong>Examples:</strong> {risk.examples.join(', ')}</p>
+                            <p className="text-awareness break-words"><strong>Mitigation:</strong> {risk.mitigation.join(' • ')}</p>
                             <p><strong>Allocation:</strong> {risk.allocation}</p>
                           </div>
                         </Card>
@@ -1229,12 +1229,12 @@ const AdvancedDefiProtocolsTutorial = () => {
                       <h3 className="text-lg font-semibold mb-4">Monitoring System</h3>
                       <div className="grid gap-3">
                         {currentStepData.content.monitoringSystem.map((item: any, idx: number) => (
-                          <Card key={idx} className="p-4">
-                            <h4 className="font-semibold mb-1">{item.metric}</h4>
+                          <Card key={idx} className="p-3 md:p-4">
+                            <h4 className="font-semibold mb-1 text-sm md:text-base">{item.metric}</h4>
                             <div className="text-xs space-y-1 text-muted-foreground">
                               <p><strong>Frequency:</strong> {item.frequency}</p>
                               <p><strong>Threshold:</strong> {item.threshold}</p>
-                              <p><strong>Tools:</strong> {item.tools.join(', ')}</p>
+                              <p className="break-words"><strong>Tools:</strong> {item.tools.join(', ')}</p>
                             </div>
                           </Card>
                         ))}
@@ -1251,15 +1251,15 @@ const AdvancedDefiProtocolsTutorial = () => {
                     <h3 className="text-lg font-semibold mb-4">Portfolio Framework</h3>
                     <div className="space-y-3">
                       {Object.entries(currentStepData.content.portfolioFramework).map(([key, value]: [string, any]) => (
-                        <Card key={key} className="p-4">
-                          <div className="flex justify-between items-start mb-2">
-                            <h4 className="font-semibold capitalize">{key}</h4>
-                            <Badge>{value.riskLevel}</Badge>
+                        <Card key={key} className="p-3 md:p-4">
+                          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-2">
+                            <h4 className="font-semibold capitalize text-sm md:text-base">{key}</h4>
+                            <Badge className="w-fit text-xs">{value.riskLevel}</Badge>
                           </div>
-                          <div className="text-sm space-y-1">
+                          <div className="text-xs md:text-sm space-y-1">
                             <p><strong>Allocation:</strong> {value.allocation}</p>
                             <p><strong>Target APY:</strong> {value.targetAPY}</p>
-                            <p className="text-xs text-muted-foreground">Strategies: {value.strategies.join(', ')}</p>
+                            <p className="text-xs text-muted-foreground break-words">Strategies: {value.strategies.join(', ')}</p>
                           </div>
                         </Card>
                       ))}

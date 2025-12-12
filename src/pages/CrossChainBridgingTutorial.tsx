@@ -760,58 +760,58 @@ const CrossChainBridgingTutorial = () => {
         {/* Current Step Content */}
         {currentStepData && (
           <Card className="mb-8">
-            <CardHeader>
-              <div className="flex items-center justify-between">
+            <CardHeader className="p-3 md:p-6">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-lg bg-primary/10">
                     <currentStepData.icon className="h-5 w-5 text-primary" />
                   </div>
                   <div>
-                    <CardTitle>{currentStepData.title}</CardTitle>
-                    <CardDescription>
+                    <CardTitle className="text-base md:text-xl">{currentStepData.title}</CardTitle>
+                    <CardDescription className="text-xs md:text-sm">
                       Estimated time: {currentStepData.duration}
                     </CardDescription>
                   </div>
                 </div>
-                <Badge variant={isStepCompleted(currentStep) ? "default" : "secondary"}>
+                <Badge variant={isStepCompleted(currentStep) ? "default" : "secondary"} className="w-fit text-xs">
                   {isStepCompleted(currentStep) ? "Completed" : "In Progress"}
                 </Badge>
               </div>
             </CardHeader>
 
-            <CardContent className="space-y-6">
-              <p className="text-muted-foreground">{currentStepData.content.overview}</p>
+            <CardContent className="space-y-4 md:space-y-6 p-3 md:p-6">
+              <p className="text-muted-foreground text-sm md:text-base">{currentStepData.content.overview}</p>
 
               {/* Step 1: Understanding Bridges */}
               {currentStep === 1 && (
                 <div className="space-y-6">
                   {/* What Are Bridges */}
                   <Card className="bg-accent/10 border-accent">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="text-lg text-foreground">What Are Blockchain Bridges?</CardTitle>
+                    <CardHeader className="pb-3 p-3 md:p-6">
+                      <CardTitle className="text-base md:text-lg text-foreground">What Are Blockchain Bridges?</CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-3 text-sm">
-                      <p><strong>Definition:</strong> {currentStepData.content.whatAreBridges?.definition}</p>
-                      <p><strong>Purpose:</strong> {currentStepData.content.whatAreBridges?.purpose}</p>
-                      <p><strong>How they work:</strong> {currentStepData.content.whatAreBridges?.mechanism}</p>
+                    <CardContent className="space-y-3 text-xs md:text-sm p-3 md:p-6 pt-0">
+                      <p className="break-words"><strong>Definition:</strong> {currentStepData.content.whatAreBridges?.definition}</p>
+                      <p className="break-words"><strong>Purpose:</strong> {currentStepData.content.whatAreBridges?.purpose}</p>
+                      <p className="break-words"><strong>How they work:</strong> {currentStepData.content.whatAreBridges?.mechanism}</p>
                     </CardContent>
                   </Card>
 
                   {/* Bridge Types */}
-                  <div className="space-y-4">
-                    <h3 className="font-semibold">Types of Cross-Chain Bridges:</h3>
-                    <div className="grid gap-4">
+                  <div className="space-y-3 md:space-y-4">
+                    <h3 className="font-semibold text-sm md:text-base">Types of Cross-Chain Bridges:</h3>
+                    <div className="grid gap-3 md:gap-4">
                       {currentStepData.content.bridgeTypes?.map((bridge, index) => (
                         <Card key={index}>
-                          <CardHeader className="pb-3">
-                            <div className="flex items-center justify-between">
-                              <CardTitle className="text-lg">{bridge.type}</CardTitle>
-                              <Badge variant="outline">{bridge.security} Security</Badge>
+                          <CardHeader className="pb-3 p-3 md:p-6">
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                              <CardTitle className="text-base md:text-lg">{bridge.type}</CardTitle>
+                              <Badge variant="outline" className="w-fit text-xs">{bridge.security} Security</Badge>
                             </div>
-                            <CardDescription>{bridge.description}</CardDescription>
+                            <CardDescription className="text-xs md:text-sm">{bridge.description}</CardDescription>
                           </CardHeader>
-                          <CardContent>
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm mb-3">
+                          <CardContent className="p-3 md:p-6 pt-0">
+                            <div className="grid grid-cols-2 gap-2 md:grid-cols-4 md:gap-3 text-xs md:text-sm mb-3">
                               <div>
                                 <span className="font-medium">Speed:</span>
                                 <p className="text-muted-foreground">{bridge.speed}</p>
@@ -828,7 +828,7 @@ const CrossChainBridgingTutorial = () => {
                                 <span className="font-medium">Examples:</span>
                                 <div className="flex flex-wrap gap-1">
                                   {bridge.examples.map((example, i) => (
-                                    <Badge key={i} variant="secondary" className="text-xs">
+                                    <Badge key={i} variant="secondary" className="text-[10px] md:text-xs">
                                       {example}
                                     </Badge>
                                   ))}
@@ -842,17 +842,17 @@ const CrossChainBridgingTutorial = () => {
                   </div>
 
                   {/* Common Chains */}
-                  <div className="space-y-4">
-                    <h3 className="font-semibold">Popular Blockchain Networks:</h3>
+                  <div className="space-y-3 md:space-y-4">
+                    <h3 className="font-semibold text-sm md:text-base">Popular Blockchain Networks:</h3>
                     <div className="grid gap-3">
                       {currentStepData.content.commonChains?.map((chain, index) => (
                         <Card key={index}>
-                          <CardContent className="p-4">
-                            <div className="flex items-center justify-between mb-3">
-                              <h4 className="font-medium">{chain.name}</h4>
-                              <Badge variant="outline">{chain.symbol}</Badge>
+                          <CardContent className="p-3 md:p-4">
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
+                              <h4 className="font-medium text-sm md:text-base">{chain.name}</h4>
+                              <Badge variant="outline" className="w-fit text-xs">{chain.symbol}</Badge>
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 md:gap-3 text-xs md:text-sm">
                               <div>
                                 <span className="font-medium">Fees: </span>
                                 <span className="text-muted-foreground">{chain.fees}</span>
@@ -867,10 +867,10 @@ const CrossChainBridgingTutorial = () => {
                               </div>
                             </div>
                             <div className="mt-2">
-                              <span className="font-medium text-primary">Bridges to: </span>
+                              <span className="font-medium text-primary text-xs md:text-sm">Bridges to: </span>
                               <div className="flex flex-wrap gap-1 mt-1">
                                 {chain.bridgeTo.map((target, i) => (
-                                  <Badge key={i} variant="secondary" className="text-xs">
+                                  <Badge key={i} variant="secondary" className="text-[10px] md:text-xs">
                                     {target}
                                   </Badge>
                                 ))}
@@ -888,21 +888,23 @@ const CrossChainBridgingTutorial = () => {
               {/* For brevity, I'll implement the key parts and you can see the structure */}
 
               {/* Step Navigation */}
-              <div className="flex items-center justify-between pt-6 border-t">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-4 md:pt-6 border-t">
                 <Button
                   variant="outline"
                   onClick={handlePrevious}
                   disabled={currentStep === 1}
+                  className="w-full sm:w-auto"
                 >
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Previous
                 </Button>
 
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                   {!isStepCompleted(currentStep) && (
                     <Button
                       variant="secondary"
                       onClick={handleStepComplete}
+                      className="w-full sm:w-auto"
                     >
                       <CheckCircle className="h-4 w-4 mr-2" />
                       Mark Complete
@@ -911,6 +913,7 @@ const CrossChainBridgingTutorial = () => {
                   
                   <Button
                     onClick={handleNext}
+                    className="w-full sm:w-auto"
                   >
                     {currentStep === totalSteps ? "Finish Tutorial" : "Next Step"}
                     <ArrowRight className="h-4 w-4 ml-2" />

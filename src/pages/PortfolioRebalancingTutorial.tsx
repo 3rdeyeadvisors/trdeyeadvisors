@@ -654,27 +654,27 @@ const PortfolioRebalancingTutorial = () => {
         {/* Current Step Content */}
         {currentStepData && (
           <Card className="mb-8">
-            <CardHeader>
-              <div className="flex items-center justify-between">
+            <CardHeader className="p-3 md:p-6">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-lg bg-primary/10">
                     <currentStepData.icon className="h-5 w-5 text-primary" />
                   </div>
                   <div>
-                    <CardTitle>{currentStepData.title}</CardTitle>
-                    <CardDescription>
+                    <CardTitle className="text-base md:text-xl">{currentStepData.title}</CardTitle>
+                    <CardDescription className="text-xs md:text-sm">
                       Estimated time: {currentStepData.duration}
                     </CardDescription>
                   </div>
                 </div>
-                <Badge variant={isStepCompleted(currentStep) ? "default" : "secondary"}>
+                <Badge variant={isStepCompleted(currentStep) ? "default" : "secondary"} className="w-fit text-xs">
                   {isStepCompleted(currentStep) ? "Completed" : "In Progress"}
                 </Badge>
               </div>
             </CardHeader>
 
-            <CardContent className="space-y-6">
-              <p className="text-muted-foreground">{currentStepData.content.overview}</p>
+            <CardContent className="space-y-4 md:space-y-6 p-3 md:p-6">
+              <p className="text-muted-foreground text-sm md:text-base">{currentStepData.content.overview}</p>
 
               {/* Render Step-Specific Content */}
               {currentStep === 1 && currentStepData.content.whyRebalance && (
@@ -685,14 +685,14 @@ const PortfolioRebalancingTutorial = () => {
                     </AlertDescription>
                   </Alert>
                   
-                  <div className="grid md:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
                     {currentStepData.content.rebalancingTriggers.map((trigger, idx) => (
                       <Card key={idx}>
-                        <CardHeader>
-                          <CardTitle className="text-base">{trigger.trigger}</CardTitle>
-                          <CardDescription>{trigger.frequency}</CardDescription>
+                        <CardHeader className="p-3 md:p-6">
+                          <CardTitle className="text-sm md:text-base">{trigger.trigger}</CardTitle>
+                          <CardDescription className="text-xs">{trigger.frequency}</CardDescription>
                         </CardHeader>
-                        <CardContent className="space-y-2 text-sm">
+                        <CardContent className="space-y-2 text-xs md:text-sm p-3 md:p-6 pt-0">
                           <p>{trigger.description}</p>
                           <p className="text-xs text-muted-foreground">Best for: {trigger.bestFor}</p>
                         </CardContent>
@@ -704,15 +704,15 @@ const PortfolioRebalancingTutorial = () => {
                     <h4 className="font-semibold">Portfolio Types</h4>
                     {currentStepData.content.portfolioTypes.map((portfolio, idx) => (
                       <Card key={idx}>
-                        <CardContent className="pt-4">
-                          <div className="flex items-center justify-between mb-2">
-                            <h5 className="font-semibold">{portfolio.type}</h5>
-                            <Badge variant={portfolio.riskLevel === "Low" ? "default" : portfolio.riskLevel === "Medium" ? "secondary" : "destructive"}>
+                        <CardContent className="pt-3 md:pt-4 p-3 md:p-6">
+                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+                            <h5 className="font-semibold text-sm md:text-base">{portfolio.type}</h5>
+                            <Badge className="w-fit text-xs" variant={portfolio.riskLevel === "Low" ? "default" : portfolio.riskLevel === "Medium" ? "secondary" : "destructive"}>
                               {portfolio.riskLevel}
                             </Badge>
                           </div>
-                          <p className="text-sm text-muted-foreground mb-2">{portfolio.allocation}</p>
-                          <div className="flex gap-4 text-xs">
+                          <p className="text-xs md:text-sm text-muted-foreground mb-2">{portfolio.allocation}</p>
+                          <div className="flex flex-wrap gap-2 md:gap-4 text-xs">
                             <span>Frequency: {portfolio.rebalanceFreq}</span>
                             <span>Target: {portfolio.targetAPY}</span>
                           </div>

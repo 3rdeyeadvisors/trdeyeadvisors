@@ -898,46 +898,48 @@ const ReadingDefiMetricsTutorial = () => {
         {/* Current Step Content */}
         {currentStepData && (
           <Card className="mb-8">
-            <CardHeader>
-              <div className="flex items-center justify-between">
+            <CardHeader className="p-3 md:p-6">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-lg bg-primary/10">
                     <currentStepData.icon className="h-5 w-5 text-primary" />
                   </div>
                   <div>
-                    <CardTitle>{currentStepData.title}</CardTitle>
-                    <CardDescription>
+                    <CardTitle className="text-base md:text-xl">{currentStepData.title}</CardTitle>
+                    <CardDescription className="text-xs md:text-sm">
                       Estimated time: {currentStepData.duration}
                     </CardDescription>
                   </div>
                 </div>
-                <Badge variant={isStepCompleted(currentStep) ? "default" : "secondary"}>
+                <Badge variant={isStepCompleted(currentStep) ? "default" : "secondary"} className="w-fit text-xs">
                   {isStepCompleted(currentStep) ? "Completed" : "In Progress"}
                 </Badge>
               </div>
             </CardHeader>
 
-            <CardContent className="space-y-6">
-              <p className="text-muted-foreground">{currentStepData.content.overview}</p>
+            <CardContent className="space-y-4 md:space-y-6 p-3 md:p-6">
+              <p className="text-muted-foreground text-sm md:text-base">{currentStepData.content.overview}</p>
 
               {/* Content implementation would go here */}
 
               {/* Step Navigation */}
-              <div className="flex items-center justify-between pt-6 border-t">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-4 md:pt-6 border-t">
                 <Button
                   variant="outline"
                   onClick={handlePrevious}
                   disabled={currentStep === 1}
+                  className="w-full sm:w-auto"
                 >
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Previous
                 </Button>
 
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                   {!isStepCompleted(currentStep) && (
                     <Button
                       variant="secondary"
                       onClick={handleStepComplete}
+                      className="w-full sm:w-auto"
                     >
                       <CheckCircle className="h-4 w-4 mr-2" />
                       Mark Complete
@@ -946,6 +948,7 @@ const ReadingDefiMetricsTutorial = () => {
                   
                   <Button
                     onClick={handleNext}
+                    className="w-full sm:w-auto"
                   >
                     {currentStep === totalSteps ? "Finish Tutorial" : "Next Step"}
                     <ArrowRight className="h-4 w-4 ml-2" />
