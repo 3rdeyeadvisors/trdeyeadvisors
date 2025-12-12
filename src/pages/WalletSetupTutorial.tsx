@@ -291,6 +291,18 @@ const WalletSetupTutorial = () => {
     });
   };
 
+  const handleStepChange = (stepId: number) => {
+    if (!user && stepId !== 1) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in to navigate the tutorial",
+        variant: "destructive"
+      });
+      return;
+    }
+    setCurrentStep(stepId);
+  };
+
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     toast({
@@ -388,7 +400,7 @@ const WalletSetupTutorial = () => {
             steps={steps}
             currentStep={currentStep}
             completedSteps={completedSteps}
-            onStepChange={setCurrentStep}
+            onStepChange={handleStepChange}
             onPrevious={handlePrevious}
             onNext={handleNext}
             onMarkComplete={handleStepComplete}

@@ -574,7 +574,13 @@ const PortfolioTrackingTutorial = () => {
               className={`cursor-pointer transition-all ${
                 currentStep === step.id ? 'ring-2 ring-primary' : ''
               } ${isStepCompleted(step.id) ? 'bg-awareness/5' : ''}`}
-              onClick={() => setCurrentStep(step.id)}
+              onClick={() => {
+                if (!user) {
+                  toast({ title: "Sign in required", description: "Please sign in to navigate the tutorial", variant: "destructive" });
+                  return;
+                }
+                setCurrentStep(step.id);
+              }}
             >
               <CardContent className="p-3 flex items-center gap-2">
                 {isStepCompleted(step.id) ? (

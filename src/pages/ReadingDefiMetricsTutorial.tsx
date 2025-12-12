@@ -863,7 +863,14 @@ const ReadingDefiMetricsTutorial = () => {
                 key={step.id}
                 variant={current ? "default" : completed ? "secondary" : "outline"}
                 size="sm"
-                onClick={() => setCurrentStep(step.id)}
+                onClick={() => {
+                  if (!user) {
+                    toast({ title: "Sign in required", description: "Please sign in to navigate the tutorial", variant: "destructive" });
+                    return;
+                  }
+                  setCurrentStep(step.id);
+                }}
+                disabled={!user && step.id !== 1}
                 className={`flex items-center gap-2 ${completed ? "bg-awareness/10 text-awareness hover:bg-awareness/20 border-awareness" : ""}`}
               >
                 <StepIcon className="h-4 w-4" />

@@ -619,7 +619,14 @@ const PortfolioRebalancingTutorial = () => {
                 key={step.id}
                 variant={current ? "default" : completed ? "secondary" : "outline"}
                 size="sm"
-                onClick={() => setCurrentStep(step.id)}
+                onClick={() => {
+                  if (!user) {
+                    toast({ title: "Sign in required", description: "Please sign in to navigate the tutorial", variant: "destructive" });
+                    return;
+                  }
+                  setCurrentStep(step.id);
+                }}
+                disabled={!user && step.id !== 1}
                 className={`flex items-center gap-2 ${completed ? "bg-success/10 text-success hover:bg-success/20 border-success" : ""}`}
               >
                 <StepIcon className="h-4 w-4" />
