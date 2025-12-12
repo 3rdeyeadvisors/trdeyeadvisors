@@ -638,7 +638,20 @@ const SpottingScamsTutorial = () => {
               <span>{Math.round(progress)}% Complete</span>
             </div>
             <Progress value={progress} className="h-2" />
-          </div>
+        </div>
+
+        {/* Sign-in Alert Banner */}
+        {!user && (
+          <Alert className="mb-6 border-primary/50 bg-primary/5">
+            <Lock className="h-4 w-4" />
+            <AlertDescription className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+              <span>Sign in to track your progress and interact with tutorial steps</span>
+              <Button size="sm" onClick={() => navigate('/auth')} className="shrink-0">
+                Sign In
+              </Button>
+            </AlertDescription>
+          </Alert>
+        )}
         </div>
 
         {/* Step Navigation */}
