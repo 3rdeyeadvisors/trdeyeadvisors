@@ -13,10 +13,12 @@ import {
   Shield,
   CheckCircle,
   Circle,
-  AlertTriangle
+  AlertTriangle,
+  Lock
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "@/components/auth/AuthProvider";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { DesktopOnlyNotice } from "@/components/DesktopOnlyNotice";
 import { TutorialHeader } from "@/components/course/TutorialHeader";
@@ -27,7 +29,8 @@ const PortfolioTrackingTutorial = () => {
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const { toast } = useToast();
   const isMobile = useIsMobile();
-  const isAuthenticated = true; // All users can access tutorials
+  const navigate = useNavigate();
+  const { user } = useAuth();
 
   const totalSteps = 6;
   const progress = ((completedSteps.length) / totalSteps) * 100;
@@ -452,6 +455,14 @@ const PortfolioTrackingTutorial = () => {
   ];
 
   const handleStepComplete = () => {
+    if (!user) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in to track your progress",
+        variant: "destructive"
+      });
+      return;
+    }
     if (!completedSteps.includes(currentStep)) {
       const newCompleted = [...completedSteps, currentStep];
       setCompletedSteps(newCompleted);
@@ -463,6 +474,14 @@ const PortfolioTrackingTutorial = () => {
   };
 
   const handleNext = () => {
+    if (!user) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in to progress through the tutorial",
+        variant: "destructive"
+      });
+      return;
+    }
     if (currentStep < totalSteps) {
       handleStepComplete();
       setCurrentStep(currentStep + 1);
@@ -485,6 +504,14 @@ const PortfolioTrackingTutorial = () => {
   };
 
   const handlePrevious = () => {
+    if (!user) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in to navigate the tutorial",
+        variant: "destructive"
+      });
+      return;
+    }
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
     }
@@ -496,6 +523,19 @@ const PortfolioTrackingTutorial = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
       <div className="container mx-auto px-4 py-8">
+        {/* Authentication Notice */}
+        {!user && (
+          <Alert className="mb-6 border-primary/50 bg-primary/5">
+            <Lock className="h-4 w-4" />
+            <AlertDescription className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+              <span>Sign in to track your progress and interact with tutorial steps</span>
+              <Button size="sm" onClick={() => navigate('/auth')} className="shrink-0">
+                Sign In
+              </Button>
+            </AlertDescription>
+          </Alert>
+        )}
+
         {/* Back Button */}
         <div className="mb-6">
           <Link to="/tutorials?tab=practical">
