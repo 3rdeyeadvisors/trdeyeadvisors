@@ -903,11 +903,11 @@ export const DefiCharts = () => {
             </CardTitle>
             <CardDescription className="text-sm">TVL breakdown by category (Top 10 Protocols)</CardDescription>
           </CardHeader>
-          <CardContent className="pt-0">
-            <div className="flex flex-col lg:flex-row lg:items-center gap-6">
+          <CardContent className="pt-0 flex-1 flex items-center justify-center">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-center gap-8 w-full max-w-2xl mx-auto">
               {/* Chart Container with center label */}
               <div className="relative flex justify-center flex-shrink-0">
-                <div className="w-[200px] h-[200px]">
+                <div className="w-[180px] h-[180px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
@@ -947,9 +947,9 @@ export const DefiCharts = () => {
               </div>
               
               {/* Legend with progress bars */}
-              <div className="flex-1 space-y-3">
+              <div className="flex-1 min-w-0 space-y-2.5 max-w-xs">
                 {data.riskDistribution.map((entry, index) => (
-                  <div key={index} className="space-y-1.5">
+                  <div key={index} className="space-y-1">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <div 
