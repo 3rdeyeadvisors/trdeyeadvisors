@@ -1,8 +1,12 @@
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { TrendingUp, BarChart3, LineChart, Activity } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { TrendingUp, BarChart3, LineChart, Activity, Lock } from 'lucide-react';
 import { toast } from 'sonner';
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/components/auth/AuthProvider";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { DesktopOnlyNotice } from "@/components/DesktopOnlyNotice";
 import { TutorialHeader } from "@/components/course/TutorialHeader";
@@ -12,6 +16,8 @@ const ChartReadingTutorial = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
+  const { user } = useAuth();
 
   const steps = [
     {
@@ -367,6 +373,10 @@ const ChartReadingTutorial = () => {
   ];
 
   const handleStepComplete = (stepIndex: number) => {
+    if (!user) {
+      toast.error("Please sign in to track your progress");
+      return;
+    }
     if (!completedSteps.includes(stepIndex)) {
       setCompletedSteps([...completedSteps, stepIndex]);
       toast.success(`Step ${stepIndex + 1} completed!`);
@@ -374,6 +384,10 @@ const ChartReadingTutorial = () => {
   };
 
   const handleNext = () => {
+    if (!user) {
+      toast.error("Please sign in to progress through the tutorial");
+      return;
+    }
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
@@ -389,13 +403,38 @@ const ChartReadingTutorial = () => {
   };
 
   const handlePrevious = () => {
+    if (!user) {
+      toast.error("Please sign in to navigate the tutorial");
+      return;
+    }
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
     }
   };
 
+  const handleStepChange = (stepIndex: number) => {
+    if (!user) {
+      toast.error("Please sign in to navigate the tutorial");
+      return;
+    }
+    setCurrentStep(stepIndex);
+  };
+
   return (
     <div className="container mx-auto px-4 py-8 mobile-typography-center">
+      {/* Authentication Notice */}
+      {!user && (
+        <Alert className="mb-6 border-primary/50 bg-primary/5">
+          <Lock className="h-4 w-4" />
+          <AlertDescription className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+            <span>Sign in to track your progress and interact with tutorial steps</span>
+            <Button size="sm" onClick={() => navigate('/auth')} className="shrink-0">
+              Sign In
+            </Button>
+          </AlertDescription>
+        </Alert>
+      )}
+
       <TutorialHeader
         title="Chart Reading Mastery"
         icon={TrendingUp}
@@ -410,11 +449,11 @@ const ChartReadingTutorial = () => {
         steps={steps}
         currentStep={currentStep}
         completedSteps={completedSteps}
-        onStepChange={setCurrentStep}
+        onStepChange={handleStepChange}
         onNext={handleNext}
         onPrevious={handlePrevious}
         onMarkComplete={() => handleStepComplete(currentStep)}
-        isAuthenticated={true}
+        isAuthenticated={!!user}
       />
 
       <div className="tutorial-content-area">

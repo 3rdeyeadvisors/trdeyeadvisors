@@ -1,8 +1,12 @@
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Users, Vote, Coins, FileText, Shield } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { Users, Vote, Coins, FileText, Shield, Lock } from 'lucide-react';
 import { toast } from 'sonner';
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/components/auth/AuthProvider";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { DesktopOnlyNotice } from "@/components/DesktopOnlyNotice";
 import { TutorialHeader } from "@/components/course/TutorialHeader";
@@ -12,6 +16,8 @@ const DaoParticipationTutorial = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
+  const { user } = useAuth();
 
   const steps = [
     {
@@ -452,6 +458,10 @@ const DaoParticipationTutorial = () => {
   const totalSteps = steps.length;
 
   const handleNext = () => {
+    if (!user) {
+      toast.error('Please sign in to progress through the tutorial');
+      return;
+    }
     if (currentStep < totalSteps) {
       setCompletedSteps(prev => [...prev, currentStep]);
       setCurrentStep(currentStep + 1);
@@ -472,16 +482,28 @@ const DaoParticipationTutorial = () => {
   };
 
   const handlePrevious = () => {
+    if (!user) {
+      toast.error('Please sign in to navigate the tutorial');
+      return;
+    }
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
     }
   };
 
   const handleStepChange = (stepId: number) => {
+    if (!user) {
+      toast.error('Please sign in to navigate the tutorial');
+      return;
+    }
     setCurrentStep(stepId);
   };
 
   const handleStepComplete = () => {
+    if (!user) {
+      toast.error('Please sign in to track your progress');
+      return;
+    }
     if (!completedSteps.includes(currentStep)) {
       setCompletedSteps([...completedSteps, currentStep]);
       toast.success('Step Completed!');
@@ -493,6 +515,19 @@ const DaoParticipationTutorial = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
       <div className="container mx-auto px-4 py-8">
+        {/* Authentication Notice */}
+        {!user && (
+          <Alert className="mb-6 border-primary/50 bg-primary/5">
+            <Lock className="h-4 w-4" />
+            <AlertDescription className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+              <span>Sign in to track your progress and interact with tutorial steps</span>
+              <Button size="sm" onClick={() => navigate('/auth')} className="shrink-0">
+                Sign In
+              </Button>
+            </AlertDescription>
+          </Alert>
+        )}
+
         <TutorialHeader
           title="DAO Participation Guide"
           icon={Users}
@@ -518,7 +553,7 @@ const DaoParticipationTutorial = () => {
           onPrevious={handlePrevious}
           onNext={handleNext}
           onMarkComplete={handleStepComplete}
-          isAuthenticated={true}
+          isAuthenticated={!!user}
         />
       </div>
     </div>

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import { 
   TrendingUp,
   Shield, 
@@ -16,6 +17,8 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/components/auth/AuthProvider";
 import { DesktopOnlyNotice } from "@/components/DesktopOnlyNotice";
 import { TutorialHeader } from "@/components/course/TutorialHeader";
 import { StepNavigation } from "@/components/course/StepNavigation";
@@ -25,6 +28,8 @@ const AdvancedDefiProtocolsTutorial = () => {
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const { toast } = useToast();
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
+  const { user } = useAuth();
 
   const totalSteps = 8;
 
@@ -819,6 +824,14 @@ const AdvancedDefiProtocolsTutorial = () => {
   const currentStepData = steps.find(step => step.id === currentStep);
 
   const handleNext = () => {
+    if (!user) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in to progress through the tutorial",
+        variant: "destructive"
+      });
+      return;
+    }
     if (currentStep < totalSteps) {
       setCompletedSteps(prev => [...prev, currentStep]);
       setCurrentStep(currentStep + 1);
@@ -844,16 +857,40 @@ const AdvancedDefiProtocolsTutorial = () => {
   };
 
   const handlePrevious = () => {
+    if (!user) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in to navigate the tutorial",
+        variant: "destructive"
+      });
+      return;
+    }
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
     }
   };
 
   const handleStepChange = (stepId: number) => {
+    if (!user) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in to navigate the tutorial",
+        variant: "destructive"
+      });
+      return;
+    }
     setCurrentStep(stepId);
   };
 
   const handleStepComplete = () => {
+    if (!user) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in to track your progress",
+        variant: "destructive"
+      });
+      return;
+    }
     setCompletedSteps(prev => [...prev, currentStep]);
     toast({
       title: "Step completed!",
@@ -866,6 +903,19 @@ const AdvancedDefiProtocolsTutorial = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
       <div className="container mx-auto px-4 py-8">
+        {/* Authentication Notice */}
+        {!user && (
+          <Alert className="mb-6 border-primary/50 bg-primary/5">
+            <Lock className="h-4 w-4" />
+            <AlertDescription className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+              <span>Sign in to track your progress and interact with tutorial steps</span>
+              <Button size="sm" onClick={() => navigate('/auth')} className="shrink-0">
+                Sign In
+              </Button>
+            </AlertDescription>
+          </Alert>
+        )}
+
         <TutorialHeader
           title="Advanced DeFi Protocols"
           icon={Building2}
@@ -1238,7 +1288,7 @@ const AdvancedDefiProtocolsTutorial = () => {
           onPrevious={handlePrevious}
           onNext={handleNext}
           onMarkComplete={handleStepComplete}
-          isAuthenticated={true}
+          isAuthenticated={!!user}
         />
       </div>
     </div>
