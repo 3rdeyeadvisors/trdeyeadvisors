@@ -74,44 +74,8 @@ const ModuleViewer = () => {
     return progress?.completed_modules?.includes(moduleIndex) || false;
   };
 
-  if (!user) {
-    return (
-      <div className="min-h-screen py-20">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <Button
-            variant="outline"
-            onClick={() => navigate(`/courses/${courseId}`)}
-            className="mb-8 font-consciousness"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Course
-          </Button>
-
-          <Card className="p-8 text-center bg-awareness/10 border-awareness/30">
-            <BookOpen className="w-16 h-16 text-awareness mx-auto mb-4" />
-            <h1 className="text-2xl font-consciousness font-bold text-foreground mb-4">
-              Sign In Required
-            </h1>
-            <p className="text-muted-foreground font-consciousness mb-6">
-              Please sign in to access course content and track your progress.
-            </p>
-            <Button
-              variant="awareness"
-              onClick={() => setShowAuthModal(true)}
-              className="font-consciousness"
-            >
-              Sign In to Continue
-            </Button>
-          </Card>
-
-          <AuthModal 
-            isOpen={showAuthModal} 
-            onClose={() => setShowAuthModal(false)} 
-          />
-        </div>
-      </div>
-    );
-  }
+  // Show sign-in prompt overlay instead of blocking content view
+  const showSignInPrompt = !user;
 
   return (
     <div className="min-h-screen py-8 sm:py-12 md:py-20">
@@ -211,31 +175,70 @@ const ModuleViewer = () => {
           </Card>
         )}
 
-        {/* Enhanced Content Player */}
-        <EnhancedContentPlayer
-          courseId={course.id}
-          module={currentModule}
-          onComplete={handleModuleComplete}
-          onNext={handleNext}
-          onPrevious={handlePrevious}
-          hasNext={currentModuleIndex < course.modules.length - 1}
-          hasPrevious={currentModuleIndex > 0}
-          currentModuleIndex={currentModuleIndex}
-          totalModules={course.modules.length}
-        />
+        {/* Sign In Prompt for non-authenticated users */}
+        {showSignInPrompt && (
+          <Card className="p-6 sm:p-8 text-center bg-awareness/10 border-awareness/30 mb-6">
+            <BookOpen className="w-12 h-12 sm:w-16 sm:h-16 text-awareness mx-auto mb-4" />
+            <h2 className="text-xl sm:text-2xl font-consciousness font-bold text-foreground mb-3">
+              Sign In to Access Content
+            </h2>
+            <p className="text-muted-foreground font-consciousness mb-4 text-sm sm:text-base">
+              You can preview the module outline below. Sign in to view the full content and track your progress.
+            </p>
+            <Button
+              variant="awareness"
+              onClick={() => setShowAuthModal(true)}
+              className="font-consciousness"
+            >
+              Sign In to Continue
+            </Button>
+          </Card>
+        )}
+
+        {/* Enhanced Content Player - Only show for authenticated users */}
+        {user ? (
+          <EnhancedContentPlayer
+            courseId={course.id}
+            module={currentModule}
+            onComplete={handleModuleComplete}
+            onNext={handleNext}
+            onPrevious={handlePrevious}
+            hasNext={currentModuleIndex < course.modules.length - 1}
+            hasPrevious={currentModuleIndex > 0}
+            currentModuleIndex={currentModuleIndex}
+            totalModules={course.modules.length}
+          />
+        ) : (
+          <Card className="p-6 bg-muted/30 border-border">
+            <h3 className="text-lg font-consciousness font-semibold mb-4">{currentModule.title}</h3>
+            <p className="text-muted-foreground mb-4">Duration: {currentModule.duration} minutes</p>
+            <div className="p-4 bg-background/50 rounded-lg border border-border text-center">
+              <p className="text-muted-foreground text-sm">
+                Full content is available after signing in.
+              </p>
+            </div>
+          </Card>
+        )}
 
         {/* Community Features - Only for authenticated users */}
-        <div className="mt-6 sm:mt-8 md:mt-12 px-2 sm:px-0">
-          <Card className="p-3 sm:p-4 md:p-6">
-            <h2 className="text-lg sm:text-xl md:text-2xl font-consciousness font-bold text-center mb-4 sm:mb-6 break-words">
-              Community Discussion
-            </h2>
-            <CommunityTabs 
-              courseId={course.id} 
-              moduleId={currentModule.id}
-            />
-          </Card>
-        </div>
+        {user && (
+          <div className="mt-6 sm:mt-8 md:mt-12 px-2 sm:px-0">
+            <Card className="p-3 sm:p-4 md:p-6">
+              <h2 className="text-lg sm:text-xl md:text-2xl font-consciousness font-bold text-center mb-4 sm:mb-6 break-words">
+                Community Discussion
+              </h2>
+              <CommunityTabs 
+                courseId={course.id} 
+                moduleId={currentModule.id}
+              />
+            </Card>
+          </div>
+        )}
+
+        <AuthModal 
+          isOpen={showAuthModal} 
+          onClose={() => setShowAuthModal(false)} 
+        />
       </div>
     </div>
   );

@@ -348,16 +348,6 @@ const Tutorials = () => {
                             className="mt-auto w-full group-hover:bg-primary group-hover:text-primary-foreground transition-all hover:shadow-cosmic border-primary/30"
                             variant="outline"
                             onClick={() => {
-                              if (!user) {
-                                toast({
-                                  title: "Sign in required",
-                                  description: "Please sign in to start tutorials",
-                                  variant: "destructive"
-                                });
-                                navigate('/auth');
-                                return;
-                              }
-                              
                               const tutorialRoutes: { [key: string]: string } = {
                                 "wallet-setup": "/tutorials/wallet-setup",
                                 "first-dex-swap": "/tutorials/first-dex-swap",
