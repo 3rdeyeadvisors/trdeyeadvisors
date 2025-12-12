@@ -20,15 +20,18 @@ import {
   PieChart
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { DesktopOnlyNotice } from "@/components/DesktopOnlyNotice";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 const ReadingDefiMetricsTutorial = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const { toast } = useToast();
   const isMobile = useIsMobile();
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const totalSteps = 6;
   const progress = (currentStep / totalSteps) * 100;
@@ -762,6 +765,10 @@ const ReadingDefiMetricsTutorial = () => {
   const currentStepData = steps.find(step => step.id === currentStep);
 
   const handleNext = () => {
+    if (!user) {
+      toast({ title: "Sign in required", description: "Please sign in to progress through the tutorial", variant: "destructive" });
+      return;
+    }
     if (currentStep < totalSteps) {
       setCompletedSteps(prev => [...prev, currentStep]);
       setCurrentStep(currentStep + 1);
@@ -786,12 +793,20 @@ const ReadingDefiMetricsTutorial = () => {
   };
 
   const handlePrevious = () => {
+    if (!user) {
+      toast({ title: "Sign in required", description: "Please sign in to navigate the tutorial", variant: "destructive" });
+      return;
+    }
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
     }
   };
 
   const handleStepComplete = () => {
+    if (!user) {
+      toast({ title: "Sign in required", description: "Please sign in to track your progress", variant: "destructive" });
+      return;
+    }
     setCompletedSteps(prev => [...prev, currentStep]);
     toast({
       title: "Step completed!",

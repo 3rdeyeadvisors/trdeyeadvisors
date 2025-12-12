@@ -3,18 +3,22 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, Circle, AlertTriangle, Shield, TrendingDown, Users, ArrowLeft } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { CheckCircle, Circle, AlertTriangle, Shield, TrendingDown, Users, ArrowLeft, Lock } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { KeyTakeaway } from "@/components/course/KeyTakeaway";
 import { DidYouKnow } from "@/components/course/DidYouKnow";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { DesktopOnlyNotice } from "@/components/DesktopOnlyNotice";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 const RiskAssessmentTutorial = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const isMobile = useIsMobile();
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const steps = [
     {
@@ -199,10 +203,54 @@ const RiskAssessmentTutorial = () => {
   ];
 
   const handleStepComplete = (stepIndex: number) => {
+    if (!user) {
+      toast.error("Sign in required", { description: "Please sign in to track your progress" });
+      return;
+    }
     if (!completedSteps.includes(stepIndex)) {
       setCompletedSteps([...completedSteps, stepIndex]);
       toast.success(`Step ${stepIndex + 1} completed!`);
     }
+  };
+
+  const handleStepChange = (index: number) => {
+    if (!user && index !== 0) {
+      toast.error("Sign in required", { description: "Please sign in to navigate tutorial steps" });
+      return;
+    }
+    setCurrentStep(index);
+  };
+
+  const handleNext = () => {
+    if (!user) {
+      toast.error("Sign in required", { description: "Please sign in to progress through the tutorial" });
+      return;
+    }
+    if (currentStep === steps.length - 1) {
+      handleStepComplete(currentStep);
+      
+      // Save completion to localStorage
+      const completed = JSON.parse(localStorage.getItem('completedTutorials') || '[]');
+      if (!completed.includes('risk-assessment')) {
+        completed.push('risk-assessment');
+        localStorage.setItem('completedTutorials', JSON.stringify(completed));
+      }
+      
+      toast.success("Tutorial Complete! 🎉 You've mastered DeFi risk assessment.");
+      setTimeout(() => {
+        window.location.href = "/tutorials?tab=practical";
+      }, 1500);
+    } else {
+      setCurrentStep(Math.min(steps.length - 1, currentStep + 1));
+    }
+  };
+
+  const handlePrevious = () => {
+    if (!user) {
+      toast.error("Sign in required", { description: "Please sign in to navigate the tutorial" });
+      return;
+    }
+    setCurrentStep(Math.max(0, currentStep - 1));
   };
 
   const progress = (completedSteps.length / steps.length) * 100;

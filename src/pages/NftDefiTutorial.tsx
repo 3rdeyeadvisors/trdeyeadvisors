@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { CheckCircle, Circle, Image, Coins, Lock, ArrowLeft, Zap, TrendingUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -10,12 +11,14 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { DesktopOnlyNotice } from "@/components/DesktopOnlyNotice";
 import { TutorialHeader } from "@/components/course/TutorialHeader";
 import { StepNavigation } from "@/components/course/StepNavigation";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 const NftDefiTutorial = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const isMobile = useIsMobile();
+  const { user } = useAuth();
 
   const steps = [
     {
@@ -390,10 +393,22 @@ const NftDefiTutorial = () => {
   ];
 
   const handleStepComplete = (stepIndex: number) => {
+    if (!user) {
+      toast.error("Sign in required", { description: "Please sign in to track your progress" });
+      return;
+    }
     if (!completedSteps.includes(stepIndex)) {
       setCompletedSteps([...completedSteps, stepIndex]);
       toast.success(`Step ${stepIndex + 1} completed!`);
     }
+  };
+
+  const handleStepChange = (index: number) => {
+    if (!user && index !== 0) {
+      toast.error("Sign in required", { description: "Please sign in to navigate tutorial steps" });
+      return;
+    }
+    setCurrentStep(index);
   };
 
   const progress = (completedSteps.length / steps.length) * 100;
