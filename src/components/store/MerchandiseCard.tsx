@@ -26,10 +26,26 @@ export function MerchandiseCard({ product, onAddToCart, isInCart }: MerchandiseC
   // Check if product has color/size variants or single variant
   const hasSizeVariants = product.variants?.some((v: any) => v.title.includes(' / '));
   
+  // Known sizes to detect format (Size / Color vs Color / Size)
+  const knownSizes = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL', 'One size', 'One Size'];
+  
+  // Detect if format is "Size / Color" or "Color / Size" by checking first part of first variant
+  const detectFormat = (variants: any[]) => {
+    if (!variants?.length) return 'color-first';
+    const firstTitle = variants[0]?.title || '';
+    const [firstPart] = firstTitle.split(' / ');
+    // If first part is a known size, it's "Size / Color" format
+    return knownSizes.includes(firstPart) ? 'size-first' : 'color-first';
+  };
+  
+  const variantFormat = hasSizeVariants ? detectFormat(product.variants) : 'color-first';
+  
   // Group variants by color (only if has size variants)
   const variantsByColor = hasSizeVariants 
     ? product.variants?.reduce((acc: any, variant: any) => {
-        const [color, size] = variant.title.split(' / ');
+        const parts = variant.title.split(' / ');
+        const color = variantFormat === 'size-first' ? parts[1] : parts[0];
+        const size = variantFormat === 'size-first' ? parts[0] : parts[1];
         if (!acc[color]) {
           acc[color] = [];
         }
@@ -48,8 +64,12 @@ export function MerchandiseCard({ product, onAddToCart, isInCart }: MerchandiseC
 
   // Update selected variant when color or size changes
   const updateSelectedVariant = (color: string, size: string) => {
+    // Match based on detected format
+    const expectedTitle = variantFormat === 'size-first' 
+      ? `${size} / ${color}` 
+      : `${color} / ${size}`;
     const variant = product.variants?.find((v: any) => 
-      v.title === `${color} / ${size}`
+      v.title === expectedTitle
     );
     setSelectedVariant(variant);
     
@@ -69,8 +89,11 @@ export function MerchandiseCard({ product, onAddToCart, isInCart }: MerchandiseC
       const firstVariant = product.variants[0];
       setSelectedVariant(firstVariant);
     } else if (availableSizes.length > 0) {
+      const expectedTitle = variantFormat === 'size-first'
+        ? `${selectedSize} / ${selectedColor}`
+        : `${selectedColor} / ${selectedSize}`;
       const firstVariant = product.variants?.find((v: any) => 
-        v.title === `${selectedColor} / ${selectedSize}`
+        v.title === expectedTitle
       );
       if (firstVariant) {
         setSelectedVariant(firstVariant);

@@ -31,10 +31,25 @@ export default function MerchandiseDetail() {
   // Check if product has color/size variants or single variant
   const hasSizeVariants = variants.some((v: any) => v.title.includes(' / '));
   
+  // Known sizes to detect format (Size / Color vs Color / Size)
+  const knownSizes = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL', 'One size', 'One Size'];
+  
+  // Detect if format is "Size / Color" or "Color / Size" by checking first part of first variant
+  const detectFormat = (variants: any[]) => {
+    if (!variants?.length) return 'color-first';
+    const firstTitle = variants[0]?.title || '';
+    const [firstPart] = firstTitle.split(' / ');
+    return knownSizes.includes(firstPart) ? 'size-first' : 'color-first';
+  };
+  
+  const variantFormat = hasSizeVariants ? detectFormat(variants) : 'color-first';
+  
   // Group variants by color (only if has size variants)
   const variantsByColor = hasSizeVariants
     ? variants.reduce((acc: any, variant: any) => {
-        const [color, size] = variant.title.split(' / ');
+        const parts = variant.title.split(' / ');
+        const color = variantFormat === 'size-first' ? parts[1] : parts[0];
+        const size = variantFormat === 'size-first' ? parts[0] : parts[1];
         if (!acc[color]) {
           acc[color] = [];
         }
@@ -82,9 +97,16 @@ export default function MerchandiseDetail() {
           setSelectedColor('');
           setSelectedSize('');
         } else {
-          // Multi-variant product with color/size
+          // Multi-variant product with color/size - detect format
+          const firstTitle = productVariants[0]?.title || '';
+          const [firstPart] = firstTitle.split(' / ');
+          const knownSizes = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL', 'One size', 'One Size'];
+          const format = knownSizes.includes(firstPart) ? 'size-first' : 'color-first';
+          
           const variantsByColor = productVariants.reduce((acc: any, variant: any) => {
-            const [color, size] = variant.title.split(' / ');
+            const parts = variant.title.split(' / ');
+            const color = format === 'size-first' ? parts[1] : parts[0];
+            const size = format === 'size-first' ? parts[0] : parts[1];
             if (!acc[color]) {
               acc[color] = [];
             }
@@ -96,13 +118,11 @@ export default function MerchandiseDetail() {
           const defaultColor = colors[0];
           setSelectedColor(defaultColor);
           
-          const firstVariant = productVariants.find((v: any) => 
-            v.title.startsWith(defaultColor)
-          );
-          if (firstVariant) {
-            const [, size] = firstVariant.title.split(' / ');
-            setSelectedSize(size);
-            setSelectedVariant(firstVariant);
+          const firstColorVariants = variantsByColor[defaultColor];
+          if (firstColorVariants?.length > 0) {
+            const firstVariant = firstColorVariants[0];
+            setSelectedSize(firstVariant.size);
+            setSelectedVariant(productVariants.find((v: any) => v.id === firstVariant.id));
             
             // Set the correct image for the first variant
             const colorImageIndex = productImages.findIndex((img: any) => 
@@ -127,8 +147,12 @@ export default function MerchandiseDetail() {
     const productVariants = (product?.variants as any[]) || [];
     const productImages = (product?.images as any[]) || [];
     
+    // Match based on detected format
+    const expectedTitle = variantFormat === 'size-first' 
+      ? `${size} / ${color}` 
+      : `${color} / ${size}`;
     const variant = productVariants.find((v: any) => 
-      v.title === `${color} / ${size}`
+      v.title === expectedTitle
     );
     setSelectedVariant(variant);
     
