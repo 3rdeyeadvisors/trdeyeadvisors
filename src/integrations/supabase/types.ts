@@ -616,6 +616,36 @@ export type Database = {
         }
         Relationships: []
       }
+      grandfathered_emails: {
+        Row: {
+          access_type: string | null
+          claimed_at: string | null
+          claimed_by: string | null
+          created_at: string | null
+          email: string
+          expires_at: string | null
+          id: string
+        }
+        Insert: {
+          access_type?: string | null
+          claimed_at?: string | null
+          claimed_by?: string | null
+          created_at?: string | null
+          email: string
+          expires_at?: string | null
+          id?: string
+        }
+        Update: {
+          access_type?: string | null
+          claimed_at?: string | null
+          claimed_by?: string | null
+          created_at?: string | null
+          email?: string
+          expires_at?: string | null
+          id?: string
+        }
+        Relationships: []
+      }
       order_action_logs: {
         Row: {
           action_type: string
