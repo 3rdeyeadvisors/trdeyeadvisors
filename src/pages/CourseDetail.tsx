@@ -273,8 +273,8 @@ const CourseDetail = () => {
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
             <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-3 sm:gap-4">
               <BookOpen className="w-6 h-6 sm:w-8 sm:h-8 text-primary flex-shrink-0" />
-              <Badge className={`${getCategoryColor(course.category)} text-xs sm:text-sm`}>
-                {course.category === "free" ? "Free Course" : "Paid Course"}
+              <Badge className={`${getCategoryColor('free')} text-xs sm:text-sm`}>
+                Free Course
               </Badge>
             </div>
             <div className="flex items-center justify-center sm:justify-end gap-2 text-muted-foreground">
@@ -283,30 +283,10 @@ const CourseDetail = () => {
             </div>
           </div>
 
-          {/* Payment Gate for Paid Courses */}
-          {course.category === 'paid' && hasAccess === false && user && (
-            <Card className="p-4 sm:p-6 mb-4 sm:mb-6 bg-primary/10 border-primary/30 text-center">
-              <Lock className="w-10 h-10 sm:w-12 sm:h-12 text-primary mx-auto mb-3 sm:mb-4" />
-              <h3 className="text-lg sm:text-xl font-consciousness font-semibold text-primary mb-2 break-words px-2">
-                Premium Course Access Required
-              </h3>
-              <p className="text-muted-foreground font-consciousness mb-3 sm:mb-4 text-sm sm:text-base break-words leading-relaxed px-2">
-                This is a paid course. Purchase access to unlock all modules and track your progress.
-              </p>
-              <Button
-                onClick={handlePurchaseCourse}
-                disabled={isPurchasing}
-                className="bg-primary hover:bg-primary/90 font-consciousness w-full sm:w-auto flex items-center justify-center mx-auto min-h-[44px] text-sm sm:text-base"
-                size="lg"
-              >
-                <CreditCard className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                <span className="break-words">{isPurchasing ? "Opening Checkout..." : `Purchase Course - ${coursePrice}`}</span>
-              </Button>
-            </Card>
-          )}
+          {/* All courses are now free */}
 
-          {/* Start Learning Button - Only for users with access */}
-          {user && hasAccess && (
+          {/* Start Learning Button - Available to all logged in users */}
+          {user && (
             <div className="mb-4 sm:mb-6 flex justify-center sm:justify-start px-2 sm:px-0">
               <Button
                 onClick={() => navigate(`/courses/${courseId}/module/${course.modules[0]?.id}`)}
