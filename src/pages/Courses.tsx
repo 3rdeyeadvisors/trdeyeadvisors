@@ -109,8 +109,7 @@ const Courses = () => {
   ];
 
   const filters = [
-    { id: "all", label: "All Resources" },
-    { id: "free", label: "Free Courses" },
+    { id: "all", label: "All Courses" },
     { id: "beginner", label: "Beginner" },
     { id: "intermediate", label: "Intermediate" },
     { id: "advanced", label: "Advanced" }
@@ -119,15 +118,11 @@ const Courses = () => {
   const getFilteredCourses = () => {
     let filtered = courses;
     
-    // Filter by category or difficulty
+    // Filter by difficulty
     if (activeFilter !== "all") {
-      if (activeFilter === "free") {
-        filtered = filtered.filter(course => course.category === "free");
-      } else {
-        filtered = filtered.filter(course => 
-          course.difficulty?.toLowerCase() === activeFilter
-        );
-      }
+      filtered = filtered.filter(course => 
+        course.difficulty?.toLowerCase() === activeFilter
+      );
     }
     
     // Filter by search query
