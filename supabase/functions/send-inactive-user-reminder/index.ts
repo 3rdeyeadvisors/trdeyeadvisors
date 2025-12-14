@@ -162,8 +162,8 @@ const handler = async (req: Request): Promise<Response> => {
         
         emailsSent++;
         
-        // Small delay to avoid rate limiting
-        await new Promise(resolve => setTimeout(resolve, 100));
+        // Delay to respect Resend's rate limit (2 req/sec)
+        await new Promise(resolve => setTimeout(resolve, 550));
         
       } catch (emailErr: any) {
         console.error(`Failed to send to ${user.email}:`, emailErr);

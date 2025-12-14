@@ -162,6 +162,9 @@ const handler = async (req: Request): Promise<Response> => {
         });
         
         emailsSent++;
+        
+        // Delay to respect Resend's rate limit (2 req/sec)
+        await new Promise(resolve => setTimeout(resolve, 550));
       } catch (emailErr: any) {
         console.error(`Failed to send reminder to ${email}:`, emailErr);
         errors.push(`${email}: ${emailErr.message}`);
