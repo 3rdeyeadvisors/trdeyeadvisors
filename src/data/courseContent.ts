@@ -2384,7 +2384,7 @@ Emergencies in DeFi are often more recoverable than they initially appear. The k
     id: 3,
     title: "Earning with DeFi: Staking, Yield Farming, and Liquidity Pools Made Simple",
     description: "Ready to earn passive income? Understand different earning methods and choose what fits your risk level.",
-    category: "paid",
+    category: "free",
     difficulty: "Intermediate",
     estimatedTime: "3 hours",
     modules: [
@@ -3867,7 +3867,7 @@ Once you understand the basics deeply, you can gradually explore more complex st
     id: 4,
     title: "Managing Your Own DeFi Portfolio: From Beginner to Confident User",
     description: "Learn to actively manage a small DeFi portfolio. Track, adjust, and grow your investments responsibly.",
-    category: "paid",
+    category: "free",
     difficulty: "Advanced",
     estimatedTime: "3.5 hours",
     modules: [
