@@ -72,13 +72,12 @@ const Courses = () => {
       id: 3,
       title: "Earning with DeFi: Staking, Yield Farming, and Liquidity Pools Made Simple",
       description: "Ready to earn passive income? Understand different earning methods and choose what fits your risk level.",
-      category: "paid",
+      category: "free",
       type: "course",
       duration: "5 modules",
       difficulty: "Intermediate",
       rating: 4.7,
       students: 756,
-      price: "$67",
       modules: [
         "How People Earn with DeFi (Overview)",
         "Staking vs Yield Farming – Which is Better for You?",
@@ -92,13 +91,12 @@ const Courses = () => {
       id: 4,
       title: "Managing Your Own DeFi Portfolio: From Beginner to Confident User",
       description: "Learn to actively manage a small DeFi portfolio. Track, adjust, and grow your investments responsibly.",
-      category: "paid",
+      category: "free",
       type: "course",
       duration: "5 modules",
       difficulty: "Advanced",
       rating: 4.6,
       students: 543,
-      price: "$97",
       modules: [
         "How to Build a Starter Portfolio (Even with $100)",
         "Tracking Your Investments (Best DeFi Portfolio Tools)",
@@ -113,7 +111,6 @@ const Courses = () => {
   const filters = [
     { id: "all", label: "All Resources" },
     { id: "free", label: "Free Courses" },
-    { id: "paid", label: "Paid Courses" },
     { id: "beginner", label: "Beginner" },
     { id: "intermediate", label: "Intermediate" },
     { id: "advanced", label: "Advanced" }
@@ -124,8 +121,8 @@ const Courses = () => {
     
     // Filter by category or difficulty
     if (activeFilter !== "all") {
-      if (["free", "paid", "tool"].includes(activeFilter)) {
-        filtered = filtered.filter(course => course.category === activeFilter);
+      if (activeFilter === "free") {
+        filtered = filtered.filter(course => course.category === "free");
       } else {
         filtered = filtered.filter(course => 
           course.difficulty?.toLowerCase() === activeFilter
