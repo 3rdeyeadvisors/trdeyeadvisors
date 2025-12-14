@@ -101,12 +101,6 @@ export const CourseCard = ({ course, index, onStartCourse, onAuthRequired }: Cou
   };
 
   const handleStartCourse = () => {
-    // For paid courses without access, check auth first then purchase
-    if (course.category === 'paid' && user && hasAccess === false) {
-      handlePurchaseCourse();
-      return;
-    }
-
     // Allow all users (including visitors) to view course details
     onStartCourse(course.id);
   };
@@ -114,12 +108,6 @@ export const CourseCard = ({ course, index, onStartCourse, onAuthRequired }: Cou
   const getButtonText = () => {
     if (!user) return "Start Learning";
     if (isCheckingAccess) return "Checking Access...";
-    if (course.category === 'free') return user ? "Continue Learning" : "Start Learning";
-    if (course.category === 'paid') {
-      if (hasAccess === null) return "Checking Access...";
-      if (hasAccess === false) return isPurchasing ? "Opening Checkout..." : "Purchase Course";
-      return "Continue Learning";
-    }
     return user ? "Continue Learning" : "Start Learning";
   };
 
@@ -137,9 +125,8 @@ export const CourseCard = ({ course, index, onStartCourse, onAuthRequired }: Cou
     >
       <div className="flex flex-col sm:flex-row items-start justify-between gap-3 sm:gap-0 mb-4">
         <course.icon className="w-10 h-10 sm:w-8 sm:h-8 text-primary group-hover:text-primary-glow transition-colors" />
-        <Badge className={`${getCategoryColor(course.category)} text-sm px-3 py-1`}>
-          {course.category === "free" ? "Free" : 
-           course.category === "paid" ? course.price : "Tool"}
+        <Badge className={`${getCategoryColor('free')} text-sm px-3 py-1`}>
+          Free
         </Badge>
       </div>
       
@@ -160,13 +147,12 @@ export const CourseCard = ({ course, index, onStartCourse, onAuthRequired }: Cou
       
       <div className="flex flex-col gap-3">
         <Button 
-          variant={course.category === "paid" ? "cosmic" : "awareness"}
+          variant="awareness"
           size="default"
           className="font-consciousness w-full h-11"
           onClick={handleStartCourse}
-          disabled={isCheckingAccess || isPurchasing}
+          disabled={isCheckingAccess}
         >
-          {getButtonIcon()}
           {getButtonText()}
         </Button>
         {isMobile && (
