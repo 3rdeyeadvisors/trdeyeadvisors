@@ -34,7 +34,10 @@ const BlogPostTemplate = () => {
     author: BRAND_AUTHOR,
     publishedDate: "2025-12-17", // Format: YYYY-MM-DD
     category: "Category Name", // e.g., "Investor Education", "DeFi Trends", "Security"
-    tags: ["tag1", "tag2", "tag3", "tag4", "tag5", "tag6"], // First 4 shown in header
+    // IMPORTANT: Tags should be 4-5 simple trending topics, NOT long-tail SEO phrases
+    // Good: ["Crypto Psychology", "Self-Custody", "Risk Management", "FTX Collapse"]
+    // Bad: ["why crypto investors lose money", "emotional trading mistakes crypto 2025"]
+    tags: ["Trending Topic 1", "Trending Topic 2", "Trending Topic 3", "Trending Topic 4"],
     readTime: "8 min read",
   };
 

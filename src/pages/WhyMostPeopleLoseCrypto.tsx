@@ -17,7 +17,7 @@ const WhyMostPeopleLoseCrypto = () => {
     author: BRAND_AUTHOR,
     publishedDate: "2025-12-17",
     category: "Investor Education",
-    tags: ["crypto behavioral finance", "DeFi vs CeFi", "why crypto investors lose money", "2022 crypto collapse", "emotional trading mistakes", "self-custody DeFi", "Terra Luna collapse", "FTX bankruptcy"],
+    tags: ["Crypto Psychology", "CeFi vs DeFi", "Self-Custody", "FTX Collapse", "Risk Management"],
   };
 
   return (
