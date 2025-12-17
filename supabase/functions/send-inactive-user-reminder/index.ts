@@ -18,6 +18,13 @@ const handler = async (req: Request): Promise<Response> => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // TEMPORARILY DISABLED - Re-enable when ready
+  console.log('Inactive user reminder is temporarily disabled');
+  return new Response(
+    JSON.stringify({ success: true, message: 'Function temporarily disabled', emailsSent: 0 }),
+    { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+  );
+
   try {
     console.log('Starting inactive user reminder check...');
     
