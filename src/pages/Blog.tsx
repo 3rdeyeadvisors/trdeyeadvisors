@@ -250,8 +250,8 @@ const Blog = () => {
                         onClick={() => setCurrentFeaturedIndex(index)}
                         className={`flex-1 h-1 transition-colors ${
                           index === currentFeaturedIndex 
-                            ? 'bg-black/60' 
-                            : 'bg-black/20 hover:bg-black/40'
+                            ? 'bg-primary' 
+                            : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
                         }`}
                       />
                     ))}

@@ -98,7 +98,7 @@ The solution isn't more information—it's better systems:
     date: "2025-12-17",
     featured: true,
     author: "3rdeyeadvisors Research Team",
-    tags: ["crypto behavioral finance", "DeFi vs CeFi", "why crypto investors lose money", "2022 crypto collapse", "emotional trading mistakes", "self-custody DeFi"]
+    tags: ["Crypto Psychology", "CeFi vs DeFi", "Self-Custody", "FTX Collapse", "Risk Management"]
   },
   {
     id: 1000010,
@@ -187,7 +187,7 @@ For users, builders, and observers of DeFi, understanding stablecoins is no long
     date: "2025-12-15",
     featured: true,
     author: "3rdeyeadvisors Research Team",
-    tags: ["stablecoins in DeFi", "decentralized finance infrastructure", "institutional DeFi", "on-chain payments", "USDC", "USDT", "DAI", "MiCA regulation"]
+    tags: ["Stablecoins", "USDC", "DAI", "DeFi Infrastructure", "Payments"]
   },
   {
     id: 1000009,
@@ -254,7 +254,7 @@ The convergence of liquid staking, restaking, and cross-chain bridges hints at a
     date: "2025-01-15",
     featured: true,
     author: "3rdeyeadvisors Research Team",
-    tags: ["liquid staking tokens 2025", "LST DeFi", "Ethereum staking", "DeFi Summer 2.0", "yield farming", "Lido", "Rocket Pool", "EigenLayer"]
+    tags: ["Liquid Staking", "ETH Staking", "Lido", "EigenLayer", "DeFi Yield"]
   },
   {
     id: 1000008,
@@ -355,7 +355,7 @@ The open letter was signed by over 110 industry leaders, including major compani
     date: "2025-08-29",
     featured: true,
     author: "3rdeyeadvisors Research Team",
-    tags: ["DeFi regulation 2025", "decentralized finance rules", "U.S. DeFi legislation", "non-custodial wallets", "crypto policy", "DeFi innovation", "Policy", "Regulation"]
+    tags: ["DeFi Regulation", "Crypto Policy", "U.S. Legislation", "Compliance"]
   },
   {
     id: 1000007,
@@ -481,7 +481,7 @@ As Wall Street continues its march into DeFi, the question isn't whether to part
     date: "2025-08-27",
     featured: true,
     author: "3rdeyeadvisors Research Team",
-    tags: ["Ethereum", "DeFi", "Institutional Adoption", "Wall Street", "Decentralized Finance", "TVL", "Smart Contracts", "Crypto Investment", "DeFi Protocols", "Financial Infrastructure"]
+    tags: ["Ethereum DeFi", "Institutional Crypto", "Wall Street", "TVL"]
   },
   {
     id: 1000006,
@@ -559,7 +559,7 @@ Whether you're looking to hedge existing positions or capitalize on potential pr
     date: "2025-08-25",
     featured: true,
     author: "3EA Research Team",
-    tags: ["Solana", "Token Unlocks", "DeFi", "Market Analysis", "Trading", "Volatility", "Crypto Investment", "SOL", "Liquidity Events"]
+    tags: ["Solana", "Token Unlocks", "Market Volatility", "Trading Strategy"]
   },
   {
     id: 1000005,
@@ -645,7 +645,7 @@ The AI token revolution represents more than a new investment category—it's th
     date: "2025-08-21",
     featured: true,
     author: "3EA Research Team",
-    tags: ["AI tokens", "DeFi 2025", "decentralized AI", "crypto trends", "AI-powered DeFi", "machine learning finance", "autonomous trading", "DeFAI"]
+    tags: ["AI Tokens", "DeFAI", "Machine Learning", "Autonomous Trading"]
   },
   {
     id: 1000004,
@@ -675,7 +675,7 @@ As the Treasury's consultation period progresses, the DeFi community faces a def
     date: "2025-08-18",
     featured: true,
     author: "3rdeyeadvisors",
-    tags: ["DeFi regulation", "AML in DeFi", "digital identity blockchain", "permissionless finance", "smart contract compliance", "KYC in DeFi"]
+    tags: ["DeFi Regulation", "AML Compliance", "Digital Identity", "KYC"]
   },
   {
     id: 1000003,
@@ -752,7 +752,7 @@ Join our free DeFi Fundamentals mini-course to master the essentials of tokenize
     date: "2025-08-15",
     featured: true,
     author: "3rdeyeadvisors Team",
-    tags: ["real-world asset tokenization", "RWA DeFi", "tokenized assets", "DeFi investment trends", "MakerDAO", "Ondo Finance", "Centrifuge", "institutional DeFi", "asset tokenization", "blockchain finance"]
+    tags: ["RWA Tokenization", "MakerDAO", "Ondo Finance", "Asset Tokenization"]
   },
   {
     id: 1000002,
@@ -830,16 +830,7 @@ The convergence of these factors—Aave's milestone, Solana's surge, record TVL,
     date: "2025-08-13",
     featured: true,
     author: "3rdeyeadvisors Team",
-    tags: [
-      "Aave milestone",
-      "Solana surge", 
-      "DeFi TVL",
-      "Ethereum altcoins",
-      "DeFi regulation",
-      "DeFi security",
-      "DeFi daily",
-      "market analysis"
-    ]
+    tags: ["Aave", "Solana", "DeFi TVL", "Market Analysis"]
   },
   {
     id: 1000001,
@@ -873,15 +864,7 @@ DeFi is maturing on two fronts at once: traditional validation (like S&P ratings
     date: "2025-08-11",
     featured: false,
     author: "3rdeyeadvisors Team",
-    tags: [
-      "DeFi trends August 2025",
-      "crypto borrowing surge",
-      "Sky Protocol credit rating",
-      "AI-powered DeFi",
-      "Ethereum",
-      "Tron",
-      "lending protocols"
-    ]
+    tags: ["DeFi TVL", "Crypto Lending", "AI DeFi", "Ethereum"]
   },
   {
     id: 1,
@@ -1082,7 +1065,7 @@ Whether you're a gamer looking to monetize your skills, an investor seeking new 
     date: "2025-08-04",
     featured: true,
     author: "3EA Gaming Research Team",
-    tags: ["DeFi", "play-to-earn", "cross-chain gaming", "AI agents", "DePIN", "gaming economy", "NFT gaming", "blockchain gaming", "metaverse finance"]
+    tags: ["Web3 Gaming", "Play-to-Earn", "NFT Gaming", "Metaverse"]
   },
   {
     id: 2,
