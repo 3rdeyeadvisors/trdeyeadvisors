@@ -31,50 +31,48 @@ const WhyMostPeopleLoseCrypto = () => {
         tags={blogPost.tags}
       />
 
-      <div className="min-h-screen bg-background">
-        {/* Hero Section */}
-        <div className="bg-gradient-consciousness py-16 md:py-24">
-          <div className="container mx-auto px-4 max-w-4xl">
-            <div className="flex flex-wrap gap-2 mb-6">
-              <Badge variant="secondary" className="bg-primary/20 text-primary-foreground">
+      <div className="min-h-screen py-20">
+        <div className="container mx-auto px-4 max-w-4xl">
+          {/* Article Header */}
+          <Card className="p-8 mb-8 bg-gradient-consciousness border-primary/20">
+            <div className="flex flex-wrap gap-3 mb-6">
+              <Badge variant="default" className="bg-primary text-primary-foreground">
+                <TrendingDown className="w-3 h-3 mr-1" />
                 {blogPost.category}
               </Badge>
-              <Badge variant="outline" className="border-primary/30 text-foreground/80">
-                Behavioral Finance
-              </Badge>
+              {blogPost.tags.slice(0, 4).map((tag, index) => (
+                <Badge key={index} variant="outline" className="text-xs">
+                  {tag}
+                </Badge>
+              ))}
             </div>
-            
-            <h1 className="text-3xl md:text-5xl font-bold text-foreground mb-6 leading-tight">
+
+            <h1 className="text-3xl md:text-4xl font-consciousness font-bold text-foreground mb-6">
               {blogPost.title}
             </h1>
-            
-            <p className="text-lg md:text-xl text-foreground/80 mb-8 leading-relaxed">
+
+            <p className="text-lg text-muted-foreground font-consciousness mb-6 leading-relaxed">
               {blogPost.excerpt}
             </p>
-            
-            <div className="flex flex-wrap items-center gap-4 md:gap-6 text-foreground/70">
+
+            <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <User className="w-4 h-4" />
-                <span className="text-sm">{blogPost.author}</span>
+                <span>{BRAND_AUTHOR}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4" />
-                <span className="text-sm">{new Date(blogPost.publishedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                <span>{new Date(blogPost.publishedDate).toLocaleDateString()}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4" />
-                <span className="text-sm">8 min read</span>
+                <span>8 min read</span>
               </div>
             </div>
-          </div>
-        </div>
-
-        {/* Main Content */}
-        <div className="container mx-auto px-4 py-12 max-w-4xl">
-          <Card className="bg-card border-border/50">
-            <div className="p-6 md:p-10">
-              <article className="prose prose-invert max-w-none">
-                
+          </Card>
+          {/* Article Content */}
+          <Card className="p-8">
+            <article className="prose prose-lg max-w-none dark:prose-invert prose-headings:font-consciousness prose-headings:text-foreground prose-p:text-foreground prose-strong:text-foreground prose-ul:text-foreground prose-li:text-foreground">
                 {/* Introduction */}
                 <div className="mb-12">
                   <p className="text-foreground/90 text-lg leading-relaxed mb-6">
@@ -334,21 +332,8 @@ const WhyMostPeopleLoseCrypto = () => {
                   </p>
                 </div>
 
-              </article>
-            </div>
+            </article>
           </Card>
-
-          {/* Tags */}
-          <div className="mt-8">
-            <h3 className="text-sm font-medium text-foreground/70 mb-3">Topics</h3>
-            <div className="flex flex-wrap gap-2">
-              {blogPost.tags.map((tag, index) => (
-                <Badge key={index} variant="outline" className="text-foreground/70 border-border/50">
-                  {tag}
-                </Badge>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
     </>
