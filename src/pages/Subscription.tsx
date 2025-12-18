@@ -182,7 +182,7 @@ const Subscription = () => {
                   <CardTitle className="text-2xl">Monthly</CardTitle>
                   <CardDescription>Full access, billed monthly</CardDescription>
                   <div className="pt-4">
-                    <span className="text-4xl font-bold text-foreground">$100</span>
+                    <span className="text-4xl font-bold text-foreground">$99</span>
                     <span className="text-muted-foreground">/month</span>
                   </div>
                 </CardHeader>
@@ -223,14 +223,14 @@ const Subscription = () => {
               <Card className="relative border-primary">
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                   <Badge className="bg-primary text-primary-foreground">
-                    Save $100/year
+                    Most Popular
                   </Badge>
                 </div>
                 <CardHeader>
                   <CardTitle className="text-2xl">Annual</CardTitle>
-                  <CardDescription>Best value - 2 months free</CardDescription>
+                  <CardDescription>Full year commitment</CardDescription>
                   <div className="pt-4">
-                    <span className="text-4xl font-bold text-foreground">$1,200</span>
+                    <span className="text-4xl font-bold text-foreground">$1,999</span>
                     <span className="text-muted-foreground">/year</span>
                   </div>
                 </CardHeader>
@@ -242,7 +242,7 @@ const Subscription = () => {
                       'Exclusive content & resources',
                       'Community access',
                       'Priority support',
-                      '2 months free vs monthly',
+                      'Locked-in annual rate',
                     ].map((feature) => (
                       <li key={feature} className="flex items-center gap-2">
                         <Check className="w-5 h-5 text-primary" />
