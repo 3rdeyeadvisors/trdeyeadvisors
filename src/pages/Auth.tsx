@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { Button } from "@/components/ui/button";
@@ -12,16 +12,18 @@ import { Helmet } from "react-helmet-async";
 import { supabase } from "@/integrations/supabase/client";
 
 const Auth = () => {
-  const { user, signIn, signUp, resetPassword, updatePassword } = useAuth();
+  const { user, session, signIn, signUp, resetPassword, updatePassword } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
+  const checkoutTriggeredRef = useRef(false);
   
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [isPasswordReset, setIsPasswordReset] = useState(false);
   const [isPasswordUpdate, setIsPasswordUpdate] = useState(false);
   const [newPassword, setNewPassword] = useState("");
@@ -56,11 +58,44 @@ const Auth = () => {
     }
   }, [toast, navigate]);
 
-  // Redirect if already authenticated (but not during password reset flow)
+  // Handle authenticated user - either redirect or trigger checkout
   useEffect(() => {
+    const triggerCheckout = async (plan: 'monthly' | 'annual') => {
+      if (checkoutTriggeredRef.current || !session) return;
+      checkoutTriggeredRef.current = true;
+      setCheckoutLoading(true);
+      
+      try {
+        const { data, error } = await supabase.functions.invoke('create-subscription-checkout', {
+          body: { plan },
+          headers: {
+            Authorization: `Bearer ${session.access_token}`,
+          },
+        });
+
+        if (error) throw error;
+        if (data?.error) throw new Error(data.error);
+
+        if (data?.url) {
+          window.location.href = data.url;
+        }
+      } catch (err) {
+        console.error('Checkout error:', err);
+        toast({
+          title: "Checkout error",
+          description: err instanceof Error ? err.message : 'Failed to start checkout',
+          variant: "destructive",
+        });
+        checkoutTriggeredRef.current = false;
+        setCheckoutLoading(false);
+        navigate('/dashboard', { replace: true });
+      }
+    };
+
     const urlParams = new URLSearchParams(window.location.search);
     const tokenHash = urlParams.get('token_hash');
     const type = urlParams.get('type');
+    const plan = urlParams.get('plan') as 'monthly' | 'annual' | null;
     const redirectTo = urlParams.get('redirect');
     
     // Don't redirect if this is a password reset flow
@@ -68,12 +103,18 @@ const Auth = () => {
       return;
     }
     
-    // Redirect authenticated users to their intended destination or dashboard
-    if (user) {
-      const destination = redirectTo || "/dashboard";
-      navigate(destination, { replace: true });
+    // Handle authenticated users
+    if (user && session) {
+      // If there's a plan parameter, auto-trigger Stripe checkout
+      if (plan && (plan === 'monthly' || plan === 'annual')) {
+        triggerCheckout(plan);
+      } else {
+        // Otherwise redirect to destination or dashboard
+        const destination = redirectTo || "/dashboard";
+        navigate(destination, { replace: true });
+      }
     }
-  }, [user, navigate]);
+  }, [user, session, navigate, toast]);
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -273,6 +314,21 @@ const Auth = () => {
       setLoading(false);
     }
   };
+
+  // Show loading screen when redirecting to Stripe checkout
+  if (checkoutLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-cosmic px-4">
+        <Card className="w-full max-w-md">
+          <CardContent className="pt-8 pb-8 text-center">
+            <Loader2 className="w-12 h-12 animate-spin text-primary mx-auto mb-4" />
+            <h2 className="text-xl font-bold mb-2">Setting up your trial...</h2>
+            <p className="text-muted-foreground">Redirecting to secure checkout</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   if (isPasswordReset) {
     return (
