@@ -119,8 +119,7 @@ const NewsletterSignup = ({ variant = "default", className = "" }: NewsletterSig
               Expand Your DeFi Consciousness
             </h3>
             <p className="text-muted-foreground font-consciousness leading-relaxed">
-              Join 10,000+ conscious investors receiving exclusive insights, market analysis, 
-              and educational content.
+              Get exclusive insights, market analysis, and educational content delivered to your inbox.
             </p>
           </div>
 
