@@ -190,9 +190,7 @@ const Index = () => {
               Understand how decentralized systems really work, without hype, noise, or confusion.
             </p>
             
-            <p className="text-sm sm:text-base md:text-lg text-foreground/70 font-consciousness mb-10 md:mb-12 max-w-2xl mx-auto px-2">
-              Free courses, practical tutorials, and a community of conscious learners building financial awareness together.
-            </p>
+            
             
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 justify-center items-center px-4">
               <Link to="/courses" className="w-full sm:w-auto">

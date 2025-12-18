@@ -6,7 +6,7 @@ import { BRAND_AUTHOR } from "@/lib/constants";
 
 const StablecoinsDefiInfrastructure2025 = () => {
   const blogPost = {
-    title: "Stablecoins Are Becoming DeFi's Real Infrastructure — Here's Why That Matters",
+    title: "Stablecoins Are Becoming DeFi's Real Infrastructure: Here's Why That Matters",
     excerpt: "Stablecoins have evolved from simple trading tools into foundational infrastructure powering payments, lending, liquidity, and cross-border transfers across decentralized finance.",
     author: BRAND_AUTHOR,
     publishedDate: "2025-12-15",
