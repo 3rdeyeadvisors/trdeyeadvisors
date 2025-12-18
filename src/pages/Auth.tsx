@@ -68,9 +68,9 @@ const Auth = () => {
       return;
     }
     
-    // Redirect authenticated users to their intended destination or home
+    // Redirect authenticated users to their intended destination or dashboard
     if (user) {
-      const destination = redirectTo || "/";
+      const destination = redirectTo || "/dashboard";
       navigate(destination, { replace: true });
     }
   }, [user, navigate]);
