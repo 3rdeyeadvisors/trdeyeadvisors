@@ -3,14 +3,14 @@ import { Mail, Twitter, Github } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="bg-background/90 border-t border-border mt-12 md:mt-20">
-      <div className="container mx-auto px-6 sm:px-8 lg:px-10 py-6 md:py-12 lg:py-16" style={{ paddingBottom: 'max(24px, env(safe-area-inset-bottom))' }}>
-        {/* Main Footer Content */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-10 lg:gap-12 mb-3 md:mb-12">
+    <footer className="bg-background/90 border-t border-border mt-8 md:mt-20">
+      <div className="container mx-auto px-4 sm:px-6 py-4 md:py-12" style={{ paddingBottom: 'max(16px, env(safe-area-inset-bottom))' }}>
+        {/* Desktop Footer - Full Layout */}
+        <div className="hidden md:grid md:grid-cols-4 gap-10 mb-8">
           {/* Brand Column */}
           <div className="text-left">
-            <Link to="/" className="inline-block mb-1.5 md:mb-2">
-              <span className="font-consciousness font-bold text-lg md:text-xl text-primary">
+            <Link to="/" className="inline-block mb-2">
+              <span className="font-consciousness font-bold text-xl text-primary">
                 3rdeyeadvisors
               </span>
             </Link>
@@ -21,10 +21,10 @@ const Footer = () => {
 
           {/* Quick Links Column */}
           <div className="text-left">
-            <h3 className="font-consciousness font-semibold mb-2 md:mb-3 text-base text-foreground text-left sm:text-left">
+            <h3 className="font-consciousness font-semibold mb-3 text-base text-foreground">
               Quick Links
             </h3>
-            <ul className="space-y-1.5 md:space-y-2">
+            <ul className="space-y-2">
               <li>
                 <Link 
                   to="/courses" 
@@ -62,10 +62,10 @@ const Footer = () => {
 
           {/* Support Column */}
           <div className="text-left">
-            <h3 className="font-consciousness font-semibold mb-2 md:mb-3 text-base text-foreground text-left sm:text-left">
+            <h3 className="font-consciousness font-semibold mb-3 text-base text-foreground">
               Support
             </h3>
-            <ul className="space-y-1.5 md:space-y-2">
+            <ul className="space-y-2">
               <li>
                 <Link 
                   to="/contact" 
@@ -112,11 +112,11 @@ const Footer = () => {
           </div>
 
           {/* Social Column */}
-          <div className="text-center sm:text-left">
-            <h3 className="font-consciousness font-semibold mb-2 md:mb-3 text-base text-foreground">
+          <div className="text-left">
+            <h3 className="font-consciousness font-semibold mb-3 text-base text-foreground">
               Connect
             </h3>
-            <div className="flex items-center justify-center sm:justify-start gap-3 mb-2 md:mb-3">
+            <div className="flex items-center gap-3 mb-3">
               <a 
                 href="mailto:info@the3rdeyeadvisors.com" 
                 className="text-muted-foreground hover:text-primary transition-colors p-2 rounded-lg hover:bg-primary/10"
@@ -160,9 +160,55 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom Section - Copyright & Disclaimer */}
-        <div className="border-t border-border pt-3 md:pt-8">
-          <div className="flex flex-col items-center justify-center gap-1 md:gap-1.5 text-center">
+        {/* Mobile Footer - Minimal */}
+        <div className="md:hidden flex flex-col items-center text-center gap-3">
+          {/* Brand */}
+          <Link to="/" className="inline-block">
+            <span className="font-consciousness font-bold text-base text-primary">
+              3rdeyeadvisors
+            </span>
+          </Link>
+          
+          {/* Social Icons */}
+          <div className="flex items-center justify-center gap-2">
+            <a 
+              href="mailto:info@the3rdeyeadvisors.com" 
+              className="text-muted-foreground hover:text-primary transition-colors p-2"
+              aria-label="Email us"
+            >
+              <Mail className="w-5 h-5" />
+            </a>
+            <a 
+              href="https://x.com/3rdeyeadvisors" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-muted-foreground hover:text-primary transition-colors p-2"
+              aria-label="Follow us on X"
+            >
+              <Twitter className="w-5 h-5" />
+            </a>
+            <a 
+              href="https://instagram.com/3rdeyeadvisors" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-muted-foreground hover:text-primary transition-colors p-2"
+              aria-label="Follow us on Instagram"
+            >
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+              </svg>
+            </a>
+          </div>
+          
+          {/* Copyright */}
+          <p className="text-xs text-muted-foreground/70 font-consciousness">
+            © {new Date().getFullYear()} 3rdeyeadvisors
+          </p>
+        </div>
+
+        {/* Desktop Bottom Section */}
+        <div className="hidden md:block border-t border-border pt-6">
+          <div className="flex flex-col items-center justify-center gap-1.5 text-center">
             <p className="text-xs text-muted-foreground/80 font-consciousness">
               © {new Date().getFullYear()} 3rdeyeadvisors. All rights reserved.
             </p>
