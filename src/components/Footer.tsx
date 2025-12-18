@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Mail, Twitter, Github } from "lucide-react";
+import { Mail, Github } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -125,24 +125,6 @@ const Footer = () => {
                 <Mail className="w-5 h-5" />
               </a>
               <a 
-                href="https://x.com/3rdeyeadvisors" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="text-muted-foreground hover:text-primary transition-colors p-2 rounded-lg hover:bg-primary/10"
-                aria-label="Follow us on X"
-              >
-                <Twitter className="w-5 h-5" />
-              </a>
-              <a 
-                href="https://github.com/3rdeyeadvisors" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="text-muted-foreground hover:text-primary transition-colors p-2 rounded-lg hover:bg-primary/10"
-                aria-label="View our GitHub"
-              >
-                <Github className="w-5 h-5" />
-              </a>
-              <a 
                 href="https://instagram.com/3rdeyeadvisors" 
                 target="_blank" 
                 rel="noopener noreferrer" 
@@ -177,15 +159,6 @@ const Footer = () => {
               aria-label="Email us"
             >
               <Mail className="w-5 h-5" />
-            </a>
-            <a 
-              href="https://x.com/3rdeyeadvisors" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="text-muted-foreground hover:text-primary transition-colors p-2"
-              aria-label="Follow us on X"
-            >
-              <Twitter className="w-5 h-5" />
             </a>
             <a 
               href="https://instagram.com/3rdeyeadvisors" 
