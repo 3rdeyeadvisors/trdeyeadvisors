@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useProgress } from "@/components/progress/ProgressProvider";
+import { useSubscription } from "@/hooks/useSubscription";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -21,9 +22,12 @@ import {
   Play,
   BarChart3,
   Brain,
-  Zap
+  Zap,
+  Crown,
+  Sparkles
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface QuizStats {
   totalQuizzes: number;
@@ -35,7 +39,9 @@ interface QuizStats {
 export const EnhancedDashboard = () => {
   const { user } = useAuth();
   const { courseProgress } = useProgress();
+  const { subscription, loading: subLoading, hasAccess, isTrialing, checkSubscription } = useSubscription();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [quizStats, setQuizStats] = useState<QuizStats>({
     totalQuizzes: 0,
     completedQuizzes: 0,
@@ -44,6 +50,20 @@ export const EnhancedDashboard = () => {
   });
   const [recentActivity, setRecentActivity] = useState<any[]>([]);
   const [weeklyProgress, setWeeklyProgress] = useState<any[]>([]);
+
+  // Handle subscription success/cancel from URL params
+  useEffect(() => {
+    const subscriptionStatus = searchParams.get('subscription');
+    if (subscriptionStatus === 'success') {
+      toast.success('Subscription activated! Welcome aboard.');
+      checkSubscription();
+      // Clear the URL param
+      window.history.replaceState({}, '', '/dashboard');
+    } else if (subscriptionStatus === 'cancelled') {
+      toast.info('Subscription checkout was cancelled.');
+      window.history.replaceState({}, '', '/dashboard');
+    }
+  }, [searchParams, checkSubscription]);
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -288,6 +308,53 @@ export const EnhancedDashboard = () => {
             </div>
           </div>
         </div>
+
+        {/* Subscription Status Card */}
+        {!subLoading && (
+          <Card className={`p-4 sm:p-6 mb-6 sm:mb-8 ${hasAccess ? 'bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30' : 'bg-gradient-to-r from-muted/50 to-muted/30 border-border'}`}>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                {hasAccess ? (
+                  <Crown className="w-8 h-8 text-primary" />
+                ) : (
+                  <Sparkles className="w-8 h-8 text-muted-foreground" />
+                )}
+                <div>
+                  <h3 className="font-semibold text-foreground">
+                    {hasAccess 
+                      ? subscription?.isGrandfathered 
+                        ? 'Grandfathered Access'
+                        : subscription?.isAdmin
+                        ? 'Admin Access'
+                        : isTrialing
+                        ? 'Free Trial Active'
+                        : 'Premium Member'
+                      : 'Unlock Full Access'}
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    {hasAccess 
+                      ? subscription?.isGrandfathered || subscription?.isAdmin
+                        ? 'You have lifetime access to all content'
+                        : isTrialing && subscription?.trialEnd
+                        ? `Trial ends ${new Date(subscription.trialEnd).toLocaleDateString()}`
+                        : `${subscription?.plan === 'annual' ? 'Annual' : 'Monthly'} plan`
+                      : 'Start your 14-day free trial today'}
+                  </p>
+                </div>
+              </div>
+              {!hasAccess && (
+                <Button onClick={() => navigate('/subscription')}>
+                  Start Free Trial
+                </Button>
+              )}
+              {hasAccess && !subscription?.isGrandfathered && !subscription?.isAdmin && (
+                <Button variant="outline" onClick={() => navigate('/subscription')}>
+                  Manage Plan
+                </Button>
+              )}
+            </div>
+          </Card>
+        )}
 
         {/* Enhanced Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6 mb-6 md:mb-8 w-full">
