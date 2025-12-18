@@ -186,11 +186,9 @@ const Index = () => {
               </h1>
             </div>
             
-            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-foreground/85 font-consciousness mb-6 max-w-3xl mx-auto leading-relaxed px-2">
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-foreground/85 font-consciousness mb-8 max-w-3xl mx-auto leading-relaxed px-2">
               Understand how decentralized systems really work, without hype, noise, or confusion.
             </p>
-            
-            
             
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 justify-center items-center px-4">
               <Link to="/courses" className="w-full sm:w-auto">

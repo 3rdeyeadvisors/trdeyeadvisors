@@ -198,7 +198,7 @@ const Contact = () => {
                 <p>
                   We are consciousness explorers who discovered that traditional financial systems 
                   were designed to keep humanity in a state of economic dependence. DeFi represents 
-                  more than just technology—it's a paradigm shift toward true financial sovereignty.
+                  more than just technology. It is a paradigm shift toward true financial sovereignty.
                 </p>
                 
                 <p>
