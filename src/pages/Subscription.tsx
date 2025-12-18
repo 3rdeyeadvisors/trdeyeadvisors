@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { useSubscription } from '@/hooks/useSubscription';
 import { supabase } from '@/integrations/supabase/client';
@@ -14,13 +14,25 @@ const Subscription = () => {
   const { user, session } = useAuth();
   const { subscription, loading: subLoading, checkSubscription, hasAccess, isTrialing } = useSubscription();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [checkoutLoading, setCheckoutLoading] = useState<'monthly' | 'annual' | null>(null);
   const [portalLoading, setPortalLoading] = useState(false);
 
+  // Auto-trigger checkout if user came from auth with a plan parameter
+  useEffect(() => {
+    const planFromUrl = searchParams.get('plan') as 'monthly' | 'annual' | null;
+    if (planFromUrl && user && session && !hasAccess && !subLoading) {
+      // Clear the plan param from URL
+      setSearchParams({});
+      // Trigger checkout
+      handleSubscribe(planFromUrl);
+    }
+  }, [user, session, hasAccess, subLoading, searchParams]);
+
   const handleSubscribe = async (plan: 'monthly' | 'annual') => {
     if (!user || !session) {
-      toast.error('Please sign in to subscribe');
-      navigate('/auth?redirect=/subscription');
+      toast.error('Please sign in to start your free trial');
+      navigate(`/auth?redirect=/subscription?plan=${plan}`);
       return;
     }
 
