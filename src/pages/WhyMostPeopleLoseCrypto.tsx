@@ -1,5 +1,5 @@
 /**
- * Blog Post: Why Most People Lose in Crypto — And How DeFi Changes the Game
+ * Blog Post: Why Most People Lose in Crypto and How DeFi Changes the Game
  * Published: December 2025
  * Research-verified content on behavioral mistakes, CeFi vs DeFi, structure & awareness
  */
@@ -12,7 +12,7 @@ import { BRAND_AUTHOR } from "@/lib/constants";
 
 const WhyMostPeopleLoseCrypto = () => {
   const blogPost = {
-    title: "Why Most People Lose in Crypto — And How DeFi Changes the Game",
+    title: "Why Most People Lose in Crypto and How DeFi Changes the Game",
     excerpt: "Explore the behavioral mistakes that cause most crypto investors to lose money, understand why centralized exchanges failed in 2022, and discover how DeFi's transparent, rules-based structure creates a fundamentally different approach to digital asset management.",
     author: BRAND_AUTHOR,
     publishedDate: "2025-12-17",
@@ -76,7 +76,7 @@ const WhyMostPeopleLoseCrypto = () => {
                 {/* Introduction */}
                 <div className="mb-12">
                   <p className="text-foreground/90 text-lg leading-relaxed mb-6">
-                    The crypto markets have created generational wealth for some and devastating losses for others. According to multiple studies, an estimated <strong className="text-foreground">70-90% of retail traders lose money</strong> in cryptocurrency markets. This isn't because crypto is inherently broken—it's because human psychology and centralized systems create predictable failure patterns.
+                    The crypto markets have created generational wealth for some and devastating losses for others. According to multiple studies, an estimated <strong className="text-foreground">70-90% of retail traders lose money</strong> in cryptocurrency markets. This is not because crypto is inherently broken. It is because human psychology and centralized systems create predictable failure patterns.
                   </p>
                   <p className="text-foreground/90 text-lg leading-relaxed">
                     Understanding these patterns is the first step toward avoiding them. Let's examine why most people lose, what the 2022 CeFi collapse revealed about centralized risk, and how DeFi's structural advantages offer a fundamentally different approach.
@@ -97,7 +97,7 @@ const WhyMostPeopleLoseCrypto = () => {
                   </p>
                   
                   <p className="text-foreground/90 leading-relaxed mb-4">
-                    These numbers aren't unique to crypto—they mirror statistics from forex, options, and other speculative markets. The common denominator isn't the asset class. It's human behavior.
+                    These numbers are not unique to crypto. They mirror statistics from forex, options, and other speculative markets. The common denominator is not the asset class. It is human behavior.
                   </p>
                   
                   <p className="text-foreground/90 leading-relaxed">
@@ -118,14 +118,14 @@ const WhyMostPeopleLoseCrypto = () => {
                     <div className="border-l-4 border-primary/50 pl-6">
                       <h3 className="text-xl font-semibold text-foreground mb-3">1. FOMO Buying at Market Peaks</h3>
                       <p className="text-foreground/90 leading-relaxed">
-                        Fear of missing out drives people to buy when prices are highest and headlines are loudest. Bitcoin's all-time highs in 2017, 2021, and subsequent peaks all saw massive retail inflows—right before significant corrections. Buying based on excitement rather than analysis is the most common mistake.
+                        Fear of missing out drives people to buy when prices are highest and headlines are loudest. Bitcoin's all-time highs in 2017, 2021, and subsequent peaks all saw massive retail inflows, right before significant corrections. Buying based on excitement rather than analysis is the most common mistake.
                       </p>
                     </div>
 
                     <div className="border-l-4 border-primary/50 pl-6">
                       <h3 className="text-xl font-semibold text-foreground mb-3">2. Panic Selling During Crashes</h3>
                       <p className="text-foreground/90 leading-relaxed">
-                        The flip side of FOMO is panic. When markets drop 30%, 50%, or more, emotional investors sell at the bottom—crystallizing losses that would have recovered with patience. Data shows that Bitcoin holders who maintained positions through any 4-year period have historically seen positive returns, yet most people sell during drawdowns.
+                        The flip side of FOMO is panic. When markets drop 30%, 50%, or more, emotional investors sell at the bottom, crystallizing losses that would have recovered with patience. Data shows that Bitcoin holders who maintained positions through any 4-year period have historically seen positive returns, yet most people sell during drawdowns.
                       </p>
                     </div>
 
@@ -158,11 +158,11 @@ const WhyMostPeopleLoseCrypto = () => {
                     <div className="p-2 bg-destructive/20 rounded-lg">
                       <AlertTriangle className="w-6 h-6 text-destructive" />
                     </div>
-                    <h2 className="text-2xl md:text-3xl font-bold text-foreground m-0">The 2022 CeFi Collapse — A Case Study in Centralized Risk</h2>
+                    <h2 className="text-2xl md:text-3xl font-bold text-foreground m-0">The 2022 CeFi Collapse: A Case Study in Centralized Risk</h2>
                   </div>
 
                   <p className="text-foreground/90 leading-relaxed mb-6">
-                    Beyond individual behavioral mistakes, 2022 exposed catastrophic failures in centralized crypto infrastructure. These weren't market corrections—they were institutional failures that destroyed customer funds.
+                    Beyond individual behavioral mistakes, 2022 exposed catastrophic failures in centralized crypto infrastructure. These were not market corrections. They were institutional failures that destroyed customer funds.
                   </p>
 
                   <div className="bg-muted/30 rounded-lg p-6 mb-6">
@@ -180,7 +180,7 @@ const WhyMostPeopleLoseCrypto = () => {
                   </p>
 
                   <p className="text-foreground/90 leading-relaxed">
-                    Users trusted centralized entities with custody of their assets—and that trust was betrayed. The lesson: centralization introduces counterparty risk that no amount of due diligence can fully eliminate.
+                    Users trusted centralized entities with custody of their assets, and that trust was betrayed. The lesson: centralization introduces counterparty risk that no amount of due diligence can fully eliminate.
                   </p>
                 </div>
 
@@ -194,7 +194,7 @@ const WhyMostPeopleLoseCrypto = () => {
                   </div>
 
                   <p className="text-foreground/90 leading-relaxed mb-6">
-                    While CeFi lending collapsed, DeFi protocols weathered 2022's storms remarkably well. Galaxy Research's 2024 Crypto Lending Report found that <strong className="text-foreground">DeFi lending grew 959%</strong> while centralized lending markets were still recovering from FTX's shadow. This isn't coincidence—it's structural advantage.
+                    While CeFi lending collapsed, DeFi protocols weathered 2022's storms remarkably well. Galaxy Research's 2024 Crypto Lending Report found that <strong className="text-foreground">DeFi lending grew 959%</strong> while centralized lending markets were still recovering from FTX's shadow. This is not coincidence. It is structural advantage.
                   </p>
 
                   <div className="grid md:grid-cols-2 gap-6 mb-6">
@@ -208,7 +208,7 @@ const WhyMostPeopleLoseCrypto = () => {
                     <div className="bg-muted/30 rounded-lg p-5">
                       <h3 className="text-lg font-semibold text-foreground mb-3">Self-Custody</h3>
                       <p className="text-foreground/80 text-sm leading-relaxed">
-                        Your keys, your coins. DeFi protocols don't take custody of your assets—they execute programmable logic while you retain control. No counterparty can freeze, steal, or misappropriate your funds.
+                        Your keys, your coins. DeFi protocols do not take custody of your assets. They execute programmable logic while you retain control. No counterparty can freeze, steal, or misappropriate your funds.
                       </p>
                     </div>
                     

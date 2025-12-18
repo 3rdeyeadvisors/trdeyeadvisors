@@ -103,20 +103,19 @@ const Subscription = () => {
         keywords="defi subscription, crypto education, blockchain courses, defi membership"
       />
 
-      <div className="min-h-screen bg-background py-12 px-4">
+      <div className="min-h-screen bg-background py-16 md:py-20 px-6">
         <div className="max-w-5xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-4">
-              <Sparkles className="w-4 h-4 text-primary" />
+          <div className="text-center mb-12 md:mb-16">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-5">
+              <Sparkles className="w-4 h-4 text-primary flex-shrink-0" />
               <span className="text-sm font-medium text-primary">14-Day Free Trial</span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-5">
               Unlock Your DeFi Potential
             </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Full access to all courses, tutorials, and premium content. 
-              Cancel anytime during your trial - no questions asked.
+            <p className="text-base sm:text-lg md:text-xl text-foreground/70 max-w-2xl mx-auto leading-relaxed">
+              Full access to all courses, tutorials, and premium content. Cancel anytime during your trial.
             </p>
           </div>
 
@@ -186,134 +185,126 @@ const Subscription = () => {
 
           {/* Pricing Cards */}
           {!hasAccess && (
-            <div className="grid md:grid-cols-2 gap-8 mb-12">
+            <div className="grid md:grid-cols-2 gap-6 md:gap-8 mb-12 md:mb-16">
               {/* Monthly Plan */}
-              <Card className="relative">
-                <CardHeader>
-                  <CardTitle className="text-2xl">Monthly</CardTitle>
-                  <CardDescription>Full access, billed monthly</CardDescription>
-                  <div className="pt-4">
-                    <span className="text-4xl font-bold text-foreground">$99</span>
-                    <span className="text-muted-foreground">/month</span>
+              <Card className="relative p-6 md:p-8 flex flex-col">
+                <div className="text-center mb-6">
+                  <h3 className="text-xl md:text-2xl font-semibold text-foreground mb-2">Monthly</h3>
+                  <p className="text-sm text-foreground/70 mb-5">Full access, billed monthly</p>
+                  <div>
+                    <span className="text-4xl md:text-5xl font-bold text-foreground">$99</span>
+                    <span className="text-foreground/70">/month</span>
                   </div>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-3 mb-6">
-                    {[
-                      '14-day free trial',
-                      'All DeFi courses & tutorials',
-                      'Exclusive content & resources',
-                      'Community access',
-                      'Cancel anytime',
-                    ].map((feature) => (
-                      <li key={feature} className="flex items-center gap-2">
-                        <Check className="w-5 h-5 text-primary" />
-                        <span className="text-muted-foreground">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <Button 
-                    className="w-full" 
-                    size="lg"
-                    onClick={() => handleSubscribe('monthly')}
-                    disabled={checkoutLoading !== null || subLoading}
-                  >
-                    {checkoutLoading === 'monthly' ? (
-                      <>
-                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                        Processing...
-                      </>
-                    ) : (
-                      'Start Free Trial'
-                    )}
-                  </Button>
-                </CardContent>
+                </div>
+                <ul className="space-y-3 mb-8 flex-1">
+                  {[
+                    '14-day free trial',
+                    'All DeFi courses and tutorials',
+                    'Exclusive content and resources',
+                    'Community access',
+                    'Cancel anytime',
+                  ].map((feature) => (
+                    <li key={feature} className="flex items-center gap-3">
+                      <Check className="w-5 h-5 text-primary flex-shrink-0" />
+                      <span className="text-foreground/80 text-sm">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Button 
+                  className="w-full min-h-[52px] text-base" 
+                  size="lg"
+                  onClick={() => handleSubscribe('monthly')}
+                  disabled={checkoutLoading !== null || subLoading}
+                >
+                  {checkoutLoading === 'monthly' ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    'Start Free Trial'
+                  )}
+                </Button>
               </Card>
 
               {/* Annual Plan */}
-              <Card className="relative border-primary">
+              <Card className="relative p-6 md:p-8 flex flex-col border-primary/60 shadow-lg shadow-primary/10">
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <Badge className="bg-primary text-primary-foreground">
+                  <Badge className="bg-primary text-primary-foreground px-4 py-1">
                     Premium
                   </Badge>
                 </div>
-                <CardHeader>
-                  <CardTitle className="text-2xl">Annual</CardTitle>
-                  <CardDescription>Full year commitment</CardDescription>
-                  <div className="pt-4">
-                    <span className="text-4xl font-bold text-foreground">$1,999</span>
-                    <span className="text-muted-foreground">/year</span>
+                <div className="text-center mb-6 pt-2">
+                  <h3 className="text-xl md:text-2xl font-semibold text-foreground mb-2">Annual</h3>
+                  <p className="text-sm text-foreground/70 mb-5">Full year commitment</p>
+                  <div>
+                    <span className="text-4xl md:text-5xl font-bold text-foreground">$1,999</span>
+                    <span className="text-foreground/70">/year</span>
                   </div>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-3 mb-6">
-                    {[
-                      '14-day free trial',
-                      'All DeFi courses & tutorials',
-                      'Exclusive content & resources',
-                      'Community access',
-                      'Priority support',
-                      'Locked-in annual rate',
-                    ].map((feature) => (
-                      <li key={feature} className="flex items-center gap-2">
-                        <Check className="w-5 h-5 text-primary" />
-                        <span className="text-muted-foreground">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <Button 
-                    className="w-full" 
-                    size="lg"
-                    variant="default"
-                    onClick={() => handleSubscribe('annual')}
-                    disabled={checkoutLoading !== null || subLoading}
-                  >
-                    {checkoutLoading === 'annual' ? (
-                      <>
-                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                        Processing...
-                      </>
-                    ) : (
-                      'Start Free Trial'
-                    )}
-                  </Button>
-                </CardContent>
+                </div>
+                <ul className="space-y-3 mb-8 flex-1">
+                  {[
+                    '14-day free trial',
+                    'All DeFi courses and tutorials',
+                    'Exclusive content and resources',
+                    'Community access',
+                    'Priority support',
+                    'Locked-in annual rate',
+                  ].map((feature) => (
+                    <li key={feature} className="flex items-center gap-3">
+                      <Check className="w-5 h-5 text-primary flex-shrink-0" />
+                      <span className="text-foreground/80 text-sm">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Button 
+                  className="w-full min-h-[52px] text-base" 
+                  size="lg"
+                  variant="default"
+                  onClick={() => handleSubscribe('annual')}
+                  disabled={checkoutLoading !== null || subLoading}
+                >
+                  {checkoutLoading === 'annual' ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    'Start Free Trial'
+                  )}
+                </Button>
               </Card>
             </div>
           )}
 
           {/* FAQ */}
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-foreground mb-4">
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-6 md:mb-8">
               Frequently Asked Questions
             </h2>
             <div className="max-w-2xl mx-auto space-y-4 text-left">
-              <div className="p-4 bg-card rounded-lg">
-                <h3 className="font-semibold text-foreground mb-2">
+              <div className="p-5 md:p-6 bg-card rounded-xl border border-border">
+                <h3 className="font-semibold text-foreground mb-3 text-base">
                   How does the free trial work?
                 </h3>
-                <p className="text-muted-foreground text-sm">
-                  Your 14-day trial starts immediately with full access to all content. 
-                  You won't be charged until the trial ends. Even if you add a payment method, 
-                  the trial runs for the full 14 days.
+                <p className="text-foreground/70 text-sm leading-relaxed">
+                  Your 14-day trial starts immediately with full access to all content. You will not be charged until the trial ends. Even if you add a payment method, the trial runs for the full 14 days.
                 </p>
               </div>
-              <div className="p-4 bg-card rounded-lg">
-                <h3 className="font-semibold text-foreground mb-2">
+              <div className="p-5 md:p-6 bg-card rounded-xl border border-border">
+                <h3 className="font-semibold text-foreground mb-3 text-base">
                   Can I cancel anytime?
                 </h3>
-                <p className="text-muted-foreground text-sm">
-                  Yes! Cancel during your trial and you won't be charged. After that, 
-                  cancel anytime and you'll keep access until the end of your billing period.
+                <p className="text-foreground/70 text-sm leading-relaxed">
+                  Yes! Cancel during your trial and you will not be charged. After that, cancel anytime and you will keep access until the end of your billing period.
                 </p>
               </div>
-              <div className="p-4 bg-card rounded-lg">
-                <h3 className="font-semibold text-foreground mb-2">
+              <div className="p-5 md:p-6 bg-card rounded-xl border border-border">
+                <h3 className="font-semibold text-foreground mb-3 text-base">
                   What payment methods do you accept?
                 </h3>
-                <p className="text-muted-foreground text-sm">
-                  We accept all major credit cards and debit cards through our secure 
-                  Stripe payment processing.
+                <p className="text-foreground/70 text-sm leading-relaxed">
+                  We accept all major credit cards and debit cards through our secure Stripe payment processing.
                 </p>
               </div>
             </div>

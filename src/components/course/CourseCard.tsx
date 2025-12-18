@@ -120,48 +120,50 @@ export const CourseCard = ({ course, index, onStartCourse, onAuthRequired }: Cou
 
   return (
     <Card 
-      className="p-4 sm:p-6 bg-card/60 border-border hover:border-primary/40 transition-all duration-cosmic hover:shadow-consciousness group w-full"
+      className="p-5 sm:p-6 bg-card border-border hover:border-primary/40 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 group w-full flex flex-col"
       style={{ animationDelay: `${index * 0.1}s` }}
     >
-      <div className="flex flex-col sm:flex-row items-start justify-between gap-3 sm:gap-0 mb-4">
-        <course.icon className="w-10 h-10 sm:w-8 sm:h-8 text-primary group-hover:text-primary-glow transition-colors" />
-        <Badge className={`${getCategoryColor('free')} text-sm px-3 py-1`}>
+      <div className="flex items-center justify-between gap-4 mb-4">
+        <div className="w-12 h-12 rounded-xl bg-primary/15 flex items-center justify-center flex-shrink-0">
+          <course.icon className="w-6 h-6 text-primary group-hover:text-primary-glow transition-colors" />
+        </div>
+        <Badge className={`${getCategoryColor('free')} text-xs px-3 py-1`}>
           Free
         </Badge>
       </div>
       
-      <h3 className="text-lg sm:text-xl font-consciousness font-semibold text-foreground mb-3 leading-tight">
+      <h3 className="text-base sm:text-lg font-consciousness font-semibold text-foreground mb-3 leading-tight">
         {course.title}
       </h3>
       
-      <p className="text-sm sm:text-base text-muted-foreground font-consciousness mb-4 leading-relaxed">
+      <p className="text-sm text-foreground/70 font-consciousness mb-5 leading-relaxed flex-1">
         {course.description}
       </p>
 
       {user && (
         <ProgressBar 
           courseId={course.id} 
-          className="mb-4"
+          className="mb-5"
         />
       )}
       
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 mt-auto">
         <Button 
           variant="awareness"
           size="default"
-          className="font-consciousness w-full h-11"
+          className="font-consciousness w-full min-h-[48px]"
           onClick={handleStartCourse}
           disabled={isCheckingAccess}
         >
           {getButtonText()}
         </Button>
         {isMobile && (
-          <p className="text-xs text-muted-foreground text-center mt-1">
+          <p className="text-xs text-foreground/60 text-center">
             Fully usable on mobile. Best experience on desktop.
           </p>
         )}
-        <div className="text-center">
-          <span className="text-sm text-muted-foreground font-system">
+        <div className="text-center pt-1">
+          <span className="text-xs text-foreground/60 font-system">
             {course.duration}
           </span>
         </div>
