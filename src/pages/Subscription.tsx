@@ -49,7 +49,7 @@ const Subscription = () => {
       if (data?.error) throw new Error(data.error);
 
       if (data?.url) {
-        window.open(data.url, '_blank');
+        window.location.href = data.url;
       }
     } catch (err) {
       console.error('Checkout error:', err);
@@ -77,7 +77,7 @@ const Subscription = () => {
       if (data?.error) throw new Error(data.error);
 
       if (data?.url) {
-        window.open(data.url, '_blank');
+        window.location.href = data.url;
       }
     } catch (err) {
       console.error('Portal error:', err);
