@@ -170,17 +170,19 @@ const Auth = () => {
         });
       } else {
         // If there's a referrer, create referral record after successful signup
+        // The database trigger (award_referral_ticket) handles ticket creation automatically
         if (referrerId && data.user) {
           try {
-            // Get active raffle
+            // Get active raffle (must have future end_date)
             const { data: activeRaffle } = await supabase
               .from('raffles')
               .select('id')
               .eq('is_active', true)
-              .single();
+              .gt('end_date', new Date().toISOString())
+              .maybeSingle();
 
             if (activeRaffle) {
-              // Create referral record
+              // Create referral record - the trigger handles ticket creation
               const { error: refInsertError } = await supabase
                 .from('referrals')
                 .insert({
@@ -193,23 +195,23 @@ const Auth = () => {
               if (refInsertError) {
                 console.error('Error inserting referral:', refInsertError);
               } else {
-                console.log('Referral created successfully for referrer:', referrerId);
-                
-                // Update referrer's raffle entries - add bonus ticket
-                const { error: ticketError } = await supabase
-                  .from('raffle_tickets')
-                  .insert({
-                    user_id: referrerId,
-                    raffle_id: activeRaffle.id,
-                    ticket_source: 'referral',
-                    metadata: { referred_user_id: data.user.id }
-                  });
+                console.log('Referral created successfully, trigger will award bonus ticket to:', referrerId);
+              }
+            } else {
+              // No active raffle, still record the referral without raffle association
+              const { error: refInsertError } = await supabase
+                .from('referrals')
+                .insert({
+                  referrer_id: referrerId,
+                  referred_user_id: data.user.id,
+                  raffle_id: null,
+                  bonus_awarded: false,
+                });
 
-                if (ticketError) {
-                  console.error('Error creating referral ticket:', ticketError);
-                } else {
-                  console.log('Referral bonus ticket awarded to:', referrerId);
-                }
+              if (refInsertError) {
+                console.error('Error inserting referral (no active raffle):', refInsertError);
+              } else {
+                console.log('Referral recorded without raffle (no active raffle)');
               }
             }
           } catch (refError) {

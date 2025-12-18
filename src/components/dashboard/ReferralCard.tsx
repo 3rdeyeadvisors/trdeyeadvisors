@@ -13,19 +13,44 @@ interface ReferralStats {
   bonusEntries: number;
 }
 
+interface ActiveRaffle {
+  id: string;
+  title: string;
+  end_date: string;
+}
+
 export const ReferralCard = () => {
   const { user } = useAuth();
   const [copied, setCopied] = useState(false);
   const [stats, setStats] = useState<ReferralStats>({ totalReferrals: 0, bonusEntries: 0 });
   const [loading, setLoading] = useState(true);
+  const [activeRaffle, setActiveRaffle] = useState<ActiveRaffle | null>(null);
 
   const referralLink = user ? `${window.location.origin}/auth?ref=${user.id}&tab=signup` : "";
 
   useEffect(() => {
     if (user) {
       loadReferralStats();
+      loadActiveRaffle();
     }
   }, [user]);
+
+  const loadActiveRaffle = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('raffles')
+        .select('id, title, end_date')
+        .eq('is_active', true)
+        .gt('end_date', new Date().toISOString())
+        .maybeSingle();
+
+      if (!error && data) {
+        setActiveRaffle(data);
+      }
+    } catch (error) {
+      console.error('Error loading active raffle:', error);
+    }
+  };
 
   const loadReferralStats = async () => {
     if (!user) return;
@@ -94,7 +119,10 @@ export const ReferralCard = () => {
             <div>
               <h3 className="font-semibold text-foreground">Invite Friends & Earn Rewards</h3>
               <p className="text-sm text-muted-foreground">
-                Share your referral link and earn bonus raffle entries when friends sign up
+                {activeRaffle 
+                  ? `Share your referral link and earn bonus entries for "${activeRaffle.title}"`
+                  : "Share your referral link - bonus entries will be awarded when a raffle is active"
+                }
               </p>
             </div>
           </div>
