@@ -53,17 +53,21 @@ serve(async (req) => {
     // Check if customer already exists
     const customers = await stripe.customers.list({ email: user.email, limit: 1 });
     let customerId;
+    let hasHadPreviousSubscription = false;
+
     if (customers.data.length > 0) {
       customerId = customers.data[0].id;
       logStep("Existing customer found", { customerId });
 
-      // Check if already has active subscription
-      const subscriptions = await stripe.subscriptions.list({
+      // Check ALL subscriptions (including canceled) to determine trial eligibility
+      const allSubscriptions = await stripe.subscriptions.list({
         customer: customerId,
-        limit: 1,
+        status: 'all', // Get all subscriptions including canceled
+        limit: 100,
       });
 
-      const activeSub = subscriptions.data.find(
+      // Check for any current active/trialing subscription
+      const activeSub = allSubscriptions.data.find(
         sub => sub.status === 'active' || sub.status === 'trialing'
       );
 
@@ -71,13 +75,29 @@ serve(async (req) => {
         logStep("User already has active subscription", { subscriptionId: activeSub.id });
         throw new Error("You already have an active subscription. Please manage it from your account settings.");
       }
+
+      // Check if user has ever had any subscription (for trial eligibility)
+      hasHadPreviousSubscription = allSubscriptions.data.length > 0;
+      logStep("Previous subscription check", { hasHadPreviousSubscription, totalPreviousSubs: allSubscriptions.data.length });
     }
 
     const origin = req.headers.get("origin") || "https://3rdeyeadvisors.com";
 
-    // Create checkout session with 14-day free trial
-    // payment_method_collection: 'if_required' allows users to start trial without payment
-    // They can cancel anytime during trial; access ends if no payment added by trial end
+    // Build subscription data - only include trial for NEW users
+    const subscriptionData: Stripe.Checkout.SessionCreateParams['subscription_data'] = {
+      metadata: {
+        user_id: user.id,
+      },
+    };
+
+    // Only offer trial to users who have NEVER had a subscription before
+    if (!hasHadPreviousSubscription) {
+      subscriptionData.trial_period_days = 14;
+      logStep("New user - offering 14-day trial");
+    } else {
+      logStep("Returning user - no trial offered (had previous subscription)");
+    }
+
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       customer_email: customerId ? undefined : user.email,
@@ -88,13 +108,8 @@ serve(async (req) => {
         },
       ],
       mode: "subscription",
-      subscription_data: {
-        trial_period_days: 14,
-        metadata: {
-          user_id: user.id,
-        },
-      },
-      payment_method_collection: 'always', // No payment required to start trial
+      subscription_data: subscriptionData,
+      payment_method_collection: 'always',
       success_url: `${origin}/dashboard?subscription=success`,
       cancel_url: `${origin}/subscription`,
       metadata: {
