@@ -229,53 +229,53 @@ const Tutorials = () => {
         type="website"
       />
       <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-6 sm:px-8 py-10 md:py-12">
           {/* Header */}
-          <div className="text-center mb-8">
+          <div className="text-center mb-10">
             <div className="flex items-center justify-center gap-3 mb-4">
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
                 Tutorials
               </h1>
               <ParticipantTracker contentType="tutorial" contentId="tutorials-page" />
             </div>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-sm sm:text-base md:text-lg text-foreground/70 max-w-2xl mx-auto">
               Step-by-step guides to master DeFi safely and effectively
             </p>
           </div>
 
           {/* Progress Summary */}
-          <Card className="mb-8 bg-gradient-to-r from-primary/5 to-accent/5 border-primary/20">
+          <Card className="mb-10 bg-gradient-to-r from-primary/5 to-accent/5 border-primary/20">
             <CardContent className="pt-6">
-              <div className="flex items-center justify-between mb-3">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-3">
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-5 w-5 text-awareness" />
-                  <h3 className="text-lg font-semibold text-foreground">Your Progress</h3>
+                  <h3 className="text-base sm:text-lg font-semibold text-foreground">Your Progress</h3>
                 </div>
                 <Badge variant="secondary" className="bg-primary/20 text-primary border-0">
                   {completedCount} of {totalTutorials} completed
                 </Badge>
               </div>
-              <Progress value={progressPercentage} className="h-2 mb-2" />
-              <p className="text-sm text-muted-foreground">
+              <Progress value={progressPercentage} className="h-2 mb-3" />
+              <p className="text-sm text-foreground/70">
                 {completedCount === 0 && "Start your DeFi learning journey today!"}
                 {completedCount > 0 && completedCount < totalTutorials && `Keep going! ${totalTutorials - completedCount} tutorial${totalTutorials - completedCount === 1 ? '' : 's'} remaining.`}
-                {completedCount === totalTutorials && "🎉 Congratulations! You've completed all tutorials!"}
+                {completedCount === totalTutorials && "Congratulations! You have completed all tutorials!"}
               </p>
             </CardContent>
           </Card>
 
           {/* Category Tabs */}
-          <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="mb-8">
-            <TabsList className="flex flex-wrap gap-2 w-full p-2 bg-card/60 rounded-lg border border-border justify-center mb-8">
+          <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="mb-10">
+            <TabsList className="flex flex-wrap gap-2 w-full p-2 bg-card/60 rounded-lg border border-border justify-center mb-10">
               {Object.entries(videoCategories).map(([key, category]) => {
                 const IconComponent = category.icon;
                 return (
                   <TabsTrigger 
                     key={key} 
                     value={key} 
-                    className="flex items-center gap-2 min-h-[44px] px-4 py-2 rounded-full text-sm whitespace-normal data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:font-semibold"
+                    className="flex items-center justify-center gap-2 min-h-[48px] px-4 py-2 rounded-full text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:font-semibold"
                   >
-                    <IconComponent className="h-4 w-4 shrink-0" />
+                    <IconComponent className="h-4 w-4 flex-shrink-0" />
                     <span>{category.title}</span>
                   </TabsTrigger>
                 );
@@ -285,11 +285,11 @@ const Tutorials = () => {
             {Object.entries(videoCategories).map(([key, category]) => (
               <TabsContent key={key} value={key}>
                 <div className="mb-6">
-                  <h2 className="text-2xl font-semibold mb-2 text-card-foreground">{category.title}</h2>
-                  <p className="text-muted-foreground">{category.description}</p>
+                  <h2 className="text-xl sm:text-2xl font-semibold mb-2 text-foreground">{category.title}</h2>
+                  <p className="text-sm sm:text-base text-foreground/70">{category.description}</p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
                   {category.videos.map((video) => {
                     const VideoIcon = video.icon;
                     const isCompleted = completedTutorials.includes(video.id);

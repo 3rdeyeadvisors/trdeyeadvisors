@@ -4,7 +4,7 @@ import { Mail, Twitter, Github } from "lucide-react";
 const Footer = () => {
   return (
     <footer className="bg-background/90 border-t border-border mt-12 md:mt-20">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-12 lg:py-16" style={{ paddingBottom: 'max(16px, env(safe-area-inset-bottom))' }}>
+      <div className="container mx-auto px-6 sm:px-8 lg:px-10 py-6 md:py-12 lg:py-16" style={{ paddingBottom: 'max(24px, env(safe-area-inset-bottom))' }}>
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-10 lg:gap-12 mb-3 md:mb-12">
           {/* Brand Column */}
@@ -14,7 +14,7 @@ const Footer = () => {
                 3rdeyeadvisors
               </span>
             </Link>
-            <p className="text-sm text-muted-foreground font-consciousness leading-snug md:leading-relaxed max-w-xs">
+            <p className="text-sm text-foreground/70 font-consciousness leading-relaxed max-w-xs">
               Empowering financial consciousness through DeFi education and tools.
             </p>
           </div>
