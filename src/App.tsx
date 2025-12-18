@@ -10,7 +10,9 @@ import SecurityHeaders from "@/components/SecurityHeaders";
 import Layout from "./components/Layout";
 import { AuthProvider } from "./components/auth/AuthProvider";
 import { ProgressProvider } from "./components/progress/ProgressProvider";
+import { SubscriptionProvider } from "./hooks/useSubscription";
 import Index from "./pages/Index";
+import Subscription from "./pages/Subscription";
 import Philosophy from "./pages/Philosophy";
 import Courses from "./pages/Courses";
 import Blog from "./pages/Blog";
@@ -98,6 +100,7 @@ const App = () => {
       <TooltipProvider>
         <CartProvider>
           <AuthProvider>
+            <SubscriptionProvider>
             <ProgressProvider>
               <SecurityHeaders />
               <Toaster />
@@ -146,6 +149,7 @@ const App = () => {
                       <Route path="/auth" element={<Auth />} />
                       <Route path="/reset-password" element={<ResetPassword />} />
                       <Route path="/dashboard" element={<Dashboard />} />
+                      <Route path="/subscription" element={<Subscription />} />
                       <Route path="/awareness-blueprint" element={<AwarenessBlueprintLanding />} />
                       <Route path="/start" element={<AdLanding />} />
                       <Route path="/admin/upload-resource" element={
@@ -189,6 +193,7 @@ const App = () => {
               </Layout>
             </BrowserRouter>
           </ProgressProvider>
+          </SubscriptionProvider>
         </AuthProvider>
       </CartProvider>
     </TooltipProvider>
