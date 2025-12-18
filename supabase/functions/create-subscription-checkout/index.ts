@@ -14,8 +14,8 @@ const logStep = (step: string, details?: any) => {
 
 // Price IDs for subscription plans
 const PRICE_IDS = {
-  monthly: 'price_1SfmmiLxeGPiI62j7yVQGUiI', // $100/month
-  annual: 'price_1Sfmn1LxeGPiI62jI6kw1juJ',  // $1200/year
+  monthly: 'price_1SfmuFLxeGPiI62jZkGuCmqm', // $99/month
+  annual: 'price_1SfmuSLxeGPiI62jEVMMN3l1',  // $1999/year
 };
 
 serve(async (req) => {
