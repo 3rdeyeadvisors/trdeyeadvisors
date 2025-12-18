@@ -94,7 +94,7 @@ serve(async (req) => {
           user_id: user.id,
         },
       },
-      payment_method_collection: 'if_required', // No payment required to start trial
+      payment_method_collection: 'always', // No payment required to start trial
       success_url: `${origin}/dashboard?subscription=success`,
       cancel_url: `${origin}/subscription`,
       metadata: {
