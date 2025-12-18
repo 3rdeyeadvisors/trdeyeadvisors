@@ -1,16 +1,54 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { 
   BookOpen, Users, Lightbulb, Repeat, TrendingUp, Globe, Cloud, Rocket, ArrowRight,
-  Shield, Wallet, LineChart, GraduationCap, Layers, FileText, CheckCircle2, Zap, Target
+  Shield, Wallet, LineChart, GraduationCap, Layers, FileText, CheckCircle2, Zap, Target, Loader2
 } from "lucide-react";
 import cosmicHeroBg from "@/assets/cosmic-hero-bg.jpg";
 import NewsletterSignup from "@/components/NewsletterSignup";
+import { useAuth } from "@/components/auth/AuthProvider";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 import SEO from "@/components/SEO";
 
 const Index = () => {
+  const { user, session } = useAuth();
+  const navigate = useNavigate();
+  const [checkoutLoading, setCheckoutLoading] = useState<'monthly' | 'annual' | null>(null);
+
+  const handleSubscribe = async (plan: 'monthly' | 'annual') => {
+    if (!user || !session) {
+      toast.error('Please sign in to start your free trial');
+      navigate(`/auth?redirect=/subscription?plan=${plan}`);
+      return;
+    }
+
+    setCheckoutLoading(plan);
+    try {
+      const { data, error } = await supabase.functions.invoke('create-subscription-checkout', {
+        body: { plan },
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+        },
+      });
+
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+
+      if (data?.url) {
+        window.open(data.url, '_blank');
+      }
+    } catch (err) {
+      console.error('Checkout error:', err);
+      toast.error(err instanceof Error ? err.message : 'Failed to start checkout');
+    } finally {
+      setCheckoutLoading(null);
+    }
+  };
+
   const whatYoullLearn = [
     {
       icon: Wallet,
@@ -402,17 +440,25 @@ const Index = () => {
                   <h3 className="text-lg md:text-xl font-consciousness font-semibold text-foreground mb-2">
                     Monthly
                   </h3>
-                  <div className="mb-4">
+                  <p className="text-sm text-muted-foreground font-consciousness mb-4">
+                    Full access, billed monthly
+                  </p>
+                  <div className="mb-6">
                     <span className="text-4xl md:text-5xl font-consciousness font-bold text-foreground">$99</span>
                     <span className="text-muted-foreground font-consciousness">/month</span>
                   </div>
-                  <p className="text-sm text-muted-foreground font-consciousness mb-6">
-                    Flexible monthly access
-                  </p>
                   <ul className="space-y-3 mb-6 text-left">
                     <li className="flex items-center text-sm text-foreground/90 font-consciousness">
                       <CheckCircle2 className="w-4 h-4 text-primary mr-3 flex-shrink-0" />
-                      All courses & tutorials
+                      14-day free trial
+                    </li>
+                    <li className="flex items-center text-sm text-foreground/90 font-consciousness">
+                      <CheckCircle2 className="w-4 h-4 text-primary mr-3 flex-shrink-0" />
+                      All DeFi courses & tutorials
+                    </li>
+                    <li className="flex items-center text-sm text-foreground/90 font-consciousness">
+                      <CheckCircle2 className="w-4 h-4 text-primary mr-3 flex-shrink-0" />
+                      Exclusive content & resources
                     </li>
                     <li className="flex items-center text-sm text-foreground/90 font-consciousness">
                       <CheckCircle2 className="w-4 h-4 text-primary mr-3 flex-shrink-0" />
@@ -420,14 +466,24 @@ const Index = () => {
                     </li>
                     <li className="flex items-center text-sm text-foreground/90 font-consciousness">
                       <CheckCircle2 className="w-4 h-4 text-primary mr-3 flex-shrink-0" />
-                      Quizzes & certificates
+                      Cancel anytime
                     </li>
                   </ul>
-                  <Link to="/subscription">
-                    <Button variant="system" className="w-full font-consciousness">
-                      Start 14-Day Free Trial
-                    </Button>
-                  </Link>
+                  <Button 
+                    variant="system" 
+                    className="w-full font-consciousness"
+                    onClick={() => handleSubscribe('monthly')}
+                    disabled={checkoutLoading !== null}
+                  >
+                    {checkoutLoading === 'monthly' ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Processing...
+                      </>
+                    ) : (
+                      'Start Free Trial'
+                    )}
+                  </Button>
                 </div>
               </Card>
               
@@ -440,20 +496,29 @@ const Index = () => {
                   <h3 className="text-lg md:text-xl font-consciousness font-semibold text-foreground mb-2">
                     Annual
                   </h3>
-                  <div className="mb-2">
+                  <p className="text-sm text-muted-foreground font-consciousness mb-4">
+                    Full year commitment
+                  </p>
+                  <div className="mb-6">
                     <span className="text-4xl md:text-5xl font-consciousness font-bold text-foreground">$1,999</span>
                     <span className="text-muted-foreground font-consciousness">/year</span>
                   </div>
-                  <p className="text-xs text-primary font-consciousness font-medium mb-4">
-                    Full year of premium access
-                  </p>
-                  <p className="text-sm text-muted-foreground font-consciousness mb-6">
-                    Best for committed learners
-                  </p>
                   <ul className="space-y-3 mb-6 text-left">
                     <li className="flex items-center text-sm text-foreground/90 font-consciousness">
                       <CheckCircle2 className="w-4 h-4 text-primary mr-3 flex-shrink-0" />
-                      Everything in Monthly
+                      14-day free trial
+                    </li>
+                    <li className="flex items-center text-sm text-foreground/90 font-consciousness">
+                      <CheckCircle2 className="w-4 h-4 text-primary mr-3 flex-shrink-0" />
+                      All DeFi courses & tutorials
+                    </li>
+                    <li className="flex items-center text-sm text-foreground/90 font-consciousness">
+                      <CheckCircle2 className="w-4 h-4 text-primary mr-3 flex-shrink-0" />
+                      Exclusive content & resources
+                    </li>
+                    <li className="flex items-center text-sm text-foreground/90 font-consciousness">
+                      <CheckCircle2 className="w-4 h-4 text-primary mr-3 flex-shrink-0" />
+                      Community access
                     </li>
                     <li className="flex items-center text-sm text-foreground/90 font-consciousness">
                       <CheckCircle2 className="w-4 h-4 text-primary mr-3 flex-shrink-0" />
@@ -461,14 +526,24 @@ const Index = () => {
                     </li>
                     <li className="flex items-center text-sm text-foreground/90 font-consciousness">
                       <CheckCircle2 className="w-4 h-4 text-primary mr-3 flex-shrink-0" />
-                      Exclusive content
+                      Locked-in annual rate
                     </li>
                   </ul>
-                  <Link to="/subscription">
-                    <Button variant="cosmic" className="w-full font-consciousness">
-                      Start 14-Day Free Trial
-                    </Button>
-                  </Link>
+                  <Button 
+                    variant="cosmic" 
+                    className="w-full font-consciousness"
+                    onClick={() => handleSubscribe('annual')}
+                    disabled={checkoutLoading !== null}
+                  >
+                    {checkoutLoading === 'annual' ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Processing...
+                      </>
+                    ) : (
+                      'Start Free Trial'
+                    )}
+                  </Button>
                 </div>
               </Card>
             </div>
