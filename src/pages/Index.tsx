@@ -217,7 +217,7 @@ const Index = () => {
         </section>
 
         {/* What You'll Learn Section */}
-        <section className="py-16 md:py-24 bg-background">
+        <section className="py-10 md:py-24 bg-background">
           <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
             <div className="text-center mb-10 md:mb-16">
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-4 md:mb-6">
@@ -253,7 +253,7 @@ const Index = () => {
         </section>
 
         {/* What is 3EA? */}
-        <section className="py-16 md:py-24 bg-background">
+        <section className="py-10 md:py-24 bg-background">
           <div className="max-w-5xl mx-auto px-6 sm:px-8 lg:px-10">
             <Card className="p-6 md:p-10 bg-card border-border">
               <div className="text-center">
@@ -276,7 +276,7 @@ const Index = () => {
         </section>
 
         {/* Platform Features */}
-        <section className="py-16 md:py-24 bg-background">
+        <section className="py-10 md:py-24 bg-background">
           <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
             <div className="text-center mb-10 md:mb-16">
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-4 md:mb-6">
@@ -312,7 +312,7 @@ const Index = () => {
         </section>
 
         {/* The Awareness Engine */}
-        <section className="py-16 md:py-24 bg-background">
+        <section className="py-10 md:py-24 bg-background">
           <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
             <div className="text-center mb-10 md:mb-16">
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-4 md:mb-6">
@@ -346,7 +346,7 @@ const Index = () => {
         </section>
 
         {/* The Vault Layers */}
-        <section className="py-16 md:py-24 bg-background">
+        <section className="py-10 md:py-24 bg-background">
           <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
             <div className="text-center mb-10 md:mb-16">
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-4 md:mb-6">
@@ -396,7 +396,7 @@ const Index = () => {
         </section>
 
         {/* Why This Matters */}
-        <section className="py-16 md:py-24 bg-background">
+        <section className="py-10 md:py-24 bg-background">
           <div className="max-w-5xl mx-auto px-6 sm:px-8 lg:px-10">
             <Card className="p-6 md:p-10 bg-card border-border">
               <div className="text-center">
@@ -419,7 +419,7 @@ const Index = () => {
         </section>
 
         {/* Subscription Plans */}
-        <section className="py-16 md:py-24 bg-background">
+        <section className="py-10 md:py-24 bg-background">
           <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-10">
             <div className="text-center mb-10 md:mb-16">
               <span className="inline-block text-xs md:text-sm uppercase tracking-wider text-primary bg-primary/15 px-4 py-2 rounded-full font-consciousness font-medium mb-4">
@@ -555,7 +555,7 @@ const Index = () => {
         </section>
 
         {/* Final CTA */}
-        <section className="py-16 md:py-24 bg-background">
+        <section className="py-10 md:py-24 bg-background">
           <div className="max-w-4xl mx-auto px-6 sm:px-8 lg:px-10 text-center">
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-4 md:mb-6">
               Ready to Begin Your Journey?
@@ -590,7 +590,7 @@ const Index = () => {
         </section>
 
         {/* Newsletter Signup */}
-        <section className="py-16 md:py-24 bg-background">
+        <section className="py-10 md:py-24 bg-background">
           <div className="max-w-4xl mx-auto px-6 sm:px-8 lg:px-10">
             <NewsletterSignup variant="cosmic" />
           </div>

@@ -63,6 +63,8 @@ const Navigation = () => {
       { path: "/analytics", label: "Analytics", icon: BarChart3 },
       { path: "/downloads", label: "Downloads", icon: Package },
       { path: "/contact", label: "Contact", icon: FileText },
+      { path: "/privacy", label: "Privacy Policy", icon: FileText },
+      { path: "/terms", label: "Terms of Service", icon: FileText },
     ]
   };
 
