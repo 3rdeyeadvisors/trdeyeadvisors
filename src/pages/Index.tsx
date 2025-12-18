@@ -170,8 +170,8 @@ const Index = () => {
       
       <div className="min-h-screen">
         {/* Hero Section */}
-        <section 
-          className="relative min-h-[60vh] md:min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
+      <section 
+        className="relative min-h-[45vh] md:min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${cosmicHeroBg})` }}
         >
           <div className="absolute inset-0 bg-background/75 backdrop-blur-sm"></div>
