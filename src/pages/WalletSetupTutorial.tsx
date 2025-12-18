@@ -641,7 +641,7 @@ const WalletSetupTutorial = () => {
               {currentStep === 5 && (
                 <div className="space-y-4">
                   <KeyTakeaway>
-                    Adding the Polygon network allows you to use DeFi with much lower fees than Ethereum mainnet—often just cents instead of dollars per transaction.
+                    Adding the Polygon network allows you to use DeFi with much lower fees than Ethereum mainnet. Often just cents instead of dollars per transaction.
                   </KeyTakeaway>
 
                   <StepBlock 

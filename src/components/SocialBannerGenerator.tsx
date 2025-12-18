@@ -64,9 +64,9 @@ export const SocialBannerGenerator = () => {
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, width, height);
 
-      // Clean background — no grid per user preference
+      // Clean background - no grid per user preference
 
-      // No starfield — keeping it minimal and clean
+      // No starfield - keeping it minimal and clean
 
       // Vignette to focus center
       const vignette = ctx.createRadialGradient(width/2, height/2, Math.min(width, height)/3, width/2, height/2, Math.max(width, height)/1.1);
@@ -185,7 +185,7 @@ export const SocialBannerGenerator = () => {
           <div className="relative bg-card rounded-lg overflow-hidden border">
             <img 
               src={generatedImage} 
-              alt="3EA Social Share Banner — 3rdeyeadvisors wordmark"
+              alt="3EA Social Share Banner - 3rdeyeadvisors wordmark"
               className="w-full h-auto"
             />
           </div>

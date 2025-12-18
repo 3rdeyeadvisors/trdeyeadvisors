@@ -24,7 +24,7 @@ const AdLanding = () => {
       />
 
       <div className="min-h-screen w-full overflow-x-hidden">
-        {/* SECTION 1 — Hook */}
+        {/* SECTION 1: Hook */}
         <section className="relative py-16 sm:py-20 md:py-24 lg:py-32 px-4 sm:px-6 w-full overflow-hidden">
           <div className="absolute inset-0 bg-background" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary)/0.15),transparent_70%)]" />
@@ -41,7 +41,7 @@ const AdLanding = () => {
             </h1>
 
             <p className="text-base sm:text-lg md:text-xl text-foreground/90 mb-8 sm:mb-10 md:mb-12 max-w-2xl mx-auto leading-relaxed">
-              Learn how money, markets, and decentralized systems are shifting — and how to stay ahead with awareness instead of fear.
+              Learn how money, markets, and decentralized systems are shifting, and how to stay ahead with awareness instead of fear.
             </p>
 
             <Button 
@@ -56,7 +56,7 @@ const AdLanding = () => {
           </div>
         </section>
 
-        {/* SECTION 2 — What You Get Inside 3EA */}
+        {/* SECTION 2: What You Get Inside 3EA */}
         <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 w-full bg-secondary/30">
           <div className="max-w-5xl mx-auto w-full">
             <div className="text-center mb-10 sm:mb-12 md:mb-16">
@@ -108,7 +108,7 @@ const AdLanding = () => {
           </div>
         </section>
 
-        {/* SECTION 3 — How It Works */}
+        {/* SECTION 3: How It Works */}
         <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 w-full">
           <div className="max-w-6xl mx-auto w-full">
             <div className="text-center mb-10 sm:mb-12 md:mb-16">
@@ -168,7 +168,7 @@ const AdLanding = () => {
           </div>
         </section>
 
-        {/* SECTION 4 — Why 3EA Is Different */}
+        {/* SECTION 4: Why 3EA Is Different */}
         <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 w-full bg-secondary/30">
           <div className="max-w-4xl mx-auto w-full">
             <div className="text-center mb-8 sm:mb-10 md:mb-12">
@@ -183,7 +183,7 @@ const AdLanding = () => {
                   3EA is not a trading group or hype project. We don't promise overnight riches or "secret strategies."
                 </p>
                 <p className="text-base sm:text-lg md:text-xl text-card-foreground leading-relaxed mb-6">
-                  We are a <span className="font-consciousness font-bold text-primary-glow">conscious learning movement</span> that teaches how the new financial system is being built — so you understand what's happening, rather than being left behind or manipulated by those who profit from your confusion.
+                  We are a <span className="font-consciousness font-bold text-primary-glow">conscious learning movement</span> that teaches how the new financial system is being built, so you understand what is happening, rather than being left behind or manipulated by those who profit from your confusion.
                 </p>
                 <p className="text-base sm:text-lg md:text-xl text-card-foreground leading-relaxed">
                   This is about <span className="font-consciousness font-bold text-primary-glow">awareness</span>, not speculation. About <span className="font-consciousness font-bold text-primary-glow">education</span>, not exploitation. About building <span className="font-consciousness font-bold text-primary-glow">clarity</span> in a world designed to keep you uncertain.
@@ -193,7 +193,7 @@ const AdLanding = () => {
           </div>
         </section>
 
-        {/* SECTION 5 — Final CTA */}
+        {/* SECTION 5: Final CTA */}
         <section className="relative py-16 sm:py-20 md:py-24 lg:py-32 px-4 sm:px-6 w-full overflow-hidden">
           <div className="absolute inset-0 bg-background" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary)/0.15),transparent_70%)]" />
