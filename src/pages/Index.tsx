@@ -113,7 +113,7 @@ const Index = () => {
     <>
       <SEO 
         title="Master DeFi Education & Cryptocurrency Knowledge"
-        description="Transform your financial understanding with expert DeFi education. Learn decentralized finance, crypto fundamentals, and blockchain protocols from industry professionals."
+        description="Build your financial understanding with comprehensive DeFi education. Learn decentralized finance, crypto fundamentals, and blockchain protocols through practical courses and tutorials."
         keywords="DeFi education, crypto training, blockchain courses, decentralized finance, cryptocurrency learning"
         url="https://www.the3rdeyeadvisors.com/"
         type="website"
