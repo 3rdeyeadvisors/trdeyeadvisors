@@ -80,7 +80,7 @@ const CartItem = ({ item }: { item: any }) => {
       // Check stock availability
       const stockInfo = getVariantStock(newVariant);
       if (!stockInfo.available) {
-        setVariantError("That variant is sold out—choose another.");
+        setVariantError("That variant is sold out. Please choose another.");
         return;
       }
 

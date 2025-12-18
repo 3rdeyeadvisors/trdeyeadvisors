@@ -577,19 +577,19 @@ const Raffles = () => {
         <Card className="mb-8 border-primary/20 w-full">
           <CardContent className="pt-6 px-4 md:px-6">
             <div className="prose prose-invert max-w-none">
-              <p className="text-lg mb-4">
-                At <span className="font-semibold text-primary">3rdeyeadvisors</span>, we believe in <span className="font-semibold">earning after learning</span> — returning that energy back to you.
+              <p className="text-base sm:text-lg mb-4 text-foreground">
+                At <span className="font-semibold text-primary">3rdeyeadvisors</span>, we believe in <span className="font-semibold">earning after learning</span>, returning that energy back to you.
               </p>
               
-              <p className="text-lg mb-4">
-                This isn't just another giveaway. <span className="font-semibold">It's a challenge to grow.</span>
+              <p className="text-base sm:text-lg mb-4 text-foreground">
+                This is not just another giveaway. <span className="font-semibold">It is a challenge to grow.</span>
               </p>
 
-              <p className="text-lg mb-4">
-                What we don't want are individuals afraid to take the next step in life. You lose nothing by learning — but you gain everything:
+              <p className="text-base sm:text-lg mb-4 text-foreground">
+                What we do not want are individuals afraid to take the next step in life. You lose nothing by learning, but you gain everything:
               </p>
 
-              <ul className="space-y-2 mb-4 list-disc list-inside text-muted-foreground">
+              <ul className="space-y-2 mb-4 list-disc list-inside text-foreground/70">
                 <li>The foundation to become your own bank</li>
                 <li>A financial system with no geographical discrimination</li>
                 <li>The ability to invest on a larger scale</li>
@@ -597,7 +597,7 @@ const Raffles = () => {
                 <li>Access to a global community of thinkers, learners, and builders</li>
               </ul>
 
-              <p className="text-lg font-semibold text-primary">
+              <p className="text-base sm:text-lg font-semibold text-primary">
                 Keep learning. Keep sharing. Keep growing the decentralized movement.
               </p>
             </div>
@@ -819,8 +819,8 @@ const Raffles = () => {
         {/* Legal Disclaimer */}
         <Card className="mt-8 border-muted">
           <CardContent className="pt-6">
-            <p className="text-xs text-muted-foreground text-center">
-              <strong>Disclaimer:</strong> Educational participation only — no purchase necessary. 
+            <p className="text-xs text-foreground/60 text-center">
+              <strong>Disclaimer:</strong> Educational participation only. No purchase necessary. 
               Winners are selected randomly from verified participants who have completed the learning 
               and engagement requirements.
             </p>
