@@ -61,15 +61,17 @@ const Auth = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const tokenHash = urlParams.get('token_hash');
     const type = urlParams.get('type');
+    const redirectTo = urlParams.get('redirect');
     
     // Don't redirect if this is a password reset flow
     if (tokenHash && type === 'recovery') {
       return;
     }
     
-    // Redirect authenticated users immediately
+    // Redirect authenticated users to their intended destination or home
     if (user) {
-      navigate("/", { replace: true });
+      const destination = redirectTo || "/";
+      navigate(destination, { replace: true });
     }
   }, [user, navigate]);
 
