@@ -148,7 +148,7 @@ serve(async (req) => {
     
     // Determine plan type based on price ID
     let plan = 'monthly';
-    if (priceId === 'price_1Sfmn1LxeGPiI62jI6kw1juJ') {
+    if (priceId === 'price_1SfmuSLxeGPiI62jEVMMN3l1') {
       plan = 'annual';
     }
 
