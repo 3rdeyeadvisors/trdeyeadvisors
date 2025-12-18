@@ -44,13 +44,22 @@ serve(async (req) => {
     logStep("User authenticated", { userId: user.id, email: user.email });
 
     // Check if user is grandfathered (full platform access)
+    // Check by email match - claimed_by may or may not be set
     const { data: grandfatheredData } = await supabaseClient
       .from('grandfathered_emails')
       .select('*')
       .ilike('email', user.email)
       .single();
     
-    if (grandfatheredData && grandfatheredData.claimed_by === user.id) {
+    if (grandfatheredData) {
+      // If found but not claimed, claim it now
+      if (!grandfatheredData.claimed_by) {
+        await supabaseClient
+          .from('grandfathered_emails')
+          .update({ claimed_by: user.id, claimed_at: new Date().toISOString() })
+          .eq('id', grandfatheredData.id);
+      }
+      
       logStep("User is grandfathered", { email: user.email });
       return new Response(JSON.stringify({
         subscribed: true,
