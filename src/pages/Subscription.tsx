@@ -223,7 +223,7 @@ const Subscription = () => {
               <Card className="relative border-primary">
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                   <Badge className="bg-primary text-primary-foreground">
-                    Most Popular
+                    Premium
                   </Badge>
                 </div>
                 <CardHeader>

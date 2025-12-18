@@ -434,7 +434,7 @@ const Index = () => {
               {/* Annual Plan */}
               <Card className="relative p-6 md:p-8 bg-card border-primary/60 shadow-lg shadow-primary/10 transition-all duration-300">
                 <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-xs uppercase tracking-wider text-primary-foreground bg-primary px-4 py-1 rounded-full font-consciousness font-medium">
-                  Best Value
+                  Premium
                 </span>
                 <div className="text-center">
                   <h3 className="text-lg md:text-xl font-consciousness font-semibold text-foreground mb-2">
@@ -445,7 +445,7 @@ const Index = () => {
                     <span className="text-muted-foreground font-consciousness">/year</span>
                   </div>
                   <p className="text-xs text-primary font-consciousness font-medium mb-4">
-                    Save $189 vs monthly
+                    Full year of premium access
                   </p>
                   <p className="text-sm text-muted-foreground font-consciousness mb-6">
                     Best for committed learners
