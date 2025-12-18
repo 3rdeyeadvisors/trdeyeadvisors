@@ -76,8 +76,8 @@ serve(async (req) => {
     const origin = req.headers.get("origin") || "https://3rdeyeadvisors.com";
 
     // Create checkout session with 14-day free trial
-    // payment_method_collection: 'always' ensures payment method is collected upfront
-    // but trial_end ensures the trial runs full 14 days regardless
+    // payment_method_collection: 'if_required' allows users to start trial without payment
+    // They can cancel anytime during trial; access ends if no payment added by trial end
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       customer_email: customerId ? undefined : user.email,
@@ -94,7 +94,7 @@ serve(async (req) => {
           user_id: user.id,
         },
       },
-      payment_method_collection: 'always', // Collect payment method but don't charge until trial ends
+      payment_method_collection: 'if_required', // No payment required to start trial
       success_url: `${origin}/dashboard?subscription=success`,
       cancel_url: `${origin}/dashboard?subscription=cancelled`,
       metadata: {
