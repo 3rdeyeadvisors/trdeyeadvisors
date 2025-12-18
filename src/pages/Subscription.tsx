@@ -31,8 +31,7 @@ const Subscription = () => {
 
   const handleSubscribe = async (plan: 'monthly' | 'annual') => {
     if (!user || !session) {
-      toast.error('Please sign in to start your free trial');
-      navigate(`/auth?redirect=/subscription?plan=${plan}`);
+      navigate(`/auth?plan=${plan}`);
       return;
     }
 
