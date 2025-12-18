@@ -172,6 +172,7 @@ const Auth = () => {
         // If there's a referrer, create referral record after successful signup
         if (referrerId && data.user) {
           try {
+            // Get active raffle
             const { data: activeRaffle } = await supabase
               .from('raffles')
               .select('id')
@@ -179,7 +180,8 @@ const Auth = () => {
               .single();
 
             if (activeRaffle) {
-              await supabase
+              // Create referral record
+              const { error: refInsertError } = await supabase
                 .from('referrals')
                 .insert({
                   referrer_id: referrerId,
@@ -188,26 +190,30 @@ const Auth = () => {
                   bonus_awarded: true,
                 });
 
-              // Update referrer's entry count
-              const { data: currentEntry } = await supabase
-                .from('raffle_entries')
-                .select('entry_count')
-                .eq('raffle_id', activeRaffle.id)
-                .eq('user_id', referrerId)
-                .single();
+              if (refInsertError) {
+                console.error('Error inserting referral:', refInsertError);
+              } else {
+                console.log('Referral created successfully for referrer:', referrerId);
+                
+                // Update referrer's raffle entries - add bonus ticket
+                const { error: ticketError } = await supabase
+                  .from('raffle_tickets')
+                  .insert({
+                    user_id: referrerId,
+                    raffle_id: activeRaffle.id,
+                    ticket_source: 'referral',
+                    metadata: { referred_user_id: data.user.id }
+                  });
 
-              await supabase
-                .from('raffle_entries')
-                .upsert({
-                  raffle_id: activeRaffle.id,
-                  user_id: referrerId,
-                  entry_count: (currentEntry?.entry_count || 0) + 1,
-                }, {
-                  onConflict: 'raffle_id,user_id'
-                });
+                if (ticketError) {
+                  console.error('Error creating referral ticket:', ticketError);
+                } else {
+                  console.log('Referral bonus ticket awarded to:', referrerId);
+                }
+              }
             }
           } catch (refError) {
-            console.error('Error creating referral:', refError);
+            console.error('Error in referral process:', refError);
           }
         }
         
