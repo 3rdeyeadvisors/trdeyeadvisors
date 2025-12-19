@@ -549,7 +549,7 @@ const Index = () => {
             </div>
             
             <p className="text-center text-xs md:text-sm text-foreground/60 font-consciousness mt-6 md:mt-8">
-              No credit card required to start. Cancel anytime during your trial.
+              Cancel anytime during your trial.
             </p>
           </div>
         </section>
