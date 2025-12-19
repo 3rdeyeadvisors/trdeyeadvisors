@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate, useSearchParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -8,13 +8,11 @@ import { ProgressBar } from "@/components/progress/ProgressBar";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useProgress } from "@/components/progress/ProgressProvider";
 import { AuthModal } from "@/components/auth/AuthModal";
-import { ArrowLeft, BookOpen, CheckCircle, Clock, Play, Grid3X3, CreditCard, Lock, ChevronDown, Monitor } from "lucide-react";
+import { ArrowLeft, BookOpen, CheckCircle, Clock, Play, Grid3X3 } from "lucide-react";
 import { getCourseContent } from "@/data/courseContent";
 import { EnhancedModuleNavigation } from "@/components/course/EnhancedModuleNavigation";
 import { CommunityTabs } from "@/components/community/CommunityTabs";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
 import SEO from "@/components/SEO";
 import { ExpandableText } from "@/components/ui/expandable-text";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -31,15 +29,10 @@ import {
 const CourseDetail = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
   const { user } = useAuth();
   const { updateModuleProgress, getCourseProgress } = useProgress();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showEnhancedNav, setShowEnhancedNav] = useState(false);
-  const [hasAccess, setHasAccess] = useState<boolean | null>(null);
-  const [isCheckingAccess, setIsCheckingAccess] = useState(true);
-  const [isPurchasing, setIsPurchasing] = useState(false);
-  const [coursePrice, setCoursePrice] = useState<string>("");
   const { toast: useToastNotification } = useToast();
   const isMobile = useIsMobile();
 
@@ -54,93 +47,6 @@ const CourseDetail = () => {
     metadata: { courseTitle: course?.title }
   });
 
-  // Check payment success from URL params
-  useEffect(() => {
-    const paymentSuccess = searchParams.get('payment');
-    const sessionId = searchParams.get('session_id');
-    
-    if (paymentSuccess === 'success' && sessionId && user) {
-      verifyPayment(sessionId);
-    }
-  }, [searchParams, user]);
-
-  // Check if user has access to this course
-  useEffect(() => {
-    const checkAccess = async () => {
-      if (!course) {
-        navigate("/courses");
-        return;
-      }
-
-      if (!user) {
-        setIsCheckingAccess(false);
-        setHasAccess(course.category === 'free');
-        return;
-      }
-
-      if (course.category === 'free') {
-        setHasAccess(true);
-        setIsCheckingAccess(false);
-        return;
-      }
-
-      try {
-        // Get course price and check access
-        const { data: courseData, error: courseError } = await supabase
-          .from('courses')
-          .select('price_cents')
-          .eq('id', parseInt(courseId || "0"))
-          .single();
-
-        if (courseError) {
-          console.error('Error fetching course data:', courseError);
-        } else if (courseData?.price_cents) {
-          setCoursePrice(`$${(courseData.price_cents / 100).toFixed(2)}`);
-        }
-
-        const { data, error } = await supabase.rpc('user_has_purchased_course', {
-          course_id: parseInt(courseId || "0")
-        });
-
-        if (error) {
-          console.error('Error checking course access:', error);
-          setHasAccess(false);
-        } else {
-          setHasAccess(data);
-        }
-      } catch (error) {
-        console.error('Error checking course access:', error);
-        setHasAccess(false);
-      } finally {
-        setIsCheckingAccess(false);
-      }
-    };
-
-    checkAccess();
-  }, [course, courseId, user, navigate]);
-
-  const verifyPayment = async (sessionId: string) => {
-    try {
-      const { data, error } = await supabase.functions.invoke('verify-course-payment', {
-        body: { sessionId }
-      });
-
-      if (error) {
-        console.error('Payment verification error:', error);
-        toast.error('Payment verification failed');
-      } else {
-        toast.success('Payment verified! Welcome to the course!');
-        setHasAccess(true);
-        // Remove payment params from URL
-        const newUrl = window.location.pathname;
-        window.history.replaceState({}, '', newUrl);
-      }
-    } catch (error) {
-      console.error('Payment verification error:', error);
-      toast.error('Payment verification failed');
-    }
-  };
-
   useEffect(() => {
     if (!course) {
       navigate("/courses");
@@ -151,41 +57,9 @@ const CourseDetail = () => {
     return null;
   }
 
-  const handlePurchaseCourse = async () => {
-    if (!user) {
-      setShowAuthModal(true);
-      return;
-    }
-
-    setIsPurchasing(true);
-    try {
-      const { data, error } = await supabase.functions.invoke('create-course-checkout', {
-        body: { courseId: parseInt(courseId || "0") }
-      });
-
-      if (error) {
-        throw error;
-      }
-
-      // Open Stripe checkout in a new tab
-      window.open(data.url, '_blank');
-    } catch (error) {
-      console.error('Error creating course checkout:', error);
-      toast.error('Failed to initiate course purchase');
-    } finally {
-      setIsPurchasing(false);
-    }
-  };
-
   const handleModuleToggle = async (moduleIndex: number) => {
     if (!user) {
       setShowAuthModal(true);
-      return;
-    }
-
-    // Check if user has access to paid content
-    if (course?.category === 'paid' && hasAccess === false) {
-      toast.error('You need to purchase this course to access modules');
       return;
     }
 
@@ -208,20 +82,12 @@ const CourseDetail = () => {
     return progress?.completed_modules?.includes(moduleIndex) || false;
   };
 
-  const getCategoryColor = (category: string) => {
-    switch (category) {
-      case "free": return "bg-awareness/20 text-awareness border-awareness/30";
-      case "paid": return "bg-primary/20 text-primary border-primary/30";
-      default: return "bg-muted/20 text-muted-foreground border-border";
-    }
-  };
-
   return (
     <>
       <SEO 
         title={`${course.title} - DeFi Course`}
         description={course.description}
-        keywords={`DeFi course, ${course.title.toLowerCase()}, decentralized finance, cryptocurrency education, blockchain learning, ${course.category === 'free' ? 'free course' : 'premium course'}`}
+        keywords={`DeFi course, ${course.title.toLowerCase()}, decentralized finance, cryptocurrency education, blockchain learning, free course`}
         url={`https://www.the3rdeyeadvisors.com/courses/${courseId}`}
         schema={{
           type: 'Course',
@@ -249,10 +115,8 @@ const CourseDetail = () => {
             answer: `This course is estimated to take ${course.estimatedTime}. You can learn at your own pace with lifetime access to all materials.`
           },
           {
-            question: course.category === 'free' ? "Is this course completely free?" : "What's included in the course price?",
-            answer: course.category === 'free' 
-              ? "Yes, this course is completely free with no hidden costs. Sign up to track your progress and earn completion certificates."
-              : `For ${coursePrice}, you get lifetime access to all ${course.modules?.length || 5} modules, community discussions, downloadable resources, and completion certificates.`
+            question: "Is this course completely free?",
+            answer: "Yes, this course is completely free with no hidden costs. Sign up to track your progress and earn completion badges."
           }
         ]}
       />
@@ -273,7 +137,7 @@ const CourseDetail = () => {
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
             <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-3 sm:gap-4">
               <BookOpen className="w-6 h-6 sm:w-8 sm:h-8 text-primary flex-shrink-0" />
-              <Badge className={`${getCategoryColor('free')} text-xs sm:text-sm`}>
+              <Badge className="bg-awareness/20 text-awareness border-awareness/30 text-xs sm:text-sm">
                 Free Course
               </Badge>
             </div>
@@ -282,8 +146,6 @@ const CourseDetail = () => {
               <span className="font-system text-xs sm:text-sm">{course.estimatedTime}</span>
             </div>
           </div>
-
-          {/* All courses are now free */}
 
           {/* Start Learning Button - Available to all logged in users */}
           {user && (
@@ -397,11 +259,7 @@ const CourseDetail = () => {
         </div>
 
         {/* Enhanced or Simple Module Navigation */}
-        {isCheckingAccess ? (
-          <div className="text-center py-8">
-            <p className="text-muted-foreground font-consciousness">Checking course access...</p>
-          </div>
-        ) : showEnhancedNav ? (
+        {showEnhancedNav ? (
           <EnhancedModuleNavigation
             courseId={course.id}
             onModuleSelect={(moduleId) => navigate(`/courses/${courseId}/module/${moduleId}`)}
@@ -412,29 +270,20 @@ const CourseDetail = () => {
           <div className="space-y-4">
             {course.modules.map((module, index) => {
               const isCompleted = isModuleCompleted(index);
-              const isLocked = course.category === 'paid' && hasAccess === false;
               
               return (
                 <Card
                   key={index}
                   className={`p-6 transition-all duration-300 ${
-                    isLocked 
-                      ? "bg-muted/30 border-muted cursor-not-allowed opacity-60"
-                      : isCompleted 
-                        ? "bg-primary/5 border-primary/30 cursor-pointer" 
-                        : "bg-card/60 border-border hover:border-primary/40 cursor-pointer"
+                    isCompleted 
+                      ? "bg-primary/5 border-primary/30 cursor-pointer" 
+                      : "bg-card/60 border-border hover:border-primary/40 cursor-pointer"
                   }`}
-                  onClick={() => {
-                    if (isLocked) {
-                      toast.error('Purchase the course to access this module');
-                      return;
-                    }
-                    navigate(`/courses/${courseId}/module/${module.id}`)
-                  }}
+                  onClick={() => navigate(`/courses/${courseId}/module/${module.id}`)}
                 >
                   <div className="flex items-start gap-4">
                     <div className="flex items-center gap-3 min-w-0 flex-1">
-                      {user && !isLocked ? (
+                      {user ? (
                         <div onClick={(e) => e.stopPropagation()}>
                           <Checkbox
                             checked={isCompleted}
@@ -443,39 +292,29 @@ const CourseDetail = () => {
                           />
                         </div>
                       ) : (
-                        <div className={`w-4 h-4 border rounded mt-1 ${
-                          isLocked ? "border-muted" : "border-border"
-                        }`} />
+                        <div className="w-4 h-4 border rounded mt-1 border-border" />
                       )}
                       
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-2">
-                          <span className={`text-sm font-system ${
-                            isLocked ? "text-muted-foreground/60" : "text-muted-foreground"
-                          }`}>
+                          <span className="text-sm font-system text-muted-foreground">
                             Module {index + 1}
                           </span>
-                          {isCompleted && !isLocked && (
+                          {isCompleted && (
                             <CheckCircle className="w-4 h-4 text-primary" />
-                          )}
-                          {isLocked && (
-                            <Lock className="w-4 h-4 text-muted-foreground/60" />
                           )}
                         </div>
                         <h3 className={`font-consciousness font-medium ${
-                          isLocked ? "text-muted-foreground/60" 
-                          : isCompleted ? "text-primary" : "text-foreground"
+                          isCompleted ? "text-primary" : "text-foreground"
                         }`}>
                           {module.title}
                         </h3>
-                        <p className={`text-sm mt-1 ${
-                          isLocked ? "text-muted-foreground/40" : "text-muted-foreground"
-                        }`}>
+                        <p className="text-sm mt-1 text-muted-foreground">
                           {module.duration} minutes • {module.type}
                         </p>
                       </div>
                       
-                      {!isLocked && <Play className="w-5 h-5 text-primary" />}
+                      <Play className="w-5 h-5 text-primary" />
                     </div>
                   </div>
                 </Card>
