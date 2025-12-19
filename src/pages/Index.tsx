@@ -202,7 +202,7 @@ const Index = () => {
                 </Button>
               </Link>
               
-              <Link to="/raffles" className="w-full sm:w-auto">
+              <Link to="/subscription" className="w-full sm:w-auto">
                 <Button 
                   variant="awareness" 
                   size="lg" 
