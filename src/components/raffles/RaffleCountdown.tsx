@@ -46,25 +46,25 @@ const RaffleCountdown = ({ endDate }: RaffleCountdownProps) => {
   }, [endDate]);
 
   const TimeBlock = ({ value, label }: { value: number; label: string }) => (
-    <div className="flex flex-col items-center">
-      <div className="bg-primary/10 rounded-lg px-4 py-3 min-w-[70px]">
-        <span className="text-2xl font-bold text-primary">{value.toString().padStart(2, '0')}</span>
+    <div className="flex flex-col items-center flex-shrink-0">
+      <div className="bg-primary/10 rounded-lg px-2 sm:px-4 py-2 sm:py-3 min-w-[50px] sm:min-w-[70px] text-center">
+        <span className="text-lg sm:text-2xl font-bold text-primary">{value.toString().padStart(2, '0')}</span>
       </div>
-      <span className="text-xs text-muted-foreground mt-1">{label}</span>
+      <span className="text-[10px] sm:text-xs text-muted-foreground mt-1">{label}</span>
     </div>
   );
 
   return (
-    <div className="flex items-center justify-center gap-2">
-      <Clock className="w-5 h-5 text-primary" />
-      <div className="flex gap-2">
+    <div className="flex items-center justify-center gap-1 sm:gap-2 w-full px-2">
+      <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-primary flex-shrink-0" />
+      <div className="flex items-center justify-center gap-1 sm:gap-2">
         <TimeBlock value={timeRemaining.days} label="Days" />
-        <span className="text-2xl font-bold text-muted-foreground self-center">:</span>
+        <span className="text-lg sm:text-2xl font-bold text-muted-foreground">:</span>
         <TimeBlock value={timeRemaining.hours} label="Hours" />
-        <span className="text-2xl font-bold text-muted-foreground self-center">:</span>
-        <TimeBlock value={timeRemaining.minutes} label="Minutes" />
-        <span className="text-2xl font-bold text-muted-foreground self-center">:</span>
-        <TimeBlock value={timeRemaining.seconds} label="Seconds" />
+        <span className="text-lg sm:text-2xl font-bold text-muted-foreground">:</span>
+        <TimeBlock value={timeRemaining.minutes} label="Min" />
+        <span className="text-lg sm:text-2xl font-bold text-muted-foreground">:</span>
+        <TimeBlock value={timeRemaining.seconds} label="Sec" />
       </div>
     </div>
   );
