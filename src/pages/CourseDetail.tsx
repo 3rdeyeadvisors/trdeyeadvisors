@@ -227,7 +227,7 @@ const CourseDetail = () => {
           type: 'Course',
           data: {
             offers: {
-              price: course.category === 'free' ? "0" : coursePrice.replace('$', '') || "67",
+              price: "0",
               priceCurrency: "USD"
             },
             hasCourseInstance: true,
