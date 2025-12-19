@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "sonner";
 import SEO from "@/components/SEO";
+import DOMPurify from "dompurify";
 import {
   Select,
   SelectContent,
@@ -242,8 +243,9 @@ export default function MerchandiseDetail() {
   }
 
   const productImages = (product?.images as any[]) || [];
-  const productDescription = typeof product?.description === 'string' ? product.description : '';
-
+  const rawDescription = typeof product?.description === 'string' ? product.description : '';
+  // Sanitize HTML to prevent XSS attacks
+  const productDescription = useMemo(() => DOMPurify.sanitize(rawDescription), [rawDescription]);
   return (
     <>
       <SEO 

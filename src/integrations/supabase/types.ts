@@ -1419,8 +1419,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      cleanup_old_email_logs: { Args: never; Returns: undefined }
       cleanup_old_presence: { Args: never; Returns: undefined }
       cleanup_old_rate_limits: { Args: never; Returns: undefined }
+      cleanup_old_security_logs: { Args: never; Returns: undefined }
       get_average_rating: { Args: never; Returns: number }
       get_profiles_batch: {
         Args: { user_ids: string[] }
