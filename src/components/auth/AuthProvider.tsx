@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { User, Session } from '@supabase/supabase-js';
 
@@ -6,6 +6,7 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
+  ready: boolean; // New: indicates initial auth check is complete
   signIn: (email: string, password: string) => Promise<any>;
   signUp: (email: string, password: string, options?: any) => Promise<any>;
   signOut: () => Promise<any>;
@@ -29,26 +30,36 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const [ready, setReady] = useState(false);
+  const initialCheckDone = useRef(false);
 
   useEffect(() => {
+    // Prevent double initialization
+    if (initialCheckDone.current) return;
+    initialCheckDone.current = true;
+
     // Set up auth state listener FIRST to catch all events
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        console.log('[Auth] Auth state change:', event, session?.user?.id);
+      (event, newSession) => {
+        console.log('[Auth] Auth state change:', event, newSession?.user?.id);
         
-        // Update state synchronously
-        setSession(session);
-        setUser(session?.user ?? null);
+        // Update state synchronously - no async calls here!
+        setSession(newSession);
+        setUser(newSession?.user ?? null);
+        
+        // Mark as ready and not loading after first event
         setLoading(false);
+        setReady(true);
       }
     );
 
     // THEN get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log('[Auth] Initial session:', session?.user?.id);
-      setSession(session);
-      setUser(session?.user ?? null);
+    supabase.auth.getSession().then(({ data: { session: initialSession } }) => {
+      console.log('[Auth] Initial session:', initialSession?.user?.id);
+      setSession(initialSession);
+      setUser(initialSession?.user ?? null);
       setLoading(false);
+      setReady(true);
     });
 
     return () => subscription.unsubscribe();
@@ -95,15 +106,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const redirectUrl = `${window.location.origin}/reset-password`;
     
     try {
-      // First, call Supabase to generate the reset token
       const result = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: redirectUrl,
       });
-
-      // Let Supabase handle sending the password reset email
-      // The email will contain the proper reset link with tokens
-      // You can customize Supabase email templates in Authentication > Email Templates
-
       return result;
     } catch (error) {
       return { error: error as any };
@@ -146,6 +151,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     user,
     session,
     loading,
+    ready,
     signIn,
     signUp,
     signOut,
@@ -154,6 +160,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     signInWithGoogle,
     signInWithApple,
   };
+
+  // Don't render children until initial auth check is complete
+  // This prevents flickering by ensuring we know the auth state before rendering
+  if (!ready) {
+    return null;
+  }
 
   return (
     <AuthContext.Provider value={value}>

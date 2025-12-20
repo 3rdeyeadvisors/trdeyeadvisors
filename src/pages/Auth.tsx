@@ -28,6 +28,7 @@ const Auth = () => {
   const [isPasswordUpdate, setIsPasswordUpdate] = useState(false);
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const hasRedirected = useRef(false);
   
   // Get initial tab from URL parameter or pathname
   const urlParams = new URLSearchParams(window.location.search);
@@ -103,13 +104,14 @@ const Auth = () => {
       return;
     }
     
-    // Handle authenticated users
-    if (user && session) {
+    // Handle authenticated users - redirect only ONCE
+    if (user && session && !hasRedirected.current) {
       // If there's a plan parameter, auto-trigger Stripe checkout
       if (plan && (plan === 'monthly' || plan === 'annual')) {
         triggerCheckout(plan);
       } else {
         // Redirect to intended destination or dashboard
+        hasRedirected.current = true;
         const destination = redirectTo || '/dashboard';
         console.log('[Auth] Redirecting authenticated user to:', destination);
         navigate(destination, { replace: true });
