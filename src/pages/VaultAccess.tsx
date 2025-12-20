@@ -37,12 +37,21 @@ const VaultAccess = () => {
   const { toast } = useToast();
   
   // Persist step state across wallet modal interactions
-  const [currentStep, setCurrentStep] = useState<Step>(() => {
+  const [currentStep, setCurrentStepInternal] = useState<Step>(() => {
     const savedStep = sessionStorage.getItem('vault_step') as Step | null;
+    console.log('[Vault] Initial step from storage:', savedStep);
     return savedStep && ['auth', 'disclaimer', 'wallet', 'nft', 'vault'].includes(savedStep) 
       ? savedStep 
       : 'auth';
   });
+  
+  // Wrapper to persist step changes
+  const setCurrentStep = (step: Step) => {
+    console.log('[Vault] Setting step:', step);
+    sessionStorage.setItem('vault_step', step);
+    setCurrentStepInternal(step);
+  };
+
   const [disclaimerAccepted, setDisclaimerAccepted] = useState(() => {
     return localStorage.getItem('vault_disclaimer_accepted') === 'true';
   });
@@ -50,11 +59,7 @@ const VaultAccess = () => {
   const [isWhitelisted, setIsWhitelisted] = useState(false);
   const [verifying, setVerifying] = useState(false);
   const [checkingWhitelist, setCheckingWhitelist] = useState(false);
-
-  // Persist step to sessionStorage on change
-  useEffect(() => {
-    sessionStorage.setItem('vault_step', currentStep);
-  }, [currentStep]);
+  const [initialized, setInitialized] = useState(false);
 
   // Track page view
   useEffect(() => {
@@ -65,9 +70,14 @@ const VaultAccess = () => {
   useEffect(() => {
     if (!ready || authLoading) return;
     
+    console.log('[Vault] Auth check - user:', !!user, 'initialized:', initialized, 'step:', currentStep);
+    
     if (!user) {
       const alreadyRedirecting = sessionStorage.getItem('vault_auth_redirect');
-      if (alreadyRedirecting) return;
+      if (alreadyRedirecting) {
+        console.log('[Vault] Already redirecting, skipping');
+        return;
+      }
       
       sessionStorage.setItem('vault_auth_redirect', 'true');
       navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`, { replace: true });
@@ -77,15 +87,23 @@ const VaultAccess = () => {
     // Clear redirect flag
     sessionStorage.removeItem('vault_auth_redirect');
     
-    // Only set initial step if we're still on 'auth' (fresh visit)
-    if (currentStep === 'auth') {
-      if (disclaimerAccepted) {
-        setCurrentStep(account ? 'nft' : 'wallet');
-      } else {
-        setCurrentStep('disclaimer');
+    // Only initialize step ONCE when user is confirmed
+    if (!initialized) {
+      setInitialized(true);
+      
+      // Only set initial step if we're still on 'auth' (fresh visit with no stored step)
+      const savedStep = sessionStorage.getItem('vault_step');
+      console.log('[Vault] Initializing - savedStep:', savedStep, 'disclaimerAccepted:', disclaimerAccepted);
+      
+      if (!savedStep || savedStep === 'auth') {
+        if (disclaimerAccepted) {
+          setCurrentStep(account ? 'nft' : 'wallet');
+        } else {
+          setCurrentStep('disclaimer');
+        }
       }
     }
-  }, [ready, authLoading, user]);
+  }, [ready, authLoading, user, initialized]);
 
   // Check whitelist when wallet connects
   useEffect(() => {
@@ -116,12 +134,13 @@ const VaultAccess = () => {
     }
   }, [user, account?.address, disclaimerAccepted]);
 
-  // Update step when wallet connects
+  // Update step when wallet connects - only if we're on wallet step
   useEffect(() => {
-    if (account && disclaimerAccepted && !isWhitelisted) {
+    if (account && disclaimerAccepted && !isWhitelisted && currentStep === 'wallet') {
+      console.log('[Vault] Wallet connected, moving to nft step');
       setCurrentStep('nft');
     }
-  }, [account, disclaimerAccepted, isWhitelisted]);
+  }, [account, disclaimerAccepted, isWhitelisted, currentStep]);
 
   // Verify NFT ownership on backend
   const verifyOwnership = async () => {
