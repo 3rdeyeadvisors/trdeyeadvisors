@@ -1,6 +1,6 @@
 import { TransactionButton, useActiveAccount } from "thirdweb/react";
 import { getNFTContract } from "@/lib/thirdweb";
-import { prepareContractCall } from "thirdweb";
+import { claimTo } from "thirdweb/extensions/erc1155";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Sparkles, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -8,6 +8,10 @@ import { useToast } from "@/hooks/use-toast";
 interface NFTPurchaseButtonProps {
   onPurchaseComplete?: () => void;
 }
+
+// Token ID for the 3EA Access NFT (first token in the ERC1155 collection)
+const ACCESS_TOKEN_ID = 0n;
+const QUANTITY = 1n;
 
 export const NFTPurchaseButton = ({ onPurchaseComplete }: NFTPurchaseButtonProps) => {
   const account = useActiveAccount();
@@ -32,7 +36,7 @@ export const NFTPurchaseButton = ({ onPurchaseComplete }: NFTPurchaseButtonProps
           Purchase 3EA Access NFT
         </CardTitle>
         <CardDescription>
-          Mint your NFT to unlock exclusive access to the 3EA Enzyme Vault
+          Claim your NFT to unlock exclusive access to the 3EA Enzyme Vault
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -48,32 +52,32 @@ export const NFTPurchaseButton = ({ onPurchaseComplete }: NFTPurchaseButtonProps
 
         <TransactionButton
           transaction={() => {
-            // Prepare the mint transaction
-            // Adjust the method name and params based on your NFT contract
-            return prepareContractCall({
+            // Use thirdweb's claimTo extension for DropERC1155 contracts
+            return claimTo({
               contract,
-              method: "function mint()",
-              params: [],
+              to: account.address,
+              tokenId: ACCESS_TOKEN_ID,
+              quantity: QUANTITY,
             });
           }}
           onTransactionSent={() => {
             toast({
               title: "Transaction Submitted",
-              description: "Your NFT purchase is being processed...",
+              description: "Your NFT claim is being processed...",
             });
           }}
           onTransactionConfirmed={() => {
             toast({
-              title: "NFT Purchased!",
+              title: "NFT Claimed!",
               description: "Welcome to 3EA! You now have vault access.",
             });
             onPurchaseComplete?.();
           }}
           onError={(error) => {
-            console.error('NFT purchase error:', error);
+            console.error('NFT claim error:', error);
             toast({
               title: "Transaction Failed",
-              description: error.message || "Failed to purchase NFT. Please try again.",
+              description: error.message || "Failed to claim NFT. Please try again.",
               variant: "destructive",
             });
           }}
@@ -89,7 +93,7 @@ export const NFTPurchaseButton = ({ onPurchaseComplete }: NFTPurchaseButtonProps
             cursor: "pointer",
           }}
         >
-          Mint Access NFT
+          Claim Access NFT
         </TransactionButton>
 
         <p className="text-xs text-muted-foreground text-center flex items-center justify-center gap-1">
