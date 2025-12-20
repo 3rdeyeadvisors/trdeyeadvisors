@@ -243,8 +243,8 @@ const Store = () => {
           {/* Physical Merchandise Section */}
           {activeCategory === 'merchandise' && (
             <section aria-labelledby="merchandise-heading">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-                <div className="flex items-center gap-3">
+              <div className="flex flex-col items-center gap-4 mb-8">
+                <div className="flex items-center justify-center gap-3">
                   <Package className="h-6 w-6 text-primary" aria-hidden="true" />
                   <h2 id="merchandise-heading" className="text-2xl font-consciousness font-bold text-foreground">
                     Physical Merchandise
@@ -330,7 +330,7 @@ const Store = () => {
           {/* Digital Collectibles / NFT Section */}
           {activeCategory === 'digital' && (
             <section aria-labelledby="nft-heading">
-              <div className="flex items-center gap-3 mb-8">
+              <div className="flex items-center justify-center gap-3 mb-8">
                 <Sparkles className="h-6 w-6 text-primary" aria-hidden="true" />
                 <h2 id="nft-heading" className="text-2xl font-consciousness font-bold text-foreground">
                   Digital Collectibles
