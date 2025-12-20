@@ -14,13 +14,42 @@ const Contact = () => {
     name: "",
     email: "",
     subject: "",
-    message: ""
+    message: "",
+    website: "" // Honeypot field
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitTime, setSubmitTime] = useState<number>(0);
   const { toast } = useToast();
+
+  // Track form load time for bot detection
+  useState(() => {
+    setSubmitTime(Date.now());
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Bot detection: honeypot check
+    if (formData.website) {
+      console.log('[Security] Honeypot triggered');
+      toast({
+        title: "Message Sent!",
+        description: "Thank you for reaching out. We'll respond within 24 hours.",
+      });
+      return;
+    }
+    
+    // Bot detection: form submitted too fast (less than 3 seconds)
+    const timeTaken = Date.now() - submitTime;
+    if (timeTaken < 3000) {
+      console.log('[Security] Form submitted too quickly:', timeTaken);
+      toast({
+        title: "Message Sent!",
+        description: "Thank you for reaching out. We'll respond within 24 hours.",
+      });
+      return;
+    }
+    
     setIsSubmitting(true);
 
     try {
@@ -29,7 +58,12 @@ const Contact = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+        }),
       });
 
       const result = await response.json();
@@ -39,7 +73,8 @@ const Contact = () => {
           title: "Message Sent!",
           description: "Thank you for reaching out. We'll respond within 24 hours.",
         });
-        setFormData({ name: "", email: "", subject: "", message: "" });
+        setFormData({ name: "", email: "", subject: "", message: "", website: "" });
+        setSubmitTime(Date.now());
       } else {
         throw new Error(result.error || 'Failed to send message');
       }
@@ -161,6 +196,20 @@ const Contact = () => {
                     onChange={handleChange}
                     className="font-consciousness resize-none"
                     disabled={isSubmitting}
+                  />
+                </div>
+
+                {/* Honeypot field - hidden from users, visible to bots */}
+                <div className="absolute -left-[9999px] opacity-0 pointer-events-none" aria-hidden="true">
+                  <Label htmlFor="website">Website</Label>
+                  <Input
+                    id="website"
+                    name="website"
+                    type="text"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={formData.website}
+                    onChange={handleChange}
                   />
                 </div>
 
