@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offline - 3rdeyeadvisors</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #0A1628 0%, #1a2744 50%, #0A1628 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #e2e8f0;
+      padding: 20px;
+    }
+
+    .container {
+      text-align: center;
+      max-width: 500px;
+    }
+
+    .icon {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 32px;
+      background: linear-gradient(135deg, #00D4FF 0%, #0088cc 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 60px rgba(0, 212, 255, 0.3);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 60px rgba(0, 212, 255, 0.3);
+      }
+      50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 80px rgba(0, 212, 255, 0.5);
+      }
+    }
+
+    .icon svg {
+      width: 60px;
+      height: 60px;
+      stroke: #0A1628;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #00D4FF 0%, #ffffff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    p {
+      font-size: 1.1rem;
+      color: #94a3b8;
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+
+    .retry-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      background: linear-gradient(135deg, #00D4FF 0%, #0088cc 100%);
+      color: #0A1628;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
+    }
+
+    .retry-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 30px rgba(0, 212, 255, 0.5);
+    }
+
+    .retry-btn:active {
+      transform: translateY(0);
+    }
+
+    .retry-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .cached-pages {
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .cached-pages h2 {
+      font-size: 1rem;
+      color: #64748b;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .cached-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .cached-links a {
+      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: #00D4FF;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+    }
+
+    .cached-links a:hover {
+      background: rgba(0, 212, 255, 0.1);
+      border-color: rgba(0, 212, 255, 0.3);
+    }
+
+    .status {
+      margin-top: 24px;
+      font-size: 0.85rem;
+      color: #64748b;
+    }
+
+    .status-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: #f59e0b;
+      border-radius: 50%;
+      margin-right: 8px;
+      animation: blink 1.5s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon">
+      <svg viewBox="0 0 24 24">
+        <path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0 1 19 12.55M5 12.55a10.94 10.94 0 0 1 5.17-2.39M10.71 5.05A16 16 0 0 1 22.58 9M1.42 9a15.91 15.91 0 0 1 4.7-2.88M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/>
+      </svg>
+    </div>
+    
+    <h1>You're Offline</h1>
+    <p>It looks like you've lost your internet connection. Don't worry — some pages may still be available from cache.</p>
+    
+    <button class="retry-btn" onclick="window.location.reload()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+      </svg>
+      Try Again
+    </button>
+    
+    <div class="cached-pages">
+      <h2>Cached Pages</h2>
+      <div class="cached-links">
+        <a href="/">Home</a>
+        <a href="/courses">Courses</a>
+        <a href="/tutorials">Tutorials</a>
+        <a href="/resources">Resources</a>
+      </div>
+    </div>
+    
+    <div class="status">
+      <span class="status-dot"></span>
+      Waiting for connection...
+    </div>
+  </div>
+
+  <script>
+    // Auto-reload when connection is restored
+    window.addEventListener('online', () => {
+      window.location.reload();
+    });
+  </script>
+</body>
+</html>
