@@ -18,7 +18,7 @@ export const THIRDWEB_CLIENT_ID = "87309968bcf322141f6cdb41ada4edcf";
 // WalletConnect Project ID - Required for WalletConnect v2 mobile connections
 // Get your own at https://cloud.walletconnect.com (free)
 // This enables QR code scanning and mobile deep linking
-export const WALLETCONNECT_PROJECT_ID = "e7f0ae0f07d0e2fdd4c8a6c3c17f1d5f";
+export const WALLETCONNECT_PROJECT_ID = "0ceca1527f12a6186d4a1003bc45b2d9";
 
 // Create the Thirdweb client with error handling
 export const thirdwebClient = createThirdwebClient({
