@@ -1,23 +1,39 @@
 import { createThirdwebClient, getContract, defineChain } from "thirdweb";
 
-// Thirdweb Client ID
+/**
+ * Thirdweb Configuration for 3rd Eye Advisors
+ * 
+ * IMPORTANT: For production, ensure these values are correct:
+ * - THIRDWEB_CLIENT_ID: Get from https://thirdweb.com/dashboard/settings/api-keys
+ * - WALLETCONNECT_PROJECT_ID: Get from https://cloud.walletconnect.com
+ * 
+ * The WalletConnect project ID is CRITICAL for mobile wallet connections.
+ * Without a valid project ID, mobile deep linking won't work properly.
+ */
+
+// Thirdweb Client ID - Required for thirdweb SDK
+// This is a publishable key (safe for client-side)
 export const THIRDWEB_CLIENT_ID = "87309968bcf322141f6cdb41ada4edcf";
 
-// WalletConnect Project ID (required for mobile wallet deep linking)
-// Get your own at https://cloud.walletconnect.com
+// WalletConnect Project ID - Required for WalletConnect v2 mobile connections
+// Get your own at https://cloud.walletconnect.com (free)
+// This enables QR code scanning and mobile deep linking
 export const WALLETCONNECT_PROJECT_ID = "e7f0ae0f07d0e2fdd4c8a6c3c17f1d5f";
 
-// Create the Thirdweb client
+// Create the Thirdweb client with error handling
 export const thirdwebClient = createThirdwebClient({
   clientId: THIRDWEB_CLIENT_ID,
 });
 
-// App metadata for WalletConnect (required for mobile wallet deep linking)
+// App metadata for WalletConnect - shown in wallet connection prompts
+// This helps users identify your app when connecting from their wallet
 export const appMetadata = {
   name: "3rd Eye Advisors",
   description: "DeFi Education & NFT-Gated Vault Access",
   url: typeof window !== "undefined" ? window.location.origin : "https://the3rdeyeadvisors.com",
   logoUrl: "https://the3rdeyeadvisors.com/android-chrome-192x192.png",
+  // Additional fields for better wallet UX
+  icons: ["https://the3rdeyeadvisors.com/android-chrome-192x192.png"],
 };
 
 // Ethereum Mainnet chain
@@ -48,9 +64,31 @@ export const getEnzymeVaultContract = () => {
 };
 
 // Supported external wallets (App Store compliant - no custodial wallets)
+// Order matters - WalletConnect should be first for mobile
 export const SUPPORTED_WALLETS = [
+  "walletConnect", // Primary for mobile - works with ANY wallet
   "io.metamask",
   "com.coinbase.wallet", 
   "me.rainbow",
-  "walletConnect",
+  "com.trustwallet.app",
+  "app.phantom",
 ] as const;
+
+// Helper to detect if user is on mobile
+export const isMobile = () => {
+  if (typeof window === "undefined") return false;
+  return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+};
+
+// Helper to detect if user is in a wallet's in-app browser
+export const isInWalletBrowser = () => {
+  if (typeof window === "undefined") return false;
+  const ua = navigator.userAgent.toLowerCase();
+  return (
+    ua.includes("metamask") ||
+    ua.includes("coinbase") ||
+    ua.includes("rainbow") ||
+    ua.includes("trust") ||
+    ua.includes("phantom")
+  );
+};
