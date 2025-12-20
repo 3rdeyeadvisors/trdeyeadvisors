@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Package, Trash2, Loader2, Edit } from "lucide-react";
@@ -20,6 +21,7 @@ interface PrintifyProduct {
 }
 
 export function ProductManager() {
+  const navigate = useNavigate();
   const [products, setProducts] = useState<PrintifyProduct[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
@@ -114,7 +116,7 @@ export function ProductManager() {
         </CardHeader>
         <CardContent className="space-y-4">
           <Button 
-            onClick={() => window.location.href = "/admin/store"}
+            onClick={() => navigate("/admin/store")}
             variant="outline"
             className="w-full"
           >
@@ -122,7 +124,7 @@ export function ProductManager() {
           </Button>
           
           <Button 
-            onClick={() => window.location.href = "/admin/upload"}
+            onClick={() => navigate("/admin/upload")}
             variant="outline"
             className="w-full"
           >
@@ -130,7 +132,7 @@ export function ProductManager() {
           </Button>
 
           <Button 
-            onClick={() => window.location.href = "/admin/upload-products"}
+            onClick={() => navigate("/admin/upload-products")}
             variant="outline"
             className="w-full"
           >

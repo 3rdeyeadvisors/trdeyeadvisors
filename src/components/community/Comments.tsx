@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -46,6 +47,7 @@ interface CommentsProps {
 export const Comments = ({ contentType, contentId, title }: CommentsProps) => {
   const { user } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
   
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -464,7 +466,7 @@ export const Comments = ({ contentType, contentId, title }: CommentsProps) => {
           <Card className="mb-6">
             <CardContent className="p-4 text-center">
               <p className="text-muted-foreground mb-3">Sign in to join the discussion</p>
-              <Button variant="outline" onClick={() => window.location.href = '/auth'}>
+              <Button variant="outline" onClick={() => navigate('/auth')}>
                 Sign In
               </Button>
             </CardContent>

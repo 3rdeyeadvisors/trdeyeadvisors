@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -52,6 +53,7 @@ interface QADiscussionsProps {
 export const QADiscussions = ({ contentType, contentId, title }: QADiscussionsProps) => {
   const { user } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
   
   const [discussions, setDiscussions] = useState<Discussion[]>([]);
   const [selectedDiscussion, setSelectedDiscussion] = useState<Discussion | null>(null);
@@ -546,7 +548,7 @@ export const QADiscussions = ({ contentType, contentId, title }: QADiscussionsPr
             <Card>
               <CardContent className="p-4 text-center">
                 <p className="text-muted-foreground mb-3">Sign in to reply to this discussion</p>
-                <Button variant="outline" onClick={() => window.location.href = '/auth'}>
+                <Button variant="outline" onClick={() => navigate('/auth')}>
                   Sign In
                 </Button>
               </CardContent>

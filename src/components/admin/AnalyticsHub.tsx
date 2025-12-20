@@ -1,8 +1,11 @@
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BarChart3 } from "lucide-react";
 
 export function AnalyticsHub() {
+  const navigate = useNavigate();
+  
   return (
     <div className="space-y-6">
       <Card className="border-primary/20">
@@ -15,7 +18,7 @@ export function AnalyticsHub() {
         </CardHeader>
         <CardContent>
           <Button 
-            onClick={() => window.location.href = "/analytics"}
+            onClick={() => navigate("/analytics")}
             variant="outline"
             className="w-full"
           >
