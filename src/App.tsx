@@ -11,6 +11,7 @@ import Layout from "./components/Layout";
 import { AuthProvider } from "./components/auth/AuthProvider";
 import { ProgressProvider } from "./components/progress/ProgressProvider";
 import { SubscriptionProvider } from "./hooks/useSubscription";
+import { PWAStatus, OfflineBanner } from "./components/PWAStatus";
 import Index from "./pages/Index";
 import Subscription from "./pages/Subscription";
 import Philosophy from "./pages/Philosophy";
@@ -103,6 +104,8 @@ const App = () => {
             <SubscriptionProvider>
             <ProgressProvider>
               <SecurityHeaders />
+              <OfflineBanner />
+              <PWAStatus />
               <Toaster />
             <Sonner />
             <BrowserRouter>
