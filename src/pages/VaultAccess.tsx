@@ -36,12 +36,25 @@ const VaultAccess = () => {
   const account = useActiveAccount();
   const { toast } = useToast();
   
-  const [currentStep, setCurrentStep] = useState<Step>('auth');
-  const [disclaimerAccepted, setDisclaimerAccepted] = useState(false);
+  // Persist step state across wallet modal interactions
+  const [currentStep, setCurrentStep] = useState<Step>(() => {
+    const savedStep = sessionStorage.getItem('vault_step') as Step | null;
+    return savedStep && ['auth', 'disclaimer', 'wallet', 'nft', 'vault'].includes(savedStep) 
+      ? savedStep 
+      : 'auth';
+  });
+  const [disclaimerAccepted, setDisclaimerAccepted] = useState(() => {
+    return localStorage.getItem('vault_disclaimer_accepted') === 'true';
+  });
   const [hasNFT, setHasNFT] = useState(false);
   const [isWhitelisted, setIsWhitelisted] = useState(false);
   const [verifying, setVerifying] = useState(false);
   const [checkingWhitelist, setCheckingWhitelist] = useState(false);
+
+  // Persist step to sessionStorage on change
+  useEffect(() => {
+    sessionStorage.setItem('vault_step', currentStep);
+  }, [currentStep]);
 
   // Track page view
   useEffect(() => {
@@ -49,37 +62,30 @@ const VaultAccess = () => {
   }, []);
 
   // Auto-redirect to auth if not logged in (runs once when ready)
-  // Skip redirect check entirely if user is logged in - we only care about unauthenticated users
   useEffect(() => {
     if (!ready || authLoading) return;
     
-    // Only redirect if there's no user - don't run this effect for logged-in users at all
     if (!user) {
-      // Check if we already initiated a redirect this session
       const alreadyRedirecting = sessionStorage.getItem('vault_auth_redirect');
       if (alreadyRedirecting) return;
       
       sessionStorage.setItem('vault_auth_redirect', 'true');
-      const currentPath = location.pathname;
-      navigate(`/auth?redirect=${encodeURIComponent(currentPath)}`, { replace: true });
+      navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`, { replace: true });
       return;
     }
     
-    // Clear the redirect flag when user is authenticated
+    // Clear redirect flag
     sessionStorage.removeItem('vault_auth_redirect');
     
-    // User is logged in - check disclaimer (only run once)
-    const accepted = localStorage.getItem('vault_disclaimer_accepted');
-    if (accepted === 'true') {
-      setDisclaimerAccepted(true);
-      // Set initial step based on wallet connection, but don't update on wallet changes
-      if (currentStep === 'auth') {
+    // Only set initial step if we're still on 'auth' (fresh visit)
+    if (currentStep === 'auth') {
+      if (disclaimerAccepted) {
         setCurrentStep(account ? 'nft' : 'wallet');
+      } else {
+        setCurrentStep('disclaimer');
       }
-    } else if (currentStep === 'auth') {
-      setCurrentStep('disclaimer');
     }
-  }, [ready, authLoading, user, navigate, location.pathname]); // Removed 'account' from deps
+  }, [ready, authLoading, user]);
 
   // Check whitelist when wallet connects
   useEffect(() => {
