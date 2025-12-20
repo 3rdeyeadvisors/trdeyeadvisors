@@ -224,7 +224,8 @@ const Store = () => {
             <p className="text-muted-foreground font-consciousness mb-6 max-w-2xl">
               Purchase NFTs to unlock exclusive vault access and premium features. All transactions use external wallets only.
             </p>
-            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
+            {/* Single card - use max-width instead of grid for single item */}
+            <div className="max-w-sm">
               <NFTStoreCard />
             </div>
           </section>

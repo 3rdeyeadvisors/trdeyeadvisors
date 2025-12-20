@@ -51,12 +51,12 @@ export const NFTStoreCard = () => {
     : 'Free';
 
   return (
-    <Card className="overflow-hidden border-primary/30 bg-gradient-to-br from-primary/5 to-primary/10 hover:shadow-xl hover:shadow-primary/20 transition-all duration-300">
+    <Card className="overflow-hidden border-primary/30 bg-gradient-to-br from-primary/5 to-primary/10 hover:shadow-xl hover:shadow-primary/20 transition-all duration-300 h-full flex flex-col">
       {/* NFT Image/Visual */}
-      <div className="aspect-square relative bg-gradient-to-br from-primary/20 via-primary/10 to-background flex items-center justify-center">
+      <div className="aspect-square relative bg-gradient-to-br from-primary/20 via-primary/10 to-background flex items-center justify-center min-h-[200px]">
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-primary/20 flex items-center justify-center animate-pulse">
-            <Sparkles className="w-16 h-16 md:w-20 md:h-20 text-primary" />
+          <div className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-full bg-primary/20 flex items-center justify-center animate-pulse">
+            <Sparkles className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 text-primary" />
           </div>
         </div>
         <Badge className="absolute top-3 right-3 bg-success text-success-foreground border-0">
@@ -64,38 +64,38 @@ export const NFTStoreCard = () => {
         </Badge>
       </div>
 
-      <CardHeader className="pb-2">
-        <CardTitle className="font-consciousness text-lg md:text-xl flex items-center gap-2">
+      <CardHeader className="pb-2 px-4 sm:px-6">
+        <CardTitle className="font-consciousness text-base sm:text-lg md:text-xl">
           3EA Earth Access NFT
         </CardTitle>
-        <CardDescription className="font-consciousness text-sm">
+        <CardDescription className="font-consciousness text-xs sm:text-sm">
           Unlock exclusive access to the 3EA Enzyme Vault
         </CardDescription>
       </CardHeader>
 
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-4 px-4 sm:px-6 flex-1 flex flex-col">
         {/* Price & Supply Info */}
-        <div className="grid grid-cols-2 gap-3">
-          <div className="rounded-lg bg-muted/50 p-3 text-center">
-            <div className="flex items-center justify-center gap-1.5 text-muted-foreground text-xs mb-1">
-              <Coins className="h-3.5 w-3.5" />
-              Price
+        <div className="grid grid-cols-2 gap-2 sm:gap-3">
+          <div className="rounded-lg bg-muted/50 p-2 sm:p-3 text-center">
+            <div className="flex items-center justify-center gap-1 sm:gap-1.5 text-muted-foreground text-xs mb-1">
+              <Coins className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0" />
+              <span>Price</span>
             </div>
             {isLoading ? (
               <Loader2 className="h-4 w-4 animate-spin mx-auto" />
             ) : (
-              <p className="font-semibold text-foreground text-sm">{formattedPrice}</p>
+              <p className="font-semibold text-foreground text-xs sm:text-sm truncate">{formattedPrice}</p>
             )}
           </div>
-          <div className="rounded-lg bg-muted/50 p-3 text-center">
-            <div className="flex items-center justify-center gap-1.5 text-muted-foreground text-xs mb-1">
-              <Package className="h-3.5 w-3.5" />
-              Supply
+          <div className="rounded-lg bg-muted/50 p-2 sm:p-3 text-center">
+            <div className="flex items-center justify-center gap-1 sm:gap-1.5 text-muted-foreground text-xs mb-1">
+              <Package className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0" />
+              <span>Supply</span>
             </div>
             {isLoading ? (
               <Loader2 className="h-4 w-4 animate-spin mx-auto" />
             ) : (
-              <p className="font-semibold text-foreground text-sm">
+              <p className="font-semibold text-foreground text-xs sm:text-sm truncate">
                 {maxSupply 
                   ? `${remaining?.toLocaleString()} left` 
                   : `${mintedCount.toLocaleString()} minted`}
@@ -111,25 +111,27 @@ export const NFTStoreCard = () => {
           <p>✓ Member-only content</p>
         </div>
 
-        {/* CTA */}
-        <Link to="/vault-access" className="block">
-          <Button className="w-full font-consciousness gap-2 min-h-[44px]" variant="default">
-            <Wallet className="h-4 w-4" />
-            View & Purchase
-          </Button>
-        </Link>
+        {/* CTA - push to bottom */}
+        <div className="mt-auto space-y-3 pt-2">
+          <Link to="/vault-access" className="block">
+            <Button className="w-full font-consciousness gap-2 min-h-[44px] text-sm" variant="default">
+              <Wallet className="h-4 w-4 shrink-0" />
+              <span>View & Purchase</span>
+            </Button>
+          </Link>
 
-        <p className="text-xs text-muted-foreground text-center flex items-center justify-center gap-1">
-          <ExternalLink className="h-3 w-3" />
-          <a 
-            href={`https://etherscan.io/address/${NFT_CONTRACT_ADDRESS}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:underline"
-          >
-            View on Etherscan
-          </a>
-        </p>
+          <p className="text-xs text-muted-foreground text-center">
+            <a 
+              href={`https://etherscan.io/address/${NFT_CONTRACT_ADDRESS}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:underline inline-flex items-center justify-center gap-1"
+            >
+              <ExternalLink className="h-3 w-3 shrink-0" />
+              <span>View on Etherscan</span>
+            </a>
+          </p>
+        </div>
       </CardContent>
     </Card>
   );
