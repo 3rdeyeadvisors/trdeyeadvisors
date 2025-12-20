@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -29,6 +30,7 @@ interface RatingStatsProps {
 export const RatingReviews = ({ contentType, contentId, title }: RatingStatsProps) => {
   const { user } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
   
   const [ratings, setRatings] = useState<Rating[]>([]);
   const [userRating, setUserRating] = useState<Rating | null>(null);
@@ -408,7 +410,7 @@ export const RatingReviews = ({ contentType, contentId, title }: RatingStatsProp
               <p className="text-muted-foreground mb-3">
                 Sign in to rate and review this content
               </p>
-              <Button variant="outline" onClick={() => window.location.href = '/auth'}>
+              <Button variant="outline" onClick={() => navigate('/auth')}>
                 Sign In
               </Button>
             </CardContent>
