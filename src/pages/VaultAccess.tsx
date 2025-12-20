@@ -135,10 +135,14 @@ const VaultAccess = () => {
   }, [user, account?.address, disclaimerAccepted]);
 
   // Update step when wallet connects - only if we're on wallet step
+  // Small delay prevents race conditions during wallet modal interactions
   useEffect(() => {
     if (account && disclaimerAccepted && !isWhitelisted && currentStep === 'wallet') {
-      console.log('[Vault] Wallet connected, moving to nft step');
-      setCurrentStep('nft');
+      const timer = setTimeout(() => {
+        console.log('[Vault] Wallet connected, moving to nft step');
+        setCurrentStep('nft');
+      }, 100);
+      return () => clearTimeout(timer);
     }
   }, [account, disclaimerAccepted, isWhitelisted, currentStep]);
 
@@ -312,9 +316,7 @@ const VaultAccess = () => {
               </CardHeader>
               <CardContent className="flex flex-col items-center gap-4 pt-2">
                 <div className="w-full flex justify-center">
-                  <WalletConnectButton 
-                    onConnect={() => setCurrentStep('nft')}
-                  />
+                  <WalletConnectButton />
                 </div>
                 <p className="text-xs text-muted-foreground text-center">
                   Supported: MetaMask, Coinbase Wallet, Rainbow, WalletConnect
