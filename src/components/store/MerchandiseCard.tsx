@@ -82,8 +82,10 @@ export function MerchandiseCard({ product, onAddToCart, isInCart }: MerchandiseC
     }
   };
 
-  // Initialize first variant
-  if (!selectedVariant) {
+  // Initialize first variant on mount
+  useEffect(() => {
+    if (selectedVariant) return;
+    
     // For single-variant products (like journals), just use the first variant
     if (!hasSizeVariants && product.variants?.length > 0) {
       const firstVariant = product.variants[0];
@@ -97,16 +99,9 @@ export function MerchandiseCard({ product, onAddToCart, isInCart }: MerchandiseC
       );
       if (firstVariant) {
         setSelectedVariant(firstVariant);
-        // Set the correct image for the first variant
-        const colorImageIndex = product.images?.findIndex((img: any) => 
-          img.variant_ids?.includes(firstVariant.id)
-        );
-        if (colorImageIndex !== -1) {
-          setCurrentImageIndex(colorImageIndex);
-        }
       }
     }
-  }
+  }, [product.variants, hasSizeVariants, variantFormat, selectedSize, selectedColor, availableSizes.length, selectedVariant]);
 
   // Update image when variant changes
   useEffect(() => {
