@@ -307,16 +307,14 @@ const Store = () => {
               </h2>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-              <NFTStoreCard />
-              {/* Placeholder cards for future NFTs to maintain grid consistency */}
-              <Card className="p-6 border-dashed border-2 border-muted flex flex-col items-center justify-center min-h-[300px] bg-muted/20">
-                <Sparkles className="h-10 w-10 text-muted-foreground/50 mb-3" />
-                <p className="text-sm text-muted-foreground font-consciousness text-center">More NFTs coming soon</p>
-              </Card>
+            {/* Single NFT - centered with max width for professional look */}
+            <div className="flex justify-center">
+              <div className="w-full max-w-sm">
+                <NFTStoreCard />
+              </div>
             </div>
             
-            <p className="text-sm text-muted-foreground font-consciousness mt-4">
+            <p className="text-sm text-muted-foreground font-consciousness mt-6 text-center">
               NFT purchases require an external wallet. Connect on the vault page to purchase.
             </p>
           </section>
