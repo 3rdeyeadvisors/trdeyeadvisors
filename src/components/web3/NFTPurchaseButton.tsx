@@ -1,9 +1,15 @@
-import { TransactionButton, useActiveAccount } from "thirdweb/react";
+import { TransactionButton, useActiveAccount, useReadContract } from "thirdweb/react";
 import { getNFTContract } from "@/lib/thirdweb";
-import { claimTo } from "thirdweb/extensions/erc1155";
+import { claimTo, getActiveClaimCondition, totalSupply } from "thirdweb/extensions/erc1155";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Sparkles, ExternalLink } from "lucide-react";
+import { Sparkles, ExternalLink, Coins, Package, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+
+// Helper to format wei to ETH
+const formatEther = (wei: bigint): string => {
+  const eth = Number(wei) / 1e18;
+  return eth.toFixed(eth < 0.01 ? 4 : 2);
+};
 
 interface NFTPurchaseButtonProps {
   onPurchaseComplete?: () => void;
@@ -17,6 +23,36 @@ export const NFTPurchaseButton = ({ onPurchaseComplete }: NFTPurchaseButtonProps
   const account = useActiveAccount();
   const { toast } = useToast();
   const contract = getNFTContract();
+
+  // Fetch active claim condition (includes price)
+  const { data: claimCondition, isLoading: loadingCondition } = useReadContract(
+    getActiveClaimCondition,
+    {
+      contract,
+      tokenId: ACCESS_TOKEN_ID,
+    }
+  );
+
+  // Fetch total minted supply
+  const { data: minted, isLoading: loadingSupply } = useReadContract(
+    totalSupply,
+    {
+      contract,
+      id: ACCESS_TOKEN_ID,
+    }
+  );
+
+  const isLoading = loadingCondition || loadingSupply;
+  const pricePerToken = claimCondition?.pricePerToken;
+  const maxClaimableSupply = claimCondition?.maxClaimableSupply;
+  const mintedCount = minted ? Number(minted) : 0;
+  const maxSupply = maxClaimableSupply ? Number(maxClaimableSupply) : null;
+  const remaining = maxSupply ? maxSupply - mintedCount : null;
+
+  // Format price for display
+  const formattedPrice = pricePerToken 
+    ? `${formatEther(pricePerToken)} ETH` 
+    : 'Free';
 
   if (!account) {
     return (
@@ -40,6 +76,36 @@ export const NFTPurchaseButton = ({ onPurchaseComplete }: NFTPurchaseButtonProps
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
+        {/* Price & Supply Info */}
+        <div className="grid grid-cols-2 gap-3">
+          <div className="rounded-lg bg-muted/50 p-3 text-center">
+            <div className="flex items-center justify-center gap-1.5 text-muted-foreground text-xs mb-1">
+              <Coins className="h-3.5 w-3.5" />
+              Price
+            </div>
+            {isLoading ? (
+              <Loader2 className="h-4 w-4 animate-spin mx-auto" />
+            ) : (
+              <p className="font-semibold text-foreground">{formattedPrice}</p>
+            )}
+          </div>
+          <div className="rounded-lg bg-muted/50 p-3 text-center">
+            <div className="flex items-center justify-center gap-1.5 text-muted-foreground text-xs mb-1">
+              <Package className="h-3.5 w-3.5" />
+              Supply
+            </div>
+            {isLoading ? (
+              <Loader2 className="h-4 w-4 animate-spin mx-auto" />
+            ) : (
+              <p className="font-semibold text-foreground">
+                {maxSupply 
+                  ? `${remaining?.toLocaleString()} / ${maxSupply.toLocaleString()}` 
+                  : `${mintedCount.toLocaleString()} minted`}
+              </p>
+            )}
+          </div>
+        </div>
+
         <div className="rounded-lg bg-muted/50 p-4 text-sm">
           <h4 className="font-medium mb-2">What you get:</h4>
           <ul className="space-y-1 text-muted-foreground">
@@ -52,7 +118,6 @@ export const NFTPurchaseButton = ({ onPurchaseComplete }: NFTPurchaseButtonProps
 
         <TransactionButton
           transaction={() => {
-            // Use thirdweb's claimTo extension for DropERC1155 contracts
             return claimTo({
               contract,
               to: account.address,
@@ -93,7 +158,7 @@ export const NFTPurchaseButton = ({ onPurchaseComplete }: NFTPurchaseButtonProps
             cursor: "pointer",
           }}
         >
-          Claim Access NFT
+          Claim Access NFT {pricePerToken && pricePerToken > 0n ? `(${formattedPrice})` : ''}
         </TransactionButton>
 
         <p className="text-xs text-muted-foreground text-center flex items-center justify-center gap-1">
