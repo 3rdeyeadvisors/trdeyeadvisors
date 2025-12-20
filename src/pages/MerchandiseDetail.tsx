@@ -2,7 +2,6 @@ import { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { ShoppingCart, Check, ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useCart } from "@/contexts/CartContext";
@@ -25,13 +24,9 @@ export default function MerchandiseDetail() {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedVariant, setSelectedVariant] = useState<any>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [selectedColor, setSelectedColor] = useState('');
+  const [selectedSize, setSelectedSize] = useState('');
 
-  // Get variants from product
-  const variants = (product?.variants as any[]) || [];
-  
-  // Check if product has color/size variants or single variant
-  const hasSizeVariants = variants.some((v: any) => v.title.includes(' / '));
-  
   // Known sizes to detect format (Size / Color vs Color / Size)
   const knownSizes = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL', 'One size', 'One Size'];
   
@@ -42,29 +37,34 @@ export default function MerchandiseDetail() {
     const [firstPart] = firstTitle.split(' / ');
     return knownSizes.includes(firstPart) ? 'size-first' : 'color-first';
   };
+
+  // Memoize derived values
+  const variants = useMemo(() => (product?.variants as any[]) || [], [product?.variants]);
+  const hasSizeVariants = useMemo(() => variants.some((v: any) => v.title?.includes(' / ')), [variants]);
+  const variantFormat = useMemo(() => hasSizeVariants ? detectFormat(variants) : 'color-first', [hasSizeVariants, variants]);
   
-  const variantFormat = hasSizeVariants ? detectFormat(variants) : 'color-first';
-  
-  // Group variants by color (only if has size variants)
-  const variantsByColor = hasSizeVariants
-    ? variants.reduce((acc: any, variant: any) => {
-        const parts = variant.title.split(' / ');
-        const color = variantFormat === 'size-first' ? parts[1] : parts[0];
-        const size = variantFormat === 'size-first' ? parts[0] : parts[1];
+  const variantsByColor = useMemo(() => {
+    if (!hasSizeVariants) return null;
+    return variants.reduce((acc: any, variant: any) => {
+      const parts = variant.title?.split(' / ') || [];
+      const color = variantFormat === 'size-first' ? parts[1] : parts[0];
+      const size = variantFormat === 'size-first' ? parts[0] : parts[1];
+      if (color) {
         if (!acc[color]) {
           acc[color] = [];
         }
         acc[color].push({ ...variant, color, size });
-        return acc;
-      }, {})
-    : null;
+      }
+      return acc;
+    }, {});
+  }, [hasSizeVariants, variants, variantFormat]);
 
-  const colors = variantsByColor ? Object.keys(variantsByColor) : [];
-  const defaultColor = colors[0] || '';
-  const [selectedColor, setSelectedColor] = useState(defaultColor);
-  
-  const availableSizes = variantsByColor?.[selectedColor] || [];
-  const [selectedSize, setSelectedSize] = useState(availableSizes[0]?.size || '');
+  const colors = useMemo(() => variantsByColor ? Object.keys(variantsByColor) : [], [variantsByColor]);
+  const availableSizes = useMemo(() => variantsByColor?.[selectedColor] || [], [variantsByColor, selectedColor]);
+
+  const productImages = useMemo(() => (product?.images as any[]) || [], [product?.images]);
+  const rawDescription = useMemo(() => typeof product?.description === 'string' ? product.description : '', [product?.description]);
+  const productDescription = useMemo(() => DOMPurify.sanitize(rawDescription), [rawDescription]);
 
   useEffect(() => {
     loadProduct();
@@ -89,7 +89,7 @@ export default function MerchandiseDetail() {
       const productImages = (data?.images as any[]) || [];
       
       if (productVariants.length > 0) {
-        const hasSizeVariants = productVariants.some((v: any) => v.title.includes(' / '));
+        const hasSizeVariants = productVariants.some((v: any) => v.title?.includes(' / '));
         
         if (!hasSizeVariants) {
           // Single variant product (like journals)
@@ -101,17 +101,18 @@ export default function MerchandiseDetail() {
           // Multi-variant product with color/size - detect format
           const firstTitle = productVariants[0]?.title || '';
           const [firstPart] = firstTitle.split(' / ');
-          const knownSizes = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL', 'One size', 'One Size'];
           const format = knownSizes.includes(firstPart) ? 'size-first' : 'color-first';
           
           const variantsByColor = productVariants.reduce((acc: any, variant: any) => {
-            const parts = variant.title.split(' / ');
+            const parts = variant.title?.split(' / ') || [];
             const color = format === 'size-first' ? parts[1] : parts[0];
             const size = format === 'size-first' ? parts[0] : parts[1];
-            if (!acc[color]) {
-              acc[color] = [];
+            if (color) {
+              if (!acc[color]) {
+                acc[color] = [];
+              }
+              acc[color].push({ ...variant, color, size });
             }
-            acc[color].push({ ...variant, color, size });
             return acc;
           }, {});
           
@@ -145,16 +146,11 @@ export default function MerchandiseDetail() {
   };
 
   const updateSelectedVariant = (color: string, size: string) => {
-    const productVariants = (product?.variants as any[]) || [];
-    const productImages = (product?.images as any[]) || [];
-    
     // Match based on detected format
     const expectedTitle = variantFormat === 'size-first' 
       ? `${size} / ${color}` 
       : `${color} / ${size}`;
-    const variant = productVariants.find((v: any) => 
-      v.title === expectedTitle
-    );
+    const variant = variants.find((v: any) => v.title === expectedTitle);
     setSelectedVariant(variant);
     
     // Update image based on color
@@ -180,9 +176,7 @@ export default function MerchandiseDetail() {
   };
 
   const handleAddToCart = () => {
-    if (!selectedVariant) return;
-    
-    const productImages = (product?.images as any[]) || [];
+    if (!selectedVariant || !product) return;
     
     addItem({
       id: `${product.printify_id}-${selectedVariant.id}`,
@@ -202,20 +196,18 @@ export default function MerchandiseDetail() {
   };
 
   const nextImage = () => {
-    const productImages = (product?.images as any[]) || [];
     if (productImages.length > 0) {
       setCurrentImageIndex((prev) => (prev + 1) % productImages.length);
     }
   };
 
   const prevImage = () => {
-    const productImages = (product?.images as any[]) || [];
     if (productImages.length > 0) {
       setCurrentImageIndex((prev) => (prev - 1 + productImages.length) % productImages.length);
     }
   };
 
-  const inCart = selectedVariant && items.some(item => item.id === `${product.printify_id}-${selectedVariant.id}`);
+  const inCart = selectedVariant && product && items.some(item => item.id === `${product.printify_id}-${selectedVariant.id}`);
 
   if (isLoading) {
     return (
@@ -242,10 +234,6 @@ export default function MerchandiseDetail() {
     return null;
   }
 
-  const productImages = (product?.images as any[]) || [];
-  const rawDescription = typeof product?.description === 'string' ? product.description : '';
-  // Sanitize HTML to prevent XSS attacks
-  const productDescription = useMemo(() => DOMPurify.sanitize(rawDescription), [rawDescription]);
   return (
     <>
       <SEO 
@@ -300,11 +288,6 @@ export default function MerchandiseDetail() {
                       </Button>
                     </>
                   )}
-                  {product.tags?.includes('Premium Apparel') && (
-                    <Badge className="absolute top-4 right-4 bg-primary/90 backdrop-blur">
-                      Premium
-                    </Badge>
-                  )}
                 </div>
               </Card>
 
@@ -339,7 +322,7 @@ export default function MerchandiseDetail() {
                   {product.title}
                 </h1>
                 <p className="text-3xl font-consciousness font-bold text-primary">
-                  ${selectedVariant?.price.toFixed(2)}
+                  ${selectedVariant?.price?.toFixed(2) || '0.00'}
                 </p>
               </div>
 

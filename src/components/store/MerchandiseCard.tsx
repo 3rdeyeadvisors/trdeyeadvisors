@@ -222,7 +222,7 @@ export function MerchandiseCard({ product, onAddToCart, isInCart }: MerchandiseC
         {/* Price & Buttons */}
         <div className="flex flex-col gap-1.5 mt-auto pt-2 border-t border-border/50">
           <p className="text-lg md:text-2xl font-consciousness font-bold text-primary text-center">
-            ${selectedVariant?.price.toFixed(2)}
+            ${selectedVariant?.price?.toFixed(2) || '0.00'}
           </p>
           
           {/* View Details Button */}
