@@ -109,8 +109,9 @@ const Auth = () => {
       if (plan && (plan === 'monthly' || plan === 'annual')) {
         triggerCheckout(plan);
       } else {
-        // Otherwise redirect to destination or dashboard
-        const destination = redirectTo || "/dashboard";
+        // Redirect to intended destination or dashboard
+        const destination = redirectTo || '/dashboard';
+        console.log('[Auth] Redirecting authenticated user to:', destination);
         navigate(destination, { replace: true });
       }
     }
