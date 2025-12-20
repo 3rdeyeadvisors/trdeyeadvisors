@@ -18,10 +18,10 @@ export const CryptoDisclaimer = ({ onAccept, onDecline }: CryptoDisclaimerProps)
 
   return (
     <Card className="border-amber-500/50 bg-amber-500/5">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-amber-500">
-          <AlertTriangle className="h-5 w-5" />
-          Important Crypto & Investment Disclaimer
+      <CardHeader className="text-center sm:text-left">
+        <CardTitle className="flex items-center justify-center sm:justify-start gap-2 text-amber-500">
+          <AlertTriangle className="h-5 w-5 shrink-0" />
+          <span>Important Crypto & Investment Disclaimer</span>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -93,14 +93,14 @@ export const CryptoDisclaimer = ({ onAccept, onDecline }: CryptoDisclaimerProps)
           </div>
         </div>
 
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-3">
           {onDecline && (
-            <Button variant="outline" className="flex-1" onClick={onDecline}>
+            <Button variant="outline" className="flex-1 min-h-[44px]" onClick={onDecline}>
               Cancel
             </Button>
           )}
           <Button 
-            className="flex-1" 
+            className="flex-1 min-h-[44px]" 
             disabled={!canProceed}
             onClick={onAccept}
           >
