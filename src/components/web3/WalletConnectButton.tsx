@@ -91,6 +91,7 @@ export const WalletConnectButton = ({ onConnect, onDisconnect }: WalletConnectBu
           padding: "0.75rem 1.5rem",
           fontWeight: "600",
           fontSize: "0.875rem",
+          minHeight: "44px",
         },
       }}
       detailsButton={{
@@ -101,6 +102,7 @@ export const WalletConnectButton = ({ onConnect, onDisconnect }: WalletConnectBu
           padding: "0.75rem 1.5rem",
           fontWeight: "500",
           fontSize: "0.875rem",
+          minHeight: "44px",
         },
       }}
     />
