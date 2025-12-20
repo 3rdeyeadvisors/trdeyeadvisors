@@ -59,7 +59,7 @@ export const NFTStoreCard = () => {
             <Sparkles className="w-16 h-16 md:w-20 md:h-20 text-primary" />
           </div>
         </div>
-        <Badge className="absolute top-3 right-3 bg-green-500/90 text-white border-0">
+        <Badge className="absolute top-3 right-3 bg-success text-success-foreground border-0">
           NFT
         </Badge>
       </div>
@@ -113,7 +113,7 @@ export const NFTStoreCard = () => {
 
         {/* CTA */}
         <Link to="/vault-access" className="block">
-          <Button className="w-full font-consciousness gap-2" variant="default">
+          <Button className="w-full font-consciousness gap-2 min-h-[44px]" variant="default">
             <Wallet className="h-4 w-4" />
             View & Purchase
           </Button>
