@@ -3,6 +3,7 @@ import { getNFTContract } from "@/lib/thirdweb";
 import { Shield, CheckCircle, XCircle, Loader2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useEffect, useRef } from "react";
 
 interface NFTOwnershipCheckProps {
   onOwnershipVerified?: (balance: number) => void;
@@ -11,6 +12,7 @@ interface NFTOwnershipCheckProps {
 export const NFTOwnershipCheck = ({ onOwnershipVerified }: NFTOwnershipCheckProps) => {
   const account = useActiveAccount();
   const contract = getNFTContract();
+  const hasCalledCallback = useRef(false);
 
   const { data: balance, isLoading, error } = useReadContract({
     contract,
@@ -21,10 +23,13 @@ export const NFTOwnershipCheck = ({ onOwnershipVerified }: NFTOwnershipCheckProp
   const ownsNFT = balance && BigInt(balance.toString()) > 0n;
   const nftCount = balance ? Number(balance.toString()) : 0;
 
-  // Callback when ownership is verified
-  if (ownsNFT && onOwnershipVerified) {
-    onOwnershipVerified(nftCount);
-  }
+  // Callback when ownership is verified - use useEffect to avoid render loop
+  useEffect(() => {
+    if (ownsNFT && onOwnershipVerified && !hasCalledCallback.current) {
+      hasCalledCallback.current = true;
+      onOwnershipVerified(nftCount);
+    }
+  }, [ownsNFT, nftCount, onOwnershipVerified]);
 
   if (!account) {
     return (
