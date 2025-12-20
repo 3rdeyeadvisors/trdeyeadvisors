@@ -176,7 +176,7 @@ export function MerchandiseCard({ product, onAddToCart, isInCart }: MerchandiseC
             onClick={handleCardClick}
             className="text-xs sm:text-sm md:text-base font-consciousness font-semibold mb-1 sm:mb-2 line-clamp-3 sm:line-clamp-2 min-h-[3.5rem] sm:min-h-[3rem] cursor-pointer hover:text-primary transition-colors text-left leading-snug"
           >
-            {product.title}
+            {product.title?.replace(/\s*[—–-]\s*/g, ' ')}
           </h3>
         </div>
 
