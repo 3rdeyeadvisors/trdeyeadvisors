@@ -1,12 +1,12 @@
 import { ConnectButton } from "thirdweb/react";
 import { thirdwebClient, ethereum, appMetadata, WALLETCONNECT_PROJECT_ID } from "@/lib/thirdweb";
-import { createWallet, injectedProvider } from "thirdweb/wallets";
+import { createWallet } from "thirdweb/wallets";
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { useActiveAccount } from "thirdweb/react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
-import { Wallet, ExternalLink, Monitor } from "lucide-react";
+import { Wallet, ExternalLink } from "lucide-react";
 import {
   Dialog,
   DialogContent,
