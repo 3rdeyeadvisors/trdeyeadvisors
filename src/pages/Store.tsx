@@ -11,6 +11,8 @@ import { MerchandiseCard } from "@/components/store/MerchandiseCard";
 import { NFTStoreCard } from "@/components/store/NFTStoreCard";
 import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import { PullToRefreshIndicator } from "@/components/ui/pull-to-refresh";
+type StoreCategory = 'merchandise' | 'digital';
+
 const Store = () => {
   const { addItem, items, clearCart } = useCart();
   const { user } = useAuth();
@@ -19,6 +21,7 @@ const Store = () => {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [printifyProducts, setPrintifyProducts] = useState<any[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [activeCategory, setActiveCategory] = useState<StoreCategory>('merchandise');
 
   const handleAddToCart = (product: any) => {
     console.log('Adding to cart:', product);
@@ -186,6 +189,30 @@ const Store = () => {
             </div>
           </div>
 
+          {/* Category Toggle Buttons */}
+          <div className="flex justify-center mb-10">
+            <div className="inline-flex rounded-lg bg-muted p-1 gap-1">
+              <Button
+                variant={activeCategory === 'merchandise' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setActiveCategory('merchandise')}
+                className="gap-2 font-consciousness min-h-[44px] px-4 md:px-6"
+              >
+                <Package className="h-4 w-4" />
+                <span>Physical Products</span>
+              </Button>
+              <Button
+                variant={activeCategory === 'digital' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setActiveCategory('digital')}
+                className="gap-2 font-consciousness min-h-[44px] px-4 md:px-6"
+              >
+                <Sparkles className="h-4 w-4" />
+                <span>Digital Collectibles</span>
+              </Button>
+            </div>
+          </div>
+
           {/* Success Message */}
           {showSuccessMessage && (
             <Card className="mb-8 p-6 bg-green-50 border-green-200 dark:bg-green-950/20 dark:border-green-800">
@@ -214,110 +241,114 @@ const Store = () => {
           )}
 
           {/* Physical Merchandise Section */}
-          <section className="mb-16" aria-labelledby="merchandise-heading">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-              <div className="flex items-center gap-3">
-                <Package className="h-6 w-6 text-primary" aria-hidden="true" />
-                <h2 id="merchandise-heading" className="text-2xl font-consciousness font-bold text-foreground">
-                  Physical Merchandise
-                </h2>
+          {activeCategory === 'merchandise' && (
+            <section aria-labelledby="merchandise-heading">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+                <div className="flex items-center gap-3">
+                  <Package className="h-6 w-6 text-primary" aria-hidden="true" />
+                  <h2 id="merchandise-heading" className="text-2xl font-consciousness font-bold text-foreground">
+                    Physical Merchandise
+                  </h2>
+                </div>
+                {isAdmin && (
+                  <Button 
+                    onClick={syncPrintifyProducts} 
+                    disabled={isSyncing}
+                    variant="outline"
+                    size="sm"
+                    className="gap-2 font-consciousness touch-target self-start sm:self-auto"
+                    aria-label="Sync merchandise products"
+                  >
+                    <RefreshCw className={`h-4 w-4 ${isSyncing ? 'animate-spin' : ''}`} aria-hidden="true" />
+                    {isSyncing ? 'Syncing...' : 'Sync Products'}
+                  </Button>
+                )}
               </div>
-              {isAdmin && (
-                <Button 
-                  onClick={syncPrintifyProducts} 
-                  disabled={isSyncing}
-                  variant="outline"
-                  size="sm"
-                  className="gap-2 font-consciousness touch-target self-start sm:self-auto"
-                  aria-label="Sync merchandise products"
-                >
-                  <RefreshCw className={`h-4 w-4 ${isSyncing ? 'animate-spin' : ''}`} aria-hidden="true" />
-                  {isSyncing ? 'Syncing...' : 'Sync Products'}
-                </Button>
-              )}
-            </div>
 
-            {(() => {
-              const filteredProducts = printifyProducts;
+              {(() => {
+                const filteredProducts = printifyProducts;
 
-              if (isLoading) {
+                if (isLoading) {
+                  return (
+                    <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
+                      {[1, 2, 3, 4].map((i) => (
+                        <Card key={i} className="overflow-hidden animate-pulse">
+                          <div className="aspect-square bg-muted" />
+                          <div className="p-4 space-y-3">
+                            <div className="h-5 bg-muted rounded w-3/4" />
+                            <div className="h-4 bg-muted rounded w-1/2" />
+                            <div className="h-10 bg-muted rounded w-full mt-4" />
+                          </div>
+                        </Card>
+                      ))}
+                    </div>
+                  );
+                }
+
+                if (filteredProducts.length === 0) {
+                  return (
+                    <Card className="p-8 md:p-12 text-center border-2 bg-card/50 backdrop-blur">
+                      <Package className="h-12 w-12 md:h-16 md:w-16 text-muted-foreground mx-auto mb-4" aria-hidden="true" />
+                      <h3 className="text-lg md:text-xl font-consciousness font-semibold mb-2">
+                        No Merchandise Available
+                      </h3>
+                      <p className="text-sm md:text-base text-muted-foreground font-consciousness mb-6">
+                        Check back soon for new products!
+                      </p>
+                      {isAdmin && (
+                        <Button 
+                          onClick={syncPrintifyProducts} 
+                          disabled={isSyncing}
+                          variant="outline"
+                          className="gap-2 font-consciousness touch-target"
+                          aria-label="Sync merchandise products from Printify"
+                        >
+                          <RefreshCw className={`h-4 w-4 ${isSyncing ? 'animate-spin' : ''}`} aria-hidden="true" />
+                          {isSyncing ? 'Syncing...' : 'Sync Products'}
+                        </Button>
+                      )}
+                    </Card>
+                  );
+                }
+
                 return (
                   <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
-                    {[1, 2, 3, 4].map((i) => (
-                      <Card key={i} className="overflow-hidden animate-pulse">
-                        <div className="aspect-square bg-muted" />
-                        <div className="p-4 space-y-3">
-                          <div className="h-5 bg-muted rounded w-3/4" />
-                          <div className="h-4 bg-muted rounded w-1/2" />
-                          <div className="h-10 bg-muted rounded w-full mt-4" />
-                        </div>
-                      </Card>
+                    {filteredProducts.map((product: any) => (
+                      <MerchandiseCard 
+                        key={product.id} 
+                        product={product}
+                        onAddToCart={handleAddToCart}
+                        isInCart={isInCart}
+                      />
                     ))}
                   </div>
                 );
-              }
-
-              if (filteredProducts.length === 0) {
-                return (
-                  <Card className="p-8 md:p-12 text-center border-2 bg-card/50 backdrop-blur">
-                    <Package className="h-12 w-12 md:h-16 md:w-16 text-muted-foreground mx-auto mb-4" aria-hidden="true" />
-                    <h3 className="text-lg md:text-xl font-consciousness font-semibold mb-2">
-                      No Merchandise Available
-                    </h3>
-                    <p className="text-sm md:text-base text-muted-foreground font-consciousness mb-6">
-                      Check back soon for new products!
-                    </p>
-                    {isAdmin && (
-                      <Button 
-                        onClick={syncPrintifyProducts} 
-                        disabled={isSyncing}
-                        variant="outline"
-                        className="gap-2 font-consciousness touch-target"
-                        aria-label="Sync merchandise products from Printify"
-                      >
-                        <RefreshCw className={`h-4 w-4 ${isSyncing ? 'animate-spin' : ''}`} aria-hidden="true" />
-                        {isSyncing ? 'Syncing...' : 'Sync Products'}
-                      </Button>
-                    )}
-                  </Card>
-                );
-              }
-
-              return (
-                <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
-                  {filteredProducts.map((product: any) => (
-                    <MerchandiseCard 
-                      key={product.id} 
-                      product={product}
-                      onAddToCart={handleAddToCart}
-                      isInCart={isInCart}
-                    />
-                  ))}
-                </div>
-              );
-            })()}
-          </section>
+              })()}
+            </section>
+          )}
 
           {/* Digital Collectibles / NFT Section */}
-          <section className="mb-16" aria-labelledby="nft-heading">
-            <div className="flex items-center gap-3 mb-8">
-              <Sparkles className="h-6 w-6 text-primary" aria-hidden="true" />
-              <h2 id="nft-heading" className="text-2xl font-consciousness font-bold text-foreground">
-                Digital Collectibles
-              </h2>
-            </div>
-            
-            {/* Single NFT - centered with max width for professional look */}
-            <div className="flex justify-center">
-              <div className="w-full max-w-sm">
-                <NFTStoreCard />
+          {activeCategory === 'digital' && (
+            <section aria-labelledby="nft-heading">
+              <div className="flex items-center gap-3 mb-8">
+                <Sparkles className="h-6 w-6 text-primary" aria-hidden="true" />
+                <h2 id="nft-heading" className="text-2xl font-consciousness font-bold text-foreground">
+                  Digital Collectibles
+                </h2>
               </div>
-            </div>
-            
-            <p className="text-sm text-muted-foreground font-consciousness mt-6 text-center">
-              NFT purchases require an external wallet. Connect on the vault page to purchase.
-            </p>
-          </section>
+              
+              {/* Single NFT - centered with max width for professional look */}
+              <div className="flex justify-center">
+                <div className="w-full max-w-sm">
+                  <NFTStoreCard />
+                </div>
+              </div>
+              
+              <p className="text-sm text-muted-foreground font-consciousness mt-6 text-center">
+                NFT purchases require an external wallet. Connect on the vault page to purchase.
+              </p>
+            </section>
+          )}
 
           <Card className="mt-16 p-6 md:p-8 bg-secondary/40 border-border" role="region" aria-label="Payment information">
             <div className="flex flex-col md:flex-row items-center md:items-start gap-4 text-center md:text-left">
