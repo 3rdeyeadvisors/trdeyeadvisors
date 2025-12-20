@@ -51,10 +51,10 @@ export const NFTStoreCard = () => {
   const maxSupply = maxClaimableSupply ? Number(maxClaimableSupply) : null;
   const remaining = maxSupply ? maxSupply - mintedCount : null;
 
-  // Format price for display - use fallback if no data or zero
+  // Format price for display - always use fallback if no valid price
   const formattedPrice = pricePerToken && pricePerToken > 0n
     ? `${formatEther(pricePerToken)} ETH` 
-    : hasDataError ? FALLBACK_PRICE : (isLoading ? null : 'Free');
+    : FALLBACK_PRICE;
   
   // Format supply for display
   const formattedSupply = hasDataError 
@@ -72,9 +72,6 @@ export const NFTStoreCard = () => {
           alt="3EA Earth Access NFT"
           className="w-full h-full object-cover"
         />
-        <Badge className="absolute top-2 right-2 bg-success text-success-foreground border-0 text-xs">
-          NFT
-        </Badge>
         {hasDataError && (
           <Badge variant="outline" className="absolute top-2 left-2 text-xs bg-background/80">
             <AlertCircle className="w-3 h-3 mr-1" />
