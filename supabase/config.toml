@@ -11,27 +11,17 @@ verify_jwt = false
 
 [auth]
 enabled = true
-# The base URL of your website. Used as an allow-list for redirects and for constructing URLs used
-# in emails.
 site_url = "https://the3rdeyeadvisors.com"
-# A list of *exact* URLs that auth providers are permitted to redirect to post authentication.
 additional_redirect_urls = ["https://lovable.dev", "http://localhost:3000", "https://the3rdeyeadvisors.com", "https://www.the3rdeyeadvisors.com"]
-# How long tokens are valid for, in seconds. Maximum 604800 (1 week).
 jwt_expiry = 604800
-# If disabled, the refresh token will never expire - keeps users logged in
 enable_refresh_token_rotation = false
-# Allow/disallow new user signups to your project.
 enable_signup = true
 
 [auth.email]
-# Allow/disallow new user signups via email to your project.
 enable_signup = true
-# If enabled, a user will be required to confirm any email change on both the old, and new email addresses. If disabled, only the new email is required to confirm.
 double_confirm_changes = true
-# If enabled, users need to confirm their email address before signing in.
 enable_confirmations = false
 
-# Use pre-defined map of claims
 [auth.jwt.template]
 claims_json = '{}'
 
@@ -154,3 +144,6 @@ verify_jwt = true
 
 [functions.customer-portal]
 verify_jwt = true
+
+[functions.verify-nft-ownership]
+verify_jwt = false

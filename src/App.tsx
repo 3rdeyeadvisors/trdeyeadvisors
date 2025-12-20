@@ -12,6 +12,7 @@ import { AuthProvider } from "./components/auth/AuthProvider";
 import { ProgressProvider } from "./components/progress/ProgressProvider";
 import { SubscriptionProvider } from "./hooks/useSubscription";
 import { PWAStatus, OfflineBanner } from "./components/PWAStatus";
+import ThirdwebWrapper from "./components/web3/ThirdwebWrapper";
 import Index from "./pages/Index";
 import Subscription from "./pages/Subscription";
 import Philosophy from "./pages/Philosophy";
@@ -66,7 +67,7 @@ import RaffleHistory from "./pages/RaffleHistory";
 import AwarenessBlueprintLanding from "./pages/AwarenessBlueprintLanding";
 import AdLanding from "./pages/AdLanding";
 import UploadResourceFile from "./pages/UploadResourceFile";
-
+import VaultAccess from "./pages/VaultAccess";
 
 const queryClient = new QueryClient();
 
@@ -98,6 +99,7 @@ const App = () => {
   return (
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
+      <ThirdwebWrapper>
       <TooltipProvider>
         <CartProvider>
           <AuthProvider>
@@ -191,6 +193,7 @@ const App = () => {
                       } />
                       <Route path="/raffles" element={<Raffles />} />
                       <Route path="/raffle-history" element={<RaffleHistory />} />
+                      <Route path="/vault-access" element={<VaultAccess />} />
                       <Route path="*" element={<NotFound />} />
                 </Routes>
               </Layout>
@@ -200,6 +203,7 @@ const App = () => {
         </AuthProvider>
       </CartProvider>
     </TooltipProvider>
+    </ThirdwebWrapper>
   </QueryClientProvider>
   </HelmetProvider>
   );

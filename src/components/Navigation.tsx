@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, LogIn, LogOut, User, ShoppingCart, ChevronDown, ChevronRight, BookOpen, BarChart3, Package, FileText, MoreHorizontal, Gift, Home, Lightbulb } from "lucide-react";
+import { Menu, X, LogIn, LogOut, User, ShoppingCart, ChevronDown, ChevronRight, BookOpen, BarChart3, Package, FileText, MoreHorizontal, Gift, Home, Lightbulb, Vault } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/contexts/CartContext";
@@ -33,6 +33,7 @@ const Navigation = () => {
     { path: "/blog", label: "Blog", external: false },
     { path: "/resources", label: "Resources", external: false },
     { path: "/raffles", label: "Raffles", external: false },
+    { path: "/vault-access", label: "Vault", external: false },
     { path: "/store", label: "Store", external: false },
   ];
 
@@ -50,6 +51,7 @@ const Navigation = () => {
       { path: "/", label: "Home" },
       { path: "/philosophy", label: "Philosophy" },
       { path: "/store", label: "Store", icon: Package },
+      { path: "/vault-access", label: "Vault Access", icon: Vault },
     ],
     learning: [
       { path: "/courses", label: "Courses", icon: BookOpen, external: false },

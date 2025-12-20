@@ -1363,6 +1363,78 @@ export type Database = {
         }
         Relationships: []
       }
+      vault_whitelist: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          last_verified: string | null
+          nft_balance: number | null
+          nft_token_id: number | null
+          updated_at: string | null
+          user_id: string | null
+          verified_at: string | null
+          wallet_address: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_verified?: string | null
+          nft_balance?: number | null
+          nft_token_id?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+          verified_at?: string | null
+          wallet_address: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_verified?: string | null
+          nft_balance?: number | null
+          nft_token_id?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+          verified_at?: string | null
+          wallet_address?: string
+        }
+        Relationships: []
+      }
+      wallet_addresses: {
+        Row: {
+          chain_id: number | null
+          created_at: string | null
+          id: string
+          is_primary: boolean | null
+          linked_at: string | null
+          updated_at: string | null
+          user_id: string
+          wallet_address: string
+        }
+        Insert: {
+          chain_id?: number | null
+          created_at?: string | null
+          id?: string
+          is_primary?: boolean | null
+          linked_at?: string | null
+          updated_at?: string | null
+          user_id: string
+          wallet_address: string
+        }
+        Update: {
+          chain_id?: number | null
+          created_at?: string | null
+          id?: string
+          is_primary?: boolean | null
+          linked_at?: string | null
+          updated_at?: string | null
+          user_id?: string
+          wallet_address?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       quizzes_public: {
