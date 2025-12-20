@@ -1,12 +1,12 @@
-import { ConnectButton } from "thirdweb/react";
+import { ConnectButton, useConnect } from "thirdweb/react";
 import { thirdwebClient, ethereum, appMetadata, WALLETCONNECT_PROJECT_ID } from "@/lib/thirdweb";
-import { createWallet } from "thirdweb/wallets";
+import { createWallet, injectedProvider } from "thirdweb/wallets";
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { useActiveAccount } from "thirdweb/react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
-import { Wallet, ExternalLink } from "lucide-react";
+import { Wallet, ExternalLink, Smartphone, QrCode } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -20,63 +20,150 @@ interface WalletConnectButtonProps {
   onDisconnect?: () => void;
 }
 
-// Detect if user is on mobile browser (not in wallet's in-app browser)
+// Detect if user is on mobile browser
 const isMobileBrowser = () => {
   if (typeof window === 'undefined') return false;
   return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 };
 
-// Check if we're inside a wallet's in-app browser (has injected provider)
+// Detect specific wallet in-app browsers
+const detectWalletBrowser = () => {
+  if (typeof window === 'undefined') return null;
+  const ua = navigator.userAgent.toLowerCase();
+  const ethereum = (window as any).ethereum;
+  
+  // Check for specific wallet providers
+  if (ethereum?.isMetaMask) return 'metamask';
+  if (ethereum?.isCoinbaseWallet) return 'coinbase';
+  if (ethereum?.isRainbow) return 'rainbow';
+  if (ethereum?.isTrust) return 'trust';
+  if (ethereum?.isPhantom) return 'phantom';
+  if (ua.includes('metamask')) return 'metamask';
+  if (ua.includes('coinbase')) return 'coinbase';
+  if (ua.includes('rainbow')) return 'rainbow';
+  if (ua.includes('trust')) return 'trust';
+  
+  // Generic injected provider
+  if (ethereum) return 'injected';
+  
+  return null;
+};
+
+// Check if we have any injected provider
 const hasInjectedWallet = () => {
   if (typeof window === 'undefined') return false;
-  // Check for any injected ethereum provider
   return !!(window as any).ethereum;
 };
 
-// Wallet deep link configurations for mobile
-const WALLET_DEEPLINKS = {
-  metamask: {
+// Wallet configurations for mobile deep links
+const WALLET_OPTIONS = [
+  {
+    id: 'metamask',
     name: 'MetaMask',
-    icon: '🦊',
+    icon: '/lovable-uploads/aefbbf1a-e30e-4002-9925-836a5e183a48.png',
+    emoji: '🦊',
     getDeepLink: () => `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}`,
+    downloadUrl: 'https://metamask.io/download/',
   },
-  coinbase: {
+  {
+    id: 'coinbase',
     name: 'Coinbase Wallet',
-    icon: '🔵',
+    icon: null,
+    emoji: '🔵',
     getDeepLink: () => `https://go.cb-w.com/dapp?cb_url=${encodeURIComponent(window.location.href)}`,
+    downloadUrl: 'https://www.coinbase.com/wallet',
   },
-  rainbow: {
+  {
+    id: 'rainbow',
     name: 'Rainbow',
-    icon: '🌈',
+    icon: null,
+    emoji: '🌈',
     getDeepLink: () => `https://rnbwapp.com/dapp?url=${encodeURIComponent(window.location.href)}`,
+    downloadUrl: 'https://rainbow.me/',
   },
-  trust: {
+  {
+    id: 'trust',
     name: 'Trust Wallet',
-    icon: '🛡️',
+    icon: null,
+    emoji: '🛡️',
     getDeepLink: () => `https://link.trustwallet.com/open_url?coin_id=60&url=${encodeURIComponent(window.location.href)}`,
+    downloadUrl: 'https://trustwallet.com/',
   },
-};
+  {
+    id: 'phantom',
+    name: 'Phantom',
+    icon: null,
+    emoji: '👻',
+    getDeepLink: () => `https://phantom.app/ul/browse/${encodeURIComponent(window.location.href)}?ref=${encodeURIComponent(window.location.origin)}`,
+    downloadUrl: 'https://phantom.app/',
+  },
+  {
+    id: 'zerion',
+    name: 'Zerion',
+    icon: null,
+    emoji: '⚡',
+    getDeepLink: () => `https://wallet.zerion.io/wc?uri=${encodeURIComponent(window.location.href)}`,
+    downloadUrl: 'https://zerion.io/',
+  },
+];
 
 export const WalletConnectButton = ({ onConnect, onDisconnect }: WalletConnectButtonProps) => {
   const account = useActiveAccount();
   const { toast } = useToast();
+  const { connect } = useConnect();
   const [showMobileModal, setShowMobileModal] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [hasInjected, setHasInjected] = useState(false);
+  const [walletBrowser, setWalletBrowser] = useState<string | null>(null);
+  const [isConnecting, setIsConnecting] = useState(false);
 
-  // Check device type and injected provider on mount
+  // Detect environment on mount
   useEffect(() => {
     setIsMobile(isMobileBrowser());
-    setHasInjected(hasInjectedWallet());
+    setWalletBrowser(detectWalletBrowser());
   }, []);
 
-  // Create wallet instances - includes both injected wallets and WalletConnect
+  // Create wallet instances
   const wallets = useMemo(() => [
     createWallet("io.metamask"),
     createWallet("com.coinbase.wallet"),
     createWallet("me.rainbow"),
+    createWallet("com.trustwallet.app"),
+    createWallet("app.phantom"),
+    createWallet("io.zerion.wallet"),
     createWallet("walletConnect"),
   ], []);
+
+  // Auto-connect if inside wallet browser with injected provider
+  useEffect(() => {
+    const autoConnect = async () => {
+      if (walletBrowser && !account && !isConnecting) {
+        setIsConnecting(true);
+        try {
+          // Check if there's an injected provider
+          const provider = injectedProvider("io.metamask");
+          if (provider) {
+            const wallet = createWallet("io.metamask");
+            await connect(async () => {
+              await wallet.connect({ client: thirdwebClient });
+              return wallet;
+            });
+            toast({
+              title: "Wallet Connected",
+              description: "Connected via " + walletBrowser,
+            });
+          }
+        } catch (error) {
+          console.error('Auto-connect failed:', error);
+        } finally {
+          setIsConnecting(false);
+        }
+      }
+    };
+    
+    // Delay to allow provider injection
+    const timeout = setTimeout(autoConnect, 500);
+    return () => clearTimeout(timeout);
+  }, [walletBrowser, account, connect, isConnecting, toast]);
 
   // Link wallet to user account when connected
   useEffect(() => {
@@ -86,7 +173,6 @@ export const WalletConnectButton = ({ onConnect, onDisconnect }: WalletConnectBu
           const { data: { user } } = await supabase.auth.getUser();
           
           if (user) {
-            // Check if wallet already linked
             const { data: existingWallet } = await supabase
               .from('wallet_addresses')
               .select('id')
@@ -95,7 +181,6 @@ export const WalletConnectButton = ({ onConnect, onDisconnect }: WalletConnectBu
               .single();
 
             if (!existingWallet) {
-              // Link new wallet
               const { error } = await supabase
                 .from('wallet_addresses')
                 .insert({
@@ -126,23 +211,38 @@ export const WalletConnectButton = ({ onConnect, onDisconnect }: WalletConnectBu
     linkWallet();
   }, [account?.address, onConnect, toast]);
 
-  // Handle mobile wallet selection via deep link
-  const handleMobileWalletClick = useCallback((walletKey: keyof typeof WALLET_DEEPLINKS) => {
-    const wallet = WALLET_DEEPLINKS[walletKey];
+  // Handle mobile wallet deep link
+  const handleMobileWalletClick = useCallback((wallet: typeof WALLET_OPTIONS[0]) => {
     const deepLink = wallet.getDeepLink();
-    
-    // Open the wallet app via deep link
     window.location.href = deepLink;
     setShowMobileModal(false);
   }, []);
 
-  // Use thirdweb's standard ConnectButton if:
-  // 1. User is on desktop
-  // 2. User is already connected
-  // 3. User is on mobile BUT inside a wallet's in-app browser (has injected provider)
-  const shouldUseThirdwebButton = !isMobile || hasInjected || !!account;
+  // Direct connect for injected wallets (when in wallet browser)
+  const handleDirectConnect = useCallback(async () => {
+    if (!hasInjectedWallet()) return;
+    
+    setIsConnecting(true);
+    try {
+      const wallet = createWallet("io.metamask");
+      await connect(async () => {
+        await wallet.connect({ client: thirdwebClient });
+        return wallet;
+      });
+    } catch (error) {
+      console.error('Direct connect failed:', error);
+      toast({
+        title: "Connection Failed",
+        description: "Please try again or use WalletConnect.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsConnecting(false);
+    }
+  }, [connect, toast]);
 
-  if (shouldUseThirdwebButton) {
+  // If connected, show the thirdweb button for account management
+  if (account) {
     return (
       <ConnectButton
         client={thirdwebClient}
@@ -150,25 +250,11 @@ export const WalletConnectButton = ({ onConnect, onDisconnect }: WalletConnectBu
         chain={ethereum}
         theme="dark"
         appMetadata={appMetadata}
-        walletConnect={{
-          projectId: WALLETCONNECT_PROJECT_ID,
-        }}
+        walletConnect={{ projectId: WALLETCONNECT_PROJECT_ID }}
         connectModal={{
           size: "compact",
           title: "Connect Your Wallet",
           showThirdwebBranding: false,
-        }}
-        connectButton={{
-          label: "Connect Wallet",
-          style: {
-            background: "hsl(var(--primary))",
-            color: "hsl(var(--primary-foreground))",
-            borderRadius: "0.5rem",
-            padding: "0.75rem 1.5rem",
-            fontWeight: "600",
-            fontSize: "0.875rem",
-            minHeight: "44px",
-          },
         }}
         detailsButton={{
           style: {
@@ -185,7 +271,57 @@ export const WalletConnectButton = ({ onConnect, onDisconnect }: WalletConnectBu
     );
   }
 
-  // Mobile browser without injected wallet: Show custom wallet selector with deep links
+  // Desktop or inside wallet browser with injected provider - use thirdweb's modal
+  if (!isMobile || walletBrowser) {
+    return (
+      <div className="flex flex-col gap-2">
+        {/* Show direct connect button if inside wallet browser */}
+        {walletBrowser && (
+          <Button
+            onClick={handleDirectConnect}
+            disabled={isConnecting}
+            className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 py-3 min-h-[44px]"
+          >
+            <Wallet className="w-4 h-4 mr-2" />
+            {isConnecting ? "Connecting..." : `Connect with ${walletBrowser}`}
+          </Button>
+        )}
+        
+        {/* Standard thirdweb connect button */}
+        <ConnectButton
+          client={thirdwebClient}
+          wallets={wallets}
+          chain={ethereum}
+          theme="dark"
+          appMetadata={appMetadata}
+          walletConnect={{ projectId: WALLETCONNECT_PROJECT_ID }}
+          connectModal={{
+            size: "wide",
+            title: "Connect Your Wallet",
+            showThirdwebBranding: false,
+            welcomeScreen: {
+              title: "Welcome to 3rd Eye Advisors",
+              subtitle: "Connect your wallet to access NFT-gated content",
+            },
+          }}
+          connectButton={{
+            label: walletBrowser ? "Other Wallets" : "Connect Wallet",
+            style: {
+              background: walletBrowser ? "hsl(var(--secondary))" : "hsl(var(--primary))",
+              color: walletBrowser ? "hsl(var(--secondary-foreground))" : "hsl(var(--primary-foreground))",
+              borderRadius: "0.5rem",
+              padding: "0.75rem 1.5rem",
+              fontWeight: "600",
+              fontSize: "0.875rem",
+              minHeight: "44px",
+            },
+          }}
+        />
+      </div>
+    );
+  }
+
+  // Mobile browser without wallet - show custom modal with deep links + WalletConnect QR
   return (
     <>
       <Button
@@ -197,23 +333,76 @@ export const WalletConnectButton = ({ onConnect, onDisconnect }: WalletConnectBu
       </Button>
 
       <Dialog open={showMobileModal} onOpenChange={setShowMobileModal}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md max-h-[85vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Connect Your Wallet</DialogTitle>
+            <DialogTitle className="flex items-center gap-2">
+              <Wallet className="w-5 h-5" />
+              Connect Your Wallet
+            </DialogTitle>
             <DialogDescription>
-              Choose a wallet app to open. You'll connect through the wallet's built-in browser.
+              Choose how you'd like to connect. Tap a wallet to open its app, or use WalletConnect for any wallet.
             </DialogDescription>
           </DialogHeader>
           
-          <div className="grid gap-3 py-4">
-            {Object.entries(WALLET_DEEPLINKS).map(([key, wallet]) => (
+          {/* WalletConnect Option - Works with ANY wallet */}
+          <div className="pt-2">
+            <p className="text-xs font-medium text-muted-foreground mb-2 flex items-center gap-1">
+              <QrCode className="w-3 h-3" />
+              RECOMMENDED: Works with any wallet
+            </p>
+            <ConnectButton
+              client={thirdwebClient}
+              wallets={[createWallet("walletConnect")]}
+              chain={ethereum}
+              theme="dark"
+              appMetadata={appMetadata}
+              walletConnect={{ projectId: WALLETCONNECT_PROJECT_ID }}
+              connectModal={{
+                size: "compact",
+                title: "Scan QR Code",
+                showThirdwebBranding: false,
+              }}
+              connectButton={{
+                label: "WalletConnect (Any Wallet)",
+                style: {
+                  width: "100%",
+                  background: "hsl(var(--primary))",
+                  color: "hsl(var(--primary-foreground))",
+                  borderRadius: "0.5rem",
+                  padding: "0.875rem 1rem",
+                  fontWeight: "600",
+                  fontSize: "0.875rem",
+                  minHeight: "52px",
+                },
+              }}
+            />
+          </div>
+
+          <div className="relative py-3">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground">
+                Or open wallet app directly
+              </span>
+            </div>
+          </div>
+          
+          {/* Individual wallet deep links */}
+          <div className="grid gap-2">
+            <p className="text-xs font-medium text-muted-foreground flex items-center gap-1">
+              <Smartphone className="w-3 h-3" />
+              OPEN IN WALLET APP
+            </p>
+            {WALLET_OPTIONS.map((wallet) => (
               <Button
-                key={key}
+                key={wallet.id}
                 variant="outline"
-                className="w-full justify-start gap-3 h-14 text-left"
-                onClick={() => handleMobileWalletClick(key as keyof typeof WALLET_DEEPLINKS)}
+                className="w-full justify-start gap-3 h-12 text-left hover:bg-muted/50"
+                onClick={() => handleMobileWalletClick(wallet)}
               >
-                <span className="text-2xl">{wallet.icon}</span>
+                <span className="text-xl">{wallet.emoji}</span>
                 <span className="flex-1 font-medium">{wallet.name}</span>
                 <ExternalLink className="w-4 h-4 opacity-50" />
               </Button>
@@ -224,7 +413,7 @@ export const WalletConnectButton = ({ onConnect, onDisconnect }: WalletConnectBu
             <p className="text-xs text-muted-foreground text-center mb-3">
               Don't have a wallet app?
             </p>
-            <div className="flex gap-2 justify-center">
+            <div className="flex flex-wrap gap-2 justify-center">
               <a 
                 href="https://metamask.io/download/" 
                 target="_blank" 
@@ -240,7 +429,16 @@ export const WalletConnectButton = ({ onConnect, onDisconnect }: WalletConnectBu
                 rel="noopener noreferrer"
                 className="text-xs text-primary underline"
               >
-                Get Coinbase Wallet
+                Coinbase Wallet
+              </a>
+              <span className="text-xs text-muted-foreground">•</span>
+              <a 
+                href="https://rainbow.me/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-xs text-primary underline"
+              >
+                Rainbow
               </a>
             </div>
           </div>
