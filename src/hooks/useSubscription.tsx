@@ -48,7 +48,7 @@ export const SubscriptionProvider = ({ children }: { children: React.ReactNode }
   const [error, setError] = useState<string | null>(null);
 
   const checkSubscription = useCallback(async () => {
-    if (!user || !session) {
+    if (!user) {
       setSubscription(null);
       setLoading(false);
       return;
@@ -58,9 +58,19 @@ export const SubscriptionProvider = ({ children }: { children: React.ReactNode }
       setLoading(true);
       setError(null);
 
+      // Get fresh session to avoid stale token issues
+      const { data: { session: freshSession }, error: sessionError } = await supabase.auth.getSession();
+      
+      if (sessionError || !freshSession) {
+        console.error('[Subscription] No active session:', sessionError);
+        setSubscription(null);
+        setLoading(false);
+        return;
+      }
+
       const { data, error: fnError } = await supabase.functions.invoke('check-subscription', {
         headers: {
-          Authorization: `Bearer ${session.access_token}`,
+          Authorization: `Bearer ${freshSession.access_token}`,
         },
       });
 
@@ -87,28 +97,28 @@ export const SubscriptionProvider = ({ children }: { children: React.ReactNode }
     } finally {
       setLoading(false);
     }
-  }, [user, session]);
+  }, [user]);
 
   // Check subscription on mount and when user changes
   useEffect(() => {
-    if (user && session) {
+    if (user) {
       checkSubscription();
     } else {
       setSubscription(null);
       setLoading(false);
     }
-  }, [user, session, checkSubscription]);
+  }, [user, checkSubscription]);
 
   // Periodically refresh subscription status (every 60 seconds)
   useEffect(() => {
-    if (!user || !session) return;
+    if (!user) return;
 
     const interval = setInterval(() => {
       checkSubscription();
     }, 60000);
 
     return () => clearInterval(interval);
-  }, [user, session, checkSubscription]);
+  }, [user, checkSubscription]);
 
   const hasAccess = subscription?.subscribed || false;
   const isTrialing = subscription?.status === 'trialing';
