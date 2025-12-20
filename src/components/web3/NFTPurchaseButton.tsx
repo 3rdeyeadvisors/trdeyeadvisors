@@ -156,6 +156,7 @@ export const NFTPurchaseButton = ({ onPurchaseComplete }: NFTPurchaseButtonProps
             fontSize: "0.875rem",
             border: "none",
             cursor: "pointer",
+            minHeight: "44px",
           }}
         >
           Claim Access NFT {pricePerToken && pricePerToken > 0n ? `(${formattedPrice})` : ''}
