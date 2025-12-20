@@ -3,10 +3,22 @@ import { createThirdwebClient, getContract, defineChain } from "thirdweb";
 // Thirdweb Client ID
 export const THIRDWEB_CLIENT_ID = "87309968bcf322141f6cdb41ada4edcf";
 
+// WalletConnect Project ID (required for mobile wallet deep linking)
+// Get your own at https://cloud.walletconnect.com
+export const WALLETCONNECT_PROJECT_ID = "e7f0ae0f07d0e2fdd4c8a6c3c17f1d5f";
+
 // Create the Thirdweb client
 export const thirdwebClient = createThirdwebClient({
   clientId: THIRDWEB_CLIENT_ID,
 });
+
+// App metadata for WalletConnect (required for mobile wallet deep linking)
+export const appMetadata = {
+  name: "3rd Eye Advisors",
+  description: "DeFi Education & NFT-Gated Vault Access",
+  url: typeof window !== "undefined" ? window.location.origin : "https://the3rdeyeadvisors.com",
+  logoUrl: "https://the3rdeyeadvisors.com/android-chrome-192x192.png",
+};
 
 // Ethereum Mainnet chain
 export const ethereum = defineChain(1);
