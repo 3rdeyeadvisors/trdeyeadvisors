@@ -58,11 +58,13 @@ export const SubscriptionProvider = ({ children }: { children: React.ReactNode }
       setLoading(true);
       setError(null);
 
-      // Get fresh session to avoid stale token issues
-      const { data: { session: freshSession }, error: sessionError } = await supabase.auth.getSession();
+      // Force token refresh to avoid stale session issues
+      const { data: refreshData, error: refreshError } = await supabase.auth.refreshSession();
       
-      if (sessionError || !freshSession) {
-        console.error('[Subscription] No active session:', sessionError);
+      if (refreshError || !refreshData.session) {
+        console.error('[Subscription] Session refresh failed, signing out:', refreshError);
+        // Session is truly invalid - sign out to clear stale state
+        await supabase.auth.signOut();
         setSubscription(null);
         setLoading(false);
         return;
@@ -70,11 +72,20 @@ export const SubscriptionProvider = ({ children }: { children: React.ReactNode }
 
       const { data, error: fnError } = await supabase.functions.invoke('check-subscription', {
         headers: {
-          Authorization: `Bearer ${freshSession.access_token}`,
+          Authorization: `Bearer ${refreshData.session.access_token}`,
         },
       });
 
       if (fnError) {
+        const errorMessage = fnError.message || String(fnError);
+        // If auth error, session might be invalid despite refresh - sign out
+        if (errorMessage.includes('Auth session missing') || errorMessage.includes('session_not_found')) {
+          console.error('[Subscription] Auth error from server, signing out');
+          await supabase.auth.signOut();
+          setSubscription(null);
+          setLoading(false);
+          return;
+        }
         console.error('[Subscription] Error checking subscription:', fnError);
         setError(fnError.message);
         setSubscription(defaultSubscription);
