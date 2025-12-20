@@ -213,21 +213,29 @@ const Store = () => {
             </Card>
           )}
 
-          {/* NFT Access Section */}
+          {/* NFT Access Section - Separate highlighted area */}
           <section className="mb-16" aria-labelledby="nft-heading">
-            <div className="flex items-center gap-3 mb-8">
-              <Sparkles className="h-6 w-6 text-primary" aria-hidden="true" />
-              <h2 id="nft-heading" className="text-2xl font-consciousness font-bold text-foreground">
-                NFT Access Passes
-              </h2>
-            </div>
-            <p className="text-muted-foreground font-consciousness mb-6 max-w-2xl">
-              Purchase NFTs to unlock exclusive vault access and premium features. All transactions use external wallets only.
-            </p>
-            {/* Single card - use max-width instead of grid for single item */}
-            <div className="max-w-sm">
-              <NFTStoreCard />
-            </div>
+            <Card className="p-6 md:p-8 bg-gradient-to-br from-primary/5 via-background to-primary/10 border-primary/20">
+              <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start">
+                {/* Left: Info */}
+                <div className="flex-1 space-y-4">
+                  <div className="flex items-center gap-3">
+                    <Sparkles className="h-6 w-6 text-primary" aria-hidden="true" />
+                    <h2 id="nft-heading" className="text-2xl font-consciousness font-bold text-foreground">
+                      NFT Access Passes
+                    </h2>
+                  </div>
+                  <p className="text-muted-foreground font-consciousness max-w-xl">
+                    Purchase NFTs to unlock exclusive vault access and premium features. 
+                    All transactions use external wallets only. Connect your wallet on the vault page to purchase.
+                  </p>
+                </div>
+                {/* Right: Card */}
+                <div className="w-full lg:w-80 shrink-0">
+                  <NFTStoreCard />
+                </div>
+              </div>
+            </Card>
           </section>
 
           {/* Merchandise Section */}
