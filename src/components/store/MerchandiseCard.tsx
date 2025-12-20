@@ -166,11 +166,6 @@ export function MerchandiseCard({ product, onAddToCart, isInCart }: MerchandiseC
           alt={product.title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
-        {product.tags?.includes('Premium Apparel') && (
-          <Badge className="absolute top-2 right-2 bg-primary/90 backdrop-blur text-xs">
-            Premium
-          </Badge>
-        )}
       </div>
 
       {/* Product Info */}
