@@ -1,7 +1,7 @@
 import { ConnectButton } from "thirdweb/react";
-import { thirdwebClient, ethereum } from "@/lib/thirdweb";
+import { thirdwebClient, ethereum, appMetadata, WALLETCONNECT_PROJECT_ID } from "@/lib/thirdweb";
 import { createWallet } from "thirdweb/wallets";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useActiveAccount } from "thirdweb/react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -11,17 +11,18 @@ interface WalletConnectButtonProps {
   onDisconnect?: () => void;
 }
 
-// Create external wallet instances (App Store compliant)
-const wallets = [
-  createWallet("io.metamask"),
-  createWallet("com.coinbase.wallet"),
-  createWallet("me.rainbow"),
-  createWallet("walletConnect"),
-];
-
 export const WalletConnectButton = ({ onConnect, onDisconnect }: WalletConnectButtonProps) => {
   const account = useActiveAccount();
   const { toast } = useToast();
+
+  // Create external wallet instances - memoized to prevent re-creation on every render
+  // Note: WalletConnect configuration is passed via the ConnectButton props, not createWallet
+  const wallets = useMemo(() => [
+    createWallet("io.metamask"),
+    createWallet("com.coinbase.wallet"),
+    createWallet("me.rainbow"),
+    createWallet("walletConnect"),
+  ], []);
 
   // Link wallet to user account when connected
   useEffect(() => {
@@ -77,6 +78,10 @@ export const WalletConnectButton = ({ onConnect, onDisconnect }: WalletConnectBu
       wallets={wallets}
       chain={ethereum}
       theme="dark"
+      appMetadata={appMetadata}
+      walletConnect={{
+        projectId: WALLETCONNECT_PROJECT_ID,
+      }}
       connectModal={{
         size: "compact",
         title: "Connect Your Wallet",
