@@ -213,38 +213,13 @@ const Store = () => {
             </Card>
           )}
 
-          {/* NFT Access Section - Separate highlighted area */}
-          <section className="mb-16" aria-labelledby="nft-heading">
-            <Card className="p-6 md:p-8 bg-gradient-to-br from-primary/5 via-background to-primary/10 border-primary/20">
-              <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start">
-                {/* Left: Info */}
-                <div className="flex-1 space-y-4">
-                  <div className="flex items-center gap-3">
-                    <Sparkles className="h-6 w-6 text-primary" aria-hidden="true" />
-                    <h2 id="nft-heading" className="text-2xl font-consciousness font-bold text-foreground">
-                      NFT Access Passes
-                    </h2>
-                  </div>
-                  <p className="text-muted-foreground font-consciousness max-w-xl">
-                    Purchase NFTs to unlock exclusive vault access and premium features. 
-                    All transactions use external wallets only. Connect your wallet on the vault page to purchase.
-                  </p>
-                </div>
-                {/* Right: Card */}
-                <div className="w-full lg:w-80 shrink-0">
-                  <NFTStoreCard />
-                </div>
-              </div>
-            </Card>
-          </section>
-
-          {/* Merchandise Section */}
+          {/* Physical Merchandise Section */}
           <section className="mb-16" aria-labelledby="merchandise-heading">
-            <div className="flex items-center justify-between mb-8">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
               <div className="flex items-center gap-3">
                 <Package className="h-6 w-6 text-primary" aria-hidden="true" />
                 <h2 id="merchandise-heading" className="text-2xl font-consciousness font-bold text-foreground">
-                  Merchandise
+                  Physical Merchandise
                 </h2>
               </div>
               {isAdmin && (
@@ -253,7 +228,7 @@ const Store = () => {
                   disabled={isSyncing}
                   variant="outline"
                   size="sm"
-                  className="gap-2 font-consciousness w-full md:w-auto touch-target"
+                  className="gap-2 font-consciousness touch-target self-start sm:self-auto"
                   aria-label="Sync merchandise products"
                 >
                   <RefreshCw className={`h-4 w-4 ${isSyncing ? 'animate-spin' : ''}`} aria-hidden="true" />
@@ -264,24 +239,17 @@ const Store = () => {
 
             {(() => {
               const filteredProducts = printifyProducts;
-              
-              // Helper function to get admin price
-              const getAdminPrice = (price: number) => isAdmin ? 0 : price;
 
               if (isLoading) {
                 return (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {[1, 2, 3].map((i) => (
+                  <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
+                    {[1, 2, 3, 4].map((i) => (
                       <Card key={i} className="overflow-hidden animate-pulse">
                         <div className="aspect-square bg-muted" />
-                        <div className="p-6 space-y-4">
-                          <div className="h-6 bg-muted rounded w-3/4" />
-                          <div className="h-4 bg-muted rounded w-full" />
-                          <div className="h-4 bg-muted rounded w-2/3" />
-                          <div className="flex justify-between items-center pt-4">
-                            <div className="h-8 bg-muted rounded w-20" />
-                            <div className="h-10 bg-muted rounded w-32" />
-                          </div>
+                        <div className="p-4 space-y-3">
+                          <div className="h-5 bg-muted rounded w-3/4" />
+                          <div className="h-4 bg-muted rounded w-1/2" />
+                          <div className="h-10 bg-muted rounded w-full mt-4" />
                         </div>
                       </Card>
                     ))}
@@ -291,12 +259,12 @@ const Store = () => {
 
               if (filteredProducts.length === 0) {
                 return (
-                  <Card className="p-12 text-center border-2 bg-card/50 backdrop-blur">
-                    <Package className="h-16 w-16 text-muted-foreground mx-auto mb-4" aria-hidden="true" />
-                    <h3 className="text-xl font-consciousness font-semibold mb-2">
+                  <Card className="p-8 md:p-12 text-center border-2 bg-card/50 backdrop-blur">
+                    <Package className="h-12 w-12 md:h-16 md:w-16 text-muted-foreground mx-auto mb-4" aria-hidden="true" />
+                    <h3 className="text-lg md:text-xl font-consciousness font-semibold mb-2">
                       No Merchandise Available
                     </h3>
-                    <p className="text-muted-foreground font-consciousness mb-6">
+                    <p className="text-sm md:text-base text-muted-foreground font-consciousness mb-6">
                       Check back soon for new products!
                     </p>
                     {isAdmin && (
@@ -328,6 +296,29 @@ const Store = () => {
                 </div>
               );
             })()}
+          </section>
+
+          {/* Digital Collectibles / NFT Section */}
+          <section className="mb-16" aria-labelledby="nft-heading">
+            <div className="flex items-center gap-3 mb-8">
+              <Sparkles className="h-6 w-6 text-primary" aria-hidden="true" />
+              <h2 id="nft-heading" className="text-2xl font-consciousness font-bold text-foreground">
+                Digital Collectibles
+              </h2>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+              <NFTStoreCard />
+              {/* Placeholder cards for future NFTs to maintain grid consistency */}
+              <Card className="p-6 border-dashed border-2 border-muted flex flex-col items-center justify-center min-h-[300px] bg-muted/20">
+                <Sparkles className="h-10 w-10 text-muted-foreground/50 mb-3" />
+                <p className="text-sm text-muted-foreground font-consciousness text-center">More NFTs coming soon</p>
+              </Card>
+            </div>
+            
+            <p className="text-sm text-muted-foreground font-consciousness mt-4">
+              NFT purchases require an external wallet. Connect on the vault page to purchase.
+            </p>
           </section>
 
           <Card className="mt-16 p-6 md:p-8 bg-secondary/40 border-border" role="region" aria-label="Payment information">
