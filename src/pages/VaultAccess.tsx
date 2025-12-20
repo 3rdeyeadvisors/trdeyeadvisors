@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useActiveAccount } from "thirdweb/react";
+import { useAuth } from "@/components/auth/AuthProvider";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -30,77 +31,77 @@ type Step = 'auth' | 'disclaimer' | 'wallet' | 'nft' | 'vault';
 
 const VaultAccess = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { user, loading: authLoading } = useAuth();
   const account = useActiveAccount();
   const { toast } = useToast();
   
-  const [user, setUser] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
   const [currentStep, setCurrentStep] = useState<Step>('auth');
   const [disclaimerAccepted, setDisclaimerAccepted] = useState(false);
   const [hasNFT, setHasNFT] = useState(false);
   const [isWhitelisted, setIsWhitelisted] = useState(false);
   const [verifying, setVerifying] = useState(false);
+  const [checkingWhitelist, setCheckingWhitelist] = useState(false);
 
   // Track page view
   useEffect(() => {
     trackEvent('vault_page_view', 'vault', currentStep);
   }, []);
 
-  // Check auth status
+  // Determine step based on auth state - runs once when auth is ready
   useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
-      setLoading(false);
+    if (authLoading) return;
+    
+    if (!user) {
+      setCurrentStep('auth');
+      return;
+    }
+    
+    // User is logged in - check disclaimer
+    const accepted = localStorage.getItem('vault_disclaimer_accepted');
+    if (accepted === 'true') {
+      setDisclaimerAccepted(true);
+      setCurrentStep(account ? 'nft' : 'wallet');
+    } else {
+      setCurrentStep('disclaimer');
+    }
+  }, [authLoading, user]);
+
+  // Check whitelist when wallet connects
+  useEffect(() => {
+    const checkWhitelist = async () => {
+      if (!user || !account?.address) return;
       
-      if (user) {
-        // Check if user has previously accepted disclaimer
-        const accepted = localStorage.getItem('vault_disclaimer_accepted');
-        if (accepted === 'true') {
-          setDisclaimerAccepted(true);
-          setCurrentStep(account ? 'nft' : 'wallet');
-        } else {
-          setCurrentStep('disclaimer');
-        }
+      setCheckingWhitelist(true);
+      try {
+        const { data: whitelist } = await supabase
+          .from('vault_whitelist')
+          .select('is_active')
+          .eq('wallet_address', account.address.toLowerCase())
+          .eq('user_id', user.id)
+          .single();
         
-        // Check if already whitelisted
-        if (account?.address) {
-          const { data: whitelist } = await supabase
-            .from('vault_whitelist')
-            .select('is_active')
-            .eq('wallet_address', account.address.toLowerCase())
-            .eq('user_id', user.id)
-            .single();
-          
-          if (whitelist?.is_active) {
-            setIsWhitelisted(true);
-            setHasNFT(true);
-            setCurrentStep('vault');
-          }
+        if (whitelist?.is_active) {
+          setIsWhitelisted(true);
+          setHasNFT(true);
+          setCurrentStep('vault');
         }
-      } else {
-        setCurrentStep('auth');
+      } finally {
+        setCheckingWhitelist(false);
       }
     };
 
-    checkAuth();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
-      setUser(session?.user ?? null);
-      if (session?.user && !disclaimerAccepted) {
-        setCurrentStep('disclaimer');
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [account, disclaimerAccepted]);
+    if (disclaimerAccepted && account) {
+      checkWhitelist();
+    }
+  }, [user, account?.address, disclaimerAccepted]);
 
   // Update step when wallet connects
   useEffect(() => {
-    if (account && disclaimerAccepted) {
+    if (account && disclaimerAccepted && !isWhitelisted) {
       setCurrentStep('nft');
     }
-  }, [account, disclaimerAccepted]);
+  }, [account, disclaimerAccepted, isWhitelisted]);
 
   // Verify NFT ownership on backend
   const verifyOwnership = async () => {
@@ -155,6 +156,12 @@ const VaultAccess = () => {
     }
   }, [account?.address, user]);
 
+  const handleSignIn = () => {
+    // Redirect to auth with current path so user comes back here
+    const currentPath = location.pathname;
+    navigate(`/auth?redirect=${encodeURIComponent(currentPath)}`);
+  };
+
   const steps = [
     { id: 'auth', label: 'Sign In', icon: LogIn },
     { id: 'disclaimer', label: 'Disclaimer', icon: Shield },
@@ -173,7 +180,8 @@ const VaultAccess = () => {
     return 'pending';
   };
 
-  if (loading) {
+  // Show loading only during initial auth check
+  if (authLoading) {
     return (
       <Layout>
         <div className="flex items-center justify-center min-h-[60vh]">
@@ -251,7 +259,7 @@ const VaultAccess = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent className="flex justify-center sm:justify-start">
-                <Button onClick={() => navigate('/auth')} className="min-h-[44px]">
+                <Button onClick={handleSignIn} className="min-h-[44px]">
                   Sign In to Continue
                   <ArrowRight className="h-4 w-4 ml-2" />
                 </Button>
@@ -300,30 +308,39 @@ const VaultAccess = () => {
                 <WalletConnectButton />
               </div>
 
-              <NFTOwnershipCheck onOwnershipVerified={handleNFTOwnershipVerified} />
+              {checkingWhitelist ? (
+                <div className="flex items-center justify-center py-8">
+                  <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                  <span className="ml-2 text-muted-foreground">Checking access...</span>
+                </div>
+              ) : (
+                <>
+                  <NFTOwnershipCheck onOwnershipVerified={handleNFTOwnershipVerified} />
 
-              {!hasNFT && account && (
-                <NFTPurchaseButton onPurchaseComplete={() => setHasNFT(true)} />
-              )}
-
-              {hasNFT && !isWhitelisted && (
-                <Button 
-                  onClick={verifyOwnership} 
-                  disabled={verifying}
-                  className="w-full min-h-[44px]"
-                >
-                  {verifying ? (
-                    <>
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      Verifying...
-                    </>
-                  ) : (
-                    <>
-                      Verify & Access Vault
-                      <ArrowRight className="h-4 w-4 ml-2" />
-                    </>
+                  {!hasNFT && account && (
+                    <NFTPurchaseButton onPurchaseComplete={() => setHasNFT(true)} />
                   )}
-                </Button>
+
+                  {hasNFT && !isWhitelisted && (
+                    <Button 
+                      onClick={verifyOwnership} 
+                      disabled={verifying}
+                      className="w-full min-h-[44px]"
+                    >
+                      {verifying ? (
+                        <>
+                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                          Verifying...
+                        </>
+                      ) : (
+                        <>
+                          Verify & Access Vault
+                          <ArrowRight className="h-4 w-4 ml-2" />
+                        </>
+                      )}
+                    </Button>
+                  )}
+                </>
               )}
             </div>
           )}
