@@ -2,13 +2,14 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Package, CheckCircle, X, RefreshCw, Shield } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { toast } from "sonner";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useCart } from "@/contexts/CartContext";
 import SEO from "@/components/SEO";
 import { MerchandiseCard } from "@/components/store/MerchandiseCard";
-
+import { usePullToRefresh } from "@/hooks/usePullToRefresh";
+import { PullToRefreshIndicator } from "@/components/ui/pull-to-refresh";
 const Store = () => {
   const { addItem, items, clearCart } = useCart();
   const { user } = useAuth();
@@ -143,6 +144,16 @@ const Store = () => {
     loadPrintifyProducts().finally(() => setIsLoading(false));
   }, [clearCart]);
 
+  // Pull-to-refresh handler
+  const handleRefresh = useCallback(async () => {
+    await loadPrintifyProducts();
+    toast.success("Products refreshed!");
+  }, []);
+
+  const { isRefreshing, pullDistance, isTriggered } = usePullToRefresh({
+    onRefresh: handleRefresh
+  });
+
 
   return (
     <>
@@ -152,6 +163,11 @@ const Store = () => {
         keywords="consciousness merchandise, spiritual apparel, 3rdeyeadvisors store"
         url="https://www.the3rdeyeadvisors.com/store"
         type="website"
+      />
+      <PullToRefreshIndicator 
+        pullDistance={pullDistance}
+        isRefreshing={isRefreshing}
+        isTriggered={isTriggered}
       />
       <div className="py-12 md:py-20 lg:py-24 w-full overflow-x-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">

@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Filter, LogIn, Search, Star } from "lucide-react";
+import { Filter, LogIn, Search } from "lucide-react";
 import { CourseCard } from "@/components/course/CourseCard";
 import { AuthModal } from "@/components/auth/AuthModal";
 import { useAuth } from "@/components/auth/AuthProvider";
@@ -10,6 +10,9 @@ import { BookOpen } from "lucide-react";
 import SEO from "@/components/SEO";
 import { ParticipantTracker } from "@/components/admin/ParticipantTracker";
 import { usePresenceTracking } from "@/hooks/usePresenceTracking";
+import { usePullToRefresh } from "@/hooks/usePullToRefresh";
+import { PullToRefreshIndicator } from "@/components/ui/pull-to-refresh";
+import { toast } from "sonner";
 
 const Courses = () => {
   const [activeFilter, setActiveFilter] = useState("all");
@@ -146,6 +149,18 @@ const Courses = () => {
     setShowAuthModal(true);
   };
 
+  // Pull-to-refresh handler
+  const handleRefresh = useCallback(async () => {
+    // Reset filters on refresh
+    setSearchQuery("");
+    setActiveFilter("all");
+    toast.success("Courses refreshed!");
+  }, []);
+
+  const { isRefreshing, pullDistance, isTriggered } = usePullToRefresh({
+    onRefresh: handleRefresh
+  });
+
   return (
     <>
       <SEO 
@@ -196,6 +211,11 @@ const Courses = () => {
             answer: "Yes, we provide free foundational courses covering DeFi basics, wallet setup, and essential security practices. Premium courses dive deeper into advanced strategies and portfolio management techniques."
           }
         ]}
+      />
+      <PullToRefreshIndicator 
+        pullDistance={pullDistance}
+        isRefreshing={isRefreshing}
+        isTriggered={isTriggered}
       />
       <div className="py-12 md:py-20 lg:py-24">
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
