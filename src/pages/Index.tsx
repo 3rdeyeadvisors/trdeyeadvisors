@@ -128,21 +128,27 @@ const Index = () => {
       title: "Earth Vault",
       subtitle: "Foundation Level",
       description: "Master basic concepts and track your progress. Build your knowledge base through clear, practical education.",
-      features: ["Wallet setup & security", "Blockchain fundamentals", "Crypto basics"]
+      features: ["Wallet setup & security", "Blockchain fundamentals", "Crypto basics"],
+      href: "/vault-access",
+      isLive: true
     },
     {
       icon: Cloud,
       title: "Sky Vault",
       subtitle: "Intermediate Level",
       description: "Deepen your understanding of protocols and unlock advanced certifications for comprehension.",
-      features: ["DeFi protocol deep-dives", "Yield & staking concepts", "Risk management"]
+      features: ["DeFi protocol deep-dives", "Yield & staking concepts", "Risk management"],
+      href: null,
+      isLive: false
     },
     {
       icon: Rocket,
       title: "Cosmos Vault",
       subtitle: "Expert Level",
       description: "Achieve mastery of decentralized systems and unlock exclusive expert-level content.",
-      features: ["Advanced concepts", "Protocol governance", "Community leadership"]
+      features: ["Advanced concepts", "Protocol governance", "Community leadership"],
+      href: null,
+      isLive: false
     }
   ];
 
@@ -358,39 +364,63 @@ const Index = () => {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
-              {vaultLayers.map((vault, index) => (
-                <Card 
-                  key={vault.title}
-                  className="relative p-5 md:p-6 bg-card border-border hover:border-primary/60 transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 group"
-                  style={{ animationDelay: `${index * 0.2}s` }}
-                >
-                  <span className="absolute top-3 right-3 text-[9px] md:text-[10px] uppercase tracking-wider text-primary bg-primary/20 border border-primary/40 px-2 py-1 rounded font-consciousness font-medium">
-                    Coming Soon
-                  </span>
-                  <div className="flex flex-col items-center text-center mb-4 md:mb-5 pt-2">
-                    <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-primary/20 flex items-center justify-center mb-3 md:mb-4">
-                      <vault.icon className="w-6 h-6 md:w-7 md:h-7 text-primary" />
+              {vaultLayers.map((vault, index) => {
+                const cardContent = (
+                  <Card 
+                    className={`relative p-5 md:p-6 bg-card border-border hover:border-primary/60 transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 group h-full ${vault.isLive ? 'cursor-pointer' : ''}`}
+                    style={{ animationDelay: `${index * 0.2}s` }}
+                  >
+                    {vault.isLive ? (
+                      <span className="absolute top-3 right-3 text-[9px] md:text-[10px] uppercase tracking-wider text-green-400 bg-green-500/20 border border-green-500/40 px-2 py-1 rounded font-consciousness font-medium">
+                        Live
+                      </span>
+                    ) : (
+                      <span className="absolute top-3 right-3 text-[9px] md:text-[10px] uppercase tracking-wider text-primary bg-primary/20 border border-primary/40 px-2 py-1 rounded font-consciousness font-medium">
+                        Coming Soon
+                      </span>
+                    )}
+                    <div className="flex flex-col items-center text-center mb-4 md:mb-5 pt-2">
+                      <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-primary/20 flex items-center justify-center mb-3 md:mb-4">
+                        <vault.icon className="w-6 h-6 md:w-7 md:h-7 text-primary" />
+                      </div>
+                      <span className="inline-block text-[10px] md:text-xs uppercase tracking-wider text-primary bg-primary/15 px-3 py-1 rounded-full font-consciousness font-medium">
+                        {vault.subtitle}
+                      </span>
+                      <h3 className="text-base md:text-lg font-consciousness font-bold text-foreground mt-2 md:mt-3">
+                        {vault.title}
+                      </h3>
                     </div>
-                    <span className="inline-block text-[10px] md:text-xs uppercase tracking-wider text-primary bg-primary/15 px-3 py-1 rounded-full font-consciousness font-medium">
-                      {vault.subtitle}
-                    </span>
-                    <h3 className="text-base md:text-lg font-consciousness font-bold text-foreground mt-2 md:mt-3">
-                      {vault.title}
-                    </h3>
+                    <p className="text-sm md:text-base text-foreground/70 font-consciousness leading-relaxed text-center mb-4 md:mb-5">
+                      {vault.description}
+                    </p>
+                    <ul className="space-y-2 md:space-y-3">
+                      {vault.features.map((feature, i) => (
+                        <li key={i} className="flex items-center text-sm text-foreground font-consciousness bg-background rounded-lg px-3 py-2.5">
+                          <CheckCircle2 className="w-4 h-4 text-primary mr-3 flex-shrink-0" />
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    {vault.isLive && (
+                      <div className="mt-4 pt-4 border-t border-border">
+                        <span className="flex items-center justify-center text-sm text-primary font-consciousness font-medium group-hover:underline">
+                          Access Vault <ArrowRight className="w-4 h-4 ml-1" />
+                        </span>
+                      </div>
+                    )}
+                  </Card>
+                );
+                
+                return vault.isLive && vault.href ? (
+                  <Link key={vault.title} to={vault.href}>
+                    {cardContent}
+                  </Link>
+                ) : (
+                  <div key={vault.title}>
+                    {cardContent}
                   </div>
-                  <p className="text-sm md:text-base text-foreground/70 font-consciousness leading-relaxed text-center mb-4 md:mb-5">
-                    {vault.description}
-                  </p>
-                  <ul className="space-y-2 md:space-y-3">
-                    {vault.features.map((feature, i) => (
-                      <li key={i} className="flex items-center text-sm text-foreground font-consciousness bg-background rounded-lg px-3 py-2.5">
-                        <CheckCircle2 className="w-4 h-4 text-primary mr-3 flex-shrink-0" />
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </Card>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>
