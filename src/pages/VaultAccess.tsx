@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useActiveAccount } from "thirdweb/react";
 import Layout from "@/components/Layout";
@@ -24,6 +24,7 @@ import EnzymeVaultCard from "@/components/web3/EnzymeVaultCard";
 import CryptoDisclaimer from "@/components/web3/CryptoDisclaimer";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { trackEvent } from "@/lib/analytics";
 
 type Step = 'auth' | 'disclaimer' | 'wallet' | 'nft' | 'vault';
 
@@ -40,6 +41,11 @@ const VaultAccess = () => {
   const [isWhitelisted, setIsWhitelisted] = useState(false);
   const [verifying, setVerifying] = useState(false);
 
+  // Track page view
+  useEffect(() => {
+    trackEvent('vault_page_view', 'vault', currentStep);
+  }, []);
+
   // Check auth status
   useEffect(() => {
     const checkAuth = async () => {
@@ -55,6 +61,22 @@ const VaultAccess = () => {
           setCurrentStep(account ? 'nft' : 'wallet');
         } else {
           setCurrentStep('disclaimer');
+        }
+        
+        // Check if already whitelisted
+        if (account?.address) {
+          const { data: whitelist } = await supabase
+            .from('vault_whitelist')
+            .select('is_active')
+            .eq('wallet_address', account.address.toLowerCase())
+            .eq('user_id', user.id)
+            .single();
+          
+          if (whitelist?.is_active) {
+            setIsWhitelisted(true);
+            setHasNFT(true);
+            setCurrentStep('vault');
+          }
         }
       } else {
         setCurrentStep('auth');
@@ -98,13 +120,17 @@ const VaultAccess = () => {
       if (data?.isOwner) {
         setIsWhitelisted(true);
         setCurrentStep('vault');
+        trackEvent('vault_verified', 'vault', account.address, data.balance);
         toast({
           title: "Verified!",
           description: "Your NFT ownership has been verified. Welcome to the vault!",
         });
+      } else {
+        trackEvent('vault_no_nft', 'vault', account.address);
       }
     } catch (error) {
       console.error('Verification error:', error);
+      trackEvent('vault_error', 'vault', String(error));
       toast({
         title: "Verification Failed",
         description: "Could not verify NFT ownership. Please try again.",
@@ -118,15 +144,16 @@ const VaultAccess = () => {
   const handleDisclaimerAccept = () => {
     setDisclaimerAccepted(true);
     localStorage.setItem('vault_disclaimer_accepted', 'true');
+    trackEvent('vault_disclaimer_accepted', 'vault');
     setCurrentStep('wallet');
   };
 
-  const handleNFTOwnershipVerified = (balance: number) => {
+  const handleNFTOwnershipVerified = useCallback((balance: number) => {
     if (balance > 0) {
       setHasNFT(true);
       verifyOwnership();
     }
-  };
+  }, [account?.address, user]);
 
   const steps = [
     { id: 'auth', label: 'Sign In', icon: LogIn },
