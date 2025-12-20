@@ -241,17 +241,17 @@ const VaultAccess = () => {
           {/* Step 1: Authentication */}
           {currentStep === 'auth' && (
             <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <LogIn className="h-5 w-5" />
-                  Sign In Required
+              <CardHeader className="text-center sm:text-left">
+                <CardTitle className="flex items-center justify-center sm:justify-start gap-2">
+                  <LogIn className="h-5 w-5 shrink-0" />
+                  <span>Sign In Required</span>
                 </CardTitle>
                 <CardDescription>
                   Please sign in to your 3EA account to access the vault
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <Button onClick={() => navigate('/auth')}>
+              <CardContent className="flex justify-center sm:justify-start">
+                <Button onClick={() => navigate('/auth')} className="min-h-[44px]">
                   Sign In to Continue
                   <ArrowRight className="h-4 w-4 ml-2" />
                 </Button>
@@ -270,19 +270,21 @@ const VaultAccess = () => {
           {/* Step 3: Connect Wallet */}
           {currentStep === 'wallet' && (
             <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Wallet className="h-5 w-5" />
-                  Connect Your Wallet
+              <CardHeader className="text-center sm:text-left">
+                <CardTitle className="flex items-center justify-center sm:justify-start gap-2">
+                  <Wallet className="h-5 w-5 shrink-0" />
+                  <span>Connect Your Wallet</span>
                 </CardTitle>
                 <CardDescription>
                   Connect an external wallet that holds your 3EA Access NFT
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <WalletConnectButton 
-                  onConnect={() => setCurrentStep('nft')}
-                />
+              <CardContent className="flex flex-col items-center gap-4 pt-2">
+                <div className="w-full flex justify-center">
+                  <WalletConnectButton 
+                    onConnect={() => setCurrentStep('nft')}
+                  />
+                </div>
                 <p className="text-xs text-muted-foreground text-center">
                   Supported: MetaMask, Coinbase Wallet, Rainbow, WalletConnect
                 </p>
@@ -293,8 +295,8 @@ const VaultAccess = () => {
           {/* Step 4: NFT Verification */}
           {currentStep === 'nft' && (
             <div className="space-y-6">
-              <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold">NFT Verification</h2>
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <h2 className="text-xl font-semibold text-center sm:text-left">NFT Verification</h2>
                 <WalletConnectButton />
               </div>
 
@@ -308,7 +310,7 @@ const VaultAccess = () => {
                 <Button 
                   onClick={verifyOwnership} 
                   disabled={verifying}
-                  className="w-full"
+                  className="w-full min-h-[44px]"
                 >
                   {verifying ? (
                     <>
@@ -329,8 +331,8 @@ const VaultAccess = () => {
           {/* Step 5: Vault Access */}
           {currentStep === 'vault' && (
             <div className="space-y-6">
-              <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold">Your Vault Access</h2>
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <h2 className="text-xl font-semibold text-center sm:text-left">Your Vault Access</h2>
                 <WalletConnectButton />
               </div>
 
