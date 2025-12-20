@@ -177,7 +177,7 @@ const Store = () => {
               Store
             </h1>
             <p className="text-xl text-muted-foreground font-consciousness max-w-2xl mx-auto mb-4">
-              Consciousness-inspired merchandise to support your journey
+              Consciousness inspired merchandise to support your journey
             </p>
             <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full">
               <Package className="w-4 h-4" />
