@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useActiveAccount } from "thirdweb/react";
 import { useAuth } from "@/components/auth/AuthProvider";
@@ -35,7 +35,6 @@ const VaultAccess = () => {
   const { user, loading: authLoading, ready } = useAuth();
   const account = useActiveAccount();
   const { toast } = useToast();
-  const hasRedirected = useRef(false);
   
   const [currentStep, setCurrentStep] = useState<Step>('auth');
   const [disclaimerAccepted, setDisclaimerAccepted] = useState(false);
@@ -50,25 +49,37 @@ const VaultAccess = () => {
   }, []);
 
   // Auto-redirect to auth if not logged in (runs once when ready)
+  // Skip redirect check entirely if user is logged in - we only care about unauthenticated users
   useEffect(() => {
-    if (!ready || authLoading || hasRedirected.current) return;
+    if (!ready || authLoading) return;
     
+    // Only redirect if there's no user - don't run this effect for logged-in users at all
     if (!user) {
-      hasRedirected.current = true;
+      // Check if we already initiated a redirect this session
+      const alreadyRedirecting = sessionStorage.getItem('vault_auth_redirect');
+      if (alreadyRedirecting) return;
+      
+      sessionStorage.setItem('vault_auth_redirect', 'true');
       const currentPath = location.pathname;
       navigate(`/auth?redirect=${encodeURIComponent(currentPath)}`, { replace: true });
       return;
     }
     
-    // User is logged in - check disclaimer
+    // Clear the redirect flag when user is authenticated
+    sessionStorage.removeItem('vault_auth_redirect');
+    
+    // User is logged in - check disclaimer (only run once)
     const accepted = localStorage.getItem('vault_disclaimer_accepted');
     if (accepted === 'true') {
       setDisclaimerAccepted(true);
-      setCurrentStep(account ? 'nft' : 'wallet');
-    } else {
+      // Set initial step based on wallet connection, but don't update on wallet changes
+      if (currentStep === 'auth') {
+        setCurrentStep(account ? 'nft' : 'wallet');
+      }
+    } else if (currentStep === 'auth') {
       setCurrentStep('disclaimer');
     }
-  }, [ready, authLoading, user, navigate, location.pathname, account]);
+  }, [ready, authLoading, user, navigate, location.pathname]); // Removed 'account' from deps
 
   // Check whitelist when wallet connects
   useEffect(() => {
