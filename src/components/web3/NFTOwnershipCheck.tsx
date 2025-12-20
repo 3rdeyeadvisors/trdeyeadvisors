@@ -64,19 +64,19 @@ export const NFTOwnershipCheck = ({ onOwnershipVerified }: NFTOwnershipCheckProp
   }
 
   return (
-    <Card className={ownsNFT ? "border-green-500/50 bg-green-500/5" : "border-amber-500/50 bg-amber-500/5"}>
+    <Card className={ownsNFT ? "border-success/50 bg-success/5" : "border-warning/50 bg-warning/5"}>
       <CardHeader className="pb-3">
-        <CardTitle className="flex items-center gap-2 text-lg">
-          <Shield className={`h-5 w-5 ${ownsNFT ? "text-green-500" : "text-amber-500"}`} />
+        <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+          <Shield className={`h-5 w-5 ${ownsNFT ? "text-success" : "text-warning"}`} />
           3EA Access NFT
         </CardTitle>
       </CardHeader>
       <CardContent>
         {ownsNFT ? (
           <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <CheckCircle className="h-5 w-5 text-green-500" />
-              <span className="font-medium text-green-500">Verified Owner</span>
+            <div className="flex items-center gap-2 flex-wrap">
+              <CheckCircle className="h-5 w-5 text-success" />
+              <span className="font-medium text-success">Verified Owner</span>
               <Badge variant="secondary" className="ml-auto">
                 {nftCount} NFT{nftCount > 1 ? 's' : ''}
               </Badge>
@@ -88,8 +88,8 @@ export const NFTOwnershipCheck = ({ onOwnershipVerified }: NFTOwnershipCheckProp
         ) : (
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <XCircle className="h-5 w-5 text-amber-500" />
-              <span className="font-medium text-amber-500">No NFT Found</span>
+              <XCircle className="h-5 w-5 text-warning" />
+              <span className="font-medium text-warning">No NFT Found</span>
             </div>
             <p className="text-sm text-muted-foreground">
               You need to own a 3EA Access NFT to access the Enzyme Vault. Purchase an NFT below to gain access.

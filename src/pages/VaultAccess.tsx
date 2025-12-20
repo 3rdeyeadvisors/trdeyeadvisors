@@ -212,8 +212,8 @@ const VaultAccess = () => {
             
             return (
               <div key={step.id} className="flex items-center">
-                <div className={`flex items-center gap-2 px-3 py-2 rounded-lg ${
-                  status === 'complete' ? 'bg-green-500/10 text-green-500' :
+                <div className={`flex items-center gap-2 px-3 py-2 rounded-lg min-h-[44px] ${
+                  status === 'complete' ? 'bg-success/10 text-success' :
                   status === 'current' ? 'bg-primary/10 text-primary' :
                   'bg-muted text-muted-foreground'
                 }`}>
