@@ -43,7 +43,7 @@ export const EnzymeVaultCard = ({ isWhitelisted = false, walletAddress }: Enzyme
             <TrendingUp className="h-5 w-5 text-primary" />
             3EA Enzyme Vault
           </CardTitle>
-          <Badge variant="secondary" className="bg-green-500/10 text-green-500 border-green-500/30">
+          <Badge variant="secondary" className="bg-success/10 text-success border-success/30">
             <Shield className="h-3 w-3 mr-1" />
             Verified Access
           </Badge>
@@ -76,7 +76,7 @@ export const EnzymeVaultCard = ({ isWhitelisted = false, walletAddress }: Enzyme
           <div className="flex flex-col sm:flex-row gap-3">
             <Button 
               variant="default" 
-              className="flex-1"
+              className="flex-1 min-h-[44px]"
               onClick={() => window.open(depositUrl, '_blank', 'noopener,noreferrer')}
             >
               Deposit
@@ -84,7 +84,7 @@ export const EnzymeVaultCard = ({ isWhitelisted = false, walletAddress }: Enzyme
             </Button>
             <Button 
               variant="outline" 
-              className="flex-1"
+              className="flex-1 min-h-[44px]"
               onClick={() => window.open(redeemUrl, '_blank', 'noopener,noreferrer')}
             >
               Withdraw
@@ -94,7 +94,7 @@ export const EnzymeVaultCard = ({ isWhitelisted = false, walletAddress }: Enzyme
 
           <Button 
             variant="ghost" 
-            className="w-full"
+            className="w-full min-h-[44px]"
             onClick={() => window.open(vaultUrl, '_blank', 'noopener,noreferrer')}
           >
             View Full Vault Dashboard
@@ -103,8 +103,8 @@ export const EnzymeVaultCard = ({ isWhitelisted = false, walletAddress }: Enzyme
         </div>
 
         {/* Disclaimer */}
-        <div className="rounded-lg bg-amber-500/10 border border-amber-500/30 p-4">
-          <p className="text-xs text-amber-500">
+        <div className="rounded-lg bg-warning/10 border border-warning/30 p-4">
+          <p className="text-xs text-warning">
             <strong>External Service:</strong> Deposits and withdrawals are processed through Enzyme Finance's platform. 
             3EA does not custody your funds. Always verify you're on the official Enzyme Finance website.
           </p>
