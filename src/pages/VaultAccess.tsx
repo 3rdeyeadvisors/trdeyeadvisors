@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useActiveAccount } from "thirdweb/react";
 import { useAuth } from "@/components/auth/AuthProvider";
@@ -32,9 +32,10 @@ type Step = 'auth' | 'disclaimer' | 'wallet' | 'nft' | 'vault';
 const VaultAccess = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, loading: authLoading } = useAuth();
+  const { user, loading: authLoading, ready } = useAuth();
   const account = useActiveAccount();
   const { toast } = useToast();
+  const hasRedirected = useRef(false);
   
   const [currentStep, setCurrentStep] = useState<Step>('auth');
   const [disclaimerAccepted, setDisclaimerAccepted] = useState(false);
@@ -48,12 +49,14 @@ const VaultAccess = () => {
     trackEvent('vault_page_view', 'vault', currentStep);
   }, []);
 
-  // Determine step based on auth state - runs once when auth is ready
+  // Auto-redirect to auth if not logged in (runs once when ready)
   useEffect(() => {
-    if (authLoading) return;
+    if (!ready || authLoading || hasRedirected.current) return;
     
     if (!user) {
-      setCurrentStep('auth');
+      hasRedirected.current = true;
+      const currentPath = location.pathname;
+      navigate(`/auth?redirect=${encodeURIComponent(currentPath)}`, { replace: true });
       return;
     }
     
@@ -65,7 +68,7 @@ const VaultAccess = () => {
     } else {
       setCurrentStep('disclaimer');
     }
-  }, [authLoading, user]);
+  }, [ready, authLoading, user, navigate, location.pathname, account]);
 
   // Check whitelist when wallet connects
   useEffect(() => {
@@ -156,12 +159,6 @@ const VaultAccess = () => {
     }
   }, [account?.address, user]);
 
-  const handleSignIn = () => {
-    // Redirect to auth with current path so user comes back here
-    const currentPath = location.pathname;
-    navigate(`/auth?redirect=${encodeURIComponent(currentPath)}`);
-  };
-
   const steps = [
     { id: 'auth', label: 'Sign In', icon: LogIn },
     { id: 'disclaimer', label: 'Disclaimer', icon: Shield },
@@ -181,7 +178,18 @@ const VaultAccess = () => {
   };
 
   // Show loading only during initial auth check
-  if (authLoading) {
+  if (!ready || authLoading) {
+    return (
+      <Layout>
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </Layout>
+    );
+  }
+
+  // If no user and hasn't redirected yet, show loading (redirect will happen)
+  if (!user) {
     return (
       <Layout>
         <div className="flex items-center justify-center min-h-[60vh]">
@@ -246,27 +254,6 @@ const VaultAccess = () => {
 
         {/* Step Content */}
         <div className="space-y-6">
-          {/* Step 1: Authentication */}
-          {currentStep === 'auth' && (
-            <Card>
-              <CardHeader className="text-center sm:text-left">
-                <CardTitle className="flex items-center justify-center sm:justify-start gap-2">
-                  <LogIn className="h-5 w-5 shrink-0" />
-                  <span>Sign In Required</span>
-                </CardTitle>
-                <CardDescription>
-                  Please sign in to your 3EA account to access the vault
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="flex justify-center sm:justify-start">
-                <Button onClick={handleSignIn} className="min-h-[44px]">
-                  Sign In to Continue
-                  <ArrowRight className="h-4 w-4 ml-2" />
-                </Button>
-              </CardContent>
-            </Card>
-          )}
-
           {/* Step 2: Disclaimer */}
           {currentStep === 'disclaimer' && (
             <CryptoDisclaimer 

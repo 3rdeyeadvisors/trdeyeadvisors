@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/components/auth/AuthProvider';
 
@@ -42,60 +42,76 @@ export const useSubscription = () => {
 };
 
 export const SubscriptionProvider = ({ children }: { children: React.ReactNode }) => {
-  const { user, session } = useAuth();
+  const { user, session, loading: authLoading } = useAuth();
   const [subscription, setSubscription] = useState<SubscriptionStatus | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const retryCountRef = useRef(0);
+  const maxRetries = 3;
 
   const checkSubscription = useCallback(async () => {
-    if (!user) {
+    // Don't check if auth is still loading or no user/session
+    if (authLoading || !user || !session) {
       setSubscription(null);
       setLoading(false);
       return;
     }
 
     try {
-      setLoading(true);
       setError(null);
 
-      // Force token refresh to avoid stale session issues
-      const { data: refreshData, error: refreshError } = await supabase.auth.refreshSession();
-      
-      if (refreshError || !refreshData.session) {
-        console.error('[Subscription] Session refresh failed, signing out:', refreshError);
-        // Session is truly invalid - sign out to clear stale state
-        await supabase.auth.signOut();
-        setSubscription(null);
-        setLoading(false);
-        return;
-      }
-
+      // Use the existing session token - don't force refresh
+      // This avoids hitting rate limits and causing unnecessary logouts
       const { data, error: fnError } = await supabase.functions.invoke('check-subscription', {
         headers: {
-          Authorization: `Bearer ${refreshData.session.access_token}`,
+          Authorization: `Bearer ${session.access_token}`,
         },
       });
 
       if (fnError) {
         const errorMessage = fnError.message || String(fnError);
-        // If auth error, session might be invalid despite refresh - sign out
-        if (errorMessage.includes('Auth session missing') || errorMessage.includes('session_not_found')) {
-          console.error('[Subscription] Auth error from server, signing out');
+        
+        // Only sign out on DEFINITIVE session invalid errors
+        const isSessionInvalid = 
+          errorMessage.includes('session_not_found') || 
+          errorMessage.includes('Invalid Refresh Token') ||
+          errorMessage.includes('JWT expired');
+        
+        if (isSessionInvalid) {
+          console.error('[Subscription] Session is definitely invalid, signing out');
           await supabase.auth.signOut();
           setSubscription(null);
           setLoading(false);
           return;
         }
-        console.error('[Subscription] Error checking subscription:', fnError);
+        
+        // For other errors (network, rate limit, etc), just skip this check
+        // Don't sign out - the session might still be valid
+        console.warn('[Subscription] Error checking subscription (not signing out):', errorMessage);
+        
+        // Retry logic with exponential backoff for transient errors
+        if (retryCountRef.current < maxRetries) {
+          retryCountRef.current++;
+          const delay = Math.pow(2, retryCountRef.current) * 1000; // 2s, 4s, 8s
+          console.log(`[Subscription] Retrying in ${delay}ms (attempt ${retryCountRef.current}/${maxRetries})`);
+          setTimeout(() => checkSubscription(), delay);
+          return;
+        }
+        
         setError(fnError.message);
         setSubscription(defaultSubscription);
+        setLoading(false);
         return;
       }
+
+      // Reset retry count on success
+      retryCountRef.current = 0;
 
       if (data.error) {
         console.error('[Subscription] API error:', data.error);
         setError(data.error);
         setSubscription(defaultSubscription);
+        setLoading(false);
         return;
       }
 
@@ -108,28 +124,34 @@ export const SubscriptionProvider = ({ children }: { children: React.ReactNode }
     } finally {
       setLoading(false);
     }
-  }, [user]);
+  }, [user, session, authLoading]);
 
-  // Check subscription on mount and when user changes
+  // Check subscription when auth is ready and user exists
   useEffect(() => {
-    if (user) {
+    if (authLoading) {
+      // Auth still loading, keep subscription loading too
+      return;
+    }
+    
+    if (user && session) {
       checkSubscription();
     } else {
       setSubscription(null);
       setLoading(false);
     }
-  }, [user, checkSubscription]);
+  }, [user, session, authLoading, checkSubscription]);
 
-  // Periodically refresh subscription status (every 60 seconds)
+  // Periodically refresh subscription status (every 5 minutes instead of 60 seconds)
+  // This reduces rate limit issues significantly
   useEffect(() => {
-    if (!user) return;
+    if (!user || !session || authLoading) return;
 
     const interval = setInterval(() => {
       checkSubscription();
-    }, 60000);
+    }, 300000); // 5 minutes
 
     return () => clearInterval(interval);
-  }, [user, checkSubscription]);
+  }, [user, session, authLoading, checkSubscription]);
 
   const hasAccess = subscription?.subscribed || false;
   const isTrialing = subscription?.status === 'trialing';
