@@ -141,7 +141,7 @@ export const WalletConnectButton = ({ onConnect, onDisconnect }: WalletConnectBu
   }, [account, onDisconnect]);
 
   return (
-    <>
+    <div className="flex flex-col items-center gap-2">
       {/* AutoConnect restores previous wallet connection on page load */}
       <AutoConnect
         client={thirdwebClient}
@@ -238,7 +238,14 @@ export const WalletConnectButton = ({ onConnect, onDisconnect }: WalletConnectBu
           {connectionError}
         </p>
       )}
-    </>
+
+      {/* Mobile hint for users who approved in wallet but connection didn't complete */}
+      {mobile && !account && (
+        <p className="text-xs text-muted-foreground text-center max-w-[250px]">
+          After approving in your wallet, return to this page. Connection will complete automatically.
+        </p>
+      )}
+    </div>
   );
 };
 
