@@ -1,11 +1,12 @@
 import { useReadContract } from "thirdweb/react";
 import { getNFTContract, NFT_CONTRACT_ADDRESS } from "@/lib/thirdweb";
-import { getActiveClaimCondition, totalSupply } from "thirdweb/extensions/erc1155";
+import { getActiveClaimCondition, totalSupply, getNFT } from "thirdweb/extensions/erc1155";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, ExternalLink, Coins, Package, Loader2, Wallet, AlertCircle } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 // Token ID for the 3EA Access NFT (first token in the ERC1155 collection)
 const ACCESS_TOKEN_ID = 0n;
@@ -13,6 +14,7 @@ const ACCESS_TOKEN_ID = 0n;
 // Fallback values when blockchain data can't be fetched
 const FALLBACK_PRICE = "0.01 ETH";
 const FALLBACK_SUPPLY = "Limited";
+const FALLBACK_IMAGE = "/lovable-uploads/aefbbf1a-e30e-4002-9925-836a5e183a48.png";
 
 // Helper to format wei to ETH
 const formatEther = (wei: bigint): string => {
@@ -22,6 +24,16 @@ const formatEther = (wei: bigint): string => {
 
 export const NFTStoreCard = () => {
   const contract = getNFTContract();
+  const [imageError, setImageError] = useState(false);
+
+  // Fetch NFT metadata (includes image)
+  const { data: nft, isLoading: loadingNFT, error: nftError } = useReadContract(
+    getNFT,
+    {
+      contract,
+      tokenId: ACCESS_TOKEN_ID,
+    }
+  );
 
   // Fetch active claim condition (includes price)
   const { data: claimCondition, isLoading: loadingCondition, error: conditionError } = useReadContract(
@@ -41,8 +53,9 @@ export const NFTStoreCard = () => {
     }
   );
 
-  const isLoading = loadingCondition || loadingSupply;
-  const hasError = conditionError || supplyError;
+  const isLoading = loadingCondition || loadingSupply || loadingNFT;
+  const hasDataError = conditionError || supplyError;
+  const hasImageError = nftError || imageError;
   
   const pricePerToken = claimCondition?.pricePerToken;
   const maxClaimableSupply = claimCondition?.maxClaimableSupply;
@@ -50,13 +63,17 @@ export const NFTStoreCard = () => {
   const maxSupply = maxClaimableSupply ? Number(maxClaimableSupply) : null;
   const remaining = maxSupply ? maxSupply - mintedCount : null;
 
+  // Get NFT image from metadata
+  const nftImage = nft?.metadata?.image;
+  const displayImage = (!hasImageError && nftImage) ? nftImage : FALLBACK_IMAGE;
+
   // Format price for display - use fallback if no data or zero
   const formattedPrice = pricePerToken && pricePerToken > 0n
     ? `${formatEther(pricePerToken)} ETH` 
-    : hasError ? FALLBACK_PRICE : (isLoading ? null : 'Free');
+    : hasDataError ? FALLBACK_PRICE : (isLoading ? null : 'Free');
   
   // Format supply for display
-  const formattedSupply = hasError 
+  const formattedSupply = hasDataError 
     ? FALLBACK_SUPPLY 
     : (maxSupply 
         ? `${remaining?.toLocaleString()} left` 
@@ -64,18 +81,27 @@ export const NFTStoreCard = () => {
 
   return (
     <Card className="overflow-hidden border-primary/30 bg-gradient-to-br from-primary/5 to-primary/10 hover:shadow-lg transition-all duration-300 h-full flex flex-col">
-      {/* NFT Image/Visual - Compact */}
-      <div className="aspect-video relative bg-gradient-to-br from-primary/20 via-primary/10 to-background flex items-center justify-center">
-        <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center">
-          <Sparkles className="w-8 h-8 text-primary" />
-        </div>
+      {/* NFT Image */}
+      <div className="aspect-square relative bg-gradient-to-br from-primary/20 via-primary/10 to-background overflow-hidden">
+        {isLoading && !displayImage ? (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+          </div>
+        ) : (
+          <img 
+            src={displayImage} 
+            alt="3EA Earth Access NFT"
+            className="w-full h-full object-cover"
+            onError={() => setImageError(true)}
+          />
+        )}
         <Badge className="absolute top-2 right-2 bg-success text-success-foreground border-0 text-xs">
           NFT
         </Badge>
-        {hasError && (
+        {hasDataError && (
           <Badge variant="outline" className="absolute top-2 left-2 text-xs bg-background/80">
             <AlertCircle className="w-3 h-3 mr-1" />
-            Offline
+            Live data unavailable
           </Badge>
         )}
       </div>
@@ -97,7 +123,7 @@ export const NFTStoreCard = () => {
               <Coins className="h-3 w-3 shrink-0" />
               <span>Price</span>
             </div>
-            {isLoading && !hasError ? (
+            {isLoading && !hasDataError ? (
               <Loader2 className="h-3 w-3 animate-spin mx-auto" />
             ) : (
               <p className="font-semibold text-foreground text-xs truncate">{formattedPrice}</p>
@@ -108,7 +134,7 @@ export const NFTStoreCard = () => {
               <Package className="h-3 w-3 shrink-0" />
               <span>Supply</span>
             </div>
-            {isLoading && !hasError ? (
+            {isLoading && !hasDataError ? (
               <Loader2 className="h-3 w-3 animate-spin mx-auto" />
             ) : (
               <p className="font-semibold text-foreground text-xs truncate">{formattedSupply}</p>
