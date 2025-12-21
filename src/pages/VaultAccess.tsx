@@ -104,7 +104,7 @@ const VaultAccess = () => {
               </a>
             </Button>
             <p className="text-xs text-muted-foreground text-center">
-              Purchase on Thirdweb with your wallet or credit card
+              Purchase on Thirdweb with your wallet
             </p>
           </CardContent>
         </Card>
