@@ -346,7 +346,7 @@ const Store = () => {
               </div>
               
               <p className="text-sm text-muted-foreground font-consciousness mt-6 text-center">
-                Complete your purchase on Thirdweb with your wallet or credit card.
+                Complete your purchase on Thirdweb with your wallet.
               </p>
             </section>
           )}
