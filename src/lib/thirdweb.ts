@@ -43,7 +43,7 @@ export const ethereum = defineChain(1);
 export const NFT_CONTRACT_ADDRESS = "0x91AE8ec3d88E871679F826c1D6c5B008f105506c";
 
 // Enzyme Vault ComptrollerProxy Address
-export const ENZYME_VAULT_ADDRESS = "0xCb5d2578e76F1cc93c1A0bDe1686729C6fbAeC58";
+export const ENZYME_VAULT_ADDRESS = "0x8b668add6fba7c01444353c0dfdef222a816cd9f";
 
 // Get NFT Contract instance
 export const getNFTContract = () => {

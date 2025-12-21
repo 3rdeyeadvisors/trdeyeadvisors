@@ -3,7 +3,7 @@
 
 export const ENZYME_CONFIG = {
   // ComptrollerProxy address for the 3EA vault
-  comptrollerProxy: "0xCb5d2578e76F1cc93c1A0bDe1686729C6fbAeC58",
+  comptrollerProxy: "0x8b668add6fba7c01444353c0dfdef222a816cd9f",
   
   // Enzyme app URL for external access
   appUrl: "https://app.enzyme.finance",
