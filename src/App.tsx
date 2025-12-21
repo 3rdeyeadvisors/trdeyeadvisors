@@ -12,7 +12,6 @@ import { AuthProvider } from "./components/auth/AuthProvider";
 import { ProgressProvider } from "./components/progress/ProgressProvider";
 import { SubscriptionProvider } from "./hooks/useSubscription";
 import { PWAStatus, OfflineBanner } from "./components/PWAStatus";
-import RainbowKitProvider from "./components/web3/RainbowKitProvider";
 import { ThirdwebProvider } from "thirdweb/react";
 import Index from "./pages/Index";
 import Subscription from "./pages/Subscription";
@@ -98,9 +97,8 @@ const App = () => {
   }, []);
 
   return (
-  <HelmetProvider>
-    <QueryClientProvider client={queryClient}>
-      <RainbowKitProvider>
+    <HelmetProvider>
+      <QueryClientProvider client={queryClient}>
         <ThirdwebProvider>
           <TooltipProvider>
             <CartProvider>
@@ -109,106 +107,104 @@ const App = () => {
                   <ProgressProvider>
                     <SecurityHeaders />
                     <OfflineBanner />
-              <PWAStatus />
-              <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <Layout>
-                <Routes>
-                  <Route path="/" element={<Index />} />
-                  
-                      <Route path="/philosophy" element={<Philosophy />} />
-                      <Route path="/courses" element={<Courses />} />
-                      <Route path="/courses/:courseId" element={<CourseDetail />} />
-                      <Route path="/courses/:courseId/module/:moduleId" element={<ModuleViewer />} />
-                      <Route path="/blog" element={<Blog />} />
-                      <Route path="/blog/:page(\\d+)" element={<Navigate to="/blog" replace />} />
-                      <Route path="/blog/defi-regulation-aml-integration" element={<DefiRegulationAmlIntegration />} />
-                      <Route path="/blog/web3-gaming-defi-convergence-2025" element={<WebThreeGamingDefiConvergence />} />
-                      <Route path="/blog/defai-revolution-2025" element={<DefaiRevolution2025 />} />
-                      <Route path="/blog/liquid-staking-tokens-2025" element={<LiquidStakingTokens2025 />} />
-                      <Route path="/blog/stablecoins-defi-infrastructure-2025" element={<StablecoinsDefiInfrastructure2025 />} />
-                      <Route path="/blog/why-most-people-lose-crypto" element={<WhyMostPeopleLoseCrypto />} />
-                      <Route path="/blog/:slug" element={<BlogPost />} />
-                      <Route path="/resources" element={<Resources />} />
-                      <Route path="/analytics" element={<Analytics />} />
-                      <Route path="/tutorials" element={<Tutorials />} />
-                      <Route path="/tutorials/wallet-setup" element={<WalletSetupTutorial />} />
-                      <Route path="/tutorials/first-dex-swap" element={<FirstDexSwapTutorial />} />
-                      <Route path="/tutorials/defi-calculators" element={<DefiCalculatorsTutorial />} />
-                      <Route path="/tutorials/spotting-scams" element={<SpottingScamsTutorial />} />
-                      <Route path="/tutorials/cross-chain-bridging" element={<CrossChainBridgingTutorial />} />
-                      <Route path="/tutorials/advanced-defi-protocols" element={<AdvancedDefiProtocolsTutorial />} />
-                      <Route path="/tutorials/portfolio-rebalancing" element={<PortfolioRebalancingTutorial />} />
-                      <Route path="/tutorials/portfolio-tracking" element={<PortfolioTrackingTutorial />} />
-                      <Route path="/tutorials/liquidity-pools" element={<LiquidityPoolBasicsTutorial />} />
-                      <Route path="/tutorials/reading-defi-metrics" element={<ReadingDefiMetricsTutorial />} />
-                      <Route path="/tutorials/risk-assessment" element={<RiskAssessmentTutorial />} />
-                      <Route path="/tutorials/chart-reading" element={<ChartReadingTutorial />} />
-                      <Route path="/tutorials/nft-defi" element={<NftDefiTutorial />} />
-                      <Route path="/tutorials/dao-participation" element={<DaoParticipationTutorial />} />
-                      <Route path="/store" element={<Store />} />
-                      <Route path="/store/merchandise/:productId" element={<MerchandiseDetail />} />
-                      <Route path="/cart" element={<Cart />} />
-                      <Route path="/contact" element={<Contact />} />
-                      <Route path="/signin" element={<Auth />} />
-                      <Route path="/signup" element={<Auth />} />
-                      <Route path="/auth" element={<Auth />} />
-                      <Route path="/reset-password" element={<ResetPassword />} />
-                      <Route path="/dashboard" element={<Dashboard />} />
-                      <Route path="/subscription" element={<Subscription />} />
-                      <Route path="/awareness-blueprint" element={<AwarenessBlueprintLanding />} />
-                      <Route path="/start" element={<AdLanding />} />
-                      <Route path="/admin/upload-resource" element={
-                        <ProtectedRoute requireRole="admin">
-                          <UploadResourceFile />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/profile" element={<Profile />} />
-                      <Route path="/privacy" element={<PrivacyPolicy />} />
-                      <Route path="/terms" element={<TermsOfService />} />
-                      <Route path="/social-banner" element={<SocialBanner />} />
-                      <Route path="/setup-stripe-products" element={
-                        <ProtectedRoute requireRole="admin">
-                          <SetupStripeProducts />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/stripe-diagnostic" element={
-                        <ProtectedRoute requireRole="admin">
-                          <StripeDiagnostic />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/admin/email-logs" element={
-                        <ProtectedRoute requireRole="admin">
-                          <EmailLogsAdmin />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/admin/store" element={
-                        <ProtectedRoute requireRole="admin">
-                          <AdminStoreDashboard />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/admin" element={
-                        <ProtectedRoute requireRole="admin">
-                          <AdminDashboard />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/raffles" element={<Raffles />} />
-                      <Route path="/raffle-history" element={<RaffleHistory />} />
-                      <Route path="/vault-access" element={<VaultAccess />} />
-                      <Route path="*" element={<NotFound />} />
-                </Routes>
-                  </Layout>
-                </BrowserRouter>
-              </ProgressProvider>
-            </SubscriptionProvider>
-          </AuthProvider>
-        </CartProvider>
-      </TooltipProvider>
-    </ThirdwebProvider>
-  </RainbowKitProvider>
-  </QueryClientProvider>
-  </HelmetProvider>
+                    <PWAStatus />
+                    <Toaster />
+                    <Sonner />
+                    <BrowserRouter>
+                      <Layout>
+                        <Routes>
+                          <Route path="/" element={<Index />} />
+                          <Route path="/philosophy" element={<Philosophy />} />
+                          <Route path="/courses" element={<Courses />} />
+                          <Route path="/courses/:courseId" element={<CourseDetail />} />
+                          <Route path="/courses/:courseId/module/:moduleId" element={<ModuleViewer />} />
+                          <Route path="/blog" element={<Blog />} />
+                          <Route path="/blog/:page(\\d+)" element={<Navigate to="/blog" replace />} />
+                          <Route path="/blog/defi-regulation-aml-integration" element={<DefiRegulationAmlIntegration />} />
+                          <Route path="/blog/web3-gaming-defi-convergence-2025" element={<WebThreeGamingDefiConvergence />} />
+                          <Route path="/blog/defai-revolution-2025" element={<DefaiRevolution2025 />} />
+                          <Route path="/blog/liquid-staking-tokens-2025" element={<LiquidStakingTokens2025 />} />
+                          <Route path="/blog/stablecoins-defi-infrastructure-2025" element={<StablecoinsDefiInfrastructure2025 />} />
+                          <Route path="/blog/why-most-people-lose-crypto" element={<WhyMostPeopleLoseCrypto />} />
+                          <Route path="/blog/:slug" element={<BlogPost />} />
+                          <Route path="/resources" element={<Resources />} />
+                          <Route path="/analytics" element={<Analytics />} />
+                          <Route path="/tutorials" element={<Tutorials />} />
+                          <Route path="/tutorials/wallet-setup" element={<WalletSetupTutorial />} />
+                          <Route path="/tutorials/first-dex-swap" element={<FirstDexSwapTutorial />} />
+                          <Route path="/tutorials/defi-calculators" element={<DefiCalculatorsTutorial />} />
+                          <Route path="/tutorials/spotting-scams" element={<SpottingScamsTutorial />} />
+                          <Route path="/tutorials/cross-chain-bridging" element={<CrossChainBridgingTutorial />} />
+                          <Route path="/tutorials/advanced-defi-protocols" element={<AdvancedDefiProtocolsTutorial />} />
+                          <Route path="/tutorials/portfolio-rebalancing" element={<PortfolioRebalancingTutorial />} />
+                          <Route path="/tutorials/portfolio-tracking" element={<PortfolioTrackingTutorial />} />
+                          <Route path="/tutorials/liquidity-pools" element={<LiquidityPoolBasicsTutorial />} />
+                          <Route path="/tutorials/reading-defi-metrics" element={<ReadingDefiMetricsTutorial />} />
+                          <Route path="/tutorials/risk-assessment" element={<RiskAssessmentTutorial />} />
+                          <Route path="/tutorials/chart-reading" element={<ChartReadingTutorial />} />
+                          <Route path="/tutorials/nft-defi" element={<NftDefiTutorial />} />
+                          <Route path="/tutorials/dao-participation" element={<DaoParticipationTutorial />} />
+                          <Route path="/store" element={<Store />} />
+                          <Route path="/store/merchandise/:productId" element={<MerchandiseDetail />} />
+                          <Route path="/cart" element={<Cart />} />
+                          <Route path="/contact" element={<Contact />} />
+                          <Route path="/signin" element={<Auth />} />
+                          <Route path="/signup" element={<Auth />} />
+                          <Route path="/auth" element={<Auth />} />
+                          <Route path="/reset-password" element={<ResetPassword />} />
+                          <Route path="/dashboard" element={<Dashboard />} />
+                          <Route path="/subscription" element={<Subscription />} />
+                          <Route path="/awareness-blueprint" element={<AwarenessBlueprintLanding />} />
+                          <Route path="/start" element={<AdLanding />} />
+                          <Route path="/admin/upload-resource" element={
+                            <ProtectedRoute requireRole="admin">
+                              <UploadResourceFile />
+                            </ProtectedRoute>
+                          } />
+                          <Route path="/profile" element={<Profile />} />
+                          <Route path="/privacy" element={<PrivacyPolicy />} />
+                          <Route path="/terms" element={<TermsOfService />} />
+                          <Route path="/social-banner" element={<SocialBanner />} />
+                          <Route path="/setup-stripe-products" element={
+                            <ProtectedRoute requireRole="admin">
+                              <SetupStripeProducts />
+                            </ProtectedRoute>
+                          } />
+                          <Route path="/stripe-diagnostic" element={
+                            <ProtectedRoute requireRole="admin">
+                              <StripeDiagnostic />
+                            </ProtectedRoute>
+                          } />
+                          <Route path="/admin/email-logs" element={
+                            <ProtectedRoute requireRole="admin">
+                              <EmailLogsAdmin />
+                            </ProtectedRoute>
+                          } />
+                          <Route path="/admin/store" element={
+                            <ProtectedRoute requireRole="admin">
+                              <AdminStoreDashboard />
+                            </ProtectedRoute>
+                          } />
+                          <Route path="/admin" element={
+                            <ProtectedRoute requireRole="admin">
+                              <AdminDashboard />
+                            </ProtectedRoute>
+                          } />
+                          <Route path="/raffles" element={<Raffles />} />
+                          <Route path="/raffle-history" element={<RaffleHistory />} />
+                          <Route path="/vault-access" element={<VaultAccess />} />
+                          <Route path="*" element={<NotFound />} />
+                        </Routes>
+                      </Layout>
+                    </BrowserRouter>
+                  </ProgressProvider>
+                </SubscriptionProvider>
+              </AuthProvider>
+            </CartProvider>
+          </TooltipProvider>
+        </ThirdwebProvider>
+      </QueryClientProvider>
+    </HelmetProvider>
   );
 };
 

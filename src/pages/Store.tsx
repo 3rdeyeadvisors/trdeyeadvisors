@@ -9,9 +9,9 @@ import { useCart } from "@/contexts/CartContext";
 import SEO from "@/components/SEO";
 import { MerchandiseCard } from "@/components/store/MerchandiseCard";
 import { NFTStoreCard } from "@/components/store/NFTStoreCard";
-import { Web3ErrorBoundary } from "@/components/web3/Web3ErrorBoundary";
 import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import { PullToRefreshIndicator } from "@/components/ui/pull-to-refresh";
+
 type StoreCategory = 'merchandise' | 'digital';
 
 const Store = () => {
@@ -341,14 +341,12 @@ const Store = () => {
               {/* Single NFT - centered with max width for professional look */}
               <div className="flex justify-center">
                 <div className="w-full max-w-sm">
-                  <Web3ErrorBoundary>
-                    <NFTStoreCard />
-                  </Web3ErrorBoundary>
+                  <NFTStoreCard />
                 </div>
               </div>
               
               <p className="text-sm text-muted-foreground font-consciousness mt-6 text-center">
-                NFT purchases require an external wallet. Connect on the vault page to purchase.
+                Complete your purchase on Thirdweb with your wallet or credit card.
               </p>
             </section>
           )}
