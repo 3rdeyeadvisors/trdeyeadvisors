@@ -485,16 +485,20 @@ export const DefiCharts = () => {
         
         {/* Mobile Analytics Notice */}
         <Card className="bg-primary/5 border-primary/20">
-          <CardHeader className="text-center">
-            <CardTitle className="text-lg flex items-center justify-center gap-2">
-              <BarChart3 className="h-5 w-5" />
-              Explore Full Analytics on Desktop
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="text-center">
-            <p className="text-sm text-muted-foreground">
-              Access comprehensive charts, risk analysis, and detailed protocol data on desktop.
-            </p>
+          <CardContent className="py-6">
+            <div className="flex flex-col items-center text-center gap-3">
+              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                <BarChart3 className="h-6 w-6 text-primary" />
+              </div>
+              <div className="space-y-1">
+                <h3 className="text-lg font-semibold text-foreground">
+                  Explore Full Analytics on Desktop
+                </h3>
+                <p className="text-sm text-muted-foreground max-w-xs mx-auto">
+                  Access comprehensive charts, risk analysis, and detailed protocol data on desktop.
+                </p>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>
