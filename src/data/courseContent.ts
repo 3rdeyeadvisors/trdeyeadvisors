@@ -5792,6 +5792,1344 @@ The hardest part of DeFi isn't learning the technology or finding opportunities 
         ]
       }
     ]
+  },
+  {
+    id: 5,
+    title: "Understanding DeFi Vaults: Your Complete Guide to Managed Investing",
+    description: "Learn what DeFi vaults are, how they work, and how to choose the right vault for your investment goals. Includes access guidance for the 3EA managed vault.",
+    category: "free",
+    difficulty: "Intermediate",
+    estimatedTime: "2.5 hours",
+    modules: [
+      {
+        id: "5-1",
+        title: "What Are DeFi Vaults? (Core Concepts and Key Terms)",
+        type: "text",
+        duration: 30,
+        content: {
+          text: `# What Are DeFi Vaults?
+
+Welcome to your complete guide on DeFi vaults. This course will take you from understanding the basics to confidently evaluating vault opportunities.
+
+## The Simple Explanation
+
+A **DeFi vault** is like having a professional investment manager for your cryptocurrency - but instead of a person, it's **smart contract code** that automatically executes investment strategies on your behalf.
+
+### Think of it Like This:
+- **Traditional Investment Fund**: You give money to a fund manager who makes investment decisions
+- **DeFi Vault**: You deposit crypto into a smart contract that automatically follows pre-programmed investment strategies
+
+## Key Definitions You Need to Know 📚
+
+[COMPONENT:KEY_TAKEAWAY]
+{
+  "title": "Essential Vault Terminology",
+  "content": "**Vault**: A smart contract that pools user funds and executes automated investment strategies\n\n**TVL (Total Value Locked)**: The total amount of assets deposited in a vault - a key metric of vault size and trust\n\n**APY (Annual Percentage Yield)**: The projected annual return, including compound interest\n\n**Strategist**: The person or team that designs and manages the vault's investment strategy\n\n**Depositor/Investor**: You - the person depositing assets into the vault"
+}
+[/COMPONENT]
+
+### More Important Terms:
+
+**Shares/Vault Tokens**
+When you deposit into a vault, you receive "shares" or tokens representing your portion of the vault. As the vault earns returns, your shares become worth more.
+
+**Management Fee**
+A percentage fee charged by the vault operator for managing the strategy. Typically ranges from 0-2% annually.
+
+**Performance Fee**
+A percentage of profits taken by the strategist as compensation. Often 10-20% of gains.
+
+**Withdrawal Fee**
+Some vaults charge a small fee when you withdraw to discourage frequent trading and protect other depositors.
+
+**Lock-up Period**
+Some vaults require you to keep funds deposited for a minimum time. Not all vaults have this.
+
+## How DeFi Vaults Actually Work ⚙️
+
+[COMPONENT:STEP_BLOCK]
+{
+  "title": "The Vault Investment Cycle",
+  "steps": [
+    "You deposit assets (e.g., ETH, USDC) into the vault smart contract",
+    "You receive vault shares representing your ownership percentage",
+    "The vault executes its strategy (lending, farming, trading, etc.)",
+    "Profits are reinvested or distributed according to the vault rules",
+    "When you withdraw, you exchange shares for your proportional assets plus gains"
+  ]
+}
+[/COMPONENT]
+
+### Example: A Simple Lending Vault
+1. You deposit 1,000 USDC
+2. Vault automatically lends USDC on Aave at 5% APY
+3. Interest earnings are auto-compounded back into the vault
+4. After 1 year, your share is worth ~1,050 USDC
+5. You withdraw and receive your principal plus earnings
+
+## Types of DeFi Vaults 🏦
+
+### 1. Yield Optimization Vaults
+- **Purpose**: Maximize returns on deposited assets
+- **Strategy**: Automatically move funds to highest-yielding opportunities
+- **Example**: Yearn Finance vaults
+- **Risk Level**: Medium (smart contract risk, strategy risk)
+
+### 2. Liquidity Pool Vaults
+- **Purpose**: Earn trading fees by providing liquidity
+- **Strategy**: Deposit into DEX liquidity pools
+- **Risk Level**: Medium-High (impermanent loss risk)
+
+### 3. Lending Vaults
+- **Purpose**: Earn interest by lending assets
+- **Strategy**: Supply assets to lending protocols
+- **Risk Level**: Low-Medium (protocol risk, utilization risk)
+
+### 4. Managed Strategy Vaults
+- **Purpose**: Follow curated investment strategies
+- **Strategy**: Active management by experienced strategists
+- **Example**: Enzyme Finance vaults, 3EA Vault
+- **Risk Level**: Varies by strategy
+
+### 5. Delta-Neutral Vaults
+- **Purpose**: Earn yield while minimizing price exposure
+- **Strategy**: Hedge positions to eliminate directional risk
+- **Risk Level**: Medium (complex strategy risk)
+
+## Why Use Vaults Instead of DIY? 🤔
+
+[COMPONENT:COMPARISON_TABLE]
+{
+  "title": "DIY DeFi vs Using a Vault",
+  "items": [
+    {
+      "traditional": "Must manually find and execute strategies",
+      "defi": "Strategies are automated and optimized"
+    },
+    {
+      "traditional": "Gas fees for each transaction you make",
+      "defi": "Gas costs shared among all depositors"
+    },
+    {
+      "traditional": "Requires constant monitoring and rebalancing",
+      "defi": "Vault handles all operations automatically"
+    },
+    {
+      "traditional": "Need deep knowledge of multiple protocols",
+      "defi": "Leverage expertise of vault strategists"
+    }
+  ]
+}
+[/COMPONENT]
+
+### Key Benefits of Vaults:
+- **Automation**: Set and forget - no daily management needed
+- **Cost Efficiency**: Share gas costs with other depositors
+- **Professional Strategies**: Access sophisticated techniques
+- **Compounding**: Auto-reinvestment of earnings
+- **Diversification**: Some vaults spread across multiple protocols
+
+## Important Disclaimer ⚠️
+
+[COMPONENT:ALERT]
+{
+  "type": "warning",
+  "message": "This educational content is for informational purposes only and does not constitute financial, investment, or legal advice. DeFi investments carry significant risks including potential loss of principal. Always conduct your own research and consider consulting with qualified financial advisors before making investment decisions."
+}
+[/COMPONENT]
+
+*Next module: We'll explore the major vault protocols and how they differ.*`,
+          quiz: {
+            id: "quiz-5-1",
+            title: "Vault Basics - Knowledge Check",
+            description: "Test your understanding of DeFi vault fundamentals and key terminology.",
+            passingScore: 70,
+            timeLimit: 10,
+            maxAttempts: 3,
+            questions: [
+              {
+                id: "q5-1-1",
+                question: "What is a DeFi vault?",
+                type: "single",
+                options: [
+                  "A physical safe for storing cryptocurrency",
+                  "A smart contract that pools funds and executes automated investment strategies",
+                  "A type of cryptocurrency wallet",
+                  "A government-regulated savings account"
+                ],
+                correctAnswers: [1],
+                explanation: "A DeFi vault is a smart contract that pools user funds and automatically executes pre-programmed investment strategies on behalf of depositors.",
+                points: 10
+              },
+              {
+                id: "q5-1-2",
+                question: "What does TVL stand for and what does it measure?",
+                type: "single",
+                options: [
+                  "Total Value Locked - the total assets deposited in a protocol or vault",
+                  "Transaction Volume Limit - maximum daily transactions",
+                  "Token Value Level - the price of a token",
+                  "Trading Verification Ledger - record of trades"
+                ],
+                correctAnswers: [0],
+                explanation: "TVL stands for Total Value Locked and measures the total amount of assets deposited in a vault or protocol. It's a key metric indicating size and trust.",
+                points: 10
+              },
+              {
+                id: "q5-1-3",
+                question: "Which of the following are benefits of using vaults? (Select all that apply)",
+                type: "multiple",
+                options: [
+                  "Automated strategy execution",
+                  "Shared gas costs among depositors",
+                  "Guaranteed profits with no risk",
+                  "Access to professional strategies"
+                ],
+                correctAnswers: [0, 1, 3],
+                explanation: "Vaults offer automation, shared gas costs, and access to professional strategies. However, they do NOT guarantee profits - all DeFi investments carry risk.",
+                points: 15
+              },
+              {
+                id: "q5-1-4",
+                question: "What are 'vault shares' or 'vault tokens'?",
+                type: "single",
+                options: [
+                  "Bonus rewards for early depositors",
+                  "Tokens representing your ownership percentage of the vault",
+                  "Fees paid to the vault operator",
+                  "Promotional tokens with no value"
+                ],
+                correctAnswers: [1],
+                explanation: "When you deposit into a vault, you receive shares or tokens representing your proportional ownership. As the vault earns returns, your shares become worth more.",
+                points: 10
+              },
+              {
+                id: "q5-1-5",
+                question: "True or False: A performance fee is a percentage of profits taken by the vault strategist as compensation.",
+                type: "true-false",
+                options: ["True", "False"],
+                correctAnswers: [0],
+                explanation: "True. Performance fees (often 10-20% of gains) compensate vault strategists for their work in designing and managing profitable strategies.",
+                points: 10
+              }
+            ]
+          }
+        },
+        resources: [
+          {
+            title: "DeFi Vault Overview",
+            url: "/analytics",
+            type: "link"
+          },
+          {
+            title: "Vault Terminology Glossary",
+            url: "/resources",
+            type: "link"
+          }
+        ]
+      },
+      {
+        id: "5-2",
+        title: "Major Vault Protocols Explained (Enzyme, Yearn, and More)",
+        type: "text",
+        duration: 35,
+        content: {
+          text: `# Major Vault Protocols Explained
+
+Now that you understand what vaults are, let's explore the most important protocols in the ecosystem. Each has unique features, strengths, and trade-offs.
+
+## Protocol Overview 🗺️
+
+[COMPONENT:COMPARISON_TABLE]
+{
+  "title": "Major Vault Protocols at a Glance",
+  "items": [
+    {
+      "traditional": "Enzyme Finance: Customizable managed vaults with transparent on-chain strategies",
+      "defi": "Best for: Following specific strategists and active management"
+    },
+    {
+      "traditional": "Yearn Finance: Automated yield optimization across DeFi",
+      "defi": "Best for: Passive yield farming with battle-tested strategies"
+    },
+    {
+      "traditional": "Beefy Finance: Multi-chain auto-compounding vaults",
+      "defi": "Best for: Cross-chain yield optimization"
+    }
+  ]
+}
+[/COMPONENT]
+
+## 1. Enzyme Finance 🧪
+
+### What It Is
+Enzyme is an **asset management infrastructure** that allows anyone to create, manage, and invest in on-chain investment vaults. Think of it as the platform that powers managed investment funds in DeFi.
+
+### How It Works
+- **Vault Managers** create vaults with specific strategies
+- **Investors** deposit assets into vaults they trust
+- **All actions** are transparent and verifiable on-chain
+- **Smart contracts** enforce rules and protect investors
+
+### Key Features
+- **Customizable Strategies**: Managers can trade, lend, stake, and more
+- **Investor Protections**: Built-in safeguards and transparency
+- **Real-Time Tracking**: See exactly what the vault is doing
+- **Multiple Asset Types**: Support for diverse crypto assets
+
+### Fee Structure
+- **Management fees**: Set by vault manager (typically 0-2%)
+- **Performance fees**: Set by vault manager (typically 10-20%)
+- **Protocol fees**: Small fee to Enzyme protocol
+
+[COMPONENT:DID_YOU_KNOW]
+{
+  "fact": "Enzyme Finance has been operating since 2017, making it one of the longest-running DeFi asset management protocols. The platform has undergone multiple security audits and manages significant assets."
+}
+[/COMPONENT]
+
+### Best For
+✅ Investors who want to follow specific strategists
+✅ Those who value transparency in investment decisions
+✅ Users seeking actively managed strategies
+✅ People who want professional DeFi exposure
+
+## 2. Yearn Finance 🏦
+
+### What It Is
+Yearn is a **yield aggregator** that automatically moves your funds to the highest-yielding opportunities. It pioneered the "vault" concept in DeFi.
+
+### How It Works
+- Deposit a single asset (e.g., USDC)
+- Yearn's strategies automatically deploy to best opportunities
+- Earnings are auto-compounded
+- Withdraw anytime with accumulated gains
+
+### Key Strategies
+- **Lending**: Supply to Aave, Compound, etc.
+- **Liquidity Providing**: Earn DEX trading fees
+- **Leverage**: Borrow to amplify returns (advanced)
+- **Multi-Step**: Combine strategies for optimization
+
+### Fee Structure
+- **Management fee**: 2% annually
+- **Performance fee**: 20% of profits
+- **No deposit/withdrawal fees**
+
+### Best For
+✅ Passive investors who want "set and forget"
+✅ Users seeking automated yield optimization
+✅ Those comfortable with Ethereum ecosystem
+✅ Investors who don't want to actively manage positions
+
+## 3. Beefy Finance 🐮
+
+### What It Is
+A **multi-chain yield optimizer** that auto-compounds your DeFi earnings across dozens of blockchains.
+
+### How It Works
+- Choose a vault on your preferred chain
+- Deposit LP tokens or single assets
+- Beefy automatically compounds earnings
+- Benefit from shared gas costs
+
+### Key Features
+- **Multi-Chain**: Available on 20+ blockchains
+- **Safety Scoring**: Rates vault risk levels
+- **Auto-Compound**: Maximizes APY through frequent harvesting
+- **Community-Driven**: Open-source and transparent
+
+### Fee Structure
+- **Performance fee**: Variable (usually ~4.5% of earnings)
+- **No management fee**
+- **No deposit/withdrawal fees on most vaults**
+
+### Best For
+✅ Users on non-Ethereum chains
+✅ Those wanting diversification across chains
+✅ Investors seeking lower gas costs
+✅ LP token holders wanting auto-compounding
+
+## 4. Other Notable Protocols 📊
+
+### Harvest Finance
+- Focus on farming and yield aggregation
+- Simple interface for beginners
+- Ethereum and select L2s
+
+### Convex Finance
+- Specialized for Curve protocol yields
+- Boost CRV rewards without locking
+- Best for Curve LP providers
+
+### Sommelier Finance
+- AI-powered vault strategies
+- More sophisticated strategy execution
+- Newer but innovative approach
+
+## Comparing Protocols: Key Metrics 📈
+
+### When Evaluating Any Vault Protocol, Check:
+
+1. **Track Record**
+   - How long has it operated?
+   - Any security incidents?
+   - Historical performance data?
+
+2. **Security**
+   - Audit history
+   - Bug bounty programs
+   - Insurance coverage (if any)
+
+3. **TVL Trends**
+   - Growing or declining deposits?
+   - Sudden changes to investigate?
+
+4. **Fee Transparency**
+   - Clear fee structure?
+   - Hidden costs?
+   - Fee changes over time?
+
+5. **Team and Governance**
+   - Known team or anonymous?
+   - Decentralized governance?
+   - Community involvement?
+
+[COMPONENT:KEY_TAKEAWAY]
+{
+  "title": "Protocol Selection Summary",
+  "content": "• **Enzyme**: Best for following trusted strategists with active management\n• **Yearn**: Best for passive, automated yield optimization on Ethereum\n• **Beefy**: Best for multi-chain exposure and LP auto-compounding\n\nNo single protocol is 'best' - choose based on your goals, risk tolerance, and preferred blockchain."
+}
+[/COMPONENT]
+
+## Risk Considerations ⚠️
+
+### Smart Contract Risk
+Every protocol has smart contract risk. Even audited contracts can have vulnerabilities.
+
+### Strategy Risk
+Different strategies have different risk profiles. Understand what the vault is doing with your funds.
+
+### Protocol-Specific Risks
+- **Enzyme**: Dependent on vault manager competence
+- **Yearn**: Complex multi-strategy risks
+- **Beefy**: Third-party protocol dependencies
+
+[COMPONENT:ALERT]
+{
+  "type": "warning",
+  "message": "Never invest more than you can afford to lose. Past performance does not guarantee future results. Always verify you're on official protocol websites before connecting your wallet."
+}
+[/COMPONENT]
+
+*Next module: We'll cover how to stay safe when using vaults and red flags to watch for.*`,
+          quiz: {
+            id: "quiz-5-2",
+            title: "Vault Protocols - Knowledge Check",
+            description: "Test your understanding of major vault protocols and their differences.",
+            passingScore: 70,
+            timeLimit: 10,
+            maxAttempts: 3,
+            questions: [
+              {
+                id: "q5-2-1",
+                question: "What is Enzyme Finance primarily used for?",
+                type: "single",
+                options: [
+                  "Automated yield farming only",
+                  "Creating and managing customizable on-chain investment vaults",
+                  "NFT trading",
+                  "Cross-chain token swaps"
+                ],
+                correctAnswers: [1],
+                explanation: "Enzyme Finance is an asset management infrastructure that allows anyone to create, manage, and invest in customizable on-chain investment vaults with transparent strategies.",
+                points: 10
+              },
+              {
+                id: "q5-2-2",
+                question: "Which protocol pioneered the 'vault' concept in DeFi?",
+                type: "single",
+                options: [
+                  "Enzyme Finance",
+                  "Beefy Finance",
+                  "Yearn Finance",
+                  "Convex Finance"
+                ],
+                correctAnswers: [2],
+                explanation: "Yearn Finance pioneered the vault concept in DeFi, automatically moving funds to the highest-yielding opportunities.",
+                points: 10
+              },
+              {
+                id: "q5-2-3",
+                question: "Which protocol is known for being multi-chain and operating on 20+ blockchains?",
+                type: "single",
+                options: [
+                  "Enzyme Finance",
+                  "Yearn Finance",
+                  "Beefy Finance",
+                  "Aave"
+                ],
+                correctAnswers: [2],
+                explanation: "Beefy Finance is a multi-chain yield optimizer available on over 20 blockchains, making it ideal for cross-chain diversification.",
+                points: 10
+              },
+              {
+                id: "q5-2-4",
+                question: "When evaluating a vault protocol, which of the following should you check? (Select all that apply)",
+                type: "multiple",
+                options: [
+                  "Audit history and security track record",
+                  "TVL trends over time",
+                  "Fee structure and transparency",
+                  "Social media follower count only"
+                ],
+                correctAnswers: [0, 1, 2],
+                explanation: "You should check audit history, TVL trends, and fee transparency. Social media follower count alone is not a reliable indicator of protocol safety or quality.",
+                points: 15
+              },
+              {
+                id: "q5-2-5",
+                question: "True or False: Enzyme Finance vaults have all actions transparent and verifiable on-chain.",
+                type: "true-false",
+                options: ["True", "False"],
+                correctAnswers: [0],
+                explanation: "True. One of Enzyme's key features is complete transparency - all vault actions are recorded on-chain and can be verified by anyone.",
+                points: 10
+              }
+            ]
+          }
+        },
+        resources: [
+          {
+            title: "Enzyme Finance Official Site",
+            url: "https://enzyme.finance",
+            type: "link"
+          },
+          {
+            title: "Yearn Finance Documentation",
+            url: "https://docs.yearn.fi",
+            type: "link"
+          },
+          {
+            title: "DeFi Protocol Comparison",
+            url: "/analytics",
+            type: "link"
+          }
+        ]
+      },
+      {
+        id: "5-3",
+        title: "Staying Safe with Vaults (Security and Red Flags)",
+        type: "text",
+        duration: 35,
+        content: {
+          text: `# Staying Safe with DeFi Vaults
+
+Security should be your top priority when using DeFi vaults. This module covers essential safety practices and red flags that could save you from significant losses.
+
+## The Golden Rules of Vault Safety 🛡️
+
+[COMPONENT:KEY_TAKEAWAY]
+{
+  "title": "5 Golden Rules for Vault Safety",
+  "content": "1. **Never invest more than you can afford to lose completely**\n2. **Verify official websites before connecting your wallet**\n3. **Start small to test before committing larger amounts**\n4. **Research the vault, protocol, AND strategist**\n5. **If something seems too good to be true, it probably is**"
+}
+[/COMPONENT]
+
+## Essential Security Practices ✅
+
+### Before You Deposit
+
+[COMPONENT:STEP_BLOCK]
+{
+  "title": "Pre-Deposit Security Checklist",
+  "steps": [
+    "Verify you're on the official protocol website (bookmark it!)",
+    "Check the vault's smart contract audit status",
+    "Research the strategist/manager's track record",
+    "Understand the exact strategy being used",
+    "Calculate all fees and their impact on returns",
+    "Check TVL trends - declining TVL may signal problems",
+    "Start with a small test deposit first"
+  ]
+}
+[/COMPONENT]
+
+### Website Verification
+- **Bookmark official sites** - never Google and click ads
+- **Check the URL carefully** - scammers use similar domains
+- **Look for HTTPS** - secure connection indicator
+- **Verify on official social channels** - confirm the correct URL
+
+### Smart Contract Safety
+- **Check for audits** from reputable firms (OpenZeppelin, Trail of Bits, Consensys Diligence)
+- **Look for bug bounty programs** - shows commitment to security
+- **Review audit reports** - understand what was found and fixed
+- **Time in market** - longer operation often means more battle-tested
+
+### Wallet Security
+- **Use a hardware wallet** for significant amounts
+- **Revoke unused approvals** regularly
+- **Don't connect to unknown sites**
+- **Keep seed phrase completely offline**
+
+## Red Flags to Watch For 🚩
+
+### Immediate Warning Signs
+
+[COMPONENT:ALERT]
+{
+  "type": "warning",
+  "message": "If you see any of these red flags, proceed with extreme caution or avoid entirely. Multiple red flags together should be considered a strong warning."
+}
+[/COMPONENT]
+
+**1. Unrealistic Returns**
+- APY promises of 1000%+ with no clear source
+- "Guaranteed" or "risk-free" claims
+- Returns that seem too good compared to market rates
+
+**2. Anonymous or Unverifiable Teams**
+- No public information about who runs the protocol
+- Team refuses to do video calls or AMAs
+- Social media accounts created recently
+
+**3. Poor Documentation**
+- No clear explanation of strategy
+- Missing or outdated audit reports
+- Vague or confusing fee structures
+
+**4. Pressure Tactics**
+- "Limited time" opportunities
+- Urgent messages to deposit quickly
+- Fear of missing out (FOMO) marketing
+
+**5. Technical Red Flags**
+- Recently deployed contracts (less than 6 months)
+- No multi-sig or governance safeguards
+- Admin keys that could drain funds
+- Unusual tokenomics or mechanisms
+
+### Vault-Specific Red Flags
+
+**Declining TVL Without Explanation**
+- Users leaving could signal problems
+- Check community channels for reasons
+
+**Strategy Changes Without Notice**
+- Legitimate protocols communicate changes
+- Sudden shifts may indicate problems
+
+**Unusual Withdrawal Restrictions**
+- New lock-ups implemented suddenly
+- "Technical issues" preventing withdrawals
+
+**Communication Blackouts**
+- Team stops responding to questions
+- Social media goes quiet
+
+## How to Research a Vault 🔍
+
+### Step 1: Protocol-Level Research
+- How long has the protocol operated?
+- What's the total TVL across all vaults?
+- Any security incidents in history?
+- Is the code open-source?
+
+### Step 2: Vault-Level Research
+- What's the specific strategy?
+- Historical performance (be skeptical of short track records)
+- Current TVL and trends
+- Fee structure and impact
+
+### Step 3: Strategist Research (for managed vaults)
+- Who manages the vault?
+- Their track record and reputation
+- Are they accessible for questions?
+- Alignment of incentives (do they have skin in the game?)
+
+### Step 4: Community Research
+- What does the community say?
+- Check Discord, Twitter, forums
+- Look for both positive AND negative feedback
+- Be wary of only positive reviews (could be fake)
+
+## What To Do If Something Goes Wrong 🆘
+
+### If You Suspect a Problem
+1. **Don't panic** - assess the situation calmly
+2. **Check official channels** - Discord, Twitter for announcements
+3. **Don't click random links** claiming to help
+4. **If possible, withdraw to safety** while evaluating
+
+### If Funds Are Compromised
+1. **Document everything** - screenshots, transaction hashes
+2. **Report to the protocol** if legitimate
+3. **Warn others** in community channels
+4. **Report to relevant authorities** if appropriate
+5. **Learn from the experience** for future
+
+### Prevention Is Better Than Cure
+- **Diversify** across protocols and vaults
+- **Never go "all in"** on any single opportunity
+- **Stay updated** on security news in DeFi
+- **Continuously educate yourself**
+
+## Trust Framework 🏗️
+
+### Factors That Build Trust:
+✅ Long operating history (2+ years ideal)
+✅ Multiple security audits from reputable firms
+✅ Active bug bounty program
+✅ Transparent team with public presence
+✅ Clear governance and upgrade processes
+✅ Insurance coverage (if available)
+✅ Large, stable TVL over time
+✅ Active, engaged community
+✅ Regular security updates and improvements
+
+### Factors That Reduce Trust:
+❌ New or unaudited contracts
+❌ Anonymous team
+❌ Unrealistic yield promises
+❌ Poor communication
+❌ Declining TVL without explanation
+❌ Admin keys without timelock
+❌ No bug bounty or security program
+❌ Aggressive marketing tactics
+
+[COMPONENT:KEY_TAKEAWAY]
+{
+  "title": "Safety Summary",
+  "content": "Security in DeFi is YOUR responsibility. No one will protect your funds for you.\n\n• Always verify before connecting\n• Research before depositing\n• Start small, scale up gradually\n• If in doubt, stay out\n• Diversify to limit potential losses"
+}
+[/COMPONENT]
+
+*Next module: How to choose a vault that's right for YOUR goals and risk tolerance.*`,
+          quiz: {
+            id: "quiz-5-3",
+            title: "Vault Safety - Knowledge Check",
+            description: "Test your understanding of vault security practices and how to identify red flags.",
+            passingScore: 70,
+            timeLimit: 10,
+            maxAttempts: 3,
+            questions: [
+              {
+                id: "q5-3-1",
+                question: "Which of the following are red flags when evaluating a DeFi vault? (Select all that apply)",
+                type: "multiple",
+                options: [
+                  "APY promises of 1000%+ with no clear source",
+                  "Multiple security audits from reputable firms",
+                  "Anonymous team with no public presence",
+                  "Pressure tactics and FOMO marketing"
+                ],
+                correctAnswers: [0, 2, 3],
+                explanation: "Unrealistic APY, anonymous teams, and pressure tactics are all red flags. Multiple security audits are actually a positive sign, not a red flag.",
+                points: 15
+              },
+              {
+                id: "q5-3-2",
+                question: "What should you do BEFORE depositing into any vault?",
+                type: "single",
+                options: [
+                  "Deposit the maximum amount immediately to maximize returns",
+                  "Verify the website, research the protocol, and start with a small test deposit",
+                  "Only check social media follower counts",
+                  "Skip research if a friend recommended it"
+                ],
+                correctAnswers: [1],
+                explanation: "Always verify the website, research thoroughly, and start with a small test deposit before committing larger amounts. Never skip due diligence regardless of who recommended it.",
+                points: 10
+              },
+              {
+                id: "q5-3-3",
+                question: "What does declining TVL in a vault potentially indicate?",
+                type: "single",
+                options: [
+                  "The vault is becoming more exclusive",
+                  "Users may be leaving due to problems or concerns",
+                  "The vault is definitely a scam",
+                  "Returns are about to increase"
+                ],
+                correctAnswers: [1],
+                explanation: "Declining TVL could signal that users are leaving due to concerns or problems. It's not definitive proof of a scam, but it warrants investigation into why users are withdrawing.",
+                points: 10
+              },
+              {
+                id: "q5-3-4",
+                question: "Which security practice is most important for protecting significant crypto holdings?",
+                type: "single",
+                options: [
+                  "Keeping your seed phrase in a notes app",
+                  "Using a hardware wallet for significant amounts",
+                  "Sharing your private key with customer support",
+                  "Connecting to any website that asks"
+                ],
+                correctAnswers: [1],
+                explanation: "Using a hardware wallet for significant amounts is crucial. Never share private keys, never store seed phrases digitally, and only connect to verified websites.",
+                points: 10
+              },
+              {
+                id: "q5-3-5",
+                question: "True or False: If a vault has been audited, it means it's completely safe with no risk.",
+                type: "true-false",
+                options: ["True", "False"],
+                correctAnswers: [1],
+                explanation: "False. Audits reduce risk but don't eliminate it. Even audited contracts can have vulnerabilities. Audits are one important factor among many to consider.",
+                points: 10
+              }
+            ]
+          }
+        },
+        resources: [
+          {
+            title: "DeFi Security Best Practices",
+            url: "/resources/security-guide.pdf",
+            type: "pdf"
+          },
+          {
+            title: "Smart Contract Security Checklist",
+            url: "/resources/security-audit-checklist.pdf",
+            type: "pdf"
+          }
+        ]
+      },
+      {
+        id: "5-4",
+        title: "How to Choose the Right Vault for You",
+        type: "text",
+        duration: 30,
+        content: {
+          text: `# How to Choose the Right Vault for You
+
+Choosing a vault isn't just about finding the highest APY. It's about finding the right fit for YOUR goals, risk tolerance, and investment timeline.
+
+## Step 1: Define Your Investment Goals 🎯
+
+[COMPONENT:KEY_TAKEAWAY]
+{
+  "title": "Key Questions to Ask Yourself",
+  "content": "• What is my investment timeline? (Months? Years?)\n• How much can I afford to lose completely?\n• Do I want passive or actively managed strategies?\n• What blockchain(s) am I comfortable using?\n• How often do I want to check on my investment?\n• Am I seeking stable returns or higher-risk growth?"
+}
+[/COMPONENT]
+
+### Goal-Based Vault Selection
+
+**If Your Goal Is: Stable, Predictable Income**
+- Look for: Single-asset lending vaults
+- Focus on: Stablecoin vaults (USDC, DAI)
+- Accept: Lower APY for lower volatility
+- Avoid: High-risk farming strategies
+
+**If Your Goal Is: Growing Crypto Holdings**
+- Look for: ETH or BTC-focused vaults
+- Focus on: Strategies that compound in your base asset
+- Accept: Price volatility with strategy returns
+- Avoid: Strategies with high impermanent loss risk
+
+**If Your Goal Is: Maximum Yield (Higher Risk)**
+- Look for: Multi-strategy yield optimization
+- Focus on: Leverage and farming strategies
+- Accept: Significant risk of loss
+- Avoid: Investing more than you can lose
+
+## Step 2: Assess Your Risk Tolerance 📊
+
+### Risk Spectrum for Vaults
+
+[COMPONENT:STEP_BLOCK]
+{
+  "title": "Vault Risk Levels (Low to High)",
+  "steps": [
+    "LOWEST: Stablecoin lending vaults (USDC → lending protocols)",
+    "LOW: Single-asset staking vaults (ETH staking)",
+    "MEDIUM: Managed strategy vaults with transparent strategies",
+    "HIGHER: Liquidity pool vaults (impermanent loss exposure)",
+    "HIGHEST: Leveraged yield farming and complex strategies"
+  ]
+}
+[/COMPONENT]
+
+### Matching Risk Tolerance to Vault Type
+
+**Conservative Investors**
+- Stick to established protocols (2+ years old)
+- Prefer stablecoin or single-asset vaults
+- Accept returns of 3-10% APY
+- Prioritize capital preservation
+
+**Moderate Investors**
+- Mix of stable and growth-focused vaults
+- Comfortable with managed strategy vaults
+- Accept returns of 5-20% APY
+- Balance growth with risk management
+
+**Aggressive Investors**
+- Willing to try newer protocols
+- Comfortable with complex strategies
+- Seeking 15%+ APY
+- Accept possibility of significant losses
+
+## Step 3: Evaluate Vault Specifics 🔬
+
+### The Vault Evaluation Framework
+
+**1. Track Record (Weight: 25%)**
+- How long has this specific vault operated?
+- Historical performance (minimum 6 months data)
+- Consistency of returns
+- Performance during market downturns
+
+**2. Strategy Clarity (Weight: 25%)**
+- Can you explain what the vault does?
+- Are the mechanics transparent?
+- Do you understand the risks involved?
+- Is the strategy appropriate for market conditions?
+
+**3. Fee Impact (Weight: 20%)**
+- Calculate actual returns AFTER all fees
+- Compare fee structure to alternatives
+- Consider if fees align with value provided
+
+**4. Security Posture (Weight: 20%)**
+- Audit status and recency
+- Protocol track record
+- Team transparency
+- Insurance or safety mechanisms
+
+**5. Liquidity & Flexibility (Weight: 10%)**
+- Can you withdraw easily?
+- Are there lock-up periods?
+- What are withdrawal fees?
+
+### Calculating Real Returns
+
+[COMPONENT:DID_YOU_KNOW]
+{
+  "fact": "A vault advertising 15% APY with 2% management fee and 20% performance fee actually yields approximately 10.4% net returns. Always calculate your actual returns after fees before comparing options."
+}
+[/COMPONENT]
+
+**Example Calculation:**
+- Gross APY: 15%
+- Less Management Fee: 15% - 2% = 13%
+- Less Performance Fee: 13% × (1 - 0.20) = 10.4%
+- **Actual Returns: ~10.4% APY**
+
+## Step 4: Due Diligence Checklist ✅
+
+### Before Investing in ANY Vault:
+
+**Protocol Level**
+- [ ] Protocol has operated 12+ months
+- [ ] No major security incidents
+- [ ] Active development and updates
+- [ ] Clear governance structure
+
+**Vault Level**
+- [ ] Strategy is clearly explained
+- [ ] Historical performance data available
+- [ ] Fees are transparent and reasonable
+- [ ] TVL is stable or growing
+
+**Security Level**
+- [ ] Recent audit from reputable firm
+- [ ] Bug bounty program exists
+- [ ] Multi-sig or governance for changes
+- [ ] No admin keys that could drain funds
+
+**Personal Level**
+- [ ] I understand the strategy
+- [ ] I'm comfortable with the risks
+- [ ] I can afford to lose this amount
+- [ ] This fits my overall portfolio
+
+## Common Mistakes to Avoid ❌
+
+### Mistake 1: Chasing Highest APY
+- High APY often means high risk
+- Unsustainable yields eventually drop
+- Focus on risk-adjusted returns instead
+
+### Mistake 2: Not Diversifying
+- Single vault exposure is risky
+- Spread across protocols and strategies
+- Don't put all eggs in one basket
+
+### Mistake 3: Ignoring Fees
+- High fees can eat significant returns
+- Always calculate net APY
+- Compare total cost of ownership
+
+### Mistake 4: FOMO Investing
+- Rushed decisions lead to losses
+- Take time to research properly
+- Missing one opportunity is better than losing money
+
+### Mistake 5: Set and Forget Completely
+- Markets and protocols change
+- Review positions periodically
+- Stay informed about your investments
+
+## Decision Framework Summary 📋
+
+[COMPONENT:KEY_TAKEAWAY]
+{
+  "title": "Quick Decision Guide",
+  "content": "**Choose a Stablecoin Lending Vault if:**\n• You prioritize capital preservation\n• You want predictable, steady returns\n• You're new to DeFi vaults\n\n**Choose a Managed Strategy Vault if:**\n• You want exposure to active management\n• You trust the strategist's track record\n• You want diversified DeFi exposure\n\n**Choose a Yield Optimization Vault if:**\n• You want hands-off yield farming\n• You're comfortable with DeFi complexity\n• You understand compounding benefits"
+}
+[/COMPONENT]
+
+*Next module: Getting access to the 3EA managed vault - step by step.*`,
+          quiz: {
+            id: "quiz-5-4",
+            title: "Choosing the Right Vault - Knowledge Check",
+            description: "Test your understanding of how to evaluate and select appropriate vaults for your goals.",
+            passingScore: 70,
+            timeLimit: 10,
+            maxAttempts: 3,
+            questions: [
+              {
+                id: "q5-4-1",
+                question: "For a conservative investor prioritizing capital preservation, which vault type is most appropriate?",
+                type: "single",
+                options: [
+                  "Leveraged yield farming vaults",
+                  "Stablecoin lending vaults",
+                  "High-risk liquidity pool vaults",
+                  "Newly launched experimental vaults"
+                ],
+                correctAnswers: [1],
+                explanation: "Conservative investors should prioritize stablecoin lending vaults which offer lower but more stable returns with reduced volatility and risk.",
+                points: 10
+              },
+              {
+                id: "q5-4-2",
+                question: "A vault advertises 20% APY with 2% management fee and 20% performance fee. What is the approximate actual return?",
+                type: "single",
+                options: [
+                  "20% APY",
+                  "18% APY",
+                  "14.4% APY",
+                  "10% APY"
+                ],
+                correctAnswers: [2],
+                explanation: "20% - 2% management = 18%, then 18% × (1 - 0.20 performance) = 14.4% actual APY. Always calculate returns after fees.",
+                points: 15
+              },
+              {
+                id: "q5-4-3",
+                question: "Which of the following are common mistakes when choosing vaults? (Select all that apply)",
+                type: "multiple",
+                options: [
+                  "Chasing the highest APY without considering risk",
+                  "Diversifying across multiple protocols",
+                  "Making rushed FOMO-driven decisions",
+                  "Ignoring fees when comparing options"
+                ],
+                correctAnswers: [0, 2, 3],
+                explanation: "Chasing highest APY, FOMO investing, and ignoring fees are all common mistakes. Diversifying is actually a good practice, not a mistake.",
+                points: 15
+              },
+              {
+                id: "q5-4-4",
+                question: "What is the recommended minimum operating history for a vault before investing?",
+                type: "single",
+                options: [
+                  "1 week",
+                  "1 month",
+                  "6+ months",
+                  "Operating history doesn't matter"
+                ],
+                correctAnswers: [2],
+                explanation: "A minimum of 6 months historical data is recommended to evaluate performance, though 12+ months is even better. Newer vaults carry additional unproven risk.",
+                points: 10
+              },
+              {
+                id: "q5-4-5",
+                question: "True or False: Once you invest in a vault, you should never check on it again.",
+                type: "true-false",
+                options: ["True", "False"],
+                correctAnswers: [1],
+                explanation: "False. While vaults automate strategy execution, you should periodically review your positions as markets and protocols change. 'Set and forget completely' is listed as a common mistake.",
+                points: 10
+              }
+            ]
+          }
+        },
+        resources: [
+          {
+            title: "Vault Comparison Calculator",
+            url: "/analytics",
+            type: "link"
+          },
+          {
+            title: "Risk Assessment Checklist",
+            url: "/resources/risk-checklist.pdf",
+            type: "pdf"
+          }
+        ]
+      },
+      {
+        id: "5-5",
+        title: "Getting Access to the 3EA Vault (Step-by-Step Guide)",
+        type: "text",
+        duration: 25,
+        content: {
+          text: `# Getting Access to the 3EA Vault
+
+This module provides a step-by-step guide to understanding and accessing the 3EA managed vault on Enzyme Finance.
+
+## About the 3EA Vault 🏦
+
+The 3EA Vault is a managed investment vault on the Enzyme Finance protocol, providing curated DeFi strategy exposure with transparent, on-chain execution.
+
+### Key Features
+- **Platform**: Enzyme Finance (established 2017)
+- **Network**: Ethereum Mainnet
+- **Strategy**: Professionally managed DeFi allocation
+- **Transparency**: All actions verifiable on-chain
+- **Access**: NFT-gated for whitelisted investors
+
+[COMPONENT:KEY_TAKEAWAY]
+{
+  "title": "What Makes This Vault Different",
+  "content": "• **Curated Strategy**: Active management by experienced DeFi professionals\n• **Transparent Execution**: Every trade and position is visible on-chain\n• **NFT Access**: Membership via 3EA Earth Access NFT\n• **Enzyme Infrastructure**: Built on battle-tested asset management protocol"
+}
+[/COMPONENT]
+
+## How Access Works 🔑
+
+Unlike open vaults where anyone can deposit, the 3EA Vault uses a **whitelisting system** to manage access. Here's how it works:
+
+### The NFT Access Model
+
+**Step 1: Acquire the 3EA Earth Access NFT**
+- The NFT serves as your membership credential
+- Purchase available through the official link
+- One NFT = one wallet whitelisted for vault access
+
+**Step 2: Whitelist Processing**
+- After purchasing your NFT, your wallet address is queued for whitelisting
+- **Please allow up to 7 days** for your wallet to be added to the vault whitelist
+- This manual verification ensures security and proper onboarding
+
+**Step 3: Vault Access**
+- Once whitelisted, you can deposit into the vault via Enzyme Finance
+- Your NFT ownership is verified
+- You can participate in the vault's strategy
+
+[COMPONENT:ALERT]
+{
+  "type": "info",
+  "message": "After purchasing your NFT, please allow up to 7 days for your wallet to be whitelisted on the vault. This is a manual verification process to ensure security."
+}
+[/COMPONENT]
+
+## Step-by-Step Access Guide 📋
+
+[COMPONENT:STEP_BLOCK]
+{
+  "title": "How to Get Vault Access",
+  "steps": [
+    "Prepare an Ethereum wallet (MetaMask, hardware wallet, etc.)",
+    "Ensure you have ETH for the NFT purchase and gas fees",
+    "Visit the official 3EA Earth Access NFT page",
+    "Connect your wallet and complete the purchase",
+    "Wait up to 7 days for whitelist processing",
+    "Once whitelisted, access the vault through Enzyme Finance",
+    "Connect your whitelisted wallet to deposit"
+  ]
+}
+[/COMPONENT]
+
+## Understanding the Vault Structure
+
+### What Happens When You Deposit
+1. You send assets to the vault smart contract
+2. You receive vault shares representing your ownership
+3. The strategist manages positions using your deposited assets
+4. As the vault generates returns, your shares increase in value
+5. When you withdraw, you exchange shares for proportional assets
+
+### Fee Structure
+All fees are transparent and enforced by smart contracts:
+- **Management Fee**: Annual fee for vault operation
+- **Performance Fee**: Percentage of profits for the strategist
+
+*Specific fee rates are visible on the Enzyme vault page before you deposit.*
+
+## What You Get with Vault Access ✅
+
+### Exclusive Vault Access Membership
+- Access to the managed vault strategy
+- Transparent, on-chain portfolio management
+- Professional DeFi exposure
+- No need to manage positions yourself
+
+### What's NOT Included
+- This is NOT financial advice
+- No guaranteed returns
+- Past performance doesn't guarantee future results
+- You maintain custody of the decision to deposit/withdraw
+
+## Important Considerations ⚠️
+
+### Before You Proceed
+
+**Understand the Risks**
+- All DeFi investments carry risk of loss
+- Smart contract vulnerabilities exist in all protocols
+- Market conditions can cause losses regardless of strategy
+- Only invest what you can afford to lose completely
+
+**Technical Requirements**
+- Ethereum-compatible wallet (MetaMask recommended)
+- ETH for gas fees (Ethereum network fees apply)
+- Understanding of basic DeFi transactions
+
+**Investment Minimums**
+- Check the Enzyme vault page for any minimum deposit requirements
+- Factor in gas costs when deciding deposit amounts
+
+[COMPONENT:ALERT]
+{
+  "type": "warning",
+  "message": "This educational content is for informational purposes only. It does not constitute financial, investment, or legal advice. All investments involve risk, including potential loss of principal. Conduct your own research and consider consulting qualified advisors before making investment decisions."
+}
+[/COMPONENT]
+
+## Frequently Asked Questions ❓
+
+**Q: How long until my wallet is whitelisted?**
+A: Please allow up to 7 days after NFT purchase for whitelist processing.
+
+**Q: Can I withdraw at any time?**
+A: Vault liquidity and withdrawal options depend on Enzyme protocol mechanics. Check the vault page for current status.
+
+**Q: What blockchain is the vault on?**
+A: The vault operates on Ethereum Mainnet.
+
+**Q: Is my NFT tied to one wallet?**
+A: Yes, the wallet that holds the NFT is the one that gets whitelisted.
+
+**Q: What if I sell my NFT?**
+A: Access rights follow the NFT. If you transfer or sell, the new holder would need to go through the whitelist process.
+
+## Getting Started 🚀
+
+Ready to explore vault access? Here are your next steps:
+
+1. **Learn More**: Visit the Vault Access page for current details
+2. **Prepare**: Set up your Ethereum wallet and acquire ETH
+3. **Purchase**: Acquire the 3EA Earth Access NFT
+4. **Wait**: Allow up to 7 days for whitelist processing
+5. **Access**: Connect to Enzyme once whitelisted
+
+[COMPONENT:KEY_TAKEAWAY]
+{
+  "title": "Course Complete!",
+  "content": "Congratulations on completing the DeFi Vaults course! You now understand:\n\n• What vaults are and how they work\n• Major protocols and their differences\n• How to stay safe and identify red flags\n• How to choose the right vault for your goals\n• How to access the 3EA managed vault\n\nRemember: Education is ongoing. Stay curious, stay safe, and never stop learning."
+}
+[/COMPONENT]
+
+*Ready to explore? Visit the Vault Access page to learn more about membership options.*`,
+          quiz: {
+            id: "quiz-5-5",
+            title: "3EA Vault Access - Knowledge Check",
+            description: "Test your understanding of the 3EA vault access process and requirements.",
+            passingScore: 70,
+            timeLimit: 10,
+            maxAttempts: 3,
+            questions: [
+              {
+                id: "q5-5-1",
+                question: "What is required to access the 3EA managed vault?",
+                type: "single",
+                options: [
+                  "Just an Ethereum wallet",
+                  "The 3EA Earth Access NFT and wallet whitelisting",
+                  "A monthly subscription payment",
+                  "KYC verification documents"
+                ],
+                correctAnswers: [1],
+                explanation: "Access to the 3EA vault requires purchasing the 3EA Earth Access NFT and waiting for your wallet to be whitelisted (up to 7 days).",
+                points: 10
+              },
+              {
+                id: "q5-5-2",
+                question: "How long should you expect to wait for wallet whitelisting after purchasing the NFT?",
+                type: "single",
+                options: [
+                  "Instant access",
+                  "24 hours",
+                  "Up to 7 days",
+                  "30 days minimum"
+                ],
+                correctAnswers: [2],
+                explanation: "After purchasing your NFT, please allow up to 7 days for your wallet to be whitelisted on the vault. This is a manual verification process.",
+                points: 10
+              },
+              {
+                id: "q5-5-3",
+                question: "Which platform hosts the 3EA managed vault?",
+                type: "single",
+                options: [
+                  "Yearn Finance",
+                  "Beefy Finance",
+                  "Enzyme Finance",
+                  "Aave"
+                ],
+                correctAnswers: [2],
+                explanation: "The 3EA Vault operates on Enzyme Finance, an established asset management protocol that has been operating since 2017.",
+                points: 10
+              },
+              {
+                id: "q5-5-4",
+                question: "Which of the following are true about the 3EA vault? (Select all that apply)",
+                type: "multiple",
+                options: [
+                  "All actions are verifiable on-chain",
+                  "Returns are guaranteed",
+                  "It operates on Ethereum Mainnet",
+                  "It uses transparent, on-chain execution"
+                ],
+                correctAnswers: [0, 2, 3],
+                explanation: "The vault offers on-chain transparency and operates on Ethereum. However, NO returns are guaranteed in DeFi - all investments carry risk.",
+                points: 15
+              },
+              {
+                id: "q5-5-5",
+                question: "True or False: The educational content in this course constitutes financial advice.",
+                type: "true-false",
+                options: ["True", "False"],
+                correctAnswers: [1],
+                explanation: "False. This educational content is for informational purposes only and does not constitute financial, investment, or legal advice. Always conduct your own research.",
+                points: 10
+              }
+            ]
+          }
+        },
+        resources: [
+          {
+            title: "3EA Vault Access Page",
+            url: "/vault-access",
+            type: "link"
+          },
+          {
+            title: "Enzyme Finance Platform",
+            url: "https://enzyme.finance",
+            type: "link"
+          },
+          {
+            title: "MetaMask Setup Guide",
+            url: "/tutorials/wallet-setup",
+            type: "link"
+          }
+        ]
+      }
+    ]
   }
 ];
 
