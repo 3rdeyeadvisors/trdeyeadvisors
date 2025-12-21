@@ -12,7 +12,8 @@ import { AuthProvider } from "./components/auth/AuthProvider";
 import { ProgressProvider } from "./components/progress/ProgressProvider";
 import { SubscriptionProvider } from "./hooks/useSubscription";
 import { PWAStatus, OfflineBanner } from "./components/PWAStatus";
-import ThirdwebWrapper from "./components/web3/ThirdwebWrapper";
+import RainbowKitProvider from "./components/web3/RainbowKitProvider";
+import { ThirdwebProvider } from "thirdweb/react";
 import Index from "./pages/Index";
 import Subscription from "./pages/Subscription";
 import Philosophy from "./pages/Philosophy";
@@ -99,14 +100,15 @@ const App = () => {
   return (
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
-      <ThirdwebWrapper>
-      <TooltipProvider>
-        <CartProvider>
-          <AuthProvider>
-            <SubscriptionProvider>
-            <ProgressProvider>
-              <SecurityHeaders />
-              <OfflineBanner />
+      <RainbowKitProvider>
+        <ThirdwebProvider>
+          <TooltipProvider>
+            <CartProvider>
+              <AuthProvider>
+                <SubscriptionProvider>
+                  <ProgressProvider>
+                    <SecurityHeaders />
+                    <OfflineBanner />
               <PWAStatus />
               <Toaster />
             <Sonner />
@@ -196,14 +198,15 @@ const App = () => {
                       <Route path="/vault-access" element={<VaultAccess />} />
                       <Route path="*" element={<NotFound />} />
                 </Routes>
-              </Layout>
-            </BrowserRouter>
-          </ProgressProvider>
-          </SubscriptionProvider>
-        </AuthProvider>
-      </CartProvider>
-    </TooltipProvider>
-    </ThirdwebWrapper>
+                  </Layout>
+                </BrowserRouter>
+              </ProgressProvider>
+            </SubscriptionProvider>
+          </AuthProvider>
+        </CartProvider>
+      </TooltipProvider>
+    </ThirdwebProvider>
+  </RainbowKitProvider>
   </QueryClientProvider>
   </HelmetProvider>
   );

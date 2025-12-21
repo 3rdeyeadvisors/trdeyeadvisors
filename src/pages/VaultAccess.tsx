@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useActiveAccount, useIsAutoConnecting } from "thirdweb/react";
+import { useAccount } from "wagmi";
 import { useAuth } from "@/components/auth/AuthProvider";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
@@ -28,8 +28,7 @@ const VaultAccess = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, loading: authLoading, ready } = useAuth();
-  const account = useActiveAccount();
-  const isAutoConnecting = useIsAutoConnecting();
+  const { address, isConnected, isReconnecting } = useAccount();
   
   const [currentStep, setCurrentStep] = useState<Step>('auth');
   const [walletStabilized, setWalletStabilized] = useState(false);
@@ -41,13 +40,13 @@ const VaultAccess = () => {
 
   // Wait for wallet to stabilize
   useEffect(() => {
-    if (!isAutoConnecting && !walletStabilized) {
+    if (!isReconnecting && !walletStabilized) {
       const timer = setTimeout(() => {
         setWalletStabilized(true);
       }, 300);
       return () => clearTimeout(timer);
     }
-  }, [isAutoConnecting, walletStabilized]);
+  }, [isReconnecting, walletStabilized]);
 
   // Determine current step based on state
   useEffect(() => {
@@ -58,13 +57,13 @@ const VaultAccess = () => {
       return;
     }
     
-    if (!account) {
+    if (!isConnected) {
       setCurrentStep('wallet');
       return;
     }
     
     setCurrentStep('vault');
-  }, [ready, authLoading, user, account, walletStabilized]);
+  }, [ready, authLoading, user, isConnected, walletStabilized]);
 
   const handleSignIn = () => {
     navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`);
@@ -215,7 +214,7 @@ const VaultAccess = () => {
 
               <EnzymeVaultCard 
                 isWhitelisted={true} 
-                walletAddress={account?.address}
+                walletAddress={address}
               />
               
               <Card className="border-primary/20 bg-primary/5">

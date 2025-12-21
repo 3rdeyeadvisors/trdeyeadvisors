@@ -1,4 +1,5 @@
-import { useReadContract, useActiveAccount } from "thirdweb/react";
+import { useReadContract } from "thirdweb/react";
+import { useAccount } from "wagmi";
 import { getNFTContract, NFT_CONTRACT_ADDRESS } from "@/lib/thirdweb";
 import { getActiveClaimCondition, totalSupply } from "thirdweb/extensions/erc1155";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -26,7 +27,7 @@ const formatEther = (wei: bigint): string => {
 
 export const NFTStoreCard = () => {
   const contract = getNFTContract();
-  const account = useActiveAccount();
+  const { address, isConnected } = useAccount();
   const [purchased, setPurchased] = useState(false);
 
   // Fetch active claim condition (includes price)
@@ -141,7 +142,7 @@ export const NFTStoreCard = () => {
                 </Button>
               </Link>
             </div>
-          ) : !account ? (
+          ) : !isConnected ? (
             <div className="flex justify-center">
               <WalletConnectButton />
             </div>
