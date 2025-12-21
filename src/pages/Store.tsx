@@ -9,6 +9,7 @@ import { useCart } from "@/contexts/CartContext";
 import SEO from "@/components/SEO";
 import { MerchandiseCard } from "@/components/store/MerchandiseCard";
 import { NFTStoreCard } from "@/components/store/NFTStoreCard";
+import { Web3ErrorBoundary } from "@/components/web3/Web3ErrorBoundary";
 import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import { PullToRefreshIndicator } from "@/components/ui/pull-to-refresh";
 type StoreCategory = 'merchandise' | 'digital';
@@ -340,7 +341,9 @@ const Store = () => {
               {/* Single NFT - centered with max width for professional look */}
               <div className="flex justify-center">
                 <div className="w-full max-w-sm">
-                  <NFTStoreCard />
+                  <Web3ErrorBoundary>
+                    <NFTStoreCard />
+                  </Web3ErrorBoundary>
                 </div>
               </div>
               

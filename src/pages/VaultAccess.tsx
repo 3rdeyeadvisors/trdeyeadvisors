@@ -5,6 +5,7 @@ import { useAuth } from "@/components/auth/AuthProvider";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Web3ErrorBoundary } from "@/components/web3/Web3ErrorBoundary";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { 
@@ -212,10 +213,12 @@ const VaultAccess = () => {
                 <WalletConnectButton />
               </div>
 
-              <EnzymeVaultCard 
-                isWhitelisted={true} 
-                walletAddress={address}
-              />
+              <Web3ErrorBoundary>
+                <EnzymeVaultCard 
+                  isWhitelisted={true} 
+                  walletAddress={address}
+                />
+              </Web3ErrorBoundary>
               
               <Card className="border-primary/20 bg-primary/5">
                 <CardContent className="pt-6">
