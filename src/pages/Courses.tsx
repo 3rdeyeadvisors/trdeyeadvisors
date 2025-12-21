@@ -108,6 +108,25 @@ const Courses = () => {
         "Staying Consistent: The Long-Term DeFi Mindset"
       ],
       icon: BookOpen
+    },
+    {
+      id: 5,
+      title: "Understanding DeFi Vaults: Your Complete Guide to Managed Investing",
+      description: "Learn what DeFi vaults are, how they work, and how to choose the right vault for your investment goals. Includes access guidance for the 3EA managed vault.",
+      category: "free",
+      type: "course",
+      duration: "5 modules",
+      difficulty: "Intermediate",
+      rating: 4.8,
+      students: 412,
+      modules: [
+        "What Are DeFi Vaults? (Core Concepts and Key Terms)",
+        "Major Vault Protocols Explained (Enzyme, Yearn, and More)",
+        "Staying Safe with Vaults (Security and Red Flags)",
+        "How to Choose the Right Vault for You",
+        "Getting Access to the 3EA Vault (Step-by-Step Guide)"
+      ],
+      icon: BookOpen
     }
   ];
 
