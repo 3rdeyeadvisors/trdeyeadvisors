@@ -75,7 +75,7 @@ const VaultAccess = () => {
                 <ul className="space-y-2 text-muted-foreground">
                   <li className="flex items-center gap-2">
                     <Sparkles className="h-4 w-4 text-primary shrink-0" />
-                    <span>Permanent vault access membership</span>
+                    <span>Exclusive vault access membership</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <TrendingUp className="h-4 w-4 text-primary shrink-0" />
@@ -168,8 +168,7 @@ const VaultAccess = () => {
         <Card className="border-amber-500/30 bg-amber-500/5">
           <CardContent className="pt-6">
             <p className="text-sm text-center">
-              <strong>Important:</strong> Your wallet must hold the 3EA Earth Access NFT to deposit into the vault. 
-              The NFT is checked automatically when you connect on Enzyme.
+              <strong>Important:</strong> After purchasing your NFT, please allow up to 7 days for your wallet to be whitelisted on the vault.
             </p>
           </CardContent>
         </Card>
