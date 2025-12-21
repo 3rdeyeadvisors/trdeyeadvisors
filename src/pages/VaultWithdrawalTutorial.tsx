@@ -30,21 +30,21 @@ const VaultWithdrawalTutorial = () => {
         description="Step-by-step guide to redeeming your vault shares and withdrawing funds from the 3EA Enzyme Vault."
       />
 
-      <div className="container max-w-3xl py-12 space-y-8">
+      <div className="container max-w-3xl px-4 py-8 md:py-12 space-y-6 md:space-y-8">
         {/* Back Navigation */}
-        <Link to="/vault-access" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
+        <Link to="/vault-access" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm">
           <ArrowLeft className="h-4 w-4" />
           Back to Vault Access
         </Link>
 
         {/* Header */}
-        <div className="space-y-4">
+        <div className="space-y-3">
           <Badge variant="outline" className="mb-2">
             <Wallet className="h-3 w-3 mr-1" />
             Tutorial
           </Badge>
-          <h1 className="text-3xl md:text-4xl font-bold">How to Withdraw from the 3EA Vault</h1>
-          <p className="text-lg text-muted-foreground">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold leading-tight">How to Withdraw from the 3EA Vault</h1>
+          <p className="text-base md:text-lg text-muted-foreground">
             A complete guide to redeeming your vault shares and getting your funds back.
           </p>
         </div>
@@ -53,8 +53,8 @@ const VaultWithdrawalTutorial = () => {
 
         {/* Important Note */}
         <Alert variant="default" className="bg-amber-500/5 border-amber-500/20">
-          <AlertTriangle className="h-4 w-4 text-amber-500" />
-          <AlertDescription>
+          <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0" />
+          <AlertDescription className="text-sm">
             <strong>Good to know:</strong> Withdrawals are processed instantly on the blockchain. 
             You'll receive the current value of your vault shares based on the vault's net asset value (NAV).
           </AlertDescription>
@@ -62,45 +62,45 @@ const VaultWithdrawalTutorial = () => {
 
         {/* Step 1: Connect to Enzyme */}
         <Card>
-          <CardHeader>
-            <div className="flex items-center gap-3">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 text-primary font-bold">
+          <CardHeader className="p-4 md:p-6">
+            <div className="flex items-start gap-3">
+              <div className="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-full bg-primary/10 text-primary font-bold text-sm md:text-base shrink-0">
                 1
               </div>
-              <div>
-                <CardTitle className="flex items-center gap-2">
-                  <Link2 className="h-5 w-5" />
-                  Connect to the Enzyme Vault
+              <div className="min-w-0">
+                <CardTitle className="flex items-center gap-2 text-base md:text-lg">
+                  <Link2 className="h-4 w-4 md:h-5 md:w-5 shrink-0" />
+                  <span>Connect to the Enzyme Vault</span>
                 </CardTitle>
-                <CardDescription>Link your wallet to view your shares</CardDescription>
+                <CardDescription className="text-sm mt-1">Link your wallet to view your shares</CardDescription>
               </div>
             </div>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-muted-foreground">
+          <CardContent className="space-y-4 p-4 pt-0 md:p-6 md:pt-0">
+            <p className="text-sm md:text-base text-muted-foreground">
               Navigate to the 3EA vault on Enzyme Finance and connect the same wallet you used to deposit.
             </p>
             
             <div className="space-y-3">
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                <p>Click the button below to open the 3EA Vault on Enzyme Finance</p>
+              <div className="flex items-start gap-2 md:gap-3">
+                <CheckCircle2 className="h-4 w-4 md:h-5 md:w-5 text-primary mt-0.5 shrink-0" />
+                <p className="text-sm md:text-base">Click the button below to open the 3EA Vault on Enzyme Finance</p>
               </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                <p>Click <strong>"Connect Wallet"</strong> in the top-right corner</p>
+              <div className="flex items-start gap-2 md:gap-3">
+                <CheckCircle2 className="h-4 w-4 md:h-5 md:w-5 text-primary mt-0.5 shrink-0" />
+                <p className="text-sm md:text-base">Click <strong>"Connect Wallet"</strong> in the top-right corner</p>
               </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                <p>Select <strong>"MetaMask"</strong> and approve the connection</p>
+              <div className="flex items-start gap-2 md:gap-3">
+                <CheckCircle2 className="h-4 w-4 md:h-5 md:w-5 text-primary mt-0.5 shrink-0" />
+                <p className="text-sm md:text-base">Select <strong>"MetaMask"</strong> and approve the connection</p>
               </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                <p>Your vault share balance should be visible on the vault page</p>
+              <div className="flex items-start gap-2 md:gap-3">
+                <CheckCircle2 className="h-4 w-4 md:h-5 md:w-5 text-primary mt-0.5 shrink-0" />
+                <p className="text-sm md:text-base">Your vault share balance should be visible on the vault page</p>
               </div>
             </div>
 
-            <Button asChild className="gap-2">
+            <Button asChild className="gap-2 w-full sm:w-auto">
               <a href={ENZYME_VAULT_URL} target="_blank" rel="noopener noreferrer">
                 Open 3EA Vault on Enzyme
                 <ExternalLink className="h-4 w-4" />
@@ -111,43 +111,43 @@ const VaultWithdrawalTutorial = () => {
 
         {/* Step 2: Check Your Share Value */}
         <Card>
-          <CardHeader>
-            <div className="flex items-center gap-3">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 text-primary font-bold">
+          <CardHeader className="p-4 md:p-6">
+            <div className="flex items-start gap-3">
+              <div className="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-full bg-primary/10 text-primary font-bold text-sm md:text-base shrink-0">
                 2
               </div>
-              <div>
-                <CardTitle className="flex items-center gap-2">
-                  <Eye className="h-5 w-5" />
-                  Check Your Share Value
+              <div className="min-w-0">
+                <CardTitle className="flex items-center gap-2 text-base md:text-lg">
+                  <Eye className="h-4 w-4 md:h-5 md:w-5 shrink-0" />
+                  <span>Check Your Share Value</span>
                 </CardTitle>
-                <CardDescription>See how much your shares are worth</CardDescription>
+                <CardDescription className="text-sm mt-1">See how much your shares are worth</CardDescription>
               </div>
             </div>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-muted-foreground">
+          <CardContent className="space-y-4 p-4 pt-0 md:p-6 md:pt-0">
+            <p className="text-sm md:text-base text-muted-foreground">
               Before withdrawing, review the current value of your vault shares.
             </p>
             
             <div className="space-y-3">
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                <p>On the vault page, look for your <strong>"Share Balance"</strong> or <strong>"Your Position"</strong></p>
+              <div className="flex items-start gap-2 md:gap-3">
+                <CheckCircle2 className="h-4 w-4 md:h-5 md:w-5 text-primary mt-0.5 shrink-0" />
+                <p className="text-sm md:text-base">On the vault page, look for your <strong>"Share Balance"</strong> or <strong>"Your Position"</strong></p>
               </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                <p>The value shown is based on the vault's current NAV (Net Asset Value)</p>
+              <div className="flex items-start gap-2 md:gap-3">
+                <CheckCircle2 className="h-4 w-4 md:h-5 md:w-5 text-primary mt-0.5 shrink-0" />
+                <p className="text-sm md:text-base">The value shown is based on the vault's current NAV (Net Asset Value)</p>
               </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                <p>Your shares may be worth more or less than your original deposit depending on vault performance</p>
+              <div className="flex items-start gap-2 md:gap-3">
+                <CheckCircle2 className="h-4 w-4 md:h-5 md:w-5 text-primary mt-0.5 shrink-0" />
+                <p className="text-sm md:text-base">Your shares may be worth more or less than your original deposit depending on vault performance</p>
               </div>
             </div>
 
             <Alert variant="default" className="bg-muted/50">
-              <DollarSign className="h-4 w-4" />
-              <AlertDescription>
+              <DollarSign className="h-4 w-4 shrink-0" />
+              <AlertDescription className="text-sm">
                 <strong>Note:</strong> The vault's value fluctuates based on market conditions and the performance of the DeFi strategies being used.
               </AlertDescription>
             </Alert>
@@ -156,45 +156,45 @@ const VaultWithdrawalTutorial = () => {
 
         {/* Step 3: Initiate Withdrawal */}
         <Card className="border-primary/30">
-          <CardHeader>
-            <div className="flex items-center gap-3">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 text-primary font-bold">
+          <CardHeader className="p-4 md:p-6">
+            <div className="flex items-start gap-3">
+              <div className="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-full bg-primary/10 text-primary font-bold text-sm md:text-base shrink-0">
                 3
               </div>
-              <div>
-                <CardTitle className="flex items-center gap-2">
-                  <MinusCircle className="h-5 w-5" />
-                  Initiate Your Withdrawal
+              <div className="min-w-0">
+                <CardTitle className="flex items-center gap-2 text-base md:text-lg">
+                  <MinusCircle className="h-4 w-4 md:h-5 md:w-5 shrink-0" />
+                  <span>Initiate Your Withdrawal</span>
                 </CardTitle>
-                <CardDescription>Redeem your vault shares for the underlying assets</CardDescription>
+                <CardDescription className="text-sm mt-1">Redeem your vault shares for the underlying assets</CardDescription>
               </div>
             </div>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-muted-foreground">
+          <CardContent className="space-y-4 p-4 pt-0 md:p-6 md:pt-0">
+            <p className="text-sm md:text-base text-muted-foreground">
               Click the Redeem button to start the withdrawal process.
             </p>
             
             <div className="space-y-3">
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                <p>On the vault page, find and click the <strong>"Redeem"</strong> or <strong>"Withdraw"</strong> button</p>
+              <div className="flex items-start gap-2 md:gap-3">
+                <CheckCircle2 className="h-4 w-4 md:h-5 md:w-5 text-primary mt-0.5 shrink-0" />
+                <p className="text-sm md:text-base">On the vault page, find and click the <strong>"Redeem"</strong> or <strong>"Withdraw"</strong> button</p>
               </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                <p>Enter the number of shares you want to redeem (or click "Max" for all shares)</p>
+              <div className="flex items-start gap-2 md:gap-3">
+                <CheckCircle2 className="h-4 w-4 md:h-5 md:w-5 text-primary mt-0.5 shrink-0" />
+                <p className="text-sm md:text-base">Enter the number of shares you want to redeem (or click "Max" for all shares)</p>
               </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                <p>Review the estimated value you'll receive in the denomination asset (ETH)</p>
+              <div className="flex items-start gap-2 md:gap-3">
+                <CheckCircle2 className="h-4 w-4 md:h-5 md:w-5 text-primary mt-0.5 shrink-0" />
+                <p className="text-sm md:text-base">Review the estimated value you'll receive in the denomination asset (ETH)</p>
               </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                <p>Click <strong>"Redeem"</strong> or <strong>"Confirm"</strong> to proceed</p>
+              <div className="flex items-start gap-2 md:gap-3">
+                <CheckCircle2 className="h-4 w-4 md:h-5 md:w-5 text-primary mt-0.5 shrink-0" />
+                <p className="text-sm md:text-base">Click <strong>"Redeem"</strong> or <strong>"Confirm"</strong> to proceed</p>
               </div>
             </div>
 
-            <Button asChild className="gap-2">
+            <Button asChild className="gap-2 w-full sm:w-auto">
               <a href={ENZYME_REDEEM_URL} target="_blank" rel="noopener noreferrer">
                 Go to Redeem Page
                 <ExternalLink className="h-4 w-4" />
@@ -205,47 +205,47 @@ const VaultWithdrawalTutorial = () => {
 
         {/* Step 4: Confirm Transaction */}
         <Card>
-          <CardHeader>
-            <div className="flex items-center gap-3">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 text-primary font-bold">
+          <CardHeader className="p-4 md:p-6">
+            <div className="flex items-start gap-3">
+              <div className="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-full bg-primary/10 text-primary font-bold text-sm md:text-base shrink-0">
                 4
               </div>
-              <div>
-                <CardTitle className="flex items-center gap-2">
-                  <ArrowRight className="h-5 w-5" />
-                  Confirm the Transaction
+              <div className="min-w-0">
+                <CardTitle className="flex items-center gap-2 text-base md:text-lg">
+                  <ArrowRight className="h-4 w-4 md:h-5 md:w-5 shrink-0" />
+                  <span>Confirm the Transaction</span>
                 </CardTitle>
-                <CardDescription>Approve the withdrawal in MetaMask</CardDescription>
+                <CardDescription className="text-sm mt-1">Approve the withdrawal in MetaMask</CardDescription>
               </div>
             </div>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-muted-foreground">
+          <CardContent className="space-y-4 p-4 pt-0 md:p-6 md:pt-0">
+            <p className="text-sm md:text-base text-muted-foreground">
               MetaMask will pop up asking you to confirm the redemption transaction.
             </p>
             
             <div className="space-y-3">
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                <p>Review the transaction details in the MetaMask popup</p>
+              <div className="flex items-start gap-2 md:gap-3">
+                <CheckCircle2 className="h-4 w-4 md:h-5 md:w-5 text-primary mt-0.5 shrink-0" />
+                <p className="text-sm md:text-base">Review the transaction details in the MetaMask popup</p>
               </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                <p>Check the gas fee – you'll need enough ETH to cover this</p>
+              <div className="flex items-start gap-2 md:gap-3">
+                <CheckCircle2 className="h-4 w-4 md:h-5 md:w-5 text-primary mt-0.5 shrink-0" />
+                <p className="text-sm md:text-base">Check the gas fee – you'll need enough ETH to cover this</p>
               </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                <p>Click <strong>"Confirm"</strong> to submit the transaction</p>
+              <div className="flex items-start gap-2 md:gap-3">
+                <CheckCircle2 className="h-4 w-4 md:h-5 md:w-5 text-primary mt-0.5 shrink-0" />
+                <p className="text-sm md:text-base">Click <strong>"Confirm"</strong> to submit the transaction</p>
               </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                <p>Wait for the transaction to be confirmed on the blockchain (usually 1-3 minutes)</p>
+              <div className="flex items-start gap-2 md:gap-3">
+                <CheckCircle2 className="h-4 w-4 md:h-5 md:w-5 text-primary mt-0.5 shrink-0" />
+                <p className="text-sm md:text-base">Wait for the transaction to be confirmed on the blockchain (usually 1-3 minutes)</p>
               </div>
             </div>
 
             <Alert variant="default" className="bg-muted/50">
-              <Clock className="h-4 w-4" />
-              <AlertDescription>
+              <Clock className="h-4 w-4 shrink-0" />
+              <AlertDescription className="text-sm">
                 <strong>Tip:</strong> Gas fees are lower during off-peak hours. 
                 Check <a href="https://etherscan.io/gastracker" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">etherscan.io/gastracker</a> for current prices.
               </AlertDescription>
@@ -255,41 +255,41 @@ const VaultWithdrawalTutorial = () => {
 
         {/* Step 5: Verify Funds Received */}
         <Card className="border-primary/30">
-          <CardHeader>
-            <div className="flex items-center gap-3">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 text-primary font-bold">
+          <CardHeader className="p-4 md:p-6">
+            <div className="flex items-start gap-3">
+              <div className="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-full bg-primary/10 text-primary font-bold text-sm md:text-base shrink-0">
                 5
               </div>
-              <div>
-                <CardTitle className="flex items-center gap-2">
-                  <Wallet className="h-5 w-5" />
-                  Verify Funds in Your Wallet
+              <div className="min-w-0">
+                <CardTitle className="flex items-center gap-2 text-base md:text-lg">
+                  <Wallet className="h-4 w-4 md:h-5 md:w-5 shrink-0" />
+                  <span>Verify Funds in Your Wallet</span>
                 </CardTitle>
-                <CardDescription>Check that your withdrawal was successful</CardDescription>
+                <CardDescription className="text-sm mt-1">Check that your withdrawal was successful</CardDescription>
               </div>
             </div>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-muted-foreground">
+          <CardContent className="space-y-4 p-4 pt-0 md:p-6 md:pt-0">
+            <p className="text-sm md:text-base text-muted-foreground">
               Once the transaction is confirmed, your funds will appear in your MetaMask wallet.
             </p>
             
             <div className="space-y-3">
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                <p>Open MetaMask and check your ETH balance</p>
+              <div className="flex items-start gap-2 md:gap-3">
+                <CheckCircle2 className="h-4 w-4 md:h-5 md:w-5 text-primary mt-0.5 shrink-0" />
+                <p className="text-sm md:text-base">Open MetaMask and check your ETH balance</p>
               </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                <p>Your balance should have increased by the redeemed amount (minus gas fees)</p>
+              <div className="flex items-start gap-2 md:gap-3">
+                <CheckCircle2 className="h-4 w-4 md:h-5 md:w-5 text-primary mt-0.5 shrink-0" />
+                <p className="text-sm md:text-base">Your balance should have increased by the redeemed amount (minus gas fees)</p>
               </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                <p>Your vault share balance on Enzyme should be reduced or zero</p>
+              <div className="flex items-start gap-2 md:gap-3">
+                <CheckCircle2 className="h-4 w-4 md:h-5 md:w-5 text-primary mt-0.5 shrink-0" />
+                <p className="text-sm md:text-base">Your vault share balance on Enzyme should be reduced or zero</p>
               </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                <p>You can view the transaction on <a href="https://etherscan.io" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Etherscan</a> for full details</p>
+              <div className="flex items-start gap-2 md:gap-3">
+                <CheckCircle2 className="h-4 w-4 md:h-5 md:w-5 text-primary mt-0.5 shrink-0" />
+                <p className="text-sm md:text-base">You can view the transaction on <a href="https://etherscan.io" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Etherscan</a> for full details</p>
               </div>
             </div>
           </CardContent>
@@ -297,12 +297,12 @@ const VaultWithdrawalTutorial = () => {
 
         {/* Success Message */}
         <Card className="border-green-500/30 bg-green-500/5">
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-3">
-              <CheckCircle2 className="h-6 w-6 text-green-500" />
+          <CardContent className="p-4 md:pt-6">
+            <div className="flex items-start gap-3">
+              <CheckCircle2 className="h-5 w-5 md:h-6 md:w-6 text-green-500 shrink-0" />
               <div>
-                <p className="font-semibold">Withdrawal Complete!</p>
-                <p className="text-sm text-muted-foreground">
+                <p className="font-semibold text-sm md:text-base">Withdrawal Complete!</p>
+                <p className="text-xs md:text-sm text-muted-foreground">
                   Your funds are now back in your wallet. You can re-deposit at any time as long as you still hold the access NFT.
                 </p>
               </div>
@@ -311,7 +311,7 @@ const VaultWithdrawalTutorial = () => {
         </Card>
 
         {/* Help Links */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link to="/vault-deposit-guide" className="text-sm text-primary hover:underline text-center">
             ← View Deposit Guide
           </Link>
