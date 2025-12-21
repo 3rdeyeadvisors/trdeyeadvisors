@@ -53,11 +53,12 @@ const VaultWithdrawalTutorial = () => {
 
         {/* Important Note */}
         <Alert variant="default" className="bg-amber-500/5 border-amber-500/20">
-          <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0" />
-          <AlertDescription className="text-sm">
-            <strong>Good to know:</strong> Withdrawals are processed instantly on the blockchain. 
-            You'll receive the current value of your vault shares based on the vault's net asset value (NAV).
-          </AlertDescription>
+          <div className="flex gap-3">
+            <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" />
+            <p className="text-sm">
+              <strong>Good to know:</strong> Withdrawals are processed instantly on the blockchain. You'll receive the current value of your vault shares based on the vault's net asset value (NAV).
+            </p>
+          </div>
         </Alert>
 
         {/* Step 1: Connect to Enzyme */}
@@ -146,10 +147,12 @@ const VaultWithdrawalTutorial = () => {
             </div>
 
             <Alert variant="default" className="bg-muted/50">
-              <DollarSign className="h-4 w-4 shrink-0" />
-              <AlertDescription className="text-sm">
-                <strong>Note:</strong> The vault's value fluctuates based on market conditions and the performance of the DeFi strategies being used.
-              </AlertDescription>
+              <div className="flex gap-3">
+                <DollarSign className="h-4 w-4 shrink-0 mt-0.5" />
+                <p className="text-sm">
+                  <strong>Note:</strong> The vault's value fluctuates based on market conditions and the performance of the DeFi strategies being used.
+                </p>
+              </div>
             </Alert>
           </CardContent>
         </Card>
@@ -244,11 +247,12 @@ const VaultWithdrawalTutorial = () => {
             </div>
 
             <Alert variant="default" className="bg-muted/50">
-              <Clock className="h-4 w-4 shrink-0" />
-              <AlertDescription className="text-sm">
-                <strong>Tip:</strong> Gas fees are lower during off-peak hours. 
-                Check <a href="https://etherscan.io/gastracker" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">etherscan.io/gastracker</a> for current prices.
-              </AlertDescription>
+              <div className="flex gap-3">
+                <Clock className="h-4 w-4 shrink-0 mt-0.5" />
+                <p className="text-sm">
+                  <strong>Tip:</strong> Gas fees are lower during off-peak hours. Check <a href="https://etherscan.io/gastracker" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline inline">etherscan.io/gastracker</a> for current prices.
+                </p>
+              </div>
             </Alert>
           </CardContent>
         </Card>
@@ -289,7 +293,7 @@ const VaultWithdrawalTutorial = () => {
               </div>
               <div className="flex items-start gap-2 md:gap-3">
                 <CheckCircle2 className="h-4 w-4 md:h-5 md:w-5 text-primary mt-0.5 shrink-0" />
-                <p className="text-sm md:text-base">You can view the transaction on <a href="https://etherscan.io" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Etherscan</a> for full details</p>
+                <p className="text-sm md:text-base">You can view the transaction on <a href="https://etherscan.io" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline inline">Etherscan</a> for full details</p>
               </div>
             </div>
           </CardContent>
