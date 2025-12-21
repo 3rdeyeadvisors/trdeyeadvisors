@@ -1,9 +1,13 @@
-import { TransactionButton, useActiveAccount, useReadContract } from "thirdweb/react";
-import { getNFTContract } from "@/lib/thirdweb";
+import { useAccount, useSendTransaction, useWaitForTransactionReceipt } from "wagmi";
+import { useReadContract } from "thirdweb/react";
+import { getNFTContract, NFT_CONTRACT_ADDRESS, thirdwebClient } from "@/lib/thirdweb";
 import { claimTo, getActiveClaimCondition, totalSupply } from "thirdweb/extensions/erc1155";
+import { encode } from "thirdweb";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Sparkles, ExternalLink, Coins, Package, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useState, useEffect } from "react";
 
 // Helper to format wei to ETH
 const formatEther = (wei: bigint): string => {
@@ -20,9 +24,28 @@ const ACCESS_TOKEN_ID = 0n;
 const QUANTITY = 1n;
 
 export const NFTPurchaseButton = ({ onPurchaseComplete }: NFTPurchaseButtonProps) => {
-  const account = useActiveAccount();
+  const { address, isConnected } = useAccount();
   const { toast } = useToast();
   const contract = getNFTContract();
+  const [isPreparing, setIsPreparing] = useState(false);
+
+  // Wagmi send transaction
+  const { 
+    data: txHash, 
+    sendTransaction, 
+    isPending: isSending,
+    error: sendError,
+    reset 
+  } = useSendTransaction();
+
+  // Wait for transaction confirmation
+  const { 
+    isLoading: isConfirming, 
+    isSuccess: isConfirmed,
+    error: confirmError 
+  } = useWaitForTransactionReceipt({
+    hash: txHash,
+  });
 
   // Fetch active claim condition (includes price)
   const { data: claimCondition, isLoading: loadingCondition } = useReadContract(
@@ -54,7 +77,83 @@ export const NFTPurchaseButton = ({ onPurchaseComplete }: NFTPurchaseButtonProps
     ? `${formatEther(pricePerToken)} ETH` 
     : 'Free';
 
-  if (!account) {
+  // Handle transaction confirmation
+  useEffect(() => {
+    if (isConfirmed) {
+      toast({
+        title: "NFT Claimed!",
+        description: "Welcome to 3EA! You now have vault access.",
+      });
+      onPurchaseComplete?.();
+      reset();
+    }
+  }, [isConfirmed, onPurchaseComplete, toast, reset]);
+
+  // Handle errors
+  useEffect(() => {
+    if (sendError) {
+      console.error('NFT claim error:', sendError);
+      toast({
+        title: "Transaction Failed",
+        description: sendError.message || "Failed to claim NFT. Please try again.",
+        variant: "destructive",
+      });
+      setIsPreparing(false);
+    }
+    if (confirmError) {
+      console.error('Transaction confirmation error:', confirmError);
+      toast({
+        title: "Transaction Failed",
+        description: "Transaction was not confirmed. Please try again.",
+        variant: "destructive",
+      });
+    }
+  }, [sendError, confirmError, toast]);
+
+  // Handle claim click
+  const handleClaim = async () => {
+    if (!address) return;
+    
+    setIsPreparing(true);
+    
+    try {
+      // Prepare the claim transaction using thirdweb
+      const transaction = claimTo({
+        contract,
+        to: address,
+        tokenId: ACCESS_TOKEN_ID,
+        quantity: QUANTITY,
+      });
+
+      // Encode the transaction to get calldata
+      const data = await encode(transaction);
+      
+      // Send via wagmi
+      sendTransaction({
+        to: NFT_CONTRACT_ADDRESS as `0x${string}`,
+        data: data as `0x${string}`,
+        value: pricePerToken || 0n,
+      });
+      
+      toast({
+        title: "Transaction Submitted",
+        description: "Your NFT claim is being processed...",
+      });
+    } catch (error) {
+      console.error('Error preparing transaction:', error);
+      toast({
+        title: "Error",
+        description: "Failed to prepare transaction. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsPreparing(false);
+    }
+  };
+
+  const isProcessing = isPreparing || isSending || isConfirming;
+
+  if (!isConnected) {
     return (
       <Card className="border-muted">
         <CardContent className="flex items-center justify-center py-8">
@@ -116,51 +215,23 @@ export const NFTPurchaseButton = ({ onPurchaseComplete }: NFTPurchaseButtonProps
           </ul>
         </div>
 
-        <TransactionButton
-          transaction={() => {
-            return claimTo({
-              contract,
-              to: account.address,
-              tokenId: ACCESS_TOKEN_ID,
-              quantity: QUANTITY,
-            });
-          }}
-          onTransactionSent={() => {
-            toast({
-              title: "Transaction Submitted",
-              description: "Your NFT claim is being processed...",
-            });
-          }}
-          onTransactionConfirmed={() => {
-            toast({
-              title: "NFT Claimed!",
-              description: "Welcome to 3EA! You now have vault access.",
-            });
-            onPurchaseComplete?.();
-          }}
-          onError={(error) => {
-            console.error('NFT claim error:', error);
-            toast({
-              title: "Transaction Failed",
-              description: error.message || "Failed to claim NFT. Please try again.",
-              variant: "destructive",
-            });
-          }}
-          style={{
-            width: "100%",
-            background: "hsl(var(--primary))",
-            color: "hsl(var(--primary-foreground))",
-            borderRadius: "0.5rem",
-            padding: "0.75rem 1.5rem",
-            fontWeight: "600",
-            fontSize: "0.875rem",
-            border: "none",
-            cursor: "pointer",
-            minHeight: "44px",
-          }}
+        <Button
+          onClick={handleClaim}
+          disabled={isProcessing || isLoading}
+          className="w-full min-h-[44px]"
+          size="lg"
         >
-          Claim Access NFT {pricePerToken && pricePerToken > 0n ? `(${formattedPrice})` : ''}
-        </TransactionButton>
+          {isProcessing ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin mr-2" />
+              {isPreparing ? 'Preparing...' : isSending ? 'Confirm in wallet...' : 'Confirming...'}
+            </>
+          ) : (
+            <>
+              Claim Access NFT {pricePerToken && pricePerToken > 0n ? `(${formattedPrice})` : ''}
+            </>
+          )}
+        </Button>
 
         <p className="text-xs text-muted-foreground text-center flex items-center justify-center gap-1">
           <ExternalLink className="h-3 w-3" />
