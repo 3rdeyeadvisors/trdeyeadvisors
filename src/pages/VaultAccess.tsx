@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useActiveAccount } from "thirdweb/react";
+import { useActiveAccount, useIsAutoConnecting } from "thirdweb/react";
 import { useAuth } from "@/components/auth/AuthProvider";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
@@ -34,7 +34,10 @@ const VaultAccess = () => {
   const location = useLocation();
   const { user, loading: authLoading, ready } = useAuth();
   const account = useActiveAccount();
+  const isAutoConnecting = useIsAutoConnecting();
   const { toast } = useToast();
+  const mountTime = useRef(Date.now());
+  const authRedirectTimer = useRef<NodeJS.Timeout | null>(null);
   
   // Persist step state across wallet modal interactions
   const [currentStep, setCurrentStepInternal] = useState<Step>(() => {
@@ -60,19 +63,64 @@ const VaultAccess = () => {
   const [verifying, setVerifying] = useState(false);
   const [checkingWhitelist, setCheckingWhitelist] = useState(false);
   const [initialized, setInitialized] = useState(false);
+  const [walletStabilized, setWalletStabilized] = useState(false);
+
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => {
+      if (authRedirectTimer.current) {
+        clearTimeout(authRedirectTimer.current);
+      }
+    };
+  }, []);
 
   // Track page view
   useEffect(() => {
     trackEvent('vault_page_view', 'vault', currentStep);
   }, []);
 
-  // Auto-redirect to auth if not logged in (runs once when ready)
+  // Wait for wallet to stabilize before making auth decisions
   useEffect(() => {
-    if (!ready || authLoading) return;
+    if (!isAutoConnecting && !walletStabilized) {
+      // Give thirdweb a moment to finish auto-connecting
+      const timer = setTimeout(() => {
+        console.log('[Vault] Wallet state stabilized, isAutoConnecting:', isAutoConnecting, 'account:', !!account);
+        setWalletStabilized(true);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [isAutoConnecting, walletStabilized, account]);
+
+  // Auto-redirect to auth if not logged in (runs once when ready AND wallet stabilized)
+  useEffect(() => {
+    if (!ready || authLoading || !walletStabilized) return;
     
-    console.log('[Vault] Auth check - user:', !!user, 'initialized:', initialized, 'step:', currentStep);
+    console.log('[Vault] Auth check - user:', !!user, 'initialized:', initialized, 'step:', currentStep, 'account:', !!account);
+    
+    // Check if user has progressed beyond auth step - if so, trust the stored state
+    const savedStep = sessionStorage.getItem('vault_step');
+    const hasProgress = savedStep && savedStep !== 'auth';
     
     if (!user) {
+      // If user has made progress, give more time before redirecting (wallet reconnection may restore session)
+      if (hasProgress) {
+        console.log('[Vault] User has progress, waiting before redirect...');
+        
+        // Only redirect after grace period - allows for page reloads during wallet connection
+        if (!authRedirectTimer.current) {
+          authRedirectTimer.current = setTimeout(() => {
+            // Re-check user state after grace period
+            if (!user) {
+              console.log('[Vault] Grace period expired, redirecting to auth');
+              sessionStorage.removeItem('vault_step'); // Clear stale progress
+              navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`, { replace: true });
+            }
+          }, 500);
+        }
+        return;
+      }
+      
+      // Fresh visit with no progress - redirect immediately
       const alreadyRedirecting = sessionStorage.getItem('vault_auth_redirect');
       if (alreadyRedirecting) {
         console.log('[Vault] Already redirecting, skipping');
@@ -84,16 +132,18 @@ const VaultAccess = () => {
       return;
     }
     
-    // Clear redirect flag
+    // Clear redirect flag and timer
     sessionStorage.removeItem('vault_auth_redirect');
+    if (authRedirectTimer.current) {
+      clearTimeout(authRedirectTimer.current);
+      authRedirectTimer.current = null;
+    }
     
     // Only initialize step ONCE when user is confirmed
     if (!initialized) {
       setInitialized(true);
       
-      // Only set initial step if we're still on 'auth' (fresh visit with no stored step)
-      const savedStep = sessionStorage.getItem('vault_step');
-      console.log('[Vault] Initializing - savedStep:', savedStep, 'disclaimerAccepted:', disclaimerAccepted);
+      console.log('[Vault] Initializing - savedStep:', savedStep, 'disclaimerAccepted:', disclaimerAccepted, 'account:', !!account);
       
       if (!savedStep || savedStep === 'auth') {
         if (disclaimerAccepted) {
@@ -103,7 +153,7 @@ const VaultAccess = () => {
         }
       }
     }
-  }, [ready, authLoading, user, initialized]);
+  }, [ready, authLoading, user, initialized, walletStabilized]);
 
   // Check whitelist when wallet connects
   useEffect(() => {
@@ -135,16 +185,19 @@ const VaultAccess = () => {
   }, [user, account?.address, disclaimerAccepted]);
 
   // Update step when wallet connects - only if we're on wallet step
-  // Small delay prevents race conditions during wallet modal interactions
+  // Wait for wallet to stabilize AND ensure minimum time since mount
   useEffect(() => {
-    if (account && disclaimerAccepted && !isWhitelisted && currentStep === 'wallet') {
+    if (account && disclaimerAccepted && !isWhitelisted && currentStep === 'wallet' && walletStabilized) {
+      const timeSinceMount = Date.now() - mountTime.current;
+      const delay = Math.max(200, 500 - timeSinceMount); // Ensure at least 500ms since mount
+      
       const timer = setTimeout(() => {
-        console.log('[Vault] Wallet connected, moving to nft step');
+        console.log('[Vault] Wallet connected and stabilized, moving to nft step');
         setCurrentStep('nft');
-      }, 100);
+      }, delay);
       return () => clearTimeout(timer);
     }
-  }, [account, disclaimerAccepted, isWhitelisted, currentStep]);
+  }, [account, disclaimerAccepted, isWhitelisted, currentStep, walletStabilized]);
 
   // Verify NFT ownership on backend
   const verifyOwnership = async () => {
@@ -217,12 +270,15 @@ const VaultAccess = () => {
     return 'pending';
   };
 
-  // Show loading only during initial auth check
-  if (!ready || authLoading) {
+  // Show loading during initial auth check OR wallet auto-connect
+  if (!ready || authLoading || !walletStabilized) {
     return (
       <Layout>
-        <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="flex flex-col items-center justify-center min-h-[60vh] gap-3">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <p className="text-sm text-muted-foreground">
+            {!walletStabilized ? 'Reconnecting wallet...' : 'Loading...'}
+          </p>
         </div>
       </Layout>
     );
