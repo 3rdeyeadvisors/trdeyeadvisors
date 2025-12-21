@@ -29,6 +29,7 @@ import {
 import { ReferralCard } from "./ReferralCard";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { courseContent } from "@/data/courseContent";
 
 interface QuizStats {
   totalQuizzes: number;
@@ -131,56 +132,88 @@ export const EnhancedDashboard = () => {
   };
 
   const loadWeeklyProgress = async () => {
-    // Mock weekly progress data - in a real app, this would come from analytics
-    const mockData = [
-      { day: 'Mon', modules: 2, quizzes: 1 },
-      { day: 'Tue', modules: 3, quizzes: 2 },
-      { day: 'Wed', modules: 1, quizzes: 0 },
-      { day: 'Thu', modules: 4, quizzes: 3 },
-      { day: 'Fri', modules: 2, quizzes: 1 },
-      { day: 'Sat', modules: 1, quizzes: 1 },
-      { day: 'Sun', modules: 0, quizzes: 0 },
-    ];
-    setWeeklyProgress(mockData);
+    if (!user) return;
+
+    try {
+      // Get the start of the current week (Monday)
+      const now = new Date();
+      const dayOfWeek = now.getDay();
+      const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+      const monday = new Date(now);
+      monday.setDate(now.getDate() + mondayOffset);
+      monday.setHours(0, 0, 0, 0);
+
+      // Fetch quiz attempts from this week
+      const { data: quizAttempts, error: quizError } = await supabase
+        .from('quiz_attempts')
+        .select('created_at')
+        .eq('user_id', user.id)
+        .gte('created_at', monday.toISOString());
+
+      if (quizError) throw quizError;
+
+      // Fetch course progress updates from this week
+      const { data: progressUpdates, error: progressError } = await supabase
+        .from('course_progress')
+        .select('updated_at, completed_modules')
+        .eq('user_id', user.id)
+        .gte('updated_at', monday.toISOString());
+
+      if (progressError) throw progressError;
+
+      // Build weekly data
+      const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+      const weekData = days.map((day, index) => {
+        const dayDate = new Date(monday);
+        dayDate.setDate(monday.getDate() + index);
+        const dayStart = new Date(dayDate);
+        dayStart.setHours(0, 0, 0, 0);
+        const dayEnd = new Date(dayDate);
+        dayEnd.setHours(23, 59, 59, 999);
+
+        // Count quizzes completed on this day
+        const quizzes = quizAttempts?.filter(attempt => {
+          const attemptDate = new Date(attempt.created_at);
+          return attemptDate >= dayStart && attemptDate <= dayEnd;
+        }).length || 0;
+
+        // Count module progress on this day
+        const modules = progressUpdates?.filter(progress => {
+          const progressDate = new Date(progress.updated_at);
+          return progressDate >= dayStart && progressDate <= dayEnd;
+        }).length || 0;
+
+        return { day, modules, quizzes };
+      });
+
+      setWeeklyProgress(weekData);
+    } catch (error) {
+      console.error('Error loading weekly progress:', error);
+      // Set empty data on error
+      setWeeklyProgress([
+        { day: 'Mon', modules: 0, quizzes: 0 },
+        { day: 'Tue', modules: 0, quizzes: 0 },
+        { day: 'Wed', modules: 0, quizzes: 0 },
+        { day: 'Thu', modules: 0, quizzes: 0 },
+        { day: 'Fri', modules: 0, quizzes: 0 },
+        { day: 'Sat', modules: 0, quizzes: 0 },
+        { day: 'Sun', modules: 0, quizzes: 0 },
+      ]);
+    }
   };
 
   if (!user) {
     return null;
   }
 
-  // Mock courses data
-  const courses = [
-    {
-      id: 1,
-      title: "DeFi Foundations: Understanding the New Financial System",
-      category: "free",
-      duration: "5 modules",
-      difficulty: "Beginner"
-    },
-    {
-      id: 2,
-      title: "Staying Safe in DeFi: Wallets, Security, and Avoiding Scams",
-      category: "free", 
-      duration: "5 modules",
-      difficulty: "Beginner"
-    },
-    {
-      id: 3,
-      title: "Earning with DeFi: Staking, Yield Farming, and Liquidity Pools Made Simple",
-      category: "paid",
-      duration: "5 modules",
-      price: "$67",
-      difficulty: "Intermediate"
-    },
-    {
-      id: 4,
-      title: "Managing Your Own DeFi Portfolio: From Beginner to Confident User",
-      category: "paid",
-      duration: "5 modules", 
-      price: "$97",
-      difficulty: "Advanced"
-    }
-  ];
+  // Get real courses from courseContent
+  const courses = courseContent.map(course => ({
+    id: course.id,
+    title: course.title,
+    category: course.category,
+    duration: `${course.modules.length} modules`,
+    difficulty: course.difficulty
+  }));
 
   // Calculate enhanced stats
   const enrolledCourses = Object.keys(courseProgress).length;
@@ -191,10 +224,58 @@ export const EnhancedDashboard = () => {
     ? Object.values(courseProgress).reduce((sum, progress) => sum + progress.completion_percentage, 0) / enrolledCourses
     : 0;
 
-  const getCurrentStreak = () => {
-    // Mock streak calculation - in a real app, this would be based on actual learning activity
-    return Math.floor(Math.random() * 7) + 1;
-  };
+  const [currentStreak, setCurrentStreak] = useState(0);
+
+  // Calculate real streak from activity data
+  useEffect(() => {
+    const calculateStreak = async () => {
+      if (!user) return;
+
+      try {
+        // Get all quiz attempts and course progress ordered by date
+        const { data: quizAttempts } = await supabase
+          .from('quiz_attempts')
+          .select('created_at')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false });
+
+        const { data: progressUpdates } = await supabase
+          .from('course_progress')
+          .select('updated_at')
+          .eq('user_id', user.id)
+          .order('updated_at', { ascending: false });
+
+        // Combine and sort all activity dates
+        const allDates = new Set<string>();
+        quizAttempts?.forEach(a => allDates.add(new Date(a.created_at).toDateString()));
+        progressUpdates?.forEach(p => allDates.add(new Date(p.updated_at).toDateString()));
+
+        // Calculate streak
+        let streak = 0;
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        for (let i = 0; i < 365; i++) {
+          const checkDate = new Date(today);
+          checkDate.setDate(today.getDate() - i);
+          
+          if (allDates.has(checkDate.toDateString())) {
+            streak++;
+          } else if (i > 0) {
+            // Allow today to be missing (user might not have done anything yet today)
+            break;
+          }
+        }
+
+        setCurrentStreak(streak);
+      } catch (error) {
+        console.error('Error calculating streak:', error);
+        setCurrentStreak(0);
+      }
+    };
+
+    calculateStreak();
+  }, [user]);
 
   const getAchievements = () => {
     const achievements = [];
@@ -261,7 +342,7 @@ export const EnhancedDashboard = () => {
 
   const { inProgress, completed, notStarted } = getCoursesByProgress();
   const achievements = getAchievements();
-  const currentStreak = getCurrentStreak();
+  // currentStreak is now calculated in useEffect above
 
   const getCategoryColor = (category: string) => {
     switch (category) {

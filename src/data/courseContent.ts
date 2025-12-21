@@ -48,7 +48,7 @@ export interface CourseContentData {
   modules: ModuleContent[];
 }
 
-// Mock course content - in a real app, this would come from a CMS or API
+// Course content data - static content for all courses
 export const courseContent: CourseContentData[] = [
   {
     id: 1,
