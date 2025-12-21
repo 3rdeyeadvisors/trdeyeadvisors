@@ -255,7 +255,7 @@ const VaultDepositTutorial = () => {
               <div className="flex gap-3">
                 <Clock className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" />
                 <p className="text-sm">
-                  <strong>Be patient:</strong> Whitelisting happens in batches. If it's been more than 7 days, contact us through the <Link to="/contact" className="text-primary hover:underline">contact page</Link>.
+                  <strong>Be patient:</strong> Whitelisting happens in batches. If it's been more than 7 days, contact us through the <Link to="/contact" className="text-primary hover:underline inline">contact page</Link>.
                 </p>
               </div>
             </Alert>
