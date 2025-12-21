@@ -152,11 +152,12 @@ const VaultDepositTutorial = () => {
             </div>
 
             <Alert variant="default" className="bg-muted/50">
-              <Shield className="h-4 w-4 shrink-0" />
-              <AlertDescription className="text-sm">
-                <strong>Tip:</strong> Gas fees are lower during off-peak hours (weekends, early mornings UTC). 
-                Check <a href="https://etherscan.io/gastracker" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">etherscan.io/gastracker</a> for current gas prices.
-              </AlertDescription>
+              <div className="flex gap-3">
+                <Shield className="h-4 w-4 shrink-0 mt-0.5" />
+                <p className="text-sm">
+                  <strong>Tip:</strong> Gas fees are lower during off-peak hours (weekends, early mornings UTC). Check <a href="https://etherscan.io/gastracker" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline inline">etherscan.io/gastracker</a> for current gas prices.
+                </p>
+              </div>
             </Alert>
           </CardContent>
         </Card>
