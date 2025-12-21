@@ -62,9 +62,17 @@ export const EnhancedModuleNavigation = ({
   };
 
   const getModuleProgress = (moduleIndex: number) => {
-    // Mock individual module progress - in a real app, this would come from detailed tracking
+    // Calculate real progress based on completion status
     if (isModuleCompleted(moduleIndex)) return 100;
-    if (currentModuleId === course.modules[moduleIndex].id) return 45; // Current module
+    // If this is the current module being viewed, show partial progress
+    if (currentModuleId === course.modules[moduleIndex].id) {
+      // Check if there are any completed modules after this one
+      // If user has completed later modules, this one should be 100%
+      const hasCompletedLaterModules = progress?.completed_modules?.some(
+        (completedIdx: number) => completedIdx > moduleIndex
+      );
+      return hasCompletedLaterModules ? 100 : 50; // Show 50% for current active module
+    }
     return 0;
   };
 

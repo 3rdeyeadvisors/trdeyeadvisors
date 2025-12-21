@@ -176,12 +176,36 @@ const Profile = () => {
         ? Math.round(quizAttempts.reduce((sum, q) => sum + q.score, 0) / quizAttempts.length)
         : 0;
 
+      // Calculate actual learning time from course progress
+      // Sum up the estimated time for completed courses
+      let totalLearningMinutes = 0;
+      
+      // Import courseContent to get actual course durations
+      const { courseContent } = await import('@/data/courseContent');
+      
+      courseProgress?.forEach(progress => {
+        if (progress.completion_percentage === 100) {
+          const course = courseContent.find(c => c.id === progress.course_id);
+          if (course) {
+            // Sum up all module durations for completed courses
+            totalLearningMinutes += course.modules.reduce((sum, module) => sum + module.duration, 0);
+          }
+        } else if (progress.completion_percentage && progress.completion_percentage > 0) {
+          // For partially completed courses, estimate proportionally
+          const course = courseContent.find(c => c.id === progress.course_id);
+          if (course) {
+            const totalCourseDuration = course.modules.reduce((sum, module) => sum + module.duration, 0);
+            totalLearningMinutes += Math.round(totalCourseDuration * (progress.completion_percentage / 100));
+          }
+        }
+      });
+
       setUserStats({
         coursesEnrolled,
         coursesCompleted,
         quizzesPassed,
         averageScore,
-        totalLearningTime: coursesCompleted * 120, // Mock calculation: 2 hours per course
+        totalLearningTime: totalLearningMinutes,
         joinDate: user.created_at
       });
     } catch (error) {

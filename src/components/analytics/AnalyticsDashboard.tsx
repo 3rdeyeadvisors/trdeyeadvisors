@@ -66,33 +66,125 @@ export const AnalyticsDashboard = () => {
 
       const averageRating = averageRatingResponse.data || 0;
 
-      // Mock additional data for demo
+      // Get real ratings data for tutorials
+      const { data: ratingsData } = await supabase
+        .from('ratings')
+        .select('content_id, rating')
+        .eq('content_type', 'tutorial');
+
+      // Calculate real tutorial ratings
+      const tutorialRatings: Record<string, { total: number; count: number }> = {};
+      ratingsData?.forEach(r => {
+        if (!tutorialRatings[r.content_id]) {
+          tutorialRatings[r.content_id] = { total: 0, count: 0 };
+        }
+        tutorialRatings[r.content_id].total += r.rating;
+        tutorialRatings[r.content_id].count++;
+      });
+
+      const popularTutorials = Object.entries(tutorialRatings)
+        .map(([id, data]) => ({
+          id,
+          title: id.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+          views: data.count, // Using rating count as a proxy for engagement
+          rating: data.count > 0 ? Number((data.total / data.count).toFixed(1)) : 0
+        }))
+        .sort((a, b) => b.views - a.views)
+        .slice(0, 4);
+
+      // Get real user engagement from quiz attempts and course progress for the last 7 days
+      const sevenDaysAgo = new Date();
+      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+      const { data: recentQuizAttempts } = await supabase
+        .from('quiz_attempts')
+        .select('created_at, user_id')
+        .gte('created_at', sevenDaysAgo.toISOString());
+
+      const { data: recentProgress } = await supabase
+        .from('course_progress')
+        .select('updated_at, user_id, completion_percentage')
+        .gte('updated_at', sevenDaysAgo.toISOString());
+
+      // Build engagement data by day
+      const engagementByDay: Record<string, { activeUsers: Set<string>; completions: number }> = {};
+      
+      for (let i = 6; i >= 0; i--) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        const dateStr = date.toISOString().split('T')[0];
+        engagementByDay[dateStr] = { activeUsers: new Set(), completions: 0 };
+      }
+
+      recentQuizAttempts?.forEach(attempt => {
+        const dateStr = new Date(attempt.created_at).toISOString().split('T')[0];
+        if (engagementByDay[dateStr]) {
+          engagementByDay[dateStr].activeUsers.add(attempt.user_id);
+        }
+      });
+
+      recentProgress?.forEach(progress => {
+        const dateStr = new Date(progress.updated_at).toISOString().split('T')[0];
+        if (engagementByDay[dateStr]) {
+          engagementByDay[dateStr].activeUsers.add(progress.user_id);
+          if (progress.completion_percentage === 100) {
+            engagementByDay[dateStr].completions++;
+          }
+        }
+      });
+
+      const userEngagement = Object.entries(engagementByDay).map(([date, data]) => ({
+        date,
+        activeUsers: data.activeUsers.size,
+        completions: data.completions
+      }));
+
+      // Get real top contributors from comments
+      const { data: commentsByUser } = await supabase
+        .from('comments')
+        .select('user_id');
+
+      const { data: badgesByUser } = await supabase
+        .from('user_badges')
+        .select('user_id');
+
+      const { data: profiles } = await supabase
+        .from('profiles')
+        .select('user_id, display_name');
+
+      // Count contributions per user
+      const contributionCounts: Record<string, number> = {};
+      commentsByUser?.forEach(c => {
+        contributionCounts[c.user_id] = (contributionCounts[c.user_id] || 0) + 1;
+      });
+
+      const badgeCounts: Record<string, number> = {};
+      badgesByUser?.forEach(b => {
+        badgeCounts[b.user_id] = (badgeCounts[b.user_id] || 0) + 1;
+      });
+
+      const profileMap: Record<string, string> = {};
+      profiles?.forEach(p => {
+        profileMap[p.user_id] = p.display_name || 'Anonymous User';
+      });
+
+      const topContributors = Object.entries(contributionCounts)
+        .map(([userId, contributions]) => ({
+          name: profileMap[userId] || 'Anonymous User',
+          contributions,
+          badges: badgeCounts[userId] || 0
+        }))
+        .sort((a, b) => b.contributions - a.contributions)
+        .slice(0, 4);
+
       setAnalytics({
         totalUsers: usersResponse.data || 0,
         totalCourses: coursesResponse.data || 0,
         totalComments: commentsResponse.count || 0,
         averageRating: Number(averageRating.toFixed(1)),
-        popularTutorials: [
-          { id: 'wallet-setup', title: 'Wallet Setup & Security', views: 1250, rating: 4.8 },
-          { id: 'first-dex-swap', title: 'Your First DEX Swap', views: 980, rating: 4.6 },
-          { id: 'defi-calculators', title: 'DeFi Calculator Tools', views: 750, rating: 4.7 },
-          { id: 'spotting-scams', title: 'Spotting DeFi Scams', views: 890, rating: 4.9 }
-        ],
-        userEngagement: [
-          { date: '2024-01-15', activeUsers: 45, completions: 12 },
-          { date: '2024-01-16', activeUsers: 52, completions: 18 },
-          { date: '2024-01-17', activeUsers: 38, completions: 9 },
-          { date: '2024-01-18', activeUsers: 61, completions: 24 },
-          { date: '2024-01-19', activeUsers: 47, completions: 15 },
-          { date: '2024-01-20', activeUsers: 55, completions: 21 },
-          { date: '2024-01-21', activeUsers: 43, completions: 13 }
-        ],
-        topContributors: [
-          { name: 'Alice Johnson', contributions: 28, badges: 5 },
-          { name: 'Bob Smith', contributions: 22, badges: 3 },
-          { name: 'Carol White', contributions: 19, badges: 4 },
-          { name: 'David Brown', contributions: 15, badges: 2 }
-        ]
+        popularTutorials: popularTutorials.length > 0 ? popularTutorials : [],
+        userEngagement,
+        topContributors: topContributors.length > 0 ? topContributors : []
       });
     } catch (error) {
       console.error('Error loading analytics:', error);
