@@ -1,27 +1,33 @@
-import { useReadContract, useActiveAccount } from "thirdweb/react";
+import { useAccount } from "wagmi";
+import { useReadContract } from "thirdweb/react";
 import { getNFTContract } from "@/lib/thirdweb";
-import { Shield, CheckCircle, XCircle, Loader2 } from "lucide-react";
+import { Shield, CheckCircle, XCircle, Loader2, RefreshCw } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { useEffect, useRef } from "react";
+import { Button } from "@/components/ui/button";
+import { useEffect, useRef, useCallback } from "react";
 
 interface NFTOwnershipCheckProps {
   onOwnershipVerified?: (balance: number) => void;
 }
 
 export const NFTOwnershipCheck = ({ onOwnershipVerified }: NFTOwnershipCheckProps) => {
-  const account = useActiveAccount();
+  const { address, isConnected } = useAccount();
   const contract = getNFTContract();
   const hasCalledCallback = useRef(false);
 
-  const { data: balance, isLoading, error } = useReadContract({
+  const { data: balance, isLoading, error, refetch } = useReadContract({
     contract,
     method: "function balanceOf(address owner) view returns (uint256)",
-    params: account?.address ? [account.address] : undefined,
+    params: address ? [address] : undefined,
   });
 
   const ownsNFT = balance && BigInt(balance.toString()) > 0n;
   const nftCount = balance ? Number(balance.toString()) : 0;
+
+  const handleRetry = useCallback(() => {
+    refetch();
+  }, [refetch]);
 
   // Callback when ownership is verified - use useEffect to avoid render loop
   useEffect(() => {
@@ -31,7 +37,7 @@ export const NFTOwnershipCheck = ({ onOwnershipVerified }: NFTOwnershipCheckProp
     }
   }, [ownsNFT, nftCount, onOwnershipVerified]);
 
-  if (!account) {
+  if (!isConnected) {
     return (
       <Card className="border-muted">
         <CardContent className="flex items-center justify-center py-8">
@@ -54,10 +60,14 @@ export const NFTOwnershipCheck = ({ onOwnershipVerified }: NFTOwnershipCheckProp
 
   if (error) {
     return (
-      <Card className="border-destructive/50">
-        <CardContent className="flex items-center justify-center gap-3 py-8">
+      <Card className="border-destructive/30 bg-destructive/5">
+        <CardContent className="flex flex-col items-center justify-center gap-3 py-8">
           <XCircle className="h-5 w-5 text-destructive" />
-          <p className="text-destructive">Error checking NFT ownership</p>
+          <p className="text-destructive text-sm">Error checking NFT ownership</p>
+          <Button onClick={handleRetry} variant="outline" size="sm" className="gap-2 mt-2">
+            <RefreshCw className="h-3.5 w-3.5" />
+            Retry
+          </Button>
         </CardContent>
       </Card>
     );

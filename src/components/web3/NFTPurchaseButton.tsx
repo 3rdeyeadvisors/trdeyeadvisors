@@ -1,13 +1,13 @@
 import { useAccount, useSendTransaction, useWaitForTransactionReceipt } from "wagmi";
 import { useReadContract } from "thirdweb/react";
-import { getNFTContract, NFT_CONTRACT_ADDRESS, thirdwebClient } from "@/lib/thirdweb";
+import { getNFTContract, NFT_CONTRACT_ADDRESS } from "@/lib/thirdweb";
 import { claimTo, getActiveClaimCondition, totalSupply } from "thirdweb/extensions/erc1155";
 import { encode } from "thirdweb";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Sparkles, ExternalLink, Coins, Package, Loader2 } from "lucide-react";
+import { Sparkles, ExternalLink, Coins, Package, Loader2, AlertCircle, RefreshCw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 // Helper to format wei to ETH
 const formatEther = (wei: bigint): string => {
@@ -47,8 +47,13 @@ export const NFTPurchaseButton = ({ onPurchaseComplete }: NFTPurchaseButtonProps
     hash: txHash,
   });
 
-  // Fetch active claim condition (includes price)
-  const { data: claimCondition, isLoading: loadingCondition } = useReadContract(
+  // Fetch active claim condition (includes price) with error handling
+  const { 
+    data: claimCondition, 
+    isLoading: loadingCondition,
+    error: conditionError,
+    refetch: refetchCondition
+  } = useReadContract(
     getActiveClaimCondition,
     {
       contract,
@@ -56,14 +61,26 @@ export const NFTPurchaseButton = ({ onPurchaseComplete }: NFTPurchaseButtonProps
     }
   );
 
-  // Fetch total minted supply
-  const { data: minted, isLoading: loadingSupply } = useReadContract(
+  // Fetch total minted supply with error handling
+  const { 
+    data: minted, 
+    isLoading: loadingSupply,
+    error: supplyError,
+    refetch: refetchSupply
+  } = useReadContract(
     totalSupply,
     {
       contract,
       id: ACCESS_TOKEN_ID,
     }
   );
+
+  const hasContractError = conditionError || supplyError;
+
+  const handleRetryFetch = useCallback(() => {
+    refetchCondition();
+    refetchSupply();
+  }, [refetchCondition, refetchSupply]);
 
   const isLoading = loadingCondition || loadingSupply;
   const pricePerToken = claimCondition?.pricePerToken;
@@ -158,6 +175,29 @@ export const NFTPurchaseButton = ({ onPurchaseComplete }: NFTPurchaseButtonProps
       <Card className="border-muted">
         <CardContent className="flex items-center justify-center py-8">
           <p className="text-muted-foreground">Connect your wallet to purchase an NFT</p>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Show error state with retry option
+  if (hasContractError && !isLoading) {
+    return (
+      <Card className="border-destructive/30 bg-destructive/5">
+        <CardHeader className="pb-2">
+          <CardTitle className="flex items-center gap-2 text-destructive text-base">
+            <AlertCircle className="h-4 w-4" />
+            Unable to Load NFT Data
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <p className="text-sm text-muted-foreground">
+            Could not connect to the blockchain to fetch NFT information. Please check your network connection.
+          </p>
+          <Button onClick={handleRetryFetch} variant="outline" size="sm" className="gap-2">
+            <RefreshCw className="h-3.5 w-3.5" />
+            Retry
+          </Button>
         </CardContent>
       </Card>
     );
