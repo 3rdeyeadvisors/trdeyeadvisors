@@ -18,7 +18,7 @@ import nftImage from "@/assets/nft/3ea-earth-access.png";
 
 // External URLs
 const THIRDWEB_NFT_URL = "https://thirdweb.com/ethereum/0x91AE8ec3d88E871679F826c1D6c5B008f105506c/erc1155";
-const ENZYME_VAULT_URL = "https://app.enzyme.finance/vault/0xCb5d2578e76F1cc93c1A0bDe1686729C6fbAeC58";
+const ENZYME_VAULT_URL = "https://app.enzyme.finance/vault/0x8b668add6fba7c01444353c0dfdef222a816cd9f";
 
 const VaultAccess = () => {
   const navigate = useNavigate();
