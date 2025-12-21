@@ -1,12 +1,15 @@
-import { useReadContract } from "thirdweb/react";
+import { useReadContract, useActiveAccount } from "thirdweb/react";
 import { getNFTContract, NFT_CONTRACT_ADDRESS } from "@/lib/thirdweb";
 import { getActiveClaimCondition, totalSupply } from "thirdweb/extensions/erc1155";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles, ExternalLink, Coins, Package, Loader2, Wallet, AlertCircle } from "lucide-react";
+import { Sparkles, ExternalLink, Coins, Package, Loader2, Wallet, AlertCircle, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import nftImage from "@/assets/nft/3ea-earth-access.png";
+import WalletConnectButton from "@/components/web3/WalletConnectButton";
+import NFTPurchaseButton from "@/components/web3/NFTPurchaseButton";
+import { useState } from "react";
 
 // Token ID for the 3EA Access NFT (first token in the ERC1155 collection)
 const ACCESS_TOKEN_ID = 0n;
@@ -23,6 +26,8 @@ const formatEther = (wei: bigint): string => {
 
 export const NFTStoreCard = () => {
   const contract = getNFTContract();
+  const account = useActiveAccount();
+  const [purchased, setPurchased] = useState(false);
 
   // Fetch active claim condition (includes price)
   const { data: claimCondition, isLoading: loadingCondition, error: conditionError } = useReadContract(
@@ -122,14 +127,27 @@ export const NFTStoreCard = () => {
           <p>✓ Managed DeFi strategies</p>
         </div>
 
-        {/* CTA - push to bottom */}
-        <div className="mt-auto pt-2">
-          <Link to="/vault-access" className="block">
-            <Button className="w-full font-consciousness gap-2 min-h-[44px] text-sm" variant="default">
-              <Wallet className="h-4 w-4 shrink-0" />
-              <span>View & Purchase</span>
-            </Button>
-          </Link>
+        {/* CTA - Wallet connect or Purchase directly */}
+        <div className="mt-auto pt-2 space-y-3">
+          {purchased ? (
+            <div className="text-center space-y-2">
+              <div className="flex items-center justify-center gap-2 text-success">
+                <CheckCircle className="h-5 w-5" />
+                <span className="font-medium">NFT Purchased!</span>
+              </div>
+              <Link to="/vault-access">
+                <Button variant="outline" className="w-full min-h-[44px]">
+                  Access Vault
+                </Button>
+              </Link>
+            </div>
+          ) : !account ? (
+            <div className="flex justify-center">
+              <WalletConnectButton />
+            </div>
+          ) : (
+            <NFTPurchaseButton onPurchaseComplete={() => setPurchased(true)} />
+          )}
         </div>
 
         <p className="text-xs text-muted-foreground text-center">
