@@ -1,11 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, LogIn, LogOut, User, ShoppingCart, ChevronDown, ChevronRight, BookOpen, BarChart3, Package, FileText, MoreHorizontal, Gift, Home, Lightbulb, Vault } from "lucide-react";
+import { 
+  Menu, X, LogIn, LogOut, User, ShoppingCart, ChevronDown, 
+  BookOpen, BarChart3, Package, FileText, MoreHorizontal, Gift, 
+  Home, Lightbulb, Vault, GraduationCap, Newspaper, FolderOpen,
+  Mail, Shield, Scale
+} from "lucide-react";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/contexts/CartContext";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -18,11 +22,28 @@ import {
 const Navigation = () => {
   const { itemCount } = useCart();
   const [isOpen, setIsOpen] = useState(false);
-  const [isLearningOpen, setIsLearningOpen] = useState(false);
-  const [isMoreOpen, setIsMoreOpen] = useState(false);
+  const [expandedSection, setExpandedSection] = useState<string | null>(null);
   const location = useLocation();
   const { user, signOut } = useAuth();
   const { toast } = useToast();
+
+  // Close menu on route change
+  useEffect(() => {
+    setIsOpen(false);
+    setExpandedSection(null);
+  }, [location.pathname]);
+
+  // Prevent body scroll when menu is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
 
   // Desktop navigation - main items
   const mainNavItems = [
@@ -41,33 +62,45 @@ const Navigation = () => {
   const moreNavItems = [
     { path: "/raffle-history", label: "Raffle History" },
     { path: "/analytics", label: "Analytics" },
-    { path: "/downloads", label: "Downloads" },
     { path: "/contact", label: "Contact" },
   ];
 
-  // Mobile navigation structure with grouping
-  const mobileNavStructure = {
-    primary: [
-      { path: "/", label: "Home" },
-      { path: "/philosophy", label: "Philosophy" },
+  // Mobile navigation - clean organized sections
+  const mobileNavSections = {
+    main: [
+      { path: "/", label: "Home", icon: Home },
+      { path: "/philosophy", label: "Philosophy", icon: Lightbulb },
       { path: "/store", label: "Store", icon: Package },
       { path: "/vault-access", label: "Vault Access", icon: Vault },
     ],
-    learning: [
-      { path: "/courses", label: "Courses", icon: BookOpen, external: false },
-      { path: "/tutorials", label: "Tutorials", icon: BookOpen, external: false },
-      { path: "/blog", label: "Blog", icon: FileText, external: false },
-      { path: "/resources", label: "Resources", icon: FileText, external: false },
-      { path: "/raffles", label: "Raffles", icon: Gift, external: false },
-    ],
-    more: [
-      { path: "/raffle-history", label: "Raffle History", icon: Gift },
-      { path: "/analytics", label: "Analytics", icon: BarChart3 },
-      { path: "/downloads", label: "Downloads", icon: Package },
-      { path: "/contact", label: "Contact", icon: FileText },
-      { path: "/privacy", label: "Privacy Policy", icon: FileText },
-      { path: "/terms", label: "Terms of Service", icon: FileText },
+    learn: {
+      label: "Learn",
+      icon: GraduationCap,
+      items: [
+        { path: "/courses", label: "Courses", icon: BookOpen },
+        { path: "/tutorials", label: "Tutorials", icon: GraduationCap },
+        { path: "/blog", label: "Blog", icon: Newspaper },
+        { path: "/resources", label: "Resources", icon: FolderOpen },
+      ]
+    },
+    community: {
+      label: "Community & More",
+      icon: Gift,
+      items: [
+        { path: "/raffles", label: "Raffles", icon: Gift },
+        { path: "/raffle-history", label: "Raffle History", icon: BarChart3 },
+        { path: "/analytics", label: "Analytics", icon: BarChart3 },
+        { path: "/contact", label: "Contact", icon: Mail },
+      ]
+    },
+    legal: [
+      { path: "/privacy", label: "Privacy Policy", icon: Shield },
+      { path: "/terms", label: "Terms of Service", icon: Scale },
     ]
+  };
+
+  const toggleSection = (section: string) => {
+    setExpandedSection(expandedSection === section ? null : section);
   };
 
   const isActive = (path: string) => location.pathname === path;
@@ -232,89 +265,58 @@ const Navigation = () => {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden fixed inset-x-0 top-16 bottom-0 bg-black border-t border-border z-40">
-            <div className="max-h-[calc(100vh-4rem)] overflow-y-auto">
-              {/* Account Section (Top Priority) */}
+          <div className="md:hidden fixed inset-x-0 top-16 bottom-0 bg-background/95 backdrop-blur-lg border-t border-border z-40 animate-in slide-in-from-top-2 duration-200">
+            <div className="h-full overflow-y-auto pb-20">
+              {/* Account Section */}
               {user ? (
-                <div className="p-4 border-b border-border bg-muted/30">
-                  {/* User Info Card */}
-                  <div className="bg-card rounded-lg p-3 mb-3 border">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                          <User className="w-5 h-5 text-primary" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium truncate">Welcome back!</p>
-                          <p className="text-xs text-muted-foreground truncate">{user.email}</p>
-                        </div>
-                      </div>
+                <div className="p-4 border-b border-border/50 bg-gradient-to-b from-primary/5 to-transparent">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-primary/20 to-primary/5 rounded-full flex items-center justify-center border border-primary/20">
+                      <User className="w-6 h-6 text-primary" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-foreground">Welcome back!</p>
+                      <p className="text-xs text-muted-foreground truncate">{user.email}</p>
                     </div>
                   </div>
                   
-                  {/* Account Actions */}
                   <div className="grid grid-cols-3 gap-2">
-                    <Button
-                      asChild
-                      variant="outline"
-                      size="sm"
-                      className="text-xs"
+                    <Link 
+                      to="/profile"
+                      className="flex flex-col items-center gap-1 p-3 rounded-xl bg-card/50 border border-border/50 hover:bg-card hover:border-primary/30 transition-all active:scale-95"
                     >
-                      <Link 
-                        to="/profile" 
-                        className="flex items-center justify-center space-x-1"
-                        onClick={() => setIsOpen(false)}
-                      >
-                        <User className="w-3 h-3" />
-                        <span>Profile</span>
-                      </Link>
-                    </Button>
+                      <User className="w-5 h-5 text-primary" />
+                      <span className="text-xs font-medium">Profile</span>
+                    </Link>
                     
-                    <Button
-                      asChild
-                      variant="outline"
-                      size="sm"
-                      className="text-xs relative"
+                    <Link 
+                      to="/cart"
+                      className="flex flex-col items-center gap-1 p-3 rounded-xl bg-card/50 border border-border/50 hover:bg-card hover:border-primary/30 transition-all active:scale-95 relative"
                     >
-                      <Link 
-                        to="/cart" 
-                        className="flex items-center justify-center space-x-1"
-                        onClick={() => setIsOpen(false)}
-                      >
-                        <ShoppingCart className="w-3 h-3" />
-                        <span>Cart</span>
-                        {itemCount > 0 && (
-                          <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full h-4 w-4 flex items-center justify-center">
-                            {itemCount}
-                          </span>
-                        )}
-                      </Link>
-                    </Button>
+                      <ShoppingCart className="w-5 h-5 text-primary" />
+                      <span className="text-xs font-medium">Cart</span>
+                      {itemCount > 0 && (
+                        <span className="absolute top-1 right-1 bg-primary text-primary-foreground text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold">
+                          {itemCount}
+                        </span>
+                      )}
+                    </Link>
                     
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => {
-                        handleSignOut();
-                        setIsOpen(false);
-                      }}
-                      className="text-xs"
+                    <button
+                      onClick={handleSignOut}
+                      className="flex flex-col items-center gap-1 p-3 rounded-xl bg-destructive/10 border border-destructive/20 hover:bg-destructive/20 transition-all active:scale-95"
                     >
-                      <LogOut className="w-3 h-3 mr-1" />
-                      <span>Sign Out</span>
-                    </Button>
+                      <LogOut className="w-5 h-5 text-destructive" />
+                      <span className="text-xs font-medium text-destructive">Sign Out</span>
+                    </button>
                   </div>
                 </div>
               ) : (
-                <div className="p-4 border-b border-border bg-muted/30">
+                <div className="p-4 border-b border-border/50 bg-gradient-to-b from-primary/5 to-transparent">
                   <div className="text-center space-y-3">
-                    <p className="text-sm font-medium">Welcome to 3rdeyeadvisors</p>
-                    <Button asChild variant="default" size="sm" className="w-full">
-                      <Link 
-                        to="/auth" 
-                        className="flex items-center justify-center space-x-2"
-                        onClick={() => setIsOpen(false)}
-                      >
+                    <p className="text-sm font-medium text-foreground">Welcome to 3rdeyeadvisors</p>
+                    <Button asChild className="w-full">
+                      <Link to="/auth" className="flex items-center justify-center gap-2">
                         <LogIn className="w-4 h-4" />
                         <span>Sign In to Get Started</span>
                       </Link>
@@ -323,119 +325,126 @@ const Navigation = () => {
                 </div>
               )}
 
-              {/* Navigation Sections */}
-              <div className="p-4 space-y-2">
-                {/* Home */}
-                <Link
-                  to="/"
-                  className={`flex items-center space-x-3 p-3 rounded-lg transition-colors ${
-                    isActive("/")
-                      ? "bg-primary/10 text-primary font-medium"
-                      : "text-foreground hover:bg-muted"
-                  }`}
-                  onClick={() => setIsOpen(false)}
-                >
-                  <Home className="w-5 h-5 flex-shrink-0" />
-                  <span className="font-consciousness">Home</span>
-                </Link>
+              {/* Main Navigation */}
+              <div className="p-4 space-y-6">
+                {/* Primary Links */}
+                <div className="space-y-1">
+                  {mobileNavSections.main.map((item) => (
+                    <Link
+                      key={item.path}
+                      to={item.path}
+                      className={`flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all active:scale-[0.98] ${
+                        isActive(item.path)
+                          ? "bg-primary/10 text-primary border border-primary/20"
+                          : "text-foreground hover:bg-muted/50"
+                      }`}
+                    >
+                      <item.icon className="w-5 h-5 flex-shrink-0" />
+                      <span className="font-medium">{item.label}</span>
+                    </Link>
+                  ))}
+                </div>
 
-                {/* Philosophy */}
-                <Link
-                  to="/philosophy"
-                  className={`flex items-center space-x-3 p-3 rounded-lg transition-colors ${
-                    isActive("/philosophy")
-                      ? "bg-primary/10 text-primary font-medium"
-                      : "text-foreground hover:bg-muted"
-                  }`}
-                  onClick={() => setIsOpen(false)}
-                >
-                  <Lightbulb className="w-5 h-5 flex-shrink-0" />
-                  <span className="font-consciousness">Philosophy</span>
-                </Link>
-
-                {/* Store */}
-                <Link
-                  to="/store"
-                  className={`flex items-center space-x-3 p-3 rounded-lg transition-colors ${
-                    isActive("/store")
-                      ? "bg-primary/10 text-primary font-medium"
-                      : "text-foreground hover:bg-muted"
-                  }`}
-                  onClick={() => setIsOpen(false)}
-                >
-                  <Package className="w-5 h-5 flex-shrink-0" />
-                  <span className="font-consciousness">Store</span>
-                </Link>
-
-                {/* Learning Section */}
-                <Collapsible open={isLearningOpen} onOpenChange={setIsLearningOpen}>
-                  <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors min-h-[44px]">
-                    <div className="flex items-center space-x-3 flex-1">
-                      <BookOpen className="w-5 h-5 flex-shrink-0" />
-                      <span className="font-consciousness font-medium">Learning</span>
+                {/* Learn Section */}
+                <div className="space-y-2">
+                  <button
+                    onClick={() => toggleSection('learn')}
+                    className={`flex items-center justify-between w-full px-4 py-3.5 rounded-xl transition-all ${
+                      expandedSection === 'learn' 
+                        ? 'bg-primary/10 border border-primary/20' 
+                        : 'bg-muted/30 hover:bg-muted/50'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <GraduationCap className="w-5 h-5 text-primary" />
+                      <span className="font-medium">{mobileNavSections.learn.label}</span>
                     </div>
-                    {isLearningOpen ? <ChevronDown className="w-4 h-4 flex-shrink-0" /> : <ChevronRight className="w-4 h-4 flex-shrink-0" />}
-                  </CollapsibleTrigger>
-                  <CollapsibleContent className="mt-1 space-y-1">
-                    {mobileNavStructure.learning.map((item) => (
-                      item.external ? (
-                        <a
-                          key={item.path}
-                          href={item.path}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center justify-center space-x-3 p-2.5 rounded-lg transition-colors text-muted-foreground hover:bg-muted hover:text-foreground"
-                          onClick={() => setIsOpen(false)}
-                        >
-                          {item.icon && <item.icon className="w-4 h-4 flex-shrink-0" />}
-                          <span className="text-sm">{item.label}</span>
-                        </a>
-                      ) : (
+                    <ChevronDown className={`w-5 h-5 transition-transform duration-200 ${
+                      expandedSection === 'learn' ? 'rotate-180' : ''
+                    }`} />
+                  </button>
+                  
+                  <div className={`overflow-hidden transition-all duration-200 ${
+                    expandedSection === 'learn' ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                  }`}>
+                    <div className="grid grid-cols-2 gap-2 pt-2">
+                      {mobileNavSections.learn.items.map((item) => (
                         <Link
                           key={item.path}
                           to={item.path}
-                          className={`flex items-center justify-center space-x-3 p-2.5 rounded-lg transition-colors ${
+                          className={`flex flex-col items-center gap-2 p-4 rounded-xl transition-all active:scale-95 ${
                             isActive(item.path)
-                              ? "bg-primary/10 text-primary font-medium"
-                              : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                              ? "bg-primary/15 border border-primary/30"
+                              : "bg-card/50 border border-border/50 hover:border-primary/20"
                           }`}
-                          onClick={() => setIsOpen(false)}
                         >
-                          {item.icon && <item.icon className="w-4 h-4 flex-shrink-0" />}
-                          <span className="text-sm">{item.label}</span>
+                          <item.icon className={`w-6 h-6 ${isActive(item.path) ? 'text-primary' : 'text-muted-foreground'}`} />
+                          <span className={`text-sm font-medium text-center ${isActive(item.path) ? 'text-primary' : ''}`}>
+                            {item.label}
+                          </span>
                         </Link>
-                      )
-                    ))}
-                  </CollapsibleContent>
-                </Collapsible>
-
-                {/* More Section */}
-                <Collapsible open={isMoreOpen} onOpenChange={setIsMoreOpen}>
-                  <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors min-h-[44px]">
-                    <div className="flex items-center space-x-3 flex-1">
-                      <MoreHorizontal className="w-5 h-5 flex-shrink-0" />
-                      <span className="font-consciousness font-medium">More</span>
+                      ))}
                     </div>
-                    {isMoreOpen ? <ChevronDown className="w-4 h-4 flex-shrink-0" /> : <ChevronRight className="w-4 h-4 flex-shrink-0" />}
-                  </CollapsibleTrigger>
-                  <CollapsibleContent className="mt-1 space-y-1">
-                    {mobileNavStructure.more.map((item) => (
+                  </div>
+                </div>
+
+                {/* Community & More Section */}
+                <div className="space-y-2">
+                  <button
+                    onClick={() => toggleSection('community')}
+                    className={`flex items-center justify-between w-full px-4 py-3.5 rounded-xl transition-all ${
+                      expandedSection === 'community' 
+                        ? 'bg-primary/10 border border-primary/20' 
+                        : 'bg-muted/30 hover:bg-muted/50'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <Gift className="w-5 h-5 text-primary" />
+                      <span className="font-medium">{mobileNavSections.community.label}</span>
+                    </div>
+                    <ChevronDown className={`w-5 h-5 transition-transform duration-200 ${
+                      expandedSection === 'community' ? 'rotate-180' : ''
+                    }`} />
+                  </button>
+                  
+                  <div className={`overflow-hidden transition-all duration-200 ${
+                    expandedSection === 'community' ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                  }`}>
+                    <div className="grid grid-cols-2 gap-2 pt-2">
+                      {mobileNavSections.community.items.map((item) => (
+                        <Link
+                          key={item.path}
+                          to={item.path}
+                          className={`flex flex-col items-center gap-2 p-4 rounded-xl transition-all active:scale-95 ${
+                            isActive(item.path)
+                              ? "bg-primary/15 border border-primary/30"
+                              : "bg-card/50 border border-border/50 hover:border-primary/20"
+                          }`}
+                        >
+                          <item.icon className={`w-6 h-6 ${isActive(item.path) ? 'text-primary' : 'text-muted-foreground'}`} />
+                          <span className={`text-sm font-medium text-center ${isActive(item.path) ? 'text-primary' : ''}`}>
+                            {item.label}
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Legal Links */}
+                <div className="pt-4 border-t border-border/30">
+                  <div className="flex justify-center gap-4">
+                    {mobileNavSections.legal.map((item) => (
                       <Link
                         key={item.path}
                         to={item.path}
-                        className={`flex items-center justify-center space-x-3 p-2.5 rounded-lg transition-colors ${
-                          isActive(item.path)
-                            ? "bg-primary/10 text-primary font-medium"
-                            : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                        }`}
-                        onClick={() => setIsOpen(false)}
+                        className="text-xs text-muted-foreground hover:text-foreground transition-colors"
                       >
-                        {item.icon && <item.icon className="w-4 h-4 flex-shrink-0" />}
-                        <span className="text-sm">{item.label}</span>
+                        {item.label}
                       </Link>
                     ))}
-                  </CollapsibleContent>
-                </Collapsible>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
