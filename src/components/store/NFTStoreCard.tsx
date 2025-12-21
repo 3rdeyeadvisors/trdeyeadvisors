@@ -15,7 +15,7 @@ const FALLBACK_PRICE = "0.01 ETH";
 const FALLBACK_SUPPLY = "Limited";
 
 // Thirdweb hosted checkout URL for the NFT
-const THIRDWEB_CHECKOUT_URL = "https://thirdweb.com/ethereum/0x91AE8ec3d88E871679F826c1D6c5B008f105506c/erc1155";
+const THIRDWEB_CHECKOUT_URL = "https://thirdweb.com/ethereum/0x91AE8ec3d88E871679F826c1D6c5B008f105506c";
 
 // Helper to format wei to ETH
 const formatEther = (wei: bigint): string => {
