@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/components/auth/AuthProvider";
 import SEO from "@/components/SEO";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -161,6 +161,11 @@ const VaultAccess = () => {
             <p className="text-xs text-muted-foreground text-center">
               You'll connect your wallet directly on Enzyme's platform
             </p>
+            <div className="text-center pt-2">
+              <Link to="/vault-deposit-guide" className="text-sm text-primary hover:underline">
+                Need help? View the full deposit guide →
+              </Link>
+            </div>
           </CardContent>
         </Card>
 

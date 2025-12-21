@@ -68,6 +68,7 @@ import AwarenessBlueprintLanding from "./pages/AwarenessBlueprintLanding";
 import AdLanding from "./pages/AdLanding";
 import UploadResourceFile from "./pages/UploadResourceFile";
 import VaultAccess from "./pages/VaultAccess";
+import VaultDepositTutorial from "./pages/VaultDepositTutorial";
 
 const queryClient = new QueryClient();
 
@@ -193,6 +194,7 @@ const App = () => {
                           <Route path="/raffles" element={<Raffles />} />
                           <Route path="/raffle-history" element={<RaffleHistory />} />
                           <Route path="/vault-access" element={<VaultAccess />} />
+                          <Route path="/vault-deposit-guide" element={<VaultDepositTutorial />} />
                           <Route path="*" element={<NotFound />} />
                         </Routes>
                       </Layout>
