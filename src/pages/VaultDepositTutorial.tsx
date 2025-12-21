@@ -86,7 +86,7 @@ const VaultDepositTutorial = () => {
             <div className="space-y-3">
               <div className="flex items-start gap-2 md:gap-3">
                 <CheckCircle2 className="h-4 w-4 md:h-5 md:w-5 text-primary mt-0.5 shrink-0" />
-                <p className="text-sm md:text-base">Go to <a href={METAMASK_DOWNLOAD_URL} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline break-all">metamask.io/download</a> and install the browser extension</p>
+                <p className="text-sm md:text-base">Go to <a href={METAMASK_DOWNLOAD_URL} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline inline">metamask.io/download</a> and install the browser extension</p>
               </div>
               <div className="flex items-start gap-2 md:gap-3">
                 <CheckCircle2 className="h-4 w-4 md:h-5 md:w-5 text-primary mt-0.5 shrink-0" />
