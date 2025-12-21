@@ -62,110 +62,12 @@ const VaultDepositTutorial = () => {
 
         <Separator />
 
-        {/* Step 1: Get the Access NFT */}
-        <Card className="border-primary/30">
-          <CardHeader>
-            <div className="flex items-center gap-3">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 text-primary font-bold">
-                1
-              </div>
-              <div>
-                <CardTitle className="flex items-center gap-2">
-                  <Sparkles className="h-5 w-5" />
-                  Get the 3EA Earth Access NFT
-                </CardTitle>
-                <CardDescription>Your membership key to the vault</CardDescription>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-muted-foreground">
-              The 3EA Earth Access NFT is required to deposit into the vault. Without it, you won't be able to access the vault even if you connect your wallet.
-            </p>
-            
-            <div className="space-y-3">
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                <p>Visit the Thirdweb page and connect your MetaMask wallet</p>
-              </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                <p>Click <strong>"Buy"</strong> to purchase the NFT with ETH from your wallet</p>
-              </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                <p>Confirm the transaction in MetaMask and wait for it to complete</p>
-              </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                <p>The NFT will appear in your wallet once the transaction is confirmed</p>
-              </div>
-            </div>
-
-            <Button asChild className="gap-2">
-              <a href={THIRDWEB_NFT_URL} target="_blank" rel="noopener noreferrer">
-                Get Your Access NFT
-                <ExternalLink className="h-4 w-4" />
-              </a>
-            </Button>
-          </CardContent>
-        </Card>
-
-        {/* Step 2: Wait for Whitelisting */}
-        <Card className="border-amber-500/30">
-          <CardHeader>
-            <div className="flex items-center gap-3">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-amber-500/10 text-amber-500 font-bold">
-                2
-              </div>
-              <div>
-                <CardTitle className="flex items-center gap-2">
-                  <Clock className="h-5 w-5" />
-                  Wait for Whitelisting
-                </CardTitle>
-                <CardDescription>Your wallet needs to be added to the vault's whitelist</CardDescription>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-muted-foreground">
-              After purchasing the NFT, your wallet address needs to be whitelisted on the Enzyme vault. This is a manual process that can take up to 7 days.
-            </p>
-            
-            <div className="space-y-3">
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                <p>Wait up to <strong>7 days</strong> after your NFT purchase for whitelisting</p>
-              </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                <p>Check the vault periodically by connecting your wallet to Enzyme</p>
-              </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                <p>If the <strong>"Deposit"</strong> button is available and clickable, you're whitelisted!</p>
-              </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                <p>If you see an error or the button is disabled, check back in a day or two</p>
-              </div>
-            </div>
-
-            <Alert variant="default" className="bg-amber-500/5 border-amber-500/20">
-              <Clock className="h-4 w-4 text-amber-500" />
-              <AlertDescription>
-                <strong>Be patient:</strong> Whitelisting happens in batches. If it's been more than 7 days, contact us through the <Link to="/contact" className="text-primary hover:underline">contact page</Link>.
-              </AlertDescription>
-            </Alert>
-          </CardContent>
-        </Card>
-
-        {/* Step 3: Install MetaMask */}
+        {/* Step 1: Install MetaMask */}
         <Card>
           <CardHeader>
             <div className="flex items-center gap-3">
               <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 text-primary font-bold">
-                3
+                1
               </div>
               <div>
                 <CardTitle className="flex items-center gap-2">
@@ -209,25 +111,25 @@ const VaultDepositTutorial = () => {
           </CardContent>
         </Card>
 
-        {/* Step 4: Fund Your Wallet */}
+        {/* Step 2: Fund Your Wallet */}
         <Card>
           <CardHeader>
             <div className="flex items-center gap-3">
               <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 text-primary font-bold">
-                4
+                2
               </div>
               <div>
                 <CardTitle className="flex items-center gap-2">
                   <PlusCircle className="h-5 w-5" />
                   Fund Your Wallet
                 </CardTitle>
-                <CardDescription>Add ETH for deposits and gas fees</CardDescription>
+                <CardDescription>Add ETH for the NFT purchase and gas fees</CardDescription>
               </div>
             </div>
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-muted-foreground">
-              You'll need ETH in your wallet for two purposes: your deposit amount and gas fees for the transaction.
+              You'll need ETH in your wallet to purchase the NFT and pay for gas fees on all transactions.
             </p>
             
             <div className="space-y-3">
@@ -254,6 +156,104 @@ const VaultDepositTutorial = () => {
               <AlertDescription>
                 <strong>Tip:</strong> Gas fees are lower during off-peak hours (weekends, early mornings UTC). 
                 Check <a href="https://etherscan.io/gastracker" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">etherscan.io/gastracker</a> for current gas prices.
+              </AlertDescription>
+            </Alert>
+          </CardContent>
+        </Card>
+
+        {/* Step 3: Get the Access NFT */}
+        <Card className="border-primary/30">
+          <CardHeader>
+            <div className="flex items-center gap-3">
+              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 text-primary font-bold">
+                3
+              </div>
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <Sparkles className="h-5 w-5" />
+                  Get the 3EA Earth Access NFT
+                </CardTitle>
+                <CardDescription>Your membership key to the vault</CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-muted-foreground">
+              The 3EA Earth Access NFT is required to deposit into the vault. Without it, you won't be able to access the vault even if you connect your wallet.
+            </p>
+            
+            <div className="space-y-3">
+              <div className="flex items-start gap-3">
+                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
+                <p>Visit the Thirdweb page and connect your MetaMask wallet</p>
+              </div>
+              <div className="flex items-start gap-3">
+                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
+                <p>Click <strong>"Buy"</strong> to purchase the NFT with ETH from your wallet</p>
+              </div>
+              <div className="flex items-start gap-3">
+                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
+                <p>Confirm the transaction in MetaMask and wait for it to complete</p>
+              </div>
+              <div className="flex items-start gap-3">
+                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
+                <p>The NFT will appear in your wallet once the transaction is confirmed</p>
+              </div>
+            </div>
+
+            <Button asChild className="gap-2">
+              <a href={THIRDWEB_NFT_URL} target="_blank" rel="noopener noreferrer">
+                Get Your Access NFT
+                <ExternalLink className="h-4 w-4" />
+              </a>
+            </Button>
+          </CardContent>
+        </Card>
+
+        {/* Step 4: Wait for Whitelisting */}
+        <Card className="border-amber-500/30">
+          <CardHeader>
+            <div className="flex items-center gap-3">
+              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-amber-500/10 text-amber-500 font-bold">
+                4
+              </div>
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <Clock className="h-5 w-5" />
+                  Wait for Whitelisting
+                </CardTitle>
+                <CardDescription>Your wallet needs to be added to the vault's whitelist</CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-muted-foreground">
+              After purchasing the NFT, your wallet address needs to be whitelisted on the Enzyme vault. This is a manual process that can take up to 7 days.
+            </p>
+            
+            <div className="space-y-3">
+              <div className="flex items-start gap-3">
+                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
+                <p>Wait up to <strong>7 days</strong> after your NFT purchase for whitelisting</p>
+              </div>
+              <div className="flex items-start gap-3">
+                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
+                <p>Check the vault periodically by connecting your wallet to Enzyme</p>
+              </div>
+              <div className="flex items-start gap-3">
+                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
+                <p>If the <strong>"Deposit"</strong> button is available and clickable, you're whitelisted!</p>
+              </div>
+              <div className="flex items-start gap-3">
+                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
+                <p>If you see an error or the button is disabled, check back in a day or two</p>
+              </div>
+            </div>
+
+            <Alert variant="default" className="bg-amber-500/5 border-amber-500/20">
+              <Clock className="h-4 w-4 text-amber-500" />
+              <AlertDescription>
+                <strong>Be patient:</strong> Whitelisting happens in batches. If it's been more than 7 days, contact us through the <Link to="/contact" className="text-primary hover:underline">contact page</Link>.
               </AlertDescription>
             </Alert>
           </CardContent>
