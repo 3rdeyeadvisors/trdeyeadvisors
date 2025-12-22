@@ -24,7 +24,8 @@
 
     .container {
       text-align: center;
-      max-width: 500px;
+      max-width: 600px;
+      width: 100%;
     }
 
     .icon {
@@ -143,6 +144,48 @@
       border-color: rgba(0, 212, 255, 0.3);
     }
 
+    .dynamic-pages {
+      margin-top: 24px;
+    }
+
+    .dynamic-pages h3 {
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-bottom: 12px;
+    }
+
+    #dynamic-cached-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      max-height: 150px;
+      overflow-y: auto;
+    }
+
+    #dynamic-cached-links a {
+      padding: 6px 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 6px;
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.8rem;
+      transition: all 0.2s ease;
+    }
+
+    #dynamic-cached-links a:hover {
+      background: rgba(0, 212, 255, 0.1);
+      border-color: rgba(0, 212, 255, 0.3);
+      color: #00D4FF;
+    }
+
+    .no-cache-msg {
+      color: #64748b;
+      font-size: 0.85rem;
+      font-style: italic;
+    }
+
     .status {
       margin-top: 24px;
       font-size: 0.85rem;
@@ -159,9 +202,38 @@
       animation: blink 1.5s ease-in-out infinite;
     }
 
+    .status-dot.online {
+      background: #22c55e;
+      animation: none;
+    }
+
     @keyframes blink {
       0%, 100% { opacity: 1; }
       50% { opacity: 0.3; }
+    }
+
+    .storage-info {
+      margin-top: 24px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      color: #64748b;
+    }
+
+    .storage-bar {
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+
+    .storage-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #00D4FF, #0088cc);
+      border-radius: 2px;
+      transition: width 0.3s ease;
     }
   </style>
 </head>
@@ -174,7 +246,7 @@
     </div>
     
     <h1>You're Offline</h1>
-    <p>It looks like you've lost your internet connection. Don't worry — some pages may still be available from cache.</p>
+    <p>It looks like you've lost your internet connection. Don't worry — many pages are still available from cache!</p>
     
     <button class="retry-btn" onclick="window.location.reload()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -184,26 +256,151 @@
     </button>
     
     <div class="cached-pages">
-      <h2>Cached Pages</h2>
+      <h2>Always Available</h2>
       <div class="cached-links">
         <a href="/">Home</a>
         <a href="/courses">Courses</a>
         <a href="/tutorials">Tutorials</a>
+        <a href="/blog">Blog</a>
         <a href="/resources">Resources</a>
+        <a href="/philosophy">Philosophy</a>
+        <a href="/raffles">Raffles</a>
+        <a href="/store">Store</a>
+      </div>
+      
+      <div class="dynamic-pages">
+        <h3>Recently Visited Pages</h3>
+        <div id="dynamic-cached-links">
+          <span class="no-cache-msg">Loading cached pages...</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="storage-info">
+      <div id="storage-text">Checking storage...</div>
+      <div class="storage-bar">
+        <div class="storage-bar-fill" id="storage-fill" style="width: 0%"></div>
       </div>
     </div>
     
     <div class="status">
-      <span class="status-dot"></span>
-      Waiting for connection...
+      <span class="status-dot" id="status-dot"></span>
+      <span id="status-text">Waiting for connection...</span>
     </div>
   </div>
 
   <script>
+    // Format bytes to readable size
+    function formatBytes(bytes) {
+      if (bytes === 0) return '0 B';
+      const k = 1024;
+      const sizes = ['B', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    }
+
+    // Get nice page name from URL
+    function getPageName(url) {
+      const path = new URL(url).pathname;
+      if (path === '/') return 'Home';
+      
+      // Clean up the path
+      const segments = path.split('/').filter(Boolean);
+      const lastSegment = segments[segments.length - 1];
+      
+      // Convert kebab-case to Title Case
+      return lastSegment
+        .split('-')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+    }
+
+    // Load dynamically cached pages
+    async function loadCachedPages() {
+      const container = document.getElementById('dynamic-cached-links');
+      const essentialPaths = ['/', '/courses', '/tutorials', '/blog', '/resources', '/philosophy', '/raffles', '/store'];
+      
+      if (!('caches' in window)) {
+        container.innerHTML = '<span class="no-cache-msg">Cache API not supported</span>';
+        return;
+      }
+
+      try {
+        const cache = await caches.open('pages-cache');
+        const keys = await cache.keys();
+        
+        // Filter out essential pages (already shown above) and offline.html
+        const dynamicPages = keys
+          .map(request => request.url)
+          .filter(url => {
+            const path = new URL(url).pathname;
+            return !essentialPaths.includes(path) && path !== '/offline.html';
+          });
+
+        if (dynamicPages.length === 0) {
+          container.innerHTML = '<span class="no-cache-msg">No additional pages cached yet</span>';
+          return;
+        }
+
+        container.innerHTML = dynamicPages
+          .slice(0, 20) // Limit to 20 pages
+          .map(url => `<a href="${new URL(url).pathname}">${getPageName(url)}</a>`)
+          .join('');
+          
+        if (dynamicPages.length > 20) {
+          container.innerHTML += `<span class="no-cache-msg">+${dynamicPages.length - 20} more</span>`;
+        }
+      } catch (error) {
+        console.error('Error loading cached pages:', error);
+        container.innerHTML = '<span class="no-cache-msg">Unable to load cached pages</span>';
+      }
+    }
+
+    // Show storage usage
+    async function showStorageInfo() {
+      const storageText = document.getElementById('storage-text');
+      const storageFill = document.getElementById('storage-fill');
+      
+      if ('storage' in navigator && 'estimate' in navigator.storage) {
+        try {
+          const estimate = await navigator.storage.estimate();
+          const used = estimate.usage || 0;
+          const quota = estimate.quota || 0;
+          const percentage = quota > 0 ? Math.round((used / quota) * 100) : 0;
+          
+          storageText.textContent = `Offline Storage: ${formatBytes(used)} / ${formatBytes(quota)} (${percentage}%)`;
+          storageFill.style.width = `${percentage}%`;
+        } catch (error) {
+          storageText.textContent = 'Storage info unavailable';
+        }
+      } else {
+        storageText.textContent = 'Storage API not supported';
+      }
+    }
+
+    // Update online status
+    function updateOnlineStatus() {
+      const statusDot = document.getElementById('status-dot');
+      const statusText = document.getElementById('status-text');
+      
+      if (navigator.onLine) {
+        statusDot.classList.add('online');
+        statusText.textContent = 'Connection restored! Reloading...';
+        setTimeout(() => window.location.reload(), 1000);
+      } else {
+        statusDot.classList.remove('online');
+        statusText.textContent = 'Waiting for connection...';
+      }
+    }
+
+    // Initialize
+    loadCachedPages();
+    showStorageInfo();
+    updateOnlineStatus();
+
     // Auto-reload when connection is restored
-    window.addEventListener('online', () => {
-      window.location.reload();
-    });
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
   </script>
 </body>
 </html>

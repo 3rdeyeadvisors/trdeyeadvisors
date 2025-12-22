@@ -63,7 +63,46 @@ export default defineConfig(({ mode }) => ({
       workbox: {
         maximumFileSizeToCacheInBytes: 10 * 1024 * 1024, // 10 MB limit
         globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,webp,woff,woff2}'],
+        // Pre-cache essential pages for offline access
+        additionalManifestEntries: [
+          { url: '/', revision: null },
+          { url: '/courses', revision: null },
+          { url: '/tutorials', revision: null },
+          { url: '/blog', revision: null },
+          { url: '/resources', revision: null },
+          { url: '/philosophy', revision: null },
+          { url: '/raffles', revision: null },
+          { url: '/store', revision: null },
+        ],
         runtimeCaching: [
+          // Cache all page navigations with NetworkFirst
+          {
+            urlPattern: ({ request }) => request.mode === 'navigate',
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'pages-cache',
+              networkTimeoutSeconds: 3,
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 60 * 60 * 24 * 7 // 7 days
+              },
+              cacheableResponse: {
+                statuses: [0, 200]
+              }
+            }
+          },
+          // Cache JS and CSS with StaleWhileRevalidate for instant loads
+          {
+            urlPattern: /\.(?:js|css)$/,
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'static-resources',
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
+              }
+            }
+          },
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
             handler: 'CacheFirst',
@@ -93,31 +132,62 @@ export default defineConfig(({ mode }) => ({
             }
           },
           {
-            urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp)$/,
+            urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp|ico)$/,
             handler: 'CacheFirst',
             options: {
               cacheName: 'images-cache',
               expiration: {
-                maxEntries: 100,
+                maxEntries: 200,
                 maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
               }
             }
           },
+          // Cache PDF and other resources
           {
-            urlPattern: /^https:\/\/.*\.supabase\.co\/.*/i,
+            urlPattern: /\.(?:pdf|csv|json)$/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'documents-cache',
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
+              }
+            }
+          },
+          // Supabase API with longer cache for offline access
+          {
+            urlPattern: /^https:\/\/.*\.supabase\.co\/rest\/v1\/.*/i,
             handler: 'NetworkFirst',
             options: {
               cacheName: 'api-cache',
               expiration: {
-                maxEntries: 50,
-                maxAgeSeconds: 60 * 5 // 5 minutes
+                maxEntries: 100,
+                maxAgeSeconds: 60 * 60 * 24 // 24 hours for offline access
               },
-              networkTimeoutSeconds: 10
+              networkTimeoutSeconds: 5,
+              cacheableResponse: {
+                statuses: [0, 200]
+              }
+            }
+          },
+          // Supabase storage (images, files)
+          {
+            urlPattern: /^https:\/\/.*\.supabase\.co\/storage\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'supabase-storage-cache',
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 60 * 60 * 24 * 7 // 7 days
+              },
+              cacheableResponse: {
+                statuses: [0, 200]
+              }
             }
           }
         ],
         navigateFallback: '/offline.html',
-        navigateFallbackDenylist: [/^\/api/, /^\/supabase/]
+        navigateFallbackDenylist: [/^\/api/, /^\/supabase/, /^\/auth/]
       }
     })
   ].filter(Boolean),

@@ -1,13 +1,16 @@
 import { Button } from '@/components/ui/button';
 import { usePWA } from '@/hooks/usePWA';
-import { Download, RefreshCw, Wifi, WifiOff } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Download, RefreshCw, WifiOff } from 'lucide-react';
+import { OfflineIndicator } from './OfflineIndicator';
 
 export const PWAStatus = () => {
   const { isOnline, isUpdateAvailable, isInstallable, isInstalled, promptInstall, updateApp } = usePWA();
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2">
+    <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 items-end">
+      {/* Offline indicator with full controls */}
+      <OfflineIndicator />
+
       {/* Offline indicator */}
       {!isOnline && (
         <div className="flex items-center gap-2 px-4 py-2 bg-destructive/90 text-destructive-foreground rounded-full shadow-lg animate-in slide-in-from-bottom-2">
