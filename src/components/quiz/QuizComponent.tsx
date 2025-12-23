@@ -346,7 +346,7 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
           }`}>
             {passed ? <Trophy className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10" /> : <XCircle className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10" />}
           </div>
-          <Badge className={`text-xs sm:text-sm md:text-base mb-2 sm:mb-3 ${passed ? 'bg-awareness text-white' : 'bg-destructive text-white'}`}>
+          <Badge className={`text-xs sm:text-sm md:text-base mb-2 sm:mb-3 ${passed ? 'bg-awareness text-awareness-foreground' : 'bg-destructive text-destructive-foreground'}`}>
             {passed ? "✅ QUIZ PASSED" : "📝 QUIZ COMPLETE"}
           </Badge>
           <h3 className="text-xl sm:text-2xl md:text-3xl font-consciousness font-bold mb-2 sm:mb-3 break-words">
@@ -387,7 +387,7 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
               }`}>
                 <div className="flex items-start gap-2 sm:gap-3 mb-2 sm:mb-3">
                   <div className={`w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center shrink-0 ${
-                    isCorrect ? "bg-awareness text-white" : "bg-destructive text-white"
+                    isCorrect ? "bg-awareness text-awareness-foreground" : "bg-destructive text-destructive-foreground"
                   }`}>
                     {isCorrect ? <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4" /> : <XCircle className="w-3 h-3 sm:w-4 sm:h-4" />}
                   </div>

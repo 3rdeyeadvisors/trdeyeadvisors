@@ -44,6 +44,7 @@ export default {
 				},
 				awareness: {
 					DEFAULT: 'hsl(var(--awareness))',
+					foreground: 'hsl(var(--awareness-foreground))',
 					glow: 'hsl(var(--awareness-glow))'
 				},
 				success: {
