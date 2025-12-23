@@ -45,6 +45,7 @@
 
     /* Awareness highlight - cosmic green */
     --awareness: 142 76% 36%;
+    --awareness-foreground: 0 0% 98%;
     --awareness-glow: 142 76% 46%;
 
     /* Destructive/Error states - cosmic red */
