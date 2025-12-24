@@ -158,8 +158,28 @@ const getCachedPages = async (): Promise<string[]> => {
   }
 };
 
+// More reliable online check - navigator.onLine can be unreliable in iframes/previews
+const checkOnlineStatus = async (): Promise<boolean> => {
+  // First check navigator.onLine as a quick initial check
+  if (!navigator.onLine) return false;
+  
+  // Then try to actually fetch something to verify connectivity
+  try {
+    const response = await fetch('/favicon.ico', { 
+      method: 'HEAD',
+      cache: 'no-store',
+      mode: 'same-origin'
+    });
+    return response.ok;
+  } catch {
+    // If fetch fails, still trust navigator.onLine since the resource might just not exist
+    return navigator.onLine;
+  }
+};
+
 export const useOfflineData = () => {
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  // Default to true (online) to avoid false offline states
+  const [isOnline, setIsOnline] = useState(true);
   const [lastSync, setLastSync] = useState<Date | null>(null);
   const [cachedPages, setCachedPages] = useState<string[]>([]);
   const [storageUsed, setStorageUsed] = useState(0);

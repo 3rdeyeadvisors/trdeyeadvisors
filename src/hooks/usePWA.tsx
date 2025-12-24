@@ -8,7 +8,8 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 export const usePWA = () => {
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  // Default to true (online) to avoid false offline indicators
+  const [isOnline, setIsOnline] = useState(true);
   const [isUpdateAvailable, setIsUpdateAvailable] = useState(false);
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState(false);
