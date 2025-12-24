@@ -8,16 +8,8 @@ export const PWAStatus = () => {
 
   return (
     <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 items-end">
-      {/* Offline indicator with full controls */}
-      <OfflineIndicator />
-
-      {/* Offline indicator */}
-      {!isOnline && (
-        <div className="flex items-center gap-2 px-4 py-2 bg-destructive/90 text-destructive-foreground rounded-full shadow-lg animate-in slide-in-from-bottom-2">
-          <WifiOff className="w-4 h-4" />
-          <span className="text-sm font-medium">Offline</span>
-        </div>
-      )}
+      {/* Only show offline controls when actually offline */}
+      {!isOnline && <OfflineIndicator />}
 
       {/* Update available */}
       {isUpdateAvailable && (
