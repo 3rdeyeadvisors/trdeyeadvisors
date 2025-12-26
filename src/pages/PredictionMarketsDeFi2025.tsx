@@ -152,7 +152,7 @@ const PredictionMarketsDeFi2025 = () => {
                   <div className="border-l-4 border-primary/50 pl-6">
                     <h3 className="text-xl font-semibold text-foreground mb-3">Growth Metrics</h3>
                     <p className="text-foreground/90 leading-relaxed">
-                      By late 2024, Polymarket reported over 100,000 monthly active users and cumulative trading volume exceeding $9 billion across all markets. Open interest in active markets regularly exceeded $500 million, making it one of the largest prediction market platforms in history.
+                      By December 2024, Polymarket had grown to over 300,000 active traders and cumulative trading volume exceeding $9 billion across all markets. Open interest in active markets regularly exceeded $500 million, making it one of the largest prediction market platforms in history.
                     </p>
                   </div>
 
