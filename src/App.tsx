@@ -63,6 +63,7 @@ import WhyMostPeopleLoseCrypto from "./pages/WhyMostPeopleLoseCrypto";
 import DefiMatured2025 from "./pages/DefiMatured2025";
 import DefiVaultsExplained from "./pages/DefiVaultsExplained";
 import PredictionMarketsDeFi2025 from "./pages/PredictionMarketsDeFi2025";
+import RwaOvertakesDex2025 from "./pages/RwaOvertakesDex2025";
 import AdminStoreDashboard from "./pages/AdminStoreDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import Raffles from "./pages/Raffles";
@@ -134,6 +135,7 @@ const App = () => {
                           <Route path="/blog/defi-matured-2025" element={<DefiMatured2025 />} />
                           <Route path="/blog/defi-vaults-explained" element={<DefiVaultsExplained />} />
                           <Route path="/blog/prediction-markets-defi-2025" element={<PredictionMarketsDeFi2025 />} />
+                          <Route path="/blog/rwa-overtakes-dex-2025" element={<RwaOvertakesDex2025 />} />
                           <Route path="/blog/:slug" element={<BlogPost />} />
                           <Route path="/resources" element={<Resources />} />
                           <Route path="/analytics" element={<Analytics />} />

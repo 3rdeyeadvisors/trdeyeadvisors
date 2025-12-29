@@ -14,6 +14,33 @@ export interface BlogPost {
 
 export const blogPosts: BlogPost[] = [
   {
+    id: 1000015,
+    slug: "rwa-overtakes-dex-2025",
+    title: "Real World Assets Just Overtook DEXs in DeFi TVL: Why This Historic Shift Matters",
+    excerpt: "For the first time in DeFi history, tokenized Real World Assets have surpassed decentralized exchanges in total value locked. According to DefiLlama data from December 2025, RWA protocols now hold $17.15 billion compared to $16.88 billion in DEXs.",
+    content: `# Real World Assets Just Overtook DEXs in DeFi TVL
+
+According to DefiLlama data accessed on December 29, 2025, Real World Asset (RWA) protocols now hold $17.152 billion in total value locked, surpassing decentralized exchanges at $16.883 billion. RWA TVL has grown 4.85% in the past month while DEX TVL has remained essentially flat.
+
+## What This Means
+
+This crossover represents a fundamental shift in what DeFi is being used for. DeFi is increasingly becoming a layer for tokenizing and trading traditional financial assets rather than purely crypto-native speculation.
+
+## Key Drivers
+
+BlackRock's BUIDL fund, improved regulatory clarity, and institutional demand for familiar assets on-chain are accelerating RWA adoption.
+
+---
+
+*Data sourced from DefiLlama (defillama.com/categories) as of December 29, 2025.*`,
+    category: "DeFi Analysis",
+    readTime: "8 min read",
+    date: "2025-12-29",
+    featured: true,
+    author: "3EA Research Team",
+    tags: ["Real World Assets", "RWA", "DEX", "TVL", "Tokenization", "DeFi 2025"]
+  },
+  {
     id: 1000014,
     slug: "prediction-markets-defi-2025",
     title: "Prediction Markets in DeFi: How Polymarket and Decentralized Forecasting Are Changing Information Discovery",
