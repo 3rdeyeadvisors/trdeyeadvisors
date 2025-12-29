@@ -6,9 +6,18 @@
 
 import { BlogSEOAutomation } from "@/components/SEOAutomation";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Calendar, User, Clock, TrendingUp, Target, Globe, Users, AlertTriangle, CheckCircle, Scale, DollarSign, Zap } from "lucide-react";
+import { Target, Globe, Users, AlertTriangle, CheckCircle, Scale, Zap } from "lucide-react";
 import { BRAND_AUTHOR } from "@/lib/constants";
+import {
+  BlogHeader,
+  BlogSection,
+  BlogSubsection,
+  BlogParagraph,
+  BlogList,
+  BlogCTA,
+  BlogDisclaimer,
+  BlogSources
+} from "@/components/blog";
 
 const PredictionMarketsDeFi2025 = () => {
   const blogPost = {
@@ -18,6 +27,7 @@ const PredictionMarketsDeFi2025 = () => {
     publishedDate: "2025-12-26",
     category: "DeFi Education",
     tags: ["Prediction Markets", "Polymarket", "DeFi", "Forecasting", "Information Markets"],
+    readTime: "10 min read"
   };
 
   return (
@@ -33,160 +43,95 @@ const PredictionMarketsDeFi2025 = () => {
 
       <div className="min-h-screen py-20">
         <div className="container mx-auto px-4 max-w-4xl">
-          {/* Article Header */}
-          <Card className="p-8 mb-8 bg-gradient-consciousness border-primary/20">
-            <div className="flex flex-wrap gap-3 mb-6">
-              <Badge variant="default" className="bg-primary text-primary-foreground">
-                <TrendingUp className="w-3 h-3 mr-1" />
-                {blogPost.category}
-              </Badge>
-              {blogPost.tags.slice(0, 4).map((tag, index) => (
-                <Badge key={index} variant="outline" className="text-xs">
-                  {tag}
-                </Badge>
-              ))}
-            </div>
+          <BlogHeader
+            title={blogPost.title}
+            excerpt={blogPost.excerpt}
+            author={blogPost.author}
+            publishedDate={new Date(blogPost.publishedDate + 'T12:00:00').toLocaleDateString()}
+            readTime={blogPost.readTime}
+            category={blogPost.category}
+            tags={blogPost.tags}
+          />
 
-            <h1 className="text-3xl md:text-4xl font-consciousness font-bold text-foreground mb-6">
-              {blogPost.title}
-            </h1>
-
-            <p className="text-lg text-muted-foreground font-consciousness mb-6 leading-relaxed">
-              {blogPost.excerpt}
-            </p>
-
-            <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground">
-              <div className="flex items-center gap-2">
-                <User className="w-4 h-4" />
-                <span>{BRAND_AUTHOR}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Calendar className="w-4 h-4" />
-                <span>{new Date(blogPost.publishedDate + 'T12:00:00').toLocaleDateString()}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4" />
-                <span>10 min read</span>
-              </div>
-            </div>
-          </Card>
-
-          {/* Article Content */}
           <Card className="p-8">
             <article className="prose prose-lg max-w-none dark:prose-invert prose-headings:font-consciousness prose-headings:text-foreground prose-p:text-foreground prose-strong:text-foreground prose-ul:text-foreground prose-li:text-foreground">
+              
               {/* Introduction */}
               <div className="mb-12">
-                <p className="text-foreground/90 text-lg leading-relaxed mb-6">
+                <BlogParagraph className="text-lg">
                   <strong className="text-foreground">What if there was a system that consistently outperformed polls, pundits, and expert predictions?</strong> What if people had to stake real money on their forecasts, creating accountability that traditional commentary lacks? What if the wisdom of crowds could be harnessed through financial incentives to produce more accurate information about the future?
-                </p>
-                <p className="text-foreground/90 text-lg leading-relaxed">
+                </BlogParagraph>
+                <BlogParagraph className="text-lg">
                   This is not hypothetical. Prediction markets have existed for decades, but decentralized versions built on blockchain technology are now demonstrating their power at unprecedented scale. In this guide, we will explain what prediction markets are, how Polymarket became a billion-dollar platform, and why this technology matters for information discovery beyond politics.
-                </p>
+                </BlogParagraph>
               </div>
 
-              {/* Section 1: What Are Prediction Markets */}
-              <div className="mb-12">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 bg-primary/20 rounded-lg">
-                    <Target className="w-6 h-6 text-primary" />
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-foreground m-0">What Are Prediction Markets?</h2>
-                </div>
-
-                <p className="text-foreground/90 leading-relaxed mb-4">
+              <BlogSection title="What Are Prediction Markets?" icon={Target}>
+                <BlogParagraph>
                   <strong className="text-foreground">A prediction market is a platform where participants trade on the outcomes of future events.</strong> Instead of betting on sports or casino games, users trade contracts that pay out based on whether a specific event occurs. The price of these contracts reflects the market's collective probability assessment.
-                </p>
-
-                <p className="text-foreground/90 leading-relaxed mb-4">
+                </BlogParagraph>
+                <BlogParagraph>
                   The fundamental mechanics are straightforward:
-                </p>
+                </BlogParagraph>
+                <BlogList items={[
+                  { label: "Binary Outcomes", description: "A contract might ask \"Will X happen by Y date?\" and trade between $0 and $1" },
+                  { label: "Price as Probability", description: "A contract trading at $0.65 implies the market believes there is a 65% chance the event will occur" },
+                  { label: "Settlement", description: "When the event resolves, winning contracts pay $1 and losing contracts pay $0" },
+                  { label: "Profit Motive", description: "Traders profit by identifying mispriced probabilities before the market corrects" }
+                ]} />
 
-                <div className="bg-muted/30 rounded-lg p-6 mb-6">
-                  <ul className="space-y-3 text-foreground/90">
-                    <li><strong className="text-foreground">Binary Outcomes:</strong> A contract might ask "Will X happen by Y date?" and trade between $0 and $1</li>
-                    <li><strong className="text-foreground">Price as Probability:</strong> A contract trading at $0.65 implies the market believes there is a 65% chance the event will occur</li>
-                    <li><strong className="text-foreground">Settlement:</strong> When the event resolves, winning contracts pay $1 and losing contracts pay $0</li>
-                    <li><strong className="text-foreground">Profit Motive:</strong> Traders profit by identifying mispriced probabilities before the market corrects</li>
-                  </ul>
-                </div>
-
-                <div className="border-l-4 border-primary/50 pl-6 mb-6">
-                  <h3 className="text-xl font-semibold text-foreground mb-3">How It Works: A Simple Example</h3>
-                  <p className="text-foreground/90 leading-relaxed mb-4">
+                <BlogSubsection title="How It Works: A Simple Example">
+                  <BlogParagraph>
                     Consider a market asking "Will the Federal Reserve cut interest rates in March 2025?"
-                  </p>
+                  </BlogParagraph>
                   <ol className="space-y-2 text-foreground/90">
                     <li><strong className="text-foreground">1.</strong> The market opens and "Yes" shares trade at $0.45 (implying 45% probability)</li>
                     <li><strong className="text-foreground">2.</strong> New economic data is released suggesting cuts are more likely</li>
                     <li><strong className="text-foreground">3.</strong> Traders buy "Yes" shares, pushing the price to $0.72</li>
                     <li><strong className="text-foreground">4.</strong> In March, if the Fed cuts rates, "Yes" shares pay out $1. Holders profit $0.28 per share</li>
                   </ol>
-                </div>
+                </BlogSubsection>
 
-                <p className="text-foreground/90 leading-relaxed">
+                <BlogParagraph>
                   The critical insight: when real money is at stake, participants have strong incentives to be accurate rather than optimistic, pessimistic, or politically biased.
-                </p>
-              </div>
+                </BlogParagraph>
+              </BlogSection>
 
-              {/* Section 2: Polymarket's Rise */}
-              <div className="mb-12">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 bg-primary/20 rounded-lg">
-                    <Globe className="w-6 h-6 text-primary" />
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-foreground m-0">Polymarket: The Breakout Platform of 2024</h2>
-                </div>
-
-                <p className="text-foreground/90 leading-relaxed mb-6">
+              <BlogSection title="Polymarket: The Breakout Platform of 2024" icon={Globe}>
+                <BlogParagraph>
                   <strong className="text-foreground">Polymarket emerged as the dominant prediction market platform in 2024,</strong> processing over $3.5 billion in trading volume during the U.S. presidential election cycle alone. Built on the Polygon blockchain, Polymarket allows users to trade on outcomes across politics, sports, entertainment, crypto, and global events.
-                </p>
+                </BlogParagraph>
 
-                <div className="space-y-8 mb-8">
-                  <div className="border-l-4 border-primary/50 pl-6">
-                    <h3 className="text-xl font-semibold text-foreground mb-3">2024 Election Performance</h3>
-                    <p className="text-foreground/90 leading-relaxed">
-                      Polymarket's election markets consistently provided probability assessments that differed significantly from traditional polling aggregates. On election night 2024, Polymarket's prices moved to reflect the actual outcome hours before major news networks called key states. According to data from Polymarket and Bloomberg coverage, the platform processed over $3.5 billion in election-related volume.
-                    </p>
-                  </div>
+                <BlogSubsection title="2024 Election Performance">
+                  <BlogParagraph>
+                    Polymarket's election markets consistently provided probability assessments that differed significantly from traditional polling aggregates. On election night 2024, Polymarket's prices moved to reflect the actual outcome hours before major news networks called key states. According to data from Polymarket and Bloomberg coverage, the platform processed over $3.5 billion in election-related volume.
+                  </BlogParagraph>
+                </BlogSubsection>
 
-                  <div className="border-l-4 border-primary/50 pl-6">
-                    <h3 className="text-xl font-semibold text-foreground mb-3">Growth Metrics</h3>
-                    <p className="text-foreground/90 leading-relaxed">
-                      By December 2024, Polymarket had grown to over 300,000 active traders and cumulative trading volume exceeding $9 billion across all markets. Open interest in active markets regularly exceeded $500 million, making it one of the largest prediction market platforms in history.
-                    </p>
-                  </div>
+                <BlogSubsection title="Growth Metrics">
+                  <BlogParagraph>
+                    By December 2024, Polymarket had grown to over 300,000 active traders and cumulative trading volume exceeding $9 billion across all markets. Open interest in active markets regularly exceeded $500 million, making it one of the largest prediction market platforms in history.
+                  </BlogParagraph>
+                </BlogSubsection>
 
-                  <div className="border-l-4 border-primary/50 pl-6">
-                    <h3 className="text-xl font-semibold text-foreground mb-3">Mainstream Attention</h3>
-                    <p className="text-foreground/90 leading-relaxed">
-                      Major financial media including Bloomberg, The Wall Street Journal, and CNBC began regularly citing Polymarket odds during election coverage. This represented a significant legitimization of prediction markets as an information source.
-                    </p>
-                  </div>
-                </div>
+                <BlogSubsection title="Mainstream Attention">
+                  <BlogParagraph>
+                    Major financial media including Bloomberg, The Wall Street Journal, and CNBC began regularly citing Polymarket odds during election coverage. This represented a significant legitimization of prediction markets as an information source.
+                  </BlogParagraph>
+                </BlogSubsection>
 
-                <div className="bg-muted/30 rounded-lg p-6 mb-6">
-                  <h3 className="text-xl font-semibold text-foreground mb-4">Key Polymarket Features</h3>
-                  <ul className="space-y-3 text-foreground/90">
-                    <li><strong className="text-foreground">USDC Settlement:</strong> All trades settle in USDC stablecoin on Polygon</li>
-                    <li><strong className="text-foreground">Low Fees:</strong> Minimal transaction costs compared to traditional betting platforms</li>
-                    <li><strong className="text-foreground">24/7 Markets:</strong> Trade anytime, unlike traditional financial markets</li>
-                    <li><strong className="text-foreground">Transparent Resolution:</strong> Clear resolution criteria published for each market</li>
-                  </ul>
-                </div>
-              </div>
+                <BlogList items={[
+                  { label: "USDC Settlement", description: "All trades settle in USDC stablecoin on Polygon" },
+                  { label: "Low Fees", description: "Minimal transaction costs compared to traditional betting platforms" },
+                  { label: "24/7 Markets", description: "Trade anytime, unlike traditional financial markets" },
+                  { label: "Transparent Resolution", description: "Clear resolution criteria published for each market" }
+                ]} />
+              </BlogSection>
 
-              {/* Section 3: Why Prediction Markets Work */}
-              <div className="mb-12">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 bg-primary/20 rounded-lg">
-                    <Scale className="w-6 h-6 text-primary" />
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-foreground m-0">Why Prediction Markets Outperform Traditional Forecasting</h2>
-                </div>
-
-                <p className="text-foreground/90 leading-relaxed mb-6">
+              <BlogSection title="Why Prediction Markets Outperform Traditional Forecasting" icon={Scale}>
+                <BlogParagraph>
                   <strong className="text-foreground">Academic research has consistently shown that prediction markets outperform polls, expert forecasts, and pundit predictions.</strong> This is not accidental—the structure of prediction markets creates powerful incentives for accuracy.
-                </p>
+                </BlogParagraph>
 
                 <div className="grid md:grid-cols-2 gap-6 mb-6">
                   <div className="bg-muted/30 rounded-lg p-5">
@@ -218,7 +163,6 @@ const PredictionMarketsDeFi2025 = () => {
                   </div>
                 </div>
 
-                {/* Comparison Table */}
                 <div className="bg-muted/30 rounded-lg p-6 mb-6 overflow-x-auto">
                   <h3 className="text-xl font-semibold text-foreground mb-4">Traditional Forecasting vs. Prediction Markets</h3>
                   <table className="w-full text-sm">
@@ -258,20 +202,12 @@ const PredictionMarketsDeFi2025 = () => {
                     </tbody>
                   </table>
                 </div>
-              </div>
+              </BlogSection>
 
-              {/* Section 4: Beyond Politics */}
-              <div className="mb-12">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 bg-primary/20 rounded-lg">
-                    <Zap className="w-6 h-6 text-primary" />
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-foreground m-0">Beyond Politics: The Expanding Universe of Prediction Markets</h2>
-                </div>
-
-                <p className="text-foreground/90 leading-relaxed mb-6">
+              <BlogSection title="Beyond Politics: The Expanding Universe of Prediction Markets" icon={Zap}>
+                <BlogParagraph>
                   <strong className="text-foreground">While political markets attract the most attention, prediction markets are expanding into numerous domains</strong> where accurate forecasting has significant value.
-                </p>
+                </BlogParagraph>
 
                 <div className="grid md:grid-cols-2 gap-6 mb-6">
                   <div className="bg-muted/30 rounded-lg p-5">
@@ -284,197 +220,84 @@ const PredictionMarketsDeFi2025 = () => {
                   <div className="bg-muted/30 rounded-lg p-5">
                     <h3 className="text-lg font-semibold text-foreground mb-3">Economic Indicators</h3>
                     <p className="text-foreground/80 text-sm leading-relaxed">
-                      Federal Reserve decisions, inflation data releases, and recession probability markets aggregate economic expectations from diverse participants.
+                      Federal Reserve decisions, inflation readings, and employment data can all be traded before official announcements.
                     </p>
                   </div>
 
                   <div className="bg-muted/30 rounded-lg p-5">
-                    <h3 className="text-lg font-semibold text-foreground mb-3">Sports and Entertainment</h3>
+                    <h3 className="text-lg font-semibold text-foreground mb-3">Sports & Entertainment</h3>
                     <p className="text-foreground/80 text-sm leading-relaxed">
-                      Championship outcomes, award ceremonies, and entertainment industry events provide familiar applications of prediction market mechanics.
+                      Award shows, box office performance, and sporting events provide entertainment-focused prediction opportunities.
                     </p>
                   </div>
 
                   <div className="bg-muted/30 rounded-lg p-5">
-                    <h3 className="text-lg font-semibold text-foreground mb-3">Scientific and Technical</h3>
+                    <h3 className="text-lg font-semibold text-foreground mb-3">Science & Technology</h3>
                     <p className="text-foreground/80 text-sm leading-relaxed">
-                      Drug trial outcomes, technology adoption timelines, and research milestones represent emerging applications with high informational value.
+                      Markets on AI development timelines, scientific discoveries, and technology adoption rates help forecast innovation.
                     </p>
                   </div>
                 </div>
-              </div>
+              </BlogSection>
 
-              {/* Section 5: DeFi Prediction Market Ecosystem */}
-              <div className="mb-12">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 bg-primary/20 rounded-lg">
-                    <Users className="w-6 h-6 text-primary" />
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-foreground m-0">The DeFi Prediction Market Ecosystem</h2>
-                </div>
+              <BlogSection title="DeFi Integration: What Makes Blockchain Prediction Markets Different" icon={Users}>
+                <BlogParagraph>
+                  <strong className="text-foreground">Blockchain-based prediction markets like Polymarket offer advantages over traditional centralized platforms:</strong>
+                </BlogParagraph>
+                <BlogList items={[
+                  { label: "Permissionless Access", description: "Anyone with a crypto wallet can participate, regardless of jurisdiction or banking status" },
+                  { label: "Non-Custodial", description: "Funds remain in user wallets until trades execute, reducing counterparty risk" },
+                  { label: "Transparent Settlement", description: "All trades and resolutions are recorded on-chain and publicly verifiable" },
+                  { label: "Composability", description: "Prediction market positions can potentially be used as collateral or integrated with other DeFi protocols" },
+                  { label: "Censorship Resistance", description: "Decentralized protocols are harder to shut down than centralized platforms" }
+                ]} />
 
-                <p className="text-foreground/90 leading-relaxed mb-6">
-                  <strong className="text-foreground">Polymarket is the largest player, but the decentralized prediction market ecosystem includes multiple platforms</strong> with different approaches and specializations.
-                </p>
+                <BlogSubsection title="The Oracle Challenge">
+                  <BlogParagraph>
+                    One critical infrastructure component for prediction markets is oracles—systems that bring real-world information on-chain to resolve markets. Platforms like UMA's Optimistic Oracle use economic incentives to ensure accurate resolution without centralized authority.
+                  </BlogParagraph>
+                </BlogSubsection>
+              </BlogSection>
 
-                <div className="space-y-6 mb-8">
-                  <div className="border-l-4 border-primary/50 pl-6">
-                    <h3 className="text-xl font-semibold text-foreground mb-3">Polymarket</h3>
-                    <p className="text-foreground/90 leading-relaxed">
-                      Built on Polygon, uses USDC settlement, and focuses on broad event coverage. Currently the market leader by volume and user count.
-                    </p>
-                  </div>
+              <BlogSection title="Risks and Limitations" icon={AlertTriangle}>
+                <BlogParagraph>
+                  <strong className="text-foreground">While prediction markets offer significant benefits, they are not perfect forecasting tools:</strong>
+                </BlogParagraph>
+                <BlogList items={[
+                  { label: "Regulatory Uncertainty", description: "Prediction markets exist in a legal gray area in many jurisdictions, including the United States where platforms often restrict access" },
+                  { label: "Market Manipulation", description: "Well-funded actors could temporarily distort prices, though sustained manipulation is costly" },
+                  { label: "Liquidity Limits", description: "Thin markets may not accurately reflect true probabilities due to wide bid-ask spreads" },
+                  { label: "Smart Contract Risk", description: "Like all DeFi protocols, prediction market platforms carry technical risks" },
+                  { label: "Oracle Failure", description: "If resolution mechanisms fail or are compromised, market outcomes may be disputed" }
+                ]} />
+              </BlogSection>
 
-                  <div className="border-l-4 border-primary/50 pl-6">
-                    <h3 className="text-xl font-semibold text-foreground mb-3">Gnosis (Omen)</h3>
-                    <p className="text-foreground/90 leading-relaxed">
-                      One of the earliest DeFi prediction market protocols, offering decentralized market creation and resolution mechanisms.
-                    </p>
-                  </div>
+              <BlogSection title="The Future of Information Markets" icon={CheckCircle}>
+                <BlogParagraph>
+                  <strong className="text-foreground">Prediction markets represent more than a new betting venue—they are tools for truth discovery in an era of information overload.</strong> When pundits can make wrong predictions without consequence and social media algorithms optimize for engagement over accuracy, markets that reward correct forecasts fill a critical gap.
+                </BlogParagraph>
+                <BlogParagraph>
+                  As infrastructure improves and regulatory clarity emerges, prediction markets are likely to expand into corporate decision-making, scientific research, and policy analysis. The 2024 election cycle demonstrated that when millions of dollars are at stake, crowd forecasting can outperform traditional information sources.
+                </BlogParagraph>
+                <BlogParagraph>
+                  For long-term observers of DeFi, prediction markets represent one of the clearest examples of blockchain technology enabling something genuinely new: transparent, incentive-aligned information discovery that traditional institutions struggle to replicate.
+                </BlogParagraph>
+              </BlogSection>
 
-                  <div className="border-l-4 border-primary/50 pl-6">
-                    <h3 className="text-xl font-semibold text-foreground mb-3">Kalshi</h3>
-                    <p className="text-foreground/90 leading-relaxed">
-                      A CFTC-regulated prediction market platform operating in the United States. While centralized, Kalshi demonstrates growing regulatory acceptance of event contracts.
-                    </p>
-                  </div>
+              <BlogSources sources={[
+                { name: "Polymarket", url: "https://polymarket.com" },
+                { name: "UMA Protocol", url: "https://uma.xyz" },
+                { name: "Bloomberg Coverage", url: "https://www.bloomberg.com" }
+              ]} />
 
-                  <div className="border-l-4 border-primary/50 pl-6">
-                    <h3 className="text-xl font-semibold text-foreground mb-3">Augur</h3>
-                    <p className="text-foreground/90 leading-relaxed">
-                      A fully decentralized protocol on Ethereum using REP tokens for dispute resolution. Prioritizes censorship resistance over user experience.
-                    </p>
-                  </div>
-                </div>
-              </div>
+              <BlogDisclaimer />
 
-              {/* Section 6: Understanding the Risks */}
-              <div className="mb-12">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 bg-destructive/20 rounded-lg">
-                    <AlertTriangle className="w-6 h-6 text-destructive" />
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-foreground m-0">Understanding the Risks</h2>
-                </div>
-
-                <p className="text-foreground/90 leading-relaxed mb-6">
-                  <strong className="text-foreground">Prediction markets are not without risks and limitations.</strong> Participants should understand these factors before engaging.
-                </p>
-
-                <div className="space-y-6 mb-8">
-                  <div className="border-l-4 border-destructive/50 pl-6">
-                    <h3 className="text-xl font-semibold text-foreground mb-3">Regulatory Uncertainty</h3>
-                    <p className="text-foreground/90 leading-relaxed">
-                      Prediction markets exist in a regulatory gray area in many jurisdictions. The CFTC has approved some event contracts while challenging others. Users should understand the legal landscape in their jurisdiction.
-                    </p>
-                  </div>
-
-                  <div className="border-l-4 border-destructive/50 pl-6">
-                    <h3 className="text-xl font-semibold text-foreground mb-3">Resolution Risk</h3>
-                    <p className="text-foreground/90 leading-relaxed">
-                      Markets depend on accurate resolution of outcomes. Ambiguous resolution criteria, disputed results, or resolution failures can affect market payouts.
-                    </p>
-                  </div>
-
-                  <div className="border-l-4 border-destructive/50 pl-6">
-                    <h3 className="text-xl font-semibold text-foreground mb-3">Liquidity Risk</h3>
-                    <p className="text-foreground/90 leading-relaxed">
-                      Thin markets may have wide spreads and difficulty executing large orders. Not all markets have sufficient liquidity for substantial positions.
-                    </p>
-                  </div>
-
-                  <div className="border-l-4 border-destructive/50 pl-6">
-                    <h3 className="text-xl font-semibold text-foreground mb-3">Platform Risk</h3>
-                    <p className="text-foreground/90 leading-relaxed">
-                      Users must trust the platform to correctly handle funds and resolve markets. While blockchain-based platforms offer transparency, smart contract risks and operational failures remain possible.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Section 7: Implications for Information */}
-              <div className="mb-12">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 bg-primary/20 rounded-lg">
-                    <CheckCircle className="w-6 h-6 text-primary" />
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-foreground m-0">The Broader Implications: Information as a Public Good</h2>
-                </div>
-
-                <p className="text-foreground/90 leading-relaxed mb-6">
-                  <strong className="text-foreground">The success of prediction markets points to a deeper truth about information.</strong> When incentives align with accuracy, forecasting improves dramatically.
-                </p>
-
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-muted/30 rounded-lg p-5">
-                    <h3 className="text-lg font-semibold text-foreground mb-3">Better Decision-Making</h3>
-                    <ul className="space-y-2 text-foreground/80 text-sm">
-                      <li>• More accurate probability estimates</li>
-                      <li>• Real-time information updating</li>
-                      <li>• Reduced reliance on biased sources</li>
-                    </ul>
-                  </div>
-
-                  <div className="bg-muted/30 rounded-lg p-5">
-                    <h3 className="text-lg font-semibold text-foreground mb-3">Pundit Accountability</h3>
-                    <ul className="space-y-2 text-foreground/80 text-sm">
-                      <li>• Track records become visible</li>
-                      <li>• Financial consequences for inaccuracy</li>
-                      <li>• Incentives for honest assessment</li>
-                    </ul>
-                  </div>
-
-                  <div className="bg-muted/30 rounded-lg p-5">
-                    <h3 className="text-lg font-semibold text-foreground mb-3">New Use Cases</h3>
-                    <ul className="space-y-2 text-foreground/80 text-sm">
-                      <li>• Corporate decision markets</li>
-                      <li>• Scientific hypothesis testing</li>
-                      <li>• Policy outcome forecasting</li>
-                    </ul>
-                  </div>
-
-                  <div className="bg-muted/30 rounded-lg p-5">
-                    <h3 className="text-lg font-semibold text-foreground mb-3">DeFi Integration</h3>
-                    <ul className="space-y-2 text-foreground/80 text-sm">
-                      <li>• Oracle systems for smart contracts</li>
-                      <li>• Risk pricing for DeFi protocols</li>
-                      <li>• Decentralized insurance applications</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-
-              {/* Conclusion */}
-              <div className="mb-8">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 bg-primary/20 rounded-lg">
-                    <DollarSign className="w-6 h-6 text-primary" />
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-foreground m-0">Conclusion: The Future of Forecasting Is Decentralized</h2>
-                </div>
-
-                <p className="text-foreground/90 leading-relaxed mb-6">
-                  <strong className="text-foreground">Prediction markets represent a fundamental improvement in how societies can aggregate information about the future.</strong> By creating financial incentives for accuracy, these platforms produce forecasts that consistently outperform traditional methods.
-                </p>
-
-                <p className="text-foreground/90 leading-relaxed mb-6">
-                  The 2024 election cycle demonstrated prediction markets' capabilities at unprecedented scale. As regulatory frameworks evolve and user experience improves, these platforms are likely to become standard tools for anyone seeking accurate probability assessments—from investors and policymakers to journalists and researchers.
-                </p>
-
-                <div className="bg-gradient-to-r from-primary/10 to-primary/5 rounded-lg p-6 border border-primary/20">
-                  <h3 className="text-xl font-bold text-foreground mb-3">The Path Forward</h3>
-                  <p className="text-foreground/90 leading-relaxed">
-                    Understanding how prediction markets work provides valuable context for interpreting the information they produce. Whether you choose to participate as a trader or simply use prediction market prices as an information source, this knowledge helps you navigate a world increasingly shaped by decentralized forecasting systems.
-                  </p>
-                </div>
-              </div>
-
-              {/* Disclaimer */}
-              <div className="border-t border-border pt-8">
-                <p className="text-sm text-muted-foreground italic leading-relaxed">
-                  This content is provided for educational purposes only. It does not constitute financial advice. All investments involve risk, including potential loss of principal. Prediction market participation may not be legal in all jurisdictions. Always conduct your own research and consult with qualified professionals before making investment decisions or participating in prediction markets.
-                </p>
-              </div>
+              <BlogCTA
+                title="Ready to Learn More About DeFi?"
+                description="Explore our comprehensive courses and tutorials to deepen your understanding of decentralized finance, prediction markets, and blockchain technology."
+                buttonText="Browse Courses"
+                buttonLink="/courses"
+              />
             </article>
           </Card>
         </div>
