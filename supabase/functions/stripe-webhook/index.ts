@@ -261,8 +261,10 @@ serve(async (req) => {
               .eq('product_id', item.product_id);
 
             if (files && files.length > 0) {
-              // Generate unique download token
-              const downloadToken = crypto.randomUUID();
+              // Generate cryptographically secure 64-character hex token (256 bits of entropy)
+              const tokenBytes = new Uint8Array(32);
+              crypto.getRandomValues(tokenBytes);
+              const downloadToken = Array.from(tokenBytes).map(b => b.toString(16).padStart(2, '0')).join('');
               const expiryDate = new Date();
               expiryDate.setDate(expiryDate.getDate() + 7); // 7 days expiry
 
