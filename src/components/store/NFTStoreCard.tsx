@@ -72,6 +72,9 @@ export const NFTStoreCard = () => {
         <img 
           src={nftImage} 
           alt="3EA Earth Access NFT"
+          loading="lazy"
+          width={400}
+          height={400}
           className="w-full h-full object-cover"
         />
         {hasDataError && (

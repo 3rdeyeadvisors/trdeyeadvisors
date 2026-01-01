@@ -271,7 +271,7 @@ const Store = () => {
 
                 if (isLoading) {
                   return (
-                    <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
                       {[1, 2, 3, 4].map((i) => (
                         <Card key={i} className="overflow-hidden animate-pulse">
                           <div className="aspect-square bg-muted" />
@@ -313,7 +313,7 @@ const Store = () => {
                 }
 
                 return (
-                  <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
                     {filteredProducts.map((product: any) => (
                       <MerchandiseCard 
                         key={product.id} 
