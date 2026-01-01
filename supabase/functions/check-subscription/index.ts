@@ -44,7 +44,6 @@ serve(async (req) => {
     logStep("User authenticated", { userId: user.id, email: user.email });
 
     // Check if user is grandfathered (full platform access)
-    // Check by email match - claimed_by may or may not be set
     const { data: grandfatheredData } = await supabaseClient
       .from('grandfathered_emails')
       .select('*')
@@ -52,7 +51,6 @@ serve(async (req) => {
       .single();
     
     if (grandfatheredData) {
-      // If found but not claimed, claim it now
       if (!grandfatheredData.claimed_by) {
         await supabaseClient
           .from('grandfathered_emails')
@@ -93,6 +91,46 @@ serve(async (req) => {
       });
     }
 
+    // Check for active database trial (auto-granted on signup)
+    const { data: trialData } = await supabaseClient
+      .from('user_trials')
+      .select('*')
+      .eq('user_id', user.id)
+      .single();
+
+    if (trialData && !trialData.converted_at) {
+      const trialEnd = new Date(trialData.trial_end);
+      const now = new Date();
+      
+      if (trialEnd > now) {
+        // Calculate days remaining
+        const daysRemaining = Math.ceil((trialEnd.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+        
+        logStep("Active database trial found", { 
+          trialEnd: trialData.trial_end, 
+          daysRemaining 
+        });
+        
+        return new Response(JSON.stringify({
+          subscribed: true,
+          isGrandfathered: false,
+          isAdmin: false,
+          plan: 'trial',
+          status: 'trialing',
+          subscriptionEnd: null,
+          trialEnd: trialData.trial_end,
+          daysRemaining,
+          isDbTrial: true
+        }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 200,
+        });
+      } else {
+        logStep("Database trial expired", { trialEnd: trialData.trial_end });
+      }
+    }
+
+    // Check Stripe for paid subscriptions
     const stripe = new Stripe(stripeKey, { apiVersion: "2025-08-27.basil" });
     const customers = await stripe.customers.list({ email: user.email, limit: 1 });
     
@@ -104,7 +142,8 @@ serve(async (req) => {
         isAdmin: false,
         plan: null,
         subscriptionEnd: null,
-        trialEnd: null
+        trialEnd: trialData?.trial_end || null,
+        trialExpired: trialData ? new Date(trialData.trial_end) <= new Date() : false
       }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 200,
@@ -120,7 +159,6 @@ serve(async (req) => {
       limit: 10,
     });
 
-    // Find active or trialing subscription
     const activeSubscription = subscriptions.data.find(
       sub => sub.status === 'active' || sub.status === 'trialing'
     );
@@ -133,11 +171,21 @@ serve(async (req) => {
         isAdmin: false,
         plan: null,
         subscriptionEnd: null,
-        trialEnd: null
+        trialEnd: trialData?.trial_end || null,
+        trialExpired: trialData ? new Date(trialData.trial_end) <= new Date() : false
       }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 200,
       });
+    }
+
+    // Mark database trial as converted if user has a paid subscription
+    if (trialData && !trialData.converted_at) {
+      await supabaseClient
+        .from('user_trials')
+        .update({ converted_at: new Date().toISOString() })
+        .eq('user_id', user.id);
+      logStep("Marked trial as converted");
     }
 
     const subscriptionEnd = new Date(activeSubscription.current_period_end * 1000).toISOString();
@@ -146,7 +194,6 @@ serve(async (req) => {
       : null;
     const priceId = activeSubscription.items.data[0]?.price.id;
     
-    // Determine plan type based on price ID
     let plan = 'monthly';
     if (priceId === 'price_1SfmuSLxeGPiI62jEVMMN3l1') {
       plan = 'annual';

@@ -25,7 +25,8 @@ serve(async (req) => {
 
   const supabaseClient = createClient(
     Deno.env.get("SUPABASE_URL") ?? "",
-    Deno.env.get("SUPABASE_ANON_KEY") ?? ""
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+    { auth: { persistSession: false } }
   );
 
   try {
@@ -50,19 +51,29 @@ serve(async (req) => {
       apiVersion: "2025-08-27.basil" 
     });
 
-    // Check if customer already exists
+    // Check if user has used their database trial
+    const { data: trialData } = await supabaseClient
+      .from('user_trials')
+      .select('*')
+      .eq('user_id', user.id)
+      .single();
+
+    const hasUsedDbTrial = !!trialData;
+    logStep("Database trial check", { hasUsedDbTrial, trialData });
+
+    // Check if customer already exists in Stripe
     const customers = await stripe.customers.list({ email: user.email, limit: 1 });
     let customerId;
-    let hasHadPreviousSubscription = false;
+    let hasHadStripeSubscription = false;
 
     if (customers.data.length > 0) {
       customerId = customers.data[0].id;
       logStep("Existing customer found", { customerId });
 
-      // Check ALL subscriptions (including canceled) to determine trial eligibility
+      // Check ALL subscriptions (including canceled) to determine if they've subscribed before
       const allSubscriptions = await stripe.subscriptions.list({
         customer: customerId,
-        status: 'all', // Get all subscriptions including canceled
+        status: 'all',
         limit: 100,
       });
 
@@ -76,26 +87,40 @@ serve(async (req) => {
         throw new Error("You already have an active subscription. Please manage it from your account settings.");
       }
 
-      // Check if user has ever had any subscription (for trial eligibility)
-      hasHadPreviousSubscription = allSubscriptions.data.length > 0;
-      logStep("Previous subscription check", { hasHadPreviousSubscription, totalPreviousSubs: allSubscriptions.data.length });
+      // Check if user has ever had any Stripe subscription
+      hasHadStripeSubscription = allSubscriptions.data.length > 0;
+      logStep("Previous Stripe subscription check", { hasHadStripeSubscription, totalPreviousSubs: allSubscriptions.data.length });
     }
 
     const origin = req.headers.get("origin") || "https://3rdeyeadvisors.com";
 
-    // Build subscription data - only include trial for NEW users
+    // Build subscription data - NO additional Stripe trial since they already had database trial
     const subscriptionData: Stripe.Checkout.SessionCreateParams['subscription_data'] = {
       metadata: {
         user_id: user.id,
       },
     };
 
-    // Only offer trial to users who have NEVER had a subscription before
-    if (!hasHadPreviousSubscription) {
+    // Only offer Stripe trial to users who:
+    // 1. Have NEVER had a database trial (edge case for old users before this feature)
+    // 2. Have NEVER had a Stripe subscription
+    if (!hasUsedDbTrial && !hasHadStripeSubscription) {
       subscriptionData.trial_period_days = 14;
-      logStep("New user - offering 14-day trial");
+      logStep("Legacy user without DB trial - offering 14-day Stripe trial");
     } else {
-      logStep("Returning user - no trial offered (had previous subscription)");
+      logStep("User has used trial - no additional trial offered", { 
+        hasUsedDbTrial, 
+        hasHadStripeSubscription 
+      });
+    }
+
+    // Mark trial as converted when user proceeds to checkout
+    if (trialData && !trialData.converted_at) {
+      await supabaseClient
+        .from('user_trials')
+        .update({ converted_at: new Date().toISOString() })
+        .eq('user_id', user.id);
+      logStep("Marked database trial as converted");
     }
 
     const session = await stripe.checkout.sessions.create({
