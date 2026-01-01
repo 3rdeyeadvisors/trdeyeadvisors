@@ -26,9 +26,9 @@
     --secondary: 217 32% 12%;
     --secondary-foreground: 0 0% 95%;
 
-    /* Muted cosmic tones - improved contrast */
+    /* Muted cosmic tones - high contrast for accessibility */
     --muted: 217 32% 10%;
-    --muted-foreground: 215 20% 78%;
+    --muted-foreground: 215 15% 90%;
 
     /* Success/positive states */
     --success: 142 76% 36%;

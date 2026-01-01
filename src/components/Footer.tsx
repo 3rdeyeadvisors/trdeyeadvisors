@@ -14,7 +14,7 @@ const Footer = () => {
                 3rdeyeadvisors
               </span>
             </Link>
-            <p className="text-sm text-foreground/70 font-consciousness leading-relaxed max-w-xs">
+            <p className="text-sm text-muted-foreground font-consciousness leading-relaxed max-w-xs">
               Empowering financial consciousness through DeFi education and tools.
             </p>
           </div>
@@ -188,7 +188,7 @@ const Footer = () => {
           </div>
           
           {/* Copyright */}
-          <p className="text-xs text-muted-foreground/70 font-consciousness">
+          <p className="text-xs text-muted-foreground font-consciousness">
             © {new Date().getFullYear()} 3rdeyeadvisors
           </p>
         </div>
@@ -196,10 +196,10 @@ const Footer = () => {
         {/* Desktop Bottom Section */}
         <div className="hidden md:block border-t border-border pt-6">
           <div className="flex flex-col items-center justify-center gap-1.5 text-center">
-            <p className="text-xs text-muted-foreground/80 font-consciousness">
+            <p className="text-xs text-muted-foreground font-consciousness">
               © {new Date().getFullYear()} 3rdeyeadvisors. All rights reserved.
             </p>
-            <p className="text-xs text-muted-foreground/60 font-consciousness max-w-2xl">
+            <p className="text-xs text-muted-foreground font-consciousness max-w-2xl">
               Educational content only. Not financial advice. Always do your own research.
             </p>
           </div>
