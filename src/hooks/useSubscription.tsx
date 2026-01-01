@@ -6,10 +6,13 @@ export interface SubscriptionStatus {
   subscribed: boolean;
   isGrandfathered: boolean;
   isAdmin: boolean;
-  plan: 'monthly' | 'annual' | 'grandfathered' | 'admin' | null;
+  plan: 'monthly' | 'annual' | 'grandfathered' | 'admin' | 'trial' | null;
   status?: 'active' | 'trialing' | 'canceled' | 'past_due';
   subscriptionEnd: string | null;
   trialEnd: string | null;
+  daysRemaining?: number;
+  isDbTrial?: boolean;
+  trialExpired?: boolean;
   cancelAtPeriodEnd?: boolean;
 }
 
@@ -20,6 +23,9 @@ interface SubscriptionContextType {
   checkSubscription: () => Promise<void>;
   hasAccess: boolean;
   isTrialing: boolean;
+  isDbTrial: boolean;
+  daysRemaining: number | null;
+  trialExpired: boolean;
 }
 
 const defaultSubscription: SubscriptionStatus = {
@@ -50,7 +56,6 @@ export const SubscriptionProvider = ({ children }: { children: React.ReactNode }
   const maxRetries = 3;
 
   const checkSubscription = useCallback(async () => {
-    // Don't check if auth is still loading or no user/session
     if (authLoading || !user || !session) {
       setSubscription(null);
       setLoading(false);
@@ -60,8 +65,6 @@ export const SubscriptionProvider = ({ children }: { children: React.ReactNode }
     try {
       setError(null);
 
-      // Use the existing session token - don't force refresh
-      // This avoids hitting rate limits and causing unnecessary logouts
       const { data, error: fnError } = await supabase.functions.invoke('check-subscription', {
         headers: {
           Authorization: `Bearer ${session.access_token}`,
@@ -71,7 +74,6 @@ export const SubscriptionProvider = ({ children }: { children: React.ReactNode }
       if (fnError) {
         const errorMessage = fnError.message || String(fnError);
         
-        // Only sign out on DEFINITIVE session invalid errors
         const isSessionInvalid = 
           errorMessage.includes('session_not_found') || 
           errorMessage.includes('Invalid Refresh Token') ||
@@ -85,14 +87,11 @@ export const SubscriptionProvider = ({ children }: { children: React.ReactNode }
           return;
         }
         
-        // For other errors (network, rate limit, etc), just skip this check
-        // Don't sign out - the session might still be valid
         console.warn('[Subscription] Error checking subscription (not signing out):', errorMessage);
         
-        // Retry logic with exponential backoff for transient errors
         if (retryCountRef.current < maxRetries) {
           retryCountRef.current++;
-          const delay = Math.pow(2, retryCountRef.current) * 1000; // 2s, 4s, 8s
+          const delay = Math.pow(2, retryCountRef.current) * 1000;
           console.log(`[Subscription] Retrying in ${delay}ms (attempt ${retryCountRef.current}/${maxRetries})`);
           setTimeout(() => checkSubscription(), delay);
           return;
@@ -104,7 +103,6 @@ export const SubscriptionProvider = ({ children }: { children: React.ReactNode }
         return;
       }
 
-      // Reset retry count on success
       retryCountRef.current = 0;
 
       if (data.error) {
@@ -126,10 +124,8 @@ export const SubscriptionProvider = ({ children }: { children: React.ReactNode }
     }
   }, [user, session, authLoading]);
 
-  // Check subscription when auth is ready and user exists
   useEffect(() => {
     if (authLoading) {
-      // Auth still loading, keep subscription loading too
       return;
     }
     
@@ -141,8 +137,6 @@ export const SubscriptionProvider = ({ children }: { children: React.ReactNode }
     }
   }, [user, session, authLoading, checkSubscription]);
 
-  // Periodically refresh subscription status (every 5 minutes instead of 60 seconds)
-  // This reduces rate limit issues significantly
   useEffect(() => {
     if (!user || !session || authLoading) return;
 
@@ -155,6 +149,9 @@ export const SubscriptionProvider = ({ children }: { children: React.ReactNode }
 
   const hasAccess = subscription?.subscribed || false;
   const isTrialing = subscription?.status === 'trialing';
+  const isDbTrial = subscription?.isDbTrial || false;
+  const daysRemaining = subscription?.daysRemaining ?? null;
+  const trialExpired = subscription?.trialExpired || false;
 
   const value = {
     subscription,
@@ -163,6 +160,9 @@ export const SubscriptionProvider = ({ children }: { children: React.ReactNode }
     checkSubscription,
     hasAccess,
     isTrialing,
+    isDbTrial,
+    daysRemaining,
+    trialExpired,
   };
 
   return (

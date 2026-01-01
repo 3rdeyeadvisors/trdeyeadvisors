@@ -1363,6 +1363,33 @@ export type Database = {
         }
         Relationships: []
       }
+      user_trials: {
+        Row: {
+          converted_at: string | null
+          created_at: string
+          id: string
+          trial_end: string
+          trial_start: string
+          user_id: string
+        }
+        Insert: {
+          converted_at?: string | null
+          created_at?: string
+          id?: string
+          trial_end?: string
+          trial_start?: string
+          user_id: string
+        }
+        Update: {
+          converted_at?: string | null
+          created_at?: string
+          id?: string
+          trial_end?: string
+          trial_start?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       vault_whitelist: {
         Row: {
           created_at: string | null

@@ -7,12 +7,12 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { Check, Crown, Loader2, Sparkles, Calendar, CreditCard } from 'lucide-react';
+import { Check, Crown, Loader2, Sparkles, Calendar, CreditCard, Clock, AlertTriangle } from 'lucide-react';
 import SEO from '@/components/SEO';
 
 const Subscription = () => {
   const { user, session } = useAuth();
-  const { subscription, loading: subLoading, checkSubscription, hasAccess, isTrialing } = useSubscription();
+  const { subscription, loading: subLoading, checkSubscription, hasAccess, isTrialing, isDbTrial, daysRemaining, trialExpired } = useSubscription();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [checkoutLoading, setCheckoutLoading] = useState<'monthly' | 'annual' | null>(null);
@@ -22,9 +22,7 @@ const Subscription = () => {
   useEffect(() => {
     const planFromUrl = searchParams.get('plan') as 'monthly' | 'annual' | null;
     if (planFromUrl && user && session && !hasAccess && !subLoading) {
-      // Clear the plan param from URL
       setSearchParams({});
-      // Trigger checkout
       handleSubscribe(planFromUrl);
     }
   }, [user, session, hasAccess, subLoading, searchParams]);
@@ -109,18 +107,82 @@ const Subscription = () => {
           <div className="text-center mb-12 md:mb-16">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-5">
               <Sparkles className="w-4 h-4 text-primary flex-shrink-0" />
-              <span className="text-sm font-medium text-primary">14-Day Free Trial</span>
+              <span className="text-sm font-medium text-primary">
+                {user && !hasAccess && !trialExpired ? 'Your Free Trial is Active!' : '14-Day Free Trial'}
+              </span>
             </div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-5">
-              Unlock Your DeFi Potential
+              {hasAccess ? 'Your Subscription' : 'Unlock Your DeFi Potential'}
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-foreground/70 max-w-2xl mx-auto leading-relaxed">
-              Full access to all courses, tutorials, and premium content. Cancel anytime during your trial.
+              {hasAccess 
+                ? 'You have full access to all courses, tutorials, and premium content.'
+                : 'Full access to all courses, tutorials, and premium content. Cancel anytime during your trial.'}
             </p>
           </div>
 
-          {/* Current Status */}
-          {hasAccess && subscription && (
+          {/* Trial Expired Warning */}
+          {user && trialExpired && !hasAccess && (
+            <Card className="mb-8 border-destructive/50 bg-destructive/5">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-4">
+                  <AlertTriangle className="w-8 h-8 text-destructive flex-shrink-0" />
+                  <div>
+                    <h3 className="font-semibold text-foreground mb-1">Your Free Trial Has Ended</h3>
+                    <p className="text-foreground/70 text-sm">
+                      Subscribe now to continue accessing all courses and premium content.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Active Database Trial Status */}
+          {hasAccess && isDbTrial && daysRemaining !== null && (
+            <Card className="mb-8 border-primary/50 bg-primary/5">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Clock className="w-6 h-6 text-primary" />
+                    <div>
+                      <CardTitle className="text-foreground">Free Trial Active</CardTitle>
+                      <CardDescription>
+                        {daysRemaining} day{daysRemaining !== 1 ? 's' : ''} remaining
+                      </CardDescription>
+                    </div>
+                  </div>
+                  <Badge variant="secondary" className="text-sm">
+                    Free Trial
+                  </Badge>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center gap-2 text-muted-foreground mb-4">
+                  <Calendar className="w-4 h-4" />
+                  <span>Trial ends: {formatDate(subscription?.trialEnd || null)}</span>
+                </div>
+                <p className="text-sm text-foreground/70 mb-4">
+                  You have full access to all content. Subscribe before your trial ends to keep your access.
+                </p>
+                <div className="flex gap-3">
+                  <Button onClick={() => handleSubscribe('monthly')} disabled={checkoutLoading !== null}>
+                    {checkoutLoading === 'monthly' ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Processing...
+                      </>
+                    ) : (
+                      'Subscribe Now'
+                    )}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Current Paid Subscription Status */}
+          {hasAccess && !isDbTrial && subscription && (
             <Card className="mb-8 border-primary/50 bg-primary/5">
               <CardHeader>
                 <div className="flex items-center justify-between">
@@ -140,7 +202,7 @@ const Subscription = () => {
                     </div>
                   </div>
                   <Badge variant={isTrialing ? 'secondary' : 'default'} className="text-sm">
-                    {isTrialing ? 'Free Trial' : 'Active'}
+                    {isTrialing ? 'Trial' : 'Active'}
                   </Badge>
                 </div>
               </CardHeader>
@@ -183,8 +245,8 @@ const Subscription = () => {
             </Card>
           )}
 
-          {/* Pricing Cards */}
-          {!hasAccess && (
+          {/* Pricing Cards - Show when user doesn't have paid access */}
+          {(!hasAccess || isDbTrial) && (
             <div className="grid md:grid-cols-2 gap-6 md:gap-8 mb-12 md:mb-16">
               {/* Monthly Plan */}
               <Card className="relative p-6 md:p-8 flex flex-col">
@@ -198,7 +260,6 @@ const Subscription = () => {
                 </div>
                 <ul className="space-y-3 mb-8 flex-1">
                   {[
-                    '14-day free trial',
                     'All DeFi courses and tutorials',
                     'Exclusive content and resources',
                     'Community access',
@@ -221,8 +282,10 @@ const Subscription = () => {
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                       Processing...
                     </>
+                  ) : isDbTrial ? (
+                    'Subscribe Now'
                   ) : (
-                    'Start Free Trial'
+                    'Get Started'
                   )}
                 </Button>
               </Card>
@@ -244,7 +307,6 @@ const Subscription = () => {
                 </div>
                 <ul className="space-y-3 mb-8 flex-1">
                   {[
-                    '14-day free trial',
                     'All DeFi courses and tutorials',
                     'Exclusive content and resources',
                     'Community access',
@@ -269,8 +331,10 @@ const Subscription = () => {
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                       Processing...
                     </>
+                  ) : isDbTrial ? (
+                    'Subscribe Now'
                   ) : (
-                    'Start Free Trial'
+                    'Get Started'
                   )}
                 </Button>
               </Card>
@@ -288,7 +352,15 @@ const Subscription = () => {
                   How does the free trial work?
                 </h3>
                 <p className="text-foreground/70 text-sm leading-relaxed">
-                  Your 14-day trial starts immediately with full access to all content. You will not be charged until the trial ends. Even if you add a payment method, the trial runs for the full 14 days.
+                  Your 14-day trial starts immediately when you create an account - no payment required. You get full access to all content during your trial.
+                </p>
+              </div>
+              <div className="p-5 md:p-6 bg-card rounded-xl border border-border">
+                <h3 className="font-semibold text-foreground mb-3 text-base">
+                  What happens when my trial ends?
+                </h3>
+                <p className="text-foreground/70 text-sm leading-relaxed">
+                  After your trial, you'll need to subscribe to continue accessing premium content. You can subscribe anytime during or after your trial.
                 </p>
               </div>
               <div className="p-5 md:p-6 bg-card rounded-xl border border-border">
@@ -296,7 +368,7 @@ const Subscription = () => {
                   Can I cancel anytime?
                 </h3>
                 <p className="text-foreground/70 text-sm leading-relaxed">
-                  Yes! Cancel during your trial and you will not be charged. After that, cancel anytime and you will keep access until the end of your billing period.
+                  Yes! Cancel anytime and you'll keep access until the end of your billing period. No questions asked.
                 </p>
               </div>
               <div className="p-5 md:p-6 bg-card rounded-xl border border-border">
