@@ -81,73 +81,81 @@ const handler = async (req: Request): Promise<Response> => {
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <style>
-              body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; }
+              @media only screen and (max-width: 600px) {
+                .container { padding: 32px 20px !important; }
+                .header h1 { font-size: 32px !important; }
+                .prize-amount { font-size: 48px !important; }
+              }
             </style>
           </head>
-          <body style="margin: 0; padding: 0; background-color: #f3f4f6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
-            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f3f4f6;">
+          <body style="margin: 0; padding: 0; background-color: hsl(222, 84%, 5%); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: hsl(222, 84%, 5%);">
               <tr>
                 <td align="center" style="padding: 40px 20px;">
-                  <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; width: 100%; background-color: #ffffff; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                  <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" class="container" style="max-width: 600px; width: 100%; background: linear-gradient(180deg, hsl(222, 47%, 11%), hsl(263, 70%, 10%)); border-radius: 16px; border: 1px solid hsl(217, 33%, 17%);">
                     <tr>
                       <td style="padding: 50px 40px;">
-                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <!-- Header -->
+                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="header">
                           <tr>
-                            <td align="center" style="padding-bottom: 30px;">
-                              <div style="font-size: 72px; margin-bottom: 20px;">🎉🏆🎉</div>
-                              <h1 style="color: #8B5CF6; margin: 0; font-size: 40px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
+                            <td align="center" style="padding-bottom: 24px;">
+                              <div style="font-size: 72px; margin-bottom: 16px;">🎉🏆🎉</div>
+                              <h1 style="color: hsl(142, 71%, 45%); margin: 0; font-size: 40px; font-weight: 700;">
                                 YOU WON!
                               </h1>
                             </td>
                           </tr>
                         </table>
                         
-                        <p style="font-size: 18px; line-height: 1.6; text-align: center; margin: 0 0 16px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; color: #1f2937;">
+                        <p style="font-size: 18px; line-height: 1.6; text-align: center; margin: 0 0 16px 0; color: hsl(0, 0%, 96%);">
                           Hi <strong>${winnerName}</strong>,
                         </p>
                         
-                        <p style="font-size: 18px; line-height: 1.6; text-align: center; margin: 0 0 30px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; color: #1f2937;">
-                          Congratulations! You've won the <strong style="color: #8B5CF6;">${raffle.title}</strong>!
+                        <p style="font-size: 18px; line-height: 1.6; text-align: center; margin: 0 0 32px 0; color: hsl(0, 0%, 83%);">
+                          Congratulations! You've won the <strong style="color: hsl(217, 91%, 60%);">${raffle.title}</strong>!
                         </p>
                         
-                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #10B981; border-radius: 12px; margin: 30px 0;">
+                        <!-- Prize Box -->
+                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background: linear-gradient(135deg, hsl(142, 71%, 45%), hsl(142, 76%, 36%)); border-radius: 12px; margin: 24px 0;">
                           <tr>
                             <td style="padding: 40px; text-align: center;">
-                              <h2 style="margin: 0 0 20px 0; color: #ffffff; font-size: 28px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
+                              <h2 style="margin: 0 0 16px 0; color: #ffffff; font-size: 24px; font-weight: 700;">
                                 Your Prize
                               </h2>
-                              <div style="font-size: 64px; font-weight: 700; margin: 20px 0; color: #ffffff;">🪙 $${raffle.prize_amount}</div>
-                              <p style="font-size: 24px; margin: 10px 0; font-weight: 700; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
+                              <div class="prize-amount" style="font-size: 64px; font-weight: 700; margin: 16px 0; color: #ffffff;">🪙 $${raffle.prize_amount}</div>
+                              <p style="font-size: 22px; margin: 8px 0; font-weight: 700; color: #ffffff;">
                                 ${raffle.prize}
                               </p>
                             </td>
                           </tr>
                         </table>
                         
-                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #FEF3C7; border-radius: 8px; border-left: 4px solid #F59E0B; margin: 30px 0;">
+                        <!-- Next Steps Box -->
+                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background: hsl(45, 93%, 47%); border-radius: 8px; border-left: 4px solid hsl(38, 92%, 50%); margin: 24px 0;">
                           <tr>
                             <td style="padding: 24px;">
-                              <h3 style="color: #92400E; margin: 0 0 12px 0; font-size: 18px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
+                              <h3 style="color: hsl(22, 78%, 31%); margin: 0 0 12px 0; font-size: 18px; font-weight: 700;">
                                 📬 Next Steps
                               </h3>
-                              <p style="font-size: 16px; line-height: 1.6; margin: 0; color: #78350F; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
+                              <p style="font-size: 16px; line-height: 1.6; margin: 0; color: hsl(22, 78%, 26%);">
                                 Our team will contact you directly within 24-48 hours to arrange delivery of your prize. Please check your email inbox (and spam folder) for our message.
                               </p>
                             </td>
                           </tr>
                         </table>
                         
-                        <p style="font-size: 16px; line-height: 1.6; text-align: center; margin: 40px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; color: #1f2937;">
+                        <p style="font-size: 16px; line-height: 1.6; text-align: center; margin: 32px 0; color: hsl(0, 0%, 83%);">
                           Thank you for being part of our Learn-to-Earn community. Your commitment to learning is what makes this possible!
                         </p>
                         
-                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top: 2px solid #e5e7eb; padding-top: 24px; margin-top: 20px;">
+                        <!-- Footer -->
+                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top: 1px solid hsl(217, 33%, 25%); padding-top: 24px; margin-top: 16px;">
                           <tr>
                             <td align="center">
-                              <p style="font-size: 18px; font-weight: 700; color: #8B5CF6; margin: 0 0 8px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
+                              <p style="font-size: 18px; font-weight: 700; color: hsl(271, 91%, 65%); margin: 0 0 8px 0;">
                                 Awareness is advantage.
                               </p>
-                              <p style="font-size: 14px; color: #6b7280; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
+                              <p style="font-size: 14px; color: hsl(0, 0%, 50%); margin: 0;">
                                 — The 3rdeyeadvisors Team
                               </p>
                             </td>
@@ -180,92 +188,108 @@ const handler = async (req: Request): Promise<Response> => {
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <style>
-              body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; }
+              @media only screen and (max-width: 600px) {
+                .container { padding: 32px 20px !important; }
+                .header h1 { font-size: 26px !important; }
+                .cta-button { padding: 16px 24px !important; font-size: 16px !important; }
+              }
             </style>
           </head>
-          <body style="margin: 0; padding: 0; background-color: #f3f4f6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
-            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f3f4f6;">
+          <body style="margin: 0; padding: 0; background-color: hsl(222, 84%, 5%); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: hsl(222, 84%, 5%);">
               <tr>
                 <td align="center" style="padding: 40px 20px;">
-                  <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; width: 100%; background-color: #ffffff; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                  <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" class="container" style="max-width: 600px; width: 100%; background: linear-gradient(180deg, hsl(222, 47%, 11%), hsl(263, 70%, 10%)); border-radius: 16px; border: 1px solid hsl(217, 33%, 17%);">
                     <tr>
                       <td style="padding: 50px 40px;">
-                        <h1 style="color: #8B5CF6; margin: 0 0 24px 0; font-size: 32px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
-                          We Have a Winner! 🎉
-                        </h1>
+                        <!-- Header -->
+                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="header">
+                          <tr>
+                            <td align="center" style="padding-bottom: 24px;">
+                              <h1 style="color: hsl(271, 91%, 65%); margin: 0; font-size: 32px; font-weight: 700;">
+                                We Have a Winner! 🎉
+                              </h1>
+                            </td>
+                          </tr>
+                        </table>
                         
-                        <p style="font-size: 16px; line-height: 1.6; margin: 0 0 16px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; color: #1f2937;">
+                        <p style="font-size: 16px; line-height: 1.6; margin: 0 0 16px 0; text-align: center; color: hsl(0, 0%, 96%);">
                           Hi <strong>${participant.display_name || 'there'}</strong>,
                         </p>
                         
-                        <p style="font-size: 16px; line-height: 1.6; margin: 0 0 32px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; color: #1f2937;">
-                          The <strong style="color: #8B5CF6;">${raffle.title}</strong> has concluded and we're excited to announce the winner!
+                        <p style="font-size: 16px; line-height: 1.6; margin: 0 0 32px 0; text-align: center; color: hsl(0, 0%, 83%);">
+                          The <strong style="color: hsl(217, 91%, 60%);">${raffle.title}</strong> has concluded and we're excited to announce the winner!
                         </p>
                         
-                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #8B5CF6; border-radius: 12px; margin: 30px 0;">
+                        <!-- Winner Box -->
+                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background: linear-gradient(135deg, hsl(271, 91%, 65%), hsl(217, 91%, 60%)); border-radius: 12px; margin: 24px 0;">
                           <tr>
                             <td style="padding: 40px 30px; text-align: center;">
-                              <h2 style="margin: 0 0 24px 0; color: #ffffff; font-size: 24px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
+                              <h2 style="margin: 0 0 20px 0; color: #ffffff; font-size: 22px; font-weight: 700;">
                                 Winner
                               </h2>
-                              <div style="font-size: 56px; margin: 20px 0;">🏆</div>
-                              <p style="font-size: 26px; font-weight: 700; margin: 16px 0; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
+                              <div style="font-size: 56px; margin: 16px 0;">🏆</div>
+                              <p style="font-size: 26px; font-weight: 700; margin: 12px 0; color: #ffffff;">
                                 ${winnerName}
                               </p>
-                              <p style="font-size: 18px; margin: 16px 0; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
+                              <p style="font-size: 18px; margin: 12px 0; color: #ffffff;">
                                 Won <strong>$${raffle.prize_amount}</strong> in ${raffle.prize}
                               </p>
                             </td>
                           </tr>
                         </table>
                         
-                        <p style="font-size: 16px; line-height: 1.6; margin: 0 0 32px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; color: #1f2937;">
-                          While you didn't win this time, your learning journey continues to be valuable. Every course you complete, every discussion you join, builds your understanding of DeFi.
+                        <p style="font-size: 16px; line-height: 1.6; margin: 0 0 24px 0; text-align: center; color: hsl(0, 0%, 83%);">
+                          While you didn't win this time, your learning journey continues to be valuable. Every course you complete builds your understanding of DeFi.
                         </p>
                         
-                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f9fafb; border-radius: 8px; margin: 30px 0;">
+                        <!-- Stay Tuned Box -->
+                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background: hsl(217, 33%, 17%); border-radius: 12px; margin: 24px 0; border: 1px solid hsl(217, 33%, 25%);">
                           <tr>
                             <td style="padding: 24px;">
-                              <h3 style="color: #8B5CF6; margin: 0 0 16px 0; font-size: 18px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
+                              <h3 style="color: hsl(217, 91%, 60%); margin: 0 0 16px 0; font-size: 18px; font-weight: 700;">
                                 Stay Tuned!
                               </h3>
-                              <p style="font-size: 16px; line-height: 1.8; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; color: #1f2937;">
+                              <p style="font-size: 16px; line-height: 1.8; margin: 0; color: hsl(0, 0%, 83%);">
                                 🎟 More Learn-to-Earn raffles are coming<br>
                                 📚 Keep learning and earning entries<br>
-                                🔔 Follow us on <a href="https://instagram.com/3rdeyeadvisors" style="color: #8B5CF6; text-decoration: none; font-weight: 600;">Instagram</a> and <a href="https://x.com/3rdeyeadvisors" style="color: #8B5CF6; text-decoration: none; font-weight: 600;">X</a> for updates
+                                🔔 Follow us on <a href="https://instagram.com/3rdeyeadvisors" style="color: hsl(217, 91%, 60%); text-decoration: none; font-weight: 600;">Instagram</a> and <a href="https://x.com/3rdeyeadvisors" style="color: hsl(217, 91%, 60%); text-decoration: none; font-weight: 600;">X</a>
                               </p>
                             </td>
                           </tr>
                         </table>
                         
+                        <!-- CTA Button -->
                         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                           <tr>
-                            <td align="center" style="padding: 30px 0 40px 0;">
-                              <a href="https://the3rdeyeadvisors.com/courses" style="display: inline-block; background-color: #8B5CF6; color: #ffffff; padding: 18px 40px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 18px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
+                            <td align="center" style="padding: 24px 0 32px 0;">
+                              <a href="https://the3rdeyeadvisors.com/courses" class="cta-button" style="display: inline-block; background: linear-gradient(45deg, hsl(217, 91%, 60%), hsl(271, 91%, 65%)); color: #ffffff; padding: 18px 40px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 18px; min-height: 44px; box-sizing: border-box;">
                                 Continue Learning →
                               </a>
                             </td>
                           </tr>
                         </table>
                         
-                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top: 2px solid #e5e7eb; padding-top: 24px; margin: 20px 0 30px 0;">
+                        <!-- Footer -->
+                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top: 1px solid hsl(217, 33%, 25%); padding-top: 24px;">
                           <tr>
                             <td align="center">
-                              <p style="font-size: 18px; font-weight: 700; color: #8B5CF6; margin: 0 0 8px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
+                              <p style="font-size: 18px; font-weight: 700; color: hsl(271, 91%, 65%); margin: 0 0 8px 0;">
                                 Awareness is advantage.
                               </p>
-                              <p style="font-size: 14px; color: #6b7280; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
+                              <p style="font-size: 14px; color: hsl(0, 0%, 50%); margin: 0;">
                                 — The 3rdeyeadvisors Team
                               </p>
                             </td>
                           </tr>
                         </table>
                         
-                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f9fafb; border-radius: 8px;">
+                        <!-- History Link -->
+                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background: hsl(217, 33%, 12%); border-radius: 8px; margin-top: 24px;">
                           <tr>
-                            <td style="padding: 20px; text-align: center;">
-                              <p style="font-size: 14px; color: #6b7280; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
-                                View all past winners on our <a href="https://the3rdeyeadvisors.com/raffle-history" style="color: #8B5CF6; text-decoration: none; font-weight: 600;">Raffle History</a> page.
+                            <td style="padding: 16px; text-align: center;">
+                              <p style="font-size: 14px; color: hsl(0, 0%, 60%); margin: 0;">
+                                View all past winners on our <a href="https://the3rdeyeadvisors.com/raffle-history" style="color: hsl(217, 91%, 60%); text-decoration: none; font-weight: 600;">Raffle History</a> page.
                               </p>
                             </td>
                           </tr>

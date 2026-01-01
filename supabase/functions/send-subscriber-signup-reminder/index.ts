@@ -113,50 +113,118 @@ const handler = async (req: Request): Promise<Response> => {
           to: [subscriber.email],
           subject: "Unlock Your Full DeFi Learning Experience 🔓",
           html: `
-            <div style="max-width: 600px; margin: 0 auto; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #020817; color: #fff; padding: 20px; border-radius: 12px;">
-              <div style="text-align: center; padding: 30px 20px; background: linear-gradient(135deg, #0f172a, #1e1b4b); border-radius: 12px; margin-bottom: 24px; border: 1px solid #1e293b;">
-                <h1 style="color: #3b82f6; font-size: 28px; margin: 0 0 8px 0; font-weight: bold;">3rdeyeadvisors</h1>
-                <h2 style="color: #a78bfa; font-size: 20px; margin: 0;">Take Your Learning to the Next Level</h2>
-              </div>
-              
-              <p style="color: #e5e5e5; font-size: 18px; margin: 0 0 16px 0; line-height: 1.6;">
-                Hey ${firstName}! 👋
-              </p>
-              
-              <p style="color: #d4d4d4; font-size: 16px; margin: 0 0 24px 0; line-height: 1.6;">
-                Thanks for subscribing to our newsletter! We noticed you haven't created an account yet – and you're missing out on some amazing features.
-              </p>
-              
-              <div style="background: linear-gradient(135deg, #1e293b, #1e1b4b); padding: 24px; border-radius: 12px; margin: 24px 0; border: 1px solid #334155;">
-                <h3 style="color: #60a5fa; margin: 0 0 16px 0; font-size: 18px;">🎁 What You Get With a Free Account:</h3>
-                <ul style="color: #d4d4d4; line-height: 1.8; margin: 0; padding-left: 20px;">
-                  <li><strong style="color: #60a5fa;">Track Your Progress</strong> - Save your place in courses and tutorials</li>
-                  <li><strong style="color: #60a5fa;">Free DeFi Courses</strong> - Access beginner-friendly content at no cost</li>
-                  <li><strong style="color: #60a5fa;">Community Access</strong> - Join discussions and Q&A with other learners</li>
-                  <li><strong style="color: #60a5fa;">Raffle Entries</strong> - Participate in exclusive giveaways and prizes</li>
-                  <li><strong style="color: #60a5fa;">Certificates</strong> - Earn badges as you complete courses</li>
-                </ul>
-              </div>
-              
-              <p style="color: #d4d4d4; font-size: 16px; margin: 0 0 24px 0; line-height: 1.6;">
-                Creating an account takes less than 30 seconds – just use the same email you subscribed with!
-              </p>
-              
-              <div style="text-align: center; margin: 32px 0;">
-                <a href="https://the3rdeyeadvisors.com/auth" style="background: linear-gradient(45deg, #3b82f6, #8b5cf6); color: #ffffff; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block; font-size: 16px;">
-                  Create Free Account
-                </a>
-              </div>
-              
-              <p style="color: #9ca3af; font-size: 14px; margin: 24px 0 0 0; line-height: 1.6;">
-                Questions? Just reply to this email – we're here to help!
-              </p>
-              
-              <hr style="margin: 32px 0; border: none; border-top: 1px solid #1e293b;">
-              <p style="color: #6b7280; font-size: 12px; text-align: center; margin: 0;">
-                You're receiving this because you subscribed at 3rdeyeadvisors.com
-              </p>
-            </div>
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <meta charset="utf-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <style>
+                @media only screen and (max-width: 600px) {
+                  .container { padding: 24px 16px !important; }
+                  .header h1 { font-size: 24px !important; }
+                  .header h2 { font-size: 18px !important; }
+                  .cta-button { padding: 16px 24px !important; font-size: 16px !important; }
+                }
+              </style>
+            </head>
+            <body style="margin: 0; padding: 0; background-color: hsl(222, 84%, 5%); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: hsl(222, 84%, 5%);">
+                <tr>
+                  <td align="center" style="padding: 40px 20px;">
+                    <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" class="container" style="max-width: 600px; width: 100%; background: linear-gradient(180deg, hsl(222, 47%, 11%), hsl(263, 70%, 10%)); border-radius: 16px; border: 1px solid hsl(217, 33%, 17%);">
+                      <tr>
+                        <td style="padding: 40px 32px;">
+                          <!-- Header -->
+                          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="header" style="text-align: center; padding-bottom: 24px; border-bottom: 1px solid hsl(217, 33%, 25%); margin-bottom: 24px;">
+                            <tr>
+                              <td align="center">
+                                <h1 style="color: hsl(217, 91%, 60%); font-size: 28px; margin: 0 0 8px 0; font-weight: 700;">3rdeyeadvisors</h1>
+                                <h2 style="color: hsl(271, 91%, 65%); font-size: 20px; margin: 0; font-weight: 600;">Take Your Learning to the Next Level</h2>
+                              </td>
+                            </tr>
+                          </table>
+                          
+                          <p style="color: hsl(0, 0%, 96%); font-size: 18px; margin: 0 0 16px 0; line-height: 1.6; text-align: center;">
+                            Hey ${firstName}! 👋
+                          </p>
+                          
+                          <p style="color: hsl(0, 0%, 83%); font-size: 16px; margin: 0 0 24px 0; line-height: 1.6; text-align: center;">
+                            Thanks for subscribing to our newsletter! We noticed you haven't created an account yet – and you're missing out on some amazing features.
+                          </p>
+                          
+                          <!-- Benefits Box -->
+                          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background: hsl(217, 33%, 17%); padding: 24px; border-radius: 12px; margin: 24px 0; border: 1px solid hsl(217, 33%, 25%);">
+                            <tr>
+                              <td>
+                                <h3 style="color: hsl(217, 91%, 60%); margin: 0 0 16px 0; font-size: 18px; font-weight: 700;">🎁 What You Get With a Free Account:</h3>
+                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                                  <tr>
+                                    <td style="padding: 8px 0; color: hsl(0, 0%, 83%); font-size: 16px; line-height: 1.6;">
+                                      <strong style="color: hsl(217, 91%, 60%);">Track Your Progress</strong> - Save your place in courses
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td style="padding: 8px 0; color: hsl(0, 0%, 83%); font-size: 16px; line-height: 1.6;">
+                                      <strong style="color: hsl(217, 91%, 60%);">Free DeFi Courses</strong> - Access beginner-friendly content
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td style="padding: 8px 0; color: hsl(0, 0%, 83%); font-size: 16px; line-height: 1.6;">
+                                      <strong style="color: hsl(217, 91%, 60%);">Community Access</strong> - Join discussions with learners
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td style="padding: 8px 0; color: hsl(0, 0%, 83%); font-size: 16px; line-height: 1.6;">
+                                      <strong style="color: hsl(217, 91%, 60%);">Raffle Entries</strong> - Participate in exclusive giveaways
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td style="padding: 8px 0; color: hsl(0, 0%, 83%); font-size: 16px; line-height: 1.6;">
+                                      <strong style="color: hsl(217, 91%, 60%);">Certificates</strong> - Earn badges as you complete courses
+                                    </td>
+                                  </tr>
+                                </table>
+                              </td>
+                            </tr>
+                          </table>
+                          
+                          <p style="color: hsl(0, 0%, 83%); font-size: 16px; margin: 0 0 24px 0; line-height: 1.6; text-align: center;">
+                            Creating an account takes less than 30 seconds – just use the same email you subscribed with!
+                          </p>
+                          
+                          <!-- CTA Button -->
+                          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                              <td align="center" style="padding: 24px 0;">
+                                <a href="https://the3rdeyeadvisors.com/auth" class="cta-button" style="display: inline-block; background: linear-gradient(45deg, hsl(217, 91%, 60%), hsl(271, 91%, 65%)); color: #ffffff; padding: 18px 40px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 18px; min-height: 44px; box-sizing: border-box;">
+                                  Create Free Account
+                                </a>
+                              </td>
+                            </tr>
+                          </table>
+                          
+                          <p style="color: hsl(0, 0%, 60%); font-size: 14px; margin: 24px 0 0 0; line-height: 1.6; text-align: center;">
+                            Questions? Just reply to this email – we're here to help!
+                          </p>
+                          
+                          <!-- Footer -->
+                          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top: 32px; padding-top: 24px; border-top: 1px solid hsl(217, 33%, 25%);">
+                            <tr>
+                              <td align="center">
+                                <p style="color: hsl(0, 0%, 45%); font-size: 12px; margin: 0;">
+                                  You're receiving this because you subscribed at 3rdeyeadvisors.com
+                                </p>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </body>
+            </html>
           `,
         });
         
