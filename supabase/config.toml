@@ -147,3 +147,6 @@ verify_jwt = true
 
 [functions.verify-nft-ownership]
 verify_jwt = false
+
+[functions.send-trial-expiring-email]
+verify_jwt = false
