@@ -55,11 +55,6 @@ verify_jwt = false
 [functions.mailchimp-sync]
 verify_jwt = false
 
-[functions.send-welcome-email]
-verify_jwt = false
-
-[functions.send-subscriber-thank-you]
-verify_jwt = false
 
 [functions.fetch-defi-data]
 verify_jwt = false
@@ -91,8 +86,6 @@ verify_jwt = false
 [functions.admin-ai-command]
 verify_jwt = true
 
-[functions.send-newsletter-email]
-verify_jwt = false
 
 [functions.3ea-broadcast]
 verify_jwt = false
