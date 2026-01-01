@@ -215,7 +215,7 @@ export function MerchandiseCard({ product, onAddToCart, isInCart }: MerchandiseC
         ) : (
           /* Single variant label for products without size options */
           <div className="h-8 md:h-9 mb-2 flex items-center justify-center">
-            <span className="text-xs text-muted-foreground/70 font-consciousness">One Size</span>
+            <span className="text-xs text-muted-foreground font-consciousness">One Size</span>
           </div>
         )}
 
