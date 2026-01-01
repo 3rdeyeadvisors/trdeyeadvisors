@@ -50,7 +50,6 @@ const Tutorials = () => {
           duration: "8 min",
           difficulty: "Beginner",
           course: "Courses 1 & 2",
-          thumbnail: "/api/placeholder/400/225",
           steps: 6,
           icon: Wallet,
           priority: "High"
@@ -62,7 +61,6 @@ const Tutorials = () => {
           duration: "12 min",
           difficulty: "Beginner",
           course: "Course 1",
-          thumbnail: "/api/placeholder/400/225",
           steps: 8,
           icon: ArrowLeftRight,
           priority: "High"
@@ -74,7 +72,6 @@ const Tutorials = () => {
           duration: "6 min",
           difficulty: "Beginner",
           course: "Platform Tools",
-          thumbnail: "/api/placeholder/400/225",
           steps: 4,
           icon: Calculator,
           priority: "High"
@@ -86,7 +83,6 @@ const Tutorials = () => {
           duration: "10 min",
           difficulty: "Beginner",
           course: "Course 2",
-          thumbnail: "/api/placeholder/400/225",
           steps: 7,
           icon: AlertTriangle,
           priority: "Critical"
@@ -105,7 +101,6 @@ const Tutorials = () => {
           duration: "15 min",
           difficulty: "Intermediate",
           course: "Course 3",
-          thumbnail: "/api/placeholder/400/225",
           steps: 10,
           icon: TrendingUp,
           priority: "Medium"
@@ -117,7 +112,6 @@ const Tutorials = () => {
           duration: "12 min",
           difficulty: "Intermediate",
           course: "Course 3",
-          thumbnail: "/api/placeholder/400/225",
           steps: 8,
           icon: TrendingUp,
           priority: "Medium"
@@ -129,7 +123,6 @@ const Tutorials = () => {
           duration: "9 min",
           difficulty: "Beginner",
           course: "Course 4",
-          thumbnail: "/api/placeholder/400/225",
           steps: 6,
           icon: PieChart,
           priority: "Medium"
@@ -141,7 +134,6 @@ const Tutorials = () => {
           duration: "14 min",
           difficulty: "Advanced",
           course: "Course 4",
-          thumbnail: "/api/placeholder/400/225",
           steps: 9,
           icon: Shield,
           priority: "Medium"
@@ -160,7 +152,6 @@ const Tutorials = () => {
           duration: "12 min",
           difficulty: "Intermediate",
           course: "Advanced Skills",
-          thumbnail: "/api/placeholder/400/225",
           steps: 6,
           icon: BarChart3,
           priority: "Medium"
@@ -172,7 +163,6 @@ const Tutorials = () => {
           duration: "11 min",
           difficulty: "Intermediate",
           course: "Advanced Skills",
-          thumbnail: "/api/placeholder/400/225",
           steps: 6,
           icon: Image,
           priority: "Medium"
@@ -184,7 +174,6 @@ const Tutorials = () => {
           duration: "10 min",
           difficulty: "Intermediate",
           course: "Advanced Skills",
-          thumbnail: "/api/placeholder/400/225",
           steps: 6,
           icon: Users,
           priority: "Medium"
