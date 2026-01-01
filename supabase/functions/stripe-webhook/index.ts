@@ -1,10 +1,15 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import Stripe from "https://esm.sh/stripe@14.21.0";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import Stripe from "https://esm.sh/stripe@18.5.0";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, stripe-signature",
+};
+
+const logStep = (step: string, details?: any) => {
+  const detailsStr = details ? ` - ${JSON.stringify(details)}` : '';
+  console.log(`[STRIPE-WEBHOOK] ${step}${detailsStr}`);
 };
 
 serve(async (req) => {
@@ -13,7 +18,7 @@ serve(async (req) => {
   }
 
   const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
-    apiVersion: "2023-10-16",
+    apiVersion: "2025-08-27.basil",
   });
 
   const supabaseClient = createClient(
@@ -30,7 +35,7 @@ serve(async (req) => {
     const body = await req.text();
     
     if (!signature) {
-      console.error("❌ No Stripe signature found");
+      logStep("ERROR: No Stripe signature found");
       return new Response(
         JSON.stringify({ error: "invalid signature" }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 }
@@ -41,7 +46,7 @@ serve(async (req) => {
     const webhookSecret = Deno.env.get("STRIPE_WEBHOOK_SECRET");
     
     if (!webhookSecret) {
-      console.error("❌ STRIPE_WEBHOOK_SECRET not configured");
+      logStep("ERROR: STRIPE_WEBHOOK_SECRET not configured");
       return new Response(
         JSON.stringify({ error: "webhook secret not configured" }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 500 }
@@ -49,10 +54,10 @@ serve(async (req) => {
     }
 
     event = await stripe.webhooks.constructEventAsync(body, signature, webhookSecret);
-    console.log("✅ Webhook signature verified, event type:", event.type);
+    logStep("Webhook signature verified", { eventType: event.type });
 
   } catch (verifyError) {
-    console.error("❌ Signature verification failed:", verifyError.message);
+    logStep("ERROR: Signature verification failed", { message: verifyError.message });
     return new Response(
       JSON.stringify({ error: "invalid signature" }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 }
@@ -69,7 +74,7 @@ serve(async (req) => {
   const backgroundWork = async () => {
     try {
       if (event.type !== "checkout.session.completed") {
-        console.log("Ignoring event type:", event.type);
+        logStep("Ignoring event type", { eventType: event.type });
         return;
       }
 
