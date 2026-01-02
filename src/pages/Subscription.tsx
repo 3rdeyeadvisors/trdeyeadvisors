@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { Check, Crown, Loader2, Sparkles, Calendar, CreditCard, Clock, AlertTriangle } from 'lucide-react';
 import SEO from '@/components/SEO';
+import { PRICING } from '@/lib/constants';
 
 const Subscription = () => {
   const { user, session } = useAuth();
@@ -254,8 +255,8 @@ const Subscription = () => {
                   <h3 className="text-xl md:text-2xl font-semibold text-foreground mb-2">Monthly</h3>
                   <p className="text-sm text-foreground/70 mb-5">Full access, billed monthly</p>
                   <div>
-                    <span className="text-4xl md:text-5xl font-bold text-foreground">$99</span>
-                    <span className="text-foreground/70">/month</span>
+                    <span className="text-4xl md:text-5xl font-bold text-foreground">{PRICING.monthly.display}</span>
+                    <span className="text-foreground/70">{PRICING.monthly.period}</span>
                   </div>
                 </div>
                 <ul className="space-y-3 mb-8 flex-1">
@@ -301,8 +302,8 @@ const Subscription = () => {
                   <h3 className="text-xl md:text-2xl font-semibold text-foreground mb-2">Annual</h3>
                   <p className="text-sm text-foreground/70 mb-5">Full year commitment</p>
                   <div>
-                    <span className="text-4xl md:text-5xl font-bold text-foreground">$1,188</span>
-                    <span className="text-foreground/70">/year</span>
+                    <span className="text-4xl md:text-5xl font-bold text-foreground">{PRICING.annual.display}</span>
+                    <span className="text-foreground/70">{PRICING.annual.period}</span>
                   </div>
                 </div>
                 <ul className="space-y-3 mb-8 flex-1">

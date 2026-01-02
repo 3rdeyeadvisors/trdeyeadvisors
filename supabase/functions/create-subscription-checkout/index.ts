@@ -13,6 +13,7 @@ const logStep = (step: string, details?: any) => {
 };
 
 // Price IDs for subscription plans
+// NOTE: These must match the Stripe Price IDs in src/lib/constants.ts (PRICING object)
 const PRICE_IDS = {
   monthly: 'price_1SfmuFLxeGPiI62jZkGuCmqm', // $99/month
   annual: 'price_1Sl04YLxeGPiI62jjtRmPeC9',  // $1188/year

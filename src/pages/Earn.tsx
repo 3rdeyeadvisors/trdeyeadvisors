@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import SEO from "@/components/SEO";
 import { Link } from "react-router-dom";
+import { PRICING, COMMISSIONS } from "@/lib/constants";
 
 interface Commission {
   id: string;
@@ -197,7 +198,7 @@ const Earn = () => {
     <>
       <SEO
         title="Earn with 3EA - 50% Commission Program"
-        description="Earn 50% commission by sharing 3rdeyeadvisors. Refer friends and earn $49.50 to $594 per subscription."
+        description={`Earn 50% commission by sharing 3rdeyeadvisors. Refer friends and earn $${COMMISSIONS.monthly} to $${COMMISSIONS.annual} per subscription.`}
         keywords="referral program, earn crypto, affiliate program, defi education"
       />
 
@@ -213,7 +214,7 @@ const Earn = () => {
               Earn 50% Commission
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-foreground/70 max-w-2xl mx-auto leading-relaxed">
-              Share 3rdeyeadvisors and earn $49.50 - $594 per referral
+              Share 3rdeyeadvisors and earn ${COMMISSIONS.monthly} - ${COMMISSIONS.annual} per referral
             </p>
           </div>
 
@@ -266,17 +267,17 @@ const Earn = () => {
                 <div className="p-4 bg-muted/30 rounded-lg border border-border">
                   <div className="flex justify-between items-center mb-2">
                     <span className="font-medium">Monthly Plan</span>
-                    <Badge variant="secondary">$99/mo</Badge>
+                    <Badge variant="secondary">{PRICING.monthly.display}/mo</Badge>
                   </div>
-                  <div className="text-2xl font-bold text-primary">$49.50</div>
+                  <div className="text-2xl font-bold text-primary">${COMMISSIONS.monthly}</div>
                   <p className="text-sm text-foreground/70">per referral</p>
                 </div>
                 <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
                   <div className="flex justify-between items-center mb-2">
                     <span className="font-medium">Annual Plan</span>
-                    <Badge>$1,188/yr</Badge>
+                    <Badge>{PRICING.annual.display}/yr</Badge>
                   </div>
-                  <div className="text-2xl font-bold text-primary">$594</div>
+                  <div className="text-2xl font-bold text-primary">${COMMISSIONS.annual}</div>
                   <p className="text-sm text-foreground/70">per referral</p>
                 </div>
               </div>
