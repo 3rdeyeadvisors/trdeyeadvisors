@@ -109,10 +109,56 @@ serve(async (req) => {
                 const subscriptionAmountCents = invoice.amount_paid;
                 const planType = subscriptionAmountCents > 50000 ? "annual" : "monthly"; // $500+ is annual
                 
-                // Tiered commission rates:
-                // - Annual subscribers get 60% commission as a premium benefit
-                // - Monthly subscribers get 50% commission
-                const commissionRate = planType === "annual" ? 0.6 : 0.5;
+                // Check if the REFERRER has an active annual subscription
+                // Only annual subscribers get 60% commission, everyone else gets 50%
+                let referrerIsAnnual = false;
+                try {
+                  // Get referrer's email from auth
+                  const { data: referrerUser } = await supabaseClient.auth.admin.getUserById(
+                    referralData.referrer_id
+                  );
+                  const referrerEmail = referrerUser?.user?.email;
+                  
+                  if (referrerEmail) {
+                    logStep("Checking referrer subscription status", { referrerEmail });
+                    
+                    // Find referrer in Stripe
+                    const referrerCustomers = await stripe.customers.list({ 
+                      email: referrerEmail, 
+                      limit: 1 
+                    });
+                    
+                    if (referrerCustomers.data.length > 0) {
+                      // Check for active annual subscription
+                      const referrerSubs = await stripe.subscriptions.list({
+                        customer: referrerCustomers.data[0].id,
+                        status: "active",
+                        limit: 10
+                      });
+                      
+                      // Annual price ID from constants
+                      const annualPriceId = "price_1Sl04YLxeGPiI62jjtRmPeC9";
+                      
+                      referrerIsAnnual = referrerSubs.data.some(sub =>
+                        sub.items.data.some(item => item.price.id === annualPriceId)
+                      );
+                      
+                      logStep("Referrer subscription check complete", { 
+                        referrerIsAnnual,
+                        activeSubscriptions: referrerSubs.data.length
+                      });
+                    } else {
+                      logStep("Referrer not found in Stripe, using default 50% rate");
+                    }
+                  }
+                } catch (lookupError) {
+                  logStep("Error checking referrer subscription, using default 50% rate", { 
+                    error: lookupError.message 
+                  });
+                }
+
+                // Commission rate based on REFERRER's subscription status (not what was purchased)
+                const commissionRate = referrerIsAnnual ? 0.6 : 0.5;
                 const commissionAmountCents = Math.floor(subscriptionAmountCents * commissionRate);
                 
                 logStep("Calculating tiered commission", { 
