@@ -636,4 +636,23 @@ svg[class*="lucide-star"] {
       max-height: 10px !important;
     }
   }
+
+  /* Improved mobile carousel swiping */
+  .embla__container,
+  [data-embla-container] {
+    touch-action: pan-y pinch-zoom;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Ensure carousel items don't block touch events */
+  .embla__slide,
+  [role="group"][aria-roledescription="slide"] {
+    touch-action: pan-x pan-y;
+  }
+
+  /* Smooth scrolling for carousels */
+  [aria-roledescription="carousel"] {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
 }
