@@ -400,7 +400,7 @@ const Raffles = () => {
 
     try {
       const { data } = await supabase
-        .from('profiles')
+        .from('public_profiles')
         .select('display_name')
         .eq('user_id', activeRaffle.winner_user_id)
         .single();
