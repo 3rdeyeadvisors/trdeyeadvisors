@@ -1,11 +1,12 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Filter, LogIn, Search } from "lucide-react";
+import { Filter, LogIn, Search, Star } from "lucide-react";
 import { CourseCard } from "@/components/course/CourseCard";
 import { AuthModal } from "@/components/auth/AuthModal";
 import { useAuth } from "@/components/auth/AuthProvider";
+import { useSubscription } from "@/hooks/useSubscription";
 import { BookOpen } from "lucide-react";
 import SEO from "@/components/SEO";
 import { ParticipantTracker } from "@/components/admin/ParticipantTracker";
@@ -13,13 +14,17 @@ import { usePresenceTracking } from "@/hooks/usePresenceTracking";
 import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import { PullToRefreshIndicator } from "@/components/ui/pull-to-refresh";
 import { toast } from "sonner";
+import { ANNUAL_BENEFITS } from "@/lib/constants";
 
 const Courses = () => {
   const [activeFilter, setActiveFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [showAuthModal, setShowAuthModal] = useState(false);
   const { user } = useAuth();
+  const { subscription } = useSubscription();
   const navigate = useNavigate();
+
+  const isAnnualSubscriber = subscription?.plan === 'annual' || subscription?.isAdmin;
 
   // Track presence
   usePresenceTracking({
@@ -28,7 +33,10 @@ const Courses = () => {
     metadata: { activeFilter, searchQuery }
   });
 
-  const courses = [
+  // Course data with early access dates
+  // early_access_date: when annual subscribers can access
+  // public_release_date: when all subscribers can access
+  const rawCourses = [
     {
       id: 1,
       title: "DeFi Foundations: Understanding the New Financial System",
@@ -48,7 +56,9 @@ const Courses = () => {
       ],
       icon: BookOpen,
       offers: [],
-      hasCourseInstance: true
+      hasCourseInstance: true,
+      early_access_date: null, // null = already public
+      public_release_date: null
     },
     {
       id: 2,
@@ -69,7 +79,9 @@ const Courses = () => {
       ],
       icon: BookOpen,
       offers: [],
-      hasCourseInstance: true
+      hasCourseInstance: true,
+      early_access_date: null,
+      public_release_date: null
     },
     {
       id: 3,
@@ -88,7 +100,9 @@ const Courses = () => {
         "How to Calculate Risk vs Reward Before You Invest",
         "Beginner-Friendly Platforms to Start With"
       ],
-      icon: BookOpen
+      icon: BookOpen,
+      early_access_date: null,
+      public_release_date: null
     },
     {
       id: 4,
@@ -107,7 +121,9 @@ const Courses = () => {
         "Recognizing Market Trends Without Guessing",
         "Staying Consistent: The Long-Term DeFi Mindset"
       ],
-      icon: BookOpen
+      icon: BookOpen,
+      early_access_date: null,
+      public_release_date: null
     },
     {
       id: 5,
@@ -126,9 +142,45 @@ const Courses = () => {
         "How to Choose the Right Vault for You",
         "Getting Access to the 3EA Vault (Step-by-Step Guide)"
       ],
-      icon: BookOpen
+      icon: BookOpen,
+      early_access_date: null,
+      public_release_date: null
     }
   ];
+
+  // Process courses to determine access based on subscription tier
+  const courses = useMemo(() => {
+    const now = new Date();
+    
+    return rawCourses.map(course => {
+      // If no early access date, course is public to all
+      if (!course.early_access_date) {
+        return { ...course, isEarlyAccess: false, isLocked: false };
+      }
+      
+      const earlyAccessDate = new Date(course.early_access_date);
+      const publicReleaseDate = course.public_release_date 
+        ? new Date(course.public_release_date)
+        : new Date(earlyAccessDate.getTime() + (ANNUAL_BENEFITS.earlyAccessDays * 24 * 60 * 60 * 1000));
+      
+      // Course not yet available to anyone
+      if (now < earlyAccessDate) {
+        return { ...course, isEarlyAccess: false, isLocked: true };
+      }
+      
+      // In early access window (annual only)
+      if (now >= earlyAccessDate && now < publicReleaseDate) {
+        return {
+          ...course,
+          isEarlyAccess: true,
+          isLocked: !isAnnualSubscriber
+        };
+      }
+      
+      // Past public release date - available to all
+      return { ...course, isEarlyAccess: false, isLocked: false };
+    });
+  }, [isAnnualSubscriber]);
 
   const filters = [
     { id: "all", label: "All Courses" },
@@ -266,6 +318,12 @@ const Courses = () => {
             <p className="text-awareness font-consciousness mt-3 text-sm sm:text-base">
               Welcome back! Your progress is being tracked.
             </p>
+          )}
+          {isAnnualSubscriber && (
+            <div className="flex items-center justify-center gap-2 mt-3 text-primary">
+              <Star className="w-4 h-4" />
+              <span className="text-sm font-consciousness">Annual Member: {ANNUAL_BENEFITS.earlyAccessDays}-day early access to new courses</span>
+            </div>
           )}
         </div>
 

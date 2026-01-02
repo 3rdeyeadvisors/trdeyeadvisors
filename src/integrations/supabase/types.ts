@@ -332,9 +332,11 @@ export type Database = {
           category: string
           created_at: string
           description: string | null
+          early_access_date: string | null
           id: number
           is_active: boolean
           price_cents: number | null
+          public_release_date: string | null
           stripe_price_id: string | null
           title: string
           updated_at: string
@@ -343,9 +345,11 @@ export type Database = {
           category: string
           created_at?: string
           description?: string | null
+          early_access_date?: string | null
           id?: number
           is_active?: boolean
           price_cents?: number | null
+          public_release_date?: string | null
           stripe_price_id?: string | null
           title: string
           updated_at?: string
@@ -354,9 +358,11 @@ export type Database = {
           category?: string
           created_at?: string
           description?: string | null
+          early_access_date?: string | null
           id?: number
           is_active?: boolean
           price_cents?: number | null
+          public_release_date?: string | null
           stripe_price_id?: string | null
           title?: string
           updated_at?: string

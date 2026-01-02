@@ -46,6 +46,8 @@ export interface CourseContentData {
   difficulty: string;
   estimatedTime: string;
   modules: ModuleContent[];
+  early_access_date?: string | null; // When annual subscribers can access
+  public_release_date?: string | null; // When all subscribers can access
 }
 
 // Course content data - static content for all courses
