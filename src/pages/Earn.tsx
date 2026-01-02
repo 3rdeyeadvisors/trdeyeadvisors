@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useSubscription } from "@/hooks/useSubscription";
+import { useReferralTerms } from "@/hooks/useReferralTerms";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,11 +13,12 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { 
   DollarSign, Users, Copy, Share2, Check, Loader2, 
-  Wallet, Mail, ArrowRight, Gift, Clock, CheckCircle2, Crown
+  Wallet, Mail, ArrowRight, Gift, Clock, CheckCircle2, Crown, FileText, Shield
 } from "lucide-react";
 import SEO from "@/components/SEO";
 import { Link } from "react-router-dom";
 import { PRICING, COMMISSIONS, COMMISSION_RATES } from "@/lib/constants";
+import { ReferralTermsModal } from "@/components/referral/ReferralTermsModal";
 
 interface Commission {
   id: string;
@@ -36,12 +38,14 @@ interface Profile {
 const Earn = () => {
   const { user, session } = useAuth();
   const { subscription } = useSubscription();
+  const { hasAcceptedTerms, loading: termsLoading, refreshTermsStatus, acceptance } = useReferralTerms();
   const [commissions, setCommissions] = useState<Commission[]>([]);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [referralCount, setReferralCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
   
   // Payout form state
   const [payoutMethod, setPayoutMethod] = useState<string>("");
@@ -102,6 +106,10 @@ const Earn = () => {
   };
 
   const handleCopyLink = async () => {
+    if (!hasAcceptedTerms) {
+      setShowTermsModal(true);
+      return;
+    }
     try {
       await navigator.clipboard.writeText(referralLink);
       setCopied(true);
@@ -113,6 +121,10 @@ const Earn = () => {
   };
 
   const handleShare = async () => {
+    if (!hasAcceptedTerms) {
+      setShowTermsModal(true);
+      return;
+    }
     if (navigator.share) {
       try {
         await navigator.share({
@@ -126,6 +138,11 @@ const Earn = () => {
     } else {
       handleCopyLink();
     }
+  };
+
+  const handleTermsAccepted = () => {
+    setShowTermsModal(false);
+    refreshTermsStatus();
   };
 
   const handleSavePayoutMethod = async () => {
@@ -347,29 +364,66 @@ const Earn = () => {
           {/* Authenticated User Section */}
           {user ? (
             <>
-              {/* Referral Link */}
-              <Card className="mb-8">
-                <CardHeader>
-                  <CardTitle>Your Referral Link</CardTitle>
-                  <CardDescription>Share this link to start earning</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex gap-2">
-                    <Input 
-                      value={referralLink} 
-                      readOnly 
-                      className="font-mono text-sm"
-                    />
-                    <Button onClick={handleCopyLink} variant="outline">
-                      {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                    </Button>
-                    <Button onClick={handleShare}>
-                      <Share2 className="w-4 h-4 mr-2" />
-                      Share
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
+              {/* Referral Link - Terms Gate */}
+              {!termsLoading && !hasAcceptedTerms ? (
+                <Card className="mb-8 border-primary/30">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Shield className="w-5 h-5 text-primary" />
+                      Accept Referral Terms
+                    </CardTitle>
+                    <CardDescription>
+                      Review and accept our referral program terms to get your unique link
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex flex-col sm:flex-row items-center gap-4 p-4 bg-muted/30 rounded-lg">
+                      <p className="text-sm text-foreground/80 flex-1">
+                        Before you can share your referral link and earn commissions, please review 
+                        and accept our referral program terms and conditions.
+                      </p>
+                      <Button onClick={() => setShowTermsModal(true)} className="w-full sm:w-auto">
+                        <FileText className="w-4 h-4 mr-2" />
+                        View Terms
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ) : (
+                <Card className="mb-8">
+                  <CardHeader>
+                    <CardTitle>Your Referral Link</CardTitle>
+                    <CardDescription>Share this link to start earning</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex gap-2">
+                      <Input 
+                        value={referralLink} 
+                        readOnly 
+                        className="font-mono text-sm"
+                      />
+                      <Button onClick={handleCopyLink} variant="outline">
+                        {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                      </Button>
+                      <Button onClick={handleShare}>
+                        <Share2 className="w-4 h-4 mr-2" />
+                        Share
+                      </Button>
+                    </div>
+                    {acceptance && (
+                      <div className="flex items-center justify-between text-xs text-muted-foreground border-t border-border pt-3">
+                        <Link to="/referral-terms" className="hover:text-primary transition-colors flex items-center gap-1">
+                          <FileText className="w-3 h-3" />
+                          View Referral Terms
+                        </Link>
+                        <span>
+                          Terms accepted: {new Date(acceptance.accepted_at).toLocaleDateString()}
+                        </span>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              )}
 
               {/* Stats */}
               <div className="grid md:grid-cols-3 gap-4 mb-8">
@@ -572,10 +626,10 @@ const Earn = () => {
             </Card>
           )}
 
-          {/* Terms */}
+          {/* Terms Summary */}
           <Card className="mt-8 bg-muted/30">
             <CardContent className="py-6">
-              <h4 className="font-semibold mb-3">Program Terms</h4>
+              <h4 className="font-semibold mb-3">Program Terms Summary</h4>
               <ul className="space-y-2 text-sm text-foreground/70">
                 <li className="flex items-start gap-2">
                   <Check className="w-4 h-4 mt-0.5 text-primary flex-shrink-0" />
@@ -587,17 +641,29 @@ const Earn = () => {
                 </li>
                 <li className="flex items-start gap-2">
                   <Check className="w-4 h-4 mt-0.5 text-primary flex-shrink-0" />
-                  Payouts are processed manually and may take up to 7 business days
+                  Payouts are processed monthly and may take up to 7 business days
                 </li>
                 <li className="flex items-start gap-2">
                   <Check className="w-4 h-4 mt-0.5 text-primary flex-shrink-0" />
                   You must have a valid payout method set up to receive payments
                 </li>
               </ul>
+              <div className="mt-4 pt-4 border-t border-border">
+                <Link to="/referral-terms" className="text-sm text-primary hover:underline flex items-center gap-1">
+                  <FileText className="w-4 h-4" />
+                  Read full Referral Program Terms & Conditions
+                </Link>
+              </div>
             </CardContent>
           </Card>
         </div>
       </div>
+
+      <ReferralTermsModal
+        open={showTermsModal}
+        onOpenChange={setShowTermsModal}
+        onAccepted={handleTermsAccepted}
+      />
     </>
   );
 };

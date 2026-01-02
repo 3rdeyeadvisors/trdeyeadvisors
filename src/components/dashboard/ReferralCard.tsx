@@ -4,9 +4,12 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Users, Copy, Check, Gift, Share2 } from "lucide-react";
+import { Users, Copy, Check, Gift, Share2, FileText, Shield } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { Link } from "react-router-dom";
+import { useReferralTerms } from "@/hooks/useReferralTerms";
+import { ReferralTermsModal } from "@/components/referral/ReferralTermsModal";
 
 interface ReferralStats {
   totalReferrals: number;
@@ -21,10 +24,12 @@ interface ActiveRaffle {
 
 export const ReferralCard = () => {
   const { user } = useAuth();
+  const { hasAcceptedTerms, loading: termsLoading, refreshTermsStatus, acceptance } = useReferralTerms();
   const [copied, setCopied] = useState(false);
   const [stats, setStats] = useState<ReferralStats>({ totalReferrals: 0, bonusEntries: 0 });
   const [loading, setLoading] = useState(true);
   const [activeRaffle, setActiveRaffle] = useState<ActiveRaffle | null>(null);
+  const [showTermsModal, setShowTermsModal] = useState(false);
 
   const referralLink = user ? `${window.location.origin}/auth?ref=${user.id}&tab=signup` : "";
 
@@ -77,6 +82,11 @@ export const ReferralCard = () => {
   };
 
   const copyToClipboard = async () => {
+    if (!hasAcceptedTerms) {
+      setShowTermsModal(true);
+      return;
+    }
+
     try {
       await navigator.clipboard.writeText(referralLink);
       setCopied(true);
@@ -88,6 +98,11 @@ export const ReferralCard = () => {
   };
 
   const shareLink = async () => {
+    if (!hasAcceptedTerms) {
+      setShowTermsModal(true);
+      return;
+    }
+
     if (navigator.share) {
       try {
         await navigator.share({
@@ -106,29 +121,95 @@ export const ReferralCard = () => {
     }
   };
 
+  const handleTermsAccepted = () => {
+    setShowTermsModal(false);
+    refreshTermsStatus();
+  };
+
   if (!user) return null;
 
-  return (
-    <Card className="p-4 sm:p-6 mb-6 sm:mb-8 bg-gradient-to-r from-accent/10 to-primary/10 border-accent/30">
-      <div className="flex flex-col gap-4">
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-accent/20 rounded-lg">
-              <Gift className="w-6 h-6 text-accent" />
+  // Show terms acceptance required state
+  if (!termsLoading && !hasAcceptedTerms) {
+    return (
+      <>
+        <Card className="p-4 sm:p-6 mb-6 sm:mb-8 bg-gradient-to-r from-accent/10 to-primary/10 border-accent/30">
+          <div className="flex flex-col gap-4">
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-accent/20 rounded-lg">
+                  <Gift className="w-6 h-6 text-accent" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground">Invite Friends & Earn Rewards</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Accept the referral terms to get your unique link
+                  </p>
+                </div>
+              </div>
             </div>
-            <div>
-              <h3 className="font-semibold text-foreground">Invite Friends & Earn Rewards</h3>
-              <p className="text-sm text-muted-foreground">
-                {activeRaffle 
-                  ? `Share your referral link and earn bonus entries for "${activeRaffle.title}"`
-                  : "Share your referral link - bonus entries will be awarded when a raffle is active"
-                }
-              </p>
+
+            <div className="flex flex-col sm:flex-row items-center gap-4 p-4 bg-muted/30 rounded-lg border border-border">
+              <div className="flex items-center gap-3 flex-1">
+                <Shield className="w-5 h-5 text-primary flex-shrink-0" />
+                <p className="text-sm text-foreground/80">
+                  Review and accept our referral program terms to start earning commissions and bonus entries.
+                </p>
+              </div>
+              <Button onClick={() => setShowTermsModal(true)} className="w-full sm:w-auto">
+                <FileText className="w-4 h-4 mr-2" />
+                View Terms
+              </Button>
             </div>
           </div>
-          
+        </Card>
+
+        <ReferralTermsModal
+          open={showTermsModal}
+          onOpenChange={setShowTermsModal}
+          onAccepted={handleTermsAccepted}
+        />
+      </>
+    );
+  }
+
+  return (
+    <>
+      <Card className="p-4 sm:p-6 mb-6 sm:mb-8 bg-gradient-to-r from-accent/10 to-primary/10 border-accent/30">
+        <div className="flex flex-col gap-4">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-accent/20 rounded-lg">
+                <Gift className="w-6 h-6 text-accent" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-foreground">Invite Friends & Earn Rewards</h3>
+                <p className="text-sm text-muted-foreground">
+                  {activeRaffle 
+                    ? `Share your referral link and earn bonus entries for "${activeRaffle.title}"`
+                    : "Share your referral link - bonus entries will be awarded when a raffle is active"
+                  }
+                </p>
+              </div>
+            </div>
+            
+            {!loading && stats.totalReferrals > 0 && (
+              <div className="hidden sm:flex items-center gap-2">
+                <Badge variant="secondary" className="flex items-center gap-1">
+                  <Users className="w-3 h-3" />
+                  {stats.totalReferrals} referral{stats.totalReferrals !== 1 ? 's' : ''}
+                </Badge>
+                {stats.bonusEntries > 0 && (
+                  <Badge className="bg-accent text-accent-foreground">
+                    +{stats.bonusEntries} bonus entries
+                  </Badge>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Mobile stats */}
           {!loading && stats.totalReferrals > 0 && (
-            <div className="hidden sm:flex items-center gap-2">
+            <div className="flex sm:hidden items-center gap-2 flex-wrap">
               <Badge variant="secondary" className="flex items-center gap-1">
                 <Users className="w-3 h-3" />
                 {stats.totalReferrals} referral{stats.totalReferrals !== 1 ? 's' : ''}
@@ -140,55 +221,59 @@ export const ReferralCard = () => {
               )}
             </div>
           )}
-        </div>
 
-        {/* Mobile stats */}
-        {!loading && stats.totalReferrals > 0 && (
-          <div className="flex sm:hidden items-center gap-2 flex-wrap">
-            <Badge variant="secondary" className="flex items-center gap-1">
-              <Users className="w-3 h-3" />
-              {stats.totalReferrals} referral{stats.totalReferrals !== 1 ? 's' : ''}
-            </Badge>
-            {stats.bonusEntries > 0 && (
-              <Badge className="bg-accent text-accent-foreground">
-                +{stats.bonusEntries} bonus entries
-              </Badge>
-            )}
+          <div className="flex flex-col sm:flex-row gap-2">
+            <div className="flex-1 relative">
+              <Input
+                value={referralLink}
+                readOnly
+                className="pr-10 bg-background/50 text-sm"
+              />
+            </div>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="default"
+                onClick={copyToClipboard}
+                className="flex-1 sm:flex-none"
+              >
+                {copied ? (
+                  <Check className="w-4 h-4 mr-2 text-awareness" />
+                ) : (
+                  <Copy className="w-4 h-4 mr-2" />
+                )}
+                {copied ? "Copied!" : "Copy"}
+              </Button>
+              <Button
+                onClick={shareLink}
+                className="flex-1 sm:flex-none"
+              >
+                <Share2 className="w-4 h-4 mr-2" />
+                Share
+              </Button>
+            </div>
           </div>
-        )}
 
-        <div className="flex flex-col sm:flex-row gap-2">
-          <div className="flex-1 relative">
-            <Input
-              value={referralLink}
-              readOnly
-              className="pr-10 bg-background/50 text-sm"
-            />
-          </div>
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="default"
-              onClick={copyToClipboard}
-              className="flex-1 sm:flex-none"
-            >
-              {copied ? (
-                <Check className="w-4 h-4 mr-2 text-awareness" />
-              ) : (
-                <Copy className="w-4 h-4 mr-2" />
-              )}
-              {copied ? "Copied!" : "Copy"}
-            </Button>
-            <Button
-              onClick={shareLink}
-              className="flex-1 sm:flex-none"
-            >
-              <Share2 className="w-4 h-4 mr-2" />
-              Share
-            </Button>
-          </div>
+          {/* Terms accepted indicator */}
+          {acceptance && (
+            <div className="flex items-center justify-between text-xs text-muted-foreground border-t border-border/50 pt-3">
+              <Link to="/referral-terms" className="hover:text-primary transition-colors flex items-center gap-1">
+                <FileText className="w-3 h-3" />
+                View Referral Terms
+              </Link>
+              <span>
+                Terms accepted: {new Date(acceptance.accepted_at).toLocaleDateString()}
+              </span>
+            </div>
+          )}
         </div>
-      </div>
-    </Card>
+      </Card>
+
+      <ReferralTermsModal
+        open={showTermsModal}
+        onOpenChange={setShowTermsModal}
+        onAccepted={handleTermsAccepted}
+      />
+    </>
   );
 };
