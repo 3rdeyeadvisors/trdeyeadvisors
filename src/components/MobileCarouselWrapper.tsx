@@ -16,8 +16,10 @@ export const MobileCarouselWrapper: React.FC<MobileCarouselWrapperProps> = ({
   
   const containerRef = useRef<HTMLDivElement>(null);
   const startX = useRef(0);
+  const startY = useRef(0);
   const startTime = useRef(0);
   const containerWidth = useRef(0);
+  const isHorizontalSwipe = useRef<boolean | null>(null);
 
   const childrenArray = React.Children.toArray(children);
   const childCount = childrenArray.length;
@@ -35,54 +37,87 @@ export const MobileCarouselWrapper: React.FC<MobileCarouselWrapperProps> = ({
     return () => window.removeEventListener('resize', updateWidth);
   }, []);
 
-  const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    if (!containerRef.current) return;
-    
-    containerWidth.current = containerRef.current.offsetWidth;
-    startX.current = e.touches[0].clientX;
-    startTime.current = Date.now();
-    setIsDragging(true);
-    setDragOffset(0);
-  }, []);
+  // Native touch event handlers for consistent behavior
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
 
-  const handleTouchMove = useCallback((e: React.TouchEvent) => {
-    if (!isDragging) return;
-    
-    const currentX = e.touches[0].clientX;
-    const diff = currentX - startX.current;
-    
-    // Apply resistance at edges
-    let offset = diff;
-    if ((currentIndex === 0 && diff > 0) || (currentIndex === childCount - 1 && diff < 0)) {
-      offset = diff * 0.3; // Resistance factor
-    }
-    
-    setDragOffset(offset);
-  }, [isDragging, currentIndex, childCount]);
+    const handleTouchStart = (e: TouchEvent) => {
+      containerWidth.current = container.offsetWidth;
+      startX.current = e.touches[0].clientX;
+      startY.current = e.touches[0].clientY;
+      startTime.current = Date.now();
+      isHorizontalSwipe.current = null;
+      setIsDragging(true);
+      setDragOffset(0);
+    };
 
-  const handleTouchEnd = useCallback(() => {
-    if (!isDragging) return;
-    
-    const elapsed = Date.now() - startTime.current;
-    const velocity = Math.abs(dragOffset) / elapsed;
-    const threshold = containerWidth.current * 0.2; // 20% of container width
-    const velocityThreshold = 0.5; // pixels per ms
-    
-    let newIndex = currentIndex;
-    
-    // Swipe detection based on distance or velocity
-    if (dragOffset > threshold || (dragOffset > 30 && velocity > velocityThreshold)) {
-      // Swipe right - go to previous
-      newIndex = Math.max(0, currentIndex - 1);
-    } else if (dragOffset < -threshold || (dragOffset < -30 && velocity > velocityThreshold)) {
-      // Swipe left - go to next
-      newIndex = Math.min(childCount - 1, currentIndex + 1);
-    }
-    
-    setCurrentIndex(newIndex);
-    setIsDragging(false);
-    setDragOffset(0);
-  }, [isDragging, dragOffset, currentIndex, childCount]);
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!isDragging) return;
+      
+      const currentX = e.touches[0].clientX;
+      const currentY = e.touches[0].clientY;
+      const diffX = currentX - startX.current;
+      const diffY = currentY - startY.current;
+      
+      // Determine swipe direction on first significant movement
+      if (isHorizontalSwipe.current === null && (Math.abs(diffX) > 10 || Math.abs(diffY) > 10)) {
+        isHorizontalSwipe.current = Math.abs(diffX) > Math.abs(diffY);
+      }
+      
+      // Only handle horizontal swipes
+      if (isHorizontalSwipe.current !== true) {
+        return;
+      }
+      
+      // Prevent scroll and stop pull-to-refresh
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      
+      // Apply resistance at edges
+      let offset = diffX;
+      if ((currentIndex === 0 && diffX > 0) || (currentIndex === childCount - 1 && diffX < 0)) {
+        offset = diffX * 0.3;
+      }
+      
+      setDragOffset(offset);
+    };
+
+    const handleTouchEnd = () => {
+      if (!isDragging) return;
+      
+      const elapsed = Date.now() - startTime.current;
+      const velocity = Math.abs(dragOffset) / elapsed;
+      const threshold = containerWidth.current * 0.2;
+      const velocityThreshold = 0.5;
+      
+      let newIndex = currentIndex;
+      
+      if (isHorizontalSwipe.current === true) {
+        if (dragOffset > threshold || (dragOffset > 30 && velocity > velocityThreshold)) {
+          newIndex = Math.max(0, currentIndex - 1);
+        } else if (dragOffset < -threshold || (dragOffset < -30 && velocity > velocityThreshold)) {
+          newIndex = Math.min(childCount - 1, currentIndex + 1);
+        }
+      }
+      
+      setCurrentIndex(newIndex);
+      setIsDragging(false);
+      setDragOffset(0);
+      isHorizontalSwipe.current = null;
+    };
+
+    // Use passive: false for touchmove to allow preventDefault
+    container.addEventListener('touchstart', handleTouchStart, { passive: true });
+    container.addEventListener('touchmove', handleTouchMove, { passive: false });
+    container.addEventListener('touchend', handleTouchEnd, { passive: true });
+
+    return () => {
+      container.removeEventListener('touchstart', handleTouchStart);
+      container.removeEventListener('touchmove', handleTouchMove);
+      container.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [isDragging, currentIndex, childCount, dragOffset]);
 
   const goToSlide = useCallback((index: number) => {
     setCurrentIndex(Math.max(0, Math.min(childCount - 1, index)));
@@ -99,9 +134,7 @@ export const MobileCarouselWrapper: React.FC<MobileCarouselWrapperProps> = ({
         ref={containerRef}
         className="mobile-carousel-container relative overflow-hidden"
         data-carousel="true"
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
+        data-dragging={isDragging}
       >
         <div
           className="mobile-carousel-track flex"

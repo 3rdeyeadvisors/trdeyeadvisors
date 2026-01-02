@@ -25,17 +25,23 @@ export const usePullToRefresh = ({
   const handleTouchStart = useCallback((e: TouchEvent) => {
     if (disabled || window.scrollY > 0) return;
     
-    // Check if touch started inside a carousel
+    // Check if touch started inside a carousel - use capture phase detection
     isCarouselTouch.current = isInsideCarousel(e.target);
-    if (isCarouselTouch.current) return;
+    if (isCarouselTouch.current) {
+      return;
+    }
     
     startY.current = e.touches[0].clientY;
     isPulling.current = true;
   }, [disabled]);
 
   const handleTouchMove = useCallback((e: TouchEvent) => {
-    // Skip if touch is inside carousel
-    if (isCarouselTouch.current) return;
+    // Skip if touch is inside carousel - check again in case it changed
+    if (isCarouselTouch.current || isInsideCarousel(e.target)) {
+      isCarouselTouch.current = true;
+      return;
+    }
+    
     if (!isPulling.current || disabled || isRefreshing) return;
     
     const currentY = e.touches[0].clientY;
@@ -49,9 +55,15 @@ export const usePullToRefresh = ({
 
   const handleTouchEnd = useCallback(async () => {
     // Reset carousel touch flag
+    const wasCarouselTouch = isCarouselTouch.current;
     isCarouselTouch.current = false;
     
-    if (!isPulling.current || disabled) return;
+    if (wasCarouselTouch || !isPulling.current || disabled) {
+      isPulling.current = false;
+      setPullDistance(0);
+      return;
+    }
+    
     isPulling.current = false;
 
     if (pullDistance >= threshold && !isRefreshing) {
@@ -68,12 +80,13 @@ export const usePullToRefresh = ({
   useEffect(() => {
     const element = document.body;
     
-    element.addEventListener('touchstart', handleTouchStart, { passive: true });
+    // Use capture phase for touchstart to detect carousels early
+    element.addEventListener('touchstart', handleTouchStart, { passive: true, capture: true });
     element.addEventListener('touchmove', handleTouchMove, { passive: false });
     element.addEventListener('touchend', handleTouchEnd, { passive: true });
 
     return () => {
-      element.removeEventListener('touchstart', handleTouchStart);
+      element.removeEventListener('touchstart', handleTouchStart, { capture: true });
       element.removeEventListener('touchmove', handleTouchMove);
       element.removeEventListener('touchend', handleTouchEnd);
     };
