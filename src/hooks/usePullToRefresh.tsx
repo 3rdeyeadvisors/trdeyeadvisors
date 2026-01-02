@@ -6,6 +6,11 @@ interface UsePullToRefreshOptions {
   disabled?: boolean;
 }
 
+const isInsideCarousel = (element: EventTarget | null): boolean => {
+  if (!element || !(element instanceof HTMLElement)) return false;
+  return !!element.closest('[data-carousel="true"], .mobile-carousel-container');
+};
+
 export const usePullToRefresh = ({
   onRefresh,
   threshold = 80,
@@ -15,14 +20,22 @@ export const usePullToRefresh = ({
   const [pullDistance, setPullDistance] = useState(0);
   const startY = useRef(0);
   const isPulling = useRef(false);
+  const isCarouselTouch = useRef(false);
 
   const handleTouchStart = useCallback((e: TouchEvent) => {
     if (disabled || window.scrollY > 0) return;
+    
+    // Check if touch started inside a carousel
+    isCarouselTouch.current = isInsideCarousel(e.target);
+    if (isCarouselTouch.current) return;
+    
     startY.current = e.touches[0].clientY;
     isPulling.current = true;
   }, [disabled]);
 
   const handleTouchMove = useCallback((e: TouchEvent) => {
+    // Skip if touch is inside carousel
+    if (isCarouselTouch.current) return;
     if (!isPulling.current || disabled || isRefreshing) return;
     
     const currentY = e.touches[0].clientY;
@@ -35,6 +48,9 @@ export const usePullToRefresh = ({
   }, [disabled, isRefreshing, threshold]);
 
   const handleTouchEnd = useCallback(async () => {
+    // Reset carousel touch flag
+    isCarouselTouch.current = false;
+    
     if (!isPulling.current || disabled) return;
     isPulling.current = false;
 

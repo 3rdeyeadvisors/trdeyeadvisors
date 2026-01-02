@@ -103,6 +103,22 @@ body {
 }
 }
 
+/* Mobile Carousel - Isolated touch handling */
+.mobile-carousel-container {
+  touch-action: pan-x;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-overflow-scrolling: touch;
+  overflow: hidden;
+}
+
+.mobile-carousel-track {
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
 /* Enhanced Mobile Optimization */
 @layer utilities {
   /* Mobile-first responsive spacing */
