@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/components/auth/AuthProvider";
+import { useSubscription } from "@/hooks/useSubscription";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,7 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { 
   DollarSign, Users, Copy, Share2, Check, Loader2, 
-  Wallet, Mail, ArrowRight, Gift, Clock, CheckCircle2
+  Wallet, Mail, ArrowRight, Gift, Clock, CheckCircle2, Crown
 } from "lucide-react";
 import SEO from "@/components/SEO";
 import { Link } from "react-router-dom";
@@ -34,6 +35,7 @@ interface Profile {
 
 const Earn = () => {
   const { user, session } = useAuth();
+  const { subscription } = useSubscription();
   const [commissions, setCommissions] = useState<Commission[]>([]);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [referralCount, setReferralCount] = useState(0);
@@ -256,34 +258,89 @@ const Earn = () => {
             </CardContent>
           </Card>
 
-          {/* Commission Rates */}
+          {/* Commission Rates - Based on YOUR subscription */}
           <Card className="mb-8">
             <CardHeader>
-              <CardTitle>Commission Rates</CardTitle>
-              <CardDescription>Earn {Math.round(COMMISSION_RATES.monthly * 100)}%-{Math.round(COMMISSION_RATES.annual * 100)}% of the subscription amount</CardDescription>
+              <CardTitle className="flex items-center gap-2">
+                Your Commission Rate
+                {subscription?.plan === 'annual' && (
+                  <Badge className="bg-primary gap-1">
+                    <Crown className="w-3 h-3" />
+                    Annual Subscriber
+                  </Badge>
+                )}
+              </CardTitle>
+              <CardDescription>
+                {subscription?.plan === 'annual' 
+                  ? "As an annual subscriber, you earn 60% on ALL referrals"
+                  : "Upgrade to annual to unlock 60% commission on all referrals"
+                }
+              </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="p-4 bg-muted/30 rounded-lg border border-border">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="font-medium">Monthly Plan</span>
-                    <Badge variant="secondary">{Math.round(COMMISSION_RATES.monthly * 100)}%</Badge>
-                  </div>
-                  <div className="text-2xl font-bold text-primary">${COMMISSIONS.monthly}</div>
-                  <p className="text-sm text-foreground/70">per referral ({PRICING.monthly.display}/mo)</p>
-                </div>
-                <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="font-medium">Annual Plan</span>
-                    <Badge className="bg-primary">{Math.round(COMMISSION_RATES.annual * 100)}%</Badge>
-                  </div>
-                  <div className="text-2xl font-bold text-primary">${COMMISSIONS.annual}</div>
-                  <p className="text-sm text-foreground/70">per referral ({PRICING.annual.display}/yr)</p>
+              {/* Current Rate Display */}
+              <div className="mb-6 p-4 rounded-lg border-2 border-primary bg-primary/5 text-center">
+                <p className="text-sm text-foreground/70 mb-1">Your Current Rate</p>
+                <div className="text-4xl font-bold text-primary">
+                  {subscription?.plan === 'annual' ? '60%' : '50%'}
                 </div>
               </div>
-              <p className="text-sm text-foreground/60 mt-4 text-center">
-                💡 Annual subscribers earn 60% commission vs 50% for monthly
-              </p>
+
+              {/* Earnings Table */}
+              <div className="space-y-3">
+                <div className="flex justify-between items-center p-3 bg-muted/30 rounded-lg">
+                  <div>
+                    <span className="font-medium">Monthly Referral</span>
+                    <p className="text-sm text-foreground/60">{PRICING.monthly.display}/mo subscription</p>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-xl font-bold text-primary">
+                      ${subscription?.plan === 'annual' 
+                        ? (PRICING.monthly.amount * 0.6).toFixed(2)
+                        : (PRICING.monthly.amount * 0.5).toFixed(2)
+                      }
+                    </div>
+                    <p className="text-xs text-foreground/60">per referral</p>
+                  </div>
+                </div>
+                <div className="flex justify-between items-center p-3 bg-muted/30 rounded-lg">
+                  <div>
+                    <span className="font-medium">Annual Referral</span>
+                    <p className="text-sm text-foreground/60">{PRICING.annual.display}/yr subscription</p>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-xl font-bold text-primary">
+                      ${subscription?.plan === 'annual' 
+                        ? (PRICING.annual.amount * 0.6).toFixed(2)
+                        : (PRICING.annual.amount * 0.5).toFixed(2)
+                      }
+                    </div>
+                    <p className="text-xs text-foreground/60">per referral</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Upgrade CTA for non-annual subscribers */}
+              {subscription?.plan !== 'annual' && (
+                <div className="mt-6 p-4 bg-primary/10 rounded-lg border border-primary/20">
+                  <div className="flex items-start gap-3">
+                    <Crown className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                    <div className="flex-1">
+                      <p className="font-medium text-foreground">Upgrade to Annual for 60% Commission</p>
+                      <p className="text-sm text-foreground/70 mt-1">
+                        Annual subscribers earn 60% on all referrals instead of 50%. 
+                        That's ${(PRICING.monthly.amount * 0.6).toFixed(2)} per monthly referral and 
+                        ${(PRICING.annual.amount * 0.6).toFixed(2)} per annual referral.
+                      </p>
+                      <Link to="/subscription">
+                        <Button size="sm" className="mt-3">
+                          Upgrade Now <ArrowRight className="w-4 h-4 ml-1" />
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
 
