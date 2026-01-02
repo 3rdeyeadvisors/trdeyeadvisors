@@ -78,7 +78,7 @@ export const Comments = ({ contentType, contentId, title }: CommentsProps) => {
       if (allComments) {
         for (const comment of allComments) {
           const { data: profile } = await supabase
-            .from('profiles')
+            .from('public_profiles')
             .select('display_name, avatar_url')
             .eq('user_id', comment.user_id)
             .single();

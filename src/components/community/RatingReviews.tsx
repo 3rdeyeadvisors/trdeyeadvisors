@@ -61,7 +61,7 @@ export const RatingReviews = ({ contentType, contentId, title }: RatingStatsProp
       if (allRatings) {
         for (const rating of allRatings) {
           const { data: profile } = await supabase
-            .from('profiles')
+            .from('public_profiles')
             .select('display_name, avatar_url')
             .eq('user_id', rating.user_id)
             .single();

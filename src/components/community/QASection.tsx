@@ -82,7 +82,7 @@ export const QASection = ({ courseId, moduleId }: QASectionProps) => {
       const questionsWithDetails = await Promise.all(
         (data || []).map(async (question) => {
           const { data: profile } = await supabase
-            .from('profiles')
+            .from('public_profiles')
             .select('display_name')
             .eq('user_id', question.user_id)
             .maybeSingle();
@@ -96,7 +96,7 @@ export const QASection = ({ courseId, moduleId }: QASectionProps) => {
           const repliesWithProfiles = await Promise.all(
             (replies || []).map(async (reply) => {
               const { data: replyProfile } = await supabase
-                .from('profiles')
+                .from('public_profiles')
                 .select('display_name')
                 .eq('user_id', reply.user_id)
                 .maybeSingle();

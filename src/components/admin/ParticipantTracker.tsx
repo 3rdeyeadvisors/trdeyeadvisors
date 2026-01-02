@@ -76,7 +76,7 @@ export const ParticipantTracker = ({ contentType, contentId }: ParticipantTracke
           // Fetch profiles for these users
           const userIds = presenceData.map(p => p.user_id);
           const { data: profiles } = await supabase
-            .from('profiles')
+            .from('public_profiles')
             .select('user_id, display_name')
             .in('user_id', userIds);
 

@@ -149,7 +149,7 @@ export const AnalyticsDashboard = () => {
         .select('user_id');
 
       const { data: profiles } = await supabase
-        .from('profiles')
+        .from('public_profiles')
         .select('user_id, display_name');
 
       // Count contributions per user

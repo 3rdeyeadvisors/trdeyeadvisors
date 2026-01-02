@@ -67,11 +67,10 @@ export const CommentsSection = ({ courseId, moduleId }: CommentsSectionProps) =>
 
       if (error) throw error;
       
-      // Fetch profiles separately
       const commentsWithProfiles = await Promise.all(
         (data || []).map(async (comment) => {
           const { data: profile } = await supabase
-            .from('profiles')
+            .from('public_profiles')
             .select('display_name')
             .eq('user_id', comment.user_id)
             .maybeSingle();

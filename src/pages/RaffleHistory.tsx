@@ -90,7 +90,7 @@ const RaffleHistory = () => {
           let winnerDisplayName = undefined;
           if (raffle.winner_user_id) {
             const { data: profile } = await supabase
-              .from('profiles')
+              .from('public_profiles')
               .select('display_name')
               .eq('user_id', raffle.winner_user_id)
               .single();
