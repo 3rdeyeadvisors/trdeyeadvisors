@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import SEO from "@/components/SEO";
 import { Link } from "react-router-dom";
-import { PRICING, COMMISSIONS } from "@/lib/constants";
+import { PRICING, COMMISSIONS, COMMISSION_RATES } from "@/lib/constants";
 
 interface Commission {
   id: string;
@@ -197,8 +197,8 @@ const Earn = () => {
   return (
     <>
       <SEO
-        title="Earn with 3EA - 50% Commission Program"
-        description={`Earn 50% commission by sharing 3rdeyeadvisors. Refer friends and earn $${COMMISSIONS.monthly} to $${COMMISSIONS.annual} per subscription.`}
+        title="Earn with 3EA - Up to 60% Commission Program"
+        description={`Earn up to 60% commission by sharing 3rdeyeadvisors. Refer friends and earn $${COMMISSIONS.monthly} to $${COMMISSIONS.annual} per subscription.`}
         keywords="referral program, earn crypto, affiliate program, defi education"
       />
 
@@ -211,7 +211,7 @@ const Earn = () => {
               <span className="text-sm font-medium text-primary">Referral Program</span>
             </div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-5">
-              Earn 50% Commission
+              Earn Up to 60% Commission
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-foreground/70 max-w-2xl mx-auto leading-relaxed">
               Share 3rdeyeadvisors and earn ${COMMISSIONS.monthly} - ${COMMISSIONS.annual} per referral
@@ -249,7 +249,7 @@ const Earn = () => {
                   </div>
                   <h3 className="font-semibold mb-2">3. You Get Paid</h3>
                   <p className="text-sm text-foreground/70">
-                    Earn 50% commission paid in crypto or Zelle
+                    Earn {Math.round(COMMISSION_RATES.monthly * 100)}%-{Math.round(COMMISSION_RATES.annual * 100)}% commission paid in crypto or Zelle
                   </p>
                 </div>
               </div>
@@ -260,27 +260,30 @@ const Earn = () => {
           <Card className="mb-8">
             <CardHeader>
               <CardTitle>Commission Rates</CardTitle>
-              <CardDescription>Earn 50% of the subscription amount</CardDescription>
+              <CardDescription>Earn {Math.round(COMMISSION_RATES.monthly * 100)}%-{Math.round(COMMISSION_RATES.annual * 100)}% of the subscription amount</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="p-4 bg-muted/30 rounded-lg border border-border">
                   <div className="flex justify-between items-center mb-2">
                     <span className="font-medium">Monthly Plan</span>
-                    <Badge variant="secondary">{PRICING.monthly.display}/mo</Badge>
+                    <Badge variant="secondary">{Math.round(COMMISSION_RATES.monthly * 100)}%</Badge>
                   </div>
                   <div className="text-2xl font-bold text-primary">${COMMISSIONS.monthly}</div>
-                  <p className="text-sm text-foreground/70">per referral</p>
+                  <p className="text-sm text-foreground/70">per referral ({PRICING.monthly.display}/mo)</p>
                 </div>
                 <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
                   <div className="flex justify-between items-center mb-2">
                     <span className="font-medium">Annual Plan</span>
-                    <Badge>{PRICING.annual.display}/yr</Badge>
+                    <Badge className="bg-primary">{Math.round(COMMISSION_RATES.annual * 100)}%</Badge>
                   </div>
                   <div className="text-2xl font-bold text-primary">${COMMISSIONS.annual}</div>
-                  <p className="text-sm text-foreground/70">per referral</p>
+                  <p className="text-sm text-foreground/70">per referral ({PRICING.annual.display}/yr)</p>
                 </div>
               </div>
+              <p className="text-sm text-foreground/60 mt-4 text-center">
+                💡 Annual subscribers earn 60% commission vs 50% for monthly
+              </p>
             </CardContent>
           </Card>
 

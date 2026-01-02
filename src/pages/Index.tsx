@@ -496,6 +496,10 @@ const Index = () => {
                     </li>
                     <li className="flex items-center text-sm text-foreground font-consciousness">
                       <CheckCircle2 className="w-4 h-4 text-primary mr-3 flex-shrink-0" />
+                      <span>50% referral commission</span>
+                    </li>
+                    <li className="flex items-center text-sm text-foreground font-consciousness">
+                      <CheckCircle2 className="w-4 h-4 text-primary mr-3 flex-shrink-0" />
                       <span>Cancel anytime</span>
                     </li>
                   </ul>
@@ -544,19 +548,23 @@ const Index = () => {
                     </li>
                     <li className="flex items-center text-sm text-foreground font-consciousness">
                       <CheckCircle2 className="w-4 h-4 text-primary mr-3 flex-shrink-0" />
-                      <span>Exclusive content and resources</span>
+                      <span>Early access to new courses</span>
                     </li>
                     <li className="flex items-center text-sm text-foreground font-consciousness">
                       <CheckCircle2 className="w-4 h-4 text-primary mr-3 flex-shrink-0" />
-                      <span>Community access</span>
+                      <span>5 bonus raffle entries per raffle</span>
                     </li>
                     <li className="flex items-center text-sm text-foreground font-consciousness">
                       <CheckCircle2 className="w-4 h-4 text-primary mr-3 flex-shrink-0" />
-                      <span>Priority support</span>
+                      <span>Early access to new vaults</span>
                     </li>
                     <li className="flex items-center text-sm text-foreground font-consciousness">
                       <CheckCircle2 className="w-4 h-4 text-primary mr-3 flex-shrink-0" />
-                      <span>Locked-in annual rate</span>
+                      <span>60% referral commission</span>
+                    </li>
+                    <li className="flex items-center text-sm text-foreground font-consciousness">
+                      <CheckCircle2 className="w-4 h-4 text-primary mr-3 flex-shrink-0" />
+                      <span>Input on platform direction</span>
                     </li>
                   </ul>
                   <Button 

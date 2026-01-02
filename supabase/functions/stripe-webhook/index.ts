@@ -107,8 +107,20 @@ serve(async (req) => {
                 logStep("User was referred, creating commission", { referrerId: referralData.referrer_id });
                 
                 const subscriptionAmountCents = invoice.amount_paid;
-                const commissionAmountCents = Math.floor(subscriptionAmountCents / 2); // 50%
                 const planType = subscriptionAmountCents > 50000 ? "annual" : "monthly"; // $500+ is annual
+                
+                // Tiered commission rates:
+                // - Annual subscribers get 60% commission as a premium benefit
+                // - Monthly subscribers get 50% commission
+                const commissionRate = planType === "annual" ? 0.6 : 0.5;
+                const commissionAmountCents = Math.floor(subscriptionAmountCents * commissionRate);
+                
+                logStep("Calculating tiered commission", { 
+                  planType, 
+                  commissionRate: `${commissionRate * 100}%`,
+                  subscriptionAmountCents,
+                  commissionAmountCents 
+                });
                 
                 // Check if commission already exists (idempotency via UNIQUE constraint)
                 const { data: existingCommission } = await supabaseClient
@@ -135,7 +147,8 @@ serve(async (req) => {
                   } else {
                     logStep("Commission created successfully", { 
                       amount: commissionAmountCents,
-                      planType 
+                      planType,
+                      commissionRate: `${commissionRate * 100}%`
                     });
                     
                     // Send admin notification
