@@ -1496,32 +1496,6 @@ export type Database = {
           title: string | null
           updated_at: string | null
         }
-        Insert: {
-          course_id?: number | null
-          created_at?: string | null
-          description?: string | null
-          id?: string | null
-          max_attempts?: number | null
-          module_id?: string | null
-          passing_score?: number | null
-          questions?: never
-          time_limit?: number | null
-          title?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          course_id?: number | null
-          created_at?: string | null
-          description?: string | null
-          id?: string | null
-          max_attempts?: number | null
-          module_id?: string | null
-          passing_score?: number | null
-          questions?: never
-          time_limit?: number | null
-          title?: string | null
-          updated_at?: string | null
-        }
         Relationships: []
       }
     }
