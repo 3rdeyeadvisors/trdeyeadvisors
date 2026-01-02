@@ -1,8 +1,12 @@
-import { ReactNode } from "react";
+import { ReactNode, useCallback } from "react";
 import { Helmet } from "react-helmet-async";
 import { useLocation } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import Navigation from "./Navigation";
 import Footer from "./Footer";
+import { usePullToRefresh } from "@/hooks/usePullToRefresh";
+import { PullToRefreshIndicator } from "./ui/pull-to-refresh";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface LayoutProps {
   children: ReactNode;
@@ -13,6 +17,21 @@ const STANDALONE_ROUTES = ['/rosa-birthday'];
 
 const Layout = ({ children }: LayoutProps) => {
   const location = useLocation();
+  const queryClient = useQueryClient();
+  const isMobile = useIsMobile();
+  
+  const handleRefresh = useCallback(async () => {
+    // Invalidate all queries to refetch data
+    await queryClient.invalidateQueries();
+    // Small delay for visual feedback
+    await new Promise(resolve => setTimeout(resolve, 500));
+  }, [queryClient]);
+
+  const { isRefreshing, pullDistance, isTriggered } = usePullToRefresh({
+    onRefresh: handleRefresh,
+    threshold: 80,
+    disabled: !isMobile
+  });
   
   // Check if this is a standalone route
   if (STANDALONE_ROUTES.includes(location.pathname)) {
@@ -30,6 +49,11 @@ const Layout = ({ children }: LayoutProps) => {
       <Helmet>
         <link rel="canonical" href={canonicalUrl} />
       </Helmet>
+      <PullToRefreshIndicator
+        pullDistance={pullDistance}
+        isRefreshing={isRefreshing}
+        isTriggered={isTriggered}
+      />
       <div className="min-h-screen bg-gradient-cosmic flex flex-col">
         <Navigation />
         <main className="pt-16 flex-1">
