@@ -89,8 +89,8 @@ const ReferralTerms = () => {
                     or Zelle. You must provide valid payment details in your account settings.
                   </li>
                   <li>
-                    <strong>Pending Period:</strong> Commissions remain in "pending" status for a minimum of 30 days 
-                    after the referred subscription is created. This allows time for potential refunds or chargebacks.
+                    <strong>Payment Processing:</strong> Approved commissions are paid out within 7-10 business days. 
+                    New commissions may be held briefly to allow time for potential refunds or chargebacks.
                   </li>
                   <li>
                     <strong>Currency:</strong> All commissions are calculated and paid in USD or USD-equivalent 
@@ -141,7 +141,7 @@ const ReferralTerms = () => {
                   <li>
                     <strong>Pending Commissions:</strong> If your participation is terminated due to violation 
                     of Program rules, all pending commissions will be forfeited. If termination is not due to 
-                    a violation, we will pay out any earned commissions within 30 days.
+                    a violation, we will pay out any earned commissions within 7-10 business days.
                   </li>
                   <li>
                     <strong>Program Discontinuation:</strong> We reserve the right to discontinue the Program 
