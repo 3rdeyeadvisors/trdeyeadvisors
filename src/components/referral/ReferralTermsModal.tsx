@@ -79,9 +79,8 @@ export const ReferralTermsModal = ({ open, onOpenChange, onAccepted }: ReferralT
             <div>
               <h4 className="font-semibold text-foreground mb-2">Commission Structure</h4>
               <ul className="list-disc pl-5 space-y-1">
-                <li>Non-subscribers: Not eligible for referral program</li>
-                <li>Monthly subscribers: {Math.round(COMMISSION_RATES.monthly * 100)}% commission rate</li>
-                <li>Annual subscribers: {Math.round(COMMISSION_RATES.annual * 100)}% commission rate (premium)</li>
+                <li>Non-subscribers & monthly subscribers: {Math.round(COMMISSION_RATES.monthly * 100)}% commission</li>
+                <li>Annual subscribers: {Math.round(COMMISSION_RATES.annual * 100)}% commission (premium rate)</li>
                 <li>Earn ${(PRICING.monthly.amount * COMMISSION_RATES.monthly).toFixed(2)} - ${(PRICING.annual.amount * COMMISSION_RATES.annual).toFixed(2)} per referral</li>
               </ul>
             </div>
