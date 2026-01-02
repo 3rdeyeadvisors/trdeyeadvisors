@@ -143,3 +143,6 @@ verify_jwt = false
 
 [functions.send-trial-expiring-email]
 verify_jwt = false
+
+[functions.delete-inactive-accounts]
+verify_jwt = true
