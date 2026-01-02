@@ -213,6 +213,45 @@ const Profile = () => {
     }
   };
 
+  // Compress image before upload for faster uploads and smaller storage
+  const compressImage = async (file: File): Promise<Blob> => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+
+      img.onload = () => {
+        // Max dimension for avatars (800px is plenty)
+        const maxSize = 800;
+        let { width, height } = img;
+
+        if (width > height && width > maxSize) {
+          height = (height / width) * maxSize;
+          width = maxSize;
+        } else if (height > maxSize) {
+          width = (width / height) * maxSize;
+          height = maxSize;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        ctx?.drawImage(img, 0, 0, width, height);
+
+        canvas.toBlob(
+          (blob) => {
+            if (blob) resolve(blob);
+            else reject(new Error('Failed to compress image'));
+          },
+          'image/jpeg',
+          0.85 // 85% quality
+        );
+      };
+
+      img.onerror = () => reject(new Error('Failed to load image'));
+      img.src = URL.createObjectURL(file);
+    });
+  };
+
   const handleAvatarUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!user || !event.target.files || event.target.files.length === 0) return;
 
@@ -229,7 +268,7 @@ const Profile = () => {
       return;
     }
 
-    // Validate file size (10MB max - increased limit)
+    // Validate file size (10MB max before compression)
     if (file.size > 10485760) {
       toast({
         title: "File too large",
@@ -241,6 +280,10 @@ const Profile = () => {
 
     setUploading(true);
     try {
+      // Compress image before upload
+      const compressedBlob = await compressImage(file);
+      const compressedFile = new File([compressedBlob], `avatar.jpg`, { type: 'image/jpeg' });
+
       // Delete old avatar if it exists and is from our storage
       if (profile?.avatar_url && profile.avatar_url.includes('supabase.co/storage')) {
         const oldPath = profile.avatar_url.split('/avatars/')[1];
@@ -249,18 +292,23 @@ const Profile = () => {
         }
       }
 
-      // Upload new avatar
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${user.id}/${Date.now()}.${fileExt}`;
+      // Upload compressed avatar
+      const fileName = `${user.id}/${Date.now()}.jpg`;
       
       const { error: uploadError } = await supabase.storage
         .from('avatars')
-        .upload(fileName, file, {
+        .upload(fileName, compressedFile, {
           cacheControl: '3600',
           upsert: false
         });
 
-      if (uploadError) throw uploadError;
+      if (uploadError) {
+        // Handle specific storage errors
+        if (uploadError.message?.includes('payload too large') || uploadError.message?.includes('size')) {
+          throw new Error('Image is too large. Please try a smaller image.');
+        }
+        throw uploadError;
+      }
 
       // Get public URL
       const { data: { publicUrl } } = supabase.storage
@@ -287,11 +335,11 @@ const Profile = () => {
         title: "Avatar updated",
         description: "Your profile picture has been successfully updated.",
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error uploading avatar:', error);
       toast({
         title: "Upload failed",
-        description: "Failed to upload image. Please try again.",
+        description: error.message || "Failed to upload image. Please try a smaller image.",
         variant: "destructive",
       });
     } finally {
