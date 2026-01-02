@@ -67,22 +67,23 @@ export const CommentsSection = ({ courseId, moduleId }: CommentsSectionProps) =>
 
       if (error) throw error;
       
-      const commentsWithProfiles = await Promise.all(
-        (data || []).map(async (comment) => {
-          const { data: profile } = await supabase
-            .from('public_profiles')
-            .select('display_name')
-            .eq('user_id', comment.user_id)
-            .maybeSingle();
-          
-          return {
-            ...comment,
-            profiles: profile
-          };
-        })
-      );
-      
-      setComments(commentsWithProfiles);
+      // Batch load profiles for all comments
+      if (data && data.length > 0) {
+        const userIds = [...new Set(data.map(c => c.user_id))];
+        const { data: profiles } = await supabase
+          .rpc('get_profiles_batch', { user_ids: userIds });
+        
+        const profileMap = new Map(profiles?.map((p: any) => [p.user_id, p]) || []);
+        
+        const commentsWithProfiles = data.map(comment => ({
+          ...comment,
+          profiles: profileMap.get(comment.user_id) || null
+        }));
+        
+        setComments(commentsWithProfiles);
+      } else {
+        setComments([]);
+      }
     } catch (error) {
       console.error('Error fetching comments:', error);
       toast({
