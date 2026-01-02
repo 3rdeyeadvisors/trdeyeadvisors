@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/components/auth/AuthProvider";
+import { useSubscription } from "@/hooks/useSubscription";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { Ticket, Trophy, Share2, Clock, CheckCircle2, History } from "lucide-react";
+import { Ticket, Trophy, Share2, Clock, CheckCircle2, History, Crown } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import SEO from "@/components/SEO";
 import { Link } from "react-router-dom";
 import RaffleCountdown from "@/components/raffles/RaffleCountdown";
 import RaffleShareButton from "@/components/raffles/RaffleShareButton";
 import SocialVerificationForm from "@/components/raffles/SocialVerificationForm";
+import { ANNUAL_BENEFITS } from "@/lib/constants";
 
 interface Raffle {
   id: string;
@@ -51,6 +53,7 @@ const AUTO_TASKS = [
 
 const Raffles = () => {
   const { user } = useAuth();
+  const { subscription } = useSubscription();
   const { toast } = useToast();
   const [activeRaffle, setActiveRaffle] = useState<Raffle | null>(null);
   const [loading, setLoading] = useState(true);
@@ -325,12 +328,19 @@ const Raffles = () => {
 
       // CRITICAL FIX: Create entry first, then ticket
       // Entry must exist before trigger can update it
+      // Check if user is annual subscriber for bonus tickets
+      const isAnnualSubscriber = subscription?.plan === 'annual';
+      const bonusTickets = isAnnualSubscriber ? ANNUAL_BENEFITS.bonusRaffleTickets : 0;
+      const initialEntryCount = 1 + bonusTickets;
+      
+      console.log('📊 Subscription status:', { plan: subscription?.plan, isAnnualSubscriber, bonusTickets });
+      
       const { error: entryError } = await supabase
         .from('raffle_entries')
         .insert({
           user_id: user.id,
           raffle_id: activeRaffle.id,
-          entry_count: 1 // Start with 1 for participation
+          entry_count: initialEntryCount
         });
 
       if (entryError && !entryError.message.includes('duplicate')) {
@@ -353,16 +363,44 @@ const Raffles = () => {
         throw ticketError;
       }
 
+      // If annual subscriber, create bonus tickets
+      if (isAnnualSubscriber && bonusTickets > 0) {
+        console.log(`🎁 Creating ${bonusTickets} bonus tickets for annual subscriber`);
+        
+        const bonusTicketInserts = Array.from({ length: bonusTickets }, () => ({
+          user_id: user.id,
+          raffle_id: activeRaffle.id,
+          ticket_source: 'annual_bonus',
+          metadata: { 
+            benefit: 'annual_subscriber_bonus',
+            timestamp: new Date().toISOString() 
+          }
+        }));
+        
+        const { error: bonusTicketError } = await supabase
+          .from('raffle_tickets')
+          .insert(bonusTicketInserts);
+        
+        if (bonusTicketError) {
+          console.error('❌ Bonus ticket creation error:', bonusTicketError);
+          // Don't throw - participation still succeeded
+        } else {
+          console.log('✅ Bonus tickets created for annual subscriber');
+        }
+      }
+
       console.log('✅ Entry and ticket created successfully');
       
       setHasParticipated(true);
-      setTotalEntries(1);
+      setTotalEntries(initialEntryCount);
 
-      console.log('🎉 Participation complete with 1 entry');
+      console.log(`🎉 Participation complete with ${initialEntryCount} entries`);
 
       toast({
         title: "✅ You've joined the raffle!",
-        description: "You now have 1 entry. Complete tasks to earn more!",
+        description: isAnnualSubscriber 
+          ? `You start with ${initialEntryCount} entries (${bonusTickets} bonus for annual members)!`
+          : "You now have 1 entry. Complete tasks to earn more!",
       });
 
       // Refresh to get accurate count
@@ -689,6 +727,14 @@ const Raffles = () => {
                           {totalEntries}
                         </Badge>
                       </div>
+                      {subscription?.plan === 'annual' && (
+                        <div className="flex items-center justify-center gap-2 mt-2">
+                          <Badge variant="default" className="text-xs">
+                            <Crown className="w-3 h-3 mr-1" />
+                            Annual Bonus: +{ANNUAL_BENEFITS.bonusRaffleTickets} entries
+                          </Badge>
+                        </div>
+                      )}
                       {referralCount > 0 && (
                         <p className="text-sm text-muted-foreground mt-2">
                           Including {referralCount} bonus {referralCount === 1 ? 'entry' : 'entries'} from referrals
@@ -708,7 +754,9 @@ const Raffles = () => {
                           {participating ? "Joining..." : "🎯 Join This Raffle"}
                         </Button>
                         <p className="text-xs text-muted-foreground text-center mt-2">
-                          Start with 1 entry, earn more by completing tasks
+                          {subscription?.plan === 'annual' 
+                            ? `Start with ${1 + ANNUAL_BENEFITS.bonusRaffleTickets} entries (annual bonus included)`
+                            : 'Start with 1 entry, earn more by completing tasks'}
                         </p>
                       </div>
                     )}

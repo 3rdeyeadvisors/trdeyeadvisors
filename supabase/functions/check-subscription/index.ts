@@ -194,8 +194,11 @@ serve(async (req) => {
       : null;
     const priceId = activeSubscription.items.data[0]?.price.id;
     
+    // Determine plan based on price ID
+    // Annual price ID: price_1Sl04YLxeGPiI62jjtRmPeC9
+    // Monthly price ID: price_1SfmuFLxeGPiI62jZkGuCmqm
     let plan = 'monthly';
-    if (priceId === 'price_1SfmuSLxeGPiI62jEVMMN3l1') {
+    if (priceId === 'price_1Sl04YLxeGPiI62jjtRmPeC9') {
       plan = 'annual';
     }
 
