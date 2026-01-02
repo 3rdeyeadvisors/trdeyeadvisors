@@ -53,11 +53,7 @@ const ReferralTerms = () => {
                 </p>
                 <ul className="list-disc pl-6 text-foreground/80 space-y-2 mt-4">
                   <li>
-                    <strong>Non-Subscribers:</strong> Not eligible to participate in the referral program. 
-                    You must have an active subscription to earn commissions.
-                  </li>
-                  <li>
-                    <strong>Monthly Subscribers:</strong> {Math.round(COMMISSION_RATES.monthly * 100)}% of the 
+                    <strong>Non-Subscribers & Monthly Subscribers:</strong> {Math.round(COMMISSION_RATES.monthly * 100)}% of the 
                     subscription amount (${(PRICING.monthly.amount * COMMISSION_RATES.monthly).toFixed(2)} per monthly referral, 
                     ${(PRICING.annual.amount * COMMISSION_RATES.monthly).toFixed(2)} per annual referral)
                   </li>
@@ -67,6 +63,11 @@ const ReferralTerms = () => {
                     ${(PRICING.annual.amount * COMMISSION_RATES.annual).toFixed(2)} per annual referral)
                   </li>
                 </ul>
+                <p className="text-foreground/80 leading-relaxed mt-4">
+                  Commissions are calculated on the net subscription amount after payment processor fees are deducted. 
+                  The commission rate that applies is based on your subscription status at the moment the referred 
+                  user's payment is processed.
+                </p>
                 <p className="text-foreground/80 leading-relaxed mt-4">
                   Commissions are calculated on the net subscription amount after payment processor fees are deducted. 
                   The commission rate that applies is based on your subscription status at the moment the referred 
@@ -187,8 +188,8 @@ const ReferralTerms = () => {
                 </CardHeader>
                 <p className="text-foreground/80 leading-relaxed">
                   If you have a dispute regarding the Program, commissions, or these terms, please contact us 
-                  at <a href="mailto:support@the3rdeyeadvisors.com" className="text-primary hover:underline">
-                  support@the3rdeyeadvisors.com</a>. We will work in good faith to resolve disputes within 30 
+                  at <a href="mailto:info@the3rdeyeadvisors.com" className="text-primary hover:underline">
+                  info@the3rdeyeadvisors.com</a>. We will work in good faith to resolve disputes within 30 
                   days. Any disputes that cannot be resolved will be subject to binding arbitration in accordance 
                   with our <Link to="/terms" className="text-primary hover:underline">Terms of Service</Link>.
                 </p>
@@ -211,8 +212,8 @@ const ReferralTerms = () => {
               <section className="border-t border-border pt-6">
                 <p className="text-foreground/80">
                   For questions about the Referral Program, please contact us at{" "}
-                  <a href="mailto:support@the3rdeyeadvisors.com" className="text-primary hover:underline">
-                    support@the3rdeyeadvisors.com
+                  <a href="mailto:info@the3rdeyeadvisors.com" className="text-primary hover:underline">
+                    info@the3rdeyeadvisors.com
                   </a>
                 </p>
               </section>
