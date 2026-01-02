@@ -73,21 +73,19 @@ export const Comments = ({ contentType, contentId, title }: CommentsProps) => {
 
       if (error) throw error;
 
-      // Then load profiles for each comment
-      const commentsWithProfiles: any[] = [];
-      if (allComments) {
-        for (const comment of allComments) {
-          const { data: profile } = await supabase
-            .from('public_profiles')
-            .select('display_name, avatar_url')
-            .eq('user_id', comment.user_id)
-            .single();
-
-          commentsWithProfiles.push({
-            ...comment,
-            profiles: profile || null
-          });
-        }
+      // Batch load profiles for all comments
+      let commentsWithProfiles: any[] = [];
+      if (allComments && allComments.length > 0) {
+        const userIds = [...new Set(allComments.map(c => c.user_id))];
+        const { data: profiles } = await supabase
+          .rpc('get_profiles_batch', { user_ids: userIds });
+        
+        const profileMap = new Map(profiles?.map((p: any) => [p.user_id, p]) || []);
+        
+        commentsWithProfiles = allComments.map(comment => ({
+          ...comment,
+          profiles: profileMap.get(comment.user_id) || null
+        }));
       }
 
       // Check which comments the current user has liked

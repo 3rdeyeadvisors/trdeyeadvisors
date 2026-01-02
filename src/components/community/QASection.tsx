@@ -78,45 +78,51 @@ export const QASection = ({ courseId, moduleId }: QASectionProps) => {
 
       if (error) throw error;
       
-      // Fetch profiles and replies separately
-      const questionsWithDetails = await Promise.all(
-        (data || []).map(async (question) => {
-          const { data: profile } = await supabase
-            .from('public_profiles')
-            .select('display_name')
-            .eq('user_id', question.user_id)
-            .maybeSingle();
-          
-          const { data: replies } = await supabase
-            .from('discussion_replies')
-            .select('id, content, created_at, user_id, is_solution')
-            .eq('discussion_id', question.id)
-            .order('created_at');
-          
-          const repliesWithProfiles = await Promise.all(
-            (replies || []).map(async (reply) => {
-              const { data: replyProfile } = await supabase
-                .from('public_profiles')
-                .select('display_name')
-                .eq('user_id', reply.user_id)
-                .maybeSingle();
-              
-              return {
-                ...reply,
-                profiles: replyProfile
-              };
-            })
-          );
-          
-          return {
-            ...question,
-            profiles: profile,
-            discussion_replies: repliesWithProfiles
-          };
-        })
-      );
-      
-      setQuestions(questionsWithDetails);
+      // Batch load profiles for questions and replies
+      if (data && data.length > 0) {
+        // Collect all user IDs from questions
+        const questionUserIds = data.map(q => q.user_id);
+        
+        // Fetch all replies for all questions
+        const questionIds = data.map(q => q.id);
+        const { data: allReplies } = await supabase
+          .from('discussion_replies')
+          .select('id, content, created_at, user_id, is_solution, discussion_id')
+          .in('discussion_id', questionIds)
+          .order('created_at');
+        
+        // Collect all user IDs (questions + replies)
+        const replyUserIds = allReplies?.map(r => r.user_id) || [];
+        const allUserIds = [...new Set([...questionUserIds, ...replyUserIds])];
+        
+        // Batch fetch all profiles
+        const { data: profiles } = await supabase
+          .rpc('get_profiles_batch', { user_ids: allUserIds });
+        
+        const profileMap = new Map(profiles?.map((p: any) => [p.user_id, p]) || []);
+        
+        // Map replies to questions with profiles
+        const repliesByQuestion = new Map<string, any[]>();
+        allReplies?.forEach(reply => {
+          const existing = repliesByQuestion.get(reply.discussion_id) || [];
+          existing.push({
+            ...reply,
+            profiles: profileMap.get(reply.user_id) || null
+          });
+          repliesByQuestion.set(reply.discussion_id, existing);
+        });
+        
+        // Build final questions with details
+        const questionsWithDetails = data.map(question => ({
+          ...question,
+          profiles: profileMap.get(question.user_id) || null,
+          discussion_replies: repliesByQuestion.get(question.id) || []
+        }));
+        
+        setQuestions(questionsWithDetails);
+      } else {
+        setQuestions([]);
+      }
     } catch (error) {
       console.error('Error fetching questions:', error);
     } finally {

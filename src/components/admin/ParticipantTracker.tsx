@@ -73,12 +73,10 @@ export const ParticipantTracker = ({ contentType, contentId }: ParticipantTracke
         if (error) throw error;
 
         if (presenceData && presenceData.length > 0) {
-          // Fetch profiles for these users
+          // Fetch profiles for these users using the secure batch function
           const userIds = presenceData.map(p => p.user_id);
           const { data: profiles } = await supabase
-            .from('public_profiles')
-            .select('user_id, display_name')
-            .in('user_id', userIds);
+            .rpc('get_profiles_batch', { user_ids: userIds });
 
           const enrichedData: Participant[] = presenceData.map(p => ({
             user_id: p.user_id,

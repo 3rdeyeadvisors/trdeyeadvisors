@@ -86,16 +86,13 @@ const RaffleHistory = () => {
             .select('*', { count: 'exact', head: true })
             .eq('raffle_id', raffle.id);
 
-          // Get winner display name if exists
+          // Get winner display name if exists using secure function
           let winnerDisplayName = undefined;
           if (raffle.winner_user_id) {
-            const { data: profile } = await supabase
-              .from('public_profiles')
-              .select('display_name')
-              .eq('user_id', raffle.winner_user_id)
-              .single();
+            const { data: profiles } = await supabase
+              .rpc('get_profiles_batch', { user_ids: [raffle.winner_user_id] });
 
-            winnerDisplayName = profile?.display_name || 'Anonymous';
+            winnerDisplayName = profiles?.[0]?.display_name || 'Anonymous';
           }
 
           return {

@@ -148,9 +148,11 @@ export const AnalyticsDashboard = () => {
         .from('user_badges')
         .select('user_id');
 
-      const { data: profiles } = await supabase
-        .from('public_profiles')
-        .select('user_id, display_name');
+      // Get user IDs from comments to fetch profiles
+      const uniqueUserIds = [...new Set(commentsByUser?.map(c => c.user_id) || [])];
+      const { data: profiles } = uniqueUserIds.length > 0 
+        ? await supabase.rpc('get_profiles_batch', { user_ids: uniqueUserIds })
+        : { data: [] };
 
       // Count contributions per user
       const contributionCounts: Record<string, number> = {};

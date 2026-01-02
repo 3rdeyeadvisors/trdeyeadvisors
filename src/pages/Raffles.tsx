@@ -399,13 +399,10 @@ const Raffles = () => {
     if (!activeRaffle?.winner_user_id) return;
 
     try {
-      const { data } = await supabase
-        .from('public_profiles')
-        .select('display_name')
-        .eq('user_id', activeRaffle.winner_user_id)
-        .single();
+      const { data: profiles } = await supabase
+        .rpc('get_profiles_batch', { user_ids: [activeRaffle.winner_user_id] });
 
-      setWinnerDisplayName(data?.display_name || 'Anonymous');
+      setWinnerDisplayName(profiles?.[0]?.display_name || 'Anonymous');
     } catch (error) {
       console.error('Error fetching winner name:', error);
     }

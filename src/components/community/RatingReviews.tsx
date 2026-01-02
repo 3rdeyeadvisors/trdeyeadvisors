@@ -56,21 +56,19 @@ export const RatingReviews = ({ contentType, contentId, title }: RatingStatsProp
 
       if (error) throw error;
 
-      // Then load profiles for each rating
-      const ratingsWithProfiles: Rating[] = [];
-      if (allRatings) {
-        for (const rating of allRatings) {
-          const { data: profile } = await supabase
-            .from('public_profiles')
-            .select('display_name, avatar_url')
-            .eq('user_id', rating.user_id)
-            .single();
-
-          ratingsWithProfiles.push({
-            ...rating,
-            profiles: profile || null
-          });
-        }
+      // Batch load profiles for all ratings
+      let ratingsWithProfiles: Rating[] = [];
+      if (allRatings && allRatings.length > 0) {
+        const userIds = [...new Set(allRatings.map(r => r.user_id))];
+        const { data: profiles } = await supabase
+          .rpc('get_profiles_batch', { user_ids: userIds });
+        
+        const profileMap = new Map(profiles?.map((p: any) => [p.user_id, p]) || []);
+        
+        ratingsWithProfiles = allRatings.map(rating => ({
+          ...rating,
+          profiles: profileMap.get(rating.user_id) || null
+        }));
       }
 
       setRatings(ratingsWithProfiles);
