@@ -1464,24 +1464,6 @@ export type Database = {
       }
     }
     Views: {
-      public_profiles: {
-        Row: {
-          avatar_url: string | null
-          display_name: string | null
-          user_id: string | null
-        }
-        Insert: {
-          avatar_url?: string | null
-          display_name?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          avatar_url?: string | null
-          display_name?: string | null
-          user_id?: string | null
-        }
-        Relationships: []
-      }
       quizzes_public: {
         Row: {
           course_id: number | null
@@ -1495,6 +1477,32 @@ export type Database = {
           time_limit: number | null
           title: string | null
           updated_at: string | null
+        }
+        Insert: {
+          course_id?: number | null
+          created_at?: string | null
+          description?: string | null
+          id?: string | null
+          max_attempts?: number | null
+          module_id?: string | null
+          passing_score?: number | null
+          questions?: never
+          time_limit?: number | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          course_id?: number | null
+          created_at?: string | null
+          description?: string | null
+          id?: string | null
+          max_attempts?: number | null
+          module_id?: string | null
+          passing_score?: number | null
+          questions?: never
+          time_limit?: number | null
+          title?: string | null
+          updated_at?: string | null
         }
         Relationships: []
       }
