@@ -79,8 +79,9 @@ export const ReferralTermsModal = ({ open, onOpenChange, onAccepted }: ReferralT
             <div>
               <h4 className="font-semibold text-foreground mb-2">Commission Structure</h4>
               <ul className="list-disc pl-5 space-y-1">
-                <li>Standard rate: {Math.round(COMMISSION_RATES.monthly * 100)}% for non-subscribers</li>
-                <li>Premium rate: {Math.round(COMMISSION_RATES.annual * 100)}% for annual subscribers</li>
+                <li>Non-subscribers: Not eligible for referral program</li>
+                <li>Monthly subscribers: {Math.round(COMMISSION_RATES.monthly * 100)}% commission rate</li>
+                <li>Annual subscribers: {Math.round(COMMISSION_RATES.annual * 100)}% commission rate (premium)</li>
                 <li>Earn ${(PRICING.monthly.amount * COMMISSION_RATES.monthly).toFixed(2)} - ${(PRICING.annual.amount * COMMISSION_RATES.annual).toFixed(2)} per referral</li>
               </ul>
             </div>
@@ -88,8 +89,7 @@ export const ReferralTermsModal = ({ open, onOpenChange, onAccepted }: ReferralT
             <div>
               <h4 className="font-semibold text-foreground mb-2">Payment Terms</h4>
               <ul className="list-disc pl-5 space-y-1">
-                <li>Commissions paid monthly via crypto (USDC) or Zelle</li>
-                <li>30-day pending period for new referrals</li>
+                <li>Commissions paid within 7-10 business days via crypto (USDC) or Zelle</li>
                 <li>You must set up payout details in your account</li>
               </ul>
             </div>
