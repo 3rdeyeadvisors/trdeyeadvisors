@@ -106,7 +106,7 @@ export const ReferralTermsModal = ({ open, onOpenChange, onAccepted }: ReferralT
             <div>
               <h4 className="font-semibold text-foreground mb-2">Important Notices</h4>
               <ul className="list-disc pl-5 space-y-1">
-                <li>Commission rates may change with 14 days notice</li>
+                <li>Commissions are paid within 7-10 business days</li>
                 <li>You are responsible for taxes on earnings</li>
                 <li>No guaranteed earnings - results vary</li>
                 <li>Refunded subscriptions = deducted commissions</li>
