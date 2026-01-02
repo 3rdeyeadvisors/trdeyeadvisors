@@ -56,7 +56,7 @@ const Layout = ({ children }: LayoutProps) => {
       />
       <div className="min-h-screen bg-gradient-cosmic flex flex-col">
         <Navigation />
-        <main className="pt-16 flex-1" style={{ touchAction: 'pan-y' }}>
+        <main className="pt-16 flex-1">
           {children}
         </main>
         <Footer />

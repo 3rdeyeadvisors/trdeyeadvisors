@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface UsePullToRefreshOptions {
   onRefresh: () => Promise<void>;
@@ -6,9 +6,20 @@ interface UsePullToRefreshOptions {
   disabled?: boolean;
 }
 
-const isInsideCarousel = (element: EventTarget | null): boolean => {
-  if (!element || !(element instanceof HTMLElement)) return false;
-  return !!element.closest('[data-carousel="true"], .mobile-carousel-container');
+// Check if touch started inside a carousel
+const isInsideCarousel = (element: HTMLElement | null): boolean => {
+  let current = element;
+  while (current) {
+    if (
+      current.hasAttribute('data-carousel') ||
+      current.classList.contains('mobile-carousel-container') ||
+      current.classList.contains('embla')
+    ) {
+      return true;
+    }
+    current = current.parentElement;
+  }
+  return false;
 };
 
 export const usePullToRefresh = ({
@@ -18,79 +29,109 @@ export const usePullToRefresh = ({
 }: UsePullToRefreshOptions) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [pullDistance, setPullDistance] = useState(0);
-  const startY = useRef(0);
-  const isPulling = useRef(false);
-  const isCarouselTouch = useRef(false);
+  
+  // Use refs to avoid stale closure issues
+  const startYRef = useRef(0);
+  const isPullingRef = useRef(false);
+  const isCarouselTouchRef = useRef(false);
+  const pullDistanceRef = useRef(0);
+  const isRefreshingRef = useRef(false);
 
-  const handleTouchStart = useCallback((e: TouchEvent) => {
-    if (disabled || window.scrollY > 0) return;
-    
-    // Check if touch started inside a carousel - use capture phase detection
-    isCarouselTouch.current = isInsideCarousel(e.target);
-    if (isCarouselTouch.current) {
-      return;
-    }
-    
-    startY.current = e.touches[0].clientY;
-    isPulling.current = true;
-  }, [disabled]);
-
-  const handleTouchMove = useCallback((e: TouchEvent) => {
-    // Skip if touch is inside carousel - check again in case it changed
-    if (isCarouselTouch.current || isInsideCarousel(e.target)) {
-      isCarouselTouch.current = true;
-      return;
-    }
-    
-    if (!isPulling.current || disabled || isRefreshing) return;
-    
-    const currentY = e.touches[0].clientY;
-    const diff = currentY - startY.current;
-    
-    if (diff > 0 && window.scrollY === 0) {
-      e.preventDefault();
-      setPullDistance(Math.min(diff * 0.5, threshold * 1.5));
-    }
-  }, [disabled, isRefreshing, threshold]);
-
-  const handleTouchEnd = useCallback(async () => {
-    // Reset carousel touch flag
-    const wasCarouselTouch = isCarouselTouch.current;
-    isCarouselTouch.current = false;
-    
-    if (wasCarouselTouch || !isPulling.current || disabled) {
-      isPulling.current = false;
-      setPullDistance(0);
-      return;
-    }
-    
-    isPulling.current = false;
-
-    if (pullDistance >= threshold && !isRefreshing) {
-      setIsRefreshing(true);
-      try {
-        await onRefresh();
-      } finally {
-        setIsRefreshing(false);
-      }
-    }
-    setPullDistance(0);
-  }, [pullDistance, threshold, isRefreshing, onRefresh, disabled]);
+  // Keep refs in sync with state
+  useEffect(() => {
+    pullDistanceRef.current = pullDistance;
+  }, [pullDistance]);
 
   useEffect(() => {
-    const element = document.body;
-    
-    // Use capture phase for touchstart to detect carousels early
-    element.addEventListener('touchstart', handleTouchStart, { passive: true, capture: true });
-    element.addEventListener('touchmove', handleTouchMove, { passive: false });
-    element.addEventListener('touchend', handleTouchEnd, { passive: true });
+    isRefreshingRef.current = isRefreshing;
+  }, [isRefreshing]);
+
+  useEffect(() => {
+    if (disabled) return;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      // Skip if carousel is currently dragging (class-based coordination)
+      if (document.body.classList.contains('carousel-dragging')) {
+        isCarouselTouchRef.current = true;
+        return;
+      }
+
+      // Check if touch started inside a carousel
+      const target = e.target as HTMLElement;
+      if (isInsideCarousel(target)) {
+        isCarouselTouchRef.current = true;
+        return;
+      }
+
+      isCarouselTouchRef.current = false;
+
+      // Only start pull-to-refresh if at top of page
+      if (window.scrollY <= 0) {
+        startYRef.current = e.touches[0].clientY;
+        isPullingRef.current = true;
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      // Skip if this is a carousel touch or carousel is dragging
+      if (isCarouselTouchRef.current || document.body.classList.contains('carousel-dragging')) {
+        return;
+      }
+
+      if (!isPullingRef.current || isRefreshingRef.current) return;
+
+      const currentY = e.touches[0].clientY;
+      const distance = Math.max(0, currentY - startYRef.current);
+
+      // Only allow pull down, not up
+      if (distance > 0 && window.scrollY <= 0) {
+        // Apply resistance curve
+        const resistedDistance = Math.min(distance * 0.5, threshold * 1.5);
+        setPullDistance(resistedDistance);
+        
+        // Prevent default scrolling when pulling down
+        if (resistedDistance > 10) {
+          e.preventDefault();
+        }
+      }
+    };
+
+    const handleTouchEnd = async () => {
+      // Skip if this was a carousel touch
+      if (isCarouselTouchRef.current) {
+        isCarouselTouchRef.current = false;
+        return;
+      }
+
+      if (!isPullingRef.current) return;
+
+      isPullingRef.current = false;
+
+      const currentPullDistance = pullDistanceRef.current;
+      
+      if (currentPullDistance >= threshold && !isRefreshingRef.current) {
+        setIsRefreshing(true);
+        try {
+          await onRefresh();
+        } finally {
+          setIsRefreshing(false);
+        }
+      }
+
+      setPullDistance(0);
+    };
+
+    // Use capture phase for touchstart to detect carousel early
+    document.body.addEventListener('touchstart', handleTouchStart, { passive: true, capture: true });
+    document.body.addEventListener('touchmove', handleTouchMove, { passive: false });
+    document.body.addEventListener('touchend', handleTouchEnd, { passive: true });
 
     return () => {
-      element.removeEventListener('touchstart', handleTouchStart, { capture: true });
-      element.removeEventListener('touchmove', handleTouchMove);
-      element.removeEventListener('touchend', handleTouchEnd);
+      document.body.removeEventListener('touchstart', handleTouchStart, { capture: true });
+      document.body.removeEventListener('touchmove', handleTouchMove);
+      document.body.removeEventListener('touchend', handleTouchEnd);
     };
-  }, [handleTouchStart, handleTouchMove, handleTouchEnd]);
+  }, [disabled, threshold, onRefresh]);
 
   return {
     isRefreshing,

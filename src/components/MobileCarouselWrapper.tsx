@@ -10,25 +10,30 @@ export const MobileCarouselWrapper: React.FC<MobileCarouselWrapperProps> = ({
   children, 
   className = '' 
 }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragOffset, setDragOffset] = useState(0);
-  
   const containerRef = useRef<HTMLDivElement>(null);
-  const startX = useRef(0);
-  const startY = useRef(0);
-  const startTime = useRef(0);
-  const containerWidth = useRef(0);
-  const isHorizontalSwipe = useRef<boolean | null>(null);
-
   const childrenArray = React.Children.toArray(children);
   const childCount = childrenArray.length;
+
+  // All tracking values as refs to avoid stale closures
+  const isDraggingRef = useRef(false);
+  const startXRef = useRef(0);
+  const startYRef = useRef(0);
+  const startTimeRef = useRef(0);
+  const containerWidthRef = useRef(0);
+  const isHorizontalSwipeRef = useRef<boolean | null>(null);
+  const dragOffsetRef = useRef(0);
+  const currentIndexRef = useRef(0);
+  const rafIdRef = useRef<number | null>(null);
+
+  // Only state that triggers re-renders
+  const [renderIndex, setRenderIndex] = useState(0);
+  const [displayOffset, setDisplayOffset] = useState(0);
 
   // Update container width on mount and resize
   useEffect(() => {
     const updateWidth = () => {
       if (containerRef.current) {
-        containerWidth.current = containerRef.current.offsetWidth;
+        containerWidthRef.current = containerRef.current.offsetWidth;
       }
     };
     
@@ -37,95 +42,147 @@ export const MobileCarouselWrapper: React.FC<MobileCarouselWrapperProps> = ({
     return () => window.removeEventListener('resize', updateWidth);
   }, []);
 
-  // Native touch event handlers for consistent behavior
+  const goToSlide = useCallback((index: number) => {
+    const newIndex = Math.max(0, Math.min(childCount - 1, index));
+    currentIndexRef.current = newIndex;
+    setRenderIndex(newIndex);
+    setDisplayOffset(0);
+    dragOffsetRef.current = 0;
+  }, [childCount]);
+
+  // Native touch event handlers - registered ONCE on mount
   useEffect(() => {
     const container = containerRef.current;
-    if (!container) return;
+    if (!container || childCount <= 1) return;
 
     const handleTouchStart = (e: TouchEvent) => {
-      containerWidth.current = container.offsetWidth;
-      startX.current = e.touches[0].clientX;
-      startY.current = e.touches[0].clientY;
-      startTime.current = Date.now();
-      isHorizontalSwipe.current = null;
-      setIsDragging(true);
-      setDragOffset(0);
+      // Update container width
+      containerWidthRef.current = container.offsetWidth;
+      
+      // Initialize touch tracking
+      isDraggingRef.current = true;
+      startXRef.current = e.touches[0].clientX;
+      startYRef.current = e.touches[0].clientY;
+      startTimeRef.current = Date.now();
+      isHorizontalSwipeRef.current = null;
+      dragOffsetRef.current = 0;
+      
+      // Add class to body to coordinate with pull-to-refresh
+      document.body.classList.add('carousel-dragging');
+      container.setAttribute('data-dragging', 'true');
     };
 
     const handleTouchMove = (e: TouchEvent) => {
-      if (!isDragging) return;
+      if (!isDraggingRef.current) return;
       
       const currentX = e.touches[0].clientX;
       const currentY = e.touches[0].clientY;
-      const diffX = currentX - startX.current;
-      const diffY = currentY - startY.current;
+      const diffX = currentX - startXRef.current;
+      const diffY = currentY - startYRef.current;
       
       // Determine swipe direction on first significant movement
-      if (isHorizontalSwipe.current === null && (Math.abs(diffX) > 10 || Math.abs(diffY) > 10)) {
-        isHorizontalSwipe.current = Math.abs(diffX) > Math.abs(diffY);
+      if (isHorizontalSwipeRef.current === null) {
+        if (Math.abs(diffX) > 8 || Math.abs(diffY) > 8) {
+          isHorizontalSwipeRef.current = Math.abs(diffX) > Math.abs(diffY);
+          
+          if (!isHorizontalSwipeRef.current) {
+            // Vertical swipe - cancel carousel drag
+            isDraggingRef.current = false;
+            document.body.classList.remove('carousel-dragging');
+            container.setAttribute('data-dragging', 'false');
+            return;
+          }
+        } else {
+          return; // Wait for more movement
+        }
       }
       
       // Only handle horizontal swipes
-      if (isHorizontalSwipe.current !== true) {
-        return;
-      }
+      if (!isHorizontalSwipeRef.current) return;
       
-      // Prevent scroll and stop pull-to-refresh
+      // CRITICAL: Prevent default and stop propagation to prevent scroll/pull-to-refresh
       e.preventDefault();
       e.stopImmediatePropagation();
       
       // Apply resistance at edges
+      const currentIdx = currentIndexRef.current;
       let offset = diffX;
-      if ((currentIndex === 0 && diffX > 0) || (currentIndex === childCount - 1 && diffX < 0)) {
+      if ((currentIdx === 0 && diffX > 0) || (currentIdx === childCount - 1 && diffX < 0)) {
         offset = diffX * 0.3;
       }
       
-      setDragOffset(offset);
+      dragOffsetRef.current = offset;
+      
+      // Use RAF for smooth updates
+      if (rafIdRef.current) {
+        cancelAnimationFrame(rafIdRef.current);
+      }
+      rafIdRef.current = requestAnimationFrame(() => {
+        setDisplayOffset(offset);
+      });
     };
 
     const handleTouchEnd = () => {
-      if (!isDragging) return;
+      if (!isDraggingRef.current) return;
       
-      const elapsed = Date.now() - startTime.current;
-      const velocity = Math.abs(dragOffset) / elapsed;
-      const threshold = containerWidth.current * 0.2;
-      const velocityThreshold = 0.5;
+      // Remove dragging state
+      document.body.classList.remove('carousel-dragging');
+      container.setAttribute('data-dragging', 'false');
       
-      let newIndex = currentIndex;
+      const wasHorizontal = isHorizontalSwipeRef.current;
+      isDraggingRef.current = false;
+      isHorizontalSwipeRef.current = null;
       
-      if (isHorizontalSwipe.current === true) {
-        if (dragOffset > threshold || (dragOffset > 30 && velocity > velocityThreshold)) {
-          newIndex = Math.max(0, currentIndex - 1);
-        } else if (dragOffset < -threshold || (dragOffset < -30 && velocity > velocityThreshold)) {
-          newIndex = Math.min(childCount - 1, currentIndex + 1);
-        }
+      if (!wasHorizontal) {
+        dragOffsetRef.current = 0;
+        setDisplayOffset(0);
+        return;
       }
       
-      setCurrentIndex(newIndex);
-      setIsDragging(false);
-      setDragOffset(0);
-      isHorizontalSwipe.current = null;
+      const elapsed = Date.now() - startTimeRef.current;
+      const velocity = Math.abs(dragOffsetRef.current) / elapsed;
+      const threshold = containerWidthRef.current * 0.2;
+      const velocityThreshold = 0.5;
+      const currentIdx = currentIndexRef.current;
+      
+      let newIndex = currentIdx;
+      const offset = dragOffsetRef.current;
+      
+      if (offset > threshold || (offset > 30 && velocity > velocityThreshold)) {
+        newIndex = Math.max(0, currentIdx - 1);
+      } else if (offset < -threshold || (offset < -30 && velocity > velocityThreshold)) {
+        newIndex = Math.min(childCount - 1, currentIdx + 1);
+      }
+      
+      currentIndexRef.current = newIndex;
+      dragOffsetRef.current = 0;
+      
+      setRenderIndex(newIndex);
+      setDisplayOffset(0);
     };
 
-    // Use passive: false for touchmove to allow preventDefault
+    // Register listeners with proper options - passive: false for touchmove
     container.addEventListener('touchstart', handleTouchStart, { passive: true });
     container.addEventListener('touchmove', handleTouchMove, { passive: false });
     container.addEventListener('touchend', handleTouchEnd, { passive: true });
+    container.addEventListener('touchcancel', handleTouchEnd, { passive: true });
 
     return () => {
       container.removeEventListener('touchstart', handleTouchStart);
       container.removeEventListener('touchmove', handleTouchMove);
       container.removeEventListener('touchend', handleTouchEnd);
+      container.removeEventListener('touchcancel', handleTouchEnd);
+      document.body.classList.remove('carousel-dragging');
+      
+      if (rafIdRef.current) {
+        cancelAnimationFrame(rafIdRef.current);
+      }
     };
-  }, [isDragging, currentIndex, childCount, dragOffset]);
-
-  const goToSlide = useCallback((index: number) => {
-    setCurrentIndex(Math.max(0, Math.min(childCount - 1, index)));
-  }, [childCount]);
+  }, [childCount]); // Only depend on childCount, not on state
 
   // Calculate transform
-  const baseTransform = -currentIndex * 100;
-  const dragPercent = containerWidth.current > 0 ? (dragOffset / containerWidth.current) * 100 : 0;
+  const baseTransform = -renderIndex * 100;
+  const dragPercent = containerWidthRef.current > 0 ? (displayOffset / containerWidthRef.current) * 100 : 0;
   const transform = baseTransform + dragPercent;
 
   return (
@@ -134,13 +191,13 @@ export const MobileCarouselWrapper: React.FC<MobileCarouselWrapperProps> = ({
         ref={containerRef}
         className="mobile-carousel-container relative overflow-hidden"
         data-carousel="true"
-        data-dragging={isDragging}
+        data-dragging="false"
       >
         <div
           className="mobile-carousel-track flex"
           style={{
             transform: `translateX(${transform}%)`,
-            transition: isDragging ? 'none' : 'transform 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+            transition: displayOffset !== 0 ? 'none' : 'transform 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94)',
           }}
         >
           {childrenArray.map((child, index) => (
@@ -153,8 +210,8 @@ export const MobileCarouselWrapper: React.FC<MobileCarouselWrapperProps> = ({
           ))}
         </div>
         
-        {/* Swipe hint - only show on first slide initially */}
-        {currentIndex === 0 && childCount > 1 && (
+        {/* Swipe hint - only show on first slide */}
+        {renderIndex === 0 && childCount > 1 && (
           <div className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground/40 animate-pulse pointer-events-none">
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -172,7 +229,7 @@ export const MobileCarouselWrapper: React.FC<MobileCarouselWrapperProps> = ({
               onClick={() => goToSlide(index)}
               className={cn(
                 "w-2 h-2 rounded-full transition-all duration-200",
-                index === currentIndex 
+                index === renderIndex 
                   ? 'bg-primary w-4' 
                   : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
               )}
