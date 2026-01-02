@@ -1,5 +1,4 @@
-
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -383,16 +382,57 @@ export const DefiCharts = () => {
   const getPreviousTVL = () => data.historicalData[data.historicalData.length - 2]?.totalTvl || data.totalTvl;
   const getTVLChange = () => ((getCurrentTVL() - getPreviousTVL()) / getPreviousTVL() * 100).toFixed(2);
 
-  // Mobile Carousel using shadcn Carousel component
+  // Mobile Carousel using shadcn Carousel component with proper touch/swipe config
   const MobileCarouselWrapper = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => {
+    const [mobileApi, setMobileApi] = React.useState<CarouselApi>();
+    const [mobileSlide, setMobileSlide] = React.useState(0);
+    const [totalSlides, setTotalSlides] = React.useState(0);
+
+    React.useEffect(() => {
+      if (!mobileApi) return;
+
+      setTotalSlides(mobileApi.scrollSnapList().length);
+      setMobileSlide(mobileApi.selectedScrollSnap());
+
+      mobileApi.on('select', () => {
+        setMobileSlide(mobileApi.selectedScrollSnap());
+      });
+    }, [mobileApi]);
+
     return (
       <div className={`md:hidden ${className}`}>
-        <Carousel>
-          <CarouselContent>
+        <Carousel
+          setApi={setMobileApi}
+          opts={{
+            align: 'start',
+            dragFree: false,
+            containScroll: 'trimSnaps',
+            skipSnaps: false,
+            loop: false,
+          }}
+          className="w-full touch-pan-y"
+        >
+          <CarouselContent className="-ml-2">
             {children}
           </CarouselContent>
         </Carousel>
-        <div className="text-center mt-3">
+        
+        {/* Dot indicators for mobile */}
+        <div className="flex items-center justify-center gap-2 mt-4">
+          {totalSlides > 1 && Array.from({ length: totalSlides }).map((_, index) => (
+            <button
+              key={index}
+              onClick={() => mobileApi?.scrollTo(index)}
+              className={`w-2 h-2 rounded-full transition-all duration-200 ${
+                mobileSlide === index 
+                  ? 'bg-primary w-4' 
+                  : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
+        <div className="text-center mt-2">
           <span className="text-xs text-muted-foreground">← Swipe to see more →</span>
         </div>
       </div>
@@ -824,7 +864,7 @@ export const DefiCharts = () => {
                 {/* Mobile Carousel */}
                 <MobileCarouselWrapper>
                   {data.protocols.slice(0, 8).map((protocol, index) => (
-                    <CarouselItem key={protocol.id} className="basis-72">
+                    <CarouselItem key={protocol.id} className="basis-[280px] pl-2">
                       <div className="p-3 rounded-lg border bg-card text-center">
                         <div className="flex flex-col items-center gap-2 mb-3">
                           <div className="w-7 h-7 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-xs font-bold text-primary">
@@ -1040,7 +1080,7 @@ export const DefiCharts = () => {
           {/* Mobile Carousel */}
           <MobileCarouselWrapper>
             {data.protocols.slice(0, 8).map((protocol, index) => (
-              <CarouselItem key={protocol.id} className="basis-64">
+              <CarouselItem key={protocol.id} className="basis-[260px] pl-2">
                 <div className="p-3 rounded-lg border bg-card">
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
