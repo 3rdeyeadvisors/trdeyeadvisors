@@ -53,14 +53,18 @@ const ReferralTerms = () => {
                 </p>
                 <ul className="list-disc pl-6 text-foreground/80 space-y-2 mt-4">
                   <li>
-                    <strong>Standard Rate (Non-Subscribers):</strong> {Math.round(COMMISSION_RATES.monthly * 100)}% of the 
-                    subscription amount (${(PRICING.monthly.amount * COMMISSION_RATES.monthly).toFixed(2)} per monthly, 
-                    ${(PRICING.annual.amount * COMMISSION_RATES.monthly).toFixed(2)} per annual)
+                    <strong>Non-Subscribers:</strong> Not eligible to participate in the referral program. 
+                    You must have an active subscription to earn commissions.
                   </li>
                   <li>
-                    <strong>Premium Rate (Annual Subscribers):</strong> {Math.round(COMMISSION_RATES.annual * 100)}% of the 
-                    subscription amount (${(PRICING.monthly.amount * COMMISSION_RATES.annual).toFixed(2)} per monthly, 
-                    ${(PRICING.annual.amount * COMMISSION_RATES.annual).toFixed(2)} per annual)
+                    <strong>Monthly Subscribers:</strong> {Math.round(COMMISSION_RATES.monthly * 100)}% of the 
+                    subscription amount (${(PRICING.monthly.amount * COMMISSION_RATES.monthly).toFixed(2)} per monthly referral, 
+                    ${(PRICING.annual.amount * COMMISSION_RATES.monthly).toFixed(2)} per annual referral)
+                  </li>
+                  <li>
+                    <strong>Annual Subscribers (Premium Rate):</strong> {Math.round(COMMISSION_RATES.annual * 100)}% of the 
+                    subscription amount (${(PRICING.monthly.amount * COMMISSION_RATES.annual).toFixed(2)} per monthly referral, 
+                    ${(PRICING.annual.amount * COMMISSION_RATES.annual).toFixed(2)} per annual referral)
                   </li>
                 </ul>
                 <p className="text-foreground/80 leading-relaxed mt-4">
