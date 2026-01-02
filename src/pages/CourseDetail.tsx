@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -6,9 +6,10 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ProgressBar } from "@/components/progress/ProgressBar";
 import { useAuth } from "@/components/auth/AuthProvider";
+import { useSubscription } from "@/hooks/useSubscription";
 import { useProgress } from "@/components/progress/ProgressProvider";
 import { AuthModal } from "@/components/auth/AuthModal";
-import { ArrowLeft, BookOpen, CheckCircle, Clock, Play, Grid3X3 } from "lucide-react";
+import { ArrowLeft, BookOpen, CheckCircle, Clock, Play, Grid3X3, Star, Lock } from "lucide-react";
 import { getCourseContent } from "@/data/courseContent";
 import { EnhancedModuleNavigation } from "@/components/course/EnhancedModuleNavigation";
 import { CommunityTabs } from "@/components/community/CommunityTabs";
@@ -19,6 +20,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { DesktopOnlyNotice } from "@/components/DesktopOnlyNotice";
 import { ParticipantTracker } from "@/components/admin/ParticipantTracker";
 import { usePresenceTracking } from "@/hooks/usePresenceTracking";
+import { ANNUAL_BENEFITS } from "@/lib/constants";
 import {
   Accordion,
   AccordionContent,
@@ -30,14 +32,40 @@ const CourseDetail = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { subscription } = useSubscription();
   const { updateModuleProgress, getCourseProgress } = useProgress();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showEnhancedNav, setShowEnhancedNav] = useState(false);
   const { toast: useToastNotification } = useToast();
   const isMobile = useIsMobile();
 
+  const isAnnualSubscriber = subscription?.plan === 'annual' || subscription?.isAdmin;
+
   const course = getCourseContent(parseInt(courseId || "0"));
   const progress = getCourseProgress(parseInt(courseId || "0"));
+
+  // Check if course is in early access and user has access
+  const { isEarlyAccess, isLocked } = useMemo(() => {
+    if (!course?.early_access_date) {
+      return { isEarlyAccess: false, isLocked: false };
+    }
+    
+    const now = new Date();
+    const earlyAccessDate = new Date(course.early_access_date);
+    const publicReleaseDate = course.public_release_date 
+      ? new Date(course.public_release_date)
+      : new Date(earlyAccessDate.getTime() + (ANNUAL_BENEFITS.earlyAccessDays * 24 * 60 * 60 * 1000));
+    
+    if (now < earlyAccessDate) {
+      return { isEarlyAccess: false, isLocked: true };
+    }
+    
+    if (now >= earlyAccessDate && now < publicReleaseDate) {
+      return { isEarlyAccess: true, isLocked: !isAnnualSubscriber };
+    }
+    
+    return { isEarlyAccess: false, isLocked: false };
+  }, [course, isAnnualSubscriber]);
 
   // Track presence for admins
   usePresenceTracking({
@@ -51,7 +79,11 @@ const CourseDetail = () => {
     if (!course) {
       navigate("/courses");
     }
-  }, [course, navigate]);
+    // Redirect if course is locked and user doesn't have access
+    if (isLocked) {
+      navigate("/subscription");
+    }
+  }, [course, navigate, isLocked]);
 
   if (!course) {
     return null;
@@ -137,6 +169,12 @@ const CourseDetail = () => {
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
             <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-3 sm:gap-4">
               <BookOpen className="w-6 h-6 sm:w-8 sm:h-8 text-primary flex-shrink-0" />
+              {isEarlyAccess && (
+                <Badge className="bg-primary/20 text-primary border-primary/30 text-xs sm:text-sm flex items-center gap-1">
+                  <Star className="w-3 h-3" />
+                  Early Access
+                </Badge>
+              )}
               <Badge className="bg-awareness/20 text-awareness border-awareness/30 text-xs sm:text-sm">
                 Free Course
               </Badge>
