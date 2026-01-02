@@ -11,6 +11,7 @@ import NewsletterSignup from "@/components/NewsletterSignup";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { PRICING, COMMISSION_RATES, ANNUAL_BENEFITS } from "@/lib/constants";
 
 import SEO from "@/components/SEO";
 
@@ -474,8 +475,8 @@ const Index = () => {
                     Full access, billed monthly
                   </p>
                   <div className="mb-5">
-                    <span className="text-3xl md:text-4xl font-consciousness font-bold text-foreground">$99</span>
-                    <span className="text-foreground/70 font-consciousness">/month</span>
+                    <span className="text-3xl md:text-4xl font-consciousness font-bold text-foreground">{PRICING.monthly.display}</span>
+                    <span className="text-foreground/70 font-consciousness">{PRICING.monthly.period}</span>
                   </div>
                   <ul className="space-y-2.5 mb-5 text-left w-full">
                     <li className="flex items-center text-sm text-foreground font-consciousness">
@@ -496,7 +497,7 @@ const Index = () => {
                     </li>
                     <li className="flex items-center text-sm text-foreground font-consciousness">
                       <CheckCircle2 className="w-4 h-4 text-primary mr-3 flex-shrink-0" />
-                      <span>50% referral commission</span>
+                      <span>{Math.round(COMMISSION_RATES.monthly * 100)}% referral commission</span>
                     </li>
                     <li className="flex items-center text-sm text-foreground font-consciousness">
                       <CheckCircle2 className="w-4 h-4 text-primary mr-3 flex-shrink-0" />
@@ -534,8 +535,8 @@ const Index = () => {
                     Full year commitment
                   </p>
                 <div className="mb-5">
-                    <span className="text-3xl md:text-4xl font-consciousness font-bold text-foreground">$1,188</span>
-                    <span className="text-foreground/70 font-consciousness">/year</span>
+                    <span className="text-3xl md:text-4xl font-consciousness font-bold text-foreground">{PRICING.annual.display}</span>
+                    <span className="text-foreground/70 font-consciousness">{PRICING.annual.period}</span>
                   </div>
                   <ul className="space-y-2.5 mb-5 text-left w-full">
                     <li className="flex items-center text-sm text-foreground font-consciousness">
@@ -552,7 +553,7 @@ const Index = () => {
                     </li>
                     <li className="flex items-center text-sm text-foreground font-consciousness">
                       <CheckCircle2 className="w-4 h-4 text-primary mr-3 flex-shrink-0" />
-                      <span>5 bonus raffle entries per raffle</span>
+                      <span>{ANNUAL_BENEFITS.bonusRaffleTickets} bonus raffle entries per raffle</span>
                     </li>
                     <li className="flex items-center text-sm text-foreground font-consciousness">
                       <CheckCircle2 className="w-4 h-4 text-primary mr-3 flex-shrink-0" />
@@ -560,7 +561,7 @@ const Index = () => {
                     </li>
                     <li className="flex items-center text-sm text-foreground font-consciousness">
                       <CheckCircle2 className="w-4 h-4 text-primary mr-3 flex-shrink-0" />
-                      <span>60% referral commission</span>
+                      <span>{Math.round(COMMISSION_RATES.annual * 100)}% referral commission</span>
                     </li>
                     <li className="flex items-center text-sm text-foreground font-consciousness">
                       <CheckCircle2 className="w-4 h-4 text-primary mr-3 flex-shrink-0" />
