@@ -301,7 +301,7 @@ const Subscription = () => {
                   <h3 className="text-xl md:text-2xl font-semibold text-foreground mb-2">Annual</h3>
                   <p className="text-sm text-foreground/70 mb-5">Full year commitment</p>
                   <div>
-                    <span className="text-4xl md:text-5xl font-bold text-foreground">$1,999</span>
+                    <span className="text-4xl md:text-5xl font-bold text-foreground">$1,188</span>
                     <span className="text-foreground/70">/year</span>
                   </div>
                 </div>

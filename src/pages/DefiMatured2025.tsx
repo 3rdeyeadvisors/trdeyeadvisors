@@ -191,8 +191,8 @@ const DefiMatured2025 = () => {
                 <p className="text-foreground/90 leading-relaxed">
                   For those interested in understanding this space, the emphasis should be on education, awareness, and long-term thinking rather than short-term speculation. The infrastructure being built today will likely shape the financial systems of tomorrow.
                 </p>
-                <p className="text-foreground/90 leading-relaxed">
-                  At <strong className="text-foreground font-semibold">3rd Eye Advisors</strong>, we believe that informed participation—grounded in research and understanding—is the foundation for navigating this evolving landscape.
+              <p className="text-foreground/90 leading-relaxed">
+                  At <strong className="text-foreground font-semibold">3rdeyeadvisors</strong>, we believe that informed participation—grounded in research and understanding—is the foundation for navigating this evolving landscape.
                 </p>
               </section>
 

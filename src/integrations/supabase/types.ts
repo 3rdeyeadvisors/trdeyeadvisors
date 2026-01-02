@@ -222,6 +222,48 @@ export type Database = {
           },
         ]
       }
+      commissions: {
+        Row: {
+          admin_notes: string | null
+          commission_amount_cents: number
+          created_at: string
+          id: string
+          paid_at: string | null
+          plan_type: string
+          referred_user_id: string
+          referrer_id: string
+          status: string
+          subscription_amount_cents: number
+          subscription_id: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          commission_amount_cents: number
+          created_at?: string
+          id?: string
+          paid_at?: string | null
+          plan_type: string
+          referred_user_id: string
+          referrer_id: string
+          status?: string
+          subscription_amount_cents: number
+          subscription_id: string
+        }
+        Update: {
+          admin_notes?: string | null
+          commission_amount_cents?: number
+          created_at?: string
+          id?: string
+          paid_at?: string | null
+          plan_type?: string
+          referred_user_id?: string
+          referrer_id?: string
+          status?: string
+          subscription_amount_cents?: number
+          subscription_id?: string
+        }
+        Relationships: []
+      }
       contact_submissions: {
         Row: {
           email: string
@@ -800,6 +842,9 @@ export type Database = {
           created_at: string
           display_name: string | null
           id: string
+          payout_crypto_network: string | null
+          payout_details: string | null
+          payout_method: string | null
           updated_at: string
           user_id: string
         }
@@ -809,6 +854,9 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           id?: string
+          payout_crypto_network?: string | null
+          payout_details?: string | null
+          payout_method?: string | null
           updated_at?: string
           user_id: string
         }
@@ -818,6 +866,9 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           id?: string
+          payout_crypto_network?: string | null
+          payout_details?: string | null
+          payout_method?: string | null
           updated_at?: string
           user_id?: string
         }

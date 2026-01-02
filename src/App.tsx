@@ -74,6 +74,7 @@ import UploadResourceFile from "./pages/UploadResourceFile";
 import VaultAccess from "./pages/VaultAccess";
 import VaultDepositTutorial from "./pages/VaultDepositTutorial";
 import VaultWithdrawalTutorial from "./pages/VaultWithdrawalTutorial";
+import Earn from "./pages/Earn";
 
 const queryClient = new QueryClient();
 
@@ -202,6 +203,7 @@ const App = () => {
                           } />
                           <Route path="/raffles" element={<Raffles />} />
                           <Route path="/raffle-history" element={<RaffleHistory />} />
+                          <Route path="/earn" element={<Earn />} />
                           <Route path="/vault-access" element={<VaultAccess />} />
                           <Route path="/vault-deposit-guide" element={<VaultDepositTutorial />} />
                           <Route path="/vault-withdrawal-guide" element={<VaultWithdrawalTutorial />} />

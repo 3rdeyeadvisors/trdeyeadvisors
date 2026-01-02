@@ -10,7 +10,8 @@ import {
   AlertTriangle,
   Gift,
   Eye,
-  Activity
+  Activity,
+  DollarSign
 } from "lucide-react";
 import {
   Sidebar,
@@ -29,6 +30,7 @@ const menuItems = [
   { id: "overview", title: "Overview", icon: LayoutDashboard },
   { id: "orders", title: "Orders & Customers", icon: ShoppingCart },
   { id: "raffles", title: "Raffle Manager", icon: Gift },
+  { id: "commissions", title: "Commissions", icon: DollarSign },
   { id: "participation", title: "Tutorial/Course Participation", icon: Activity },
   { id: "email", title: "Email Center", icon: Mail },
   { id: "email-preview", title: "Email Preview", icon: Eye },
