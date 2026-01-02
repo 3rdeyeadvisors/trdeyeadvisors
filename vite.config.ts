@@ -64,7 +64,7 @@ export default defineConfig(({ mode }) => ({
         // Skip waiting and claim clients immediately for seamless updates
         skipWaiting: true,
         clientsClaim: true,
-        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5 MB limit
+        maximumFileSizeToCacheInBytes: 10 * 1024 * 1024, // 10 MB limit for large thirdweb bundle
         // Only cache essential static assets
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff,woff2}'],
         // Minimal runtime caching - prioritize network for live data
