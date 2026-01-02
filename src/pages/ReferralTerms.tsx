@@ -82,8 +82,8 @@ const ReferralTerms = () => {
                 </CardHeader>
                 <ul className="list-disc pl-6 text-foreground/80 space-y-3">
                   <li>
-                    <strong>Payment Schedule:</strong> Commissions are reviewed and paid on a monthly basis, 
-                    typically within the first two weeks of each month for the previous month's qualified referrals.
+                    <strong>Payment Schedule:</strong> Approved commissions are paid out within 7-10 business days 
+                    of being marked as approved by our team.
                   </li>
                   <li>
                     <strong>Minimum Payout:</strong> There is no minimum payout threshold. However, we reserve 
@@ -94,8 +94,8 @@ const ReferralTerms = () => {
                     or Zelle. You must provide valid payment details in your account settings.
                   </li>
                   <li>
-                    <strong>Payment Processing:</strong> Approved commissions are paid out within 7-10 business days. 
-                    New commissions may be held briefly to allow time for potential refunds or chargebacks.
+                    <strong>Chargeback Protection:</strong> New commissions may be held briefly to allow time for 
+                    potential refunds or chargebacks before being marked as approved.
                   </li>
                   <li>
                     <strong>Currency:</strong> All commissions are calculated and paid in USD or USD-equivalent 
