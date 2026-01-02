@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
-import { Wifi, WifiOff, Download, RefreshCw } from 'lucide-react';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -8,9 +6,7 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 export const usePWA = () => {
-  // Default to true (online) to avoid false offline indicators
-  const [isOnline, setIsOnline] = useState(true);
-  const [isUpdateAvailable, setIsUpdateAvailable] = useState(false);
+  const [isOnline, setIsOnline] = useState(typeof navigator !== 'undefined' ? navigator.onLine : true);
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState(false);
 
@@ -20,65 +16,25 @@ export const usePWA = () => {
       setIsInstalled(true);
     }
 
-    // Online/Offline detection
-    const handleOnline = () => {
-      setIsOnline(true);
-      toast.success('Back online!', {
-        icon: <Wifi className="w-4 h-4" />,
-      });
-    };
+    // Online/Offline detection - silent, no toasts
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
 
-    const handleOffline = () => {
-      setIsOnline(false);
-      toast.warning('You are offline. Some features may be limited.', {
-        icon: <WifiOff className="w-4 h-4" />,
-        duration: 5000,
-      });
-    };
-
-    // Install prompt
+    // Install prompt - capture but don't show automatically
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       setInstallPrompt(e as BeforeInstallPromptEvent);
     };
 
-    // App installed
     const handleAppInstalled = () => {
       setIsInstalled(true);
       setInstallPrompt(null);
-      toast.success('App installed successfully!', {
-        icon: <Download className="w-4 h-4" />,
-      });
     };
 
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     window.addEventListener('appinstalled', handleAppInstalled);
-
-    // Service worker update detection
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.ready.then((registration) => {
-        registration.addEventListener('updatefound', () => {
-          const newWorker = registration.installing;
-          if (newWorker) {
-            newWorker.addEventListener('statechange', () => {
-              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                setIsUpdateAvailable(true);
-                toast.info('App update available!', {
-                  icon: <RefreshCw className="w-4 h-4" />,
-                  action: {
-                    label: 'Update',
-                    onClick: () => window.location.reload(),
-                  },
-                  duration: 10000,
-                });
-              }
-            });
-          }
-        });
-      });
-    }
 
     return () => {
       window.removeEventListener('online', handleOnline);
@@ -106,16 +62,10 @@ export const usePWA = () => {
     }
   };
 
-  const updateApp = () => {
-    window.location.reload();
-  };
-
   return {
     isOnline,
-    isUpdateAvailable,
     isInstallable: !!installPrompt,
     isInstalled,
     promptInstall,
-    updateApp,
   };
 };
