@@ -529,8 +529,8 @@ const Index = () => {
                   <p className="text-sm text-foreground/70 font-consciousness mb-4">
                     Full year commitment
                   </p>
-                  <div className="mb-5">
-                    <span className="text-3xl md:text-4xl font-consciousness font-bold text-foreground">$1,999</span>
+                <div className="mb-5">
+                    <span className="text-3xl md:text-4xl font-consciousness font-bold text-foreground">$1,188</span>
                     <span className="text-foreground/70 font-consciousness">/year</span>
                   </div>
                   <ul className="space-y-2.5 mb-5 text-left w-full">

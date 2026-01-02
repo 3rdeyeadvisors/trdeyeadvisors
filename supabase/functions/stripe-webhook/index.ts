@@ -73,6 +73,99 @@ serve(async (req) => {
   // Process webhook event in background (don't block response)
   const backgroundWork = async () => {
     try {
+      // Handle subscription invoice payments for commission tracking
+      if (event.type === "invoice.payment_succeeded") {
+        const invoice = event.data.object as any;
+        
+        // Only process first subscription payment (not renewals)
+        if (invoice.subscription && invoice.billing_reason === "subscription_create") {
+          logStep("Processing first subscription payment for commission", { 
+            customerId: invoice.customer,
+            customerEmail: invoice.customer_email,
+            amount: invoice.amount_paid 
+          });
+          
+          const customerEmail = invoice.customer_email;
+          if (!customerEmail) {
+            logStep("No customer email on invoice, skipping commission check");
+          } else {
+            // Find user by email
+            const { data: userData } = await supabaseClient.auth.admin.listUsers();
+            const user = userData.users.find(u => u.email === customerEmail);
+            
+            if (user) {
+              logStep("Found user for commission check", { userId: user.id });
+              
+              // Check if this user was referred
+              const { data: referralData } = await supabaseClient
+                .from("referrals")
+                .select("referrer_id")
+                .eq("referred_user_id", user.id)
+                .single();
+              
+              if (referralData) {
+                logStep("User was referred, creating commission", { referrerId: referralData.referrer_id });
+                
+                const subscriptionAmountCents = invoice.amount_paid;
+                const commissionAmountCents = Math.floor(subscriptionAmountCents / 2); // 50%
+                const planType = subscriptionAmountCents > 50000 ? "annual" : "monthly"; // $500+ is annual
+                
+                // Check if commission already exists (idempotency via UNIQUE constraint)
+                const { data: existingCommission } = await supabaseClient
+                  .from("commissions")
+                  .select("id")
+                  .eq("referred_user_id", user.id)
+                  .single();
+                
+                if (!existingCommission) {
+                  const { error: commissionError } = await supabaseClient
+                    .from("commissions")
+                    .insert({
+                      referrer_id: referralData.referrer_id,
+                      referred_user_id: user.id,
+                      subscription_id: invoice.subscription as string,
+                      plan_type: planType,
+                      subscription_amount_cents: subscriptionAmountCents,
+                      commission_amount_cents: commissionAmountCents,
+                      status: "pending",
+                    });
+                  
+                  if (commissionError) {
+                    logStep("Error creating commission", { error: commissionError.message });
+                  } else {
+                    logStep("Commission created successfully", { 
+                      amount: commissionAmountCents,
+                      planType 
+                    });
+                    
+                    // Send admin notification
+                    try {
+                      await supabaseClient.functions.invoke("send-commission-notification", {
+                        body: {
+                          referrer_id: referralData.referrer_id,
+                          commission_amount_cents: commissionAmountCents,
+                          plan_type: planType,
+                        },
+                      });
+                      logStep("Commission notification sent to admin");
+                    } catch (notifyError) {
+                      logStep("Failed to send commission notification", { error: notifyError.message });
+                    }
+                  }
+                } else {
+                  logStep("Commission already exists for this referred user");
+                }
+              } else {
+                logStep("User was not referred, no commission to create");
+              }
+            } else {
+              logStep("Could not find user by email for commission check");
+            }
+          }
+        }
+        return;
+      }
+
       if (event.type !== "checkout.session.completed") {
         logStep("Ignoring event type", { eventType: event.type });
         return;

@@ -1,7 +1,7 @@
 import { createThirdwebClient, getContract, defineChain } from "thirdweb";
 
 /**
- * Thirdweb Configuration for 3rd Eye Advisors
+ * Thirdweb Configuration for 3rdeyeadvisors
  * 
  * IMPORTANT: For production, ensure these values are correct:
  * - THIRDWEB_CLIENT_ID: Get from https://thirdweb.com/dashboard/settings/api-keys
@@ -28,7 +28,7 @@ export const thirdwebClient = createThirdwebClient({
 // App metadata for WalletConnect - shown in wallet connection prompts
 // This helps users identify your app when connecting from their wallet
 export const appMetadata = {
-  name: "3rd Eye Advisors",
+  name: "3rdeyeadvisors",
   description: "DeFi Education & NFT-Gated Vault Access",
   url: typeof window !== "undefined" ? window.location.origin : "https://the3rdeyeadvisors.com",
   logoUrl: "https://the3rdeyeadvisors.com/android-chrome-192x192.png",

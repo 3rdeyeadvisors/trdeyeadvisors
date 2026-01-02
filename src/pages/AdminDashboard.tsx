@@ -18,6 +18,7 @@ import { BroadcastAlertsLog } from "@/components/admin/BroadcastAlertsLog";
 import RaffleManager from "@/components/admin/RaffleManager";
 import EmailPreview from "@/components/admin/EmailPreview";
 import { TutorialCourseParticipation } from "@/components/admin/TutorialCourseParticipation";
+import CommissionsManager from "@/components/admin/CommissionsManager";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -80,6 +81,8 @@ const AdminDashboard = () => {
         return <OrdersManager />;
       case "raffles":
         return <RaffleManager />;
+      case "commissions":
+        return <CommissionsManager />;
       case "email":
         return <EmailCenter />;
       case "email-preview":

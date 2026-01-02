@@ -54,6 +54,7 @@ const Navigation = () => {
     { path: "/blog", label: "Blog", external: false },
     { path: "/resources", label: "Resources", external: false },
     { path: "/raffles", label: "Raffles", external: false },
+    { path: "/earn", label: "Earn", external: false },
     { path: "/vault-access", label: "Vault", external: false },
     { path: "/store", label: "Store", external: false },
   ];
@@ -88,6 +89,7 @@ const Navigation = () => {
       icon: Gift,
       items: [
         { path: "/raffles", label: "Raffles", icon: Gift },
+        { path: "/earn", label: "Earn", icon: Gift },
         { path: "/raffle-history", label: "Raffle History", icon: BarChart3 },
         { path: "/analytics", label: "Analytics", icon: BarChart3 },
         { path: "/contact", label: "Contact", icon: Mail },
