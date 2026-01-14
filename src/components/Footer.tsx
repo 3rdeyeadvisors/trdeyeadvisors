@@ -1,210 +1,158 @@
-import { Link } from "react-router-dom";
-import { Mail, Github, Instagram } from "lucide-react";
+import { Link } from 'react-router-dom';
+import { Mail, Github, Instagram, Twitter, ExternalLink } from 'lucide-react';
 
 const Footer = () => {
+  const currentYear = new Date().getFullYear();
+
+  const quickLinks = [
+    { label: 'Courses', href: '/courses' },
+    { label: 'Tutorials', href: '/tutorials' },
+    { label: 'Store', href: '/store' },
+    { label: 'Blog', href: '/blog' },
+  ];
+
+  const supportLinks = [
+    { label: 'Contact', href: '/contact' },
+    { label: 'Resources', href: '/resources' },
+    { label: 'Whitepaper', href: '/resources/3EA-Whitepaper-White.pdf', external: true },
+  ];
+
+  const legalLinks = [
+    { label: 'Privacy Policy', href: '/privacy' },
+    { label: 'Terms of Service', href: '/terms' },
+  ];
+
+  const socialLinks = [
+    { icon: Mail, href: 'mailto:info@the3rdeyeadvisors.com', label: 'Email' },
+    { icon: Twitter, href: 'https://twitter.com/3rdeyeadvisors', label: 'Twitter' },
+    { icon: Instagram, href: 'https://instagram.com/3rdeyeadvisors', label: 'Instagram' },
+    { icon: Github, href: 'https://github.com/3rdeyeadvisors', label: 'GitHub' },
+  ];
+
   return (
-    <footer className="bg-background/90 border-t border-border mt-8 md:mt-20">
-      <div className="container mx-auto px-4 sm:px-6 py-4 md:py-12" style={{ paddingBottom: 'max(16px, env(safe-area-inset-bottom))' }}>
-        {/* Desktop Footer - Full Layout */}
-        <div className="hidden md:grid md:grid-cols-4 gap-10 mb-8">
-          {/* Brand Column */}
-          <div className="text-left">
-            <Link to="/" className="inline-block mb-2">
-              <span className="font-consciousness font-bold text-xl text-primary">
+    <footer className="relative border-t border-border/50 bg-card/30 backdrop-blur-sm">
+      {/* Top gradient line */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+      
+      <div className="max-w-7xl mx-auto px-6 py-12 md:py-16">
+        {/* Main footer grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 md:gap-12 mb-12">
+          {/* Brand column - spans 2 on mobile, 1 on larger */}
+          <div className="col-span-2 lg:col-span-1">
+            <Link to="/" className="inline-block mb-4 group">
+              <span className="font-consciousness font-bold text-xl text-foreground group-hover:text-primary transition-colors">
                 3rdeyeadvisors
               </span>
             </Link>
-            <p className="text-sm text-muted-foreground font-consciousness leading-relaxed max-w-xs">
+            <p className="text-sm text-muted-foreground font-consciousness leading-relaxed max-w-xs mb-6">
               Empowering financial consciousness through DeFi education and tools.
             </p>
+            
+            {/* Social icons */}
+            <div className="flex items-center gap-2">
+              {socialLinks.map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target={social.href.startsWith('mailto') ? undefined : '_blank'}
+                  rel={social.href.startsWith('mailto') ? undefined : 'noopener noreferrer'}
+                  className="w-10 h-10 rounded-lg bg-background/50 border border-border/50 flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/30 transition-all duration-300"
+                  aria-label={social.label}
+                >
+                  <social.icon className="w-4 h-4" />
+                </a>
+              ))}
+            </div>
           </div>
 
-          {/* Quick Links Column */}
-          <div className="text-left">
-            <h3 className="font-consciousness font-semibold mb-3 text-base text-foreground">
-              Quick Links
+          {/* Quick Links */}
+          <div>
+            <h3 className="font-consciousness font-semibold text-sm text-foreground mb-4 uppercase tracking-wider">
+              Learn
             </h3>
-            <ul className="space-y-2">
-              <li>
-                <Link 
-                  to="/courses" 
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness inline-block"
-                >
-                  Courses
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  to="/tutorials" 
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness inline-block"
-                >
-                  Tutorials
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  to="/store" 
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness inline-block"
-                >
-                  Store
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  to="/blog" 
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness inline-block"
-                >
-                  Blog
-                </Link>
-              </li>
+            <ul className="space-y-3">
+              {quickLinks.map((link) => (
+                <li key={link.label}>
+                  <Link
+                    to={link.href}
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness inline-flex items-center gap-1 group"
+                  >
+                    {link.label}
+                    <span className="opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Support Column */}
-          <div className="text-left">
-            <h3 className="font-consciousness font-semibold mb-3 text-base text-foreground">
+          {/* Support Links */}
+          <div>
+            <h3 className="font-consciousness font-semibold text-sm text-foreground mb-4 uppercase tracking-wider">
               Support
             </h3>
-            <ul className="space-y-2">
-              <li>
-                <Link 
-                  to="/contact" 
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness inline-block"
-                >
-                  Contact
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  to="/resources" 
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness inline-block"
-                >
-                  Resources
-                </Link>
-              </li>
-              <li>
-                <a 
-                  href="/resources/3EA-Whitepaper-White.pdf" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness inline-block"
-                >
-                  Whitepaper
-                </a>
-              </li>
-              <li>
-                <Link 
-                  to="/privacy" 
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness inline-block"
-                >
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  to="/terms" 
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness inline-block"
-                >
-                  Terms of Service
-                </Link>
-              </li>
+            <ul className="space-y-3">
+              {supportLinks.map((link) => (
+                <li key={link.label}>
+                  {link.external ? (
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness inline-flex items-center gap-1 group"
+                    >
+                      {link.label}
+                      <ExternalLink className="w-3 h-3 opacity-50" />
+                    </a>
+                  ) : (
+                    <Link
+                      to={link.href}
+                      className="text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness inline-flex items-center gap-1 group"
+                    >
+                      {link.label}
+                      <span className="opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+                    </Link>
+                  )}
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Social Column */}
-          <div className="text-left">
-            <h3 className="font-consciousness font-semibold mb-3 text-base text-foreground">
-              Connect
+          {/* Legal Links */}
+          <div>
+            <h3 className="font-consciousness font-semibold text-sm text-foreground mb-4 uppercase tracking-wider">
+              Legal
             </h3>
-            <div className="flex items-center gap-3 mb-3">
-              <a 
-                href="mailto:info@the3rdeyeadvisors.com" 
-                className="text-muted-foreground hover:text-primary transition-colors p-2 rounded-lg hover:bg-primary/10"
-                aria-label="Email us"
-              >
-                <Mail className="w-5 h-5" />
-              </a>
-              <a 
-                href="https://github.com/3rdeyeadvisors" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="text-muted-foreground hover:text-primary transition-colors p-2 rounded-lg hover:bg-primary/10"
-                aria-label="View our GitHub"
-              >
-                <Github className="w-5 h-5" />
-              </a>
-              <a 
-                href="https://instagram.com/3rdeyeadvisors" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="text-muted-foreground hover:text-primary transition-colors p-2 rounded-lg hover:bg-primary/10"
-                aria-label="Follow us on Instagram"
-              >
-                <Instagram className="w-5 h-5" />
-              </a>
-            </div>
-            <p className="text-xs text-muted-foreground font-consciousness">
-              Join our community and stay updated
-            </p>
+            <ul className="space-y-3">
+              {legalLinks.map((link) => (
+                <li key={link.label}>
+                  <Link
+                    to={link.href}
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness inline-flex items-center gap-1 group"
+                  >
+                    {link.label}
+                    <span className="opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 
-        {/* Mobile Footer - Minimal */}
-        <div className="md:hidden flex flex-col items-center text-center gap-3">
-          {/* Brand */}
-          <Link to="/" className="inline-block">
-            <span className="font-consciousness font-bold text-base text-primary">
-              3rdeyeadvisors
-            </span>
-          </Link>
-          
-          {/* Social Icons */}
-          <div className="flex items-center justify-center gap-2">
-            <a 
-              href="mailto:info@the3rdeyeadvisors.com" 
-              className="text-muted-foreground hover:text-primary transition-colors p-2"
-              aria-label="Email us"
-            >
-              <Mail className="w-5 h-5" />
-            </a>
-            <a 
-              href="https://github.com/3rdeyeadvisors" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="text-muted-foreground hover:text-primary transition-colors p-2"
-              aria-label="View our GitHub"
-            >
-              <Github className="w-5 h-5" />
-            </a>
-            <a 
-              href="https://instagram.com/3rdeyeadvisors" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="text-muted-foreground hover:text-primary transition-colors p-2"
-              aria-label="Follow us on Instagram"
-            >
-              <Instagram className="w-5 h-5" />
-            </a>
-          </div>
-          
-          {/* Copyright */}
-          <p className="text-xs text-muted-foreground font-consciousness">
-            © {new Date().getFullYear()} 3rdeyeadvisors
-          </p>
-        </div>
-
-        {/* Desktop Bottom Section */}
-        <div className="hidden md:block border-t border-border pt-6">
-          <div className="flex flex-col items-center justify-center gap-1.5 text-center">
-            <p className="text-xs text-muted-foreground font-consciousness">
-              © {new Date().getFullYear()} 3rdeyeadvisors. All rights reserved.
+        {/* Bottom section */}
+        <div className="pt-8 border-t border-border/50">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-xs text-muted-foreground font-consciousness text-center md:text-left">
+              © {currentYear} 3rdeyeadvisors. All rights reserved.
             </p>
-            <p className="text-xs text-muted-foreground font-consciousness max-w-2xl">
+            <p className="text-xs text-muted-foreground/70 font-consciousness text-center md:text-right max-w-md">
               Educational content only. Not financial advice. Always do your own research.
             </p>
           </div>
         </div>
       </div>
+      
+      {/* Safe area padding for mobile */}
+      <div className="h-[env(safe-area-inset-bottom)]" />
     </footer>
   );
 };

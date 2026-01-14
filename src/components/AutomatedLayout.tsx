@@ -33,7 +33,7 @@ const AutomatedLayout = ({ children, showSEOValidator = true }: AutomatedLayoutP
   });
 
   return (
-    <div className="min-h-screen bg-gradient-cosmic flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col">
       <PullToRefreshIndicator
         pullDistance={pullDistance}
         isRefreshing={isRefreshing}
