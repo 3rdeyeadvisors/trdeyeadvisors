@@ -32,9 +32,9 @@ const Footer = () => {
       {/* Top gradient line */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
       
-      <div className="max-w-7xl mx-auto px-6 py-8 md:py-12">
+      <div className="max-w-7xl mx-auto px-6 py-6 md:py-8 lg:py-12">
         {/* Main footer grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 lg:gap-8 mb-6 md:mb-8">
           {/* Learn Links */}
           <div>
             <h3 className="font-consciousness font-semibold text-sm text-foreground mb-3 uppercase tracking-wider">
@@ -115,7 +115,7 @@ const Footer = () => {
         </div>
 
         {/* Bottom section */}
-        <div className="pt-6 border-t border-border/50">
+        <div className="pt-4 md:pt-6 border-t border-border/50">
           <div className="flex flex-col md:flex-row items-center justify-between gap-3">
             <div className="flex items-center gap-2">
               <span className="font-consciousness font-bold text-foreground">3rdeyeadvisors</span>

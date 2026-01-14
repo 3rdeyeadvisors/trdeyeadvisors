@@ -21,13 +21,13 @@ const valueProps = [
 
 const AboutSection = () => {
   return (
-    <section className="py-12 md:py-16 lg:py-20 relative">
+    <section className="py-10 md:py-14 lg:py-20 relative">
       {/* Background accent */}
       <div className="absolute left-0 top-1/2 -translate-y-1/2 w-96 h-96 bg-accent/5 rounded-full blur-[100px] pointer-events-none" />
       
       <div className="max-w-4xl mx-auto px-6">
         <AnimatedSection>
-          <div className="relative p-6 md:p-10 rounded-2xl bg-card/50 backdrop-blur-sm border border-border/50">
+          <div className="relative p-5 md:p-8 lg:p-10 rounded-2xl bg-card/50 backdrop-blur-sm border border-border/50">
             {/* Corner accents */}
             <div className="absolute top-0 left-0 w-16 h-16 border-l-2 border-t-2 border-primary/30 rounded-tl-2xl" />
             <div className="absolute bottom-0 right-0 w-16 h-16 border-r-2 border-b-2 border-primary/30 rounded-br-2xl" />

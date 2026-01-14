@@ -36,9 +36,9 @@ const FeaturesSection = () => {
   const { containerRef, isItemVisible } = useStaggeredAnimation(features.length, 150);
 
   return (
-    <section className="py-12 md:py-16 lg:py-20 relative">
+    <section className="py-10 md:py-14 lg:py-20 relative">
       <div className="max-w-7xl mx-auto px-6">
-        <AnimatedSection className="text-center mb-8 md:mb-10">
+        <AnimatedSection className="text-center mb-6 md:mb-8 lg:mb-10">
           <span className="inline-block text-xs md:text-sm uppercase tracking-[0.2em] text-primary font-medium mb-3">
             What You'll Gain
           </span>
@@ -50,14 +50,14 @@ const FeaturesSection = () => {
           </p>
         </AnimatedSection>
 
-        <div ref={containerRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+        <div ref={containerRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-6">
           {features.map((feature, index) => (
             <GlowCard 
               key={feature.title}
               delay={index * 100}
               isVisible={isItemVisible(index)}
             >
-              <div className="p-5 md:p-6 flex flex-col items-center text-center h-full">
+              <div className="p-4 md:p-5 lg:p-6 flex flex-col items-center text-center h-full">
                 <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors duration-300">
                   <feature.icon className="w-6 h-6 md:w-7 md:h-7 text-primary" />
                 </div>

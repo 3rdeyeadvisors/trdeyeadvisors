@@ -51,12 +51,12 @@ const VaultSection = () => {
   const { containerRef, isItemVisible } = useStaggeredAnimation(vaultLayers.length, 200);
 
   return (
-    <section className="py-12 md:py-16 lg:py-20 relative overflow-hidden">
+    <section className="py-10 md:py-14 lg:py-20 relative overflow-hidden">
       {/* Background effects */}
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/3 rounded-full blur-[150px] pointer-events-none" />
       
       <div className="max-w-7xl mx-auto px-6">
-        <AnimatedSection className="text-center mb-10 md:mb-12">
+        <AnimatedSection className="text-center mb-8 md:mb-10 lg:mb-12">
           <span className="inline-block text-xs md:text-sm uppercase tracking-[0.2em] text-primary font-medium mb-4">
             Progress Path
           </span>
@@ -68,7 +68,7 @@ const VaultSection = () => {
           </p>
         </AnimatedSection>
 
-        <div ref={containerRef} className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div ref={containerRef} className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5 lg:gap-6">
           {vaultLayers.map((vault, index) => {
             const CardContent = (
               <div
@@ -96,7 +96,7 @@ const VaultSection = () => {
                   )}
                 </div>
 
-                <div className="p-6 pt-12">
+                <div className="p-5 md:p-6 pt-10 md:pt-12">
                   <div className="flex flex-col items-center text-center mb-6">
                     <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${vault.gradient} bg-opacity-10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
                       <vault.icon className="w-7 h-7 text-foreground" />
