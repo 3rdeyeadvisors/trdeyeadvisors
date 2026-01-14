@@ -1,4 +1,4 @@
-import { Wallet, LineChart, Shield, TrendingUp, LucideIcon } from 'lucide-react';
+import { Shield, Banknote, AlertTriangle, TrendingUp, LucideIcon } from 'lucide-react';
 import AnimatedSection from './AnimatedSection';
 import GlowCard from './GlowCard';
 import { useStaggeredAnimation } from '@/hooks/useScrollAnimation';
@@ -11,24 +11,24 @@ interface Feature {
 
 const features: Feature[] = [
   {
-    icon: Wallet,
-    title: "Wallet Security & Setup",
-    description: "Learn to safely create, manage, and protect your crypto wallets from common threats"
-  },
-  {
-    icon: LineChart,
-    title: "DeFi Protocols Explained",
-    description: "Understand lending, borrowing, staking, and yield farming without the jargon"
-  },
-  {
     icon: Shield,
-    title: "Scam Detection & Safety",
-    description: "Identify red flags and protect yourself from rug pulls, phishing, and fraud"
+    title: "Protect Your Assets",
+    description: "Learn to secure wealth that no one can freeze or seize"
+  },
+  {
+    icon: Banknote,
+    title: "Escape the Middlemen",
+    description: "Understand systems that cut out banks and excessive fees"
+  },
+  {
+    icon: AlertTriangle,
+    title: "Spot the Traps",
+    description: "Identify scams before they take your money"
   },
   {
     icon: TrendingUp,
-    title: "Market Analysis Basics",
-    description: "Read charts, understand metrics, and make informed decisions"
+    title: "Read the Signals",
+    description: "Make informed decisions, not gambles"
   }
 ];
 
@@ -38,30 +38,30 @@ const FeaturesSection = () => {
   return (
     <section className="py-12 md:py-16 lg:py-20 relative">
       <div className="max-w-7xl mx-auto px-6">
-        <AnimatedSection className="text-center mb-10 md:mb-12">
-          <span className="inline-block text-xs md:text-sm uppercase tracking-[0.2em] text-primary font-medium mb-4">
-            Curriculum
+        <AnimatedSection className="text-center mb-8 md:mb-10">
+          <span className="inline-block text-xs md:text-sm uppercase tracking-[0.2em] text-primary font-medium mb-3">
+            What You'll Gain
           </span>
-          <h2 className="text-3xl md:text-5xl font-consciousness font-bold text-foreground mb-6">
-            What You'll Learn
+          <h2 className="text-2xl md:text-4xl lg:text-5xl font-consciousness font-bold text-foreground mb-4">
+            Real Skills, Real Protection
           </h2>
-          <p className="text-lg text-muted-foreground font-consciousness max-w-2xl mx-auto">
-            Practical skills for navigating the decentralized future
+          <p className="text-base md:text-lg text-muted-foreground font-consciousness max-w-2xl mx-auto">
+            Practical knowledge for navigating the decentralized future
           </p>
         </AnimatedSection>
 
-        <div ref={containerRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div ref={containerRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {features.map((feature, index) => (
             <GlowCard 
               key={feature.title}
               delay={index * 100}
               isVisible={isItemVisible(index)}
             >
-              <div className="p-6 flex flex-col items-center text-center h-full">
-                <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-5 group-hover:bg-primary/20 transition-colors duration-300">
-                  <feature.icon className="w-7 h-7 text-primary" />
+              <div className="p-5 md:p-6 flex flex-col items-center text-center h-full">
+                <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors duration-300">
+                  <feature.icon className="w-6 h-6 md:w-7 md:h-7 text-primary" />
                 </div>
-                <h3 className="text-lg font-consciousness font-semibold text-foreground mb-3">
+                <h3 className="text-base md:text-lg font-consciousness font-semibold text-foreground mb-2">
                   {feature.title}
                 </h3>
                 <p className="text-sm text-muted-foreground font-consciousness leading-relaxed">
