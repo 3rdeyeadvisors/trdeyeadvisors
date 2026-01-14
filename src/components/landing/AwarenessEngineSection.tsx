@@ -40,9 +40,9 @@ const AwarenessEngineSection = () => {
   const { containerRef, isItemVisible } = useStaggeredAnimation(awarenessSteps.length, 120);
 
   return (
-    <section className="py-20 md:py-32 relative">
+    <section className="py-12 md:py-16 lg:py-20 relative">
       <div className="max-w-7xl mx-auto px-6">
-        <AnimatedSection className="text-center mb-16">
+        <AnimatedSection className="text-center mb-10 md:mb-12">
           <span className="inline-block text-xs md:text-sm uppercase tracking-[0.2em] text-accent font-medium mb-4">
             The Process
           </span>

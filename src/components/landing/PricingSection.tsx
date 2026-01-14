@@ -43,9 +43,9 @@ const PricingSection = () => {
   };
 
   return (
-    <section className="py-20 md:py-32 relative">
+    <section className="py-12 md:py-16 lg:py-20 relative">
       <div className="max-w-5xl mx-auto px-6">
-        <AnimatedSection className="text-center mb-16">
+        <AnimatedSection className="text-center mb-10 md:mb-12">
           <span className="inline-flex items-center gap-2 text-xs md:text-sm uppercase tracking-[0.2em] text-primary font-medium mb-4 bg-primary/10 px-4 py-2 rounded-full">
             <Sparkles className="w-4 h-4" />
             14-Day Free Trial

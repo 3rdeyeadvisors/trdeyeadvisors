@@ -4,7 +4,7 @@ import CounterAnimation from './CounterAnimation';
 
 const AboutSection = () => {
   return (
-    <section className="py-20 md:py-32 relative">
+    <section className="py-12 md:py-16 lg:py-20 relative">
       {/* Background accent */}
       <div className="absolute left-0 top-1/2 -translate-y-1/2 w-96 h-96 bg-accent/5 rounded-full blur-[100px] pointer-events-none" />
       
