@@ -37,7 +37,7 @@ const Footer = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 lg:gap-16 mb-6 md:mb-8 items-start w-fit mx-auto">
           {/* Learn Links */}
           <div className="text-center">
-            <h3 className="font-consciousness font-semibold text-sm text-foreground mb-3 uppercase tracking-wider h-5 flex items-center">
+            <h3 className="font-consciousness font-semibold text-sm text-foreground mb-3 uppercase tracking-wider h-5 flex items-center justify-center">
               Learn
             </h3>
             <ul className="space-y-2">
@@ -56,7 +56,7 @@ const Footer = () => {
 
           {/* Support Links */}
           <div className="text-center">
-            <h3 className="font-consciousness font-semibold text-sm text-foreground mb-3 uppercase tracking-wider h-5 flex items-center">
+            <h3 className="font-consciousness font-semibold text-sm text-foreground mb-3 uppercase tracking-wider h-5 flex items-center justify-center">
               Support
             </h3>
             <ul className="space-y-2">
@@ -75,7 +75,7 @@ const Footer = () => {
 
           {/* Legal Links */}
           <div className="text-center">
-            <h3 className="font-consciousness font-semibold text-sm text-foreground mb-3 uppercase tracking-wider h-5 flex items-center">
+            <h3 className="font-consciousness font-semibold text-sm text-foreground mb-3 uppercase tracking-wider h-5 flex items-center justify-center">
               Legal
             </h3>
             <ul className="space-y-2">
@@ -94,7 +94,7 @@ const Footer = () => {
 
           {/* Connect */}
           <div className="text-center">
-            <h3 className="font-consciousness font-semibold text-sm text-foreground mb-3 uppercase tracking-wider h-5 flex items-center">
+            <h3 className="font-consciousness font-semibold text-sm text-foreground mb-3 uppercase tracking-wider h-5 flex items-center justify-center">
               Connect
             </h3>
             <div className="flex gap-2 justify-center">
