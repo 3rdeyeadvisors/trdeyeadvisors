@@ -36,7 +36,7 @@ const Footer = () => {
         {/* Main footer grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 lg:gap-8 mb-6 md:mb-8 items-start">
           {/* Learn Links */}
-          <div>
+          <div className="text-left">
             <h3 className="font-consciousness font-semibold text-sm text-foreground mb-3 uppercase tracking-wider h-5 flex items-center">
               Learn
             </h3>
@@ -55,7 +55,7 @@ const Footer = () => {
           </div>
 
           {/* Support Links */}
-          <div>
+          <div className="text-left">
             <h3 className="font-consciousness font-semibold text-sm text-foreground mb-3 uppercase tracking-wider h-5 flex items-center">
               Support
             </h3>
@@ -74,7 +74,7 @@ const Footer = () => {
           </div>
 
           {/* Legal Links */}
-          <div>
+          <div className="text-left">
             <h3 className="font-consciousness font-semibold text-sm text-foreground mb-3 uppercase tracking-wider h-5 flex items-center">
               Legal
             </h3>
@@ -93,11 +93,11 @@ const Footer = () => {
           </div>
 
           {/* Connect */}
-          <div>
+          <div className="text-left">
             <h3 className="font-consciousness font-semibold text-sm text-foreground mb-3 uppercase tracking-wider h-5 flex items-center">
               Connect
             </h3>
-            <div className="flex items-center gap-2">
+            <div className="flex gap-2">
               {socialLinks.map((social) => (
                 <a
                   key={social.label}
