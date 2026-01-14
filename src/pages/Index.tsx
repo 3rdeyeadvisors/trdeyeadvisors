@@ -1,5 +1,6 @@
 import SEO from "@/components/SEO";
 import NewsletterSignup from "@/components/NewsletterSignup";
+import OrionChat from "@/components/orion/OrionChat";
 import {
   FloatingParticles,
   HeroSection,
@@ -57,6 +58,9 @@ const Index = () => {
             </div>
           </section>
         </div>
+        
+        {/* Orion AI Assistant */}
+        <OrionChat />
       </div>
     </>
   );
