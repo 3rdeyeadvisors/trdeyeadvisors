@@ -1,6 +1,23 @@
-import { Target } from 'lucide-react';
+import { Shield, Lock, Globe } from 'lucide-react';
 import AnimatedSection from './AnimatedSection';
-import CounterAnimation from './CounterAnimation';
+
+const valueProps = [
+  {
+    icon: Shield,
+    title: "Protect Your Wealth",
+    subtitle: "Beat inflation, own what's yours"
+  },
+  {
+    icon: Lock,
+    title: "True Ownership",
+    subtitle: "No banks, no borders, no limits"
+  },
+  {
+    icon: Globe,
+    title: "Global Access",
+    subtitle: "No geographical discrimination"
+  }
+];
 
 const AboutSection = () => {
   return (
@@ -10,48 +27,39 @@ const AboutSection = () => {
       
       <div className="max-w-4xl mx-auto px-6">
         <AnimatedSection>
-          <div className="relative p-8 md:p-12 rounded-2xl bg-card/50 backdrop-blur-sm border border-border/50">
+          <div className="relative p-6 md:p-10 rounded-2xl bg-card/50 backdrop-blur-sm border border-border/50">
             {/* Corner accents */}
-            <div className="absolute top-0 left-0 w-20 h-20 border-l-2 border-t-2 border-primary/30 rounded-tl-2xl" />
-            <div className="absolute bottom-0 right-0 w-20 h-20 border-r-2 border-b-2 border-primary/30 rounded-br-2xl" />
+            <div className="absolute top-0 left-0 w-16 h-16 border-l-2 border-t-2 border-primary/30 rounded-tl-2xl" />
+            <div className="absolute bottom-0 right-0 w-16 h-16 border-r-2 border-b-2 border-primary/30 rounded-br-2xl" />
             
             <div className="text-center">
-              <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-6">
-                <Target className="w-8 h-8 text-primary" />
-              </div>
-              
-              <h2 className="text-3xl md:text-4xl font-consciousness font-bold text-foreground mb-6">
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-consciousness font-bold text-foreground mb-4 md:mb-6">
                 What is 3EA?
               </h2>
               
-              <p className="text-lg text-foreground/90 font-consciousness leading-relaxed mb-4">
-                3EA (3rdeyeadvisors) is a conscious financial awareness movement focused on clarity, education, and decentralized participation.
+              <p className="text-base md:text-lg text-foreground/90 font-consciousness leading-relaxed mb-3">
+                3EA teaches you to protect what you own in a system where <span className="text-primary font-semibold">no one else can touch it</span>. This isn't an investment course—it's a new way of thinking about money, freedom, and possibility.
               </p>
               
-              <p className="text-base text-muted-foreground font-consciousness leading-relaxed mb-8">
-                We cut through the noise to help you understand how new financial systems work. Not through hype or promises, but through genuine learning and conscious evolution.
+              <p className="text-sm md:text-base text-muted-foreground font-consciousness leading-relaxed mb-6 md:mb-8">
+                Traditional finance locks people out based on geography, credit scores, and arbitrary gatekeeping. DeFi opens the door to anyone with an internet connection.
               </p>
 
-              {/* Stats row */}
-              <div className="grid grid-cols-3 gap-6 pt-8 border-t border-border/50">
-                <div>
-                  <div className="text-2xl md:text-3xl font-bold text-primary">
-                    <CounterAnimation end={50} suffix="+" />
+              {/* Value props row */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 pt-6 md:pt-8 border-t border-border/50">
+                {valueProps.map((prop) => (
+                  <div key={prop.title} className="flex flex-col items-center p-3 md:p-4">
+                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-3">
+                      <prop.icon className="w-6 h-6 text-primary" />
+                    </div>
+                    <div className="text-sm md:text-base font-semibold text-foreground font-consciousness">
+                      {prop.title}
+                    </div>
+                    <div className="text-xs md:text-sm text-muted-foreground mt-1 font-consciousness">
+                      {prop.subtitle}
+                    </div>
                   </div>
-                  <div className="text-sm text-muted-foreground mt-1">Lessons</div>
-                </div>
-                <div>
-                  <div className="text-2xl md:text-3xl font-bold text-primary">
-                    <CounterAnimation end={1000} suffix="+" />
-                  </div>
-                  <div className="text-sm text-muted-foreground mt-1">Students</div>
-                </div>
-                <div>
-                  <div className="text-2xl md:text-3xl font-bold text-primary">
-                    <CounterAnimation end={24} suffix="/7" />
-                  </div>
-                  <div className="text-sm text-muted-foreground mt-1">Access</div>
-                </div>
+                ))}
               </div>
             </div>
           </div>
