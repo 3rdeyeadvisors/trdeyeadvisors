@@ -17,14 +17,40 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
+interface ActiveRaffle {
+  id: string;
+  title: string;
+  prize: string;
+  prize_amount: number;
+  start_date: string;
+  end_date: string;
+}
+
 export function EmailCenter() {
   const [emailStats, setEmailStats] = useState({ total: 0, sent: 0, failed: 0 });
   const [loading, setLoading] = useState(true);
   const [sendingRaffleEmail, setSendingRaffleEmail] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
+  const [activeRaffle, setActiveRaffle] = useState<ActiveRaffle | null>(null);
   const { toast } = useToast();
 
-  const raffleEmailHTML = `
+  const formatRaffleDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric"
+    });
+  };
+
+  const getRaffleEmailHTML = () => {
+    const rafflePeriod = activeRaffle 
+      ? `${formatRaffleDate(activeRaffle.start_date)} – ${formatRaffleDate(activeRaffle.end_date)}`
+      : "Check website for current dates";
+    
+    const prizeAmount = activeRaffle?.prize_amount || 50;
+    const prizeName = activeRaffle?.prize || "Bitcoin";
+
+    return `
     <!DOCTYPE html>
     <html>
     <head>
@@ -76,9 +102,9 @@ export function EmailCenter() {
                           </tr>
                         </table>
                         
-                        <div style="font-size: 48px; font-weight: bold; margin: 20px 0; color: #ffffff;">🪙 $50</div>
-                        <p style="font-size: 20px; margin: 10px 0; color: #ffffff; font-family: Arial, sans-serif;">Prize: Bitcoin</p>
-                        <p style="font-size: 16px; margin: 10px 0; color: #ffffff; font-family: Arial, sans-serif;">🕒 Active Period: November 10–23, 2025</p>
+                        <div style="font-size: 48px; font-weight: bold; margin: 20px 0; color: #ffffff;">🪙 $${prizeAmount}</div>
+                        <p style="font-size: 20px; margin: 10px 0; color: #ffffff; font-family: Arial, sans-serif;">Prize: ${prizeName}</p>
+                        <p style="font-size: 16px; margin: 10px 0; color: #ffffff; font-family: Arial, sans-serif;">🕒 Active Period: ${rafflePeriod}</p>
                       </td>
                     </tr>
                   </table>
@@ -118,10 +144,30 @@ export function EmailCenter() {
     </body>
     </html>
   `;
+  };
 
   useEffect(() => {
     loadEmailStats();
+    loadActiveRaffle();
   }, []);
+
+  const loadActiveRaffle = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("raffles")
+        .select("id, title, prize, prize_amount, start_date, end_date")
+        .eq("is_active", true)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .single();
+
+      if (!error && data) {
+        setActiveRaffle(data);
+      }
+    } catch (error) {
+      console.log("No active raffle found");
+    }
+  };
 
   const loadEmailStats = async () => {
     try {
@@ -148,6 +194,15 @@ export function EmailCenter() {
   };
 
   const sendRaffleAnnouncement = async () => {
+    if (!activeRaffle) {
+      toast({
+        title: "No Active Raffle",
+        description: "Create an active raffle before sending announcements.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (!confirm("Send raffle announcement to all subscribers?")) {
       return;
     }
@@ -214,10 +269,22 @@ export function EmailCenter() {
             Raffle Announcement
           </CardTitle>
           <CardDescription>
-            Send the raffle announcement email to all newsletter subscribers
+            {activeRaffle 
+              ? `Send announcement for: ${activeRaffle.title} ($${activeRaffle.prize_amount} ${activeRaffle.prize})`
+              : "No active raffle - create one first"
+            }
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
+          {!activeRaffle && (
+            <div className="p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg flex items-center gap-3">
+              <AlertCircle className="h-5 w-5 text-yellow-500 flex-shrink-0" />
+              <p className="text-sm text-yellow-600 dark:text-yellow-400">
+                No active raffle found. Create an active raffle in the Raffle Manager before sending announcements.
+              </p>
+            </div>
+          )}
+
           <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
             <DialogTrigger asChild>
               <Button 
@@ -233,19 +300,22 @@ export function EmailCenter() {
               <DialogHeader>
                 <DialogTitle>Raffle Announcement Email Preview</DialogTitle>
                 <DialogDescription>
-                  This is what subscribers will see when they receive the raffle announcement
+                  {activeRaffle 
+                    ? `Preview for: ${activeRaffle.title}`
+                    : "Using placeholder data - create an active raffle for real dates"
+                  }
                 </DialogDescription>
               </DialogHeader>
               <div 
                 className="border rounded-lg p-4 bg-white"
-                dangerouslySetInnerHTML={{ __html: raffleEmailHTML }}
+                dangerouslySetInnerHTML={{ __html: getRaffleEmailHTML() }}
               />
             </DialogContent>
           </Dialog>
 
           <Button 
             onClick={sendRaffleAnnouncement}
-            disabled={sendingRaffleEmail}
+            disabled={sendingRaffleEmail || !activeRaffle}
             className="w-full"
             size="lg"
           >
