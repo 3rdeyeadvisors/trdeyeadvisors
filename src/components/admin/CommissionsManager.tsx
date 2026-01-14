@@ -35,6 +35,19 @@ interface Commission {
   referred_email?: string;
 }
 
+interface ProfileMap {
+  [userId: string]: {
+    display_name: string | null;
+    payout_method: string | null;
+    payout_details: string | null;
+    payout_crypto_network: string | null;
+  };
+}
+
+interface EmailMap {
+  [userId: string]: string;
+}
+
 const CommissionsManager = () => {
   const [commissions, setCommissions] = useState<Commission[]>([]);
   const [loading, setLoading] = useState(true);
@@ -58,27 +71,48 @@ const CommissionsManager = () => {
 
       if (error) throw error;
 
-      // Enrich with profile and email data
-      const enrichedCommissions: Commission[] = [];
-      
-      for (const commission of commissionsData || []) {
-        // Get referrer profile
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("display_name, payout_method, payout_details, payout_crypto_network")
-          .eq("user_id", commission.referrer_id)
-          .single();
-
-        enrichedCommissions.push({
-          ...commission,
-          referrer_profile: profile ? {
-            display_name: profile.display_name,
-            payout_method: profile.payout_method,
-            payout_details: profile.payout_details,
-            payout_crypto_network: profile.payout_crypto_network,
-          } : undefined,
-        });
+      if (!commissionsData || commissionsData.length === 0) {
+        setCommissions([]);
+        return;
       }
+
+      // Get unique user IDs (referrers and referred users)
+      const referrerIds = [...new Set(commissionsData.map(c => c.referrer_id))];
+      const referredIds = [...new Set(commissionsData.map(c => c.referred_user_id))];
+      const allUserIds = [...new Set([...referrerIds, ...referredIds])];
+
+      // Batch fetch all profiles in one query
+      const { data: profilesData } = await supabase
+        .from("profiles")
+        .select("user_id, display_name, payout_method, payout_details, payout_crypto_network")
+        .in("user_id", referrerIds);
+
+      // Batch fetch all emails using the RPC function
+      const { data: emailsData } = await supabase.rpc("get_user_emails_with_profiles");
+
+      // Create lookup maps for O(1) access
+      const profileMap: ProfileMap = {};
+      profilesData?.forEach(p => {
+        profileMap[p.user_id] = {
+          display_name: p.display_name,
+          payout_method: p.payout_method,
+          payout_details: p.payout_details,
+          payout_crypto_network: p.payout_crypto_network,
+        };
+      });
+
+      const emailMap: EmailMap = {};
+      emailsData?.forEach((e: { user_id: string; email: string }) => {
+        emailMap[e.user_id] = e.email;
+      });
+
+      // Enrich commissions with profile and email data
+      const enrichedCommissions: Commission[] = commissionsData.map(commission => ({
+        ...commission,
+        referrer_profile: profileMap[commission.referrer_id] || undefined,
+        referrer_email: emailMap[commission.referrer_id],
+        referred_email: emailMap[commission.referred_user_id],
+      }));
 
       setCommissions(enrichedCommissions);
     } catch (error) {
@@ -104,6 +138,17 @@ const CommissionsManager = () => {
         .eq("id", selectedCommission.id);
 
       if (error) throw error;
+
+      // Send notification email to referrer
+      if (selectedCommission.referrer_email) {
+        await supabase.functions.invoke("send-commission-notification", {
+          body: {
+            email: selectedCommission.referrer_email,
+            amount: selectedCommission.commission_amount_cents / 100,
+            status: "paid",
+          },
+        });
+      }
 
       toast.success("Commission marked as paid");
       setSelectedCommission(null);
@@ -135,6 +180,7 @@ const CommissionsManager = () => {
   const maskEmail = (email?: string) => {
     if (!email) return "N/A";
     const [local, domain] = email.split("@");
+    if (!domain) return email;
     if (local.length <= 3) return `${local[0]}***@${domain}`;
     return `${local.slice(0, 3)}***@${domain}`;
   };
@@ -259,7 +305,7 @@ const CommissionsManager = () => {
                           {commission.referrer_profile?.display_name || commission.referrer_email || "Unknown"}
                         </span>
                         <Badge variant={commission.plan_type === "annual" ? "default" : "secondary"}>
-                          {commission.plan_type === "annual" ? "Annual" : "Monthly"}
+                          {commission.plan_type === "annual" ? "Annual (60%)" : "Monthly (50%)"}
                         </Badge>
                         {commission.referrer_profile?.payout_method && (
                           <Badge variant="outline" className="flex items-center gap-1">
@@ -273,6 +319,10 @@ const CommissionsManager = () => {
                         )}
                       </div>
                       <div className="text-sm text-muted-foreground space-y-1">
+                        <p>
+                          <strong>Referrer Email:</strong>{" "}
+                          {commission.referrer_email || "N/A"}
+                        </p>
                         <p>
                           <strong>Payout:</strong>{" "}
                           {commission.referrer_profile?.payout_details || "Not set"}
@@ -291,6 +341,9 @@ const CommissionsManager = () => {
                       <div className="text-right">
                         <p className="text-2xl font-bold text-primary">
                           {formatCurrency(commission.commission_amount_cents)}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          from {formatCurrency(commission.subscription_amount_cents)}
                         </p>
                       </div>
                       <Button onClick={() => setSelectedCommission(commission)}>
@@ -322,7 +375,7 @@ const CommissionsManager = () => {
                           {commission.referrer_profile?.display_name || commission.referrer_email || "Unknown"}
                         </span>
                         <Badge variant={commission.plan_type === "annual" ? "default" : "secondary"}>
-                          {commission.plan_type === "annual" ? "Annual" : "Monthly"}
+                          {commission.plan_type === "annual" ? "Annual (60%)" : "Monthly (50%)"}
                         </Badge>
                         <Badge className="bg-green-500">Paid</Badge>
                       </div>
@@ -358,6 +411,7 @@ const CommissionsManager = () => {
             <div className="space-y-4">
               <div className="p-4 bg-muted rounded-lg space-y-2">
                 <p><strong>Referrer:</strong> {selectedCommission.referrer_profile?.display_name || selectedCommission.referrer_email}</p>
+                <p><strong>Referrer Email:</strong> {selectedCommission.referrer_email || "N/A"}</p>
                 <p><strong>Amount:</strong> {formatCurrency(selectedCommission.commission_amount_cents)}</p>
                 <p><strong>Payout Method:</strong> {selectedCommission.referrer_profile?.payout_method || "Not set"}</p>
                 <p><strong>Payout Details:</strong> {selectedCommission.referrer_profile?.payout_details || "Not set"}</p>

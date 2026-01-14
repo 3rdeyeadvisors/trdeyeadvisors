@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
-import { DollarSign, Users, BookOpen, Package, TrendingUp, TrendingDown } from "lucide-react";
+import { DollarSign, Users, BookOpen, Package, TrendingUp, TrendingDown, AlertCircle } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { RemoveFromRaffleButton } from "./RemoveFromRaffleButton";
 
@@ -10,70 +10,152 @@ interface MetricCard {
   value: string | number;
   change?: number;
   icon: any;
-  trend?: "up" | "down";
+  trend?: "up" | "down" | "neutral";
 }
 
 export function OverviewPanel() {
   const [metrics, setMetrics] = useState<MetricCard[]>([]);
   const [loading, setLoading] = useState(true);
   const [aiInsight, setAiInsight] = useState("");
+  const [activeRaffleId, setActiveRaffleId] = useState<string | null>(null);
 
   useEffect(() => {
     loadMetrics();
     loadAIInsights();
+    loadActiveRaffle();
   }, []);
+
+  const loadActiveRaffle = async () => {
+    try {
+      const { data } = await supabase
+        .from("raffles")
+        .select("id")
+        .eq("is_active", true)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .single();
+
+      if (data) {
+        setActiveRaffleId(data.id);
+      }
+    } catch (error) {
+      // No active raffle found, that's okay
+      console.log("No active raffle found");
+    }
+  };
 
   const loadMetrics = async () => {
     try {
+      // Calculate date ranges
+      const now = new Date();
+      const oneWeekAgo = new Date(now);
+      oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+      const twoWeeksAgo = new Date(now);
+      twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
+
       // Fetch total users
       const { count: userCount } = await supabase
         .from("profiles")
         .select("*", { count: "exact", head: true });
+
+      // Fetch users from this week
+      const { count: usersThisWeek } = await supabase
+        .from("profiles")
+        .select("*", { count: "exact", head: true })
+        .gte("created_at", oneWeekAgo.toISOString());
+
+      // Fetch users from last week
+      const { count: usersLastWeek } = await supabase
+        .from("profiles")
+        .select("*", { count: "exact", head: true })
+        .gte("created_at", twoWeeksAgo.toISOString())
+        .lt("created_at", oneWeekAgo.toISOString());
 
       // Fetch course enrollments
       const { count: enrollmentCount } = await supabase
         .from("user_purchases")
         .select("*", { count: "exact", head: true });
 
-      // Fetch active products
-      const { count: productCount } = await supabase
-        .from("printify_products")
+      // Fetch enrollments this week
+      const { count: enrollmentsThisWeek } = await supabase
+        .from("user_purchases")
         .select("*", { count: "exact", head: true })
-        .eq("is_active", true);
+        .gte("created_at", oneWeekAgo.toISOString());
 
-      // Fetch recent orders
-      const { count: orderCount } = await supabase
+      // Fetch enrollments last week
+      const { count: enrollmentsLastWeek } = await supabase
+        .from("user_purchases")
+        .select("*", { count: "exact", head: true })
+        .gte("created_at", twoWeeksAgo.toISOString())
+        .lt("created_at", oneWeekAgo.toISOString());
+
+      // Fetch all orders with revenue
+      const { data: allOrders } = await supabase
         .from("printify_orders")
-        .select("*", { count: "exact", head: true });
+        .select("total_price, created_at");
+
+      // Calculate total revenue
+      const totalRevenue = allOrders?.reduce((sum, order) => sum + (order.total_price || 0), 0) || 0;
+
+      // Calculate revenue this week
+      const revenueThisWeek = allOrders
+        ?.filter(o => new Date(o.created_at) >= oneWeekAgo)
+        .reduce((sum, order) => sum + (order.total_price || 0), 0) || 0;
+
+      // Calculate revenue last week
+      const revenueLastWeek = allOrders
+        ?.filter(o => new Date(o.created_at) >= twoWeeksAgo && new Date(o.created_at) < oneWeekAgo)
+        .reduce((sum, order) => sum + (order.total_price || 0), 0) || 0;
+
+      // Count orders this week vs last week
+      const ordersThisWeek = allOrders?.filter(o => new Date(o.created_at) >= oneWeekAgo).length || 0;
+      const ordersLastWeek = allOrders?.filter(o => new Date(o.created_at) >= twoWeeksAgo && new Date(o.created_at) < oneWeekAgo).length || 0;
+
+      // Calculate percentage changes
+      const calculateChange = (current: number, previous: number): { change: number; trend: "up" | "down" | "neutral" } => {
+        if (previous === 0) {
+          return { change: current > 0 ? 100 : 0, trend: current > 0 ? "up" : "neutral" };
+        }
+        const change = Math.round(((current - previous) / previous) * 100);
+        return {
+          change: Math.abs(change),
+          trend: change > 0 ? "up" : change < 0 ? "down" : "neutral"
+        };
+      };
+
+      const revenueChange = calculateChange(revenueThisWeek, revenueLastWeek);
+      const userChange = calculateChange(usersThisWeek || 0, usersLastWeek || 0);
+      const enrollmentChange = calculateChange(enrollmentsThisWeek || 0, enrollmentsLastWeek || 0);
+      const orderChange = calculateChange(ordersThisWeek, ordersLastWeek);
 
       setMetrics([
         {
           title: "Total Revenue",
-          value: "$0",
-          change: 0,
+          value: `$${(totalRevenue / 100).toFixed(2)}`,
+          change: revenueChange.change,
           icon: DollarSign,
-          trend: "up"
+          trend: revenueChange.trend
         },
         {
           title: "Active Users",
           value: userCount || 0,
-          change: 12,
+          change: userChange.change,
           icon: Users,
-          trend: "up"
+          trend: userChange.trend
         },
         {
           title: "Course Enrollments",
           value: enrollmentCount || 0,
-          change: 8,
+          change: enrollmentChange.change,
           icon: BookOpen,
-          trend: "up"
+          trend: enrollmentChange.trend
         },
         {
           title: "Product Sales",
-          value: orderCount || 0,
-          change: -3,
+          value: allOrders?.length || 0,
+          change: orderChange.change,
           icon: Package,
-          trend: "down"
+          trend: orderChange.trend
         }
       ]);
     } catch (error) {
@@ -89,7 +171,9 @@ export function OverviewPanel() {
         body: { command: "generate weekly summary" }
       });
 
-      if (!error && data?.insight) {
+      if (!error && data?.data?.insight) {
+        setAiInsight(data.data.insight);
+      } else if (!error && data?.insight) {
         setAiInsight(data.insight);
       }
     } catch (error) {
@@ -113,15 +197,27 @@ export function OverviewPanel() {
   return (
     <div className="space-y-6">
       {/* Admin Quick Actions Card */}
-      <Card className="bg-gradient-to-r from-destructive/10 to-destructive/5 border-destructive/20">
-        <CardHeader>
-          <CardTitle className="text-lg">Admin Quick Actions</CardTitle>
-          <CardDescription>Remove yourself from active raffles</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <RemoveFromRaffleButton raffleId="c6008efe-7ee7-4db3-96ca-451bacc07a2a" />
-        </CardContent>
-      </Card>
+      {activeRaffleId ? (
+        <Card className="bg-gradient-to-r from-destructive/10 to-destructive/5 border-destructive/20">
+          <CardHeader>
+            <CardTitle className="text-lg">Admin Quick Actions</CardTitle>
+            <CardDescription>Remove yourself from active raffles</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <RemoveFromRaffleButton raffleId={activeRaffleId} />
+          </CardContent>
+        </Card>
+      ) : (
+        <Card className="border-muted">
+          <CardHeader>
+            <CardTitle className="text-lg flex items-center gap-2">
+              <AlertCircle className="h-5 w-5 text-muted-foreground" />
+              No Active Raffle
+            </CardTitle>
+            <CardDescription>There are no active raffles at the moment</CardDescription>
+          </CardHeader>
+        </Card>
+      )}
 
       {aiInsight && (
         <Card className="border-primary/20 bg-gradient-to-br from-cosmic-deep to-cosmic-void">
@@ -146,11 +242,14 @@ export function OverviewPanel() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{metric.value}</div>
-              {metric.change !== undefined && (
+              {metric.change !== undefined && metric.trend !== "neutral" && (
                 <p className={`text-xs ${metric.trend === "up" ? "text-green-500" : "text-red-500"} flex items-center gap-1 mt-1`}>
                   {metric.trend === "up" ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
-                  {Math.abs(metric.change)}% from last week
+                  {metric.change}% from last week
                 </p>
+              )}
+              {metric.trend === "neutral" && (
+                <p className="text-xs text-muted-foreground mt-1">No change from last week</p>
               )}
             </CardContent>
           </Card>
