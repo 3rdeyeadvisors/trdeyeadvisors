@@ -174,15 +174,18 @@ const Store = () => {
         isRefreshing={isRefreshing}
         isTriggered={isTriggered}
       />
-      <div className="py-12 md:py-20 lg:py-24 w-full overflow-x-hidden">
+      <div className="py-12 md:py-16 lg:py-20 w-full overflow-x-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           {/* Header */}
-          <div className="text-center mb-12">
+          <div className="text-center mb-8 md:mb-10">
             <h1 className="text-4xl md:text-5xl font-consciousness font-bold text-foreground mb-4">
               Store
             </h1>
-            <p className="text-xl text-muted-foreground font-consciousness max-w-2xl mx-auto mb-4">
-              Consciousness inspired merchandise to support your journey
+            <p className="text-xl text-muted-foreground font-consciousness max-w-2xl mx-auto mb-2">
+              Show your commitment to financial freedom with 3EA merchandise
+            </p>
+            <p className="text-sm text-muted-foreground/80 font-consciousness max-w-2xl mx-auto mb-4">
+              Every purchase supports independent DeFi education
             </p>
             <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full">
               <Package className="w-4 h-4" />
@@ -191,7 +194,7 @@ const Store = () => {
           </div>
 
           {/* Category Toggle Buttons */}
-          <div className="flex justify-center mb-10">
+          <div className="flex justify-center mb-8 md:mb-10">
             <div className="inline-flex rounded-lg bg-muted p-1 gap-1">
               <Button
                 variant={activeCategory === 'merchandise' ? 'default' : 'ghost'}
@@ -351,7 +354,7 @@ const Store = () => {
             </section>
           )}
 
-          <Card className="mt-16 p-6 md:p-8 bg-secondary/40 border-border" role="region" aria-label="Payment information">
+          <Card className="mt-12 md:mt-16 p-6 md:p-8 bg-secondary/40 border-border" role="region" aria-label="Payment information">
             <div className="flex flex-col md:flex-row items-center md:items-start gap-4 text-center md:text-left">
               <Shield className="h-8 w-8 text-primary flex-shrink-0" aria-hidden="true" />
               <div>

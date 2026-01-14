@@ -40,7 +40,7 @@ const Tutorials = () => {
   const videoCategories = {
     immediate: {
       title: "Immediate Impact",
-      description: "Essential tutorials to get started safely",
+      description: "Critical skills to protect yourself before you invest a single dollar",
       icon: Target,
       videos: [
         {
@@ -91,7 +91,7 @@ const Tutorials = () => {
     },
     practical: {
       title: "Practical DeFi Actions",
-      description: "Hands-on tutorials for DeFi strategies",
+      description: "Real steps to grow your portfolio without relying on middlemen",
       icon: TrendingUp,
       videos: [
         {
@@ -142,7 +142,7 @@ const Tutorials = () => {
     },
     advanced: {
       title: "Advanced Topics",
-      description: "Specialized tutorials for experienced DeFi users",
+      description: "Advanced tools for maximizing opportunities and minimizing risk",
       icon: BarChart3,
       videos: [
         {
@@ -218,9 +218,9 @@ const Tutorials = () => {
         type="website"
       />
       <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
-        <div className="container mx-auto px-6 sm:px-8 py-10 md:py-12">
+        <div className="container mx-auto px-6 sm:px-8 py-12 md:py-16 lg:py-20">
           {/* Header */}
-          <div className="text-center mb-10">
+          <div className="text-center mb-8 md:mb-10">
             <div className="flex items-center justify-center gap-3 mb-4">
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
                 Tutorials
@@ -228,12 +228,12 @@ const Tutorials = () => {
               <ParticipantTracker contentType="tutorial" contentId="tutorials-page" />
             </div>
             <p className="text-sm sm:text-base md:text-lg text-foreground/70 max-w-2xl mx-auto">
-              Step-by-step guides to master DeFi safely and effectively
+              Practical guides to protect your wealth, spot scams, and navigate DeFi with confidence
             </p>
           </div>
 
           {/* Progress Summary */}
-          <Card className="mb-10 bg-gradient-to-r from-primary/5 to-accent/5 border-primary/20">
+          <Card className="mb-8 md:mb-10 bg-gradient-to-r from-primary/5 to-accent/5 border-primary/20">
             <CardContent className="pt-6">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-3">
                 <div className="flex items-center gap-2">
@@ -254,8 +254,8 @@ const Tutorials = () => {
           </Card>
 
           {/* Category Tabs */}
-          <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="mb-10">
-            <TabsList className="flex flex-wrap gap-2 w-full p-2 bg-card/60 rounded-lg border border-border justify-center mb-10">
+          <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="mb-8 md:mb-10">
+            <TabsList className="flex flex-wrap gap-2 w-full p-2 bg-card/60 rounded-lg border border-border justify-center mb-8 md:mb-10">
               {Object.entries(videoCategories).map(([key, category]) => {
                 const IconComponent = category.icon;
                 return (

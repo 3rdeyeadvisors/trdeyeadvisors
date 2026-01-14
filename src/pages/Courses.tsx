@@ -40,7 +40,7 @@ const Courses = () => {
     {
       id: 1,
       title: "DeFi Foundations: Understanding the New Financial System",
-      description: "Complete beginner's guide from zero knowledge to confident understanding. Learn what DeFi is, why it exists, and how it works in plain English.",
+      description: "Understand why traditional finance fails you and how DeFi offers an alternative you control. No prior crypto knowledge required.",
       category: "free",
       type: "course",
       duration: "5 modules",
@@ -63,7 +63,7 @@ const Courses = () => {
     {
       id: 2,
       title: "Staying Safe in DeFi: Wallets, Security, and Avoiding Scams",
-      description: "Essential security course for beginners worried about hacks or losing funds. Learn to set up wallets correctly and keep funds safe.",
+      description: "Protect your assets from scams, hacks, and human error with essential security practices every DeFi user needs.",
       category: "free",
       type: "course", 
       duration: "5 modules",
@@ -86,7 +86,7 @@ const Courses = () => {
     {
       id: 3,
       title: "Earning with DeFi: Staking, Yield Farming, and Liquidity Pools Made Simple",
-      description: "Ready to earn passive income? Understand different earning methods and choose what fits your risk level.",
+      description: "Learn sustainable strategies to grow your wealth without middlemen taking their cut. Understand the real risks and rewards.",
       category: "free",
       type: "course",
       duration: "5 modules",
@@ -107,7 +107,7 @@ const Courses = () => {
     {
       id: 4,
       title: "Managing Your Own DeFi Portfolio: From Beginner to Confident User",
-      description: "Learn to actively manage a small DeFi portfolio. Track, adjust, and grow your investments responsibly.",
+      description: "Build and maintain a portfolio that works toward your goals, not someone else's. Master the tools for independent wealth management.",
       category: "free",
       type: "course",
       duration: "5 modules",
@@ -128,7 +128,7 @@ const Courses = () => {
     {
       id: 5,
       title: "Understanding DeFi Vaults: Your Complete Guide to Managed Investing",
-      description: "Learn what DeFi vaults are, how they work, and how to choose the right vault for your investment goals. Includes access guidance for the 3EA managed vault.",
+      description: "Access managed investment strategies with the transparency and control traditional funds lack. Understand vault mechanics and risks.",
       category: "free",
       type: "course",
       duration: "5 modules",
@@ -312,7 +312,7 @@ const Courses = () => {
             </div>
           )}
           <p className="text-sm sm:text-base md:text-lg text-foreground/70 font-consciousness max-w-2xl mx-auto leading-relaxed">
-            Reprogram your understanding with our curated learning resources and practical tools
+            Learn to protect your assets, beat inflation, and take control of your financial future.
           </p>
           {user && (
             <p className="text-awareness font-consciousness mt-3 text-sm sm:text-base">
