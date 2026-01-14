@@ -43,9 +43,9 @@ const PricingSection = () => {
   };
 
   return (
-    <section className="py-12 md:py-16 lg:py-20 relative">
+    <section className="py-10 md:py-14 lg:py-20 relative">
       <div className="max-w-5xl mx-auto px-6">
-        <AnimatedSection className="text-center mb-10 md:mb-12">
+        <AnimatedSection className="text-center mb-8 md:mb-10 lg:mb-12">
           <span className="inline-flex items-center gap-2 text-xs md:text-sm uppercase tracking-[0.2em] text-primary font-medium mb-4 bg-primary/10 px-4 py-2 rounded-full">
             <Sparkles className="w-4 h-4" />
             14-Day Free Trial
@@ -58,10 +58,10 @@ const PricingSection = () => {
           </p>
         </AnimatedSection>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 lg:gap-6 max-w-4xl mx-auto">
           {/* Monthly Plan */}
           <AnimatedSection animation="fade-left" delay={0}>
-            <div className="relative h-full p-6 md:p-8 rounded-2xl border border-border/50 bg-card/30 backdrop-blur-sm hover:border-primary/30 transition-all duration-300 group">
+            <div className="relative h-full p-5 md:p-6 lg:p-8 rounded-2xl border border-border/50 bg-card/30 backdrop-blur-sm hover:border-primary/30 transition-all duration-300 group">
               <div className="flex flex-col h-full">
                 <div className="text-center mb-6">
                   <h3 className="text-lg font-consciousness font-semibold text-foreground mb-2">
@@ -113,7 +113,7 @@ const PricingSection = () => {
 
           {/* Annual Plan */}
           <AnimatedSection animation="fade-right" delay={100}>
-            <div className="relative h-full p-6 md:p-8 rounded-2xl border-2 border-primary/50 bg-card/50 backdrop-blur-sm group overflow-hidden">
+            <div className="relative h-full p-5 md:p-6 lg:p-8 rounded-2xl border-2 border-primary/50 bg-card/50 backdrop-blur-sm group overflow-hidden">
               {/* Premium badge */}
               <div className="absolute -top-px left-1/2 -translate-x-1/2">
                 <span className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider text-primary-foreground bg-primary px-4 py-1.5 rounded-b-lg font-medium">

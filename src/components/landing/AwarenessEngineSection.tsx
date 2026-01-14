@@ -40,9 +40,9 @@ const AwarenessEngineSection = () => {
   const { containerRef, isItemVisible } = useStaggeredAnimation(awarenessSteps.length, 120);
 
   return (
-    <section className="py-12 md:py-16 lg:py-20 relative">
+    <section className="py-10 md:py-14 lg:py-20 relative">
       <div className="max-w-7xl mx-auto px-6">
-        <AnimatedSection className="text-center mb-10 md:mb-12">
+        <AnimatedSection className="text-center mb-8 md:mb-10 lg:mb-12">
           <span className="inline-block text-xs md:text-sm uppercase tracking-[0.2em] text-accent font-medium mb-4">
             The Process
           </span>
@@ -59,7 +59,7 @@ const AwarenessEngineSection = () => {
           {/* Connection lines (desktop only) */}
           <div className="hidden lg:block absolute top-1/2 left-[10%] right-[10%] h-[2px] bg-gradient-to-r from-primary/0 via-primary/30 to-primary/0 -translate-y-1/2" />
           
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4 lg:gap-6">
             {awarenessSteps.map((step, index) => (
               <div
                 key={step.title}
@@ -69,7 +69,7 @@ const AwarenessEngineSection = () => {
                 `}
                 style={{ transitionDelay: `${index * 120}ms` }}
               >
-                <div className="p-5 rounded-xl bg-card/50 border border-border/50 hover:border-accent/30 hover:bg-card/80 transition-all duration-300 h-full flex flex-col items-center text-center">
+                <div className="p-4 md:p-5 rounded-xl bg-card/50 border border-border/50 hover:border-accent/30 hover:bg-card/80 transition-all duration-300 h-full flex flex-col items-center text-center">
                   {/* Step number */}
                   <span className="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 rounded-full bg-accent/20 border border-accent/40 text-accent text-xs font-bold flex items-center justify-center">
                     {index + 1}

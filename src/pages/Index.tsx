@@ -52,7 +52,7 @@ const Index = () => {
           <CTASection />
           
           {/* Newsletter */}
-          <section className="py-12 md:py-16 lg:py-20">
+          <section className="py-8 md:py-12 lg:py-16">
             <div className="max-w-4xl mx-auto px-6">
               <NewsletterSignup variant="cosmic" />
             </div>

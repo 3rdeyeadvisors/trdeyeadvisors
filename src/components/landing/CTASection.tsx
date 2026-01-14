@@ -12,14 +12,14 @@ const benefits = [
 
 const CTASection = () => {
   return (
-    <section className="py-12 md:py-16 lg:py-20 relative overflow-hidden">
+    <section className="py-10 md:py-14 lg:py-20 relative overflow-hidden">
       {/* Background glow */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
       
       <div className="max-w-4xl mx-auto px-6 relative z-10">
         {/* Why This Matters Card */}
-        <AnimatedSection className="mb-10 md:mb-14">
-          <div className="relative p-6 md:p-8 lg:p-10 rounded-2xl bg-gradient-to-b from-card/80 to-card/40 border border-border/50 overflow-hidden max-w-3xl mx-auto">
+        <AnimatedSection className="mb-8 md:mb-12 lg:mb-14">
+          <div className="relative p-5 md:p-6 lg:p-8 xl:p-10 rounded-2xl bg-gradient-to-b from-card/80 to-card/40 border border-border/50 overflow-hidden max-w-3xl mx-auto">
             {/* Decorative elements */}
             <div className="absolute top-3 left-3 w-2 h-2 rounded-full bg-primary/50" />
             <div className="absolute top-3 right-3 w-2 h-2 rounded-full bg-accent/50" />
