@@ -2,12 +2,13 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { CartProvider } from "@/contexts/CartContext";
 import { HelmetProvider } from "react-helmet-async";
 import SecurityHeaders from "@/components/SecurityHeaders";
 import Layout from "./components/Layout";
+import PageTransition from "./components/PageTransition";
 import { AuthProvider } from "./components/auth/AuthProvider";
 import { ProgressProvider } from "./components/progress/ProgressProvider";
 import { SubscriptionProvider } from "./hooks/useSubscription";
@@ -79,6 +80,105 @@ import ReferralTerms from "./pages/ReferralTerms";
 
 const queryClient = new QueryClient();
 
+// Wrapper component to provide location key for page transitions
+const AnimatedRoutes = () => {
+  const location = useLocation();
+  
+  return (
+    <Routes location={location} key={location.pathname}>
+      <Route path="/" element={<PageTransition><Index /></PageTransition>} />
+      <Route path="/philosophy" element={<PageTransition><Philosophy /></PageTransition>} />
+      <Route path="/courses" element={<PageTransition><Courses /></PageTransition>} />
+      <Route path="/courses/:courseId" element={<PageTransition><CourseDetail /></PageTransition>} />
+      <Route path="/courses/:courseId/module/:moduleId" element={<PageTransition><ModuleViewer /></PageTransition>} />
+      <Route path="/blog" element={<PageTransition><Blog /></PageTransition>} />
+      <Route path="/blog/:page(\\d+)" element={<Navigate to="/blog" replace />} />
+      <Route path="/blog/defi-regulation-aml-integration" element={<PageTransition><DefiRegulationAmlIntegration /></PageTransition>} />
+      <Route path="/blog/web3-gaming-defi-convergence-2025" element={<PageTransition><WebThreeGamingDefiConvergence /></PageTransition>} />
+      <Route path="/blog/defai-revolution-2025" element={<PageTransition><DefaiRevolution2025 /></PageTransition>} />
+      <Route path="/blog/liquid-staking-tokens-2025" element={<PageTransition><LiquidStakingTokens2025 /></PageTransition>} />
+      <Route path="/blog/stablecoins-defi-infrastructure-2025" element={<PageTransition><StablecoinsDefiInfrastructure2025 /></PageTransition>} />
+      <Route path="/blog/why-most-people-lose-crypto" element={<PageTransition><WhyMostPeopleLoseCrypto /></PageTransition>} />
+      <Route path="/blog/defi-matured-2025" element={<PageTransition><DefiMatured2025 /></PageTransition>} />
+      <Route path="/blog/defi-vaults-explained" element={<PageTransition><DefiVaultsExplained /></PageTransition>} />
+      <Route path="/blog/prediction-markets-defi-2025" element={<PageTransition><PredictionMarketsDeFi2025 /></PageTransition>} />
+      <Route path="/blog/rwa-overtakes-dex-2025" element={<PageTransition><RwaOvertakesDex2025 /></PageTransition>} />
+      <Route path="/blog/:slug" element={<PageTransition><BlogPost /></PageTransition>} />
+      <Route path="/resources" element={<PageTransition><Resources /></PageTransition>} />
+      <Route path="/analytics" element={<PageTransition><Analytics /></PageTransition>} />
+      <Route path="/tutorials" element={<PageTransition><Tutorials /></PageTransition>} />
+      <Route path="/tutorials/wallet-setup" element={<PageTransition><WalletSetupTutorial /></PageTransition>} />
+      <Route path="/tutorials/first-dex-swap" element={<PageTransition><FirstDexSwapTutorial /></PageTransition>} />
+      <Route path="/tutorials/defi-calculators" element={<PageTransition><DefiCalculatorsTutorial /></PageTransition>} />
+      <Route path="/tutorials/spotting-scams" element={<PageTransition><SpottingScamsTutorial /></PageTransition>} />
+      <Route path="/tutorials/cross-chain-bridging" element={<PageTransition><CrossChainBridgingTutorial /></PageTransition>} />
+      <Route path="/tutorials/advanced-defi-protocols" element={<PageTransition><AdvancedDefiProtocolsTutorial /></PageTransition>} />
+      <Route path="/tutorials/portfolio-rebalancing" element={<PageTransition><PortfolioRebalancingTutorial /></PageTransition>} />
+      <Route path="/tutorials/portfolio-tracking" element={<PageTransition><PortfolioTrackingTutorial /></PageTransition>} />
+      <Route path="/tutorials/liquidity-pools" element={<PageTransition><LiquidityPoolBasicsTutorial /></PageTransition>} />
+      <Route path="/tutorials/reading-defi-metrics" element={<PageTransition><ReadingDefiMetricsTutorial /></PageTransition>} />
+      <Route path="/tutorials/risk-assessment" element={<PageTransition><RiskAssessmentTutorial /></PageTransition>} />
+      <Route path="/tutorials/chart-reading" element={<PageTransition><ChartReadingTutorial /></PageTransition>} />
+      <Route path="/tutorials/nft-defi" element={<PageTransition><NftDefiTutorial /></PageTransition>} />
+      <Route path="/tutorials/dao-participation" element={<PageTransition><DaoParticipationTutorial /></PageTransition>} />
+      <Route path="/store" element={<PageTransition><Store /></PageTransition>} />
+      <Route path="/store/merchandise/:productId" element={<PageTransition><MerchandiseDetail /></PageTransition>} />
+      <Route path="/cart" element={<PageTransition><Cart /></PageTransition>} />
+      <Route path="/contact" element={<PageTransition><Contact /></PageTransition>} />
+      <Route path="/signin" element={<PageTransition><Auth /></PageTransition>} />
+      <Route path="/signup" element={<PageTransition><Auth /></PageTransition>} />
+      <Route path="/auth" element={<PageTransition><Auth /></PageTransition>} />
+      <Route path="/reset-password" element={<PageTransition><ResetPassword /></PageTransition>} />
+      <Route path="/dashboard" element={<PageTransition><Dashboard /></PageTransition>} />
+      <Route path="/subscription" element={<PageTransition><Subscription /></PageTransition>} />
+      <Route path="/awareness-blueprint" element={<PageTransition><AwarenessBlueprintLanding /></PageTransition>} />
+      <Route path="/start" element={<PageTransition><AdLanding /></PageTransition>} />
+      <Route path="/admin/upload-resource" element={
+        <ProtectedRoute requireRole="admin">
+          <PageTransition><UploadResourceFile /></PageTransition>
+        </ProtectedRoute>
+      } />
+      <Route path="/profile" element={<PageTransition><Profile /></PageTransition>} />
+      <Route path="/privacy" element={<PageTransition><PrivacyPolicy /></PageTransition>} />
+      <Route path="/terms" element={<PageTransition><TermsOfService /></PageTransition>} />
+      <Route path="/social-banner" element={<PageTransition><SocialBanner /></PageTransition>} />
+      <Route path="/setup-stripe-products" element={
+        <ProtectedRoute requireRole="admin">
+          <PageTransition><SetupStripeProducts /></PageTransition>
+        </ProtectedRoute>
+      } />
+      <Route path="/stripe-diagnostic" element={
+        <ProtectedRoute requireRole="admin">
+          <PageTransition><StripeDiagnostic /></PageTransition>
+        </ProtectedRoute>
+      } />
+      <Route path="/admin/email-logs" element={
+        <ProtectedRoute requireRole="admin">
+          <PageTransition><EmailLogsAdmin /></PageTransition>
+        </ProtectedRoute>
+      } />
+      <Route path="/admin/store" element={
+        <ProtectedRoute requireRole="admin">
+          <PageTransition><AdminStoreDashboard /></PageTransition>
+        </ProtectedRoute>
+      } />
+      <Route path="/admin" element={
+        <ProtectedRoute requireRole="admin">
+          <PageTransition><AdminDashboard /></PageTransition>
+        </ProtectedRoute>
+      } />
+      <Route path="/raffles" element={<PageTransition><Raffles /></PageTransition>} />
+      <Route path="/raffle-history" element={<PageTransition><RaffleHistory /></PageTransition>} />
+      <Route path="/earn" element={<PageTransition><Earn /></PageTransition>} />
+      <Route path="/referral-terms" element={<PageTransition><ReferralTerms /></PageTransition>} />
+      <Route path="/vault-access" element={<PageTransition><VaultAccess /></PageTransition>} />
+      <Route path="/vault-deposit-guide" element={<PageTransition><VaultDepositTutorial /></PageTransition>} />
+      <Route path="/vault-withdrawal-guide" element={<PageTransition><VaultWithdrawalTutorial /></PageTransition>} />
+      <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
+    </Routes>
+  );
+};
+
 const App = () => {
   // Handle domain and protocol redirects in production only
   useEffect(() => {
@@ -118,97 +218,7 @@ const App = () => {
                     <Sonner />
                     <BrowserRouter>
                       <Layout>
-                        <Routes>
-                          <Route path="/" element={<Index />} />
-                          <Route path="/philosophy" element={<Philosophy />} />
-                          <Route path="/courses" element={<Courses />} />
-                          <Route path="/courses/:courseId" element={<CourseDetail />} />
-                          <Route path="/courses/:courseId/module/:moduleId" element={<ModuleViewer />} />
-                          <Route path="/blog" element={<Blog />} />
-                          <Route path="/blog/:page(\\d+)" element={<Navigate to="/blog" replace />} />
-                          <Route path="/blog/defi-regulation-aml-integration" element={<DefiRegulationAmlIntegration />} />
-                          <Route path="/blog/web3-gaming-defi-convergence-2025" element={<WebThreeGamingDefiConvergence />} />
-                          <Route path="/blog/defai-revolution-2025" element={<DefaiRevolution2025 />} />
-                          <Route path="/blog/liquid-staking-tokens-2025" element={<LiquidStakingTokens2025 />} />
-                          <Route path="/blog/stablecoins-defi-infrastructure-2025" element={<StablecoinsDefiInfrastructure2025 />} />
-                          <Route path="/blog/why-most-people-lose-crypto" element={<WhyMostPeopleLoseCrypto />} />
-                          <Route path="/blog/defi-matured-2025" element={<DefiMatured2025 />} />
-                          <Route path="/blog/defi-vaults-explained" element={<DefiVaultsExplained />} />
-                          <Route path="/blog/prediction-markets-defi-2025" element={<PredictionMarketsDeFi2025 />} />
-                          <Route path="/blog/rwa-overtakes-dex-2025" element={<RwaOvertakesDex2025 />} />
-                          <Route path="/blog/:slug" element={<BlogPost />} />
-                          <Route path="/resources" element={<Resources />} />
-                          <Route path="/analytics" element={<Analytics />} />
-                          <Route path="/tutorials" element={<Tutorials />} />
-                          <Route path="/tutorials/wallet-setup" element={<WalletSetupTutorial />} />
-                          <Route path="/tutorials/first-dex-swap" element={<FirstDexSwapTutorial />} />
-                          <Route path="/tutorials/defi-calculators" element={<DefiCalculatorsTutorial />} />
-                          <Route path="/tutorials/spotting-scams" element={<SpottingScamsTutorial />} />
-                          <Route path="/tutorials/cross-chain-bridging" element={<CrossChainBridgingTutorial />} />
-                          <Route path="/tutorials/advanced-defi-protocols" element={<AdvancedDefiProtocolsTutorial />} />
-                          <Route path="/tutorials/portfolio-rebalancing" element={<PortfolioRebalancingTutorial />} />
-                          <Route path="/tutorials/portfolio-tracking" element={<PortfolioTrackingTutorial />} />
-                          <Route path="/tutorials/liquidity-pools" element={<LiquidityPoolBasicsTutorial />} />
-                          <Route path="/tutorials/reading-defi-metrics" element={<ReadingDefiMetricsTutorial />} />
-                          <Route path="/tutorials/risk-assessment" element={<RiskAssessmentTutorial />} />
-                          <Route path="/tutorials/chart-reading" element={<ChartReadingTutorial />} />
-                          <Route path="/tutorials/nft-defi" element={<NftDefiTutorial />} />
-                          <Route path="/tutorials/dao-participation" element={<DaoParticipationTutorial />} />
-                          <Route path="/store" element={<Store />} />
-                          <Route path="/store/merchandise/:productId" element={<MerchandiseDetail />} />
-                          <Route path="/cart" element={<Cart />} />
-                          <Route path="/contact" element={<Contact />} />
-                          <Route path="/signin" element={<Auth />} />
-                          <Route path="/signup" element={<Auth />} />
-                          <Route path="/auth" element={<Auth />} />
-                          <Route path="/reset-password" element={<ResetPassword />} />
-                          <Route path="/dashboard" element={<Dashboard />} />
-                          <Route path="/subscription" element={<Subscription />} />
-                          <Route path="/awareness-blueprint" element={<AwarenessBlueprintLanding />} />
-                          <Route path="/start" element={<AdLanding />} />
-                          <Route path="/admin/upload-resource" element={
-                            <ProtectedRoute requireRole="admin">
-                              <UploadResourceFile />
-                            </ProtectedRoute>
-                          } />
-                          <Route path="/profile" element={<Profile />} />
-                          <Route path="/privacy" element={<PrivacyPolicy />} />
-                          <Route path="/terms" element={<TermsOfService />} />
-                          <Route path="/social-banner" element={<SocialBanner />} />
-                          <Route path="/setup-stripe-products" element={
-                            <ProtectedRoute requireRole="admin">
-                              <SetupStripeProducts />
-                            </ProtectedRoute>
-                          } />
-                          <Route path="/stripe-diagnostic" element={
-                            <ProtectedRoute requireRole="admin">
-                              <StripeDiagnostic />
-                            </ProtectedRoute>
-                          } />
-                          <Route path="/admin/email-logs" element={
-                            <ProtectedRoute requireRole="admin">
-                              <EmailLogsAdmin />
-                            </ProtectedRoute>
-                          } />
-                          <Route path="/admin/store" element={
-                            <ProtectedRoute requireRole="admin">
-                              <AdminStoreDashboard />
-                            </ProtectedRoute>
-                          } />
-                          <Route path="/admin" element={
-                            <ProtectedRoute requireRole="admin">
-                              <AdminDashboard />
-                            </ProtectedRoute>
-                          } />
-                          <Route path="/raffles" element={<Raffles />} />
-                          <Route path="/raffle-history" element={<RaffleHistory />} />
-                          <Route path="/earn" element={<Earn />} />
-                          <Route path="/referral-terms" element={<ReferralTerms />} />
-                          <Route path="/vault-access" element={<VaultAccess />} />
-                          <Route path="/vault-deposit-guide" element={<VaultDepositTutorial />} />
-                          <Route path="/vault-withdrawal-guide" element={<VaultWithdrawalTutorial />} />
-                          <Route path="*" element={<NotFound />} />
-                        </Routes>
+                        <AnimatedRoutes />
                       </Layout>
                     </BrowserRouter>
                   </ProgressProvider>
