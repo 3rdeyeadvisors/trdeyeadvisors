@@ -37,7 +37,7 @@ const Footer = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 lg:gap-8 mb-6 md:mb-8 items-start">
           {/* Learn Links */}
           <div>
-            <h3 className="font-consciousness font-semibold text-sm text-foreground mb-3 uppercase tracking-wider min-h-[1.25rem]">
+            <h3 className="font-consciousness font-semibold text-sm text-foreground mb-3 uppercase tracking-wider h-5 flex items-center">
               Learn
             </h3>
             <ul className="space-y-2">
@@ -56,7 +56,7 @@ const Footer = () => {
 
           {/* Support Links */}
           <div>
-            <h3 className="font-consciousness font-semibold text-sm text-foreground mb-3 uppercase tracking-wider min-h-[1.25rem]">
+            <h3 className="font-consciousness font-semibold text-sm text-foreground mb-3 uppercase tracking-wider h-5 flex items-center">
               Support
             </h3>
             <ul className="space-y-2">
@@ -75,7 +75,7 @@ const Footer = () => {
 
           {/* Legal Links */}
           <div>
-            <h3 className="font-consciousness font-semibold text-sm text-foreground mb-3 uppercase tracking-wider min-h-[1.25rem]">
+            <h3 className="font-consciousness font-semibold text-sm text-foreground mb-3 uppercase tracking-wider h-5 flex items-center">
               Legal
             </h3>
             <ul className="space-y-2">
@@ -94,7 +94,7 @@ const Footer = () => {
 
           {/* Connect */}
           <div>
-            <h3 className="font-consciousness font-semibold text-sm text-foreground mb-3 uppercase tracking-wider min-h-[1.25rem]">
+            <h3 className="font-consciousness font-semibold text-sm text-foreground mb-3 uppercase tracking-wider h-5 flex items-center">
               Connect
             </h3>
             <div className="flex items-center gap-2">
