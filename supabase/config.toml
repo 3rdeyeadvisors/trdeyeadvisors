@@ -146,3 +146,6 @@ verify_jwt = false
 
 [functions.delete-inactive-accounts]
 verify_jwt = true
+
+[functions.orion-chat]
+verify_jwt = false
