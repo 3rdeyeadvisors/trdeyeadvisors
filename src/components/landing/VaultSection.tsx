@@ -51,12 +51,12 @@ const VaultSection = () => {
   const { containerRef, isItemVisible } = useStaggeredAnimation(vaultLayers.length, 200);
 
   return (
-    <section className="py-20 md:py-32 relative overflow-hidden">
+    <section className="py-12 md:py-16 lg:py-20 relative overflow-hidden">
       {/* Background effects */}
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/3 rounded-full blur-[150px] pointer-events-none" />
       
       <div className="max-w-7xl mx-auto px-6">
-        <AnimatedSection className="text-center mb-16">
+        <AnimatedSection className="text-center mb-10 md:mb-12">
           <span className="inline-block text-xs md:text-sm uppercase tracking-[0.2em] text-primary font-medium mb-4">
             Progress Path
           </span>

@@ -35,12 +35,12 @@ const PlatformFeaturesSection = () => {
   const { containerRef, isItemVisible } = useStaggeredAnimation(platformFeatures.length, 100);
 
   return (
-    <section className="py-20 md:py-32 relative overflow-hidden">
+    <section className="py-12 md:py-16 lg:py-20 relative overflow-hidden">
       {/* Background accent */}
       <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] pointer-events-none" />
       
       <div className="max-w-7xl mx-auto px-6">
-        <AnimatedSection className="text-center mb-16">
+        <AnimatedSection className="text-center mb-10 md:mb-12">
           <span className="inline-block text-xs md:text-sm uppercase tracking-[0.2em] text-primary font-medium mb-4">
             Platform
           </span>

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Mail, Github, Instagram, Twitter, ExternalLink } from 'lucide-react';
+import { Mail, Github, Instagram } from 'lucide-react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -14,7 +14,6 @@ const Footer = () => {
   const supportLinks = [
     { label: 'Contact', href: '/contact' },
     { label: 'Resources', href: '/resources' },
-    { label: 'Whitepaper', href: '/resources/3EA-Whitepaper-White.pdf', external: true },
   ];
 
   const legalLinks = [
@@ -24,7 +23,6 @@ const Footer = () => {
 
   const socialLinks = [
     { icon: Mail, href: 'mailto:info@the3rdeyeadvisors.com', label: 'Email' },
-    { icon: Twitter, href: 'https://twitter.com/3rdeyeadvisors', label: 'Twitter' },
     { icon: Instagram, href: 'https://instagram.com/3rdeyeadvisors', label: 'Instagram' },
     { icon: Github, href: 'https://github.com/3rdeyeadvisors', label: 'GitHub' },
   ];
@@ -91,27 +89,15 @@ const Footer = () => {
               Support
             </h3>
             <ul className="space-y-3">
-              {supportLinks.map((link) => (
+          {supportLinks.map((link) => (
                 <li key={link.label}>
-                  {link.external ? (
-                    <a
-                      href={link.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness inline-flex items-center gap-1 group"
-                    >
-                      {link.label}
-                      <ExternalLink className="w-3 h-3 opacity-50" />
-                    </a>
-                  ) : (
-                    <Link
-                      to={link.href}
-                      className="text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness inline-flex items-center gap-1 group"
-                    >
-                      {link.label}
-                      <span className="opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-                    </Link>
-                  )}
+                  <Link
+                    to={link.href}
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors font-consciousness inline-flex items-center gap-1 group"
+                  >
+                    {link.label}
+                    <span className="opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+                  </Link>
                 </li>
               ))}
             </ul>
