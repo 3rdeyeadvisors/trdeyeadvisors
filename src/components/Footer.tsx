@@ -34,10 +34,10 @@ const Footer = () => {
       
       <div className="max-w-7xl mx-auto px-6 py-6 md:py-8 lg:py-12">
         {/* Main footer grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 lg:gap-8 mb-6 md:mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 lg:gap-8 mb-6 md:mb-8 items-start">
           {/* Learn Links */}
           <div>
-            <h3 className="font-consciousness font-semibold text-sm text-foreground mb-3 uppercase tracking-wider">
+            <h3 className="font-consciousness font-semibold text-sm text-foreground mb-3 uppercase tracking-wider min-h-[1.25rem]">
               Learn
             </h3>
             <ul className="space-y-2">
@@ -56,7 +56,7 @@ const Footer = () => {
 
           {/* Support Links */}
           <div>
-            <h3 className="font-consciousness font-semibold text-sm text-foreground mb-3 uppercase tracking-wider">
+            <h3 className="font-consciousness font-semibold text-sm text-foreground mb-3 uppercase tracking-wider min-h-[1.25rem]">
               Support
             </h3>
             <ul className="space-y-2">
@@ -75,7 +75,7 @@ const Footer = () => {
 
           {/* Legal Links */}
           <div>
-            <h3 className="font-consciousness font-semibold text-sm text-foreground mb-3 uppercase tracking-wider">
+            <h3 className="font-consciousness font-semibold text-sm text-foreground mb-3 uppercase tracking-wider min-h-[1.25rem]">
               Legal
             </h3>
             <ul className="space-y-2">
@@ -94,7 +94,7 @@ const Footer = () => {
 
           {/* Connect */}
           <div>
-            <h3 className="font-consciousness font-semibold text-sm text-foreground mb-3 uppercase tracking-wider">
+            <h3 className="font-consciousness font-semibold text-sm text-foreground mb-3 uppercase tracking-wider min-h-[1.25rem]">
               Connect
             </h3>
             <div className="flex items-center gap-2">
