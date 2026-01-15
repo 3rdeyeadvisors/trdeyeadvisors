@@ -477,7 +477,7 @@ export const EnhancedDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen py-20 w-full overflow-x-hidden">
+    <div className="min-h-screen pt-20 pb-8 w-full overflow-x-hidden">
       <div className="container mx-auto px-4 max-w-6xl w-full">
         {/* Enhanced Header */}
         <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 mb-6 sm:mb-8 w-full">
