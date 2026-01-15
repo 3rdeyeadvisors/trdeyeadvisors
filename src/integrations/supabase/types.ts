@@ -664,6 +664,51 @@ export type Database = {
         }
         Relationships: []
       }
+      founding33_purchases: {
+        Row: {
+          amount_paid: number
+          created_at: string
+          customer_email: string
+          customer_name: string | null
+          id: string
+          purchased_at: string | null
+          seat_number: number | null
+          status: string
+          stripe_payment_intent_id: string | null
+          stripe_session_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount_paid?: number
+          created_at?: string
+          customer_email: string
+          customer_name?: string | null
+          id?: string
+          purchased_at?: string | null
+          seat_number?: number | null
+          status?: string
+          stripe_payment_intent_id?: string | null
+          stripe_session_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount_paid?: number
+          created_at?: string
+          customer_email?: string
+          customer_name?: string | null
+          id?: string
+          purchased_at?: string | null
+          seat_number?: number | null
+          status?: string
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       grandfathered_emails: {
         Row: {
           access_type: string | null
@@ -1610,6 +1655,8 @@ export type Database = {
       cleanup_old_rate_limits: { Args: never; Returns: undefined }
       cleanup_old_security_logs: { Args: never; Returns: undefined }
       get_average_rating: { Args: never; Returns: number }
+      get_founding33_spots_remaining: { Args: never; Returns: number }
+      get_next_founding33_seat: { Args: never; Returns: number }
       get_profiles_batch: {
         Args: { user_ids: string[] }
         Returns: {
@@ -1645,6 +1692,10 @@ export type Database = {
           _user_id?: string
         }
         Returns: undefined
+      }
+      user_has_founding33_access: {
+        Args: { check_user_id: string }
+        Returns: boolean
       }
       user_has_purchased_course: {
         Args: { course_id: number }

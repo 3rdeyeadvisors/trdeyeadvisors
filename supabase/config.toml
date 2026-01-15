@@ -55,7 +55,6 @@ verify_jwt = false
 [functions.mailchimp-sync]
 verify_jwt = false
 
-
 [functions.fetch-defi-data]
 verify_jwt = false
 
@@ -85,7 +84,6 @@ verify_jwt = false
 
 [functions.admin-ai-command]
 verify_jwt = true
-
 
 [functions.3ea-broadcast]
 verify_jwt = false
@@ -148,4 +146,13 @@ verify_jwt = false
 verify_jwt = true
 
 [functions.orion-chat]
+verify_jwt = false
+
+[functions.create-founding33-checkout]
+verify_jwt = false
+
+[functions.get-founding33-spots]
+verify_jwt = false
+
+[functions.send-founding33-confirmation]
 verify_jwt = false
