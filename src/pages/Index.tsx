@@ -51,8 +51,8 @@ const Index = () => {
           <AboutSection />
           <PlatformFeaturesSection />
           <PricingSection />
-          <Founding33Section />
           <InstitutionalSection />
+          <Founding33Section />
           <CTASection />
           
           {/* Newsletter */}
