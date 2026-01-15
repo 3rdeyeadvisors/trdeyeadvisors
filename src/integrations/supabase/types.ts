@@ -369,6 +369,30 @@ export type Database = {
         }
         Relationships: []
       }
+      daily_logins: {
+        Row: {
+          created_at: string
+          id: string
+          login_date: string
+          points_awarded: boolean
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          login_date: string
+          points_awarded?: boolean
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          login_date?: string
+          points_awarded?: boolean
+          user_id?: string
+        }
+        Relationships: []
+      }
       digital_downloads: {
         Row: {
           created_at: string
@@ -736,6 +760,42 @@ export type Database = {
           email?: string
           expires_at?: string | null
           id?: string
+        }
+        Relationships: []
+      }
+      monthly_rewards: {
+        Row: {
+          claimed: boolean
+          claimed_at: string | null
+          created_at: string
+          id: string
+          month_year: string
+          rank: number
+          reward_details: Json | null
+          reward_type: string
+          user_id: string
+        }
+        Insert: {
+          claimed?: boolean
+          claimed_at?: string | null
+          created_at?: string
+          id?: string
+          month_year: string
+          rank: number
+          reward_details?: Json | null
+          reward_type: string
+          user_id: string
+        }
+        Update: {
+          claimed?: boolean
+          claimed_at?: string | null
+          created_at?: string
+          id?: string
+          month_year?: string
+          rank?: number
+          reward_details?: Json | null
+          reward_type?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -1408,6 +1468,66 @@ export type Database = {
         }
         Relationships: []
       }
+      user_points: {
+        Row: {
+          action_id: string | null
+          action_type: string
+          created_at: string
+          id: string
+          metadata: Json | null
+          month_year: string
+          points: number
+          user_id: string
+        }
+        Insert: {
+          action_id?: string | null
+          action_type: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          month_year: string
+          points: number
+          user_id: string
+        }
+        Update: {
+          action_id?: string | null
+          action_type?: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          month_year?: string
+          points?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_points_monthly: {
+        Row: {
+          id: string
+          month_year: string
+          rank: number | null
+          total_points: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          month_year: string
+          rank?: number | null
+          total_points?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          month_year?: string
+          rank?: number | null
+          total_points?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_presence: {
         Row: {
           content_id: string
@@ -1641,6 +1761,27 @@ export type Database = {
     }
     Functions: {
       auto_cleanup_rate_limits: { Args: never; Returns: undefined }
+      award_user_points: {
+        Args: {
+          _action_id?: string
+          _action_type: string
+          _metadata?: Json
+          _points: number
+          _user_id: string
+        }
+        Returns: {
+          message: string
+          points_awarded: number
+          success: boolean
+        }[]
+      }
+      check_daily_login: {
+        Args: { _user_id: string }
+        Returns: {
+          already_logged_in: boolean
+          points_awarded: number
+        }[]
+      }
       check_rate_limit: {
         Args: {
           _action_type: string
@@ -1657,6 +1798,16 @@ export type Database = {
       get_average_rating: { Args: never; Returns: number }
       get_founding33_spots_remaining: { Args: never; Returns: number }
       get_next_founding33_seat: { Args: never; Returns: number }
+      get_points_leaderboard: {
+        Args: { _limit?: number }
+        Returns: {
+          avatar_url: string
+          display_name: string
+          rank: number
+          total_points: number
+          user_id: string
+        }[]
+      }
       get_profiles_batch: {
         Args: { user_ids: string[] }
         Returns: {
@@ -1674,6 +1825,14 @@ export type Database = {
           display_name: string
           email: string
           user_id: string
+        }[]
+      }
+      get_user_points_rank: {
+        Args: { _user_id: string }
+        Returns: {
+          rank: number
+          total_points: number
+          total_users: number
         }[]
       }
       has_role: {
