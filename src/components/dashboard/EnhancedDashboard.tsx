@@ -39,6 +39,15 @@ interface QuizStats {
   passedQuizzes: number;
 }
 
+interface AnalyticsStats {
+  totalStudyTime: string;
+  averageSession: string;
+  bestDay: string;
+  highestScore: number;
+  improvementTrend: number;
+  modulesCompleted: number;
+}
+
 export const EnhancedDashboard = () => {
   const { user } = useAuth();
   const { courseProgress } = useProgress();
@@ -53,6 +62,14 @@ export const EnhancedDashboard = () => {
   });
   const [recentActivity, setRecentActivity] = useState<any[]>([]);
   const [weeklyProgress, setWeeklyProgress] = useState<any[]>([]);
+  const [analyticsStats, setAnalyticsStats] = useState<AnalyticsStats>({
+    totalStudyTime: '0h 0m',
+    averageSession: '0 minutes',
+    bestDay: 'No data',
+    highestScore: 0,
+    improvementTrend: 0,
+    modulesCompleted: 0
+  });
 
   // Handle subscription success/cancel from URL params
   useEffect(() => {
@@ -81,6 +98,7 @@ export const EnhancedDashboard = () => {
       loadQuizStats();
       loadRecentActivity();
       loadWeeklyProgress();
+      loadAnalyticsStats();
     }
   }, [user]);
 
@@ -153,35 +171,36 @@ export const EnhancedDashboard = () => {
 
       if (quizError) throw quizError;
 
-      // Fetch course progress updates from this week
-      const { data: progressUpdates, error: progressError } = await supabase
-        .from('course_progress')
-        .select('updated_at, completed_modules')
+      // Fetch point transactions for module completions this week
+      const { data: modulePoints, error: moduleError } = await supabase
+        .from('user_points')
+        .select('created_at')
         .eq('user_id', user.id)
-        .gte('updated_at', monday.toISOString());
+        .eq('action_type', 'module_completion')
+        .gte('created_at', monday.toISOString());
 
-      if (progressError) throw progressError;
+      if (moduleError) throw moduleError;
 
       // Build weekly data
       const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
       const weekData = days.map((day, index) => {
         const dayDate = new Date(monday);
         dayDate.setDate(monday.getDate() + index);
-        const dayStart = new Date(dayDate);
-        dayStart.setHours(0, 0, 0, 0);
+        const dayStart = new Date(dayDate).getTime();
         const dayEnd = new Date(dayDate);
         dayEnd.setHours(23, 59, 59, 999);
+        const dayEndTime = dayEnd.getTime();
 
         // Count quizzes completed on this day
         const quizzes = quizAttempts?.filter(attempt => {
-          const attemptDate = new Date(attempt.created_at);
-          return attemptDate >= dayStart && attemptDate <= dayEnd;
+          const d = new Date(attempt.created_at).getTime();
+          return d >= dayStart && d <= dayEndTime;
         }).length || 0;
 
-        // Count module progress on this day
-        const modules = progressUpdates?.filter(progress => {
-          const progressDate = new Date(progress.updated_at);
-          return progressDate >= dayStart && progressDate <= dayEnd;
+        // Count module completions on this day (from user_points)
+        const modules = modulePoints?.filter(point => {
+          const d = new Date(point.created_at).getTime();
+          return d >= dayStart && d <= dayEndTime;
         }).length || 0;
 
         return { day, modules, quizzes };
@@ -200,6 +219,70 @@ export const EnhancedDashboard = () => {
         { day: 'Sat', modules: 0, quizzes: 0 },
         { day: 'Sun', modules: 0, quizzes: 0 },
       ]);
+    }
+  };
+
+  const loadAnalyticsStats = async () => {
+    if (!user) return;
+    
+    try {
+      // Get all quiz attempts with scores and time
+      const { data: quizzes } = await supabase
+        .from('quiz_attempts')
+        .select('score, created_at, time_taken')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: true });
+
+      // Calculate highest score
+      const highestScore = quizzes?.reduce((max, q) => Math.max(max, q.score), 0) || 0;
+      
+      // Calculate improvement (first 3 vs last 3 quizzes)
+      let improvementTrend = 0;
+      if (quizzes && quizzes.length >= 6) {
+        const first3Avg = quizzes.slice(0, 3).reduce((s, q) => s + q.score, 0) / 3;
+        const last3Avg = quizzes.slice(-3).reduce((s, q) => s + q.score, 0) / 3;
+        improvementTrend = Math.round(last3Avg - first3Avg);
+      } else if (quizzes && quizzes.length >= 2) {
+        // For fewer quizzes, compare first half vs second half
+        const midpoint = Math.floor(quizzes.length / 2);
+        const firstHalfAvg = quizzes.slice(0, midpoint).reduce((s, q) => s + q.score, 0) / midpoint;
+        const secondHalfAvg = quizzes.slice(midpoint).reduce((s, q) => s + q.score, 0) / (quizzes.length - midpoint);
+        improvementTrend = Math.round(secondHalfAvg - firstHalfAvg);
+      }
+
+      // Calculate best day from activity
+      const dayCount: Record<string, number> = {};
+      quizzes?.forEach(q => {
+        const day = new Date(q.created_at).toLocaleDateString('en-US', { weekday: 'long' });
+        dayCount[day] = (dayCount[day] || 0) + 1;
+      });
+      const bestDay = Object.entries(dayCount).sort((a, b) => b[1] - a[1])[0]?.[0] || 'No data';
+
+      // Calculate total time from quiz time_taken (in seconds)
+      const totalSeconds = quizzes?.reduce((sum, q) => sum + (q.time_taken || 0), 0) || 0;
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const totalStudyTime = `${hours}h ${minutes}m`;
+
+      // Average session time
+      const avgSeconds = quizzes?.length ? totalSeconds / quizzes.length : 0;
+      const avgMinutes = Math.round(avgSeconds / 60);
+      const averageSession = `${avgMinutes} minutes`;
+
+      // Modules completed from courseProgress
+      const modulesCompleted = Object.values(courseProgress)
+        .reduce((sum, p) => sum + (p.completed_modules?.length || 0), 0);
+
+      setAnalyticsStats({
+        totalStudyTime,
+        averageSession,
+        bestDay,
+        highestScore,
+        improvementTrend,
+        modulesCompleted
+      });
+    } catch (error) {
+      console.error('Error loading analytics:', error);
     }
   };
 
@@ -795,19 +878,19 @@ export const EnhancedDashboard = () => {
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
                     <span>Total Study Time</span>
-                    <span className="font-semibold">24h 32m</span>
+                    <span className="font-semibold">{analyticsStats.totalStudyTime}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span>Average Session</span>
-                    <span className="font-semibold">18 minutes</span>
+                    <span className="font-semibold">{analyticsStats.averageSession}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span>Best Day</span>
-                    <span className="font-semibold">Thursday</span>
+                    <span className="font-semibold">{analyticsStats.bestDay}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span>Modules Completed</span>
-                    <span className="font-semibold">{Object.values(courseProgress).reduce((sum, p) => sum + (p.completed_modules?.length || 0), 0)}</span>
+                    <span className="font-semibold">{analyticsStats.modulesCompleted}</span>
                   </div>
                 </div>
               </Card>
@@ -832,11 +915,13 @@ export const EnhancedDashboard = () => {
                   </div>
                   <div className="flex justify-between items-center">
                     <span>Highest Score</span>
-                    <span className="font-semibold">98%</span>
+                    <span className="font-semibold">{analyticsStats.highestScore}%</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span>Improvement Trend</span>
-                    <span className="font-semibold text-awareness">+12%</span>
+                    <span className={`font-semibold ${analyticsStats.improvementTrend >= 0 ? 'text-awareness' : 'text-destructive'}`}>
+                      {analyticsStats.improvementTrend >= 0 ? '+' : ''}{analyticsStats.improvementTrend}%
+                    </span>
                   </div>
                 </div>
               </Card>

@@ -1825,6 +1825,10 @@ export type Database = {
       cleanup_old_presence: { Args: never; Returns: undefined }
       cleanup_old_rate_limits: { Args: never; Returns: undefined }
       cleanup_old_security_logs: { Args: never; Returns: undefined }
+      create_profile_for_user: {
+        Args: { _display_name: string; _user_id: string }
+        Returns: undefined
+      }
       get_average_rating: { Args: never; Returns: number }
       get_founding33_spots_remaining: { Args: never; Returns: number }
       get_next_founding33_seat: { Args: never; Returns: number }
