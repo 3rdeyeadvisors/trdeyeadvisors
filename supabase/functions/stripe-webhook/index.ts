@@ -232,6 +232,98 @@ serve(async (req) => {
 
       let session = event.data.object as Stripe.Checkout.Session;
       
+      // ============ FOUNDING 33 PAYMENT HANDLING ============
+      if (session.metadata?.purchase_type === "founding_33") {
+        logStep("Processing Founding 33 purchase", { sessionId: session.id, userId: session.metadata.user_id });
+        
+        try {
+          // Retrieve full session with customer details
+          session = await stripe.checkout.sessions.retrieve(session.id, {
+            expand: ['customer', 'payment_intent']
+          });
+
+          const userId = session.metadata?.user_id;
+          if (!userId) {
+            logStep("ERROR: No user_id in Founding 33 session metadata");
+            return;
+          }
+
+          // Get next seat number atomically
+          const { data: seatNumber, error: seatError } = await supabaseClient.rpc('get_next_founding33_seat');
+          
+          if (seatError) {
+            logStep("ERROR getting seat number", { error: seatError.message });
+            throw seatError;
+          }
+
+          logStep("Assigned seat number", { seatNumber });
+
+          // Update purchase record to completed
+          const { error: updateError } = await supabaseClient
+            .from('founding33_purchases')
+            .update({
+              status: 'completed',
+              seat_number: seatNumber,
+              stripe_payment_intent_id: typeof session.payment_intent === 'string' 
+                ? session.payment_intent 
+                : session.payment_intent?.id,
+              purchased_at: new Date().toISOString(),
+              customer_name: session.customer_details?.name || null,
+            })
+            .eq('stripe_session_id', session.id);
+
+          if (updateError) {
+            logStep("ERROR updating purchase record", { error: updateError.message });
+          } else {
+            logStep("Purchase record updated to completed");
+          }
+
+          // Grant lifetime access via grandfathered_emails
+          const customerEmail = session.customer_email || session.customer_details?.email;
+          if (customerEmail) {
+            const { error: grandfatherError } = await supabaseClient
+              .from('grandfathered_emails')
+              .upsert({
+                email: customerEmail.toLowerCase(),
+                access_type: 'founding_33',
+                claimed_by: userId,
+                claimed_at: new Date().toISOString(),
+              }, { onConflict: 'email' });
+
+            if (grandfatherError) {
+              logStep("ERROR granting lifetime access", { error: grandfatherError.message });
+            } else {
+              logStep("Lifetime access granted via grandfathered_emails");
+            }
+          }
+
+          // Send confirmation email
+          try {
+            await supabaseClient.functions.invoke('send-founding33-confirmation', {
+              body: {
+                customer_email: customerEmail,
+                customer_name: session.customer_details?.name,
+                seat_number: seatNumber,
+                order_id: session.id,
+                user_id: userId,
+              },
+            });
+            logStep("Confirmation email triggered");
+          } catch (emailError) {
+            logStep("ERROR sending confirmation email", { error: emailError.message });
+          }
+
+          logStep("Founding 33 purchase completed successfully", { seatNumber, userId });
+          return;
+        } catch (founding33Error) {
+          logStep("ERROR processing Founding 33 purchase", { error: founding33Error.message });
+          return;
+        }
+      }
+      // ============ END FOUNDING 33 HANDLING ============
+
+      let session = event.data.object as Stripe.Checkout.Session;
+      
       // Retrieve full session with line items and shipping details
       session = await stripe.checkout.sessions.retrieve(session.id, {
         expand: ['line_items', 'line_items.data.price.product', 'customer', 'shipping_details']

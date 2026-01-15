@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { CheckCircle2, Crown, Loader2, Flame } from 'lucide-react';
+import { CheckCircle2, Crown, Loader2, Flame, Lock } from 'lucide-react';
 import AnimatedSection from './AnimatedSection';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { supabase } from '@/integrations/supabase/client';
@@ -12,28 +12,89 @@ interface Founding33SectionProps {
   claimedSpots?: number;
 }
 
-const Founding33Section = ({ totalSpots = 33, claimedSpots = 13 }: Founding33SectionProps) => {
+interface SpotsData {
+  total: number;
+  claimed: number;
+  remaining: number;
+}
+
+const Founding33Section = ({ totalSpots = 33, claimedSpots: initialClaimed = 0 }: Founding33SectionProps) => {
   const { user, session } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [isLoading, setIsLoading] = useState(false);
+  const [spotsData, setSpotsData] = useState<SpotsData>({
+    total: totalSpots,
+    claimed: initialClaimed,
+    remaining: totalSpots - initialClaimed,
+  });
 
-  const spotsRemaining = totalSpots - claimedSpots;
-  const percentageClaimed = (claimedSpots / totalSpots) * 100;
+  // Fetch dynamic spots data on mount
+  useEffect(() => {
+    const fetchSpots = async () => {
+      try {
+        const { data, error } = await supabase.functions.invoke('get-founding33-spots');
+        if (error) throw error;
+        if (data) {
+          setSpotsData({
+            total: data.total || 33,
+            claimed: data.claimed || 0,
+            remaining: data.remaining || 33,
+          });
+        }
+      } catch (err) {
+        console.error('Error fetching spots:', err);
+        // Keep default values on error
+      }
+    };
+    fetchSpots();
+  }, []);
+
+  // Handle success/cancel query params
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const founding33Status = params.get('founding33');
+    
+    if (founding33Status === 'success') {
+      toast.success('🎉 Welcome to the Founding 33! Check your email for confirmation.', {
+        duration: 8000,
+      });
+      // Clear the query param
+      navigate('/', { replace: true });
+    } else if (founding33Status === 'canceled') {
+      toast.info('Checkout was canceled. Your spot is still available!', {
+        duration: 5000,
+      });
+      navigate('/', { replace: true });
+    }
+  }, [location.search, navigate]);
+
+  const spotsRemaining = spotsData.remaining;
+  const percentageClaimed = (spotsData.claimed / spotsData.total) * 100;
+  const isSoldOut = spotsRemaining <= 0;
 
   const handleSecureSeat = async () => {
     if (!user || !session) {
-      navigate('/auth?redirect=/founding-33');
+      navigate('/auth?redirect=/?founding33=checkout');
       return;
     }
 
     setIsLoading(true);
     try {
-      // TODO: Implement Stripe checkout for $2000 one-time payment
-      toast.info('Founding 33 checkout coming soon!');
+      const { data, error } = await supabase.functions.invoke('create-founding33-checkout');
+      
+      if (error) {
+        throw new Error(error.message || 'Failed to create checkout session');
+      }
+      
+      if (data?.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error('No checkout URL returned');
+      }
     } catch (err) {
       console.error('Checkout error:', err);
       toast.error(err instanceof Error ? err.message : 'Failed to start checkout');
-    } finally {
       setIsLoading(false);
     }
   };
@@ -108,7 +169,10 @@ const Founding33Section = ({ totalSpots = 33, claimedSpots = 13 }: Founding33Sec
               <div className="flex items-center justify-center gap-2 mb-3">
                 <Flame className="w-5 h-5 text-amber-400 animate-pulse" />
                 <span className="text-lg md:text-xl font-consciousness font-semibold text-foreground">
-                  Only {spotsRemaining} of {totalSpots} spots remaining
+                  {isSoldOut 
+                    ? 'All 33 founding spots have been claimed!' 
+                    : `Only ${spotsRemaining} of ${spotsData.total} spots remaining`
+                  }
                 </span>
               </div>
               
@@ -120,29 +184,40 @@ const Founding33Section = ({ totalSpots = 33, claimedSpots = 13 }: Founding33Sec
                 />
               </div>
               <p className="text-xs text-muted-foreground mt-2 text-center font-consciousness">
-                {claimedSpots} founding members have already claimed their spot
+                {spotsData.claimed} founding members have already claimed their spot
               </p>
             </div>
 
             {/* CTA Button */}
-            <Button 
-              size="lg"
-              className="w-full py-7 text-lg font-consciousness font-semibold bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black border-0 shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 transition-all duration-300"
-              onClick={handleSecureSeat}
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                  Processing...
-                </>
-              ) : (
-                <>
-                  <Crown className="w-5 h-5 mr-2" />
-                  Secure Your Founding Seat!
-                </>
-              )}
-            </Button>
+            {isSoldOut ? (
+              <Button 
+                size="lg"
+                className="w-full py-7 text-lg font-consciousness font-semibold bg-muted text-muted-foreground border-0 cursor-not-allowed"
+                disabled
+              >
+                <Lock className="w-5 h-5 mr-2" />
+                All 33 Spots Claimed
+              </Button>
+            ) : (
+              <Button 
+                size="lg"
+                className="w-full py-7 text-lg font-consciousness font-semibold bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black border-0 shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 transition-all duration-300"
+                onClick={handleSecureSeat}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    <Crown className="w-5 h-5 mr-2" />
+                    Secure Your Founding Seat!
+                  </>
+                )}
+              </Button>
+            )}
           </div>
         </AnimatedSection>
 
