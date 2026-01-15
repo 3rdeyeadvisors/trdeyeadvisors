@@ -156,3 +156,9 @@ verify_jwt = false
 
 [functions.send-founding33-confirmation]
 verify_jwt = false
+
+[functions.seed-bot-users]
+verify_jwt = false
+
+[functions.simulate-bot-activity]
+verify_jwt = false
