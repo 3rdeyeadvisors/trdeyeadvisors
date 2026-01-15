@@ -4,16 +4,21 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Users, Copy, Check, Gift, Share2, FileText, Shield } from "lucide-react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Users, Copy, Check, Gift, Share2, FileText, Shield, ChevronDown, DollarSign, UserCheck } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { useReferralTerms } from "@/hooks/useReferralTerms";
 import { ReferralTermsModal } from "@/components/referral/ReferralTermsModal";
+import { ReferredUsersList } from "./ReferredUsersList";
 
 interface ReferralStats {
   totalReferrals: number;
   bonusEntries: number;
+  convertedReferrals: number;
+  pendingCommissions: number;
+  paidCommissions: number;
 }
 
 interface ActiveRaffle {
@@ -26,10 +31,17 @@ export const ReferralCard = () => {
   const { user } = useAuth();
   const { hasAcceptedTerms, loading: termsLoading, refreshTermsStatus, acceptance } = useReferralTerms();
   const [copied, setCopied] = useState(false);
-  const [stats, setStats] = useState<ReferralStats>({ totalReferrals: 0, bonusEntries: 0 });
+  const [stats, setStats] = useState<ReferralStats>({ 
+    totalReferrals: 0, 
+    bonusEntries: 0,
+    convertedReferrals: 0,
+    pendingCommissions: 0,
+    paidCommissions: 0
+  });
   const [loading, setLoading] = useState(true);
   const [activeRaffle, setActiveRaffle] = useState<ActiveRaffle | null>(null);
   const [showTermsModal, setShowTermsModal] = useState(false);
+  const [showReferrals, setShowReferrals] = useState(false);
 
   const referralLink = user ? `${window.location.origin}/auth?ref=${user.id}&tab=signup` : "";
 
@@ -70,10 +82,23 @@ export const ReferralCard = () => {
 
       if (error) throw error;
 
+      // Get commission stats (converted referrals = actual paying customers)
+      const { data: commissions } = await supabase
+        .from('commissions')
+        .select('commission_amount_cents, status')
+        .eq('referrer_id', user.id);
+
       const totalReferrals = referrals?.length || 0;
       const bonusEntries = referrals?.filter(r => r.bonus_awarded).length || 0;
+      const convertedReferrals = commissions?.length || 0;
+      const pendingCommissions = commissions
+        ?.filter(c => c.status === 'pending')
+        .reduce((sum, c) => sum + c.commission_amount_cents, 0) || 0;
+      const paidCommissions = commissions
+        ?.filter(c => c.status === 'paid')
+        .reduce((sum, c) => sum + c.commission_amount_cents, 0) || 0;
 
-      setStats({ totalReferrals, bonusEntries });
+      setStats({ totalReferrals, bonusEntries, convertedReferrals, pendingCommissions, paidCommissions });
     } catch (error) {
       console.error('Error loading referral stats:', error);
     } finally {
@@ -192,28 +217,27 @@ export const ReferralCard = () => {
               </div>
             </div>
             
-            {!loading && stats.totalReferrals > 0 && (
-              <div className="hidden sm:flex items-center gap-2">
-                <Badge variant="secondary" className="flex items-center gap-1">
-                  <Users className="w-3 h-3" />
-                  {stats.totalReferrals} referral{stats.totalReferrals !== 1 ? 's' : ''}
-                </Badge>
-                {stats.bonusEntries > 0 && (
-                  <Badge className="bg-accent text-accent-foreground">
-                    +{stats.bonusEntries} bonus entries
-                  </Badge>
-                )}
-              </div>
-            )}
           </div>
 
-          {/* Mobile stats */}
+          {/* Stats badges */}
           {!loading && stats.totalReferrals > 0 && (
-            <div className="flex sm:hidden items-center gap-2 flex-wrap">
+            <div className="flex flex-wrap items-center gap-2">
               <Badge variant="secondary" className="flex items-center gap-1">
                 <Users className="w-3 h-3" />
-                {stats.totalReferrals} referral{stats.totalReferrals !== 1 ? 's' : ''}
+                {stats.totalReferrals} Signup{stats.totalReferrals !== 1 ? 's' : ''}
               </Badge>
+              {stats.convertedReferrals > 0 && (
+                <Badge className="bg-awareness/20 text-awareness border-awareness/30 flex items-center gap-1">
+                  <UserCheck className="w-3 h-3" />
+                  {stats.convertedReferrals} Converted
+                </Badge>
+              )}
+              {(stats.pendingCommissions > 0 || stats.paidCommissions > 0) && (
+                <Badge className="bg-primary/20 text-primary border-primary/30 flex items-center gap-1">
+                  <DollarSign className="w-3 h-3" />
+                  ${((stats.pendingCommissions + stats.paidCommissions) / 100).toFixed(2)} Earned
+                </Badge>
+              )}
               {stats.bonusEntries > 0 && (
                 <Badge className="bg-accent text-accent-foreground">
                   +{stats.bonusEntries} bonus entries
@@ -253,6 +277,21 @@ export const ReferralCard = () => {
               </Button>
             </div>
           </div>
+
+          {/* Expandable Referrals List */}
+          {stats.totalReferrals > 0 && (
+            <Collapsible open={showReferrals} onOpenChange={setShowReferrals}>
+              <CollapsibleTrigger asChild>
+                <Button variant="ghost" className="w-full justify-between text-sm text-muted-foreground hover:text-foreground">
+                  <span>View Your Referrals ({stats.totalReferrals})</span>
+                  <ChevronDown className={`w-4 h-4 transition-transform ${showReferrals ? 'rotate-180' : ''}`} />
+                </Button>
+              </CollapsibleTrigger>
+              <CollapsibleContent className="pt-2 border-t border-border/50 mt-2">
+                <ReferredUsersList />
+              </CollapsibleContent>
+            </Collapsible>
+          )}
 
           {/* Terms accepted indicator */}
           {acceptance && (
