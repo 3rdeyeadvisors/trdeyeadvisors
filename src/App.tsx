@@ -139,6 +139,7 @@ const AnimatedRoutes = () => {
         </ProtectedRoute>
       } />
       <Route path="/profile" element={<PageTransition><Profile /></PageTransition>} />
+      <Route path="/profile/:userId" element={<PageTransition><Profile /></PageTransition>} />
       <Route path="/privacy" element={<PageTransition><PrivacyPolicy /></PageTransition>} />
       <Route path="/terms" element={<PageTransition><TermsOfService /></PageTransition>} />
       <Route path="/social-banner" element={<PageTransition><SocialBanner /></PageTransition>} />

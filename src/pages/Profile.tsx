@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/components/auth/AuthProvider";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -27,7 +27,8 @@ import {
   Settings,
   Camera,
   Upload,
-  Loader2
+  Loader2,
+  ArrowLeft
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -52,8 +53,13 @@ interface UserStats {
 
 const Profile = () => {
   const { user, loading } = useAuth();
+  const { userId: viewUserId } = useParams<{ userId?: string }>();
   const navigate = useNavigate();
   const { toast } = useToast();
+  
+  // Determine if viewing own profile or someone else's
+  const isOwnProfile = !viewUserId || viewUserId === user?.id;
+  const targetUserId = viewUserId || user?.id;
   
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [userStats, setUserStats] = useState<UserStats>({
@@ -75,31 +81,34 @@ const Profile = () => {
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   
-  const { isFoundingMember } = useSingleFoundingMemberStatus(user?.id);
+  const { isFoundingMember } = useSingleFoundingMemberStatus(targetUserId);
 
-  // Redirect if not authenticated
+  // Redirect if not authenticated and viewing own profile
   useEffect(() => {
-    if (!loading && !user) {
+    if (!loading && !user && isOwnProfile) {
       navigate("/auth");
     }
-  }, [user, loading, navigate]);
+  }, [user, loading, navigate, isOwnProfile]);
 
   // Load user profile and stats
   useEffect(() => {
-    if (user) {
+    if (targetUserId) {
       loadProfile();
-      loadUserStats();
+      // Only load stats for own profile
+      if (isOwnProfile && user) {
+        loadUserStats();
+      }
     }
-  }, [user]);
+  }, [targetUserId, user, isOwnProfile]);
 
   const loadProfile = async () => {
-    if (!user) return;
+    if (!targetUserId) return;
 
     try {
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
-        .eq('user_id', user.id)
+        .eq('user_id', targetUserId)
         .single();
 
       if (error && error.code !== 'PGRST116') { // PGRST116 is "not found"
@@ -446,8 +455,26 @@ const Profile = () => {
     );
   }
 
-  if (!user) {
+  // For viewing own profile, require authentication
+  if (isOwnProfile && !user) {
     return null;
+  }
+
+  // For viewing other profiles, allow even if not logged in but profile must exist
+  if (!isOwnProfile && !profile) {
+    return (
+      <div className="min-h-screen flex items-center justify-center py-20">
+        <div className="text-center">
+          <User className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
+          <h2 className="text-xl font-semibold mb-2">Profile Not Found</h2>
+          <p className="text-muted-foreground mb-4">This user doesn't have a public profile.</p>
+          <Button onClick={() => navigate(-1)}>
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Go Back
+          </Button>
+        </div>
+      </div>
+    );
   }
 
   const achievements = getAchievements();
@@ -455,6 +482,18 @@ const Profile = () => {
   return (
     <div className="min-h-screen py-20 w-full overflow-x-hidden">
       <div className="container mx-auto px-4 max-w-4xl w-full">
+        {/* Back button for viewing other profiles */}
+        {!isOwnProfile && (
+          <Button 
+            variant="ghost" 
+            onClick={() => navigate(-1)} 
+            className="mb-4"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back
+          </Button>
+        )}
+
         {/* Profile Header */}
         <Card className="mb-8">
           <CardContent className="p-8">
@@ -464,37 +503,41 @@ const Profile = () => {
                 <Avatar className="w-32 h-32">
                   <AvatarImage src={profile?.avatar_url || ""} />
                   <AvatarFallback className="bg-primary/10 text-primary text-4xl font-consciousness">
-                    {(profile?.display_name || user.email)?.charAt(0).toUpperCase()}
+                    {(profile?.display_name || "U").charAt(0).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
-                  onChange={handleAvatarUpload}
-                  className="hidden"
-                />
-                <Button
-                  size="icon"
-                  variant="secondary"
-                  className="absolute -bottom-2 -right-2 rounded-full shadow-lg"
-                  onClick={() => fileInputRef.current?.click()}
-                  disabled={uploading}
-                  title="Upload new avatar"
-                >
-                  {uploading ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <Camera className="w-4 h-4" />
-                  )}
-                </Button>
+                {isOwnProfile && (
+                  <>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
+                      onChange={handleAvatarUpload}
+                      className="hidden"
+                    />
+                    <Button
+                      size="icon"
+                      variant="secondary"
+                      className="absolute -bottom-2 -right-2 rounded-full shadow-lg"
+                      onClick={() => fileInputRef.current?.click()}
+                      disabled={uploading}
+                      title="Upload new avatar"
+                    >
+                      {uploading ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Camera className="w-4 h-4" />
+                      )}
+                    </Button>
+                  </>
+                )}
               </div>
 
               {/* Profile Info */}
               <div className="flex-1 space-y-4 text-center md:text-left">
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                   <div className="flex-1">
-                    {isEditing ? (
+                    {isEditing && isOwnProfile ? (
                       <div className="space-y-4">
                         <div>
                           <Label htmlFor="display_name">Display Name</Label>
@@ -528,168 +571,180 @@ const Profile = () => {
                     ) : (
                       <>
                         <h1 className="text-3xl font-consciousness font-bold text-foreground mb-2 flex items-center gap-2 justify-center md:justify-start">
-                          {profile?.display_name || user.email?.split('@')[0] || 'User'}
+                          {profile?.display_name || (isOwnProfile ? user?.email?.split('@')[0] : 'User')}
                           {isFoundingMember && <FoundingMemberBadge className="w-6 h-6" />}
                         </h1>
-                        <div className="flex items-center justify-center md:justify-start gap-2 text-muted-foreground mb-4">
-                          <Mail className="w-4 h-4" />
-                          <span>{user.email}</span>
-                        </div>
+                        {isOwnProfile && user && (
+                          <div className="flex items-center justify-center md:justify-start gap-2 text-muted-foreground mb-4">
+                            <Mail className="w-4 h-4" />
+                            <span>{user.email}</span>
+                          </div>
+                        )}
                         {profile?.bio && (
                           <p className="text-muted-foreground mb-4">{profile.bio}</p>
                         )}
-                        <div className="flex items-center justify-center md:justify-start gap-2 text-sm text-muted-foreground">
-                          <Calendar className="w-4 h-4" />
-                          <span>Joined {new Date(user.created_at).toLocaleDateString()}</span>
-                        </div>
+                        {isOwnProfile && user && (
+                          <div className="flex items-center justify-center md:justify-start gap-2 text-sm text-muted-foreground">
+                            <Calendar className="w-4 h-4" />
+                            <span>Joined {new Date(user.created_at).toLocaleDateString()}</span>
+                          </div>
+                        )}
                       </>
                     )}
                   </div>
 
-                  {/* Edit Controls */}
-                  <div className="flex gap-2 justify-center sm:self-start">
-                    {isEditing ? (
-                      <>
-                        <Button
-                          onClick={handleSaveProfile}
-                          disabled={saving}
-                          size="sm"
-                        >
-                          <Save className="w-4 h-4 sm:mr-2" />
-                          <span className="hidden sm:inline">{saving ? "Saving..." : "Save"}</span>
-                        </Button>
+                  {/* Edit Controls - only show for own profile */}
+                  {isOwnProfile && (
+                    <div className="flex gap-2 justify-center sm:self-start">
+                      {isEditing ? (
+                        <>
+                          <Button
+                            onClick={handleSaveProfile}
+                            disabled={saving}
+                            size="sm"
+                          >
+                            <Save className="w-4 h-4 sm:mr-2" />
+                            <span className="hidden sm:inline">{saving ? "Saving..." : "Save"}</span>
+                          </Button>
+                          <Button
+                            variant="outline"
+                            onClick={() => {
+                              setIsEditing(false);
+                              setEditForm({
+                                display_name: profile?.display_name || "",
+                                bio: profile?.bio || "",
+                                avatar_url: profile?.avatar_url || ""
+                              });
+                            }}
+                            size="sm"
+                          >
+                            <X className="w-4 h-4 sm:mr-2" />
+                            <span className="hidden sm:inline">Cancel</span>
+                          </Button>
+                        </>
+                      ) : (
                         <Button
                           variant="outline"
-                          onClick={() => {
-                            setIsEditing(false);
-                            setEditForm({
-                              display_name: profile?.display_name || "",
-                              bio: profile?.bio || "",
-                              avatar_url: profile?.avatar_url || ""
-                            });
-                          }}
+                          onClick={() => setIsEditing(true)}
                           size="sm"
                         >
-                          <X className="w-4 h-4 sm:mr-2" />
-                          <span className="hidden sm:inline">Cancel</span>
+                          <Edit className="w-4 h-4 sm:mr-2" />
+                          <span className="hidden sm:inline">Edit Profile</span>
                         </Button>
-                      </>
-                    ) : (
-                      <Button
-                        variant="outline"
-                        onClick={() => setIsEditing(true)}
-                        size="sm"
-                      >
-                        <Edit className="w-4 h-4 sm:mr-2" />
-                        <span className="hidden sm:inline">Edit Profile</span>
-                      </Button>
-                    )}
-                  </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Stats Overview */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <Card className="p-4 text-center">
-            <BookOpen className="w-8 h-8 text-primary mx-auto mb-2" />
-            <p className="text-2xl font-bold text-foreground">{userStats.coursesEnrolled}</p>
-            <p className="text-sm text-muted-foreground">Courses Enrolled</p>
-          </Card>
-          
-          <Card className="p-4 text-center">
-            <Trophy className="w-8 h-8 text-awareness mx-auto mb-2" />
-            <p className="text-2xl font-bold text-foreground">{userStats.coursesCompleted}</p>
-            <p className="text-sm text-muted-foreground">Completed</p>
-          </Card>
-          
-          <Card className="p-4 text-center">
-            <Brain className="w-8 h-8 text-accent mx-auto mb-2" />
-            <p className="text-2xl font-bold text-foreground">{userStats.quizzesPassed}</p>
-            <p className="text-sm text-muted-foreground">Quizzes Passed</p>
-          </Card>
-          
-          <Card className="p-4 text-center">
-            <TrendingUp className="w-8 h-8 text-green-600 mx-auto mb-2" />
-            <p className="text-2xl font-bold text-foreground">{userStats.averageScore}%</p>
-            <p className="text-sm text-muted-foreground">Avg Score</p>
-          </Card>
-        </div>
+        {/* Stats Overview - only show for own profile */}
+        {isOwnProfile && (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <Card className="p-4 text-center">
+              <BookOpen className="w-8 h-8 text-primary mx-auto mb-2" />
+              <p className="text-2xl font-bold text-foreground">{userStats.coursesEnrolled}</p>
+              <p className="text-sm text-muted-foreground">Courses Enrolled</p>
+            </Card>
+            
+            <Card className="p-4 text-center">
+              <Trophy className="w-8 h-8 text-awareness mx-auto mb-2" />
+              <p className="text-2xl font-bold text-foreground">{userStats.coursesCompleted}</p>
+              <p className="text-sm text-muted-foreground">Completed</p>
+            </Card>
+            
+            <Card className="p-4 text-center">
+              <Brain className="w-8 h-8 text-accent mx-auto mb-2" />
+              <p className="text-2xl font-bold text-foreground">{userStats.quizzesPassed}</p>
+              <p className="text-sm text-muted-foreground">Quizzes Passed</p>
+            </Card>
+            
+            <Card className="p-4 text-center">
+              <TrendingUp className="w-8 h-8 text-green-600 mx-auto mb-2" />
+              <p className="text-2xl font-bold text-foreground">{userStats.averageScore}%</p>
+              <p className="text-sm text-muted-foreground">Avg Score</p>
+            </Card>
+          </div>
+        )}
 
-        {/* Achievements */}
-        <Card className="mb-8">
-          <CardHeader className="text-center">
-            <CardTitle className="flex items-center justify-center gap-2">
-              <Trophy className="w-5 h-5" />
-              Achievements
-            </CardTitle>
-            <CardDescription>
-              Your learning milestones and accomplishments
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {achievements.length > 0 ? (
-              <div className="grid md:grid-cols-2 gap-4">
-                {achievements.map((achievement, index) => (
-                  <div key={index} className="flex items-center gap-3 p-4 bg-muted/30 rounded-lg">
-                    <achievement.icon className={`w-8 h-8 ${achievement.color}`} />
-                    <div>
-                      <h4 className="font-semibold text-foreground">{achievement.title}</h4>
-                      <p className="text-sm text-muted-foreground">{achievement.description}</p>
+        {/* Achievements - only show for own profile */}
+        {isOwnProfile && (
+          <Card className="mb-8">
+            <CardHeader className="text-center">
+              <CardTitle className="flex items-center justify-center gap-2">
+                <Trophy className="w-5 h-5" />
+                Achievements
+              </CardTitle>
+              <CardDescription>
+                Your learning milestones and accomplishments
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {achievements.length > 0 ? (
+                <div className="grid md:grid-cols-2 gap-4">
+                  {achievements.map((achievement, index) => (
+                    <div key={index} className="flex items-center gap-3 p-4 bg-muted/30 rounded-lg">
+                      <achievement.icon className={`w-8 h-8 ${achievement.color}`} />
+                      <div>
+                        <h4 className="font-semibold text-foreground">{achievement.title}</h4>
+                        <p className="text-sm text-muted-foreground">{achievement.description}</p>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-8">
-                <Trophy className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                <p className="text-muted-foreground">No achievements yet. Start completing courses to earn your first badge!</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <Trophy className="w-12 h-12 text-muted-foreground/50 mx-auto mb-4" />
+                  <p className="text-muted-foreground">Complete courses and quizzes to unlock achievements!</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        )}
 
-        {/* Quick Actions */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Settings className="w-5 h-5" />
-              Quick Actions
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid md:grid-cols-3 gap-4">
-              <Button
-                variant="outline"
-                className="justify-start"
-                onClick={() => navigate("/dashboard")}
-              >
-                <User className="w-4 h-4 mr-2" />
-                Go to Dashboard
-              </Button>
-              
-              <Button
-                variant="outline"
-                className="justify-start"
-                onClick={() => navigate("/courses")}
-              >
-                <BookOpen className="w-4 h-4 mr-2" />
-                Browse Courses
-              </Button>
-              
-              <Button
-                variant="outline"
-                className="justify-start"
-                onClick={() => navigate("/tutorials")}
-              >
-                <Brain className="w-4 h-4 mr-2" />
-                Tutorials
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+        {/* Quick Actions - only show for own profile */}
+        {isOwnProfile && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Settings className="w-5 h-5" />
+                Quick Actions
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-3 gap-4">
+                <Button
+                  variant="outline"
+                  className="justify-start"
+                  onClick={() => navigate("/dashboard")}
+                >
+                  <User className="w-4 h-4 mr-2" />
+                  Go to Dashboard
+                </Button>
+                
+                <Button
+                  variant="outline"
+                  className="justify-start"
+                  onClick={() => navigate("/courses")}
+                >
+                  <BookOpen className="w-4 h-4 mr-2" />
+                  Browse Courses
+                </Button>
+                
+                <Button
+                  variant="outline"
+                  className="justify-start"
+                  onClick={() => navigate("/tutorials")}
+                >
+                  <Brain className="w-4 h-4 mr-2" />
+                  Tutorials
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   );
