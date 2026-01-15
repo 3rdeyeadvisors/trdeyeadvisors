@@ -7,10 +7,11 @@ import {
   FeaturesSection,
   AboutSection,
   PlatformFeaturesSection,
-  AwarenessEngineSection,
   VaultSection,
   PricingSection,
   CTASection,
+  WhoIsThisForSection,
+  InstitutionalSection,
 } from "@/components/landing";
 
 const Index = () => {
@@ -44,11 +45,12 @@ const Index = () => {
         <div className="relative z-10">
           <HeroSection />
           <FeaturesSection />
+          <WhoIsThisForSection />
+          <VaultSection />
           <AboutSection />
           <PlatformFeaturesSection />
-          <AwarenessEngineSection />
-          <VaultSection />
           <PricingSection />
+          <InstitutionalSection />
           <CTASection />
           
           {/* Newsletter */}

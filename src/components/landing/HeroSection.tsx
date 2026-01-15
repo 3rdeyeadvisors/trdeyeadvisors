@@ -36,26 +36,21 @@ const HeroSection = () => {
         </AnimatedSection>
 
         <AnimatedSection animation="fade-up" delay={100}>
-          <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-consciousness font-bold text-foreground mb-3 md:mb-4 leading-[1.1] tracking-tight">
-            Awaken Awareness.
-          </h1>
-        </AnimatedSection>
-
-        <AnimatedSection animation="fade-up" delay={200}>
-          <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-consciousness font-bold mb-4 md:mb-6 leading-[1.1] tracking-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-consciousness font-bold text-foreground mb-4 md:mb-6 leading-[1.15] tracking-tight max-w-4xl mx-auto">
+            Master DeFi Security and Decentralized Finance—
             <span className="bg-gradient-to-r from-primary via-primary to-accent bg-clip-text text-transparent">
-              Recode the System.
+              Without the Hype!
             </span>
           </h1>
         </AnimatedSection>
 
-        <AnimatedSection animation="fade-up" delay={300}>
+        <AnimatedSection animation="fade-up" delay={200}>
           <p className="text-lg md:text-xl lg:text-2xl text-muted-foreground font-consciousness mb-8 md:mb-10 max-w-2xl mx-auto leading-relaxed">
             Understand how decentralized systems really work—without hype, noise, or confusion.
           </p>
         </AnimatedSection>
 
-        <AnimatedSection animation="fade-up" delay={400}>
+        <AnimatedSection animation="fade-up" delay={300}>
           <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center items-center">
             <Link to="/courses">
               <Button 
@@ -84,7 +79,7 @@ const HeroSection = () => {
         </AnimatedSection>
 
         {/* Scroll indicator */}
-        <AnimatedSection animation="fade-up" delay={600}>
+        <AnimatedSection animation="fade-up" delay={400}>
           <button
             onClick={scrollToContent}
             className="absolute bottom-8 left-1/2 -translate-x-1/2 text-muted-foreground hover:text-primary transition-colors group"
