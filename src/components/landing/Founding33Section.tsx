@@ -104,6 +104,8 @@ const Founding33Section = ({ totalSpots = 33, claimedSpots: initialClaimed = 0 }
     'Every future course release included',
     'Full community channel access',
     'All vault tiers unlocked forever',
+    '70% referral commission (highest tier)',
+    '10 bonus raffle entries per raffle',
     'Founding member recognition',
     'Direct input on platform roadmap',
   ];

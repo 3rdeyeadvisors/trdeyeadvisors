@@ -58,11 +58,20 @@ serve(async (req) => {
           .eq('id', grandfatheredData.id);
       }
       
-      logStep("User is grandfathered", { email: user.email });
+      // Determine if this is a Founding 33 member (highest tier)
+      const isFounder = grandfatheredData.access_type === 'founding_33';
+      
+      logStep("User is grandfathered", { 
+        email: user.email, 
+        isFounder,
+        accessType: grandfatheredData.access_type 
+      });
+      
       return new Response(JSON.stringify({
         subscribed: true,
         isGrandfathered: true,
-        plan: 'grandfathered',
+        isFounder,
+        plan: isFounder ? 'founding_33' : 'grandfathered',
         subscriptionEnd: null
       }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
