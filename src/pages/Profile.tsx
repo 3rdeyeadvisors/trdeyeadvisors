@@ -10,6 +10,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
+import { useSingleFoundingMemberStatus } from "@/hooks/useFoundingMemberStatus";
+import { FoundingMemberBadge } from "@/components/community/FoundingMemberBadge";
 import { 
   User, 
   Mail, 
@@ -72,6 +74,8 @@ const Profile = () => {
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  const { isFoundingMember } = useSingleFoundingMemberStatus(user?.id);
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -523,8 +527,9 @@ const Profile = () => {
                       </div>
                     ) : (
                       <>
-                        <h1 className="text-3xl font-consciousness font-bold text-foreground mb-2">
+                        <h1 className="text-3xl font-consciousness font-bold text-foreground mb-2 flex items-center gap-2 justify-center md:justify-start">
                           {profile?.display_name || user.email?.split('@')[0] || 'User'}
+                          {isFoundingMember && <FoundingMemberBadge className="w-6 h-6" />}
                         </h1>
                         <div className="flex items-center justify-center md:justify-start gap-2 text-muted-foreground mb-4">
                           <Mail className="w-4 h-4" />
