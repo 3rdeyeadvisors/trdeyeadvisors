@@ -10,11 +10,7 @@ import { OverviewPanel } from "@/components/admin/OverviewPanel";
 import { OrdersManager } from "@/components/admin/OrdersManager";
 import { EmailCenter } from "@/components/admin/EmailCenter";
 import { UserManager } from "@/components/admin/UserManager";
-import { AnalyticsHub } from "@/components/admin/AnalyticsHub";
-import { AutomationPanel } from "@/components/admin/AutomationPanel";
 import { ProductManager } from "@/components/admin/ProductManager";
-import BroadcastTester from "@/components/admin/BroadcastTester";
-import { BroadcastAlertsLog } from "@/components/admin/BroadcastAlertsLog";
 import RaffleManager from "@/components/admin/RaffleManager";
 import EmailPreview from "@/components/admin/EmailPreview";
 import { TutorialCourseParticipation } from "@/components/admin/TutorialCourseParticipation";
@@ -87,16 +83,8 @@ const AdminDashboard = () => {
         return <EmailCenter />;
       case "email-preview":
         return <EmailPreview />;
-      case "broadcast":
-        return <BroadcastTester />;
-      case "broadcast-alerts":
-        return <BroadcastAlertsLog />;
       case "users":
         return <UserManager />;
-      case "analytics":
-        return <AnalyticsHub />;
-      case "automation":
-        return <AutomationPanel />;
       case "products":
         return <ProductManager />;
       case "participation":

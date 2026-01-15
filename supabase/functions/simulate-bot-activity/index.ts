@@ -50,64 +50,80 @@ serve(async (req) => {
     const currentMonth = new Date().toISOString().slice(0, 7); // YYYY-MM format
     console.log(`Running bot simulation for month: ${currentMonth}`);
 
-    // Get the top REAL user's points (excluding bots)
-    const { data: topRealUser, error: topUserError } = await supabaseAdmin
-      .from('user_points_monthly')
-      .select(`
-        user_id,
-        total_points,
-        profiles!inner(is_bot)
-      `)
-      .eq('month_year', currentMonth)
-      .eq('profiles.is_bot', false)
-      .order('total_points', { ascending: false })
-      .limit(1)
-      .single();
+    // Step 1: Get all bot profiles first (avoiding join issues)
+    const { data: botProfiles, error: profilesError } = await supabaseAdmin
+      .from('profiles')
+      .select('user_id, display_name')
+      .eq('is_bot', true);
 
-    if (topUserError && topUserError.code !== 'PGRST116') {
-      console.error('Error fetching top user:', topUserError);
-    }
-
-    const topRealPoints = topRealUser?.total_points || 100; // Default minimum if no real users
-    console.log(`Top real user has ${topRealPoints} points`);
-
-    // Get all bots with their configs
-    const { data: bots, error: botsError } = await supabaseAdmin
-      .from('bot_config')
-      .select(`
-        user_id,
-        personality_type,
-        max_point_percentage,
-        profiles!inner(display_name, is_bot)
-      `)
-      .eq('profiles.is_bot', true);
-
-    if (botsError) {
-      console.error('Error fetching bots:', botsError);
-      return new Response(JSON.stringify({ error: 'Failed to fetch bots' }), {
+    if (profilesError) {
+      console.error('Error fetching bot profiles:', profilesError);
+      return new Response(JSON.stringify({ error: 'Failed to fetch bot profiles' }), {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       });
     }
 
-    if (!bots || bots.length === 0) {
+    if (!botProfiles || botProfiles.length === 0) {
       return new Response(JSON.stringify({ message: 'No bots found. Run seed-bot-users first.' }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       });
     }
 
-    console.log(`Processing ${bots.length} bots...`);
+    const botUserIds = botProfiles.map(p => p.user_id);
+    console.log(`Found ${botProfiles.length} bot profiles`);
+
+    // Step 2: Get bot configs for these user_ids
+    const { data: botConfigs, error: configsError } = await supabaseAdmin
+      .from('bot_config')
+      .select('user_id, personality_type, max_point_percentage')
+      .in('user_id', botUserIds);
+
+    if (configsError) {
+      console.error('Error fetching bot configs:', configsError);
+      return new Response(JSON.stringify({ error: 'Failed to fetch bot configs' }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+
+    // Create a map of user_id to config
+    const configMap = new Map();
+    botConfigs?.forEach(config => {
+      configMap.set(config.user_id, config);
+    });
+
+    console.log(`Found ${botConfigs?.length || 0} bot configs`);
+
+    // Step 3: Get top real user points (excluding bots)
+    const { data: allMonthlyPoints } = await supabaseAdmin
+      .from('user_points_monthly')
+      .select('user_id, total_points')
+      .eq('month_year', currentMonth)
+      .order('total_points', { ascending: false });
+
+    // Filter out bots to find top real user
+    const topRealUser = allMonthlyPoints?.find(u => !botUserIds.includes(u.user_id));
+    const topRealPoints = topRealUser?.total_points || 100; // Default minimum if no real users
+    console.log(`Top real user has ${topRealPoints} points`);
+
+    // Step 4: Process each bot
     const results: { name: string; pointsAwarded: number; currentTotal: number }[] = [];
 
-    for (const bot of bots) {
-      const botName = bot.profiles?.display_name || 'Unknown Bot';
-      const maxPoints = Math.floor(topRealPoints * (bot.max_point_percentage / 100));
+    for (const profile of botProfiles) {
+      const botName = profile.display_name || 'Unknown Bot';
+      const config = configMap.get(profile.user_id);
+      
+      // Default config values if not found
+      const personalityType = config?.personality_type || 'steady';
+      const maxPointPercentage = config?.max_point_percentage || 60;
+      const maxPoints = Math.floor(topRealPoints * (maxPointPercentage / 100));
 
       // Get bot's current points for this month
       const { data: currentPoints } = await supabaseAdmin
         .from('user_points_monthly')
         .select('total_points')
-        .eq('user_id', bot.user_id)
+        .eq('user_id', profile.user_id)
         .eq('month_year', currentMonth)
         .single();
 
@@ -126,7 +142,7 @@ serve(async (req) => {
       let activityChance: number;
       let maxActionsPerRun: number;
       
-      switch (bot.personality_type) {
+      switch (personalityType) {
         case 'aggressive':
           activityChance = 0.9; // 90% chance to be active
           maxActionsPerRun = randomBetween(3, 5);
@@ -166,12 +182,12 @@ serve(async (req) => {
         }
 
         // Generate a unique action ID to prevent duplicates
-        const actionId = `bot-${bot.user_id}-${Date.now()}-${i}`;
+        const actionId = `bot-${profile.user_id}-${Date.now()}-${i}`;
 
         // Award points using the database function
         const { data: awardResult, error: awardError } = await supabaseAdmin
           .rpc('award_user_points', {
-            _user_id: bot.user_id,
+            _user_id: profile.user_id,
             _points: action.points,
             _action_type: action.type,
             _action_id: actionId,
