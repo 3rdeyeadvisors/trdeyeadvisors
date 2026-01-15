@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
-import { DollarSign, Users, BookOpen, Package, TrendingUp, TrendingDown, AlertCircle } from "lucide-react";
+import { DollarSign, Users, BookOpen, Package, TrendingUp, TrendingDown, AlertCircle, Bot, Play, Loader2 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { RemoveFromRaffleButton } from "./RemoveFromRaffleButton";
-
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 interface MetricCard {
   title: string;
   value: string | number;
@@ -18,12 +19,43 @@ export function OverviewPanel() {
   const [loading, setLoading] = useState(true);
   const [aiInsight, setAiInsight] = useState("");
   const [activeRaffleId, setActiveRaffleId] = useState<string | null>(null);
+  const [botSeeding, setBotSeeding] = useState(false);
+  const [botSimulating, setBotSimulating] = useState(false);
 
   useEffect(() => {
     loadMetrics();
     loadAIInsights();
     loadActiveRaffle();
   }, []);
+
+  const seedBots = async () => {
+    setBotSeeding(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('seed-bot-users');
+      if (error) throw error;
+      toast.success(data.message || 'Bots seeded successfully!');
+    } catch (error) {
+      console.error('Error seeding bots:', error);
+      toast.error('Failed to seed bots');
+    } finally {
+      setBotSeeding(false);
+    }
+  };
+
+  const simulateBotActivity = async () => {
+    setBotSimulating(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('simulate-bot-activity');
+      if (error) throw error;
+      const successCount = data.results?.filter((r: any) => r.pointsAwarded > 0).length || 0;
+      toast.success(`Bot simulation complete! ${successCount} bots earned points.`);
+    } catch (error) {
+      console.error('Error simulating bots:', error);
+      toast.error('Failed to simulate bot activity');
+    } finally {
+      setBotSimulating(false);
+    }
+  };
 
   const loadActiveRaffle = async () => {
     try {
@@ -196,6 +228,34 @@ export function OverviewPanel() {
 
   return (
     <div className="space-y-6">
+      {/* Bot Control Card */}
+      <Card className="bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20">
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Bot className="h-5 w-5" />
+            Bot Management
+          </CardTitle>
+          <CardDescription>Control leaderboard bots for social proof</CardDescription>
+        </CardHeader>
+        <CardContent className="flex gap-3">
+          <Button 
+            onClick={seedBots} 
+            disabled={botSeeding}
+            variant="outline"
+          >
+            {botSeeding ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Bot className="h-4 w-4 mr-2" />}
+            Seed Bots
+          </Button>
+          <Button 
+            onClick={simulateBotActivity} 
+            disabled={botSimulating}
+          >
+            {botSimulating ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Play className="h-4 w-4 mr-2" />}
+            Run Simulation
+          </Button>
+        </CardContent>
+      </Card>
+
       {/* Admin Quick Actions Card */}
       {activeRaffleId ? (
         <Card className="bg-gradient-to-r from-destructive/10 to-destructive/5 border-destructive/20">
