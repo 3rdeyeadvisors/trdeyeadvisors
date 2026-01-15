@@ -38,7 +38,7 @@ const AboutSection = () => {
               </h2>
               
               <p className="text-base md:text-lg text-foreground/90 font-consciousness leading-relaxed mb-3">
-                3EA teaches you to protect what you own in a system where <span className="text-primary font-semibold">no one else can touch it</span>. This isn't an investment course—it's a new way of thinking about money, freedom, and possibility.
+                3EA teaches you to protect what you own in a system where <span className="text-primary font-semibold">no one else can touch it</span>. This isn't an investment course. It's a new way of thinking about money, freedom, and possibility.
               </p>
               
               <p className="text-sm md:text-base text-muted-foreground font-consciousness leading-relaxed mb-6 md:mb-8">

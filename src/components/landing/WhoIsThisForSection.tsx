@@ -11,14 +11,14 @@ interface PersonaCard {
 const personas: PersonaCard[] = [
   {
     icon: <Shield className="w-8 h-8" />,
-    label: "The Safety-First Investor",
+    label: "The Safety First Individual",
     headline: "The Protective Guardian",
     body: "You have capital you want to move on-chain, but you're terrified of 'pressing the wrong button.' We provide the roadmap to secure your assets, vet protocols, and sleep soundly knowing your keys are safe.",
   },
   {
     icon: <Briefcase className="w-8 h-8" />,
     label: "The Career Strategist",
-    headline: "The Future-Proof Professional",
+    headline: "The Future Proof Professional",
     body: "Traditional finance is being rewritten in code. Whether you're an accountant, lawyer, or entrepreneur, we bridge the knowledge gap so you can lead the transition into the decentralized economy.",
   },
   {
