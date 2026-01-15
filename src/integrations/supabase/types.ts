@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      bot_config: {
+        Row: {
+          created_at: string
+          id: string
+          max_point_percentage: number
+          personality_type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          max_point_percentage: number
+          personality_type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          max_point_percentage?: number
+          personality_type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       broadcast_alerts: {
         Row: {
           alert_sent: boolean | null
@@ -953,6 +980,7 @@ export type Database = {
           created_at: string
           display_name: string | null
           id: string
+          is_bot: boolean
           payout_crypto_network: string | null
           payout_details: string | null
           payout_method: string | null
@@ -965,6 +993,7 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           id?: string
+          is_bot?: boolean
           payout_crypto_network?: string | null
           payout_details?: string | null
           payout_method?: string | null
@@ -977,6 +1006,7 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           id?: string
+          is_bot?: boolean
           payout_crypto_network?: string | null
           payout_details?: string | null
           payout_method?: string | null
