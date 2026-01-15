@@ -139,7 +139,7 @@ const Founding33Section = ({ totalSpots = 33, claimedSpots: initialClaimed = 0 }
 
         {/* Premium Card */}
         <AnimatedSection delay={150}>
-          <div className="relative p-6 md:p-8 lg:p-10 rounded-3xl border-2 border-amber-500/40 bg-gradient-to-b from-card via-card/90 to-card/80 backdrop-blur-sm shadow-2xl shadow-amber-500/10">
+          <div className="relative overflow-hidden p-6 md:p-8 lg:p-10 rounded-3xl border-2 border-amber-500/40 bg-gradient-to-b from-card via-card/90 to-card/80 backdrop-blur-sm shadow-2xl shadow-amber-500/10">
             {/* Corner accents */}
             <div className="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-amber-500/50 rounded-tl-3xl" />
             <div className="absolute top-0 right-0 w-16 h-16 border-t-2 border-r-2 border-amber-500/50 rounded-tr-3xl" />
