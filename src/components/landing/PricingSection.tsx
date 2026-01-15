@@ -104,7 +104,7 @@ const PricingSection = () => {
                       Processing...
                     </>
                   ) : (
-                    'Start Free Trial'
+                    'Start 14-Day Free Trial'
                   )}
                 </Button>
               </div>
@@ -167,7 +167,7 @@ const PricingSection = () => {
                       Processing...
                     </>
                   ) : (
-                    'Start Free Trial'
+                    'Start 14-Day Free Trial'
                   )}
                 </Button>
               </div>

@@ -12,3 +12,5 @@ export { default as AwarenessEngineSection } from './AwarenessEngineSection';
 export { default as VaultSection } from './VaultSection';
 export { default as PricingSection } from './PricingSection';
 export { default as CTASection } from './CTASection';
+export { default as WhoIsThisForSection } from './WhoIsThisForSection';
+export { default as InstitutionalSection } from './InstitutionalSection';
