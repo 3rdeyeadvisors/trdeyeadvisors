@@ -10,6 +10,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { usePoints } from "@/hooks/usePoints";
 import { 
   Clock, 
   CheckCircle, 
@@ -49,6 +50,7 @@ interface QuizComponentProps {
 export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComponentProps) => {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { awardPoints } = usePoints();
   
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<Record<string, any>>({});
@@ -228,6 +230,19 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
       });
 
       onComplete?.(passed, finalScore);
+      
+      // Award points for quiz completion
+      if (passed) {
+        try {
+          await awardPoints('quiz_passed', `${quiz.id}_${new Date().toISOString().slice(0, 7)}`);
+          // Award bonus for perfect score
+          if (finalScore === 100) {
+            await awardPoints('quiz_perfect', `${quiz.id}_perfect_${new Date().toISOString().slice(0, 7)}`);
+          }
+        } catch (e) {
+          console.log('Could not award quiz points');
+        }
+      }
       
       // Try to reload attempts (may not work for courseContent quizzes)
       try {

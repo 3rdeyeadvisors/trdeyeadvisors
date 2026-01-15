@@ -12,6 +12,7 @@ import PageTransition from "./components/PageTransition";
 import { AuthProvider } from "./components/auth/AuthProvider";
 import { ProgressProvider } from "./components/progress/ProgressProvider";
 import { SubscriptionProvider } from "./hooks/useSubscription";
+import { PointsProvider } from "./components/points/PointsProvider";
 // PWA components removed - app runs live without caching interruptions
 import { ThirdwebProvider } from "thirdweb/react";
 import Index from "./pages/Index";
@@ -214,14 +215,16 @@ const App = () => {
               <AuthProvider>
                 <SubscriptionProvider>
                   <ProgressProvider>
-                    <SecurityHeaders />
-                    <Toaster />
-                    <Sonner />
-                    <BrowserRouter>
-                      <Layout>
-                        <AnimatedRoutes />
-                      </Layout>
-                    </BrowserRouter>
+                    <PointsProvider>
+                      <SecurityHeaders />
+                      <Toaster />
+                      <Sonner />
+                      <BrowserRouter>
+                        <Layout>
+                          <AnimatedRoutes />
+                        </Layout>
+                      </BrowserRouter>
+                    </PointsProvider>
                   </ProgressProvider>
                 </SubscriptionProvider>
               </AuthProvider>
