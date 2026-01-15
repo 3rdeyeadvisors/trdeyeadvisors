@@ -3,11 +3,7 @@ import {
   ShoppingCart, 
   Mail, 
   Users, 
-  BarChart3, 
-  Zap, 
   Package,
-  Radio,
-  AlertTriangle,
   Gift,
   Eye,
   Activity,
@@ -34,11 +30,7 @@ const menuItems = [
   { id: "participation", title: "Tutorial/Course Participation", icon: Activity },
   { id: "email", title: "Email Center", icon: Mail },
   { id: "email-preview", title: "Email Preview", icon: Eye },
-  { id: "broadcast", title: "Broadcast Tester", icon: Radio },
-  { id: "broadcast-alerts", title: "Broadcast Alerts", icon: AlertTriangle },
   { id: "users", title: "User Management", icon: Users },
-  { id: "analytics", title: "Analytics & KPIs", icon: BarChart3 },
-  { id: "automation", title: "Automation", icon: Zap },
   { id: "products", title: "Products & Courses", icon: Package },
 ];
 
