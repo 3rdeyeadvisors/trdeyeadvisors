@@ -120,7 +120,7 @@ const Footer = () => {
             <div className="flex items-center gap-2">
               <span className="font-consciousness font-bold text-foreground">3rdeyeadvisors</span>
               <span className="text-xs text-muted-foreground font-consciousness">
-                © {currentYear}
+                © {currentYear} All Rights Reserved
               </span>
             </div>
             <p className="text-xs text-muted-foreground/70 font-consciousness text-center md:text-right max-w-md">
