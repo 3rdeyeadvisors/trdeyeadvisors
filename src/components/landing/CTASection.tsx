@@ -4,10 +4,10 @@ import { BookOpen, ArrowRight, Zap, Check } from 'lucide-react';
 import AnimatedSection from './AnimatedSection';
 
 const benefits = [
-  "Beat inflation — Stop watching your money lose value",
-  "True ownership — Assets only YOU control",
-  "No borders — Access financial tools from anywhere",
-  "No permission needed — No credit checks, no gatekeepers"
+  "Beat inflation. Stop watching your money lose value",
+  "True ownership. Assets only you control",
+  "No borders. Access financial tools from anywhere",
+  "No permission needed. No credit checks, no gatekeepers"
 ];
 
 const CTASection = () => {

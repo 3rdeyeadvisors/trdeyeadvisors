@@ -37,7 +37,7 @@ const HeroSection = () => {
 
         <AnimatedSection animation="fade-up" delay={100}>
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-consciousness font-bold text-foreground mb-4 md:mb-6 leading-[1.15] tracking-tight max-w-4xl mx-auto">
-            Master DeFi Security and Decentralized Finance—
+            Master DeFi Security and Decentralized Finance{' '}
             <span className="bg-gradient-to-r from-primary via-primary to-accent bg-clip-text text-transparent">
               Without the Hype!
             </span>
@@ -46,7 +46,7 @@ const HeroSection = () => {
 
         <AnimatedSection animation="fade-up" delay={200}>
           <p className="text-lg md:text-xl lg:text-2xl text-muted-foreground font-consciousness mb-8 md:mb-10 max-w-2xl mx-auto leading-relaxed">
-            Understand how decentralized systems really work—without hype, noise, or confusion.
+            Understand how decentralized systems really work. No hype, no noise, no confusion.
           </p>
         </AnimatedSection>
 
