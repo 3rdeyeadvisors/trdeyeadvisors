@@ -14,3 +14,4 @@ export { default as PricingSection } from './PricingSection';
 export { default as CTASection } from './CTASection';
 export { default as WhoIsThisForSection } from './WhoIsThisForSection';
 export { default as InstitutionalSection } from './InstitutionalSection';
+export { default as Founding33Section } from './Founding33Section';

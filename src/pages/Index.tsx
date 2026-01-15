@@ -12,6 +12,7 @@ import {
   CTASection,
   WhoIsThisForSection,
   InstitutionalSection,
+  Founding33Section,
 } from "@/components/landing";
 
 const Index = () => {
@@ -50,6 +51,7 @@ const Index = () => {
           <AboutSection />
           <PlatformFeaturesSection />
           <PricingSection />
+          <Founding33Section />
           <InstitutionalSection />
           <CTASection />
           
