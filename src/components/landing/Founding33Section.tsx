@@ -197,8 +197,8 @@ const Founding33Section = ({ totalSpots = 33, claimedSpots: initialClaimed = 0 }
                 className="w-full py-7 text-lg font-consciousness font-semibold bg-muted text-muted-foreground border-0 cursor-not-allowed"
                 disabled
               >
-                <Lock className="w-5 h-5 mr-2" />
-                All 33 Spots Claimed
+              <Lock className="w-5 h-5" />
+                <span>All 33 Spots Claimed</span>
               </Button>
             ) : (
               <Button 
@@ -209,13 +209,13 @@ const Founding33Section = ({ totalSpots = 33, claimedSpots: initialClaimed = 0 }
               >
                 {isLoading ? (
                   <>
-                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                    Processing...
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    <span>Processing...</span>
                   </>
                 ) : (
                   <>
-                    <Crown className="w-5 h-5 mr-2" />
-                    Secure Your Founding Seat!
+                    <Crown className="w-5 h-5" />
+                    <span>Secure Your Founding Seat!</span>
                   </>
                 )}
               </Button>
