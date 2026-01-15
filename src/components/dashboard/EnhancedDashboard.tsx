@@ -30,6 +30,7 @@ import { ReferralCard } from "./ReferralCard";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { courseContent } from "@/data/courseContent";
+import { PointsDisplay } from "@/components/points";
 
 interface QuizStats {
   totalQuizzes: number;
@@ -437,6 +438,11 @@ export const EnhancedDashboard = () => {
             </div>
           </Card>
         )}
+
+        {/* Points Display */}
+        <div className="mb-6 sm:mb-8">
+          <PointsDisplay />
+        </div>
 
         {/* Referral Card */}
         <ReferralCard />

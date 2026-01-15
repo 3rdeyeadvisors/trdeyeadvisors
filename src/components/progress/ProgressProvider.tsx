@@ -1,7 +1,8 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { courseContent } from '@/data/courseContent';
+import { usePoints } from '@/hooks/usePoints';
 
 interface CourseProgress {
   course_id: number;
@@ -33,6 +34,7 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
   const [courseProgress, setCourseProgress] = useState<Record<number, CourseProgress>>({});
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
+  const { awardPoints } = usePoints();
 
   useEffect(() => {
     if (user) {
@@ -168,9 +170,36 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
         
         resultData = insertData;
         console.log('[Progress] INSERT successful! Saved data:', resultData);
+        
+        // Award points for first course started
+        if (updatedModules.length === 1) {
+          try {
+            await awardPoints('first_course_started', `course_${courseId}`);
+          } catch (e) {
+            console.log('[Progress] Could not award first_course_started points');
+          }
+        }
       }
 
       console.log('[Progress] Confirmed saved modules:', resultData.completed_modules);
+
+      // Award points for module completion
+      try {
+        const result = await awardPoints('module_completion', `${courseId}_${moduleIndex}`);
+        console.log('[Progress] Module completion points:', result);
+      } catch (e) {
+        console.log('[Progress] Could not award module completion points');
+      }
+
+      // Check if course is now complete and award course completion points
+      if (resultData.completion_percentage === 100) {
+        try {
+          await awardPoints('course_completion', `course_${courseId}`);
+          console.log('[Progress] Course completion points awarded');
+        } catch (e) {
+          console.log('[Progress] Could not award course completion points');
+        }
+      }
 
       // Update local state with the exact data from database
       setCourseProgress(prev => ({
