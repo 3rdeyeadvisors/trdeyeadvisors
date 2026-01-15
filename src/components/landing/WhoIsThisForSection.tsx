@@ -53,24 +53,24 @@ const WhoIsThisForSection = () => {
               delay={index * 150}
               className="group"
             >
-              <div className="h-full p-8 rounded-2xl bg-card/50 backdrop-blur-sm border border-border/50 hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10">
+              <div className="h-full p-6 md:p-8 rounded-2xl bg-card/50 backdrop-blur-sm border border-border/50 hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10">
                 {/* Icon */}
-                <div className="w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-6 group-hover:bg-primary/20 transition-colors">
+                <div className="w-14 h-14 md:w-16 md:h-16 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-4 md:mb-6 mx-auto md:mx-0 group-hover:bg-primary/20 transition-colors">
                   {persona.icon}
                 </div>
                 
                 {/* Label */}
-                <p className="text-sm font-medium text-primary uppercase tracking-wider mb-2">
+                <p className="text-sm font-medium text-primary uppercase tracking-wider mb-1 md:mb-2 text-center md:text-left">
                   {persona.label}
                 </p>
                 
                 {/* Headline */}
-                <h3 className="text-xl md:text-2xl font-bold text-foreground mb-4">
+                <h3 className="text-xl md:text-2xl font-bold text-foreground mb-3 md:mb-4 text-center md:text-left">
                   {persona.headline}
                 </h3>
                 
                 {/* Body */}
-                <p className="text-muted-foreground leading-relaxed">
+                <p className="text-muted-foreground leading-relaxed text-center md:text-left">
                   {persona.body}
                 </p>
               </div>
