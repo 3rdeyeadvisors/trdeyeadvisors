@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 import RaffleCountdown from "@/components/raffles/RaffleCountdown";
 import RaffleShareButton from "@/components/raffles/RaffleShareButton";
 import SocialVerificationForm from "@/components/raffles/SocialVerificationForm";
-import { ANNUAL_BENEFITS } from "@/lib/constants";
+import { ANNUAL_BENEFITS, FOUNDING33_BENEFITS } from "@/lib/constants";
 
 interface Raffle {
   id: string;
@@ -328,12 +328,21 @@ const Raffles = () => {
 
       // CRITICAL FIX: Create entry first, then ticket
       // Entry must exist before trigger can update it
-      // Check if user is annual subscriber for bonus tickets
+      // Check if user is Founding 33 member (highest tier) or annual subscriber for bonus tickets
+      const isFounder = subscription?.plan === 'founding_33' || subscription?.isFounder;
       const isAnnualSubscriber = subscription?.plan === 'annual';
-      const bonusTickets = isAnnualSubscriber ? ANNUAL_BENEFITS.bonusRaffleTickets : 0;
+      
+      // Founding 33 gets 10 bonus, Annual gets 5, others get 0
+      let bonusTickets = 0;
+      if (isFounder) {
+        bonusTickets = FOUNDING33_BENEFITS.bonusRaffleTickets; // 10
+      } else if (isAnnualSubscriber) {
+        bonusTickets = ANNUAL_BENEFITS.bonusRaffleTickets; // 5
+      }
+      
       const initialEntryCount = 1 + bonusTickets;
       
-      console.log('📊 Subscription status:', { plan: subscription?.plan, isAnnualSubscriber, bonusTickets });
+      console.log('📊 Subscription status:', { plan: subscription?.plan, isFounder, isAnnualSubscriber, bonusTickets });
       
       const { error: entryError } = await supabase
         .from('raffle_entries')
@@ -363,16 +372,18 @@ const Raffles = () => {
         throw ticketError;
       }
 
-      // If annual subscriber, create bonus tickets
-      if (isAnnualSubscriber && bonusTickets > 0) {
-        console.log(`🎁 Creating ${bonusTickets} bonus tickets for annual subscriber`);
+      // If Founding 33 or annual subscriber, create bonus tickets
+      if (bonusTickets > 0) {
+        const ticketSource = isFounder ? 'founding_33_bonus' : 'annual_bonus';
+        const benefitType = isFounder ? 'founding_33_member_bonus' : 'annual_subscriber_bonus';
+        console.log(`🎁 Creating ${bonusTickets} bonus tickets for ${isFounder ? 'Founding 33 member' : 'annual subscriber'}`);
         
         const bonusTicketInserts = Array.from({ length: bonusTickets }, () => ({
           user_id: user.id,
           raffle_id: activeRaffle.id,
-          ticket_source: 'annual_bonus',
+          ticket_source: ticketSource,
           metadata: { 
-            benefit: 'annual_subscriber_bonus',
+            benefit: benefitType,
             timestamp: new Date().toISOString() 
           }
         }));
@@ -385,7 +396,7 @@ const Raffles = () => {
           console.error('❌ Bonus ticket creation error:', bonusTicketError);
           // Don't throw - participation still succeeded
         } else {
-          console.log('✅ Bonus tickets created for annual subscriber');
+          console.log(`✅ Bonus tickets created for ${isFounder ? 'Founding 33 member' : 'annual subscriber'}`);
         }
       }
 
@@ -398,9 +409,11 @@ const Raffles = () => {
 
       toast({
         title: "✅ You've joined the raffle!",
-        description: isAnnualSubscriber 
-          ? `You start with ${initialEntryCount} entries (${bonusTickets} bonus for annual members)!`
-          : "You now have 1 entry. Complete tasks to earn more!",
+        description: isFounder 
+          ? `You start with ${initialEntryCount} entries (${bonusTickets} bonus for Founding 33 members)!`
+          : isAnnualSubscriber 
+            ? `You start with ${initialEntryCount} entries (${bonusTickets} bonus for annual members)!`
+            : "You now have 1 entry. Complete tasks to earn more!",
       });
 
       // Refresh to get accurate count
@@ -727,6 +740,14 @@ const Raffles = () => {
                           {totalEntries}
                         </Badge>
                       </div>
+                      {subscription?.plan === 'founding_33' && (
+                        <div className="flex items-center justify-center gap-2 mt-2">
+                          <Badge variant="default" className="text-xs bg-amber-500 text-black">
+                            <Crown className="w-3 h-3 mr-1" />
+                            Founding 33: +{FOUNDING33_BENEFITS.bonusRaffleTickets} entries
+                          </Badge>
+                        </div>
+                      )}
                       {subscription?.plan === 'annual' && (
                         <div className="flex items-center justify-center gap-2 mt-2">
                           <Badge variant="default" className="text-xs">
@@ -754,9 +775,11 @@ const Raffles = () => {
                           {participating ? "Joining..." : "🎯 Join This Raffle"}
                         </Button>
                         <p className="text-xs text-muted-foreground text-center mt-2">
-                          {subscription?.plan === 'annual' 
-                            ? `Start with ${1 + ANNUAL_BENEFITS.bonusRaffleTickets} entries (annual bonus included)`
-                            : 'Start with 1 entry, earn more by completing tasks'}
+                          {subscription?.plan === 'founding_33' 
+                            ? `Start with ${1 + FOUNDING33_BENEFITS.bonusRaffleTickets} entries (Founding 33 bonus included)`
+                            : subscription?.plan === 'annual' 
+                              ? `Start with ${1 + ANNUAL_BENEFITS.bonusRaffleTickets} entries (annual bonus included)`
+                              : 'Start with 1 entry, earn more by completing tasks'}
                         </p>
                       </div>
                     )}

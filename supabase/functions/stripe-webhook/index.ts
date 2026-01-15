@@ -109,9 +109,11 @@ serve(async (req) => {
                 const subscriptionAmountCents = invoice.amount_paid;
                 const planType = subscriptionAmountCents > 50000 ? "annual" : "monthly"; // $500+ is annual
                 
-                // Check if the REFERRER has an active annual subscription
-                // Only annual subscribers get 60% commission, everyone else gets 50%
+                // Check if the REFERRER is a Founding 33 member, annual subscriber, or regular
+                // Founding 33 gets 70%, Annual gets 60%, everyone else gets 50%
                 let referrerIsAnnual = false;
+                let referrerIsFounder = false;
+                
                 try {
                   // Get referrer's email from auth
                   const { data: referrerUser } = await supabaseClient.auth.admin.getUserById(
@@ -122,33 +124,46 @@ serve(async (req) => {
                   if (referrerEmail) {
                     logStep("Checking referrer subscription status", { referrerEmail });
                     
-                    // Find referrer in Stripe
-                    const referrerCustomers = await stripe.customers.list({ 
-                      email: referrerEmail, 
-                      limit: 1 
-                    });
+                    // First check if referrer is a Founding 33 member (highest tier)
+                    const { data: founderData } = await supabaseClient
+                      .from('grandfathered_emails')
+                      .select('access_type')
+                      .ilike('email', referrerEmail)
+                      .eq('access_type', 'founding_33')
+                      .single();
                     
-                    if (referrerCustomers.data.length > 0) {
-                      // Check for active annual subscription
-                      const referrerSubs = await stripe.subscriptions.list({
-                        customer: referrerCustomers.data[0].id,
-                        status: "active",
-                        limit: 10
-                      });
-                      
-                      // Annual price ID from constants
-                      const annualPriceId = "price_1Sl04YLxeGPiI62jjtRmPeC9";
-                      
-                      referrerIsAnnual = referrerSubs.data.some(sub =>
-                        sub.items.data.some(item => item.price.id === annualPriceId)
-                      );
-                      
-                      logStep("Referrer subscription check complete", { 
-                        referrerIsAnnual,
-                        activeSubscriptions: referrerSubs.data.length
-                      });
+                    if (founderData) {
+                      referrerIsFounder = true;
+                      logStep("Referrer is Founding 33 member, using 70% rate");
                     } else {
-                      logStep("Referrer not found in Stripe, using default 50% rate");
+                      // Not a founder, check for annual subscription in Stripe
+                      const referrerCustomers = await stripe.customers.list({ 
+                        email: referrerEmail, 
+                        limit: 1 
+                      });
+                      
+                      if (referrerCustomers.data.length > 0) {
+                        // Check for active annual subscription
+                        const referrerSubs = await stripe.subscriptions.list({
+                          customer: referrerCustomers.data[0].id,
+                          status: "active",
+                          limit: 10
+                        });
+                        
+                        // Annual price ID from constants
+                        const annualPriceId = "price_1Sl04YLxeGPiI62jjtRmPeC9";
+                        
+                        referrerIsAnnual = referrerSubs.data.some(sub =>
+                          sub.items.data.some(item => item.price.id === annualPriceId)
+                        );
+                        
+                        logStep("Referrer subscription check complete", { 
+                          referrerIsAnnual,
+                          activeSubscriptions: referrerSubs.data.length
+                        });
+                      } else {
+                        logStep("Referrer not found in Stripe, using default 50% rate");
+                      }
                     }
                   }
                 } catch (lookupError) {
@@ -157,8 +172,14 @@ serve(async (req) => {
                   });
                 }
 
-                // Commission rate based on REFERRER's subscription status (not what was purchased)
-                const commissionRate = referrerIsAnnual ? 0.6 : 0.5;
+                // Commission rate based on REFERRER's status (tiered: Founding 33 > Annual > Monthly/None)
+                let commissionRate = 0.5; // Default rate
+                if (referrerIsFounder) {
+                  commissionRate = 0.7; // Founding 33 premium rate
+                } else if (referrerIsAnnual) {
+                  commissionRate = 0.6; // Annual subscriber rate
+                }
+                
                 const commissionAmountCents = Math.floor(subscriptionAmountCents * commissionRate);
                 
                 logStep("Calculating tiered commission", { 

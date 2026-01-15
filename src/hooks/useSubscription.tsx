@@ -6,7 +6,8 @@ export interface SubscriptionStatus {
   subscribed: boolean;
   isGrandfathered: boolean;
   isAdmin: boolean;
-  plan: 'monthly' | 'annual' | 'grandfathered' | 'admin' | 'trial' | null;
+  isFounder?: boolean;
+  plan: 'monthly' | 'annual' | 'grandfathered' | 'founding_33' | 'admin' | 'trial' | null;
   status?: 'active' | 'trialing' | 'canceled' | 'past_due';
   subscriptionEnd: string | null;
   trialEnd: string | null;
