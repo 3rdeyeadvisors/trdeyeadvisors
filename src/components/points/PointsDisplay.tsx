@@ -66,7 +66,7 @@ export const PointsDisplay = ({ compact = false }: PointsDisplayProps) => {
               </span>
             </div>
             <div className="text-xs text-muted-foreground">
-              of {rank?.total_users || 0}
+              of 2,000
             </div>
           </div>
           
