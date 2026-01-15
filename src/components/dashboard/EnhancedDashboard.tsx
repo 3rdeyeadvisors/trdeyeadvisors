@@ -10,6 +10,13 @@ import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
+  Sheet, 
+  SheetContent, 
+  SheetDescription, 
+  SheetHeader, 
+  SheetTitle 
+} from "@/components/ui/sheet";
+import { 
   BookOpen, 
   Trophy, 
   Clock, 
@@ -24,7 +31,9 @@ import {
   Brain,
   Zap,
   Crown,
-  Sparkles
+  Sparkles,
+  ChevronRight,
+  ExternalLink
 } from "lucide-react";
 import { ReferralCard } from "./ReferralCard";
 import { supabase } from "@/integrations/supabase/client";
@@ -46,6 +55,19 @@ interface AnalyticsStats {
   highestScore: number;
   improvementTrend: number;
   modulesCompleted: number;
+}
+
+interface DetailedQuiz {
+  id: string;
+  score: number;
+  passed: boolean;
+  created_at: string;
+  time_taken: number | null;
+  quizzes: {
+    title: string;
+    course_id: number;
+    module_id: string;
+  } | null;
 }
 
 export const EnhancedDashboard = () => {
@@ -70,6 +92,10 @@ export const EnhancedDashboard = () => {
     improvementTrend: 0,
     modulesCompleted: 0
   });
+  
+  // State for detail sheets
+  const [openDetail, setOpenDetail] = useState<string | null>(null);
+  const [detailedQuizzes, setDetailedQuizzes] = useState<DetailedQuiz[]>([]);
 
   // Handle subscription success/cancel from URL params
   useEffect(() => {
@@ -106,12 +132,17 @@ export const EnhancedDashboard = () => {
     if (!user) return;
 
     try {
+      // Fetch detailed quiz data for the sheet views
       const { data: attempts, error } = await supabase
         .from('quiz_attempts')
-        .select('score, passed, quiz_id')
-        .eq('user_id', user.id);
+        .select('id, score, passed, quiz_id, created_at, time_taken, quizzes(title, course_id, module_id)')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
 
       if (error) throw error;
+
+      // Store detailed quiz data
+      setDetailedQuizzes(attempts as DetailedQuiz[] || []);
 
       const uniqueQuizzes = new Set(attempts?.map(a => a.quiz_id) || []);
       const completedQuizzes = uniqueQuizzes.size;
@@ -121,7 +152,7 @@ export const EnhancedDashboard = () => {
         : 0;
 
       setQuizStats({
-        totalQuizzes: completedQuizzes, // For now, same as completed
+        totalQuizzes: completedQuizzes,
         completedQuizzes,
         averageScore,
         passedQuizzes
@@ -530,75 +561,105 @@ export const EnhancedDashboard = () => {
         {/* Referral Card */}
         <ReferralCard />
 
-        {/* Enhanced Stats Cards */}
+        {/* Enhanced Stats Cards - Now Clickable */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6 mb-6 md:mb-8 w-full">
-          <Card className="p-4 sm:p-6 bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
-            <div className="flex items-center gap-2 sm:gap-3">
-              <BookOpen className="w-6 h-6 sm:w-8 sm:h-8 text-primary flex-shrink-0" />
-              <div>
-                <p className="text-xl sm:text-2xl font-consciousness font-bold text-foreground">
-                  {enrolledCourses}
-                </p>
-                <p className="text-xs sm:text-sm text-muted-foreground font-consciousness">
-                  Courses Enrolled
-                </p>
+          <Card 
+            className="p-4 sm:p-6 bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20 cursor-pointer hover:border-primary/40 hover:shadow-md transition-all group"
+            onClick={() => setOpenDetail('enrolled')}
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <BookOpen className="w-6 h-6 sm:w-8 sm:h-8 text-primary flex-shrink-0" />
+                <div>
+                  <p className="text-xl sm:text-2xl font-consciousness font-bold text-foreground">
+                    {enrolledCourses}
+                  </p>
+                  <p className="text-xs sm:text-sm text-muted-foreground font-consciousness">
+                    Courses Enrolled
+                  </p>
+                </div>
               </div>
+              <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
             </div>
           </Card>
 
-          <Card className="p-4 sm:p-6 bg-gradient-to-br from-awareness/10 to-awareness/5 border-awareness/20">
-            <div className="flex items-center gap-2 sm:gap-3">
-              <Trophy className="w-6 h-6 sm:w-8 sm:h-8 text-awareness flex-shrink-0" />
-              <div>
-                <p className="text-xl sm:text-2xl font-consciousness font-bold text-foreground">
-                  {completedCourses}
-                </p>
-                <p className="text-xs sm:text-sm text-muted-foreground font-consciousness">
-                  Completed
-                </p>
+          <Card 
+            className="p-4 sm:p-6 bg-gradient-to-br from-awareness/10 to-awareness/5 border-awareness/20 cursor-pointer hover:border-awareness/40 hover:shadow-md transition-all group"
+            onClick={() => setOpenDetail('completed')}
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <Trophy className="w-6 h-6 sm:w-8 sm:h-8 text-awareness flex-shrink-0" />
+                <div>
+                  <p className="text-xl sm:text-2xl font-consciousness font-bold text-foreground">
+                    {completedCourses}
+                  </p>
+                  <p className="text-xs sm:text-sm text-muted-foreground font-consciousness">
+                    Completed
+                  </p>
+                </div>
               </div>
+              <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-awareness transition-colors" />
             </div>
           </Card>
 
-          <Card className="p-4 sm:p-6 bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
-            <div className="flex items-center gap-2 sm:gap-3">
-              <Brain className="w-6 h-6 sm:w-8 sm:h-8 text-accent flex-shrink-0" />
-              <div>
-                <p className="text-xl sm:text-2xl font-consciousness font-bold text-foreground">
-                  {quizStats.passedQuizzes}
-                </p>
-                <p className="text-xs sm:text-sm text-muted-foreground font-consciousness">
-                  Quizzes Passed
-                </p>
+          <Card 
+            className="p-4 sm:p-6 bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20 cursor-pointer hover:border-accent/40 hover:shadow-md transition-all group"
+            onClick={() => setOpenDetail('quizzes')}
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <Brain className="w-6 h-6 sm:w-8 sm:h-8 text-accent flex-shrink-0" />
+                <div>
+                  <p className="text-xl sm:text-2xl font-consciousness font-bold text-foreground">
+                    {quizStats.passedQuizzes}
+                  </p>
+                  <p className="text-xs sm:text-sm text-muted-foreground font-consciousness">
+                    Quizzes Passed
+                  </p>
+                </div>
               </div>
+              <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-accent transition-colors" />
             </div>
           </Card>
 
-          <Card className="p-4 sm:p-6 bg-card border-border">
-            <div className="flex items-center gap-2 sm:gap-3">
-              <TrendingUp className="w-6 h-6 sm:w-8 sm:h-8 text-awareness flex-shrink-0" />
-              <div>
-                <p className="text-xl sm:text-2xl font-consciousness font-bold text-foreground">
-                  {quizStats.averageScore}%
-                </p>
-                <p className="text-xs sm:text-sm text-muted-foreground font-consciousness">
-                  Avg. Quiz Score
-                </p>
+          <Card 
+            className="p-4 sm:p-6 bg-card border-border cursor-pointer hover:border-primary/40 hover:shadow-md transition-all group"
+            onClick={() => setOpenDetail('scores')}
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <TrendingUp className="w-6 h-6 sm:w-8 sm:h-8 text-awareness flex-shrink-0" />
+                <div>
+                  <p className="text-xl sm:text-2xl font-consciousness font-bold text-foreground">
+                    {quizStats.averageScore}%
+                  </p>
+                  <p className="text-xs sm:text-sm text-muted-foreground font-consciousness">
+                    Avg. Quiz Score
+                  </p>
+                </div>
               </div>
+              <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
             </div>
           </Card>
 
-          <Card className="p-4 sm:p-6 bg-card border-border">
-            <div className="flex items-center gap-2 sm:gap-3">
-              <Target className="w-6 h-6 sm:w-8 sm:h-8 text-accent flex-shrink-0" />
-              <div>
-                <p className="text-xl sm:text-2xl font-consciousness font-bold text-foreground">
-                  {Math.round(totalProgress)}%
-                </p>
-                <p className="text-xs sm:text-sm text-muted-foreground font-consciousness">
-                  Overall Progress
-                </p>
+          <Card 
+            className="p-4 sm:p-6 bg-card border-border cursor-pointer hover:border-primary/40 hover:shadow-md transition-all group"
+            onClick={() => setOpenDetail('progress')}
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <Target className="w-6 h-6 sm:w-8 sm:h-8 text-accent flex-shrink-0" />
+                <div>
+                  <p className="text-xl sm:text-2xl font-consciousness font-bold text-foreground">
+                    {Math.round(totalProgress)}%
+                  </p>
+                  <p className="text-xs sm:text-sm text-muted-foreground font-consciousness">
+                    Overall Progress
+                  </p>
+                </div>
               </div>
+              <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
             </div>
           </Card>
         </div>
@@ -928,6 +989,283 @@ export const EnhancedDashboard = () => {
             </div>
           </TabsContent>
         </Tabs>
+
+        {/* Detail Sheets */}
+        {/* Enrolled Courses Sheet */}
+        <Sheet open={openDetail === 'enrolled'} onOpenChange={(open) => !open && setOpenDetail(null)}>
+          <SheetContent className="w-full sm:max-w-lg overflow-y-auto">
+            <SheetHeader>
+              <SheetTitle className="flex items-center gap-2">
+                <BookOpen className="w-5 h-5 text-primary" />
+                Enrolled Courses ({enrolledCourses})
+              </SheetTitle>
+              <SheetDescription>All courses you're currently enrolled in</SheetDescription>
+            </SheetHeader>
+            <div className="space-y-3 mt-6">
+              {[...inProgress, ...completed].length > 0 ? (
+                [...inProgress, ...completed].map(course => (
+                  <Card 
+                    key={course.id}
+                    className="p-4 cursor-pointer hover:border-primary/40 transition-all group"
+                    onClick={() => {
+                      setOpenDetail(null);
+                      navigate(`/courses/${course.id}`);
+                    }}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-semibold text-foreground line-clamp-1">{course.title}</h4>
+                      <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary" />
+                    </div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <Badge className={getCategoryColor(course.category)} variant="outline">
+                        {course.category === "free" ? "Free" : "Paid"}
+                      </Badge>
+                      <span className={`text-xs ${getDifficultyColor(course.difficulty)}`}>
+                        {course.difficulty}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Progress value={courseProgress[course.id]?.completion_percentage || 0} className="flex-1 h-2" />
+                      <span className="text-sm font-medium">{Math.round(courseProgress[course.id]?.completion_percentage || 0)}%</span>
+                    </div>
+                  </Card>
+                ))
+              ) : (
+                <p className="text-center text-muted-foreground py-8">
+                  No courses enrolled yet. Start learning!
+                </p>
+              )}
+            </div>
+          </SheetContent>
+        </Sheet>
+
+        {/* Completed Courses Sheet */}
+        <Sheet open={openDetail === 'completed'} onOpenChange={(open) => !open && setOpenDetail(null)}>
+          <SheetContent className="w-full sm:max-w-lg overflow-y-auto">
+            <SheetHeader>
+              <SheetTitle className="flex items-center gap-2">
+                <Trophy className="w-5 h-5 text-awareness" />
+                Completed Courses ({completedCourses})
+              </SheetTitle>
+              <SheetDescription>Courses you've successfully completed</SheetDescription>
+            </SheetHeader>
+            <div className="space-y-3 mt-6">
+              {completed.length > 0 ? (
+                completed.map(course => (
+                  <Card 
+                    key={course.id}
+                    className="p-4 cursor-pointer hover:border-awareness/40 transition-all group bg-awareness/5"
+                    onClick={() => {
+                      setOpenDetail(null);
+                      navigate(`/courses/${course.id}`);
+                    }}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-semibold text-foreground line-clamp-1">{course.title}</h4>
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-awareness" />
+                        <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-awareness" />
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Badge className="bg-awareness/20 text-awareness border-awareness/30" variant="outline">
+                        Completed
+                      </Badge>
+                      <span className={`text-xs ${getDifficultyColor(course.difficulty)}`}>
+                        {course.difficulty}
+                      </span>
+                    </div>
+                  </Card>
+                ))
+              ) : (
+                <p className="text-center text-muted-foreground py-8">
+                  No courses completed yet. Keep learning!
+                </p>
+              )}
+            </div>
+          </SheetContent>
+        </Sheet>
+
+        {/* Passed Quizzes Sheet */}
+        <Sheet open={openDetail === 'quizzes'} onOpenChange={(open) => !open && setOpenDetail(null)}>
+          <SheetContent className="w-full sm:max-w-lg overflow-y-auto">
+            <SheetHeader>
+              <SheetTitle className="flex items-center gap-2">
+                <Brain className="w-5 h-5 text-accent" />
+                Passed Quizzes ({quizStats.passedQuizzes})
+              </SheetTitle>
+              <SheetDescription>All quizzes you've successfully passed</SheetDescription>
+            </SheetHeader>
+            <div className="space-y-3 mt-6">
+              {detailedQuizzes.filter(q => q.passed).length > 0 ? (
+                detailedQuizzes.filter(q => q.passed).map(quiz => (
+                  <Card 
+                    key={quiz.id}
+                    className="p-4 cursor-pointer hover:border-accent/40 transition-all group"
+                    onClick={() => {
+                      setOpenDetail(null);
+                      if (quiz.quizzes?.course_id) {
+                        navigate(`/courses/${quiz.quizzes.course_id}`);
+                      }
+                    }}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-semibold text-foreground line-clamp-1">
+                        {quiz.quizzes?.title || 'Quiz'}
+                      </h4>
+                      <Badge className="bg-awareness/20 text-awareness">{quiz.score}%</Badge>
+                    </div>
+                    <div className="flex items-center justify-between text-sm text-muted-foreground">
+                      <span>Passed on {new Date(quiz.created_at).toLocaleDateString()}</span>
+                      {quiz.time_taken && (
+                        <span className="flex items-center gap-1">
+                          <Clock className="w-3 h-3" />
+                          {Math.round(quiz.time_taken / 60)}m
+                        </span>
+                      )}
+                    </div>
+                  </Card>
+                ))
+              ) : (
+                <p className="text-center text-muted-foreground py-8">
+                  No quizzes passed yet. Take a quiz to get started!
+                </p>
+              )}
+            </div>
+          </SheetContent>
+        </Sheet>
+
+        {/* All Quiz Scores Sheet */}
+        <Sheet open={openDetail === 'scores'} onOpenChange={(open) => !open && setOpenDetail(null)}>
+          <SheetContent className="w-full sm:max-w-lg overflow-y-auto">
+            <SheetHeader>
+              <SheetTitle className="flex items-center gap-2">
+                <TrendingUp className="w-5 h-5 text-awareness" />
+                All Quiz Attempts ({detailedQuizzes.length})
+              </SheetTitle>
+              <SheetDescription>
+                Average Score: {quizStats.averageScore}%
+              </SheetDescription>
+            </SheetHeader>
+            <div className="space-y-3 mt-6">
+              {detailedQuizzes.length > 0 ? (
+                detailedQuizzes.map(quiz => (
+                  <Card 
+                    key={quiz.id}
+                    className={`p-4 cursor-pointer transition-all group ${
+                      quiz.passed 
+                        ? 'hover:border-awareness/40 bg-awareness/5' 
+                        : 'hover:border-destructive/40 bg-destructive/5'
+                    }`}
+                    onClick={() => {
+                      setOpenDetail(null);
+                      if (quiz.quizzes?.course_id) {
+                        navigate(`/courses/${quiz.quizzes.course_id}`);
+                      }
+                    }}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-semibold text-foreground line-clamp-1">
+                        {quiz.quizzes?.title || 'Quiz'}
+                      </h4>
+                      <Badge className={quiz.passed ? "bg-awareness/20 text-awareness" : "bg-destructive/20 text-destructive"}>
+                        {quiz.score}%
+                      </Badge>
+                    </div>
+                    <div className="flex items-center justify-between text-sm text-muted-foreground">
+                      <span className="flex items-center gap-1">
+                        {quiz.passed ? (
+                          <CheckCircle2 className="w-3 h-3 text-awareness" />
+                        ) : (
+                          <span className="w-3 h-3 rounded-full bg-destructive" />
+                        )}
+                        {quiz.passed ? 'Passed' : 'Not Passed'}
+                      </span>
+                      <span>{new Date(quiz.created_at).toLocaleDateString()}</span>
+                    </div>
+                  </Card>
+                ))
+              ) : (
+                <p className="text-center text-muted-foreground py-8">
+                  No quiz attempts yet. Take a quiz to get started!
+                </p>
+              )}
+            </div>
+          </SheetContent>
+        </Sheet>
+
+        {/* Overall Progress Sheet */}
+        <Sheet open={openDetail === 'progress'} onOpenChange={(open) => !open && setOpenDetail(null)}>
+          <SheetContent className="w-full sm:max-w-lg overflow-y-auto">
+            <SheetHeader>
+              <SheetTitle className="flex items-center gap-2">
+                <Target className="w-5 h-5 text-accent" />
+                Overall Progress ({Math.round(totalProgress)}%)
+              </SheetTitle>
+              <SheetDescription>Breakdown of your progress across all courses</SheetDescription>
+            </SheetHeader>
+            <div className="space-y-4 mt-6">
+              {/* Summary Stats */}
+              <Card className="p-4 bg-muted/30">
+                <div className="grid grid-cols-3 gap-4 text-center">
+                  <div>
+                    <p className="text-2xl font-bold text-primary">{enrolledCourses}</p>
+                    <p className="text-xs text-muted-foreground">Enrolled</p>
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-awareness">{completedCourses}</p>
+                    <p className="text-xs text-muted-foreground">Completed</p>
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-accent">{analyticsStats.modulesCompleted}</p>
+                    <p className="text-xs text-muted-foreground">Modules</p>
+                  </div>
+                </div>
+              </Card>
+
+              {/* Per-course breakdown */}
+              <div className="space-y-3">
+                <h4 className="font-semibold text-sm text-muted-foreground">Course Breakdown</h4>
+                {courses.map(course => {
+                  const progress = courseProgress[course.id]?.completion_percentage || 0;
+                  const isCompleted = progress === 100;
+                  const isStarted = progress > 0;
+                  
+                  return (
+                    <Card 
+                      key={course.id}
+                      className={`p-4 cursor-pointer transition-all group ${
+                        isCompleted 
+                          ? 'bg-awareness/5 hover:border-awareness/40' 
+                          : isStarted 
+                          ? 'hover:border-primary/40' 
+                          : 'hover:border-border'
+                      }`}
+                      onClick={() => {
+                        setOpenDetail(null);
+                        navigate(`/courses/${course.id}`);
+                      }}
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className="font-semibold text-foreground line-clamp-1 text-sm">{course.title}</h4>
+                        {isCompleted && <CheckCircle2 className="w-4 h-4 text-awareness" />}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Progress 
+                          value={progress} 
+                          className={`flex-1 h-2 ${isCompleted ? '[&>div]:bg-awareness' : ''}`} 
+                        />
+                        <span className={`text-sm font-medium ${isCompleted ? 'text-awareness' : ''}`}>
+                          {Math.round(progress)}%
+                        </span>
+                      </div>
+                    </Card>
+                  );
+                })}
+              </div>
+            </div>
+          </SheetContent>
+        </Sheet>
       </div>
     </div>
   );
