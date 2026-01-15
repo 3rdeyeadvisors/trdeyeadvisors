@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
+import { useFoundingMemberStatus } from "@/hooks/useFoundingMemberStatus";
+import { FoundingMemberBadge } from "./FoundingMemberBadge";
 import { 
   Heart, 
   MessageSquare, 
@@ -56,6 +58,23 @@ export const Comments = ({ contentType, contentId, title }: CommentsProps) => {
   const [replyText, setReplyText] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [expandedComments, setExpandedComments] = useState<Set<string>>(new Set());
+
+  // Collect all user IDs from comments for founding member check
+  const allUserIds = useMemo(() => {
+    const collectUserIds = (commentList: Comment[]): string[] => {
+      const ids: string[] = [];
+      commentList.forEach(comment => {
+        ids.push(comment.user_id);
+        if (comment.replies) {
+          ids.push(...collectUserIds(comment.replies));
+        }
+      });
+      return ids;
+    };
+    return [...new Set(collectUserIds(comments))];
+  }, [comments]);
+
+  const { foundingMembers } = useFoundingMemberStatus(allUserIds);
 
   useEffect(() => {
     loadComments();
@@ -306,9 +325,12 @@ export const Comments = ({ contentType, contentId, title }: CommentsProps) => {
             
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
-                <span className="font-medium text-sm">
-                  {comment.profiles?.display_name || 'Anonymous User'}
-                </span>
+                <div className="flex items-center gap-1">
+                  <span className="font-medium text-sm">
+                    {comment.profiles?.display_name || 'Anonymous User'}
+                  </span>
+                  {foundingMembers.has(comment.user_id) && <FoundingMemberBadge />}
+                </div>
                 <span className="text-xs text-muted-foreground">
                   {formatDate(comment.created_at)}
                 </span>

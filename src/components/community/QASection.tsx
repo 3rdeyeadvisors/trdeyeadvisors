@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
@@ -11,6 +11,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { HelpCircle, MessageSquare, CheckCircle, ThumbsUp, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { formatDistanceToNow } from "date-fns";
+import { useFoundingMemberStatus } from "@/hooks/useFoundingMemberStatus";
+import { FoundingMemberBadge } from "./FoundingMemberBadge";
 
 interface QAItem {
   id: string;
@@ -54,6 +56,18 @@ export const QASection = ({ courseId, moduleId }: QASectionProps) => {
   const [submitting, setSubmitting] = useState(false);
   const { user } = useAuth();
   const { toast } = useToast();
+
+  // Collect all user IDs from questions and replies for founding member check
+  const allUserIds = useMemo(() => {
+    const ids: string[] = [];
+    questions.forEach(q => {
+      ids.push(q.user_id);
+      q.discussion_replies?.forEach(r => ids.push(r.user_id));
+    });
+    return [...new Set(ids)];
+  }, [questions]);
+
+  const { foundingMembers } = useFoundingMemberStatus(allUserIds);
 
   const canEdit = (createdAt: string) => {
     const hoursSinceCreation = (Date.now() - new Date(createdAt).getTime()) / (1000 * 60 * 60);
@@ -516,9 +530,12 @@ export const QASection = ({ courseId, moduleId }: QASectionProps) => {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between mb-1">
                     <div className="flex items-center gap-2">
-                      <span className="font-consciousness font-medium text-sm">
-                        {question.profiles?.display_name || "Anonymous"}
-                      </span>
+                      <div className="flex items-center gap-1">
+                        <span className="font-consciousness font-medium text-sm">
+                          {question.profiles?.display_name || "Anonymous"}
+                        </span>
+                        {foundingMembers.has(question.user_id) && <FoundingMemberBadge />}
+                      </div>
                       <span className="text-xs text-muted-foreground">
                         {formatDistanceToNow(new Date(question.created_at), { addSuffix: true })}
                       </span>
@@ -629,9 +646,12 @@ export const QASection = ({ courseId, moduleId }: QASectionProps) => {
                         <div className="flex-1">
                           <div className="flex items-center justify-between mb-1">
                             <div className="flex items-center gap-2">
-                              <span className="font-consciousness font-medium text-xs">
-                                {reply.profiles?.display_name || "Anonymous"}
-                              </span>
+                              <div className="flex items-center gap-1">
+                                <span className="font-consciousness font-medium text-xs">
+                                  {reply.profiles?.display_name || "Anonymous"}
+                                </span>
+                                {foundingMembers.has(reply.user_id) && <FoundingMemberBadge className="w-3 h-3" />}
+                              </div>
                               <span className="text-xs text-muted-foreground">
                                 {formatDistanceToNow(new Date(reply.created_at), { addSuffix: true })}
                               </span>
