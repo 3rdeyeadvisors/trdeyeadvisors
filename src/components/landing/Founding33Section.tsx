@@ -226,7 +226,7 @@ const Founding33Section = ({ totalSpots = 33, claimedSpots: initialClaimed = 0 }
         {/* Trust note */}
         <AnimatedSection delay={300}>
           <p className="text-center text-sm text-muted-foreground font-consciousness mt-6">
-            Secure payment via Stripe • Instant lifetime access • No recurring fees ever
+            Instant lifetime access • No recurring fees ever
           </p>
         </AnimatedSection>
       </div>
