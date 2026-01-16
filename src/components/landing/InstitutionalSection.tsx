@@ -5,7 +5,7 @@ import AnimatedSection from "./AnimatedSection";
 
 const InstitutionalSection = () => {
   return (
-    <section className="py-16 md:py-20 relative overflow-hidden">
+    <section className="py-10 md:py-14 relative overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-muted/30 to-transparent" />
       
