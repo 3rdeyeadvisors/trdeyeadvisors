@@ -3,12 +3,15 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useProgress } from "@/components/progress/ProgressProvider";
 import { useSubscription } from "@/hooks/useSubscription";
+import { useAchievementSounds } from "@/hooks/useAchievementSounds";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import { 
   Sheet, 
   SheetContent, 
@@ -33,13 +36,16 @@ import {
   Crown,
   Sparkles,
   ChevronRight,
-  ExternalLink
+  ExternalLink,
+  Volume2,
+  VolumeX
 } from "lucide-react";
 import { ReferralCard } from "./ReferralCard";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { courseContent } from "@/data/courseContent";
 import { PointsDisplay } from "@/components/points";
+import { BadgeCollection } from "@/components/badges";
 
 interface QuizStats {
   totalQuizzes: number;
@@ -74,6 +80,7 @@ export const EnhancedDashboard = () => {
   const { user } = useAuth();
   const { courseProgress } = useProgress();
   const { subscription, loading: subLoading, hasAccess, isTrialing, checkSubscription } = useSubscription();
+  const { soundEnabled, toggleSound } = useAchievementSounds();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [quizStats, setQuizStats] = useState<QuizStats>({
@@ -557,6 +564,33 @@ export const EnhancedDashboard = () => {
         <div className="mb-6 sm:mb-8">
           <PointsDisplay />
         </div>
+
+        {/* Badge Collection */}
+        <div className="mb-6 sm:mb-8">
+          <BadgeCollection />
+        </div>
+
+        {/* Sound Settings */}
+        <Card className="p-4 mb-6 sm:mb-8">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              {soundEnabled ? (
+                <Volume2 className="w-5 h-5 text-primary" />
+              ) : (
+                <VolumeX className="w-5 h-5 text-muted-foreground" />
+              )}
+              <div>
+                <Label htmlFor="sound-toggle" className="font-medium">Achievement Sounds</Label>
+                <p className="text-xs text-muted-foreground">Play sounds for achievements and progress</p>
+              </div>
+            </div>
+            <Switch
+              id="sound-toggle"
+              checked={soundEnabled}
+              onCheckedChange={toggleSound}
+            />
+          </div>
+        </Card>
 
         {/* Referral Card */}
         <ReferralCard />

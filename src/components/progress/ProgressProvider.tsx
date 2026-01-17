@@ -3,6 +3,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { courseContent } from '@/data/courseContent';
 import { usePoints } from '@/hooks/usePoints';
+import { useBadges } from '@/hooks/useBadges';
+import { useAchievementSounds } from '@/hooks/useAchievementSounds';
 
 interface CourseProgress {
   course_id: number;
@@ -35,6 +37,8 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
   const { awardPoints } = usePoints();
+  const { awardBadge, checkBadgeProgress } = useBadges();
+  const { playModuleComplete, playCourseComplete } = useAchievementSounds();
 
   useEffect(() => {
     if (user) {
@@ -175,6 +179,8 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
         if (updatedModules.length === 1) {
           try {
             await awardPoints('first_course_started', `course_${courseId}`);
+            // Award first steps badge
+            await awardBadge('first_steps');
           } catch (e) {
             console.log('[Progress] Could not award first_course_started points');
           }
@@ -187,6 +193,8 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
       try {
         const result = await awardPoints('module_completion', `${courseId}_${moduleIndex}`);
         console.log('[Progress] Module completion points:', result);
+        // Play module complete sound
+        playModuleComplete();
       } catch (e) {
         console.log('[Progress] Could not award module completion points');
       }
@@ -196,6 +204,24 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
         try {
           await awardPoints('course_completion', `course_${courseId}`);
           console.log('[Progress] Course completion points awarded');
+          // Play course complete sound
+          playCourseComplete();
+          // Award course graduate badge
+          await awardBadge('course_graduate');
+          
+          // Check for scholar badge (3 courses completed)
+          const completedCourses = Object.values(courseProgress).filter(
+            p => p.completion_percentage === 100
+          ).length + 1; // +1 for the one just completed
+          
+          if (completedCourses >= 3) {
+            await awardBadge('scholar');
+          }
+          
+          // Check for DeFi master badge (all courses)
+          if (completedCourses >= courseContent.length) {
+            await awardBadge('defi_master');
+          }
         } catch (e) {
           console.log('[Progress] Could not award course completion points');
         }

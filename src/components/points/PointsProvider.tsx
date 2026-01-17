@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, useCallback, ReactNode } from 'react';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { usePoints, PointActionType, POINT_VALUES } from '@/hooks/usePoints';
+import { useAchievementSounds } from '@/hooks/useAchievementSounds';
 import { toast } from 'sonner';
 
 interface PointsContextType {
@@ -39,6 +40,7 @@ export const PointsProvider = ({ children }: PointsProviderProps) => {
     getDaysRemaining,
     refreshPoints,
   } = usePoints();
+  const { playPointsEarned, playDailyLogin } = useAchievementSounds();
 
   const [hasCheckedDailyLogin, setHasCheckedDailyLogin] = useState(false);
 
@@ -48,6 +50,8 @@ export const PointsProvider = ({ children }: PointsProviderProps) => {
       const checkLogin = async () => {
         const result = await checkDailyLogin();
         if (!result.alreadyLoggedIn && result.pointsAwarded > 0) {
+          // Play daily login sound
+          playDailyLogin();
           toast.success(`+${result.pointsAwarded} points for daily login!`, {
             description: 'Keep your streak going!',
             duration: 3000,
@@ -57,7 +61,7 @@ export const PointsProvider = ({ children }: PointsProviderProps) => {
       };
       checkLogin();
     }
-  }, [user, hasCheckedDailyLogin, checkDailyLogin]);
+  }, [user, hasCheckedDailyLogin, checkDailyLogin, playDailyLogin]);
 
   // Reset daily login check when user changes
   useEffect(() => {
@@ -75,6 +79,8 @@ export const PointsProvider = ({ children }: PointsProviderProps) => {
     const result = await baseAwardPoints(actionType, actionId, metadata);
     
     if (result.success && result.pointsAwarded > 0) {
+      // Play points earned sound
+      playPointsEarned();
       const actionDisplayNames: Record<string, string> = {
         module_completion: 'Module completed',
         course_completion: 'Course completed',
@@ -99,7 +105,7 @@ export const PointsProvider = ({ children }: PointsProviderProps) => {
     }
 
     return result;
-  }, [baseAwardPoints]);
+  }, [baseAwardPoints, playPointsEarned]);
 
   const value: PointsContextType = {
     totalPoints,
