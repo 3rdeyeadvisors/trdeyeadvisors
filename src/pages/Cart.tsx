@@ -29,11 +29,12 @@ const CartItem = ({ item }: { item: any }) => {
     const loadProductData = async () => {
       if (item.type === "merchandise" && item.printify_product_id) {
         console.log('Loading product data for cart item:', item);
+        // Use secure public view that excludes pricing strategy data
         const { data } = await supabase
-          .from('printify_products')
+          .from('printify_products_public')
           .select('*')
           .eq('printify_id', item.printify_product_id)
-          .single();
+          .maybeSingle();
         
         console.log('Product data loaded:', data);
         if (data) {

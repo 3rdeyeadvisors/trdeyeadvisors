@@ -81,10 +81,10 @@ const Store = () => {
 
   const loadPrintifyProducts = async () => {
     try {
+      // Use secure public view that excludes pricing strategy data
       const { data, error } = await supabase
-        .from('printify_products')
-        .select('*')
-        .eq('is_active', true);
+        .from('printify_products_public')
+        .select('*');
       
       if (error) throw error;
       

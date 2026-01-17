@@ -1746,6 +1746,48 @@ export type Database = {
       }
     }
     Views: {
+      printify_products_public: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string | null
+          images: Json | null
+          is_active: boolean | null
+          printify_id: string | null
+          shop_id: string | null
+          tags: string[] | null
+          title: string | null
+          updated_at: string | null
+          variants: Json | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string | null
+          images?: Json | null
+          is_active?: boolean | null
+          printify_id?: string | null
+          shop_id?: string | null
+          tags?: string[] | null
+          title?: string | null
+          updated_at?: string | null
+          variants?: Json | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string | null
+          images?: Json | null
+          is_active?: boolean | null
+          printify_id?: string | null
+          shop_id?: string | null
+          tags?: string[] | null
+          title?: string | null
+          updated_at?: string | null
+          variants?: Json | null
+        }
+        Relationships: []
+      }
       quizzes_public: {
         Row: {
           course_id: number | null
