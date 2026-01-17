@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { useFoundingMemberStatus } from "@/hooks/useFoundingMemberStatus";
+import { useBadges } from "@/hooks/useBadges";
 import { FoundingMemberBadge } from "./FoundingMemberBadge";
 import { 
   Heart, 
@@ -50,6 +51,7 @@ export const Comments = ({ contentType, contentId, title }: CommentsProps) => {
   const { user } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { awardBadge, hasBadge } = useBadges();
   
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -194,6 +196,11 @@ export const Comments = ({ contentType, contentId, title }: CommentsProps) => {
         title: "Comment posted",
         description: "Your comment has been added successfully.",
       });
+      
+      // Award contributor badge for first comment
+      if (!hasBadge('contributor')) {
+        await awardBadge('contributor');
+      }
       
       // Reload comments
       loadComments();

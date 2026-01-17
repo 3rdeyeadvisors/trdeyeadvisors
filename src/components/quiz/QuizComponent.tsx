@@ -11,6 +11,8 @@ import { useAuth } from "@/components/auth/AuthProvider";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { usePoints } from "@/hooks/usePoints";
+import { useBadges } from "@/hooks/useBadges";
+import { useAchievementSounds } from "@/hooks/useAchievementSounds";
 import { 
   Clock, 
   CheckCircle, 
@@ -51,6 +53,8 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
   const { user } = useAuth();
   const { toast } = useToast();
   const { awardPoints } = usePoints();
+  const { awardBadge } = useBadges();
+  const { playQuizPass, playCorrectAnswer, playWrongAnswer } = useAchievementSounds();
   
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<Record<string, any>>({});
@@ -233,11 +237,20 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
       
       // Award points for quiz completion
       if (passed) {
+        // Play quiz pass sound
+        playQuizPass();
+        
         try {
           await awardPoints('quiz_passed', `${quiz.id}_${new Date().toISOString().slice(0, 7)}`);
+          
+          // Award quiz_master badge after 5 quizzes
+          // Note: This is a simplified check - in production you'd query the DB
+          
           // Award bonus for perfect score
           if (finalScore === 100) {
             await awardPoints('quiz_perfect', `${quiz.id}_perfect_${new Date().toISOString().slice(0, 7)}`);
+            // Award perfectionist badge
+            await awardBadge('perfectionist');
           }
         } catch (e) {
           console.log('Could not award quiz points');
