@@ -1,4 +1,5 @@
 import { useCallback, useRef, useEffect, useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 
 // Pre-defined sound prompts for ElevenLabs
 const SOUND_PROMPTS: Record<string, string> = {
@@ -63,31 +64,24 @@ export const useAchievementSounds = () => {
     try {
       setIsLoading(true);
       
-      // Use fetch directly for binary audio data
-      const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-achievement-sound`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-          },
-          body: JSON.stringify({ prompt, duration: 2 }),
-        }
-      );
+      // Use supabase client to invoke edge function
+      const { data, error } = await supabase.functions.invoke('generate-achievement-sound', {
+        body: { prompt, duration: 2 },
+      });
 
-      if (!response.ok) {
-        console.error('Sound generation failed:', response.status);
+      if (error) {
+        console.error('Sound generation failed:', error.message);
         return null;
       }
 
-      const audioBlob = await response.blob();
-      const audioUrl = URL.createObjectURL(audioBlob);
+      // The edge function returns audio data - create blob URL
+      if (data instanceof Blob) {
+        const audioUrl = URL.createObjectURL(data);
+        audioCache[soundType] = audioUrl;
+        return audioUrl;
+      }
       
-      // Cache the audio URL
-      audioCache[soundType] = audioUrl;
-      
-      return audioUrl;
+      return null;
     } catch (error) {
       console.error('Error generating sound:', error);
       return null;
