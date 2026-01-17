@@ -73,12 +73,12 @@ export default function MerchandiseDetail() {
   const loadProduct = async () => {
     try {
       setIsLoading(true);
+      // Use secure public view that excludes pricing strategy data
       const { data, error } = await supabase
-        .from('printify_products')
+        .from('printify_products_public')
         .select('*')
         .eq('printify_id', productId)
-        .eq('is_active', true)
-        .single();
+        .maybeSingle();
       
       if (error) throw error;
       
