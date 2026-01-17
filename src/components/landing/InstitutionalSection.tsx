@@ -37,10 +37,10 @@ const InstitutionalSection = () => {
           {/* Digital Asset Reserves Section */}
           <div className="mt-12 pt-10 border-t border-border/50">
             <h3 className="text-xl md:text-2xl font-semibold text-foreground mb-4">
-              Digital Asset Reserve Advisory
+              Digital Asset Reserve Education
             </h3>
             <p className="text-muted-foreground max-w-2xl mx-auto mb-8">
-              We assist families, individuals, and institutions in creating and managing strategic digital asset reserves. Whether you're planning for generational wealth transfer, building a personal crypto portfolio, or diversifying treasury holdings, our team provides tailored guidance.
+              We assist families, individuals, and institutions in creating and managing strategic digital asset reserves. Whether you're planning for generational wealth transfer, building a digital asset portfolio, or diversifying treasury holdings, our team provides tailored guidance.
             </p>
             
             {/* Client Types */}
