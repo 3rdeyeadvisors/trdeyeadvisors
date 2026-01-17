@@ -571,23 +571,45 @@ export const EnhancedDashboard = () => {
         </div>
 
         {/* Sound Settings */}
-        <Card className="p-4 mb-6 sm:mb-8">
+        <Card className={`p-4 mb-6 sm:mb-8 transition-all duration-300 ${
+          soundEnabled 
+            ? 'bg-gradient-to-r from-primary/10 via-accent/5 to-primary/10 border-primary/30 shadow-lg shadow-primary/10' 
+            : 'bg-muted/30 border-border'
+        }`}>
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              {soundEnabled ? (
-                <Volume2 className="w-5 h-5 text-primary" />
-              ) : (
-                <VolumeX className="w-5 h-5 text-muted-foreground" />
-              )}
+            <div className="flex items-center gap-4">
+              <div className={`p-2.5 rounded-xl transition-all duration-300 ${
+                soundEnabled 
+                  ? 'bg-primary/20 text-primary' 
+                  : 'bg-muted text-muted-foreground'
+              }`}>
+                {soundEnabled ? (
+                  <Volume2 className="w-5 h-5 animate-pulse" />
+                ) : (
+                  <VolumeX className="w-5 h-5" />
+                )}
+              </div>
               <div>
-                <Label htmlFor="sound-toggle" className="font-medium">Achievement Sounds</Label>
-                <p className="text-xs text-muted-foreground">Play sounds for achievements and progress</p>
+                <Label htmlFor="sound-toggle" className="font-medium text-foreground flex items-center gap-2">
+                  Achievement Sounds
+                  {soundEnabled && (
+                    <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 bg-primary/10 border-primary/30 text-primary">
+                      ON
+                    </Badge>
+                  )}
+                </Label>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  {soundEnabled 
+                    ? '🔊 Sounds will play for achievements & milestones' 
+                    : 'Enable sounds for a more immersive experience'}
+                </p>
               </div>
             </div>
             <Switch
               id="sound-toggle"
               checked={soundEnabled}
               onCheckedChange={toggleSound}
+              className="data-[state=checked]:bg-primary"
             />
           </div>
         </Card>
