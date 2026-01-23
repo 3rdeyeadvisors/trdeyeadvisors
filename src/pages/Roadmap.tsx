@@ -147,7 +147,7 @@ const Roadmap = () => {
                 {/* In Progress */}
                 {inProgressItems.length > 0 && (
                   <div className="space-y-4">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-center sm:justify-start gap-2">
                       <div className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse" />
                       <h2 className="text-xl md:text-2xl font-consciousness font-bold">
                         In Progress
@@ -184,7 +184,7 @@ const Roadmap = () => {
                 {/* Proposed */}
                 {proposedItems.length > 0 && (
                   <div className="space-y-4">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-center sm:justify-start gap-2">
                       <div className="w-2.5 h-2.5 rounded-full bg-primary" />
                       <h2 className="text-xl md:text-2xl font-consciousness font-bold">
                         Proposed Features
@@ -221,7 +221,7 @@ const Roadmap = () => {
                 {/* Completed */}
                 {completedItems.length > 0 && (
                   <div className="space-y-4">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-center sm:justify-start gap-2">
                       <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
                       <h2 className="text-xl md:text-2xl font-consciousness font-bold">
                         Shipped
