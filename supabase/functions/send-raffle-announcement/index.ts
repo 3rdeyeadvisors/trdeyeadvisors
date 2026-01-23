@@ -21,10 +21,11 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log("Fetching subscribers for raffle announcement...");
 
-    // Fetch all subscribers
+    // Fetch all subscribers (exclude bot accounts)
     const { data: subscribers, error } = await supabase
       .from('subscribers')
-      .select('email, name');
+      .select('email, name')
+      .not('email', 'ilike', 'bot-%@internal.3rdeyeadvisors.com');
 
     if (error) throw error;
 

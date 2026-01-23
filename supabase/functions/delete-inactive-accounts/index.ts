@@ -268,6 +268,9 @@ const handler = async (req: Request): Promise<Response> => {
         // Delete from profiles
         await supabaseAdmin.from("profiles").delete().eq("user_id", user.id);
 
+        // Delete from subscribers table (using email since it's not user_id based)
+        await supabaseAdmin.from("subscribers").delete().eq("email", userEmail);
+
         // Log to security audit
         await supabaseAdmin.from("security_audit_log").insert({
           event_type: "account_deleted_inactivity",

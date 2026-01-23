@@ -172,10 +172,11 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log('Final market block content:', marketBlockContent);
 
-    // Get all subscribers
+    // Get all subscribers (exclude bot accounts)
     const { data: subscribers, error: subscribersError } = await supabase
       .from('subscribers')
-      .select('email, name');
+      .select('email, name')
+      .not('email', 'ilike', 'bot-%@internal.3rdeyeadvisors.com');
 
     if (subscribersError) {
       console.error('Error fetching subscribers:', subscribersError);

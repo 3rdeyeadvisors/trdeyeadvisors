@@ -72,10 +72,11 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    // Fetch all subscribers
+    // Fetch all subscribers (exclude bot accounts)
     const { data: subscribers, error: subsError } = await supabase
       .from("subscribers")
-      .select("email, name");
+      .select("email, name")
+      .not("email", "ilike", "bot-%@internal.3rdeyeadvisors.com");
 
     if (subsError) {
       console.error("Error fetching subscribers:", subsError);
