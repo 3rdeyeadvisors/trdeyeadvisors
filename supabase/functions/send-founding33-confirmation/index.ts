@@ -111,19 +111,19 @@ serve(async (req) => {
         </div>
         <div style="margin-bottom: 12px; display: flex; align-items: center;">
           <span style="color: #f59e0b; margin-right: 12px;">✓</span>
-          <span><strong>Full community</strong> channel access</span>
+          <span><strong>Priority access</strong> to new features</span>
         </div>
         <div style="margin-bottom: 12px; display: flex; align-items: center;">
           <span style="color: #f59e0b; margin-right: 12px;">✓</span>
-          <span><strong>All vault tiers</strong> unlocked forever</span>
+          <span><strong>70% commission</strong> on referrals</span>
         </div>
         <div style="margin-bottom: 12px; display: flex; align-items: center;">
           <span style="color: #f59e0b; margin-right: 12px;">✓</span>
-          <span><strong>Founding member</strong> recognition</span>
+          <span><strong>Founding member</strong> recognition badge</span>
         </div>
         <div style="display: flex; align-items: center;">
           <span style="color: #f59e0b; margin-right: 12px;">✓</span>
-          <span><strong>Direct input</strong> on platform roadmap</span>
+          <span><strong>3x weighted vote</strong> on platform roadmap</span>
         </div>
       </div>
     </div>
