@@ -15,6 +15,7 @@ import RaffleManager from "@/components/admin/RaffleManager";
 import EmailPreview from "@/components/admin/EmailPreview";
 import { TutorialCourseParticipation } from "@/components/admin/TutorialCourseParticipation";
 import CommissionsManager from "@/components/admin/CommissionsManager";
+import RoadmapManager from "@/components/admin/RoadmapManager";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -89,6 +90,8 @@ const AdminDashboard = () => {
         return <ProductManager />;
       case "participation":
         return <TutorialCourseParticipation />;
+      case "roadmap":
+        return <RoadmapManager />;
       default:
         return <OverviewPanel />;
     }
