@@ -11,6 +11,7 @@ const corsHeaders = {
 
 interface RequestBody {
   item_id: string;
+  resend_to_real_only?: boolean; // Bypass duplicate check and send only to real subscribers
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -23,7 +24,7 @@ const handler = async (req: Request): Promise<Response> => {
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    const { item_id }: RequestBody = await req.json();
+    const { item_id, resend_to_real_only = false }: RequestBody = await req.json();
 
     if (!item_id) {
       return new Response(JSON.stringify({ error: "item_id is required" }), {
@@ -47,26 +48,29 @@ const handler = async (req: Request): Promise<Response> => {
       });
     }
 
-    // Check if we already sent this reminder
-    const { data: existingReminder } = await supabase
-      .from("roadmap_reminder_sent")
-      .select("id")
-      .eq("roadmap_item_id", item_id)
-      .eq("reminder_type", "created")
-      .single();
+    // Check if we already sent this reminder (skip if resending to real subscribers)
+    if (!resend_to_real_only) {
+      const { data: existingReminder } = await supabase
+        .from("roadmap_reminder_sent")
+        .select("id")
+        .eq("roadmap_item_id", item_id)
+        .eq("reminder_type", "created")
+        .single();
 
-    if (existingReminder) {
-      console.log("Created email already sent for this item");
-      return new Response(JSON.stringify({ message: "Email already sent" }), {
-        status: 200,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      if (existingReminder) {
+        console.log("Created email already sent for this item");
+        return new Response(JSON.stringify({ message: "Email already sent" }), {
+          status: 200,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
     }
 
-    // Fetch all subscribers
+    // Fetch all subscribers (exclude bot accounts)
     const { data: subscribers, error: subsError } = await supabase
       .from("subscribers")
-      .select("email, name");
+      .select("email, name")
+      .not("email", "ilike", "bot-%@internal.3rdeyeadvisors.com");
 
     if (subsError) {
       console.error("Error fetching subscribers:", subsError);

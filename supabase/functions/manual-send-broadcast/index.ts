@@ -58,10 +58,11 @@ const handler = async (req: Request): Promise<Response> => {
       ? `<div style="background-color: #fef2f2; border-left: 4px solid #ef4444; padding: 15px; margin-bottom: 20px; border-radius: 4px; color: #991b1b;"><strong>Our Apologies:</strong> ${apology_message}</div>${broadcast.intro_text}`
       : broadcast.intro_text;
 
-    // Get all subscribers
+    // Get all subscribers (exclude bot accounts)
     const { data: subscribers, error: subscribersError } = await supabase
       .from('subscribers')
-      .select('email, name');
+      .select('email, name')
+      .not('email', 'ilike', 'bot-%@internal.3rdeyeadvisors.com');
 
     if (subscribersError || !subscribers || subscribers.length === 0) {
       throw new Error('No subscribers found');
