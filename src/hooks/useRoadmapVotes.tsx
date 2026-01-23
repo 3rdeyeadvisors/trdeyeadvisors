@@ -35,21 +35,24 @@ export const useRoadmapVotes = () => {
   const [voting, setVoting] = useState<string | null>(null);
 
   // Determine vote weight based on membership
+  // Check both founding33_purchases table AND grandfathered founding_33 members
+  const isFounder = isFoundingMember || subscription?.plan === 'founding_33' || subscription?.isFounder;
+  
   const getVoteWeight = useCallback((): number => {
-    if (isFoundingMember) return 3;
+    if (isFounder) return 3;
     if (subscription?.plan === 'annual') return 1;
     return 0; // Cannot vote
-  }, [isFoundingMember, subscription?.plan]);
+  }, [isFounder, subscription?.plan]);
 
   const canVote = useCallback((): boolean => {
     return getVoteWeight() > 0;
   }, [getVoteWeight]);
 
   const getVotingTier = useCallback((): 'founding' | 'annual' | 'none' => {
-    if (isFoundingMember) return 'founding';
+    if (isFounder) return 'founding';
     if (subscription?.plan === 'annual') return 'annual';
     return 'none';
-  }, [isFoundingMember, subscription?.plan]);
+  }, [isFounder, subscription?.plan]);
 
   // Fetch all roadmap items with vote counts
   const fetchItems = useCallback(async () => {
