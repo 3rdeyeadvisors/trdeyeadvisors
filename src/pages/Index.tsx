@@ -50,9 +50,9 @@ const Index = () => {
           <VaultSection />
           <AboutSection />
           <PlatformFeaturesSection />
-          <PricingSection />
-          <InstitutionalSection />
-          <Founding33Section />
+        <PricingSection />
+        <Founding33Section />
+        <InstitutionalSection />
           <CTASection />
           
           {/* Newsletter */}
