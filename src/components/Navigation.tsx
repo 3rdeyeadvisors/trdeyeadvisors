@@ -5,7 +5,7 @@ import {
   Menu, X, LogIn, LogOut, User, ShoppingCart, ChevronDown, 
   BookOpen, BarChart3, Package, FileText, MoreHorizontal, Gift, 
   Home, Lightbulb, Vault, GraduationCap, Newspaper, FolderOpen,
-  Mail, Shield, Scale
+  Mail, Shield, Scale, Map
 } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useToast } from "@/hooks/use-toast";
@@ -92,6 +92,7 @@ const Navigation = () => {
         { path: "/raffles", label: "Raffles", icon: Gift },
         { path: "/earn", label: "Earn", icon: Gift },
         { path: "/raffle-history", label: "Raffle History", icon: BarChart3 },
+        { path: "/roadmap", label: "Roadmap", icon: Map },
         { path: "/analytics", label: "Analytics", icon: BarChart3 },
         { path: "/contact", label: "Contact", icon: Mail },
       ]
