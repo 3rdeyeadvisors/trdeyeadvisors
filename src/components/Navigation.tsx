@@ -62,6 +62,7 @@ const Navigation = () => {
   // Desktop navigation - dropdown items
   const moreNavItems = [
     { path: "/raffle-history", label: "Raffle History" },
+    { path: "/roadmap", label: "Roadmap" },
     { path: "/analytics", label: "Analytics" },
     { path: "/contact", label: "Contact" },
   ];

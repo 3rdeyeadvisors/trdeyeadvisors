@@ -14,6 +14,7 @@ const Footer = () => {
   const supportLinks = [
     { label: 'Contact', href: '/contact' },
     { label: 'Resources', href: '/resources' },
+    { label: 'Roadmap', href: '/roadmap' },
   ];
 
   const legalLinks = [

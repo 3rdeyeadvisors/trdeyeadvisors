@@ -78,6 +78,7 @@ import VaultDepositTutorial from "./pages/VaultDepositTutorial";
 import VaultWithdrawalTutorial from "./pages/VaultWithdrawalTutorial";
 import Earn from "./pages/Earn";
 import ReferralTerms from "./pages/ReferralTerms";
+import Roadmap from "./pages/Roadmap";
 
 const queryClient = new QueryClient();
 
@@ -173,6 +174,7 @@ const AnimatedRoutes = () => {
       <Route path="/raffle-history" element={<PageTransition><RaffleHistory /></PageTransition>} />
       <Route path="/earn" element={<PageTransition><Earn /></PageTransition>} />
       <Route path="/referral-terms" element={<PageTransition><ReferralTerms /></PageTransition>} />
+      <Route path="/roadmap" element={<PageTransition><Roadmap /></PageTransition>} />
       <Route path="/vault-access" element={<PageTransition><VaultAccess /></PageTransition>} />
       <Route path="/vault-deposit-guide" element={<PageTransition><VaultDepositTutorial /></PageTransition>} />
       <Route path="/vault-withdrawal-guide" element={<PageTransition><VaultWithdrawalTutorial /></PageTransition>} />

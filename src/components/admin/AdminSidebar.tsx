@@ -7,7 +7,8 @@ import {
   Gift,
   Eye,
   Activity,
-  DollarSign
+  DollarSign,
+  Map
 } from "lucide-react";
 import {
   Sidebar,
@@ -28,6 +29,7 @@ const menuItems = [
   { id: "raffles", title: "Raffle Manager", icon: Gift },
   { id: "commissions", title: "Commissions", icon: DollarSign },
   { id: "participation", title: "Tutorial/Course Participation", icon: Activity },
+  { id: "roadmap", title: "Roadmap Manager", icon: Map },
   { id: "email", title: "Email Center", icon: Mail },
   { id: "email-preview", title: "Email Preview", icon: Eye },
   { id: "users", title: "User Management", icon: Users },
