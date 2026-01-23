@@ -39,60 +39,59 @@ const Roadmap = () => {
 
       <div className="min-h-screen bg-background">
         {/* Hero Section */}
-        <section className="relative py-16 md:py-24 overflow-hidden">
+        <section className="relative pt-8 pb-6 md:pt-12 md:pb-10 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent opacity-50" />
           
           <div className="container mx-auto px-4 relative">
-            <div className="max-w-3xl mx-auto text-center space-y-6">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20">
+            <div className="max-w-3xl mx-auto text-center space-y-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20">
                 <Map className="w-4 h-4 text-primary" />
                 <span className="text-sm font-medium text-primary">Platform Roadmap</span>
               </div>
 
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-consciousness font-bold leading-tight">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-consciousness font-bold leading-tight">
                 Shape the{' '}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary/80 to-primary/60">
                   Future
                 </span>
               </h1>
 
-              <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+              <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
                 Your voice matters. Vote on the features you want to see next.
-                Premium members get weighted voting power.
               </p>
 
               {/* Voting Power Explainer */}
-              <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
-                <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/30">
-                  <Crown className="w-5 h-5 text-amber-400" />
-                  <span className="text-sm font-medium">Founding 33 = 3x Votes</span>
+              <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-2 sm:gap-3 pt-2">
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/30">
+                  <Crown className="w-4 h-4 text-amber-400" />
+                  <span className="text-xs sm:text-sm font-medium">Founding 33 = 3x</span>
                 </div>
-                <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 border border-primary/30">
-                  <Star className="w-5 h-5 text-primary" />
-                  <span className="text-sm font-medium">Annual = 1x Vote</span>
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary/10 border border-primary/30">
+                  <Star className="w-4 h-4 text-primary" />
+                  <span className="text-xs sm:text-sm font-medium">Annual = 1x</span>
                 </div>
-                <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-muted/50 border border-border">
-                  <Lock className="w-5 h-5 text-muted-foreground" />
-                  <span className="text-sm font-medium text-muted-foreground">Monthly/Trial = View Only</span>
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted/50 border border-border">
+                  <Lock className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-xs sm:text-sm font-medium text-muted-foreground">View Only</span>
                 </div>
               </div>
 
               {/* User Status */}
               {!user ? (
-                <div className="pt-4">
-                  <Button asChild>
+                <div className="pt-2">
+                  <Button asChild size="sm">
                     <Link to="/auth">
                       Sign In to Vote <ArrowRight className="w-4 h-4 ml-2" />
                     </Link>
                   </Button>
                 </div>
               ) : !canVote ? (
-                <div className="pt-4">
-                  <p className="text-sm text-muted-foreground mb-2">
-                    Upgrade to Annual to unlock voting
+                <div className="pt-2">
+                  <p className="text-xs sm:text-sm text-muted-foreground mb-2">
+                    Upgrade to Annual or join Founding 33 to unlock voting
                   </p>
-                  <Button asChild variant="outline">
+                  <Button asChild variant="outline" size="sm">
                     <Link to="/subscription">
                       View Plans <ArrowRight className="w-4 h-4 ml-2" />
                     </Link>
@@ -127,37 +126,37 @@ const Roadmap = () => {
         </section>
 
         {/* Roadmap Items */}
-        <section className="py-12 md:py-16">
+        <section className="py-6 md:py-10">
           <div className="container mx-auto px-4">
             {loading ? (
-              <div className="flex items-center justify-center py-20">
+              <div className="flex items-center justify-center py-10">
                 <Loader2 className="w-8 h-8 animate-spin text-primary" />
               </div>
             ) : items.length === 0 ? (
-              <div className="text-center py-20">
-                <Map className="w-12 h-12 mx-auto text-muted-foreground/50 mb-4" />
-                <h3 className="text-xl font-consciousness font-medium mb-2">
+              <div className="text-center py-10">
+                <Map className="w-10 h-10 mx-auto text-muted-foreground/50 mb-3" />
+                <h3 className="text-lg font-consciousness font-medium mb-1">
                   No roadmap items yet
                 </h3>
-                <p className="text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   Check back soon for upcoming features to vote on.
                 </p>
               </div>
             ) : (
-              <div className="space-y-12">
+              <div className="space-y-8">
                 {/* In Progress */}
                 {inProgressItems.length > 0 && (
-                  <div className="space-y-6">
-                    <div className="flex items-center gap-3">
-                      <div className="w-3 h-3 rounded-full bg-amber-500 animate-pulse" />
-                      <h2 className="text-2xl font-consciousness font-bold">
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse" />
+                      <h2 className="text-xl md:text-2xl font-consciousness font-bold">
                         In Progress
                       </h2>
-                      <Badge variant="outline" className="bg-amber-500/20 text-amber-400 border-amber-500/30">
+                      <Badge variant="outline" className="bg-amber-500/20 text-amber-400 border-amber-500/30 text-xs">
                         {inProgressItems.length}
                       </Badge>
                     </div>
-                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
                       {inProgressItems.map((item) => (
                         <RoadmapCard
                           key={item.id}
@@ -184,17 +183,17 @@ const Roadmap = () => {
 
                 {/* Proposed */}
                 {proposedItems.length > 0 && (
-                  <div className="space-y-6">
-                    <div className="flex items-center gap-3">
-                      <div className="w-3 h-3 rounded-full bg-primary" />
-                      <h2 className="text-2xl font-consciousness font-bold">
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2.5 h-2.5 rounded-full bg-primary" />
+                      <h2 className="text-xl md:text-2xl font-consciousness font-bold">
                         Proposed Features
                       </h2>
-                      <Badge variant="outline">
+                      <Badge variant="outline" className="text-xs">
                         {proposedItems.length}
                       </Badge>
                     </div>
-                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
                       {proposedItems.map((item) => (
                         <RoadmapCard
                           key={item.id}
@@ -221,17 +220,17 @@ const Roadmap = () => {
 
                 {/* Completed */}
                 {completedItems.length > 0 && (
-                  <div className="space-y-6">
-                    <div className="flex items-center gap-3">
-                      <div className="w-3 h-3 rounded-full bg-emerald-500" />
-                      <h2 className="text-2xl font-consciousness font-bold">
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+                      <h2 className="text-xl md:text-2xl font-consciousness font-bold">
                         Shipped
                       </h2>
-                      <Badge variant="outline" className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">
+                      <Badge variant="outline" className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-xs">
                         {completedItems.length}
                       </Badge>
                     </div>
-                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
                       {completedItems.map((item) => (
                         <RoadmapCard
                           key={item.id}
@@ -261,15 +260,15 @@ const Roadmap = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="py-16 border-t border-border/50">
+        <section className="py-8 md:py-10 border-t border-border/50">
           <div className="container mx-auto px-4 text-center">
-            <h2 className="text-2xl md:text-3xl font-consciousness font-bold mb-4">
+            <h2 className="text-xl md:text-2xl font-consciousness font-bold mb-2">
               Have a Feature Idea?
             </h2>
-            <p className="text-muted-foreground mb-6 max-w-lg mx-auto">
-              We're always looking for ways to improve. Reach out to share your ideas for the platform.
+            <p className="text-sm text-muted-foreground mb-4 max-w-md mx-auto">
+              We're always looking for ways to improve. Share your ideas with us.
             </p>
-            <Button asChild variant="outline">
+            <Button asChild variant="outline" size="sm">
               <Link to="/contact">Contact Us</Link>
             </Button>
           </div>

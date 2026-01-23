@@ -119,19 +119,19 @@ export const RoadmapCard = ({
       {/* Subtle gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
       
-      <CardHeader className="relative pb-2">
-        <div className="flex items-start justify-between gap-4">
-          <CardTitle className="text-lg font-consciousness leading-tight">
+      <CardHeader className="relative p-4 pb-2">
+        <div className="flex items-start justify-between gap-2">
+          <CardTitle className="text-base md:text-lg font-consciousness leading-tight">
             {title}
           </CardTitle>
-          <Badge variant="outline" className={statusInfo.className}>
+          <Badge variant="outline" className={`${statusInfo.className} text-xs shrink-0`}>
             {statusInfo.label}
           </Badge>
         </div>
         
         {/* Countdown Timer */}
         {!isCompleted && timeRemaining && (
-          <div className={`flex items-center gap-1.5 mt-2 text-sm ${
+          <div className={`flex items-center gap-1 mt-1.5 text-xs ${
             timeRemaining.expired 
               ? 'text-muted-foreground' 
               : timeRemaining.urgent 
@@ -139,61 +139,61 @@ export const RoadmapCard = ({
                 : 'text-muted-foreground'
           }`}>
             {timeRemaining.urgent && !timeRemaining.expired ? (
-              <AlertTriangle className="w-3.5 h-3.5" />
+              <AlertTriangle className="w-3 h-3" />
             ) : (
-              <Clock className="w-3.5 h-3.5" />
+              <Clock className="w-3 h-3" />
             )}
             <span className="font-medium">{formatTimeRemaining()}</span>
           </div>
         )}
       </CardHeader>
 
-      <CardContent className="relative space-y-4">
+      <CardContent className="relative p-4 pt-2 space-y-3">
         {description && (
-          <p className="text-sm text-muted-foreground leading-relaxed">
+          <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed line-clamp-2">
             {description}
           </p>
         )}
 
         {/* Vote Progress */}
-        <div className="space-y-2">
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-muted-foreground">Community Support</span>
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-muted-foreground">Support</span>
             <span className="font-medium text-primary">{totalVotes} votes</span>
           </div>
-          <Progress value={votePercentage} className="h-2" />
+          <Progress value={votePercentage} className="h-1.5" />
         </div>
 
         {/* Vote Action */}
-        <div className="flex items-center justify-between gap-4 pt-2">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pt-1">
           {/* Vote Weight Badge */}
           {votingTier !== 'none' && (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center">
               {votingTier === 'founding' ? (
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/30">
-                  <Crown className="w-3.5 h-3.5 text-amber-400" />
-                  <span className="text-xs font-medium text-amber-400">3x Vote Power</span>
+                <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/30">
+                  <Crown className="w-3 h-3 text-amber-400" />
+                  <span className="text-xs font-medium text-amber-400">3x</span>
                 </div>
               ) : (
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 border border-primary/30">
-                  <Star className="w-3.5 h-3.5 text-primary" />
-                  <span className="text-xs font-medium text-primary">1x Vote Power</span>
+                <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 border border-primary/30">
+                  <Star className="w-3 h-3 text-primary" />
+                  <span className="text-xs font-medium text-primary">1x</span>
                 </div>
               )}
             </div>
           )}
 
           {/* Vote Button */}
-          <div className="ml-auto">
+          <div className="w-full sm:w-auto sm:ml-auto">
             {isCompleted ? (
-              <div className="flex items-center gap-1.5 text-emerald-400">
-                <Check className="w-4 h-4" />
-                <span className="text-sm font-medium">Shipped</span>
+              <div className="flex items-center gap-1 text-emerald-400">
+                <Check className="w-3.5 h-3.5" />
+                <span className="text-xs font-medium">Shipped</span>
               </div>
             ) : !isVotingOpen ? (
-              <div className="flex items-center gap-1.5 text-muted-foreground">
-                <Clock className="w-4 h-4" />
-                <span className="text-sm font-medium">Voting Closed</span>
+              <div className="flex items-center gap-1 text-muted-foreground">
+                <Clock className="w-3.5 h-3.5" />
+                <span className="text-xs font-medium">Closed</span>
               </div>
             ) : userHasVoted ? (
               <Button
@@ -201,13 +201,13 @@ export const RoadmapCard = ({
                 size="sm"
                 onClick={onRemoveVote}
                 disabled={isVoting}
-                className="border-primary/30 text-primary hover:bg-primary/10"
+                className="w-full sm:w-auto min-h-[36px] border-primary/30 text-primary hover:bg-primary/10 text-xs"
               >
                 {isVoting ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
                 ) : (
                   <>
-                    <Check className="w-4 h-4 mr-1.5" />
+                    <Check className="w-3.5 h-3.5 mr-1" />
                     Voted
                   </>
                 )}
@@ -218,20 +218,21 @@ export const RoadmapCard = ({
                 size="sm"
                 onClick={onVote}
                 disabled={isVoting}
+                className="w-full sm:w-auto min-h-[36px] text-xs"
               >
                 {isVoting ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
                 ) : (
                   <>
-                    <Vote className="w-4 h-4 mr-1.5" />
+                    <Vote className="w-3.5 h-3.5 mr-1" />
                     Vote
                   </>
                 )}
               </Button>
             ) : (
-              <Button variant="outline" size="sm" disabled className="opacity-50">
-                <Vote className="w-4 h-4 mr-1.5" />
-                Annual Only
+              <Button variant="outline" size="sm" disabled className="w-full sm:w-auto min-h-[36px] opacity-50 text-xs">
+                <Vote className="w-3.5 h-3.5 mr-1" />
+                Premium Only
               </Button>
             )}
           </div>
