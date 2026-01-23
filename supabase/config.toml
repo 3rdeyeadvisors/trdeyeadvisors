@@ -162,3 +162,6 @@ verify_jwt = false
 
 [functions.simulate-bot-activity]
 verify_jwt = false
+
+[functions.send-new-course-announcement]
+verify_jwt = true

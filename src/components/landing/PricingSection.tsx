@@ -145,9 +145,9 @@ const PricingSection = () => {
                     'All DeFi courses and tutorials',
                     'Early access to new courses',
                     `${ANNUAL_BENEFITS.bonusRaffleTickets} bonus raffle entries per raffle`,
-                    'Early access to new vaults',
+                    'Priority email announcements',
                     `${Math.round(COMMISSION_RATES.annual * 100)}% referral commission`,
-                    'Input on platform direction'
+                    'Vote on platform roadmap'
                   ].map((feature, i) => (
                     <li key={i} className="flex items-center text-sm text-foreground/80 font-consciousness">
                       <CheckCircle2 className="w-4 h-4 text-primary mr-3 flex-shrink-0" />

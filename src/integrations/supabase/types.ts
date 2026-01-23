@@ -856,6 +856,45 @@ export type Database = {
         }
         Relationships: []
       }
+      premium_content_announcements: {
+        Row: {
+          announcement_sent_at: string | null
+          content_id: string
+          content_type: string
+          created_at: string | null
+          description: string | null
+          early_access_date: string | null
+          id: string
+          public_release_date: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          announcement_sent_at?: string | null
+          content_id: string
+          content_type: string
+          created_at?: string | null
+          description?: string | null
+          early_access_date?: string | null
+          id?: string
+          public_release_date?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          announcement_sent_at?: string | null
+          content_id?: string
+          content_type?: string
+          created_at?: string | null
+          description?: string | null
+          early_access_date?: string | null
+          id?: string
+          public_release_date?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       printify_orders: {
         Row: {
           address_to: Json
@@ -1410,6 +1449,65 @@ export type Database = {
             columns: ["raffle_id"]
             isOneToOne: false
             referencedRelation: "raffles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      roadmap_items: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          status: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          status?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      roadmap_votes: {
+        Row: {
+          created_at: string | null
+          id: string
+          roadmap_item_id: string
+          user_id: string
+          vote_weight: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          roadmap_item_id: string
+          user_id: string
+          vote_weight?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          roadmap_item_id?: string
+          user_id?: string
+          vote_weight?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "roadmap_votes_roadmap_item_id_fkey"
+            columns: ["roadmap_item_id"]
+            isOneToOne: false
+            referencedRelation: "roadmap_items"
             referencedColumns: ["id"]
           },
         ]
