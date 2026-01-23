@@ -50,8 +50,8 @@ export const RoadmapManager = () => {
   const handleCreate = async () => {
     if (!newTitle.trim()) return;
 
-    const success = await createItem(newTitle.trim(), newDescription.trim());
-    if (success) {
+    const itemId = await createItem(newTitle.trim(), newDescription.trim());
+    if (itemId) {
       setNewTitle('');
       setNewDescription('');
       setIsCreating(false);

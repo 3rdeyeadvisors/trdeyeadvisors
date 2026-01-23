@@ -1461,6 +1461,7 @@ export type Database = {
           status: string | null
           title: string
           updated_at: string | null
+          voting_ends_at: string | null
         }
         Insert: {
           created_at?: string | null
@@ -1469,6 +1470,7 @@ export type Database = {
           status?: string | null
           title: string
           updated_at?: string | null
+          voting_ends_at?: string | null
         }
         Update: {
           created_at?: string | null
@@ -1477,8 +1479,38 @@ export type Database = {
           status?: string | null
           title?: string
           updated_at?: string | null
+          voting_ends_at?: string | null
         }
         Relationships: []
+      }
+      roadmap_reminder_sent: {
+        Row: {
+          id: string
+          reminder_type: string
+          roadmap_item_id: string
+          sent_at: string | null
+        }
+        Insert: {
+          id?: string
+          reminder_type: string
+          roadmap_item_id: string
+          sent_at?: string | null
+        }
+        Update: {
+          id?: string
+          reminder_type?: string
+          roadmap_item_id?: string
+          sent_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "roadmap_reminder_sent_roadmap_item_id_fkey"
+            columns: ["roadmap_item_id"]
+            isOneToOne: false
+            referencedRelation: "roadmap_items"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       roadmap_votes: {
         Row: {

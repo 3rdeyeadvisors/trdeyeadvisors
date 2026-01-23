@@ -11,6 +11,7 @@ interface RoadmapItem {
   description: string | null;
   status: string | null;
   created_at: string | null;
+  voting_ends_at: string | null;
   total_votes: number;
   user_has_voted: boolean;
 }
@@ -88,6 +89,7 @@ export const useRoadmapVotes = () => {
           description: item.description,
           status: item.status,
           created_at: item.created_at,
+          voting_ends_at: (item as any).voting_ends_at || null,
           total_votes: totalVotes,
           user_has_voted: userHasVoted,
         };
@@ -108,6 +110,13 @@ export const useRoadmapVotes = () => {
     }
   }, [user, toast]);
 
+  // Check if voting is still open for an item
+  const isVotingOpen = useCallback((item: RoadmapItem): boolean => {
+    if (item.status === 'completed') return false;
+    if (!item.voting_ends_at) return true; // Legacy items without deadline
+    return new Date(item.voting_ends_at) > new Date();
+  }, []);
+
   // Cast a vote
   const castVote = useCallback(
     async (roadmapItemId: string) => {
@@ -125,6 +134,17 @@ export const useRoadmapVotes = () => {
           title: 'Annual subscription required',
           description:
             'Only Annual subscribers and Founding 33 members can vote on the roadmap',
+          variant: 'destructive',
+        });
+        return false;
+      }
+
+      // Check if voting is still open
+      const item = items.find(i => i.id === roadmapItemId);
+      if (item && !isVotingOpen(item)) {
+        toast({
+          title: 'Voting closed',
+          description: 'Voting has ended for this feature',
           variant: 'destructive',
         });
         return false;
@@ -154,8 +174,22 @@ export const useRoadmapVotes = () => {
           return false;
         }
 
+        // Award points for voting
+        try {
+          await supabase.rpc('award_user_points', {
+            _user_id: user.id,
+            _points: 15,
+            _action_type: 'roadmap_vote',
+            _action_id: roadmapItemId,
+            _metadata: { item_title: item?.title }
+          });
+        } catch (pointsError) {
+          console.error('Error awarding points for vote:', pointsError);
+          // Don't fail the vote if points fail
+        }
+
         toast({
-          title: 'Vote cast!',
+          title: 'Vote cast! +15 points',
           description: `Your vote (${voteWeight}x power) has been recorded`,
         });
 
@@ -174,7 +208,7 @@ export const useRoadmapVotes = () => {
         setVoting(null);
       }
     },
-    [user, canVote, getVoteWeight, fetchItems, toast]
+    [user, canVote, getVoteWeight, fetchItems, toast, items, isVotingOpen]
   );
 
   // Remove a vote
@@ -225,6 +259,7 @@ export const useRoadmapVotes = () => {
     canVote: canVote(),
     votingTier: getVotingTier(),
     voteWeight: getVoteWeight(),
+    isVotingOpen,
     castVote,
     removeVote,
     refreshItems: fetchItems,
@@ -236,22 +271,37 @@ export const useRoadmapAdmin = () => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
 
-  const createItem = async (title: string, description: string) => {
+  const createItem = async (title: string, description: string): Promise<string | null> => {
     setLoading(true);
     try {
-      const { error } = await supabase.from('roadmap_items').insert({
+      // Set voting deadline to 7 days from now
+      const votingEndsAt = new Date();
+      votingEndsAt.setDate(votingEndsAt.getDate() + 7);
+
+      const { data, error } = await supabase.from('roadmap_items').insert({
         title,
         description,
         status: 'proposed',
-      });
+        voting_ends_at: votingEndsAt.toISOString(),
+      }).select('id').single();
 
       if (error) throw error;
 
+      // Trigger email notification to all subscribers
+      try {
+        await supabase.functions.invoke('send-roadmap-item-created', {
+          body: { item_id: data.id }
+        });
+      } catch (emailError) {
+        console.error('Error sending roadmap email:', emailError);
+        // Don't fail the create if email fails
+      }
+
       toast({
         title: 'Success',
-        description: 'Roadmap item created',
+        description: 'Roadmap item created & email sent to subscribers',
       });
-      return true;
+      return data.id;
     } catch (error) {
       console.error('Error creating roadmap item:', error);
       toast({
@@ -259,7 +309,7 @@ export const useRoadmapAdmin = () => {
         description: 'Failed to create roadmap item',
         variant: 'destructive',
       });
-      return false;
+      return null;
     } finally {
       setLoading(false);
     }

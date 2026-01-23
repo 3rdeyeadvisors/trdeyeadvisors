@@ -21,6 +21,7 @@ export const POINT_VALUES = {
   discussion_started: 25,
   discussion_reply: 10,
   rate_course: 20,
+  roadmap_vote: 15, // Points for voting on roadmap items
   
   // Referral points
   referral_signup: 50,
@@ -271,6 +272,7 @@ export const usePoints = () => {
       discussion_started: 'Discussion Started',
       discussion_reply: 'Discussion Reply',
       rate_course: 'Course Rated',
+      roadmap_vote: 'Roadmap Vote',
       referral_signup: 'Referral Signup',
       referral_monthly_conversion: 'Referral Subscribed (Monthly)',
       referral_annual_conversion: 'Referral Subscribed (Annual)',
