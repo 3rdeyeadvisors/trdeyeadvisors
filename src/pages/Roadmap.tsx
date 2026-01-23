@@ -16,6 +16,7 @@ const Roadmap = () => {
     canVote,
     votingTier,
     voteWeight,
+    isVotingOpen,
     castVote,
     removeVote,
   } = useRoadmapVotes();
@@ -164,6 +165,7 @@ const Roadmap = () => {
                           title={item.title}
                           description={item.description}
                           status={item.status}
+                          votingEndsAt={item.voting_ends_at}
                           totalVotes={item.total_votes}
                           userHasVoted={item.user_has_voted}
                           maxVotes={maxVotes}
@@ -171,6 +173,7 @@ const Roadmap = () => {
                           votingTier={votingTier}
                           voteWeight={voteWeight}
                           isVoting={voting === item.id}
+                          isVotingOpen={isVotingOpen(item)}
                           onVote={() => castVote(item.id)}
                           onRemoveVote={() => removeVote(item.id)}
                         />
@@ -199,6 +202,7 @@ const Roadmap = () => {
                           title={item.title}
                           description={item.description}
                           status={item.status}
+                          votingEndsAt={item.voting_ends_at}
                           totalVotes={item.total_votes}
                           userHasVoted={item.user_has_voted}
                           maxVotes={maxVotes}
@@ -206,6 +210,7 @@ const Roadmap = () => {
                           votingTier={votingTier}
                           voteWeight={voteWeight}
                           isVoting={voting === item.id}
+                          isVotingOpen={isVotingOpen(item)}
                           onVote={() => castVote(item.id)}
                           onRemoveVote={() => removeVote(item.id)}
                         />
@@ -234,6 +239,7 @@ const Roadmap = () => {
                           title={item.title}
                           description={item.description}
                           status={item.status}
+                          votingEndsAt={item.voting_ends_at}
                           totalVotes={item.total_votes}
                           userHasVoted={item.user_has_voted}
                           maxVotes={maxVotes}
@@ -241,6 +247,7 @@ const Roadmap = () => {
                           votingTier={votingTier}
                           voteWeight={voteWeight}
                           isVoting={voting === item.id}
+                          isVotingOpen={isVotingOpen(item)}
                           onVote={() => castVote(item.id)}
                           onRemoveVote={() => removeVote(item.id)}
                         />

@@ -1,14 +1,16 @@
-import { Check, Vote, Loader2, Crown, Star } from 'lucide-react';
+import { Check, Vote, Loader2, Crown, Star, Clock, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
+import { useState, useEffect } from 'react';
 
 interface RoadmapCardProps {
   id: string;
   title: string;
   description: string | null;
   status: string | null;
+  votingEndsAt: string | null;
   totalVotes: number;
   userHasVoted: boolean;
   maxVotes: number;
@@ -16,6 +18,7 @@ interface RoadmapCardProps {
   votingTier: 'founding' | 'annual' | 'none';
   voteWeight: number;
   isVoting: boolean;
+  isVotingOpen: boolean;
   onVote: () => void;
   onRemoveVote: () => void;
 }
@@ -35,11 +38,39 @@ const statusConfig = {
   },
 };
 
+interface TimeRemaining {
+  days: number;
+  hours: number;
+  minutes: number;
+  expired: boolean;
+  urgent: boolean; // Less than 24 hours
+}
+
+const getTimeRemaining = (votingEndsAt: string | null): TimeRemaining | null => {
+  if (!votingEndsAt) return null;
+  
+  const end = new Date(votingEndsAt);
+  const now = new Date();
+  const diffMs = end.getTime() - now.getTime();
+  
+  if (diffMs <= 0) {
+    return { days: 0, hours: 0, minutes: 0, expired: true, urgent: false };
+  }
+  
+  const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+  const urgent = diffMs < 24 * 60 * 60 * 1000; // Less than 24 hours
+  
+  return { days, hours, minutes, expired: false, urgent };
+};
+
 export const RoadmapCard = ({
   id,
   title,
   description,
   status,
+  votingEndsAt,
   totalVotes,
   userHasVoted,
   maxVotes,
@@ -47,12 +78,41 @@ export const RoadmapCard = ({
   votingTier,
   voteWeight,
   isVoting,
+  isVotingOpen,
   onVote,
   onRemoveVote,
 }: RoadmapCardProps) => {
   const statusInfo = statusConfig[status as keyof typeof statusConfig] || statusConfig.proposed;
   const votePercentage = maxVotes > 0 ? (totalVotes / maxVotes) * 100 : 0;
   const isCompleted = status === 'completed';
+  
+  const [timeRemaining, setTimeRemaining] = useState<TimeRemaining | null>(() => 
+    getTimeRemaining(votingEndsAt)
+  );
+
+  // Update countdown every minute
+  useEffect(() => {
+    if (!votingEndsAt || isCompleted) return;
+    
+    const interval = setInterval(() => {
+      setTimeRemaining(getTimeRemaining(votingEndsAt));
+    }, 60000); // Update every minute
+    
+    return () => clearInterval(interval);
+  }, [votingEndsAt, isCompleted]);
+
+  const formatTimeRemaining = () => {
+    if (!timeRemaining) return null;
+    if (timeRemaining.expired) return 'Voting ended';
+    
+    if (timeRemaining.days > 0) {
+      return `${timeRemaining.days}d ${timeRemaining.hours}h left`;
+    }
+    if (timeRemaining.hours > 0) {
+      return `${timeRemaining.hours}h ${timeRemaining.minutes}m left`;
+    }
+    return `${timeRemaining.minutes}m left`;
+  };
 
   return (
     <Card className="group relative overflow-hidden border-border/50 bg-card/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-300">
@@ -68,6 +128,24 @@ export const RoadmapCard = ({
             {statusInfo.label}
           </Badge>
         </div>
+        
+        {/* Countdown Timer */}
+        {!isCompleted && timeRemaining && (
+          <div className={`flex items-center gap-1.5 mt-2 text-sm ${
+            timeRemaining.expired 
+              ? 'text-muted-foreground' 
+              : timeRemaining.urgent 
+                ? 'text-amber-400' 
+                : 'text-muted-foreground'
+          }`}>
+            {timeRemaining.urgent && !timeRemaining.expired ? (
+              <AlertTriangle className="w-3.5 h-3.5" />
+            ) : (
+              <Clock className="w-3.5 h-3.5" />
+            )}
+            <span className="font-medium">{formatTimeRemaining()}</span>
+          </div>
+        )}
       </CardHeader>
 
       <CardContent className="relative space-y-4">
@@ -111,6 +189,11 @@ export const RoadmapCard = ({
               <div className="flex items-center gap-1.5 text-emerald-400">
                 <Check className="w-4 h-4" />
                 <span className="text-sm font-medium">Shipped</span>
+              </div>
+            ) : !isVotingOpen ? (
+              <div className="flex items-center gap-1.5 text-muted-foreground">
+                <Clock className="w-4 h-4" />
+                <span className="text-sm font-medium">Voting Closed</span>
               </div>
             ) : userHasVoted ? (
               <Button
