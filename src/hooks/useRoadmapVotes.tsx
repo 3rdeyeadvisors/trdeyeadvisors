@@ -36,7 +36,7 @@ export const useRoadmapVotes = () => {
 
   // Determine vote weight based on membership
   // Check both founding33_purchases table AND grandfathered founding_33 members
-  const isFounder = isFoundingMember || subscription?.plan === 'founding_33' || subscription?.isFounder;
+  const isFounder = isFoundingMember || subscription?.plan === 'founding_33' || subscription?.isFounder || subscription?.isAdmin;
   
   const getVoteWeight = useCallback((): number => {
     if (isFounder) return 3;
