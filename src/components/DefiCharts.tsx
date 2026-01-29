@@ -446,13 +446,13 @@ export const DefiCharts = () => {
       {/* Mobile View - Only show key metrics */}
       <div className="block md:hidden space-y-4">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Value Locked</CardTitle>
+          <CardHeader className="flex flex-col items-center justify-center space-y-2 pb-2">
             <DollarSign className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-center">Total Value Locked</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="text-center">
             <div className="text-2xl font-bold">{formatCurrency(getCurrentTVL())}</div>
-            <div className="flex items-center text-xs text-muted-foreground">
+            <div className="flex items-center justify-center text-xs text-muted-foreground">
               {parseFloat(getTVLChange()) >= 0 ? (
                 <TrendingUp className="w-4 h-4 text-awareness mr-1" />
               ) : (
