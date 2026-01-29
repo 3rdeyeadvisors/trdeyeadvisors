@@ -1,43 +1,61 @@
 
-## Grant Admin Voting Access on Roadmap
+## Security Cleanup Plan
 
-### Problem
-Your admin account cannot vote on roadmap items because the voting eligibility check only includes:
-- Founding 33 members (3x power)
-- Annual subscribers (1x power)
+### Summary
+After a thorough audit, I found 2 actual RLS policy issues that need fixing, plus 3 false positive security warnings that can be dismissed. The platform is already well-secured - just needs minor policy corrections.
 
-Admins are excluded from voting even though they have full platform access.
+### What Needs Fixing
 
-### Solution
-Add `subscription?.isAdmin` to the voting weight logic in `useRoadmapVotes.tsx`. Admins will get 3x voting power (same as Founding 33 members).
+**1. Fix Overly Permissive RLS Policies**
 
-### Changes Required
+Two tables have `USING (true)` policies that grant broader access than intended:
 
-**File:** `src/hooks/useRoadmapVotes.tsx`
+| Table | Current Issue | Fix |
+|-------|--------------|-----|
+| `roadmap_reminder_sent` | ALL policy with `true` for public role | Restrict to service_role only |
+| `user_points_monthly` | ALL policy with `true` for public role | Restrict to service_role only |
 
-**Update line 39** - Add isAdmin to the isFounder check:
-```typescript
-// FROM:
-const isFounder = isFoundingMember || subscription?.plan === 'founding_33' || subscription?.isFounder;
+**Migration to apply:**
+```sql
+-- Fix roadmap_reminder_sent: Only service role should manage this
+DROP POLICY IF EXISTS "Service role can manage reminders" ON public.roadmap_reminder_sent;
+CREATE POLICY "Service role can manage reminders" ON public.roadmap_reminder_sent
+  FOR ALL TO service_role USING (true) WITH CHECK (true);
 
-// TO:
-const isFounder = isFoundingMember || subscription?.plan === 'founding_33' || subscription?.isFounder || subscription?.isAdmin;
+-- Fix user_points_monthly: Only service role for bulk operations
+DROP POLICY IF EXISTS "Service role can manage monthly totals" ON public.user_points_monthly;
+CREATE POLICY "Service role can manage monthly totals" ON public.user_points_monthly
+  FOR ALL TO service_role USING (true) WITH CHECK (true);
 ```
 
-This single change propagates to all the dependent functions:
-- `getVoteWeight()` → Returns 3 for admins
-- `canVote()` → Returns true for admins  
-- `getVotingTier()` → Returns 'founding' for admins
+**2. Mark False Positives as Resolved**
 
-### Result
-| User Type | Voting Power |
-|-----------|-------------|
-| Admin | 3x (new) |
-| Founding 33 | 3x |
-| Annual Subscriber | 1x |
-| Monthly/Trial/Free | Cannot vote |
+These tables are already properly secured with admin-only access:
 
-### Technical Notes
-- The `subscription?.isAdmin` value is already returned from the `check-subscription` edge function
-- No database changes required - this is purely a frontend logic update
-- Admins will see the "3x Voting Power Active" badge and can cast votes immediately
+- **subscribers** - Only admins can SELECT, public INSERT has rate limiting
+- **contact_submissions** - Admin-only SELECT/UPDATE/DELETE, rate-limited INSERT
+- **grandfathered_emails** - Admin-only ALL policy
+
+### What You Need to Do Manually
+
+**Leaked Password Protection** - This must be enabled in the Supabase Dashboard:
+1. Go to Authentication → Providers → Email
+2. Under "Password Policy", enable "Leaked Password Protection"
+3. This checks passwords against known breached password databases
+
+### Technical Details
+
+**Why these policies were flagged:**
+The original policies used `TO public` which includes all roles. By changing to `TO service_role`, the policies only apply when your edge functions call the database with the service role key, preventing any client-side exploitation.
+
+**No encryption needed:**
+The flagged email fields in `subscribers` and `contact_submissions` don't require encryption because:
+- RLS already blocks unauthorized access completely
+- Encryption at rest would add complexity without security benefit since the data is already protected by RLS
+- Supabase encrypts data at rest at the infrastructure level
+
+### Implementation Order
+1. Apply the RLS policy fixes via migration
+2. Update security findings to mark false positives
+3. Remind you to enable leaked password protection in dashboard
+
