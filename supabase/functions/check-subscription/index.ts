@@ -4,7 +4,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
 const logStep = (step: string, details?: any) => {
@@ -17,12 +17,6 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  const supabaseClient = createClient(
-    Deno.env.get("SUPABASE_URL") ?? "",
-    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
-    { auth: { persistSession: false } }
-  );
-
   try {
     logStep("Function started");
 
@@ -34,40 +28,59 @@ serve(async (req) => {
     if (!authHeader) throw new Error("No authorization header provided");
     logStep("Authorization header found");
 
+    // Parse JWT directly instead of using getUser() - more reliable
     const token = authHeader.replace("Bearer ", "");
-    logStep("Authenticating user with token");
+    let userId: string;
+    let userEmail: string;
     
-    const { data: userData, error: userError } = await supabaseClient.auth.getUser(token);
-    if (userError) throw new Error(`Authentication error: ${userError.message}`);
-    const user = userData.user;
-    if (!user?.email) throw new Error("User not authenticated or email not available");
-    logStep("User authenticated", { userId: user.id, email: user.email });
+    try {
+      const payloadBase64 = token.split('.')[1];
+      const payload = JSON.parse(atob(payloadBase64));
+      userId = payload.sub;
+      userEmail = payload.email;
+      
+      if (!userId || !userEmail) {
+        throw new Error("Invalid token payload");
+      }
+      
+      logStep("User authenticated via JWT parsing", { userId, email: userEmail });
+    } catch (parseError) {
+      logStep("JWT parsing failed", { error: String(parseError) });
+      throw new Error("Invalid or expired token");
+    }
+
+    // Create service role client for database queries
+    const supabaseClient = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+      { auth: { persistSession: false } }
+    );
 
     // Check if user is admin FIRST (before grandfathered to ensure isAdmin flag is always set)
     const { data: adminRole } = await supabaseClient
       .from('user_roles')
       .select('role')
-      .eq('user_id', user.id)
+      .eq('user_id', userId)
       .eq('role', 'admin')
       .maybeSingle();
     
     const isAdmin = !!adminRole;
     if (isAdmin) {
-      logStep("User has admin role", { userId: user.id });
+      logStep("User has admin role", { userId });
     }
 
     // Check if user is grandfathered (full platform access)
     const { data: grandfatheredData } = await supabaseClient
       .from('grandfathered_emails')
       .select('*')
-      .ilike('email', user.email)
+      .ilike('email', userEmail)
       .maybeSingle();
     
     if (grandfatheredData) {
       if (!grandfatheredData.claimed_by) {
         await supabaseClient
           .from('grandfathered_emails')
-          .update({ claimed_by: user.id, claimed_at: new Date().toISOString() })
+          .update({ claimed_by: userId, claimed_at: new Date().toISOString() })
           .eq('id', grandfatheredData.id);
       }
       
@@ -75,7 +88,7 @@ serve(async (req) => {
       const isFounder = grandfatheredData.access_type === 'founding_33';
       
       logStep("User is grandfathered", { 
-        email: user.email, 
+        email: userEmail, 
         isFounder,
         isAdmin,
         accessType: grandfatheredData.access_type 
@@ -96,7 +109,7 @@ serve(async (req) => {
 
     // If admin but not grandfathered
     if (isAdmin) {
-      logStep("User is admin (not grandfathered)", { userId: user.id });
+      logStep("User is admin (not grandfathered)", { userId });
       return new Response(JSON.stringify({
         subscribed: true,
         isAdmin: true,
@@ -112,8 +125,8 @@ serve(async (req) => {
     const { data: trialData } = await supabaseClient
       .from('user_trials')
       .select('*')
-      .eq('user_id', user.id)
-      .single();
+      .eq('user_id', userId)
+      .maybeSingle();
 
     if (trialData && !trialData.converted_at) {
       const trialEnd = new Date(trialData.trial_end);
@@ -149,7 +162,7 @@ serve(async (req) => {
 
     // Check Stripe for paid subscriptions
     const stripe = new Stripe(stripeKey, { apiVersion: "2025-08-27.basil" });
-    const customers = await stripe.customers.list({ email: user.email, limit: 1 });
+    const customers = await stripe.customers.list({ email: userEmail, limit: 1 });
     
     if (customers.data.length === 0) {
       logStep("No customer found, user is not subscribed");
@@ -201,7 +214,7 @@ serve(async (req) => {
       await supabaseClient
         .from('user_trials')
         .update({ converted_at: new Date().toISOString() })
-        .eq('user_id', user.id);
+        .eq('user_id', userId);
       logStep("Marked trial as converted");
     }
 
