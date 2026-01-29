@@ -7,7 +7,7 @@ const corsHeaders = {
 
 // Cache for storing API responses
 let cachedData: { data: any; timestamp: number } | null = null;
-const CACHE_DURATION_MS = 5 * 60 * 1000; // 5 minutes
+const CACHE_DURATION_MS = 3 * 60 * 1000; // 3 minutes for fresher data
 
 // 3EA Recommended token IDs (CoinGecko format)
 const RECOMMENDED_IDS = [
@@ -60,6 +60,7 @@ serve(async (req) => {
         success: true,
         data: cachedData.data,
         cached: true,
+        cacheAge: Math.floor((now - cachedData.timestamp) / 1000),
         lastUpdated: new Date(cachedData.timestamp).toISOString()
       }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -136,6 +137,7 @@ serve(async (req) => {
       success: true,
       data: responseData,
       cached: false,
+      cacheAge: 0,
       lastUpdated: new Date(now).toISOString()
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -152,6 +154,7 @@ serve(async (req) => {
         data: cachedData.data,
         cached: true,
         stale: true,
+        cacheAge: Math.floor((now - cachedData.timestamp) / 1000),
         lastUpdated: new Date(cachedData.timestamp).toISOString(),
         error: 'Using cached data due to API error'
       }), {
