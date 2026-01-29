@@ -9,9 +9,12 @@ import {
   RefreshCw, 
   Star, 
   AlertTriangle,
-  Coins
+  Coins,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface CryptoData {
   id: string;
@@ -65,22 +68,23 @@ const CryptoCard = ({ crypto, isRecommended = false }: { crypto: CryptoData; isR
   
   return (
     <Card className={`p-4 bg-card/80 border-border hover:border-primary/50 transition-all duration-300 ${isRecommended ? 'ring-1 ring-primary/30' : ''}`}>
-      <div className="flex items-start justify-between mb-3">
-        <div className="flex items-center gap-2">
+      {/* Header: Center on mobile, left-align on desktop */}
+      <div className="flex flex-col sm:flex-row items-center sm:items-start sm:justify-between mb-3 gap-2 sm:gap-0">
+        <div className="flex flex-col sm:flex-row items-center gap-2">
           <img 
             src={crypto.image} 
             alt={crypto.name} 
-            className="w-8 h-8 rounded-full"
+            className="w-10 h-10 sm:w-8 sm:h-8 rounded-full"
             loading="lazy"
           />
-          <div>
-            <div className="flex items-center gap-1.5">
+          <div className="text-center sm:text-left">
+            <div className="flex items-center justify-center sm:justify-start gap-1.5">
               <span className="font-consciousness font-semibold text-foreground">{crypto.symbol}</span>
               {isRecommended && (
                 <Star className="w-3.5 h-3.5 text-primary fill-primary" />
               )}
             </div>
-            <span className="text-xs text-muted-foreground font-consciousness truncate max-w-[80px] block">
+            <span className="text-xs text-muted-foreground font-consciousness truncate max-w-[120px] sm:max-w-[80px] block">
               {crypto.name}
             </span>
           </div>
@@ -90,12 +94,14 @@ const CryptoCard = ({ crypto, isRecommended = false }: { crypto: CryptoData; isR
         </Badge>
       </div>
       
-      <div className="space-y-2">
-        <div className="text-xl font-consciousness font-bold text-foreground">
+      {/* Price and details: All centered on mobile */}
+      <div className="space-y-2 text-center sm:text-left">
+        <div className="text-2xl sm:text-xl font-consciousness font-bold text-foreground">
           {formatPrice(crypto.currentPrice)}
         </div>
         
-        <div className="flex items-center justify-between">
+        {/* Price change and APY: Stack on mobile, row on desktop */}
+        <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-2 sm:gap-0">
           <div className={`flex items-center gap-1 text-sm font-consciousness ${isPositive ? 'text-green-500' : 'text-red-500'}`}>
             {isPositive ? (
               <TrendingUp className="w-4 h-4" />
@@ -122,18 +128,20 @@ const CryptoCard = ({ crypto, isRecommended = false }: { crypto: CryptoData; isR
 
 const LoadingSkeleton = () => (
   <Card className="p-4 bg-card/80 border-border">
-    <div className="flex items-start justify-between mb-3">
-      <div className="flex items-center gap-2">
-        <Skeleton className="w-8 h-8 rounded-full" />
-        <div>
-          <Skeleton className="w-12 h-4 mb-1" />
-          <Skeleton className="w-16 h-3" />
+    <div className="flex flex-col sm:flex-row items-center sm:items-start sm:justify-between mb-3 gap-2 sm:gap-0">
+      <div className="flex flex-col sm:flex-row items-center gap-2">
+        <Skeleton className="w-10 h-10 sm:w-8 sm:h-8 rounded-full" />
+        <div className="text-center sm:text-left">
+          <Skeleton className="w-12 h-4 mb-1 mx-auto sm:mx-0" />
+          <Skeleton className="w-16 h-3 mx-auto sm:mx-0" />
         </div>
       </div>
       <Skeleton className="w-8 h-5" />
     </div>
-    <Skeleton className="w-24 h-7 mb-2" />
-    <Skeleton className="w-16 h-4" />
+    <div className="text-center sm:text-left">
+      <Skeleton className="w-24 h-7 mb-2 mx-auto sm:mx-0" />
+      <Skeleton className="w-16 h-4 mx-auto sm:mx-0" />
+    </div>
   </Card>
 );
 
@@ -144,6 +152,10 @@ export const CryptoPricesWidget = () => {
   const [lastUpdated, setLastUpdated] = useState<string | null>(null);
   const [isStale, setIsStale] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [showAllTop10, setShowAllTop10] = useState(false);
+  const [showAllRecommended, setShowAllRecommended] = useState(false);
+  
+  const isMobile = useIsMobile();
 
   const fetchPrices = useCallback(async (isManualRefresh = false) => {
     try {
@@ -193,11 +205,16 @@ export const CryptoPricesWidget = () => {
     });
   };
 
+  // Limit displayed items on mobile
+  const displayedTop10 = isMobile && !showAllTop10 ? data?.top10.slice(0, 5) : data?.top10;
+  const displayedRecommended = isMobile && !showAllRecommended ? data?.recommended.slice(0, 5) : data?.recommended;
+
   if (loading) {
     return (
       <Card className="p-6 bg-card/60 border-border">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
+        {/* Loading Header - Centered on mobile */}
+        <div className="flex flex-col items-center sm:flex-row sm:items-center sm:justify-between mb-6 gap-4 text-center sm:text-left">
+          <div className="flex flex-col sm:flex-row items-center gap-3">
             <Coins className="w-8 h-8 text-primary" />
             <div>
               <h2 className="text-2xl font-consciousness font-bold text-foreground">Live Crypto Prices</h2>
@@ -207,16 +224,26 @@ export const CryptoPricesWidget = () => {
         </div>
         
         <div className="mb-8">
-          <h3 className="text-lg font-consciousness font-semibold text-foreground mb-4">Top 10 by Market Cap</h3>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {Array(10).fill(0).map((_, i) => <LoadingSkeleton key={i} />)}
+          <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-2 mb-4">
+            <div className="flex items-center gap-2">
+              <TrendingUp className="w-5 h-5 text-primary" />
+              <h3 className="text-lg font-consciousness font-semibold text-foreground">Top 10 by Market Cap</h3>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {Array(isMobile ? 5 : 10).fill(0).map((_, i) => <LoadingSkeleton key={i} />)}
           </div>
         </div>
         
         <div>
-          <h3 className="text-lg font-consciousness font-semibold text-foreground mb-4">3EA Recommended</h3>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {Array(10).fill(0).map((_, i) => <LoadingSkeleton key={i} />)}
+          <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-2 mb-4">
+            <div className="flex items-center gap-2">
+              <Star className="w-5 h-5 text-primary fill-primary" />
+              <h3 className="text-lg font-consciousness font-semibold text-foreground">3EA Recommended</h3>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {Array(isMobile ? 5 : 10).fill(0).map((_, i) => <LoadingSkeleton key={i} />)}
           </div>
         </div>
       </Card>
@@ -232,7 +259,7 @@ export const CryptoPricesWidget = () => {
             Unable to Load Prices
           </h3>
           <p className="text-muted-foreground font-consciousness mb-4">{error}</p>
-          <Button onClick={() => fetchPrices(true)} variant="outline">
+          <Button onClick={() => fetchPrices(true)} variant="outline" className="min-h-[52px]">
             <RefreshCw className="w-4 h-4 mr-2" />
             Try Again
           </Button>
@@ -243,13 +270,13 @@ export const CryptoPricesWidget = () => {
 
   return (
     <Card className="p-6 bg-card/60 border-border">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
-        <div className="flex items-center gap-3">
+      {/* Header - Fully centered on mobile */}
+      <div className="flex flex-col items-center sm:flex-row sm:items-center sm:justify-between mb-6 gap-4 text-center sm:text-left">
+        <div className="flex flex-col sm:flex-row items-center gap-3">
           <Coins className="w-8 h-8 text-primary" />
           <div>
             <h2 className="text-2xl font-consciousness font-bold text-foreground">Live Crypto Prices</h2>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground font-consciousness">
+            <div className="flex flex-col sm:flex-row items-center gap-2 text-sm text-muted-foreground font-consciousness">
               {lastUpdated && (
                 <span>Updated at {formatLastUpdated(lastUpdated)}</span>
               )}
@@ -267,7 +294,7 @@ export const CryptoPricesWidget = () => {
           variant="outline" 
           size="sm"
           disabled={refreshing}
-          className="font-consciousness"
+          className="font-consciousness min-h-[52px] sm:min-h-0 w-full sm:w-auto"
         >
           <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
           Refresh
@@ -276,29 +303,75 @@ export const CryptoPricesWidget = () => {
 
       {/* Top 10 Section */}
       <div className="mb-8">
-        <div className="flex items-center gap-2 mb-4">
-          <TrendingUp className="w-5 h-5 text-primary" />
-          <h3 className="text-lg font-consciousness font-semibold text-foreground">Top 10 by Market Cap</h3>
+        <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-2 mb-4">
+          <div className="flex items-center gap-2">
+            <TrendingUp className="w-5 h-5 text-primary" />
+            <h3 className="text-lg font-consciousness font-semibold text-foreground">Top 10 by Market Cap</h3>
+          </div>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-          {data?.top10.map((crypto) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          {displayedTop10?.map((crypto) => (
             <CryptoCard key={crypto.id} crypto={crypto} />
           ))}
         </div>
+        
+        {/* Show More/Less Toggle for Top 10 */}
+        {isMobile && data?.top10 && data.top10.length > 5 && (
+          <Button 
+            variant="ghost" 
+            className="w-full mt-4 font-consciousness min-h-[52px]"
+            onClick={() => setShowAllTop10(!showAllTop10)}
+          >
+            {showAllTop10 ? (
+              <>
+                <ChevronUp className="w-4 h-4 mr-2" />
+                Show Less
+              </>
+            ) : (
+              <>
+                <ChevronDown className="w-4 h-4 mr-2" />
+                Show More ({data.top10.length - 5} more)
+              </>
+            )}
+          </Button>
+        )}
       </div>
 
       {/* 3EA Recommended Section */}
       <div>
-        <div className="flex items-center gap-2 mb-4">
-          <Star className="w-5 h-5 text-primary fill-primary" />
-          <h3 className="text-lg font-consciousness font-semibold text-foreground">3EA Recommended</h3>
-          <Badge variant="secondary" className="ml-2 font-consciousness">Our Picks</Badge>
+        <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-2 mb-4">
+          <div className="flex items-center gap-2">
+            <Star className="w-5 h-5 text-primary fill-primary" />
+            <h3 className="text-lg font-consciousness font-semibold text-foreground">3EA Recommended</h3>
+          </div>
+          <Badge variant="secondary" className="font-consciousness">Our Picks</Badge>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-          {data?.recommended.map((crypto) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          {displayedRecommended?.map((crypto) => (
             <CryptoCard key={crypto.id} crypto={crypto} isRecommended />
           ))}
         </div>
+        
+        {/* Show More/Less Toggle for Recommended */}
+        {isMobile && data?.recommended && data.recommended.length > 5 && (
+          <Button 
+            variant="ghost" 
+            className="w-full mt-4 font-consciousness min-h-[52px]"
+            onClick={() => setShowAllRecommended(!showAllRecommended)}
+          >
+            {showAllRecommended ? (
+              <>
+                <ChevronUp className="w-4 h-4 mr-2" />
+                Show Less
+              </>
+            ) : (
+              <>
+                <ChevronDown className="w-4 h-4 mr-2" />
+                Show More ({data.recommended.length - 5} more)
+              </>
+            )}
+          </Button>
+        )}
       </div>
 
       {/* Disclaimer */}
