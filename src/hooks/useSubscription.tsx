@@ -66,9 +66,26 @@ export const SubscriptionProvider = ({ children }: { children: React.ReactNode }
     try {
       setError(null);
 
+      // Get a fresh access token before making the request
+      let accessToken = session.access_token;
+      
+      // If this is a retry, refresh the session first
+      if (retryCountRef.current > 0) {
+        console.log('[Subscription] Refreshing session before retry');
+        const { data: refreshData, error: refreshError } = await supabase.auth.refreshSession();
+        
+        if (refreshError) {
+          console.warn('[Subscription] Session refresh failed:', refreshError.message);
+          // Continue with existing token - the edge function will handle it
+        } else if (refreshData.session) {
+          accessToken = refreshData.session.access_token;
+          console.log('[Subscription] Session refreshed successfully');
+        }
+      }
+
       const { data, error: fnError } = await supabase.functions.invoke('check-subscription', {
         headers: {
-          Authorization: `Bearer ${session.access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
 
