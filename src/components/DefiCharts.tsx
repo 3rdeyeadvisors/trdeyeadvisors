@@ -387,13 +387,16 @@ export const DefiCharts = () => {
   return (
     <div className="space-y-6 mobile-typography-center">
       {/* Status badges and refresh button */}
-      <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-end gap-2">
+      <div className="flex flex-col items-center gap-3">
         <TooltipProvider>
+          {/* Live Data badge on top, centered */}
+          <Badge variant="secondary" className={`${loading ? "animate-pulse" : ""}`}>
+            <Activity className="w-4 h-4 mr-2" />
+            {loading ? 'Updating...' : 'Live Data'}
+          </Badge>
+          
+          {/* Next refresh and button row */}
           <div className="flex flex-wrap gap-2 justify-center">
-            <Badge variant="secondary" className={loading ? "animate-pulse" : ""}>
-              <Activity className="w-4 h-4 mr-2" />
-              {loading ? 'Updating...' : 'Live Data'}
-            </Badge>
             <UITooltip>
               <TooltipTrigger asChild>
                 <Badge variant="outline" className="cursor-help">
