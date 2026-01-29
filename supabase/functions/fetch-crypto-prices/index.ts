@@ -148,13 +148,14 @@ serve(async (req) => {
     
     // Return cached data if available, even if stale
     if (cachedData) {
+      const nowFallback = Date.now();
       console.log('Returning stale cached data due to error');
       return new Response(JSON.stringify({
         success: true,
         data: cachedData.data,
         cached: true,
         stale: true,
-        cacheAge: Math.floor((now - cachedData.timestamp) / 1000),
+        cacheAge: Math.floor((nowFallback - cachedData.timestamp) / 1000),
         lastUpdated: new Date(cachedData.timestamp).toISOString(),
         error: 'Using cached data due to API error'
       }), {
