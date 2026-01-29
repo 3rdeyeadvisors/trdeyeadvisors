@@ -1,4 +1,5 @@
 import { DefiCharts } from '@/components/DefiCharts';
+import { CryptoPricesWidget } from '@/components/CryptoPricesWidget';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { TrendingUp, Activity, BarChart3, AlertTriangle } from 'lucide-react';
@@ -71,8 +72,13 @@ const Analytics = () => {
           </div>
         </div>
 
+        {/* Live Crypto Prices */}
+        <CryptoPricesWidget />
+
         {/* Live Analytics Dashboard */}
-        <DefiCharts />
+        <div className="mt-12">
+          <DefiCharts />
+        </div>
 
         {/* Market Insights Card */}
         <Card className="mt-12 p-6 bg-card/60 border-border">

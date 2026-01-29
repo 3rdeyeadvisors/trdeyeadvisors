@@ -165,3 +165,6 @@ verify_jwt = false
 
 [functions.send-new-course-announcement]
 verify_jwt = true
+
+[functions.fetch-crypto-prices]
+verify_jwt = false
