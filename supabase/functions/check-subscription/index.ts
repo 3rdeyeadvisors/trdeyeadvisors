@@ -43,12 +43,25 @@ serve(async (req) => {
     if (!user?.email) throw new Error("User not authenticated or email not available");
     logStep("User authenticated", { userId: user.id, email: user.email });
 
+    // Check if user is admin FIRST (before grandfathered to ensure isAdmin flag is always set)
+    const { data: adminRole } = await supabaseClient
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', user.id)
+      .eq('role', 'admin')
+      .maybeSingle();
+    
+    const isAdmin = !!adminRole;
+    if (isAdmin) {
+      logStep("User has admin role", { userId: user.id });
+    }
+
     // Check if user is grandfathered (full platform access)
     const { data: grandfatheredData } = await supabaseClient
       .from('grandfathered_emails')
       .select('*')
       .ilike('email', user.email)
-      .single();
+      .maybeSingle();
     
     if (grandfatheredData) {
       if (!grandfatheredData.claimed_by) {
@@ -64,6 +77,7 @@ serve(async (req) => {
       logStep("User is grandfathered", { 
         email: user.email, 
         isFounder,
+        isAdmin,
         accessType: grandfatheredData.access_type 
       });
       
@@ -71,6 +85,7 @@ serve(async (req) => {
         subscribed: true,
         isGrandfathered: true,
         isFounder,
+        isAdmin, // Include admin status for voting eligibility
         plan: isFounder ? 'founding_33' : 'grandfathered',
         subscriptionEnd: null
       }), {
@@ -79,16 +94,9 @@ serve(async (req) => {
       });
     }
 
-    // Check if user is admin (free access)
-    const { data: adminRole } = await supabaseClient
-      .from('user_roles')
-      .select('role')
-      .eq('user_id', user.id)
-      .eq('role', 'admin')
-      .single();
-    
-    if (adminRole) {
-      logStep("User is admin", { userId: user.id });
+    // If admin but not grandfathered
+    if (isAdmin) {
+      logStep("User is admin (not grandfathered)", { userId: user.id });
       return new Response(JSON.stringify({
         subscribed: true,
         isAdmin: true,
