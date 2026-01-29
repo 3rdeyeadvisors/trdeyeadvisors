@@ -385,19 +385,11 @@ export const DefiCharts = () => {
   // MobileCarouselWrapper is now imported from a separate stable component
 
   return (
-    <div className="container mx-auto px-4 py-8 space-y-6 mobile-typography-center">
-      <div className="flex flex-col md:flex-row items-center md:items-center justify-between gap-4 text-center md:text-left">
-        <div>
-          <h1 className="text-3xl font-bold">DeFi Analytics Dashboard</h1>
-          <p className="text-muted-foreground mt-2">
-            Real-time data from DefiLlama, Aave, Uniswap, and leading DeFi protocols
-          </p>
-          {error && (
-            <p className="text-amber-500 text-sm mt-1">{error}</p>
-          )}
-        </div>
+    <div className="space-y-6 mobile-typography-center">
+      {/* Status badges and refresh button */}
+      <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-end gap-2">
         <TooltipProvider>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2 justify-center">
             <Badge variant="secondary" className={loading ? "animate-pulse" : ""}>
               <Activity className="w-4 h-4 mr-2" />
               {loading ? 'Updating...' : 'Live Data'}
@@ -424,10 +416,10 @@ export const DefiCharts = () => {
                   size="sm"
                   onClick={() => fetchDefiData(true)}
                   disabled={loading || refreshCooldown > 0}
-                  className="gap-2 flex items-center justify-center"
+                  className="gap-2 flex items-center justify-center min-h-[44px]"
                 >
                   <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-                  <span className="hidden sm:inline whitespace-nowrap">
+                  <span className="whitespace-nowrap">
                     {refreshCooldown > 0 ? `Wait ${refreshCooldown}s` : 'Refresh Now'}
                   </span>
                 </Button>
@@ -443,6 +435,10 @@ export const DefiCharts = () => {
           </div>
         </TooltipProvider>
       </div>
+      
+      {error && (
+        <p className="text-amber-500 text-sm text-center">{error}</p>
+      )}
 
       {/* Mobile View - Only show key metrics */}
       <div className="block md:hidden space-y-4">
