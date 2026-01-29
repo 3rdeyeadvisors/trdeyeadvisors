@@ -191,8 +191,8 @@ export const CryptoPricesWidget = () => {
   useEffect(() => {
     fetchPrices();
     
-    // Auto-refresh every 5 minutes
-    const interval = setInterval(() => fetchPrices(), 5 * 60 * 1000);
+    // Auto-refresh every 3 minutes to match cache duration
+    const interval = setInterval(() => fetchPrices(), 3 * 60 * 1000);
     return () => clearInterval(interval);
   }, [fetchPrices]);
 
@@ -205,9 +205,9 @@ export const CryptoPricesWidget = () => {
     });
   };
 
-  // Limit displayed items on mobile
-  const displayedTop10 = isMobile && !showAllTop10 ? data?.top10.slice(0, 5) : data?.top10;
-  const displayedRecommended = isMobile && !showAllRecommended ? data?.recommended.slice(0, 5) : data?.recommended;
+  // Limit displayed items on mobile - show only 1 by default for minimal scrolling
+  const displayedTop10 = isMobile && !showAllTop10 ? data?.top10.slice(0, 1) : data?.top10;
+  const displayedRecommended = isMobile && !showAllRecommended ? data?.recommended.slice(0, 1) : data?.recommended;
 
   if (loading) {
     return (
@@ -231,7 +231,7 @@ export const CryptoPricesWidget = () => {
             </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {Array(isMobile ? 5 : 10).fill(0).map((_, i) => <LoadingSkeleton key={i} />)}
+            {Array(isMobile ? 1 : 10).fill(0).map((_, i) => <LoadingSkeleton key={i} />)}
           </div>
         </div>
         
@@ -243,7 +243,7 @@ export const CryptoPricesWidget = () => {
             </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {Array(isMobile ? 5 : 10).fill(0).map((_, i) => <LoadingSkeleton key={i} />)}
+            {Array(isMobile ? 1 : 10).fill(0).map((_, i) => <LoadingSkeleton key={i} />)}
           </div>
         </div>
       </Card>
@@ -316,7 +316,7 @@ export const CryptoPricesWidget = () => {
         </div>
         
         {/* Show More/Less Toggle for Top 10 */}
-        {isMobile && data?.top10 && data.top10.length > 5 && (
+        {isMobile && data?.top10 && data.top10.length > 1 && (
           <Button 
             variant="ghost" 
             className="w-full mt-4 font-consciousness min-h-[52px]"
@@ -330,7 +330,7 @@ export const CryptoPricesWidget = () => {
             ) : (
               <>
                 <ChevronDown className="w-4 h-4 mr-2" />
-                Show More ({data.top10.length - 5} more)
+                Show More ({data.top10.length - 1} more)
               </>
             )}
           </Button>
@@ -353,7 +353,7 @@ export const CryptoPricesWidget = () => {
         </div>
         
         {/* Show More/Less Toggle for Recommended */}
-        {isMobile && data?.recommended && data.recommended.length > 5 && (
+        {isMobile && data?.recommended && data.recommended.length > 1 && (
           <Button 
             variant="ghost" 
             className="w-full mt-4 font-consciousness min-h-[52px]"
@@ -367,7 +367,7 @@ export const CryptoPricesWidget = () => {
             ) : (
               <>
                 <ChevronDown className="w-4 h-4 mr-2" />
-                Show More ({data.recommended.length - 5} more)
+                Show More ({data.recommended.length - 1} more)
               </>
             )}
           </Button>
@@ -377,7 +377,7 @@ export const CryptoPricesWidget = () => {
       {/* Disclaimer */}
       <div className="mt-6 pt-4 border-t border-border">
         <p className="text-xs text-muted-foreground font-consciousness text-center">
-          Prices powered by CoinGecko. Data refreshes every 5 minutes. 
+          Prices powered by CoinGecko. Data refreshes every 3 minutes. 
           APY rates are approximate and subject to change. Not financial advice.
         </p>
       </div>
