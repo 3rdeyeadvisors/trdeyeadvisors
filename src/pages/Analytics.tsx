@@ -76,12 +76,12 @@ const Analytics = () => {
         <CryptoPricesWidget />
 
         {/* Live Analytics Dashboard */}
-        <div className="mt-12">
+        <div className="mt-6">
           <DefiCharts />
         </div>
 
         {/* Market Insights Card */}
-        <Card className="mt-12 p-6 bg-card/60 border-border">
+        <Card className="mt-6 p-6 bg-card/60 border-border">
           <div className="flex flex-col md:flex-row items-center md:items-start gap-4 text-center md:text-left">
             <AlertTriangle className="w-6 h-6 text-amber-500 flex-shrink-0 mt-1" />
             <div className="max-w-none md:max-w-full">
