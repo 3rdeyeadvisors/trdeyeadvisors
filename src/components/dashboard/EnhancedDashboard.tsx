@@ -778,7 +778,7 @@ export const EnhancedDashboard = () => {
                           <span className="text-sm font-medium text-primary">Continue</span>
                         </div>
                         <Badge className={getCategoryColor(course.category)}>
-                          {course.category === "free" ? "Free" : course.price}
+                          {course.category === "free" ? "Free" : "Premium"}
                         </Badge>
                       </div>
                       <h3 className="font-consciousness font-semibold text-foreground mb-3 line-clamp-2">
@@ -828,7 +828,7 @@ export const EnhancedDashboard = () => {
                           <span className="text-sm font-medium text-awareness">Completed</span>
                         </div>
                         <Badge className={getCategoryColor(course.category)}>
-                          {course.category === "free" ? "Free" : course.price}
+                          {course.category === "free" ? "Free" : "Premium"}
                         </Badge>
                       </div>
                       <h3 className="font-consciousness font-semibold text-foreground mb-3 line-clamp-2">
@@ -875,7 +875,7 @@ export const EnhancedDashboard = () => {
                           <span className="text-sm font-medium text-primary">Start Learning</span>
                         </div>
                         <Badge className={getCategoryColor(course.category)}>
-                          {course.category === "free" ? "Free" : course.price}
+                          {course.category === "free" ? "Free" : "Premium"}
                         </Badge>
                       </div>
                       <h3 className="font-consciousness font-semibold text-foreground mb-3 line-clamp-2">
