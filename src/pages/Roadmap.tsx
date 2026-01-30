@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Map, Crown, Star, Lock, ArrowRight, Loader2 } from 'lucide-react';
-import { useRoadmapVotes } from '@/hooks/useRoadmapVotes';
+import { useRoadmapVotes, VoteType } from '@/hooks/useRoadmapVotes';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { RoadmapCard } from '@/components/roadmap/RoadmapCard';
 import { Button } from '@/components/ui/button';
@@ -21,8 +21,8 @@ const Roadmap = () => {
     removeVote,
   } = useRoadmapVotes();
 
-  // Calculate max votes for progress bars
-  const maxVotes = Math.max(...items.map((i) => i.total_votes), 1);
+  // Calculate max votes for progress bars (use net_votes)
+  const maxVotes = Math.max(...items.map((i) => Math.abs(i.net_votes)), 1);
 
   // Group items by status
   const proposedItems = items.filter((i) => i.status === 'proposed' || !i.status);
@@ -165,15 +165,17 @@ const Roadmap = () => {
                           description={item.description}
                           status={item.status}
                           votingEndsAt={item.voting_ends_at}
-                          totalVotes={item.total_votes}
-                          userHasVoted={item.user_has_voted}
+                          yesVotes={item.yes_votes}
+                          noVotes={item.no_votes}
+                          netVotes={item.net_votes}
+                          userVoteType={item.user_vote_type}
                           maxVotes={maxVotes}
                           canVote={canVote}
                           votingTier={votingTier}
                           voteWeight={voteWeight}
                           isVoting={voting === item.id}
                           isVotingOpen={isVotingOpen(item)}
-                          onVote={() => castVote(item.id)}
+                          onVote={(voteType: VoteType) => castVote(item.id, voteType)}
                           onRemoveVote={() => removeVote(item.id)}
                         />
                       ))}
@@ -202,15 +204,17 @@ const Roadmap = () => {
                           description={item.description}
                           status={item.status}
                           votingEndsAt={item.voting_ends_at}
-                          totalVotes={item.total_votes}
-                          userHasVoted={item.user_has_voted}
+                          yesVotes={item.yes_votes}
+                          noVotes={item.no_votes}
+                          netVotes={item.net_votes}
+                          userVoteType={item.user_vote_type}
                           maxVotes={maxVotes}
                           canVote={canVote}
                           votingTier={votingTier}
                           voteWeight={voteWeight}
                           isVoting={voting === item.id}
                           isVotingOpen={isVotingOpen(item)}
-                          onVote={() => castVote(item.id)}
+                          onVote={(voteType: VoteType) => castVote(item.id, voteType)}
                           onRemoveVote={() => removeVote(item.id)}
                         />
                       ))}
@@ -239,15 +243,17 @@ const Roadmap = () => {
                           description={item.description}
                           status={item.status}
                           votingEndsAt={item.voting_ends_at}
-                          totalVotes={item.total_votes}
-                          userHasVoted={item.user_has_voted}
+                          yesVotes={item.yes_votes}
+                          noVotes={item.no_votes}
+                          netVotes={item.net_votes}
+                          userVoteType={item.user_vote_type}
                           maxVotes={maxVotes}
                           canVote={canVote}
                           votingTier={votingTier}
                           voteWeight={voteWeight}
                           isVoting={voting === item.id}
                           isVotingOpen={isVotingOpen(item)}
-                          onVote={() => castVote(item.id)}
+                          onVote={(voteType: VoteType) => castVote(item.id, voteType)}
                           onRemoveVote={() => removeVote(item.id)}
                         />
                       ))}

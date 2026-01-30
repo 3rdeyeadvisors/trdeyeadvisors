@@ -5,6 +5,8 @@ import { useSubscription } from '@/hooks/useSubscription';
 import { useSingleFoundingMemberStatus } from '@/hooks/useFoundingMemberStatus';
 import { useToast } from '@/hooks/use-toast';
 
+export type VoteType = 'yes' | 'no';
+
 interface RoadmapItem {
   id: string;
   title: string;
@@ -12,8 +14,10 @@ interface RoadmapItem {
   status: string | null;
   created_at: string | null;
   voting_ends_at: string | null;
-  total_votes: number;
-  user_has_voted: boolean;
+  yes_votes: number;
+  no_votes: number;
+  net_votes: number;
+  user_vote_type: VoteType | null;
 }
 
 interface RoadmapVote {
@@ -21,6 +25,7 @@ interface RoadmapVote {
   roadmap_item_id: string;
   user_id: string;
   vote_weight: number | null;
+  vote_type: string;
   created_at: string | null;
 }
 
@@ -82,13 +87,20 @@ export const useRoadmapVotes = () => {
         const itemVotes = (votesData || []).filter(
           (v: RoadmapVote) => v.roadmap_item_id === item.id
         );
-        const totalVotes = itemVotes.reduce(
-          (sum: number, v: RoadmapVote) => sum + (v.vote_weight || 1),
-          0
-        );
-        const userHasVoted = user
-          ? itemVotes.some((v: RoadmapVote) => v.user_id === user.id)
-          : false;
+        
+        // Calculate yes and no votes separately
+        const yesVotes = itemVotes
+          .filter((v: RoadmapVote) => v.vote_type === 'yes')
+          .reduce((sum: number, v: RoadmapVote) => sum + (v.vote_weight || 1), 0);
+        
+        const noVotes = itemVotes
+          .filter((v: RoadmapVote) => v.vote_type === 'no')
+          .reduce((sum: number, v: RoadmapVote) => sum + (v.vote_weight || 1), 0);
+        
+        // Find user's vote type
+        const userVote = user
+          ? itemVotes.find((v: RoadmapVote) => v.user_id === user.id)
+          : null;
 
         return {
           id: item.id,
@@ -97,13 +109,15 @@ export const useRoadmapVotes = () => {
           status: item.status,
           created_at: item.created_at,
           voting_ends_at: (item as any).voting_ends_at || null,
-          total_votes: totalVotes,
-          user_has_voted: userHasVoted,
+          yes_votes: yesVotes,
+          no_votes: noVotes,
+          net_votes: yesVotes - noVotes,
+          user_vote_type: userVote ? (userVote.vote_type as VoteType) : null,
         };
       });
 
-      // Sort by vote count (descending)
-      processedItems.sort((a, b) => b.total_votes - a.total_votes);
+      // Sort by net vote count (descending)
+      processedItems.sort((a, b) => b.net_votes - a.net_votes);
       setItems(processedItems);
     } catch (error) {
       console.error('Error fetching roadmap items:', error);
@@ -124,9 +138,9 @@ export const useRoadmapVotes = () => {
     return new Date(item.voting_ends_at) > new Date();
   }, []);
 
-  // Cast a vote
+  // Cast a vote (yes or no)
   const castVote = useCallback(
-    async (roadmapItemId: string) => {
+    async (roadmapItemId: string, voteType: VoteType) => {
       if (!user) {
         toast({
           title: 'Sign in required',
@@ -161,44 +175,65 @@ export const useRoadmapVotes = () => {
       try {
         const voteWeight = getVoteWeight();
 
-        const { error } = await supabase.from('roadmap_votes').insert({
-          roadmap_item_id: roadmapItemId,
-          user_id: user.id,
-          vote_weight: voteWeight,
-        });
+        // Check if user already has a vote
+        const existingVote = item?.user_vote_type;
+        
+        if (existingVote) {
+          // Update existing vote type
+          const { error } = await supabase
+            .from('roadmap_votes')
+            .update({ vote_type: voteType })
+            .eq('roadmap_item_id', roadmapItemId)
+            .eq('user_id', user.id);
 
-        if (error) {
-          if (error.code === '23505') {
-            // Unique constraint violation - already voted
-            toast({
-              title: 'Already voted',
-              description: 'You have already voted for this feature',
-              variant: 'destructive',
-            });
-          } else {
-            throw error;
-          }
-          return false;
-        }
+          if (error) throw error;
 
-        // Award points for voting
-        try {
-          await supabase.rpc('award_user_points', {
-            _user_id: user.id,
-            _points: 15,
-            _action_type: 'roadmap_vote',
-            _action_id: roadmapItemId,
-            _metadata: { item_title: item?.title }
+          toast({
+            title: 'Vote updated',
+            description: `Changed to ${voteType === 'yes' ? 'support' : 'oppose'}`,
           });
-        } catch (pointsError) {
-          console.error('Error awarding points for vote:', pointsError);
-          // Don't fail the vote if points fail
-        }
+        } else {
+          // Insert new vote
+          const { error } = await supabase.from('roadmap_votes').insert({
+            roadmap_item_id: roadmapItemId,
+            user_id: user.id,
+            vote_weight: voteWeight,
+            vote_type: voteType,
+          });
 
-        toast({
-          title: 'Vote cast! +15 points',
-          description: `Your vote (${voteWeight}x power) has been recorded`,
-        });
+          if (error) {
+            if (error.code === '23505') {
+              // Unique constraint violation - already voted
+              toast({
+                title: 'Already voted',
+                description: 'You have already voted for this feature',
+                variant: 'destructive',
+              });
+            } else {
+              throw error;
+            }
+            return false;
+          }
+
+          // Award points for voting (only on new vote)
+          try {
+            await supabase.rpc('award_user_points', {
+              _user_id: user.id,
+              _points: 15,
+              _action_type: 'roadmap_vote',
+              _action_id: roadmapItemId,
+              _metadata: { item_title: item?.title, vote_type: voteType }
+            });
+          } catch (pointsError) {
+            console.error('Error awarding points for vote:', pointsError);
+            // Don't fail the vote if points fail
+          }
+
+          toast({
+            title: 'Vote cast! +15 points',
+            description: `Your ${voteType === 'yes' ? 'support' : 'opposition'} (${voteWeight}x power) has been recorded`,
+          });
+        }
 
         // Refresh items
         await fetchItems();
