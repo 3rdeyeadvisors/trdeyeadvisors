@@ -199,7 +199,16 @@ export const RoadmapManager = () => {
                         </span>
                       </TableCell>
                       <TableCell className="text-center">
-                        <span className="font-medium text-primary">{item.total_votes}</span>
+                        <div className="flex flex-col items-center gap-0.5">
+                          <span className="font-medium">
+                            <span className="text-emerald-400">+{item.yes_votes}</span>
+                            <span className="text-muted-foreground mx-1">/</span>
+                            <span className="text-red-400">-{item.no_votes}</span>
+                          </span>
+                          <span className={`text-xs ${item.net_votes >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                            net: {item.net_votes >= 0 ? '+' : ''}{item.net_votes}
+                          </span>
+                        </div>
                       </TableCell>
                       <TableCell>
                         <Select

@@ -1518,6 +1518,7 @@ export type Database = {
           id: string
           roadmap_item_id: string
           user_id: string
+          vote_type: string
           vote_weight: number | null
         }
         Insert: {
@@ -1525,6 +1526,7 @@ export type Database = {
           id?: string
           roadmap_item_id: string
           user_id: string
+          vote_type?: string
           vote_weight?: number | null
         }
         Update: {
@@ -1532,6 +1534,7 @@ export type Database = {
           id?: string
           roadmap_item_id?: string
           user_id?: string
+          vote_type?: string
           vote_weight?: number | null
         }
         Relationships: [
