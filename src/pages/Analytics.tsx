@@ -50,7 +50,7 @@ const Analytics = () => {
       <div className="min-h-screen pt-20 pb-8">
       <div className="container mx-auto px-4 mobile-typography-center">
         {/* Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-6">
           <div className="flex items-center justify-center gap-3 mb-4">
             <BarChart3 className="w-12 h-12 text-primary" />
             <h1 className="text-4xl md:text-5xl font-consciousness font-bold text-foreground">
