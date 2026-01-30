@@ -1,125 +1,117 @@
 
 
-## Minimal Scroll Mobile Layout + Data Accuracy Fix
+# Roadmap Voting Enhancement Plan
 
-### Overview
-Transform the mobile experience to show only **1 token per section** by default, with an expandable dropdown for the rest. Also improve data accuracy by reducing cache staleness indicators and ensuring fresh data is prioritized.
+## Overview
+This plan adds two features to the Roadmap voting system:
+1. **Yes/No voting options** - Replace the single "Vote" button with separate "Yes" and "No" buttons
+2. **Expandable description modal** - Click on a roadmap card to see the full description in a popup dialog
 
-### Changes
+---
 
-**File: `src/components/CryptoPricesWidget.tsx`**
+## Current Behavior
+- Users can only upvote (single "Vote" button)
+- Descriptions are truncated with `line-clamp-2` (shows only 2 lines)
+- No way to read the full description
 
-#### 1. Show Only First Token by Default (Mobile)
+---
 
-Change the slice logic from `slice(0, 5)` to `slice(0, 1)`:
+## Changes Summary
 
-```tsx
-// Current (line 209-210)
-const displayedTop10 = isMobile && !showAllTop10 ? data?.top10.slice(0, 5) : data?.top10;
-const displayedRecommended = isMobile && !showAllRecommended ? data?.recommended.slice(0, 5) : data?.recommended;
+### 1. Database Migration
+Add a `vote_type` column to track yes/no votes:
 
-// New
-const displayedTop10 = isMobile && !showAllTop10 ? data?.top10.slice(0, 1) : data?.top10;
-const displayedRecommended = isMobile && !showAllRecommended ? data?.recommended.slice(0, 1) : data?.recommended;
+| Column | Type | Default | Description |
+|--------|------|---------|-------------|
+| `vote_type` | text | 'yes' | Either 'yes' or 'no' |
+
+The total vote count will be calculated as: `SUM(yes_votes) - SUM(no_votes)`
+
+### 2. RoadmapCard Component Updates
+- Make the card clickable to open a detail dialog
+- Replace single "Vote" button with "Yes" and "No" buttons side by side
+- Show separate vote counts for yes and no
+- Add visual indicators (thumbs up/down or similar icons)
+
+### 3. Detail Dialog
+- Opens when clicking anywhere on the card (except buttons)
+- Shows full title, complete description, voting status
+- Includes the yes/no voting buttons in the dialog too
+
+### 4. Hook Updates (`useRoadmapVotes`)
+- Update `castVote` to accept vote type ('yes' | 'no')
+- Update vote counting to show net score or separate counts
+- Track user's vote type for UI state
+
+---
+
+## Technical Details
+
+### Database Migration
+```sql
+ALTER TABLE roadmap_votes 
+ADD COLUMN vote_type text DEFAULT 'yes' 
+CHECK (vote_type IN ('yes', 'no'));
 ```
 
-#### 2. Update Button Text to Reflect "9 more" / "19 more"
+### Updated Vote Calculation
+Instead of summing all vote weights:
+- **Yes votes**: Sum of vote_weight where vote_type = 'yes'
+- **No votes**: Sum of vote_weight where vote_type = 'no'  
+- **Net score**: Yes votes - No votes (or show both separately)
 
-```tsx
-// Current (line 333)
-Show More ({data.top10.length - 5} more)
-
-// New
-Show More ({data.top10.length - 1} more)
-```
-
-Same for recommended section (line 370).
-
-#### 3. Visual Result on Mobile
-
+### UI Layout (RoadmapCard)
 ```text
-+----------------------------------+
-|        [Coin Icon]               |
-|    LIVE CRYPTO PRICES            |
-|    Updated at 2:30 PM            |
-|        [ Refresh ]               |
-+----------------------------------+
-|                                  |
-|   [TrendUp] TOP 10 BY MARKET     |
-|                                  |
-|  +----------------------------+  |
-|  |        [BTC Logo]          |  |
-|  |           BTC              |  |
-|  |          Bitcoin           |  |
-|  |           #1               |  |
-|  |       $84,060.00           |  |
-|  |    [TrendDown] -5.56%      |  |
-|  |      MCap: $1.68T          |  |
-|  +----------------------------+  |
-|                                  |
-|     [ Show More (9 more) v ]     |
-|                                  |
-+----------------------------------+
-|                                  |
-|   [Star] 3EA RECOMMENDED         |
-|         [Our Picks]              |
-|                                  |
-|  +----------------------------+  |
-|  |        [BTC Logo]          |  |
-|  |          BTC  [Star]       |  |
-|  |          Bitcoin           |  |
-|  |           #1               |  |
-|  |       $84,060.00           |  |
-|  |    [TrendDown] -5.56%      |  |
-|  |      MCap: $1.68T          |  |
-|  +----------------------------+  |
-|                                  |
-|     [ Show More (19 more) v ]    |
-|                                  |
-+----------------------------------+
++------------------------------------------+
+| [Title]                    [Status Badge] |
+| [Countdown timer]                         |
+|-------------------------------------------|
+| Description preview (2 lines)...          |
+| "Click to read more"                      |
+|-------------------------------------------|
+| Support: +15 / -3 net                     |
+| [========----------] progress bar         |
+|-------------------------------------------|
+| [3x badge]     [Yes ✓] [No ✗]            |
++------------------------------------------+
+```
+
+### Detail Dialog Layout
+```text
++------------------------------------------+
+|              Feature Title            [X] |
+|-------------------------------------------|
+| [In Progress Badge]     [3d 5h left]     |
+|-------------------------------------------|
+| Full description text that can be        |
+| as long as needed, with proper           |
+| formatting and line breaks...            |
+|-------------------------------------------|
+| Current Support: +15 yes, -3 no          |
+| [========----------]                     |
+|-------------------------------------------|
+|        [Yes ✓ Vote]  [No ✗ Vote]         |
++------------------------------------------+
 ```
 
 ---
 
-**File: `supabase/functions/fetch-crypto-prices/index.ts`**
+## Files to Modify
 
-#### 4. Improve Data Accuracy
+| File | Changes |
+|------|---------|
+| `supabase/migrations/` | New migration adding `vote_type` column |
+| `src/hooks/useRoadmapVotes.tsx` | Update castVote, vote calculation, track vote type |
+| `src/components/roadmap/RoadmapCard.tsx` | Add dialog, yes/no buttons, click handler |
+| `src/integrations/supabase/types.ts` | Auto-updated after migration |
 
-The current implementation is already fetching real-time data from CoinGecko with a 5-minute cache. The data accuracy is good based on the network response I can see (prices match current market).
+---
 
-However, to ensure maximum accuracy:
+## User Experience Flow
 
-**a) Reduce cache duration to 3 minutes** (CoinGecko updates frequently):
-```tsx
-// Current (line 10)
-const CACHE_DURATION_MS = 5 * 60 * 1000; // 5 minutes
-
-// New
-const CACHE_DURATION_MS = 3 * 60 * 1000; // 3 minutes for fresher data
-```
-
-**b) Add cache timestamp to response** so UI can show how old the data is:
-```tsx
-// Add to response
-cacheAge: cachedData ? Math.floor((now - cachedData.timestamp) / 1000) : 0 // seconds since cache
-```
-
-**c) Update staking APY values** to match current rates from your watchlist images:
-- Verify the APY values are accurate (current values look reasonable based on typical staking yields)
-- Consider adding a note that APY rates are approximate and fetched from external sources
-
-#### 5. Summary of Changes
-
-| File | Change |
-|------|--------|
-| `CryptoPricesWidget.tsx` | Line 209-210: Change `slice(0, 5)` to `slice(0, 1)` |
-| `CryptoPricesWidget.tsx` | Line 333, 370: Update button text from `-5` to `-1` |
-| `fetch-crypto-prices/index.ts` | Line 10: Reduce cache to 3 minutes |
-| `fetch-crypto-prices/index.ts` | Add `cacheAge` to response for transparency |
-
-### Technical Notes
-
-- **CoinGecko Free API**: Updates every 1-2 minutes for top coins, so 3-minute cache is reasonable
-- **Staking APY**: These are hardcoded approximations - for 100% accuracy, would need to integrate with staking reward APIs (Staking Rewards API, etc.) which is a larger scope
-- **Mobile UX**: Showing just 1 card dramatically reduces scroll, users tap "Show More" if interested
+1. **Browsing**: User sees cards with truncated descriptions and "Click to read more" hint
+2. **Reading**: Clicking a card opens a dialog with full details
+3. **Voting**: User clicks either "Yes" (support) or "No" (oppose) button
+4. **Feedback**: Vote is recorded with appropriate weight (1x or 3x), UI updates immediately
+5. **Changing vote**: User can switch from Yes to No (or vice versa) by clicking the other button
 
