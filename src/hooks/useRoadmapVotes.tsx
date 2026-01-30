@@ -63,7 +63,7 @@ export const useRoadmapVotes = () => {
     return 'none';
   }, [isFounder, subscription?.plan]);
 
-  // Fetch all roadmap items with vote counts
+  // Fetch all roadmap items with vote counts (privacy-safe: no user_id exposure)
   const fetchItems = useCallback(async () => {
     setLoading(true);
     try {
@@ -75,32 +75,42 @@ export const useRoadmapVotes = () => {
 
       if (itemsError) throw itemsError;
 
-      // Fetch all votes
-      const { data: votesData, error: votesError } = await supabase
-        .from('roadmap_votes')
+      // Fetch aggregate vote counts from secure view (no user_id exposed)
+      const { data: voteCounts, error: voteCountsError } = await supabase
+        .from('roadmap_vote_counts')
         .select('*');
 
-      if (votesError) throw votesError;
+      if (voteCountsError) throw voteCountsError;
+
+      // Fetch only the current user's votes for UI highlighting (RLS enforced)
+      const { data: userVotes, error: userVotesError } = user
+        ? await supabase
+            .from('roadmap_votes')
+            .select('roadmap_item_id, vote_type')
+            .eq('user_id', user.id)
+        : { data: [], error: null };
+
+      if (userVotesError) throw userVotesError;
+
+      // Create lookup maps for efficient processing
+      const voteCountsMap = new Map(
+        (voteCounts || []).map((vc: { roadmap_item_id: string; yes_votes: number; no_votes: number }) => [
+          vc.roadmap_item_id,
+          { yes: vc.yes_votes, no: vc.no_votes }
+        ])
+      );
+      
+      const userVoteMap = new Map(
+        (userVotes || []).map((v: { roadmap_item_id: string; vote_type: string }) => [
+          v.roadmap_item_id,
+          v.vote_type as VoteType
+        ])
+      );
 
       // Process items with vote counts
       const processedItems: RoadmapItem[] = (itemsData || []).map((item) => {
-        const itemVotes = (votesData || []).filter(
-          (v: RoadmapVote) => v.roadmap_item_id === item.id
-        );
-        
-        // Calculate yes and no votes separately
-        const yesVotes = itemVotes
-          .filter((v: RoadmapVote) => v.vote_type === 'yes')
-          .reduce((sum: number, v: RoadmapVote) => sum + (v.vote_weight || 1), 0);
-        
-        const noVotes = itemVotes
-          .filter((v: RoadmapVote) => v.vote_type === 'no')
-          .reduce((sum: number, v: RoadmapVote) => sum + (v.vote_weight || 1), 0);
-        
-        // Find user's vote type
-        const userVote = user
-          ? itemVotes.find((v: RoadmapVote) => v.user_id === user.id)
-          : null;
+        const counts = voteCountsMap.get(item.id) || { yes: 0, no: 0 };
+        const userVoteType = userVoteMap.get(item.id) || null;
 
         return {
           id: item.id,
@@ -109,10 +119,10 @@ export const useRoadmapVotes = () => {
           status: item.status,
           created_at: item.created_at,
           voting_ends_at: (item as any).voting_ends_at || null,
-          yes_votes: yesVotes,
-          no_votes: noVotes,
-          net_votes: yesVotes - noVotes,
-          user_vote_type: userVote ? (userVote.vote_type as VoteType) : null,
+          yes_votes: counts.yes,
+          no_votes: counts.no,
+          net_votes: counts.yes - counts.no,
+          user_vote_type: userVoteType,
         };
       });
 

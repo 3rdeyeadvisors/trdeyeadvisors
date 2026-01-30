@@ -2026,6 +2026,22 @@ export type Database = {
         }
         Relationships: []
       }
+      roadmap_vote_counts: {
+        Row: {
+          no_votes: number | null
+          roadmap_item_id: string | null
+          yes_votes: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "roadmap_votes_roadmap_item_id_fkey"
+            columns: ["roadmap_item_id"]
+            isOneToOne: false
+            referencedRelation: "roadmap_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       auto_cleanup_rate_limits: { Args: never; Returns: undefined }
