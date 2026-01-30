@@ -71,15 +71,10 @@ export const SubscriptionProvider = ({ children }: { children: React.ReactNode }
       
       // If this is a retry, refresh the session first
       if (retryCountRef.current > 0) {
-        console.log('[Subscription] Refreshing session before retry');
         const { data: refreshData, error: refreshError } = await supabase.auth.refreshSession();
         
-        if (refreshError) {
-          console.warn('[Subscription] Session refresh failed:', refreshError.message);
-          // Continue with existing token - the edge function will handle it
-        } else if (refreshData.session) {
+        if (!refreshError && refreshData.session) {
           accessToken = refreshData.session.access_token;
-          console.log('[Subscription] Session refreshed successfully');
         }
       }
 
@@ -98,19 +93,15 @@ export const SubscriptionProvider = ({ children }: { children: React.ReactNode }
           errorMessage.includes('JWT expired');
         
         if (isSessionInvalid) {
-          console.error('[Subscription] Session is definitely invalid, signing out');
           await supabase.auth.signOut();
           setSubscription(null);
           setLoading(false);
           return;
         }
         
-        console.warn('[Subscription] Error checking subscription (not signing out):', errorMessage);
-        
         if (retryCountRef.current < maxRetries) {
           retryCountRef.current++;
           const delay = Math.pow(2, retryCountRef.current) * 1000;
-          console.log(`[Subscription] Retrying in ${delay}ms (attempt ${retryCountRef.current}/${maxRetries})`);
           setTimeout(() => checkSubscription(), delay);
           return;
         }
@@ -124,14 +115,12 @@ export const SubscriptionProvider = ({ children }: { children: React.ReactNode }
       retryCountRef.current = 0;
 
       if (data.error) {
-        console.error('[Subscription] API error:', data.error);
         setError(data.error);
         setSubscription(defaultSubscription);
         setLoading(false);
         return;
       }
 
-      console.log('[Subscription] Status:', data);
       setSubscription(data as SubscriptionStatus);
     } catch (err) {
       console.error('[Subscription] Unexpected error:', err);

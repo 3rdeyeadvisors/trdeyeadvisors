@@ -83,11 +83,8 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
 
   const updateModuleProgress = async (courseId: number, moduleIndex: number) => {
     if (!user) {
-      console.log('[Progress] No user found');
       throw new Error('User not authenticated');
     }
-
-    console.log('[Progress] Starting module completion:', { courseId, moduleIndex, userId: user.id });
 
     try {
       // Get existing progress to check if module already completed
@@ -98,24 +95,15 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
         .eq('course_id', courseId)
         .maybeSingle();
 
-      if (fetchError) {
-        console.error('[Progress] Error fetching existing data:', fetchError);
-        throw fetchError;
-      }
-
-      console.log('[Progress] BEFORE - Existing data:', existingData);
-      console.log('[Progress] BEFORE - Completed modules:', existingData?.completed_modules);
+      if (fetchError) throw fetchError;
 
       // Ensure we have a valid array
       const completedModules = Array.isArray(existingData?.completed_modules) 
         ? existingData.completed_modules 
         : [];
       
-      console.log('[Progress] Validated completed modules array:', completedModules);
-      
       // Don't add if already completed
       if (completedModules.includes(moduleIndex)) {
-        console.log('[Progress] Module already completed, skipping');
         return;
       }
 
@@ -124,14 +112,10 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
       const totalModules = getCourseModuleCount(courseId);
       const completionPercentage = (updatedModules.length / totalModules) * 100;
 
-      console.log('[Progress] AFTER - Will save these modules:', updatedModules);
-      console.log('[Progress] Completion percentage:', completionPercentage);
-
       let resultData;
 
       if (existingData) {
         // Record exists - UPDATE it
-        console.log('[Progress] Record exists, performing UPDATE');
         const { error: updateError, data: updateData } = await supabase
           .from('course_progress')
           .update({
@@ -144,16 +128,10 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
           .select()
           .single();
 
-        if (updateError) {
-          console.error('[Progress] Error updating progress:', updateError);
-          throw updateError;
-        }
-        
+        if (updateError) throw updateError;
         resultData = updateData;
-        console.log('[Progress] UPDATE successful! Saved data:', resultData);
       } else {
         // Record doesn't exist - INSERT it
-        console.log('[Progress] No existing record, performing INSERT');
         const { error: insertError, data: insertData } = await supabase
           .from('course_progress')
           .insert({
@@ -167,73 +145,56 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
           .select()
           .single();
 
-        if (insertError) {
-          console.error('[Progress] Error inserting progress:', insertError);
-          throw insertError;
-        }
-        
+        if (insertError) throw insertError;
         resultData = insertData;
-        console.log('[Progress] INSERT successful! Saved data:', resultData);
         
         // Award points for first course started
         if (updatedModules.length === 1) {
           try {
             await awardPoints('first_course_started', `course_${courseId}`);
-            // Award first steps badge
             await awardBadge('first_steps');
           } catch (e) {
-            console.log('[Progress] Could not award first_course_started points');
+            // Silently fail points/badges
           }
         }
       }
 
-      console.log('[Progress] Confirmed saved modules:', resultData.completed_modules);
-
       // Award points for module completion
       try {
-        const result = await awardPoints('module_completion', `${courseId}_${moduleIndex}`);
-        console.log('[Progress] Module completion points:', result);
-        // Play module complete sound
+        await awardPoints('module_completion', `${courseId}_${moduleIndex}`);
         playModuleComplete();
       } catch (e) {
-        console.log('[Progress] Could not award module completion points');
+        // Silently fail points
       }
 
       // Check if course is now complete and award course completion points
       if (resultData.completion_percentage === 100) {
         try {
           await awardPoints('course_completion', `course_${courseId}`);
-          console.log('[Progress] Course completion points awarded');
-          // Play course complete sound
           playCourseComplete();
-          // Award course graduate badge
           await awardBadge('course_graduate');
           
-          // Check for scholar badge (3 courses completed)
           const completedCourses = Object.values(courseProgress).filter(
             p => p.completion_percentage === 100
-          ).length + 1; // +1 for the one just completed
+          ).length + 1;
           
           if (completedCourses >= 3) {
             await awardBadge('scholar');
           }
           
-          // Check for DeFi master badge (all courses)
           if (completedCourses >= courseContent.length) {
             await awardBadge('defi_master');
           }
         } catch (e) {
-          console.log('[Progress] Could not award course completion points');
+          // Silently fail points/badges
         }
       }
 
-      // Update local state with the exact data from database
+      // Update local state
       setCourseProgress(prev => ({
         ...prev,
         [courseId]: resultData
       }));
-
-      console.log('[Progress] Local state updated successfully');
 
     } catch (error) {
       console.error('[Progress] Error updating module progress:', error);
