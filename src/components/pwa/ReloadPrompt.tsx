@@ -15,19 +15,19 @@ function ReloadPrompt() {
   });
 
   // Handle case where useRegisterSW might return undefined or incomplete in some environments
-  if (!swResult || !Array.isArray(swResult.offlineReady) || !Array.isArray(swResult.needUpdate)) {
+  if (!swResult || !Array.isArray(swResult.offlineReady) || !Array.isArray(swResult.needRefresh)) {
     return null;
   }
 
   const {
     offlineReady: [offlineReady, setOfflineReady],
-    needUpdate: [needUpdate, setNeedUpdate],
+    needRefresh: [needRefresh, setNeedRefresh],
     updateServiceWorker,
   } = swResult;
 
   const close = () => {
     setOfflineReady(false);
-    setNeedUpdate(false);
+    setNeedRefresh(false);
   };
 
   React.useEffect(() => {
@@ -42,7 +42,7 @@ function ReloadPrompt() {
   }, [offlineReady]);
 
   React.useEffect(() => {
-    if (needUpdate) {
+    if (needRefresh) {
       toast("New content available, click on reload button to update.", {
         duration: Infinity,
         action: {
@@ -55,9 +55,9 @@ function ReloadPrompt() {
         }
       });
     }
-  }, [needUpdate]);
+  }, [needRefresh]);
 
-  if (!offlineReady && !needUpdate) return null;
+  if (!offlineReady && !needRefresh) return null;
 
   return (
     <div className="fixed bottom-4 right-4 z-[100] p-3 rounded-lg bg-card border border-border shadow-cosmic animate-in fade-in slide-in-from-bottom-4 duration-300">
@@ -70,7 +70,7 @@ function ReloadPrompt() {
           )}
         </div>
         <div className="flex gap-2">
-          {needUpdate && (
+          {needRefresh && (
             <Button
               size="sm"
               onClick={() => updateServiceWorker(true)}
