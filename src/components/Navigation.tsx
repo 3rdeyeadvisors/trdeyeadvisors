@@ -137,8 +137,8 @@ const Navigation = () => {
           </Link>
           
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center justify-end flex-1 ml-8 gap-1 lg:gap-4 xl:gap-6">
-            <div className="flex items-center gap-4 lg:gap-6">
+          <div className="hidden md:flex items-center flex-1 ml-8">
+            <div className="flex items-center justify-center flex-1 gap-4 lg:gap-6">
               {mainNavItems.slice(0, 5).map((item) => (
                 <Link
                   key={item.path}
