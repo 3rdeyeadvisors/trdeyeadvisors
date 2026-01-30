@@ -136,7 +136,7 @@ const Roadmap = () => {
         </section>
 
         {/* Roadmap Items */}
-        <section className="py-6 md:py-10">
+        <section className="py-4 md:py-6">
           <div className="container mx-auto px-4">
             {loading ? (
               <div className="flex items-center justify-center py-10">
