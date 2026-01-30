@@ -299,8 +299,8 @@ export const RoadmapCard = ({
 
           {/* Vote Action */}
           <div className="flex flex-col gap-2 pt-1">
-            {/* Vote Weight Badge */}
-            <div className="flex items-center justify-between">
+            {/* Vote Weight Badge & User Vote Status */}
+            <div className="flex items-center justify-center gap-3 flex-wrap">
               <VoteWeightBadge />
               {userVoteType && (
                 <span className="text-xs text-muted-foreground">
@@ -312,8 +312,10 @@ export const RoadmapCard = ({
             </div>
 
             {/* Voting Buttons */}
-            <div className="w-full">
-              <VotingButtons />
+            <div className="w-full flex justify-center">
+              <div className="flex gap-2 w-full max-w-xs">
+                <VotingButtons />
+              </div>
             </div>
           </div>
         </CardContent>
@@ -378,8 +380,8 @@ export const RoadmapCard = ({
               </div>
             </div>
 
-            {/* Vote Weight Badge */}
-            <div className="flex items-center justify-between">
+            {/* Vote Weight Badge & User Vote Status */}
+            <div className="flex items-center justify-center gap-3 flex-wrap">
               <VoteWeightBadge />
               {userVoteType && (
                 <span className="text-sm text-muted-foreground">
@@ -391,8 +393,10 @@ export const RoadmapCard = ({
             </div>
 
             {/* Voting Buttons */}
-            <div className="pt-2">
-              <VotingButtons />
+            <div className="pt-2 flex justify-center">
+              <div className="flex gap-2 w-full max-w-xs">
+                <VotingButtons />
+              </div>
             </div>
           </div>
         </DialogContent>
