@@ -1918,6 +1918,33 @@ export type Database = {
         }
         Relationships: []
       }
+      profiles_public: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string | null
+          display_name: string | null
+          is_bot: boolean | null
+          user_id: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          display_name?: string | null
+          is_bot?: boolean | null
+          user_id?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          display_name?: string | null
+          is_bot?: boolean | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       quizzes_public: {
         Row: {
           course_id: number | null
