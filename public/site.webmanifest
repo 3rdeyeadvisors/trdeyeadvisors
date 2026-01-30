@@ -1,6 +1,6 @@
 {
   "name": "3rdeyeadvisors - DeFi Education",
-  "short_name": "3EA",
+  "short_name": "3EA DeFi",
   "description": "DeFi Education & Digital Ownership Tools",
   "icons": [
     {
@@ -25,7 +25,7 @@
       "purpose": "any maskable"
     }
   ],
-  "theme_color": "#00D4FF",
+  "theme_color": "#0A1628",
   "background_color": "#0A1628",
   "display": "standalone",
   "start_url": "/",

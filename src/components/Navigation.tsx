@@ -129,27 +129,17 @@ const Navigation = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background border-b border-border">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          {/* Logo/Brand - Mobile only */}
-          <Link to="/" className="flex md:hidden items-center justify-center absolute left-1/2 -translate-x-1/2" aria-label="3rdeyeadvisors home">
-            <div className="text-base sm:text-lg font-consciousness font-bold text-primary whitespace-nowrap">
+          {/* Logo/Brand */}
+          <Link to="/" className="flex items-center gap-2 group" aria-label="3rdeyeadvisors home">
+            <div className="text-lg md:text-xl font-consciousness font-bold text-primary whitespace-nowrap group-hover:text-primary-glow transition-all duration-300">
               3rdeyeadvisors
             </div>
           </Link>
           
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center justify-center w-full gap-8">
-            {mainNavItems.map((item) => (
-              item.external ? (
-                <a
-                  key={item.path}
-                  href={item.path}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm font-consciousness transition-all duration-cosmic hover:text-primary text-muted-foreground whitespace-nowrap"
-                >
-                  {item.label}
-                </a>
-              ) : (
+          <div className="hidden md:flex items-center justify-end flex-1 ml-8 gap-1 lg:gap-4 xl:gap-6">
+            <div className="flex items-center gap-4 lg:gap-6">
+              {mainNavItems.slice(0, 5).map((item) => (
                 <Link
                   key={item.path}
                   to={item.path}
@@ -161,31 +151,47 @@ const Navigation = () => {
                 >
                   {item.label}
                 </Link>
-              )
-            ))}
+              ))}
+            </div>
             
             {/* More Dropdown */}
             <NavigationMenu>
               <NavigationMenuList>
                 <NavigationMenuItem>
                   <NavigationMenuTrigger className="text-sm font-consciousness h-auto py-1 px-2 bg-transparent hover:bg-transparent data-[state=open]:bg-transparent">
-                    <MoreHorizontal className="h-4 w-4 mr-1" />
                     More
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
-                    <ul className="grid w-[200px] gap-1 p-2 bg-popover">
+                    <ul className="grid w-[220px] gap-1 p-2 bg-popover shadow-xl">
+                      {/* Remaining main items */}
+                      {mainNavItems.slice(5).map((item) => (
+                        <li key={item.path}>
+                          <NavigationMenuLink asChild>
+                            <Link
+                              to={item.path}
+                              className={`block select-none space-y-1 rounded-md p-2.5 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground ${
+                                isActive(item.path) ? "bg-accent text-accent-foreground" : ""
+                              }`}
+                            >
+                              <div className="text-sm font-medium font-consciousness">
+                                {item.label}
+                              </div>
+                            </Link>
+                          </NavigationMenuLink>
+                        </li>
+                      ))}
+                      <div className="h-px bg-border my-1" />
+                      {/* Original more items */}
                       {moreNavItems.map((item) => (
                         <li key={item.path}>
                           <NavigationMenuLink asChild>
                             <Link
                               to={item.path}
-                              className={`block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground ${
-                                isActive(item.path)
-                                  ? "bg-accent text-accent-foreground"
-                                  : ""
+                              className={`block select-none space-y-1 rounded-md p-2.5 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground ${
+                                isActive(item.path) ? "bg-accent text-accent-foreground" : ""
                               }`}
                             >
-                              <div className="text-sm font-medium leading-none font-consciousness">
+                              <div className="text-sm font-medium font-consciousness">
                                 {item.label}
                               </div>
                             </Link>
@@ -198,47 +204,49 @@ const Navigation = () => {
               </NavigationMenuList>
             </NavigationMenu>
             
-            <Link to="/cart" className="relative">
-              <Button variant="ghost" size="icon" className="relative">
-                <ShoppingCart className="h-5 w-5" />
-                {itemCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                    {itemCount}
-                  </span>
-                )}
-              </Button>
-            </Link>
-            {user ? (
-              <>
-                <Button
-                  asChild
-                  variant="ghost"
-                  size="sm"
-                  className="text-muted-foreground hover:text-primary"
-                >
-                  <Link to="/profile" className="flex items-center space-x-2">
-                    <User className="w-4 h-4" />
-                    <span>Profile</span>
+            <div className="flex items-center gap-2 ml-2 lg:ml-4 pl-4 border-l border-border/50">
+              <Link to="/cart" className="relative">
+                <Button variant="ghost" size="icon" className="relative h-9 w-9">
+                  <ShoppingCart className="h-5 w-5" />
+                  {itemCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold">
+                      {itemCount}
+                    </span>
+                  )}
+                </Button>
+              </Link>
+              {user ? (
+                <div className="flex items-center gap-2">
+                  <Button
+                    asChild
+                    variant="ghost"
+                    size="sm"
+                    className="text-muted-foreground hover:text-primary hidden lg:flex h-9"
+                  >
+                    <Link to="/profile" className="flex items-center space-x-2">
+                      <User className="w-4 h-4" />
+                      <span>Profile</span>
+                    </Link>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleSignOut}
+                    className="flex items-center space-x-2 h-9"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span className="hidden lg:inline">Sign Out</span>
+                  </Button>
+                </div>
+              ) : (
+                <Button asChild variant="outline" size="sm" className="h-9">
+                  <Link to="/auth" className="flex items-center space-x-2">
+                    <LogIn className="w-4 h-4" />
+                    <span>Sign In</span>
                   </Link>
                 </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleSignOut}
-                  className="flex items-center space-x-2"
-                >
-                  <LogOut className="w-4 h-4" />
-                  <span>Sign Out</span>
-                </Button>
-              </>
-            ) : (
-              <Button asChild variant="outline" size="sm">
-                <Link to="/auth" className="flex items-center space-x-2">
-                  <LogIn className="w-4 h-4" />
-                  <span>Sign In</span>
-                </Link>
-              </Button>
-            )}
+              )}
+            </div>
           </div>
 
           {/* Mobile Cart & Menu */}

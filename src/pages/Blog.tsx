@@ -17,11 +17,6 @@ const Blog = () => {
   const sliderRef = useRef<HTMLDivElement>(null);
   const posts = getBlogPostsByCategory(selectedCategory);
   
-  // Debug logging
-  console.log("Blog component - selectedCategory:", selectedCategory);
-  console.log("Blog component - posts:", posts);
-  console.log("Blog component - posts length:", posts.length);
-  
   // Helper to parse date strings as local dates to avoid timezone issues
   const parseLocalDate = (dateStr: string) => {
     const [year, month, day] = dateStr.split('-').map(Number);
@@ -36,13 +31,11 @@ const Blog = () => {
     const postDate = parseLocalDate(post.date);
     return !isNaN(postDate.getTime()) && postDate >= cutoff && post.featured === true;
   });
-  console.log("Featured posts (last 7 days):", featuredPosts);
   
   const regularPosts = posts.filter(post => {
     const postDate = parseLocalDate(post.date);
     return !isNaN(postDate.getTime()) && (postDate < cutoff || post.featured !== true);
   });
-  console.log("Regular posts:", regularPosts);
 
   const categories = getBlogCategories();
 

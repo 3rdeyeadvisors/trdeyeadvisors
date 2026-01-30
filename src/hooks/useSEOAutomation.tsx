@@ -109,18 +109,6 @@ export function useSEOAutomation(options: SEOAutomationOptions): SEOAutomationRe
           errors: []
         });
 
-        // Log automation results in development
-        if (process.env.NODE_ENV === 'development') {
-          console.group('🔍 SEO Automation Results');
-          console.log('Page Type:', validation.pageType);
-          console.log('SEO Config:', seoConfig);
-          console.log('Schema Type:', schema.type);
-          console.log('Validation:', validation.isValid ? '✅ Pass' : '❌ Issues found');
-          if (validation.issues.length > 0) {
-            console.log('Issues:', validation.issues);
-          }
-          console.groupEnd();
-        }
 
       } catch (error) {
         console.error('SEO Automation Error:', error);

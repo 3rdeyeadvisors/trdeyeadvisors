@@ -2629,18 +2629,11 @@ export const getFeaturedBlogPosts = (days: number = 7): BlogPost[] => {
 
 // Helper function to get blog posts by category
 export const getBlogPostsByCategory = (category: string): BlogPost[] => {
-  console.log("getBlogPostsByCategory called with category:", category);
-  console.log("Total blogPosts available:", blogPosts.length);
-  
   if (category === "All") {
-    const allPosts = getAllBlogPosts();
-    console.log("Returning all posts:", allPosts.length);
-    return allPosts;
+    return getAllBlogPosts();
   }
   
-  const filteredPosts = blogPosts.filter(post => post.category === category);
-  console.log("Filtered posts for category", category, ":", filteredPosts.length);
-  return filteredPosts;
+  return blogPosts.filter(post => post.category === category);
 };
 
 // Helper function to get unique categories
