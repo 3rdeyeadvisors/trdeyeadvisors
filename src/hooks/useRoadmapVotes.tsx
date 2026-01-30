@@ -177,6 +177,16 @@ export const useRoadmapVotes = () => {
 
         // Check if user already has a vote
         const existingVote = item?.user_vote_type;
+
+        // If clicking the same vote type, skip - no change needed
+        if (existingVote === voteType) {
+          toast({
+            title: 'Already voted',
+            description: `You already voted ${voteType === 'yes' ? 'Yes' : 'No'}`,
+          });
+          setVoting(null);
+          return true;
+        }
         
         if (existingVote) {
           // Update existing vote type
