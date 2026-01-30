@@ -51,7 +51,7 @@ const Roadmap = () => {
         {/* Hero Section */}
         <section className="relative pt-8 pb-6 md:pt-12 md:pb-10 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent opacity-50" />
+          <div className="absolute inset-0 mt-4 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent opacity-50" />
           
           <div className="container mx-auto px-4 relative">
             <div className="max-w-3xl mx-auto text-center space-y-4">
