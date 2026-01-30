@@ -48,7 +48,7 @@ export const FeatureSuggestionsList = ({
   if (loading) {
     return (
       <Card className="border-border/50">
-        <CardContent className="flex items-center justify-center py-8">
+        <CardContent className="flex items-center justify-center py-10 px-4">
           <Loader2 className="w-6 h-6 animate-spin text-primary" />
         </CardContent>
       </Card>
@@ -58,9 +58,9 @@ export const FeatureSuggestionsList = ({
   if (suggestions.length === 0) {
     return (
       <Card className="border-border/50">
-        <CardContent className="flex flex-col items-center justify-center py-8 text-center">
-          <MessageSquare className="w-8 h-8 text-muted-foreground/50 mb-2" />
-          <p className="text-sm text-muted-foreground">No community ideas yet</p>
+        <CardContent className="flex flex-col items-center justify-center py-10 px-4 text-center gap-2">
+          <MessageSquare className="w-10 h-10 text-muted-foreground/50" />
+          <p className="text-sm font-medium text-muted-foreground">No community ideas yet</p>
           <p className="text-xs text-muted-foreground/70">Be the first to submit one!</p>
         </CardContent>
       </Card>
