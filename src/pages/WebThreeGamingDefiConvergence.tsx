@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, User, Clock } from "lucide-react";
 import { BRAND_AUTHOR } from "@/lib/constants";
+import DOMPurify from "dompurify";
 
 const WebThreeGamingDefiConvergence = () => {
   const blogPost = {
@@ -267,10 +268,10 @@ Whether you're a gamer looking to monetize your skills, an investor seeking new 
             <article className="prose prose-lg max-w-none dark:prose-invert mobile-typography-center">
               <div 
                 dangerouslySetInnerHTML={{ 
-                  __html: blogPost.content
+                  __html: DOMPurify.sanitize(blogPost.content
                     .replace(/\n/g, '<br/>')
                     .replace(/#{1,6}\s/g, '')
-                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'))
                 }} 
               />
             </article>

@@ -7,10 +7,10 @@ import { RefreshCw, X } from "lucide-react";
 function ReloadPrompt() {
   const swResult = useRegisterSW({
     onRegistered(r) {
-      console.log('SW Registered: ' + r);
+      // SW Registered
     },
     onRegisterError(error) {
-      console.log('SW registration error', error);
+      // SW registration error
     },
   });
 
