@@ -149,12 +149,12 @@ export const RoadmapCard = ({
 
     if (!canVote) {
       return (
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm" disabled className={`${compact ? '' : 'flex-1'} min-h-[36px] opacity-50 text-xs`}>
+        <div className="flex gap-2 w-full">
+          <Button variant="outline" size="sm" disabled className="flex-1 min-h-[36px] opacity-50 text-xs">
             <ThumbsUp className="w-3.5 h-3.5 mr-1" />
             Yes
           </Button>
-          <Button variant="outline" size="sm" disabled className={`${compact ? '' : 'flex-1'} min-h-[36px] opacity-50 text-xs`}>
+          <Button variant="outline" size="sm" disabled className="flex-1 min-h-[36px] opacity-50 text-xs">
             <ThumbsDown className="w-3.5 h-3.5 mr-1" />
             No
           </Button>
@@ -163,7 +163,7 @@ export const RoadmapCard = ({
     }
 
     return (
-      <div className="flex gap-2">
+      <div className="flex gap-2 w-full">
         <Button
           variant={userVoteType === 'yes' ? 'default' : 'outline'}
           size="sm"
@@ -172,7 +172,7 @@ export const RoadmapCard = ({
             onVote('yes');
           }}
           disabled={isVoting}
-          className={`${compact ? '' : 'flex-1'} min-h-[36px] text-xs ${
+          className={`flex-1 min-h-[36px] text-xs ${
             userVoteType === 'yes' 
               ? 'bg-emerald-600 hover:bg-emerald-700 text-white' 
               : 'border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10'
@@ -195,7 +195,7 @@ export const RoadmapCard = ({
             onVote('no');
           }}
           disabled={isVoting}
-          className={`${compact ? '' : 'flex-1'} min-h-[36px] text-xs ${
+          className={`flex-1 min-h-[36px] text-xs ${
             userVoteType === 'no' 
               ? 'bg-red-600 hover:bg-red-700 text-white' 
               : 'border-red-500/30 text-red-400 hover:bg-red-500/10'
@@ -312,8 +312,8 @@ export const RoadmapCard = ({
             </div>
 
             {/* Voting Buttons */}
-            <div className="w-full flex justify-center">
-              <div className="flex gap-2 w-full max-w-xs">
+            <div className="flex justify-center w-full">
+              <div className="w-full max-w-[280px]">
                 <VotingButtons />
               </div>
             </div>
@@ -393,8 +393,8 @@ export const RoadmapCard = ({
             </div>
 
             {/* Voting Buttons */}
-            <div className="pt-2 flex justify-center">
-              <div className="flex gap-2 w-full max-w-xs">
+            <div className="pt-2 flex justify-center w-full">
+              <div className="w-full max-w-[280px]">
                 <VotingButtons />
               </div>
             </div>
