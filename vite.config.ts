@@ -30,9 +30,9 @@ export default defineConfig(({ mode }) => ({
       ],
       manifest: {
         name: '3rdeyeadvisors - DeFi Education',
-        short_name: '3EA',
+        short_name: '3EA DeFi',
         description: 'DeFi Education & Digital Ownership Tools',
-        theme_color: '#00D4FF',
+        theme_color: '#0A1628',
         background_color: '#0A1628',
         display: 'standalone',
         start_url: '/',
@@ -107,11 +107,38 @@ export default defineConfig(({ mode }) => ({
             }
           }
         ],
-        // No navigation fallback - always fetch fresh
-        navigateFallback: null
+        // Ensure SPA navigation works offline
+        navigateFallback: 'index.html',
+        navigateFallbackAllowlist: [/^(?!\/__).*/] // Allow all routes except those starting with /__
       }
     })
   ].filter(Boolean),
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-ui': [
+            '@radix-ui/react-accordion',
+            '@radix-ui/react-dialog',
+            '@radix-ui/react-dropdown-menu',
+            '@radix-ui/react-popover',
+            '@radix-ui/react-select',
+            '@radix-ui/react-tabs',
+            '@radix-ui/react-toast',
+            '@radix-ui/react-tooltip',
+            'lucide-react'
+          ],
+          'vendor-web3': ['thirdweb', 'viem', 'wagmi', '@rainbow-me/rainbowkit'],
+          'vendor-charts': ['recharts'],
+          'vendor-three': ['three', '@react-three/fiber', '@react-three/drei'],
+          'vendor-motion': ['framer-motion'],
+          'vendor-utils': ['date-fns', 'clsx', 'tailwind-merge', 'zod']
+        }
+      }
+    },
+    chunkSizeWarningLimit: 1000
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
