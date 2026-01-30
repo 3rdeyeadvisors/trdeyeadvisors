@@ -152,57 +152,57 @@ const Navigation = () => {
                   {item.label}
                 </Link>
               ))}
+              
+              {/* More Dropdown - inside centered container */}
+              <NavigationMenu>
+                <NavigationMenuList>
+                  <NavigationMenuItem>
+                    <NavigationMenuTrigger className="text-sm font-consciousness h-auto py-1 px-2 bg-transparent hover:bg-transparent data-[state=open]:bg-transparent">
+                      More
+                    </NavigationMenuTrigger>
+                    <NavigationMenuContent>
+                      <ul className="grid w-[220px] gap-1 p-2 bg-popover shadow-xl">
+                        {/* Remaining main items */}
+                        {mainNavItems.slice(5).map((item) => (
+                          <li key={item.path}>
+                            <NavigationMenuLink asChild>
+                              <Link
+                                to={item.path}
+                                className={`block select-none space-y-1 rounded-md p-2.5 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground ${
+                                  isActive(item.path) ? "bg-accent text-accent-foreground" : ""
+                                }`}
+                              >
+                                <div className="text-sm font-medium font-consciousness">
+                                  {item.label}
+                                </div>
+                              </Link>
+                            </NavigationMenuLink>
+                          </li>
+                        ))}
+                        <div className="h-px bg-border my-1" />
+                        {/* Original more items */}
+                        {moreNavItems.map((item) => (
+                          <li key={item.path}>
+                            <NavigationMenuLink asChild>
+                              <Link
+                                to={item.path}
+                                className={`block select-none space-y-1 rounded-md p-2.5 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground ${
+                                  isActive(item.path) ? "bg-accent text-accent-foreground" : ""
+                                }`}
+                              >
+                                <div className="text-sm font-medium font-consciousness">
+                                  {item.label}
+                                </div>
+                              </Link>
+                            </NavigationMenuLink>
+                          </li>
+                        ))}
+                      </ul>
+                    </NavigationMenuContent>
+                  </NavigationMenuItem>
+                </NavigationMenuList>
+              </NavigationMenu>
             </div>
-            
-            {/* More Dropdown */}
-            <NavigationMenu>
-              <NavigationMenuList>
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="text-sm font-consciousness h-auto py-1 px-2 bg-transparent hover:bg-transparent data-[state=open]:bg-transparent">
-                    More
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <ul className="grid w-[220px] gap-1 p-2 bg-popover shadow-xl">
-                      {/* Remaining main items */}
-                      {mainNavItems.slice(5).map((item) => (
-                        <li key={item.path}>
-                          <NavigationMenuLink asChild>
-                            <Link
-                              to={item.path}
-                              className={`block select-none space-y-1 rounded-md p-2.5 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground ${
-                                isActive(item.path) ? "bg-accent text-accent-foreground" : ""
-                              }`}
-                            >
-                              <div className="text-sm font-medium font-consciousness">
-                                {item.label}
-                              </div>
-                            </Link>
-                          </NavigationMenuLink>
-                        </li>
-                      ))}
-                      <div className="h-px bg-border my-1" />
-                      {/* Original more items */}
-                      {moreNavItems.map((item) => (
-                        <li key={item.path}>
-                          <NavigationMenuLink asChild>
-                            <Link
-                              to={item.path}
-                              className={`block select-none space-y-1 rounded-md p-2.5 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground ${
-                                isActive(item.path) ? "bg-accent text-accent-foreground" : ""
-                              }`}
-                            >
-                              <div className="text-sm font-medium font-consciousness">
-                                {item.label}
-                              </div>
-                            </Link>
-                          </NavigationMenuLink>
-                        </li>
-                      ))}
-                    </ul>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
             
             <div className="flex items-center gap-2 ml-2 lg:ml-4 pl-4 border-l border-border/50">
               <Link to="/cart" className="relative">
