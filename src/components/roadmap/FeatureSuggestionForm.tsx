@@ -75,17 +75,17 @@ export const FeatureSuggestionForm = ({
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <CollapsibleTrigger asChild>
           <CardHeader className="cursor-pointer hover:bg-primary/5 transition-colors rounded-t-lg">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-primary/10">
+            <div className="flex flex-col items-center text-center gap-2">
+              <div className="p-2.5 rounded-lg bg-primary/10">
                 <Lightbulb className="w-5 h-5 text-primary" />
               </div>
-              <div className="flex-1 text-left">
+              <div>
                 <CardTitle className="text-base md:text-lg">Submit Your Feature Idea</CardTitle>
-                <CardDescription className="text-sm">
+                <CardDescription className="text-sm mt-1">
                   Share your ideas and help shape the platform
                 </CardDescription>
               </div>
-              <Button variant="ghost" size="sm" className="shrink-0">
+              <Button variant="ghost" size="sm" className="mt-1">
                 {isOpen ? 'Close' : 'Open'}
               </Button>
             </div>
