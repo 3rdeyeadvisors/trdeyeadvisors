@@ -240,11 +240,11 @@ export const RoadmapCard = ({
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
         
         <CardHeader className="relative p-4 pb-2">
-          <div className="flex items-start justify-between gap-2">
-            <CardTitle className="text-base md:text-lg font-consciousness leading-tight">
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
+            <CardTitle className="text-base md:text-lg font-consciousness leading-tight flex-1 min-w-0">
               {title}
             </CardTitle>
-            <Badge variant="outline" className={`${statusInfo.className} text-xs shrink-0`}>
+            <Badge variant="outline" className={`${statusInfo.className} text-[10px] sm:text-xs shrink-0 self-start`}>
               {statusInfo.label}
             </Badge>
           </div>
@@ -312,7 +312,7 @@ export const RoadmapCard = ({
             </div>
 
             {/* Voting Buttons */}
-            <div className="flex justify-center w-full">
+            <div className="flex justify-center w-full pt-1">
               <div className="w-full max-w-[280px]">
                 <VotingButtons />
               </div>

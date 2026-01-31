@@ -579,26 +579,26 @@ const Earn = () => {
                       {commissions.map((commission) => (
                         <div 
                           key={commission.id} 
-                          className="flex items-center justify-between p-4 bg-muted/30 rounded-lg"
+                          className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 bg-muted/30 rounded-lg"
                         >
-                          <div>
-                            <div className="flex items-center gap-2">
-                              <Badge variant={commission.plan_type === "annual" ? "default" : "secondary"}>
+                          <div className="min-w-0">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <Badge variant={commission.plan_type === "annual" ? "default" : "secondary"} className="text-[10px] sm:text-xs">
                                 {commission.plan_type === "annual" ? "Annual" : "Monthly"}
                               </Badge>
                               <Badge 
                                 variant={commission.status === "paid" ? "default" : "outline"}
-                                className={commission.status === "paid" ? "bg-green-500" : ""}
+                                className={`text-[10px] sm:text-xs ${commission.status === "paid" ? "bg-green-500" : ""}`}
                               >
                                 {commission.status}
                               </Badge>
                             </div>
-                            <p className="text-sm text-foreground/70 mt-1">
+                            <p className="text-xs sm:text-sm text-foreground/70 mt-1.5 break-words">
                               {formatDate(commission.created_at)}
                               {commission.paid_at && ` • Paid ${formatDate(commission.paid_at)}`}
                             </p>
                           </div>
-                          <div className="text-xl font-bold text-primary">
+                          <div className="text-lg sm:text-xl font-bold text-primary self-start sm:self-center">
                             {formatCurrency(commission.commission_amount_cents)}
                           </div>
                         </div>

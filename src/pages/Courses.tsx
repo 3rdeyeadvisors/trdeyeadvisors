@@ -145,6 +145,27 @@ const Courses = () => {
       icon: BookOpen,
       early_access_date: null,
       public_release_date: null
+    },
+    {
+      id: 6,
+      title: "Tokenizing Real World Assets: From Traditional Finance to Blockchain",
+      description: "Discover how blockchain technology is transforming real estate, treasuries, commodities, and infrastructure into tradeable digital tokens. Learn about fractional ownership, evaluate RWA protocols, and understand the regulatory landscape shaping the $30+ billion tokenization market. This course was created based on community voting through our Platform Roadmap.",
+      category: "free",
+      type: "course",
+      duration: "5 modules",
+      difficulty: "Advanced",
+      rating: 4.9,
+      students: 256,
+      modules: [
+        "Introduction to Real World Assets (RWA)",
+        "The Legal and Regulatory Framework",
+        "Tokenization Mechanics and Platforms",
+        "Evaluating RWA Protocols (Ondo, Centrifuge, MakerDAO)",
+        "Risks and Future of On-Chain Assets"
+      ],
+      icon: BookOpen,
+      early_access_date: "2026-01-31",
+      public_release_date: "2026-02-07"
     }
   ];
 
@@ -165,7 +186,12 @@ const Courses = () => {
       
       // Course not yet available to anyone
       if (now < earlyAccessDate) {
-        return { ...course, isEarlyAccess: false, isLocked: true };
+        return {
+          ...course,
+          isEarlyAccess: false,
+          isLocked: true,
+          public_release_date: earlyAccessDate.toISOString()
+        };
       }
       
       // In early access window (annual only)
@@ -173,7 +199,8 @@ const Courses = () => {
         return {
           ...course,
           isEarlyAccess: true,
-          isLocked: !isAnnualSubscriber
+          isLocked: !isAnnualSubscriber,
+          public_release_date: publicReleaseDate.toISOString()
         };
       }
       
