@@ -39,7 +39,12 @@ const CourseDetail = () => {
   const { toast: useToastNotification } = useToast();
   const isMobile = useIsMobile();
 
-  const isAnnualSubscriber = subscription?.plan === 'annual' || subscription?.isAdmin;
+  const isPremiumMember = 
+    subscription?.plan === 'annual' || 
+    subscription?.plan === 'founding_33' ||
+    subscription?.isFounder ||
+    subscription?.isAdmin ||
+    subscription?.isGrandfathered;
 
   const course = getCourseContent(parseInt(courseId || "0"));
   const progress = getCourseProgress(parseInt(courseId || "0"));
@@ -61,11 +66,11 @@ const CourseDetail = () => {
     }
     
     if (now >= earlyAccessDate && now < publicReleaseDate) {
-      return { isEarlyAccess: true, isLocked: !isAnnualSubscriber };
+      return { isEarlyAccess: true, isLocked: !isPremiumMember };
     }
     
     return { isEarlyAccess: false, isLocked: false };
-  }, [course, isAnnualSubscriber]);
+  }, [course, isPremiumMember]);
 
   // Track presence for admins
   usePresenceTracking({
