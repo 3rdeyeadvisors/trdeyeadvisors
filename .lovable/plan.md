@@ -1,185 +1,115 @@
 
-# Security Fix Plan: 3 Critical Issues (One by One)
 
-We'll fix each security vulnerability individually to ensure accuracy and proper testing.
+# Build Errors Fix Plan
 
----
+## Issue Summary
 
-## Issue #1: Quiz Answer Exposure (HIGH PRIORITY)
-
-### Problem
-The `quizzes_public` view currently includes `explanation` in the questions JSON:
-```sql
-jsonb_build_object(
-  'id', q.value ->> 'id',
-  'question', q.value ->> 'question',
-  'options', q.value -> 'options',
-  'explanation', q.value ->> 'explanation'  -- ⚠️ LEAKING HINTS
-)
-```
-This reveals answer hints before quiz completion.
-
-### Solution
-Recreate the view WITHOUT the `explanation` field:
-
-**Migration File: `fix_quiz_explanation_leak.sql`**
-```sql
--- Drop and recreate quizzes_public view without explanation field
-DROP VIEW IF EXISTS public.quizzes_public;
-
-CREATE OR REPLACE VIEW public.quizzes_public
-WITH (security_invoker = on)
-AS SELECT
-    id,
-    course_id,
-    module_id,
-    title,
-    description,
-    passing_score,
-    time_limit,
-    max_attempts,
-    (
-        SELECT jsonb_agg(
-            jsonb_build_object(
-                'id', q.value ->> 'id',
-                'question', q.value ->> 'question',
-                'options', q.value -> 'options'
-                -- explanation intentionally removed for security
-            )
-        )
-        FROM jsonb_array_elements(quizzes.questions) q(value)
-    ) AS questions,
-    created_at,
-    updated_at
-FROM quizzes
-WHERE auth.uid() IS NOT NULL;
-
--- Grant access to authenticated users
-GRANT SELECT ON public.quizzes_public TO authenticated;
-```
-
-### Impact
-- Users can still take quizzes with questions and options
-- Explanations only revealed after submission (handled by app logic)
-- No frontend code changes needed
+Multiple files have **duplicate/merged code blocks** that are causing syntax errors. It appears that code was somehow duplicated or merged incorrectly, resulting in broken imports, function declarations, and JSX structures.
 
 ---
 
-## Issue #2: User Privacy / Vote Tracking (HIGH PRIORITY)
+## Files Affected
 
-### Problem
-The `roadmap_votes` table has TWO overlapping public SELECT policies:
-```sql
-"Anyone can view votes" -- qual: true (public!)
-"Authenticated users can view votes" -- qual: true
-```
-This exposes `user_id` values to anonymous visitors, allowing tracking of individual voting patterns.
-
-### Solution
-Remove the overly permissive "Anyone can view votes" policy and restrict vote visibility:
-
-**Migration File: `fix_roadmap_vote_privacy.sql`**
-```sql
--- Remove the public policy that exposes user voting patterns
-DROP POLICY IF EXISTS "Anyone can view votes" ON public.roadmap_votes;
-
--- Keep authenticated users policy but make it more restrictive
--- Users can only see their own votes (for UI highlighting)
--- Vote counts are computed server-side in the app
-DROP POLICY IF EXISTS "Authenticated users can view votes" ON public.roadmap_votes;
-
-CREATE POLICY "Users can view own votes for UI"
-ON public.roadmap_votes FOR SELECT
-USING (auth.uid() = user_id);
-
--- Allow service role to see all votes for admin operations
-CREATE POLICY "Service role can view all votes"
-ON public.roadmap_votes FOR SELECT
-USING ((auth.jwt() ->> 'role'::text) = 'service_role'::text);
-
--- Admins can view all votes for management
-CREATE POLICY "Admins can view all votes"
-ON public.roadmap_votes FOR SELECT
-USING (has_role(auth.uid(), 'admin'::app_role));
-```
-
-### Frontend Update Required
-Since users can no longer fetch ALL votes, we need to update `useRoadmapVotes.tsx` to:
-1. Fetch only the user's own votes for UI highlighting
-2. Compute vote counts from aggregated data (create a new view or edge function)
-
-**New View: `roadmap_vote_counts`**
-```sql
-CREATE OR REPLACE VIEW public.roadmap_vote_counts
-WITH (security_invoker = on)
-AS SELECT
-    roadmap_item_id,
-    COUNT(*) FILTER (WHERE vote_type = 'yes') as yes_votes,
-    COUNT(*) FILTER (WHERE vote_type = 'no') as no_votes
-FROM roadmap_votes
-GROUP BY roadmap_item_id;
-
-GRANT SELECT ON public.roadmap_vote_counts TO authenticated;
-```
-
-**File: `src/hooks/useRoadmapVotes.tsx`**
-```tsx
-// Line 78-81: Change from fetching all votes to:
-// 1. Fetch vote counts from the new view
-const { data: voteCounts } = await supabase
-  .from('roadmap_vote_counts')
-  .select('*');
-
-// 2. Fetch only user's own votes for highlighting
-const { data: userVotes } = user
-  ? await supabase
-      .from('roadmap_votes')
-      .select('roadmap_item_id, vote_type')
-      .eq('user_id', user.id)
-  : { data: [] };
-```
+| File | Issue Type | Lines Affected |
+|------|------------|----------------|
+| `src/components/pwa/ReloadPrompt.tsx` | Duplicate useEffect block | Lines 97-130 |
+| `src/components/admin/FeatureSuggestionsManager.tsx` | Duplicate imports | Lines 3-17, 56-63 |
+| `src/components/roadmap/FeatureSuggestionForm.tsx` | Duplicate function signature & button | Lines 19-27, 150-159 |
+| `src/components/roadmap/FeatureSuggestionsList.tsx` | Duplicate function signature | Lines 39-47 |
+| `src/components/roadmap/RoadmapCard.tsx` | Multiple duplicate blocks | Lines 165-187, 199-229, 262-313, 399-455, 490-541 |
+| `src/hooks/useFeatureSuggestions.tsx` | Duplicate function params & update statements | Lines 151-167, 213-218 |
+| `supabase/functions/delete-inactive-accounts/index.ts` | Resend import format | Line 3 |
 
 ---
 
-## Issue #3: Roadmap Strategy Visibility (MEDIUM PRIORITY)
+## Fix Details
 
-### Problem
-The `roadmap_items` table has two public SELECT policies:
-```sql
-"Anyone can view roadmap items" -- qual: true (public!)
-"Authenticated users can view roadmap items" -- qual: true
+### 1. ReloadPrompt.tsx (PWA Component)
+
+**Problem**: Duplicate `useEffect` block for `needRefresh` at lines 97-130
+
+**Fix**: Remove the duplicate code block (lines 118-130) that repeats the toast notification logic
+
+---
+
+### 2. FeatureSuggestionsManager.tsx (Admin Component)
+
+**Problem**: Two duplicate import sections merged together
+
+**Fix**: 
+- Remove duplicate import block at lines 3-8
+- Remove duplicate import block at lines 56-62
+
+---
+
+### 3. FeatureSuggestionForm.tsx (Roadmap Component)
+
+**Problem**: 
+- Duplicate function signature at lines 19-27
+- Duplicate button at lines 150-153
+
+**Fix**: Remove the duplicate sections
+
+---
+
+### 4. FeatureSuggestionsList.tsx (Roadmap Component)
+
+**Problem**: Duplicate function signature at lines 39-47
+
+**Fix**: Remove the duplicate section
+
+---
+
+### 5. RoadmapCard.tsx (Roadmap Component)
+
+**Problem**: Multiple duplicated sections throughout the file, including:
+- Duplicate conditional blocks for `canVote` check (lines 165-187)
+- Duplicate ternary expressions in className (lines 199-229)
+- Duplicate countdown timer sections (lines 262-313)
+- Duplicate Dialog content sections (lines 399-455, 490-541)
+
+**Fix**: Remove all duplicate blocks, keeping only the first occurrence of each
+
+---
+
+### 6. useFeatureSuggestions.tsx (Hook)
+
+**Problem**: 
+- Duplicate function parameter on lines 151-156
+- Duplicate `.update()` statements on lines 159-167 and 213-218
+
+**Fix**: Remove the duplicate declarations
+
+---
+
+### 7. delete-inactive-accounts Edge Function
+
+**Problem**: Deno import format issue - using `npm:resend@2.0.0` which is not resolving correctly
+
+**Fix**: Change to esm.sh import format:
+```typescript
+// Before
+import { Resend } from "npm:resend@2.0.0";
+
+// After
+import { Resend } from "https://esm.sh/resend@2.0.0";
 ```
-
-### Solution
-This is intentionally public for transparency. We'll mark it as acknowledged:
-
-**Option A: Keep public (recommended)** - The roadmap is meant to be visible for community transparency. We'll dismiss this security warning as "intentional behavior."
-
-**Option B: Restrict to authenticated only** - Remove "Anyone can view" policy if you want it members-only.
-
-### Recommended Action
-Mark this as intentional by updating the security finding status.
 
 ---
 
 ## Implementation Order
 
-| Step | Issue | Priority | Risk |
-|------|-------|----------|------|
-| 1 | Quiz explanation leak | HIGH | None - just removes field |
-| 2 | Roadmap votes privacy | HIGH | Requires frontend update |
-| 3 | Roadmap items visibility | MEDIUM | Decision only - no code change |
+1. Fix `ReloadPrompt.tsx` - Critical (blocks build)
+2. Fix `FeatureSuggestionsManager.tsx` - Import errors
+3. Fix `FeatureSuggestionForm.tsx` - Component errors
+4. Fix `FeatureSuggestionsList.tsx` - Component errors
+5. Fix `RoadmapCard.tsx` - Multiple JSX errors
+6. Fix `useFeatureSuggestions.tsx` - Hook errors
+7. Fix `delete-inactive-accounts` edge function - Deno import
 
 ---
 
-## Summary of Changes
+## Technical Notes
 
-### Database Migrations
-1. `fix_quiz_explanation_leak.sql` - Recreate view without explanation
-2. `fix_roadmap_vote_privacy.sql` - New RLS policies + vote counts view
+All fixes involve removing duplicate code blocks that were incorrectly merged. No logic changes are required - just cleanup of malformed code structure.
 
-### Frontend Changes
-1. `src/hooks/useRoadmapVotes.tsx` - Update to use new vote counts view and fetch only user's own votes
-
-### Security Finding Updates
-1. Mark "roadmap items public" as intentional if keeping public transparency
