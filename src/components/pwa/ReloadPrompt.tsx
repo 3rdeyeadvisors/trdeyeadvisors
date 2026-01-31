@@ -115,6 +115,19 @@ function ReloadPrompt() {
       }
     }
   }, [needRefresh, isStandalone, updateServiceWorker]);
+      toast("New content available, click on reload button to update.", {
+        duration: Infinity,
+        action: {
+          label: "Reload",
+          onClick: () => updateServiceWorker(true),
+        },
+        cancel: {
+          label: "Close",
+          onClick: () => close(),
+        }
+      });
+    }
+  }, [needRefresh]);
 
   if (!offlineReady && !needRefresh) return null;
 

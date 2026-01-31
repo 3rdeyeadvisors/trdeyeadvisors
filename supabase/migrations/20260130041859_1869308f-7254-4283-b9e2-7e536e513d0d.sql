@@ -6,6 +6,7 @@ CREATE VIEW public.quizzes_public
 WITH (security_invoker = on)
 AS
 SELECT
+SELECT 
   id,
   course_id,
   module_id,

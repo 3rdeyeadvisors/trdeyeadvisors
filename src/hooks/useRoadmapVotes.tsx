@@ -100,6 +100,7 @@ export const useRoadmapVotes = () => {
         ])
       );
 
+      
       const userVoteMap = new Map(
         (userVotes || []).map((v: { roadmap_item_id: string; vote_type: string }) => [
           v.roadmap_item_id,
@@ -198,6 +199,54 @@ export const useRoadmapVotes = () => {
           return true;
         }
 
+        if (existingVote) {
+          // Update existing vote type
+          const { error } = await supabase
+            .from('roadmap_votes')
+            .update({ vote_type: voteType })
+            .eq('roadmap_item_id', roadmapItemId)
+            .eq('user_id', user.id);
+
+          if (error) throw error;
+
+          toast({
+            title: 'Vote updated',
+            description: `Changed to ${voteType === 'yes' ? 'support' : 'oppose'}`,
+          });
+        } else {
+          // Insert new vote
+          const { error } = await supabase.from('roadmap_votes').insert({
+            roadmap_item_id: roadmapItemId,
+            user_id: user.id,
+            vote_weight: voteWeight,
+            vote_type: voteType,
+          });
+
+          if (error) {
+            if (error.code === '23505') {
+              // Unique constraint violation - already voted
+              toast({
+                title: 'Already voted',
+                description: 'You have already voted for this feature',
+                variant: 'destructive',
+              });
+            } else {
+              throw error;
+            }
+            return false;
+          }
+
+
+        // If clicking the same vote type, skip - no change needed
+        if (existingVote === voteType) {
+          toast({
+            title: 'Already voted',
+            description: `You already voted ${voteType === 'yes' ? 'Yes' : 'No'}`,
+          });
+          setVoting(null);
+          return true;
+        }
+        
         if (existingVote) {
           // Update existing vote type
           const { error } = await supabase

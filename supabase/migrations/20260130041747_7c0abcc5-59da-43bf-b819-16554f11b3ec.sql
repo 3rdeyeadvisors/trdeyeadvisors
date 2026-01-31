@@ -8,6 +8,10 @@ CREATE VIEW public.profiles_public
 WITH (security_invoker = on)
 AS
 SELECT
+CREATE VIEW public.profiles_public 
+WITH (security_invoker = on)
+AS
+SELECT 
   user_id,
   display_name,
   avatar_url,

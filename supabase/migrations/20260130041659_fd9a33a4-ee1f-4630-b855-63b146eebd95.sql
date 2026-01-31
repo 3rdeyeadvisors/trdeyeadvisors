@@ -3,6 +3,7 @@
 -- This view should be used for community features (comments, discussions, etc.)
 CREATE OR REPLACE VIEW public.profiles_public AS
 SELECT
+SELECT 
   user_id,
   display_name,
   avatar_url,

@@ -21,6 +21,7 @@ USING (has_role(auth.uid(), 'admin'::app_role));
 CREATE OR REPLACE VIEW public.roadmap_vote_counts
 WITH (security_invoker = on)
 AS SELECT
+AS SELECT 
     roadmap_item_id,
     COALESCE(SUM(CASE WHEN vote_type = 'yes' THEN vote_weight ELSE 0 END), 0)::integer as yes_votes,
     COALESCE(SUM(CASE WHEN vote_type = 'no' THEN vote_weight ELSE 0 END), 0)::integer as no_votes
