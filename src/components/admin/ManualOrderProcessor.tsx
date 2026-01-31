@@ -25,7 +25,6 @@ export const ManualOrderProcessor = () => {
       if (error) throw error;
 
       toast.success("Order processed successfully!");
-      console.log("Printify order result:", data);
       setSessionId("");
     } catch (error: any) {
       console.error("Error processing order:", error);

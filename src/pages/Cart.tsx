@@ -28,7 +28,6 @@ const CartItem = ({ item }: { item: any }) => {
   useEffect(() => {
     const loadProductData = async () => {
       if (item.type === "merchandise" && item.printify_product_id) {
-        console.log('Loading product data for cart item:', item);
         // Use secure public view that excludes pricing strategy data
         const { data } = await supabase
           .from('printify_products_public')
@@ -36,7 +35,6 @@ const CartItem = ({ item }: { item: any }) => {
           .eq('printify_id', item.printify_product_id)
           .maybeSingle();
         
-        console.log('Product data loaded:', data);
         if (data) {
           setProductData(data);
         }
@@ -186,6 +184,8 @@ const CartItem = ({ item }: { item: any }) => {
               <img 
                 src={item.image} 
                 alt={item.title}
+                width={80}
+                height={80}
                 className="w-full h-full object-cover"
                 loading="lazy"
                 onError={(e) => {
@@ -412,22 +412,9 @@ const Cart = () => {
           image: item.image
         };
         
-        console.log('Cart item for checkout:', {
-          id: checkoutItem.id,
-          title: checkoutItem.title,
-          price: checkoutItem.price,
-          image: checkoutItem.image,
-          variant_id: checkoutItem.variant_id
-        });
-        
         return checkoutItem;
       });
 
-      console.log('=== Checkout Request ===');
-      console.log('User ID:', user?.id);
-      console.log('Items count:', checkoutItems.length);
-      console.log('Total cart value:', total);
-      console.log('Discount applied:', discountApplied, discountCode);
       
       const { data, error } = await supabase.functions.invoke('create-cart-checkout', {
         body: {
@@ -437,7 +424,6 @@ const Cart = () => {
         }
       });
 
-      console.log('Checkout response:', { data, error });
 
       if (error) {
         console.error('Checkout error:', error);
@@ -445,7 +431,6 @@ const Cart = () => {
       }
 
       if (data?.url) {
-        console.log('Redirecting to Stripe checkout:', data.url);
         window.location.href = data.url;
       } else {
         console.error('No checkout URL received:', data);

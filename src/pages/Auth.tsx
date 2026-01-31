@@ -22,6 +22,7 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
+  const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [loading, setLoading] = useState(false);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [isPasswordReset, setIsPasswordReset] = useState(false);
@@ -113,7 +114,6 @@ const Auth = () => {
         // Redirect to intended destination or dashboard
         hasRedirected.current = true;
         const destination = redirectTo || '/dashboard';
-        console.log('[Auth] Redirecting authenticated user to:', destination);
         navigate(destination, { replace: true });
       }
     }
@@ -151,6 +151,16 @@ const Auth = () => {
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!agreeToTerms) {
+      toast({
+        title: "Terms and Privacy",
+        description: "You must agree to the Terms of Service and Privacy Policy to create an account.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setLoading(true);
     
     try {
@@ -198,7 +208,6 @@ const Auth = () => {
               if (refInsertError) {
                 console.error('Error inserting referral:', refInsertError);
               } else {
-                console.log('Referral created successfully, trigger will award bonus ticket to:', referrerId);
               }
             } else {
               // No active raffle, still record the referral without raffle association
@@ -214,7 +223,6 @@ const Auth = () => {
               if (refInsertError) {
                 console.error('Error inserting referral (no active raffle):', refInsertError);
               } else {
-                console.log('Referral recorded without raffle (no active raffle)');
               }
             }
           } catch (refError) {
@@ -540,6 +548,26 @@ const Auth = () => {
                     <p className="text-xs text-muted-foreground">
                       Password must be at least 8 characters and include uppercase, lowercase, and a number
                     </p>
+                  </div>
+                  <div className="flex items-start space-x-2 py-2">
+                    <input
+                      id="terms"
+                      type="checkbox"
+                      className="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                      checked={agreeToTerms}
+                      onChange={(e) => setAgreeToTerms(e.target.checked)}
+                      required
+                    />
+                    <Label htmlFor="terms" className="text-xs leading-relaxed text-muted-foreground">
+                      I agree to the{" "}
+                      <a href="/terms" className="text-primary hover:underline underline-offset-4">
+                        Terms of Service
+                      </a>{" "}
+                      and{" "}
+                      <a href="/privacy" className="text-primary hover:underline underline-offset-4">
+                        Privacy Policy
+                      </a>
+                    </Label>
                   </div>
                   <Button type="submit" className="w-full" disabled={loading}>
                     {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

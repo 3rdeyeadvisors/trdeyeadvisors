@@ -28,10 +28,8 @@ const ResetPassword = () => {
       const tokenHash = searchParams.get('token_hash');
       const type = searchParams.get('type');
       
-      console.log('Reset page loaded with params:', { tokenHash, type });
       
       if (!tokenHash || type !== 'recovery') {
-        console.log('Invalid token or type, redirecting to auth');
         toast({
           title: "Invalid Reset Link",
           description: "This password reset link is invalid or has expired. Please request a new one.",
@@ -61,7 +59,6 @@ const ResetPassword = () => {
     
     // If we have reset parameters, NEVER redirect away from this page
     if (tokenHash && type === 'recovery') {
-      console.log('Password reset flow detected, preventing redirects');
       return; // Don't redirect anywhere
     }
     

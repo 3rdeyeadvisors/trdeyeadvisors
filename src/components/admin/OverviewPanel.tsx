@@ -72,7 +72,6 @@ export function OverviewPanel() {
       }
     } catch (error) {
       // No active raffle found, that's okay
-      console.log("No active raffle found");
     }
   };
 

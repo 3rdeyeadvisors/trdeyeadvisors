@@ -165,7 +165,6 @@ export function EmailCenter() {
         setActiveRaffle(data);
       }
     } catch (error) {
-      console.log("No active raffle found");
     }
   };
 

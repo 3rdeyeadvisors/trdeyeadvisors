@@ -6,12 +6,6 @@ import {
   ArrowUpRight,
   Check,
   X,
-import { 
-  MessageSquare, 
-  Loader2, 
-  ArrowUpRight, 
-  Check, 
-  X, 
   Clock,
   Eye
 } from 'lucide-react';
@@ -56,10 +50,6 @@ import {
   useFeatureSuggestions,
   useFeatureSuggestionsAdmin,
   FeatureSuggestion
-import { 
-  useFeatureSuggestions, 
-  useFeatureSuggestionsAdmin,
-  FeatureSuggestion 
 } from '@/hooks/useFeatureSuggestions';
 
 const statusOptions = [
@@ -338,7 +328,6 @@ export const FeatureSuggestionsManager = () => {
             <AlertDialogTitle>Promote to Roadmap Vote?</AlertDialogTitle>
             <AlertDialogDescription>
               This will create a new roadmap item for community voting.
-              This will create a new roadmap item for community voting. 
               The voting window will be set to 7 days.
             </AlertDialogDescription>
           </AlertDialogHeader>

@@ -138,7 +138,6 @@ export const EnhancedContentPlayer = ({
     try {
       // First, check if module has a quiz in courseContent
       if (module.content.quiz) {
-        console.log('Loading quiz from courseContent:', module.content.quiz);
         
         // Validate quiz structure
         if (!module.content.quiz.questions || !Array.isArray(module.content.quiz.questions)) {
@@ -157,7 +156,6 @@ export const EnhancedContentPlayer = ({
         }
 
         setQuiz(module.content.quiz);
-        console.log('Quiz loaded successfully from courseContent');
         return;
       }
 
@@ -172,7 +170,6 @@ export const EnhancedContentPlayer = ({
       if (error && error.code !== 'PGRST116') throw error;
       
       if (data && data.questions) {
-        console.log('Loading quiz from database:', data);
         
         // Validate that the quiz has the correct structure
         const questions = data.questions as any[];
@@ -190,7 +187,6 @@ export const EnhancedContentPlayer = ({
             timeLimit: data.time_limit,
             maxAttempts: data.max_attempts || 3
           });
-          console.log('Quiz loaded successfully from database');
         } else {
           console.error('Database quiz has invalid structure');
         }

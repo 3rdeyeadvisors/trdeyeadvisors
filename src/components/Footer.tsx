@@ -105,7 +105,7 @@ const Footer = () => {
                   href={social.href}
                   target={social.href.startsWith('mailto') ? undefined : '_blank'}
                   rel={social.href.startsWith('mailto') ? undefined : 'noopener noreferrer'}
-                  className="w-9 h-9 rounded-lg bg-background/50 border border-border/50 flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/30 transition-all duration-300"
+                  className="w-11 h-11 rounded-lg bg-background/50 border border-border/50 flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/30 transition-all duration-300"
                   aria-label={social.label}
                 >
                   <social.icon className="w-4 h-4" />

@@ -266,6 +266,8 @@ export default function MerchandiseDetail() {
                   <img
                     src={productImages[currentImageIndex]?.src || productImages[0]?.src}
                     alt={product.title}
+                    width={800}
+                    height={800}
                     className="w-full h-full object-cover"
                   />
                   {productImages.length > 1 && (
@@ -275,6 +277,7 @@ export default function MerchandiseDetail() {
                         size="icon"
                         className="absolute left-2 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur"
                         onClick={prevImage}
+                        aria-label="Previous product image"
                       >
                         <ChevronLeft className="h-4 w-4" />
                       </Button>
@@ -283,6 +286,7 @@ export default function MerchandiseDetail() {
                         size="icon"
                         className="absolute right-2 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur"
                         onClick={nextImage}
+                        aria-label="Next product image"
                       >
                         <ChevronRight className="h-4 w-4" />
                       </Button>
@@ -307,6 +311,8 @@ export default function MerchandiseDetail() {
                       <img
                         src={image.src}
                         alt={`${product.title} view ${index + 1}`}
+                        width={80}
+                        height={80}
                         className="w-full h-full object-cover"
                       />
                     </button>

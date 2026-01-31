@@ -64,7 +64,7 @@ const OrionChat = () => {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 md:bottom-6 md:right-6">
+    <div className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] right-[calc(1rem+env(safe-area-inset-right))] z-50 md:bottom-6 md:right-6">
       {/* Greeting Bubble */}
       <AnimatePresence>
         {showGreeting && !isOpen && (
@@ -214,6 +214,7 @@ const OrionChat = () => {
                   size="icon"
                   onClick={handleSend}
                   disabled={!input.trim() || isLoading}
+                  aria-label="Send message"
                 >
                   <Send className="w-4 h-4" />
                 </Button>

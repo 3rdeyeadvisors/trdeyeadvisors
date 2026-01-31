@@ -126,9 +126,9 @@ const Navigation = () => {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background border-b border-border">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background border-b border-border pt-[env(safe-area-inset-top)]">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo/Brand */}
           <Link to="/" className="flex items-center gap-2 group" aria-label="3rdeyeadvisors home">
             <div className="text-lg md:text-xl font-consciousness font-bold text-primary whitespace-nowrap group-hover:text-primary-glow transition-all duration-300">
@@ -137,8 +137,8 @@ const Navigation = () => {
           </Link>
           
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center flex-1 ml-8">
-            <div className="flex items-center justify-center flex-1 gap-4 lg:gap-6">
+          <div className="hidden md:flex items-center justify-end flex-1 ml-8 gap-1 lg:gap-4 xl:gap-6">
+            <div className="flex items-center gap-4 lg:gap-6">
               {mainNavItems.slice(0, 5).map((item) => (
                 <Link
                   key={item.path}
@@ -152,61 +152,61 @@ const Navigation = () => {
                   {item.label}
                 </Link>
               ))}
-              
-              {/* More Dropdown - inside centered container */}
-              <NavigationMenu>
-                <NavigationMenuList>
-                  <NavigationMenuItem>
-                    <NavigationMenuTrigger className="text-sm font-consciousness h-auto py-1 px-2 bg-transparent hover:bg-transparent data-[state=open]:bg-transparent">
-                      More
-                    </NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                      <ul className="grid w-[220px] gap-1 p-2 bg-popover shadow-xl">
-                        {/* Remaining main items */}
-                        {mainNavItems.slice(5).map((item) => (
-                          <li key={item.path}>
-                            <NavigationMenuLink asChild>
-                              <Link
-                                to={item.path}
-                                className={`block select-none space-y-1 rounded-md p-2.5 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground ${
-                                  isActive(item.path) ? "bg-accent text-accent-foreground" : ""
-                                }`}
-                              >
-                                <div className="text-sm font-medium font-consciousness">
-                                  {item.label}
-                                </div>
-                              </Link>
-                            </NavigationMenuLink>
-                          </li>
-                        ))}
-                        <div className="h-px bg-border my-1" />
-                        {/* Original more items */}
-                        {moreNavItems.map((item) => (
-                          <li key={item.path}>
-                            <NavigationMenuLink asChild>
-                              <Link
-                                to={item.path}
-                                className={`block select-none space-y-1 rounded-md p-2.5 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground ${
-                                  isActive(item.path) ? "bg-accent text-accent-foreground" : ""
-                                }`}
-                              >
-                                <div className="text-sm font-medium font-consciousness">
-                                  {item.label}
-                                </div>
-                              </Link>
-                            </NavigationMenuLink>
-                          </li>
-                        ))}
-                      </ul>
-                    </NavigationMenuContent>
-                  </NavigationMenuItem>
-                </NavigationMenuList>
-              </NavigationMenu>
             </div>
             
+            {/* More Dropdown */}
+            <NavigationMenu>
+              <NavigationMenuList>
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="text-sm font-consciousness h-auto py-1 px-2 bg-transparent hover:bg-transparent data-[state=open]:bg-transparent">
+                    More
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid w-[220px] gap-1 p-2 bg-popover shadow-xl">
+                      {/* Remaining main items */}
+                      {mainNavItems.slice(5).map((item) => (
+                        <li key={item.path}>
+                          <NavigationMenuLink asChild>
+                            <Link
+                              to={item.path}
+                              className={`block select-none space-y-1 rounded-md p-2.5 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground ${
+                                isActive(item.path) ? "bg-accent text-accent-foreground" : ""
+                              }`}
+                            >
+                              <div className="text-sm font-medium font-consciousness">
+                                {item.label}
+                              </div>
+                            </Link>
+                          </NavigationMenuLink>
+                        </li>
+                      ))}
+                      <div className="h-px bg-border my-1" />
+                      {/* Original more items */}
+                      {moreNavItems.map((item) => (
+                        <li key={item.path}>
+                          <NavigationMenuLink asChild>
+                            <Link
+                              to={item.path}
+                              className={`block select-none space-y-1 rounded-md p-2.5 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground ${
+                                isActive(item.path) ? "bg-accent text-accent-foreground" : ""
+                              }`}
+                            >
+                              <div className="text-sm font-medium font-consciousness">
+                                {item.label}
+                              </div>
+                            </Link>
+                          </NavigationMenuLink>
+                        </li>
+                      ))}
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
+
             <div className="flex items-center gap-2 ml-2 lg:ml-4 pl-4 border-l border-border/50">
-              <Link to="/cart" className="relative">
-                <Button variant="ghost" size="icon" className="relative h-9 w-9">
+              <Link to="/cart" className="relative" aria-label={`View shopping cart with ${itemCount} items`}>
+                <Button variant="ghost" size="icon" className="relative h-11 w-11" aria-hidden="true">
                   <ShoppingCart className="h-5 w-5" />
                   {itemCount > 0 && (
                     <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold">
@@ -221,7 +221,7 @@ const Navigation = () => {
                     asChild
                     variant="ghost"
                     size="sm"
-                    className="text-muted-foreground hover:text-primary hidden lg:flex h-9"
+                    className="text-muted-foreground hover:text-primary hidden lg:flex h-11"
                   >
                     <Link to="/profile" className="flex items-center space-x-2">
                       <User className="w-4 h-4" />
@@ -232,14 +232,14 @@ const Navigation = () => {
                     variant="outline"
                     size="sm"
                     onClick={handleSignOut}
-                    className="flex items-center space-x-2 h-9"
+                    className="flex items-center space-x-2 h-11"
                   >
                     <LogOut className="w-4 h-4" />
                     <span className="hidden lg:inline">Sign Out</span>
                   </Button>
                 </div>
               ) : (
-                <Button asChild variant="outline" size="sm" className="h-9">
+                <Button asChild variant="outline" size="sm" className="h-11">
                   <Link to="/auth" className="flex items-center space-x-2">
                     <LogIn className="w-4 h-4" />
                     <span>Sign In</span>
@@ -252,8 +252,8 @@ const Navigation = () => {
           {/* Mobile Cart & Menu */}
           <div className="md:hidden flex items-center space-x-2 ml-auto">
             {/* Mobile Cart */}
-            <Link to="/cart" className="relative">
-              <Button variant="ghost" size="icon" className="relative">
+            <Link to="/cart" className="relative" aria-label={`View shopping cart with ${itemCount} items`}>
+              <Button variant="ghost" size="icon" className="relative" aria-hidden="true">
                 <ShoppingCart className="h-5 w-5" />
                 {itemCount > 0 && (
                   <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
@@ -277,7 +277,7 @@ const Navigation = () => {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden fixed inset-x-0 top-16 bottom-0 bg-background/95 backdrop-blur-lg border-t border-border z-40 animate-in slide-in-from-top-2 duration-200">
+          <div className="md:hidden fixed inset-x-0 top-[calc(4rem+env(safe-area-inset-top))] bottom-0 bg-background/95 backdrop-blur-lg border-t border-border z-40 animate-in slide-in-from-top-2 duration-200">
             <div className="h-full overflow-y-auto pb-20">
               {/* Account Section */}
               {user ? (
@@ -361,6 +361,8 @@ const Navigation = () => {
                 <div className="space-y-2">
                   <button
                     onClick={() => toggleSection('learn')}
+                    aria-expanded={expandedSection === 'learn'}
+                    aria-controls="mobile-learn-section"
                     className={`flex items-center justify-between w-full px-4 py-3.5 rounded-xl transition-all ${
                       expandedSection === 'learn' 
                         ? 'bg-primary/10 border border-primary/20' 
@@ -376,7 +378,9 @@ const Navigation = () => {
                     }`} />
                   </button>
                   
-                  <div className={`overflow-hidden transition-all duration-200 ${
+                  <div
+                    id="mobile-learn-section"
+                    className={`overflow-hidden transition-all duration-200 ${
                     expandedSection === 'learn' ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
                   }`}>
                     <div className="grid grid-cols-2 gap-2 pt-2">
@@ -404,6 +408,8 @@ const Navigation = () => {
                 <div className="space-y-2">
                   <button
                     onClick={() => toggleSection('community')}
+                    aria-expanded={expandedSection === 'community'}
+                    aria-controls="mobile-community-section"
                     className={`flex items-center justify-between w-full px-4 py-3.5 rounded-xl transition-all ${
                       expandedSection === 'community' 
                         ? 'bg-primary/10 border border-primary/20' 
@@ -419,7 +425,9 @@ const Navigation = () => {
                     }`} />
                   </button>
                   
-                  <div className={`overflow-hidden transition-all duration-200 ${
+                  <div
+                    id="mobile-community-section"
+                    className={`overflow-hidden transition-all duration-200 ${
                     expandedSection === 'community' ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
                   }`}>
                     <div className="grid grid-cols-2 gap-2 pt-2">

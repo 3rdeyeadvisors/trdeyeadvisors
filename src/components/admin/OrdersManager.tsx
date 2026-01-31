@@ -51,7 +51,6 @@ export function OrdersManager() {
           table: 'printify_orders'
         },
         (payload) => {
-          console.log('📦 Order update received:', payload);
           
           if (payload.eventType === 'INSERT') {
             setOrders(prev => [payload.new as any, ...prev]);

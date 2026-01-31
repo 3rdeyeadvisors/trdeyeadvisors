@@ -16,7 +16,6 @@ export const ProductCleanup = () => {
       if (error) throw error;
 
       toast.success(`Cleaned up ${data.deactivated_count} old products`);
-      console.log("Active products:", data.active_products);
     } catch (error: any) {
       console.error("Error cleaning up products:", error);
       toast.error(error.message || "Failed to clean up products");

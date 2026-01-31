@@ -40,10 +40,6 @@ export const FeatureSuggestionsList = ({
   suggestions,
   loading,
   maxItems = 6
-export const FeatureSuggestionsList = ({ 
-  suggestions, 
-  loading, 
-  maxItems = 6 
 }: FeatureSuggestionsListProps) => {
   const [selectedSuggestion, setSelectedSuggestion] = useState<FeatureSuggestion | null>(null);
 
