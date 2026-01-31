@@ -36,6 +36,8 @@ export default defineConfig(({ mode }) => ({
         background_color: '#0A1628',
         display: 'standalone',
         start_url: '/',
+        scope: '/',
+        orientation: 'portrait',
         icons: [
           {
             src: '/favicon-32x32.png',

@@ -4,6 +4,10 @@ DROP VIEW IF EXISTS public.profiles_public;
 
 -- Create a secure public view for profiles that excludes sensitive payout information
 -- Using default SECURITY INVOKER (not DEFINER) so RLS policies apply
+CREATE VIEW public.profiles_public
+WITH (security_invoker = on)
+AS
+SELECT
 CREATE VIEW public.profiles_public 
 WITH (security_invoker = on)
 AS

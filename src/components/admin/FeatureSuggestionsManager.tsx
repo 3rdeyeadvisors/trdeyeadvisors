@@ -1,5 +1,11 @@
 import { useState } from 'react';
 import { formatDistanceToNow } from 'date-fns';
+import {
+  MessageSquare,
+  Loader2,
+  ArrowUpRight,
+  Check,
+  X,
 import { 
   MessageSquare, 
   Loader2, 
@@ -46,6 +52,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import {
+  useFeatureSuggestions,
+  useFeatureSuggestionsAdmin,
+  FeatureSuggestion
 import { 
   useFeatureSuggestions, 
   useFeatureSuggestionsAdmin,
@@ -327,6 +337,7 @@ export const FeatureSuggestionsManager = () => {
           <AlertDialogHeader>
             <AlertDialogTitle>Promote to Roadmap Vote?</AlertDialogTitle>
             <AlertDialogDescription>
+              This will create a new roadmap item for community voting.
               This will create a new roadmap item for community voting. 
               The voting window will be set to 7 days.
             </AlertDialogDescription>

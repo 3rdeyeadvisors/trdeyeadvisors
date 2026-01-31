@@ -193,8 +193,6 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
       const passed = finalScore >= quiz.passingScore;
       const timeTaken = quiz.timeLimit ? (quiz.timeLimit * 60) - (timeLeft || 0) : null;
 
-      console.log('Submitting quiz:', { finalScore, passed, answersCount: Object.keys(answers).length });
-
       // Try to save to database, but don't fail if it doesn't work (for courseContent quizzes)
       try {
         const { error } = await supabase
@@ -210,18 +208,16 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
           });
 
         if (error) {
-          console.log('Could not save quiz to database (this is OK for courseContent quizzes):', error.message);
+          // Could not save quiz to database (this is OK for courseContent quizzes)
         }
       } catch (dbError) {
-        console.log('Database save skipped for courseContent quiz');
+        // Database save skipped for courseContent quiz
       }
 
       // Set results state - this should always happen
       setScore(finalScore);
       setShowResults(true);
       setQuizStarted(false);
-      
-      console.log('Quiz submitted successfully, showing results');
       
       // Show prominent toast notification
       toast({
@@ -253,7 +249,7 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
             await awardBadge('perfectionist');
           }
         } catch (e) {
-          console.log('Could not award quiz points');
+          // Could not award quiz points
         }
       }
       
@@ -261,7 +257,7 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
       try {
         await loadAttempts();
       } catch (e) {
-        console.log('Could not reload attempts');
+        // Could not reload attempts
       }
     } catch (error) {
       console.error('Error calculating quiz score:', error);
@@ -358,8 +354,6 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
 
   const renderResults = () => {
     const passed = score >= quiz.passingScore;
-    
-    console.log('Rendering results:', { score, passed, questionsLength: quiz.questions.length });
     
     return (
       <Card className="p-3 sm:p-6 border-2 border-primary/20 shadow-lg w-full max-w-full overflow-hidden">

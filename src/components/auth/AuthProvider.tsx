@@ -41,8 +41,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     // Set up auth state listener FIRST to catch all events
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, newSession) => {
-        console.log('[Auth] Auth state change:', event, newSession?.user?.id);
-        
         // Update state synchronously - no async calls here!
         setSession(newSession);
         setUser(newSession?.user ?? null);
@@ -55,7 +53,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     // THEN get initial session
     supabase.auth.getSession().then(({ data: { session: initialSession } }) => {
-      console.log('[Auth] Initial session:', initialSession?.user?.id);
       setSession(initialSession);
       setUser(initialSession?.user ?? null);
       setLoading(false);
@@ -70,7 +67,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       email,
       password,
     });
-    console.log('[Auth] Sign in result:', result.data.session?.user?.id);
     return result;
   };
 
@@ -95,7 +91,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         email,
         password,
       });
-      console.log('[Auth] Auto sign-in after signup:', signInResult.data.session?.user?.id);
       return signInResult;
     }
     

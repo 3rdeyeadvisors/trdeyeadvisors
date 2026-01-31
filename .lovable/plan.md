@@ -29,7 +29,7 @@ DROP VIEW IF EXISTS public.quizzes_public;
 
 CREATE OR REPLACE VIEW public.quizzes_public
 WITH (security_invoker = on)
-AS SELECT 
+AS SELECT
     id,
     course_id,
     module_id,
@@ -112,7 +112,7 @@ Since users can no longer fetch ALL votes, we need to update `useRoadmapVotes.ts
 ```sql
 CREATE OR REPLACE VIEW public.roadmap_vote_counts
 WITH (security_invoker = on)
-AS SELECT 
+AS SELECT
     roadmap_item_id,
     COUNT(*) FILTER (WHERE vote_type = 'yes') as yes_votes,
     COUNT(*) FILTER (WHERE vote_type = 'no') as no_votes
@@ -131,7 +131,7 @@ const { data: voteCounts } = await supabase
   .select('*');
 
 // 2. Fetch only user's own votes for highlighting
-const { data: userVotes } = user 
+const { data: userVotes } = user
   ? await supabase
       .from('roadmap_votes')
       .select('roadmap_item_id, vote_type')

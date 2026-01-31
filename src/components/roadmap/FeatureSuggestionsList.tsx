@@ -36,6 +36,10 @@ const statusConfig = {
   },
 };
 
+export const FeatureSuggestionsList = ({
+  suggestions,
+  loading,
+  maxItems = 6
 export const FeatureSuggestionsList = ({ 
   suggestions, 
   loading, 

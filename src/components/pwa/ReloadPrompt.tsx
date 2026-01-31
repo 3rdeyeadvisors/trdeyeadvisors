@@ -30,6 +30,59 @@ function ReloadPrompt() {
     setNeedRefresh(false);
   };
 
+  // Automatic update check on focus/visibility change
+  React.useEffect(() => {
+    const checkUpdate = () => {
+      // updateServiceWorker() returns a promise that resolves when the update is checked
+      if (typeof updateServiceWorker === 'function') {
+        updateServiceWorker();
+      }
+    };
+
+    window.addEventListener('focus', checkUpdate);
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        checkUpdate();
+      }
+    });
+
+    // Check for updates every 60 minutes
+    const interval = setInterval(checkUpdate, 60 * 60 * 1000);
+
+    return () => {
+      window.removeEventListener('focus', checkUpdate);
+      document.removeEventListener('visibilitychange', checkUpdate);
+      clearInterval(interval);
+    };
+  }, [updateServiceWorker]);
+
+  // Handle automatic reload when the service worker updates
+  React.useEffect(() => {
+    let refreshing = false;
+    const handleControllerChange = () => {
+      if (refreshing) return;
+      refreshing = true;
+      // Reload the page to use the new service worker
+      window.location.reload();
+    };
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.addEventListener('controllerchange', handleControllerChange);
+    }
+
+    return () => {
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.removeEventListener('controllerchange', handleControllerChange);
+      }
+    };
+  }, []);
+
+  // Check if we are in standalone mode (Home Screen)
+  const isStandalone = React.useMemo(() => {
+    return window.matchMedia('(display-mode: standalone)').matches ||
+           (window.navigator as any).standalone === true;
+  }, []);
+
   React.useEffect(() => {
     if (offlineReady) {
       toast.success("App ready to work offline", {
@@ -43,6 +96,25 @@ function ReloadPrompt() {
 
   React.useEffect(() => {
     if (needRefresh) {
+      // If in standalone mode, we might want to be more aggressive or automatic
+      if (isStandalone) {
+        console.log("[PWA] Standalone mode detected, updating service worker...");
+        updateServiceWorker(true);
+      } else {
+        toast("New content available, click on reload button to update.", {
+          duration: Infinity,
+          action: {
+            label: "Reload",
+            onClick: () => updateServiceWorker(true),
+          },
+          cancel: {
+            label: "Close",
+            onClick: () => close(),
+          }
+        });
+      }
+    }
+  }, [needRefresh, isStandalone, updateServiceWorker]);
       toast("New content available, click on reload button to update.", {
         duration: Infinity,
         action: {

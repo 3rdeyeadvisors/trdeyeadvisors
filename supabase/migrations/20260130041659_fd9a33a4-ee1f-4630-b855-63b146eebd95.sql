@@ -2,6 +2,7 @@
 -- Create a secure public view for profiles that excludes sensitive payout information
 -- This view should be used for community features (comments, discussions, etc.)
 CREATE OR REPLACE VIEW public.profiles_public AS
+SELECT
 SELECT 
   user_id,
   display_name,

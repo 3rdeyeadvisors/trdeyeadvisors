@@ -16,6 +16,10 @@ interface FeatureSuggestionFormProps {
 const MAX_TITLE_LENGTH = 100;
 const MAX_DESCRIPTION_LENGTH = 1000;
 
+export const FeatureSuggestionForm = ({
+  canSubmit,
+  submitting,
+  onSubmit
 export const FeatureSuggestionForm = ({ 
   canSubmit, 
   submitting, 
@@ -143,6 +147,8 @@ export const FeatureSuggestionForm = ({
                 )}
                 Submit Idea
               </Button>
+              <Button
+                variant="outline"
               <Button 
                 variant="outline" 
                 onClick={() => setIsOpen(false)}

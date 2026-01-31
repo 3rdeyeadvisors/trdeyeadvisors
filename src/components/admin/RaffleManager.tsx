@@ -116,19 +116,14 @@ const RaffleManager = () => {
 
   const fetchParticipants = async (raffleId: string) => {
     setLoadingParticipants(true);
-    console.log('🔍 Fetching participants for raffle:', raffleId);
 
     try {
       const { data: emailsData, error: emailsError } = await supabase
         .rpc('get_user_emails_with_profiles');
 
-      if (emailsError) {
-        console.error('❌ RPC Error:', emailsError);
-        throw emailsError;
-      }
+      if (emailsError) throw emailsError;
 
       if (!emailsData) {
-        console.warn('⚠️ No data returned from RPC');
         setParticipants([]);
         toast({
           title: "No Data",
@@ -138,19 +133,12 @@ const RaffleManager = () => {
         return;
       }
 
-      console.log(`📊 RPC returned ${emailsData.length} user records`);
-
       const { data: entriesData, error: entriesError } = await supabase
         .from('raffle_entries')
         .select('user_id, entry_count')
         .eq('raffle_id', raffleId);
 
-      if (entriesError) {
-        console.error('❌ Entries Error:', entriesError);
-        throw entriesError;
-      }
-
-      console.log(`🎫 Found ${entriesData?.length || 0} raffle entries`);
+      if (entriesError) throw entriesError;
 
       // Fetch all tickets for this raffle
       const { data: ticketsData, error: ticketsError } = await supabase
@@ -158,12 +146,6 @@ const RaffleManager = () => {
         .select('id, user_id, ticket_source, earned_at, metadata')
         .eq('raffle_id', raffleId)
         .order('earned_at', { ascending: false });
-
-      if (ticketsError) {
-        console.error('❌ Tickets Error:', ticketsError);
-      }
-
-      console.log(`🎟️ Found ${ticketsData?.length || 0} individual tickets`);
 
       const participantsList = (entriesData || []).map(entry => {
         const userInfo = emailsData.find((u: any) => u.user_id === entry.user_id);
@@ -177,9 +159,6 @@ const RaffleManager = () => {
           tickets: userTickets,
         };
       });
-
-      console.log(`✅ Mapped ${participantsList.length} participants`);
-      console.log('Final participants:', participantsList);
 
       setParticipants(participantsList);
 
@@ -527,13 +506,9 @@ const RaffleManager = () => {
     });
     
     try {
-      console.log('🔧 Calling repair function for raffle:', activeRaffle.id);
-      
       const { data, error } = await supabase.functions.invoke('repair-raffle-tickets', {
         body: { raffleId: activeRaffle.id }
       });
-
-      console.log('🔧 Repair response:', { data, error });
 
       if (error) throw error;
 

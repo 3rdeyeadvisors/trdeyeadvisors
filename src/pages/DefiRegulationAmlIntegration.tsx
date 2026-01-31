@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Calendar, User, Clock, ExternalLink } from 'lucide-react';
 import { BRAND_AUTHOR } from '@/lib/constants';
+import DOMPurify from 'dompurify';
 
 const DefiRegulationAmlIntegration = () => {
   const blogPost = {
@@ -118,7 +119,7 @@ const DefiRegulationAmlIntegration = () => {
           <Card className="p-8 border-border/10 bg-card/50 backdrop-blur-sm">
             <article className="prose prose-lg max-w-none prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-li:text-muted-foreground prose-h2:text-2xl prose-h2:font-bold prose-h2:mb-4 prose-h2:mt-8 prose-h3:text-xl prose-h3:font-semibold prose-h3:mb-3 prose-h3:mt-6 prose-h4:text-lg prose-h4:font-medium prose-h4:mb-2 prose-h4:mt-4">
               <div dangerouslySetInnerHTML={{ 
-                __html: blogPost.content
+                __html: DOMPurify.sanitize(blogPost.content
                   .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                   .replace(/\n\n/g, '</p><p>')
                   .replace(/^(?!<[h|u|l])/gm, '<p>')
@@ -128,7 +129,7 @@ const DefiRegulationAmlIntegration = () => {
                   .replace(/<p><ul>/g, '<ul>')
                   .replace(/<\/ul><\/p>/g, '</ul>')
                   .replace(/<p><li>/g, '<li>')
-                  .replace(/<\/li><\/p>/g, '</li>')
+                  .replace(/<\/li><\/p>/g, '</li>'))
               }} />
             </article>
             

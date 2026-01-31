@@ -18,6 +18,7 @@ export interface FeatureSuggestion {
 export const useFeatureSuggestions = () => {
   const { user } = useAuth();
   const { toast } = useToast();
+
   
   const [suggestions, setSuggestions] = useState<FeatureSuggestion[]>([]);
   const [loading, setLoading] = useState(true);
@@ -36,11 +37,13 @@ export const useFeatureSuggestions = () => {
 
       // Fetch profile names for submitters
       const userIds = [...new Set((data || []).map(s => s.user_id))];
+
       
       let profiles: Record<string, string> = {};
       if (userIds.length > 0) {
         const { data: profileData } = await supabase
           .rpc('get_profiles_batch', { user_ids: userIds });
+
         
         if (profileData) {
           profiles = profileData.reduce((acc: Record<string, string>, p: any) => {
@@ -146,6 +149,7 @@ export const useFeatureSuggestionsAdmin = () => {
   const [loading, setLoading] = useState(false);
 
   const updateStatus = async (
+    suggestionId: string,
     suggestionId: string, 
     status: FeatureSuggestion['status'],
     adminNotes?: string
@@ -154,6 +158,8 @@ export const useFeatureSuggestionsAdmin = () => {
     try {
       const { error } = await supabase
         .from('feature_suggestions')
+        .update({
+          status,
         .update({ 
           status, 
           admin_notes: adminNotes || null,
@@ -205,6 +211,7 @@ export const useFeatureSuggestionsAdmin = () => {
       // Update suggestion status
       const { error: updateError } = await supabase
         .from('feature_suggestions')
+        .update({
         .update({ 
           status: 'promoted',
           reviewed_at: new Date().toISOString()

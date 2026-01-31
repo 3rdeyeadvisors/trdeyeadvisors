@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, User, Clock, TrendingUp, Shield, Zap } from "lucide-react";
 import { BRAND_AUTHOR } from "@/lib/constants";
+import DOMPurify from "dompurify";
 
 const DefaiRevolution2025 = () => {
   const blogPost = {
@@ -419,7 +420,7 @@ const DefaiRevolution2025 = () => {
             <article className="prose prose-lg max-w-none dark:prose-invert prose-headings:font-consciousness prose-headings:text-foreground prose-p:text-foreground prose-strong:text-foreground prose-ul:text-foreground prose-li:text-foreground">
               <div 
                 dangerouslySetInnerHTML={{ 
-                  __html: blogPost.content 
+                  __html: DOMPurify.sanitize(blogPost.content)
                 }} 
               />
             </article>
