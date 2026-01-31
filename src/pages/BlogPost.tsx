@@ -19,15 +19,11 @@ const BlogPost = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log("BlogPost - URL slug parameter:", slug);
     const foundPost = getBlogPost(slug || "");
-    console.log("BlogPost - found post:", foundPost);
     
     if (foundPost) {
       setPost(foundPost);
-      console.log("BlogPost - post set successfully");
     } else {
-      console.log("BlogPost - no post found, showing 404");
       // Don't redirect - let the post render as 404 to avoid redirect status codes
       setPost(null);
     }

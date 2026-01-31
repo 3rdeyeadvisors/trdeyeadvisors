@@ -78,7 +78,6 @@ const Raffles = () => {
   useEffect(() => {
     if (!user || !activeRaffle) return;
 
-    console.log('Setting up real-time subscriptions for user:', user.id, 'raffle:', activeRaffle.id);
 
     let channel: any = null;
 
@@ -95,7 +94,6 @@ const Raffles = () => {
             filter: `user_id=eq.${user.id}`,
           },
           (payload) => {
-            console.log('🎫 Entry count updated:', payload);
             if (payload.new && 'entry_count' in payload.new) {
               setTotalEntries(payload.new.entry_count as number);
               toast({
@@ -115,7 +113,6 @@ const Raffles = () => {
             filter: `user_id=eq.${user.id}`,
           },
           (payload) => {
-            console.log('🎫 New entry created:', payload);
             if (payload.new && 'entry_count' in payload.new) {
               setTotalEntries(payload.new.entry_count as number);
             }
@@ -131,7 +128,6 @@ const Raffles = () => {
             filter: `user_id=eq.${user.id}`,
           },
           (payload) => {
-            console.log('✅ Task verification updated:', payload);
             fetchUserProgress(); // Refresh all task data
             
             // Show notification if task was verified
@@ -153,7 +149,6 @@ const Raffles = () => {
             filter: `user_id=eq.${user.id}`,
           },
           (payload) => {
-            console.log('📝 New task created:', payload);
             fetchUserProgress();
           }
         )
@@ -167,7 +162,6 @@ const Raffles = () => {
             filter: `id=eq.${activeRaffle.id}`,
           },
           (payload) => {
-            console.log('🏆 Raffle updated:', payload);
             fetchActiveRaffle(); // Refresh raffle data
             
             if (payload.new && payload.new.winner_user_id && !payload.old.winner_user_id) {
@@ -180,16 +174,13 @@ const Raffles = () => {
           }
         )
         .subscribe((status) => {
-          console.log('Real-time subscription status:', status);
         });
     } catch (error) {
       console.error('Failed to set up real-time subscriptions:', error);
-      console.log('Continuing without real-time updates - page will still work with manual refresh');
     }
 
     return () => {
       if (channel) {
-        console.log('Cleaning up real-time subscriptions');
         try {
           supabase.removeChannel(channel);
         } catch (error) {
@@ -304,7 +295,6 @@ const Raffles = () => {
     setParticipating(true);
 
     try {
-      console.log('🎯 Starting participation for user:', user.id);
       
       // Double-check if entry already exists
       const { data: existingEntry } = await supabase
@@ -315,7 +305,6 @@ const Raffles = () => {
         .maybeSingle();
 
       if (existingEntry) {
-        console.log('⚠️ User already has entry');
         setHasParticipated(true);
         setTotalEntries(existingEntry.entry_count);
         toast({
@@ -342,7 +331,6 @@ const Raffles = () => {
       
       const initialEntryCount = 1 + bonusTickets;
       
-      console.log('📊 Subscription status:', { plan: subscription?.plan, isFounder, isAnnualSubscriber, bonusTickets });
       
       const { error: entryError } = await supabase
         .from('raffle_entries')
@@ -376,7 +364,6 @@ const Raffles = () => {
       if (bonusTickets > 0) {
         const ticketSource = isFounder ? 'founding_33_bonus' : 'annual_bonus';
         const benefitType = isFounder ? 'founding_33_member_bonus' : 'annual_subscriber_bonus';
-        console.log(`🎁 Creating ${bonusTickets} bonus tickets for ${isFounder ? 'Founding 33 member' : 'annual subscriber'}`);
         
         const bonusTicketInserts = Array.from({ length: bonusTickets }, () => ({
           user_id: user.id,
@@ -396,16 +383,13 @@ const Raffles = () => {
           console.error('❌ Bonus ticket creation error:', bonusTicketError);
           // Don't throw - participation still succeeded
         } else {
-          console.log(`✅ Bonus tickets created for ${isFounder ? 'Founding 33 member' : 'annual subscriber'}`);
         }
       }
 
-      console.log('✅ Entry and ticket created successfully');
       
       setHasParticipated(true);
       setTotalEntries(initialEntryCount);
 
-      console.log(`🎉 Participation complete with ${initialEntryCount} entries`);
 
       toast({
         title: "✅ You've joined the raffle!",
@@ -485,7 +469,6 @@ const Raffles = () => {
     const newValue = !taskCompletion[taskId];
 
     try {
-      console.log('🎯 User toggling task:', taskId, 'New value:', newValue);
       
       const { error: taskError } = await supabase
         .from('raffle_tasks')
@@ -509,7 +492,6 @@ const Raffles = () => {
 
       // If completing task, create ticket and update entry count
       if (newValue) {
-        console.log('✅ Creating task completion ticket');
         
         const { error: ticketError } = await supabase
           .from('raffle_tickets')
@@ -530,10 +512,8 @@ const Raffles = () => {
           throw ticketError;
         }
 
-        console.log('✅ Ticket created, trigger will update entry count');
       } else {
         // User unchecked - remove the ticket and adjust count
-        console.log('⚠️ Removing task completion ticket');
         
         // Delete the specific ticket
         await supabase
@@ -583,7 +563,6 @@ const Raffles = () => {
 
   const handleSocialVerificationSubmit = async (taskType: string, username: string) => {
     if (!user || !activeRaffle) return;
-    console.log('Social verification submitted:', taskType, username);
   };
 
   if (loading) {

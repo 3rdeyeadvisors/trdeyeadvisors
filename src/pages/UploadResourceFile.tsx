@@ -32,7 +32,6 @@ const UploadResourceFile = () => {
       }
       const base64Data = btoa(binary);
 
-      console.log("Calling edge function to upload PDF...");
 
       // Call the edge function to upload to Supabase storage
       const { data, error } = await supabase.functions.invoke("upload-resource-file", {
@@ -47,7 +46,6 @@ const UploadResourceFile = () => {
       if (data.success) {
         setPublicUrl(data.publicUrl);
         toast.success("PDF uploaded successfully!");
-        console.log("Public URL:", data.publicUrl);
       } else {
         throw new Error(data.error || "Upload failed");
       }

@@ -89,7 +89,6 @@ export const RatingSection = ({ courseId, moduleId }: RatingSectionProps) => {
   };
 
   const handleSubmitRating = async () => {
-    console.log('Submitting rating:', { selectedRating, user: !!user });
     
     if (!user) {
       toast({
@@ -114,7 +113,6 @@ export const RatingSection = ({ courseId, moduleId }: RatingSectionProps) => {
       const contentId = moduleId || `course-${courseId}`;
       const contentType = moduleId ? 'module' : 'course';
 
-      console.log('Upserting rating:', { contentId, contentType, selectedRating });
 
       const { error } = await supabase
         .from('ratings')
@@ -133,7 +131,6 @@ export const RatingSection = ({ courseId, moduleId }: RatingSectionProps) => {
         throw error;
       }
 
-      console.log('Rating submitted successfully');
 
       // Send email notification
       try {

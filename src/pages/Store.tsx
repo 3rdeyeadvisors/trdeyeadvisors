@@ -25,7 +25,6 @@ const Store = () => {
   const [activeCategory, setActiveCategory] = useState<StoreCategory>('merchandise');
 
   const handleAddToCart = (product: any) => {
-    console.log('Adding to cart:', product);
     
     // Ensure image is a string, not an array
     const imageUrl = product.image || 
@@ -48,7 +47,6 @@ const Store = () => {
       images: product.images
     };
     
-    console.log('Cart item being added:', cartItem);
     addItem(cartItem);
     toast.success(`${product.title} added to cart!`);
   };

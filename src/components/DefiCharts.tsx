@@ -177,7 +177,6 @@ export const DefiCharts = () => {
       }
       
       if (response && response.protocols && Array.isArray(response.protocols)) {
-        console.log('API returned protocols:', response.protocols.length);
         setData(response);
         saveCachedData(response); // Cache successful response
         setLastUpdated(new Date());
@@ -207,7 +206,6 @@ export const DefiCharts = () => {
       
       // Auto-retry up to 3 times on initial load failure
       if (!isRetry && retryCount < 3 && !data) {
-        console.log(`Retrying fetch (attempt ${retryCount + 1}/3)...`);
         setRetryCount(prev => prev + 1);
         setTimeout(() => fetchDefiData(forceRefresh, true), 2000); // Retry after 2 seconds
         return;
@@ -216,11 +214,9 @@ export const DefiCharts = () => {
       // Use cached data if available, otherwise use fallback
       const cachedData = loadCachedData();
       if (cachedData && !data) {
-        console.log('Using cached data from previous successful fetch');
         setError('Using cached data due to network issues.');
         setData(cachedData);
       } else if (!data) {
-        console.log('No cached data available, using fallback');
         setError('Using sample data - no cached data available.');
         setData(generateFallbackData());
       } else {
@@ -258,7 +254,6 @@ export const DefiCharts = () => {
     
     // Update data every 5 minutes (300000ms)
     const interval = setInterval(() => {
-      console.log('Auto-refreshing DeFi data...');
       fetchDefiData();
     }, 300000);
     

@@ -6,7 +6,6 @@ DROP VIEW IF EXISTS public.quizzes_public;
 CREATE OR REPLACE VIEW public.quizzes_public
 WITH (security_invoker = on)
 AS SELECT
-AS SELECT 
     id,
     course_id,
     module_id,

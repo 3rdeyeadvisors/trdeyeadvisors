@@ -31,7 +31,6 @@ const Contact = () => {
     
     // Bot detection: honeypot check
     if (formData.website) {
-      console.log('[Security] Honeypot triggered');
       toast({
         title: "Message Sent!",
         description: "Thank you for reaching out. We'll respond within 24 hours.",
@@ -42,7 +41,6 @@ const Contact = () => {
     // Bot detection: form submitted too fast (less than 3 seconds)
     const timeTaken = Date.now() - submitTime;
     if (timeTaken < 3000) {
-      console.log('[Security] Form submitted too quickly:', timeTaken);
       toast({
         title: "Message Sent!",
         description: "Thank you for reaching out. We'll respond within 24 hours.",

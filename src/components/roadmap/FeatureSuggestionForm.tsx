@@ -20,10 +20,6 @@ export const FeatureSuggestionForm = ({
   canSubmit,
   submitting,
   onSubmit
-export const FeatureSuggestionForm = ({ 
-  canSubmit, 
-  submitting, 
-  onSubmit 
 }: FeatureSuggestionFormProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [title, setTitle] = useState('');
@@ -149,8 +145,6 @@ export const FeatureSuggestionForm = ({
               </Button>
               <Button
                 variant="outline"
-              <Button 
-                variant="outline" 
                 onClick={() => setIsOpen(false)}
                 disabled={submitting}
                 className="w-full sm:w-auto"

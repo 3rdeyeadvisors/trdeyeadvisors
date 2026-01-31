@@ -7,10 +7,8 @@ import { RefreshCw, X } from "lucide-react";
 function ReloadPrompt() {
   const swResult = useRegisterSW({
     onRegistered(r) {
-      console.log('SW Registered: ' + r);
     },
     onRegisterError(error) {
-      console.log('SW registration error', error);
     },
   });
 
@@ -98,7 +96,6 @@ function ReloadPrompt() {
     if (needRefresh) {
       // If in standalone mode, we might want to be more aggressive or automatic
       if (isStandalone) {
-        console.log("[PWA] Standalone mode detected, updating service worker...");
         updateServiceWorker(true);
       } else {
         toast("New content available, click on reload button to update.", {
@@ -115,19 +112,6 @@ function ReloadPrompt() {
       }
     }
   }, [needRefresh, isStandalone, updateServiceWorker]);
-      toast("New content available, click on reload button to update.", {
-        duration: Infinity,
-        action: {
-          label: "Reload",
-          onClick: () => updateServiceWorker(true),
-        },
-        cancel: {
-          label: "Close",
-          onClick: () => close(),
-        }
-      });
-    }
-  }, [needRefresh]);
 
   if (!offlineReady && !needRefresh) return null;
 

@@ -65,6 +65,8 @@ const VaultAccess = () => {
                 <img 
                   src={nftImage} 
                   alt="3EA Earth Access NFT"
+                  width={200}
+                  height={200}
                   className="w-full h-full object-cover"
                 />
               </div>

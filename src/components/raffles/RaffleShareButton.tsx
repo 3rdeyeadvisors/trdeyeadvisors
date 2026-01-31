@@ -52,7 +52,6 @@ const RaffleShareButton = ({ userId }: RaffleShareButtonProps) => {
         });
       } catch (error) {
         // User cancelled or share failed
-        console.log("Share cancelled");
       }
     }
   };

@@ -55,7 +55,6 @@ export const SocialPreviewChecker = () => {
               src={socialImage} 
               alt="Current social share preview"
               className="w-full max-w-lg mx-auto rounded border"
-              onError={() => console.log('Image failed to load:', socialImage)}
             />
           </div>
           <div className="text-sm text-muted-foreground">

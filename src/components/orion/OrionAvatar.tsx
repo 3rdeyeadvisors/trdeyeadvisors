@@ -9,7 +9,7 @@ interface OrionAvatarProps {
 
 const OrionAvatar = ({ size = "md", isThinking = false, onClick, className = "" }: OrionAvatarProps) => {
   const sizeClasses = {
-    sm: "w-10 h-10",
+    sm: "w-11 h-11",
     md: "w-14 h-14",
     lg: "w-20 h-20",
   };
@@ -20,12 +20,11 @@ const OrionAvatar = ({ size = "md", isThinking = false, onClick, className = "" 
     lg: "w-4 h-4",
   };
 
-  return (
+  const Content = (
     <motion.div
-      className={`relative cursor-pointer ${sizeClasses[size]} ${className}`}
-      onClick={onClick}
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
+      className={`relative ${onClick ? "cursor-pointer" : ""} ${sizeClasses[size]} ${className}`}
+      whileHover={onClick ? { scale: 1.05 } : {}}
+      whileTap={onClick ? { scale: 0.95 } : {}}
       animate={isThinking ? { y: [0, -2, 0] } : { y: [0, -3, 0] }}
       transition={isThinking ? { duration: 0.5, repeat: Infinity } : { duration: 2, repeat: Infinity, ease: "easeInOut" }}
     >
@@ -91,6 +90,20 @@ const OrionAvatar = ({ size = "md", isThinking = false, onClick, className = "" 
       </div>
     </motion.div>
   );
+
+  if (onClick) {
+    return (
+      <button
+        onClick={onClick}
+        className="focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-2xl"
+        aria-label="Open Orion chat assistant"
+      >
+        {Content}
+      </button>
+    );
+  }
+
+  return Content;
 };
 
 export default OrionAvatar;
