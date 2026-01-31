@@ -715,6 +715,42 @@ export type Database = {
         }
         Relationships: []
       }
+      feature_suggestions: {
+        Row: {
+          admin_notes: string | null
+          created_at: string
+          description: string
+          id: string
+          reviewed_at: string | null
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          created_at?: string
+          description: string
+          id?: string
+          reviewed_at?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_notes?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          reviewed_at?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       founding33_purchases: {
         Row: {
           amount_paid: number
@@ -1518,6 +1554,7 @@ export type Database = {
           id: string
           roadmap_item_id: string
           user_id: string
+          vote_type: string
           vote_weight: number | null
         }
         Insert: {
@@ -1525,6 +1562,7 @@ export type Database = {
           id?: string
           roadmap_item_id: string
           user_id: string
+          vote_type?: string
           vote_weight?: number | null
         }
         Update: {
@@ -1532,6 +1570,7 @@ export type Database = {
           id?: string
           roadmap_item_id?: string
           user_id?: string
+          vote_type?: string
           vote_weight?: number | null
         }
         Relationships: [
@@ -1918,6 +1957,33 @@ export type Database = {
         }
         Relationships: []
       }
+      profiles_public: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string | null
+          display_name: string | null
+          is_bot: boolean | null
+          user_id: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          display_name?: string | null
+          is_bot?: boolean | null
+          user_id?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          display_name?: string | null
+          is_bot?: boolean | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       quizzes_public: {
         Row: {
           course_id: number | null
@@ -1959,6 +2025,22 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      roadmap_vote_counts: {
+        Row: {
+          no_votes: number | null
+          roadmap_item_id: string | null
+          yes_votes: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "roadmap_votes_roadmap_item_id_fkey"
+            columns: ["roadmap_item_id"]
+            isOneToOne: false
+            referencedRelation: "roadmap_items"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Functions: {

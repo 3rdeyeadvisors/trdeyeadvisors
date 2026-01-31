@@ -7,27 +7,27 @@ import { RefreshCw, X } from "lucide-react";
 function ReloadPrompt() {
   const swResult = useRegisterSW({
     onRegistered(r) {
-      // SW Registered
+      console.log('SW Registered: ' + r);
     },
     onRegisterError(error) {
-      // SW registration error
+      console.log('SW registration error', error);
     },
   });
 
   // Handle case where useRegisterSW might return undefined or incomplete in some environments
-  if (!swResult || !Array.isArray(swResult.offlineReady) || !Array.isArray(swResult.needUpdate)) {
+  if (!swResult || !Array.isArray(swResult.offlineReady) || !Array.isArray(swResult.needRefresh)) {
     return null;
   }
 
   const {
     offlineReady: [offlineReady, setOfflineReady],
-    needUpdate: [needUpdate, setNeedUpdate],
+    needRefresh: [needRefresh, setNeedRefresh],
     updateServiceWorker,
   } = swResult;
 
   const close = () => {
     setOfflineReady(false);
-    setNeedUpdate(false);
+    setNeedRefresh(false);
   };
 
   // Automatic update check on focus/visibility change
@@ -95,7 +95,7 @@ function ReloadPrompt() {
   }, [offlineReady]);
 
   React.useEffect(() => {
-    if (needUpdate) {
+    if (needRefresh) {
       // If in standalone mode, we might want to be more aggressive or automatic
       if (isStandalone) {
         console.log("[PWA] Standalone mode detected, updating service worker...");
@@ -114,9 +114,9 @@ function ReloadPrompt() {
         });
       }
     }
-  }, [needUpdate, isStandalone]);
+  }, [needRefresh, isStandalone, updateServiceWorker]);
 
-  if (!offlineReady && !needUpdate) return null;
+  if (!offlineReady && !needRefresh) return null;
 
   return (
     <div className="fixed bottom-4 right-4 z-[100] p-3 rounded-lg bg-card border border-border shadow-cosmic animate-in fade-in slide-in-from-bottom-4 duration-300">
@@ -129,7 +129,7 @@ function ReloadPrompt() {
           )}
         </div>
         <div className="flex gap-2">
-          {needUpdate && (
+          {needRefresh && (
             <Button
               size="sm"
               onClick={() => updateServiceWorker(true)}

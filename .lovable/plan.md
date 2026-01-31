@@ -1,125 +1,185 @@
 
+# Security Fix Plan: 3 Critical Issues (One by One)
 
-## Minimal Scroll Mobile Layout + Data Accuracy Fix
+We'll fix each security vulnerability individually to ensure accuracy and proper testing.
 
-### Overview
-Transform the mobile experience to show only **1 token per section** by default, with an expandable dropdown for the rest. Also improve data accuracy by reducing cache staleness indicators and ensuring fresh data is prioritized.
+---
 
-### Changes
+## Issue #1: Quiz Answer Exposure (HIGH PRIORITY)
 
-**File: `src/components/CryptoPricesWidget.tsx`**
+### Problem
+The `quizzes_public` view currently includes `explanation` in the questions JSON:
+```sql
+jsonb_build_object(
+  'id', q.value ->> 'id',
+  'question', q.value ->> 'question',
+  'options', q.value -> 'options',
+  'explanation', q.value ->> 'explanation'  -- ⚠️ LEAKING HINTS
+)
+```
+This reveals answer hints before quiz completion.
 
-#### 1. Show Only First Token by Default (Mobile)
+### Solution
+Recreate the view WITHOUT the `explanation` field:
 
-Change the slice logic from `slice(0, 5)` to `slice(0, 1)`:
+**Migration File: `fix_quiz_explanation_leak.sql`**
+```sql
+-- Drop and recreate quizzes_public view without explanation field
+DROP VIEW IF EXISTS public.quizzes_public;
 
-```tsx
-// Current (line 209-210)
-const displayedTop10 = isMobile && !showAllTop10 ? data?.top10.slice(0, 5) : data?.top10;
-const displayedRecommended = isMobile && !showAllRecommended ? data?.recommended.slice(0, 5) : data?.recommended;
+CREATE OR REPLACE VIEW public.quizzes_public
+WITH (security_invoker = on)
+AS SELECT
+    id,
+    course_id,
+    module_id,
+    title,
+    description,
+    passing_score,
+    time_limit,
+    max_attempts,
+    (
+        SELECT jsonb_agg(
+            jsonb_build_object(
+                'id', q.value ->> 'id',
+                'question', q.value ->> 'question',
+                'options', q.value -> 'options'
+                -- explanation intentionally removed for security
+            )
+        )
+        FROM jsonb_array_elements(quizzes.questions) q(value)
+    ) AS questions,
+    created_at,
+    updated_at
+FROM quizzes
+WHERE auth.uid() IS NOT NULL;
 
-// New
-const displayedTop10 = isMobile && !showAllTop10 ? data?.top10.slice(0, 1) : data?.top10;
-const displayedRecommended = isMobile && !showAllRecommended ? data?.recommended.slice(0, 1) : data?.recommended;
+-- Grant access to authenticated users
+GRANT SELECT ON public.quizzes_public TO authenticated;
 ```
 
-#### 2. Update Button Text to Reflect "9 more" / "19 more"
+### Impact
+- Users can still take quizzes with questions and options
+- Explanations only revealed after submission (handled by app logic)
+- No frontend code changes needed
 
-```tsx
-// Current (line 333)
-Show More ({data.top10.length - 5} more)
+---
 
-// New
-Show More ({data.top10.length - 1} more)
+## Issue #2: User Privacy / Vote Tracking (HIGH PRIORITY)
+
+### Problem
+The `roadmap_votes` table has TWO overlapping public SELECT policies:
+```sql
+"Anyone can view votes" -- qual: true (public!)
+"Authenticated users can view votes" -- qual: true
+```
+This exposes `user_id` values to anonymous visitors, allowing tracking of individual voting patterns.
+
+### Solution
+Remove the overly permissive "Anyone can view votes" policy and restrict vote visibility:
+
+**Migration File: `fix_roadmap_vote_privacy.sql`**
+```sql
+-- Remove the public policy that exposes user voting patterns
+DROP POLICY IF EXISTS "Anyone can view votes" ON public.roadmap_votes;
+
+-- Keep authenticated users policy but make it more restrictive
+-- Users can only see their own votes (for UI highlighting)
+-- Vote counts are computed server-side in the app
+DROP POLICY IF EXISTS "Authenticated users can view votes" ON public.roadmap_votes;
+
+CREATE POLICY "Users can view own votes for UI"
+ON public.roadmap_votes FOR SELECT
+USING (auth.uid() = user_id);
+
+-- Allow service role to see all votes for admin operations
+CREATE POLICY "Service role can view all votes"
+ON public.roadmap_votes FOR SELECT
+USING ((auth.jwt() ->> 'role'::text) = 'service_role'::text);
+
+-- Admins can view all votes for management
+CREATE POLICY "Admins can view all votes"
+ON public.roadmap_votes FOR SELECT
+USING (has_role(auth.uid(), 'admin'::app_role));
 ```
 
-Same for recommended section (line 370).
+### Frontend Update Required
+Since users can no longer fetch ALL votes, we need to update `useRoadmapVotes.tsx` to:
+1. Fetch only the user's own votes for UI highlighting
+2. Compute vote counts from aggregated data (create a new view or edge function)
 
-#### 3. Visual Result on Mobile
+**New View: `roadmap_vote_counts`**
+```sql
+CREATE OR REPLACE VIEW public.roadmap_vote_counts
+WITH (security_invoker = on)
+AS SELECT
+    roadmap_item_id,
+    COUNT(*) FILTER (WHERE vote_type = 'yes') as yes_votes,
+    COUNT(*) FILTER (WHERE vote_type = 'no') as no_votes
+FROM roadmap_votes
+GROUP BY roadmap_item_id;
 
-```text
-+----------------------------------+
-|        [Coin Icon]               |
-|    LIVE CRYPTO PRICES            |
-|    Updated at 2:30 PM            |
-|        [ Refresh ]               |
-+----------------------------------+
-|                                  |
-|   [TrendUp] TOP 10 BY MARKET     |
-|                                  |
-|  +----------------------------+  |
-|  |        [BTC Logo]          |  |
-|  |           BTC              |  |
-|  |          Bitcoin           |  |
-|  |           #1               |  |
-|  |       $84,060.00           |  |
-|  |    [TrendDown] -5.56%      |  |
-|  |      MCap: $1.68T          |  |
-|  +----------------------------+  |
-|                                  |
-|     [ Show More (9 more) v ]     |
-|                                  |
-+----------------------------------+
-|                                  |
-|   [Star] 3EA RECOMMENDED         |
-|         [Our Picks]              |
-|                                  |
-|  +----------------------------+  |
-|  |        [BTC Logo]          |  |
-|  |          BTC  [Star]       |  |
-|  |          Bitcoin           |  |
-|  |           #1               |  |
-|  |       $84,060.00           |  |
-|  |    [TrendDown] -5.56%      |  |
-|  |      MCap: $1.68T          |  |
-|  +----------------------------+  |
-|                                  |
-|     [ Show More (19 more) v ]    |
-|                                  |
-+----------------------------------+
+GRANT SELECT ON public.roadmap_vote_counts TO authenticated;
+```
+
+**File: `src/hooks/useRoadmapVotes.tsx`**
+```tsx
+// Line 78-81: Change from fetching all votes to:
+// 1. Fetch vote counts from the new view
+const { data: voteCounts } = await supabase
+  .from('roadmap_vote_counts')
+  .select('*');
+
+// 2. Fetch only user's own votes for highlighting
+const { data: userVotes } = user
+  ? await supabase
+      .from('roadmap_votes')
+      .select('roadmap_item_id, vote_type')
+      .eq('user_id', user.id)
+  : { data: [] };
 ```
 
 ---
 
-**File: `supabase/functions/fetch-crypto-prices/index.ts`**
+## Issue #3: Roadmap Strategy Visibility (MEDIUM PRIORITY)
 
-#### 4. Improve Data Accuracy
-
-The current implementation is already fetching real-time data from CoinGecko with a 5-minute cache. The data accuracy is good based on the network response I can see (prices match current market).
-
-However, to ensure maximum accuracy:
-
-**a) Reduce cache duration to 3 minutes** (CoinGecko updates frequently):
-```tsx
-// Current (line 10)
-const CACHE_DURATION_MS = 5 * 60 * 1000; // 5 minutes
-
-// New
-const CACHE_DURATION_MS = 3 * 60 * 1000; // 3 minutes for fresher data
+### Problem
+The `roadmap_items` table has two public SELECT policies:
+```sql
+"Anyone can view roadmap items" -- qual: true (public!)
+"Authenticated users can view roadmap items" -- qual: true
 ```
 
-**b) Add cache timestamp to response** so UI can show how old the data is:
-```tsx
-// Add to response
-cacheAge: cachedData ? Math.floor((now - cachedData.timestamp) / 1000) : 0 // seconds since cache
-```
+### Solution
+This is intentionally public for transparency. We'll mark it as acknowledged:
 
-**c) Update staking APY values** to match current rates from your watchlist images:
-- Verify the APY values are accurate (current values look reasonable based on typical staking yields)
-- Consider adding a note that APY rates are approximate and fetched from external sources
+**Option A: Keep public (recommended)** - The roadmap is meant to be visible for community transparency. We'll dismiss this security warning as "intentional behavior."
 
-#### 5. Summary of Changes
+**Option B: Restrict to authenticated only** - Remove "Anyone can view" policy if you want it members-only.
 
-| File | Change |
-|------|--------|
-| `CryptoPricesWidget.tsx` | Line 209-210: Change `slice(0, 5)` to `slice(0, 1)` |
-| `CryptoPricesWidget.tsx` | Line 333, 370: Update button text from `-5` to `-1` |
-| `fetch-crypto-prices/index.ts` | Line 10: Reduce cache to 3 minutes |
-| `fetch-crypto-prices/index.ts` | Add `cacheAge` to response for transparency |
+### Recommended Action
+Mark this as intentional by updating the security finding status.
 
-### Technical Notes
+---
 
-- **CoinGecko Free API**: Updates every 1-2 minutes for top coins, so 3-minute cache is reasonable
-- **Staking APY**: These are hardcoded approximations - for 100% accuracy, would need to integrate with staking reward APIs (Staking Rewards API, etc.) which is a larger scope
-- **Mobile UX**: Showing just 1 card dramatically reduces scroll, users tap "Show More" if interested
+## Implementation Order
 
+| Step | Issue | Priority | Risk |
+|------|-------|----------|------|
+| 1 | Quiz explanation leak | HIGH | None - just removes field |
+| 2 | Roadmap votes privacy | HIGH | Requires frontend update |
+| 3 | Roadmap items visibility | MEDIUM | Decision only - no code change |
+
+---
+
+## Summary of Changes
+
+### Database Migrations
+1. `fix_quiz_explanation_leak.sql` - Recreate view without explanation
+2. `fix_roadmap_vote_privacy.sql` - New RLS policies + vote counts view
+
+### Frontend Changes
+1. `src/hooks/useRoadmapVotes.tsx` - Update to use new vote counts view and fetch only user's own votes
+
+### Security Finding Updates
+1. Mark "roadmap items public" as intentional if keeping public transparency

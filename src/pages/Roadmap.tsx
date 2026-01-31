@@ -1,8 +1,11 @@
 import { Link } from 'react-router-dom';
 import { Map, Crown, Star, Lock, ArrowRight, Loader2 } from 'lucide-react';
-import { useRoadmapVotes } from '@/hooks/useRoadmapVotes';
+import { useRoadmapVotes, VoteType } from '@/hooks/useRoadmapVotes';
+import { useFeatureSuggestions } from '@/hooks/useFeatureSuggestions';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { RoadmapCard } from '@/components/roadmap/RoadmapCard';
+import { FeatureSuggestionForm } from '@/components/roadmap/FeatureSuggestionForm';
+import { FeatureSuggestionsList } from '@/components/roadmap/FeatureSuggestionsList';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import SEO from '@/components/SEO';
@@ -21,8 +24,15 @@ const Roadmap = () => {
     removeVote,
   } = useRoadmapVotes();
 
-  // Calculate max votes for progress bars
-  const maxVotes = Math.max(...items.map((i) => i.total_votes), 1);
+  const {
+    suggestions,
+    loading: suggestionsLoading,
+    submitting,
+    submitSuggestion,
+  } = useFeatureSuggestions();
+
+  // Calculate max votes for progress bars (use net_votes)
+  const maxVotes = Math.max(...items.map((i) => Math.abs(i.net_votes)), 1);
 
   // Group items by status
   const proposedItems = items.filter((i) => i.status === 'proposed' || !i.status);
@@ -41,7 +51,7 @@ const Roadmap = () => {
         {/* Hero Section */}
         <section className="relative pt-8 pb-6 md:pt-12 md:pb-10 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent opacity-50" />
+          <div className="absolute inset-0 mt-4 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent opacity-50" />
           
           <div className="container mx-auto px-4 relative">
             <div className="max-w-3xl mx-auto text-center space-y-4">
@@ -126,7 +136,7 @@ const Roadmap = () => {
         </section>
 
         {/* Roadmap Items */}
-        <section className="py-6 md:py-10">
+        <section className="py-4 md:py-6">
           <div className="container mx-auto px-4">
             {loading ? (
               <div className="flex items-center justify-center py-10">
@@ -165,15 +175,17 @@ const Roadmap = () => {
                           description={item.description}
                           status={item.status}
                           votingEndsAt={item.voting_ends_at}
-                          totalVotes={item.total_votes}
-                          userHasVoted={item.user_has_voted}
+                          yesVotes={item.yes_votes}
+                          noVotes={item.no_votes}
+                          netVotes={item.net_votes}
+                          userVoteType={item.user_vote_type}
                           maxVotes={maxVotes}
                           canVote={canVote}
                           votingTier={votingTier}
                           voteWeight={voteWeight}
                           isVoting={voting === item.id}
                           isVotingOpen={isVotingOpen(item)}
-                          onVote={() => castVote(item.id)}
+                          onVote={(voteType: VoteType) => castVote(item.id, voteType)}
                           onRemoveVote={() => removeVote(item.id)}
                         />
                       ))}
@@ -202,15 +214,17 @@ const Roadmap = () => {
                           description={item.description}
                           status={item.status}
                           votingEndsAt={item.voting_ends_at}
-                          totalVotes={item.total_votes}
-                          userHasVoted={item.user_has_voted}
+                          yesVotes={item.yes_votes}
+                          noVotes={item.no_votes}
+                          netVotes={item.net_votes}
+                          userVoteType={item.user_vote_type}
                           maxVotes={maxVotes}
                           canVote={canVote}
                           votingTier={votingTier}
                           voteWeight={voteWeight}
                           isVoting={voting === item.id}
                           isVotingOpen={isVotingOpen(item)}
-                          onVote={() => castVote(item.id)}
+                          onVote={(voteType: VoteType) => castVote(item.id, voteType)}
                           onRemoveVote={() => removeVote(item.id)}
                         />
                       ))}
@@ -239,15 +253,17 @@ const Roadmap = () => {
                           description={item.description}
                           status={item.status}
                           votingEndsAt={item.voting_ends_at}
-                          totalVotes={item.total_votes}
-                          userHasVoted={item.user_has_voted}
+                          yesVotes={item.yes_votes}
+                          noVotes={item.no_votes}
+                          netVotes={item.net_votes}
+                          userVoteType={item.user_vote_type}
                           maxVotes={maxVotes}
                           canVote={canVote}
                           votingTier={votingTier}
                           voteWeight={voteWeight}
                           isVoting={voting === item.id}
                           isVotingOpen={isVotingOpen(item)}
-                          onVote={() => castVote(item.id)}
+                          onVote={(voteType: VoteType) => castVote(item.id, voteType)}
                           onRemoveVote={() => removeVote(item.id)}
                         />
                       ))}
@@ -259,18 +275,35 @@ const Roadmap = () => {
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="py-8 md:py-10 border-t border-border/50">
-          <div className="container mx-auto px-4 text-center">
-            <h2 className="text-xl md:text-2xl font-consciousness font-bold mb-2">
-              Have a Feature Idea?
-            </h2>
-            <p className="text-sm text-muted-foreground mb-4 max-w-md mx-auto">
-              We're always looking for ways to improve. Share your ideas with us.
-            </p>
-            <Button asChild variant="outline" size="sm">
-              <Link to="/contact">Contact Us</Link>
-            </Button>
+        {/* Feature Suggestions Section */}
+        <section className="py-8 md:py-12 border-t border-border/50">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto space-y-6">
+              <div className="text-center mb-6">
+                <h2 className="text-xl md:text-2xl font-consciousness font-bold mb-2">
+                  Have a Feature Idea?
+                </h2>
+                <p className="text-sm text-muted-foreground max-w-md mx-auto">
+                  Premium members can submit ideas for consideration. Popular suggestions may be promoted to the public roadmap.
+                </p>
+              </div>
+
+              <div className="grid gap-6 md:grid-cols-2">
+                {/* Submit Form */}
+                <FeatureSuggestionForm
+                  canSubmit={canVote}
+                  submitting={submitting}
+                  onSubmit={submitSuggestion}
+                />
+
+                {/* Recent Ideas List */}
+                <FeatureSuggestionsList
+                  suggestions={suggestions}
+                  loading={suggestionsLoading}
+                  maxItems={5}
+                />
+              </div>
+            </div>
           </div>
         </section>
       </div>
