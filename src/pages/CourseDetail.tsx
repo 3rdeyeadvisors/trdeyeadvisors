@@ -68,17 +68,12 @@ const CourseDetail = () => {
     if (now >= earlyAccessDate && now < publicReleaseDate) {
       return {
         isEarlyAccess: true,
-        isLocked: !isAnnualSubscriber,
+        isLocked: !isPremiumMember,
         releaseDate: publicReleaseDate
       };
     }
     
     return { isEarlyAccess: false, isLocked: false, releaseDate: null };
-  }, [course, isAnnualSubscriber]);
-      return { isEarlyAccess: true, isLocked: !isPremiumMember };
-    }
-    
-    return { isEarlyAccess: false, isLocked: false };
   }, [course, isPremiumMember]);
 
   // Track presence for admins
