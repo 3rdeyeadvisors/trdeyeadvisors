@@ -12,6 +12,7 @@ import { QuizComponent } from "@/components/quiz/QuizComponent";
 import { ExpandableText } from "@/components/ui/expandable-text";
 import { FullscreenContentViewer } from "./FullscreenContentViewer";
 import { useAchievementSounds } from "@/hooks/useAchievementSounds";
+import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
 import { 
   BookOpen, 
   Clock, 
@@ -94,6 +95,13 @@ export const EnhancedContentPlayer = ({
   const [fullscreen, setFullscreen] = useState(false);
   const [isFullscreenViewerOpen, setIsFullscreenViewerOpen] = useState(false);
   const { toast } = useToast();
+
+  // Integrated swipe navigation for the main viewer
+  const swipeHandlers = useSwipeNavigation({
+    onSwipeLeft: hasNext ? onNext : undefined,
+    onSwipeRight: hasPrevious ? onPrevious : undefined,
+    threshold: 60
+  });
 
   // Check if module is already completed
   useEffect(() => {
@@ -312,6 +320,8 @@ export const EnhancedContentPlayer = ({
         isOpen={isFullscreenViewerOpen}
         onClose={() => setIsFullscreenViewerOpen(false)}
         content={module.content.text || ''}
+        type={module.type}
+        videoUrl={module.content.videoUrl}
         title={module.title}
         currentIndex={currentModuleIndex}
         totalModules={totalModules}
@@ -415,16 +425,19 @@ export const EnhancedContentPlayer = ({
         </TabsList>
 
         <TabsContent value="content" className="space-y-4 sm:space-y-6 w-full">
-          <Card className={`${fullscreen ? 'fixed inset-0 z-50' : ''} w-full relative`}>
-            {/* Floating Focus Mode Button */}
-            {module.type === 'text' && module.content.text && (
+          <Card
+            className={`${fullscreen ? 'fixed inset-0 z-50' : ''} w-full relative`}
+            {...swipeHandlers}
+          >
+            {/* Floating Focus Mode Button - Now for both text and video */}
+            {(module.type === 'text' || module.type === 'video') && (
               <Button
                 onClick={() => setIsFullscreenViewerOpen(true)}
                 className="absolute top-3 right-3 z-10 bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg gap-2 px-4"
-                title="Focus Mode - Distraction-free reading with swipe navigation"
+                title="Full Screen Mode - Immersive view with swipe navigation"
               >
                 <Maximize2 className="w-4 h-4" />
-                <span className="font-medium">Focus Mode</span>
+                <span className="font-medium">Full Screen</span>
               </Button>
             )}
             <div className="p-3 sm:p-4 md:p-6">
