@@ -235,7 +235,7 @@ const Roadmap = () => {
                     <div className="flex items-center justify-center sm:justify-start gap-2">
                       <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
                       <h2 className="text-xl md:text-2xl font-consciousness font-bold">
-                        Shipped
+                        Completed
                       </h2>
                       <Badge variant="outline" className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-xs">
                         {completedItems.length}
