@@ -42,10 +42,12 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
   }, []);
 
   // Swipe navigation - always provide handlers to prevent bubbling
+  // Using higher threshold to differentiate from scrolling
   const swipeHandlers = useSwipeNavigation({
     onSwipeLeft: hasNext ? onNext : () => handleBoundarySwipe('left'),
     onSwipeRight: hasPrevious ? onPrevious : () => handleBoundarySwipe('right'),
-    threshold: 60
+    threshold: 80,
+    preventDefaultOnSwipe: true
   });
 
   // Keyboard navigation
@@ -120,7 +122,6 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         className="fixed inset-0 z-[9999] bg-background flex flex-col"
-        {...swipeHandlers}
       >
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-background/95 backdrop-blur-sm safe-area-inset-top">
@@ -184,10 +185,11 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
           ))}
         </div>
 
-        {/* Content */}
+        {/* Content - swipe handlers attached here */}
         <div
           ref={contentRef}
-          className="flex-1 overflow-y-auto px-4 py-6 md:px-8 lg:px-16 xl:px-24"
+          className="flex-1 overflow-y-auto px-4 py-6 md:px-8 lg:px-16 xl:px-24 touch-pan-y"
+          {...swipeHandlers}
         >
           <div className="max-w-4xl mx-auto">
             <EnhancedMarkdownRenderer content={content} />

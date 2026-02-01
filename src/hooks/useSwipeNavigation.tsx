@@ -42,8 +42,9 @@ export const useSwipeNavigation = ({
     const deltaX = Math.abs(touchEndX.current - touchStartX.current);
     const deltaY = Math.abs(touchEndY.current - touchStartY.current);
     
-    // Mark as swiping if movement exceeds threshold
-    if (deltaX > threshold || deltaY > threshold) {
+    // Only mark as horizontal swipe if deltaX is significantly larger than deltaY
+    // This prevents accidental swipes while scrolling
+    if (deltaX > threshold && deltaX > deltaY * 2) {
       isSwiping.current = true;
     }
   }, [threshold]);
