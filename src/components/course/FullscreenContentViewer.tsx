@@ -30,7 +30,7 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
   onPrevious,
   courseTitle
 }) => {
-  const { isFullscreen, enter, exit, containerRef } = useFullscreen();
+  const { isFullscreen, isSupported, enter, exit, containerRef } = useFullscreen();
   const contentRef = useRef<HTMLDivElement>(null);
   const hasNext = currentIndex < totalModules - 1;
   const hasPrevious = currentIndex > 0;
@@ -61,10 +61,13 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
           break;
         case 'f':
         case 'F':
-          if (!isFullscreen) {
-            enter(containerRef.current);
-          } else {
-            exit();
+          // Only try fullscreen if supported (not in iframe)
+          if (isSupported) {
+            if (!isFullscreen) {
+              enter(containerRef.current);
+            } else {
+              exit();
+            }
           }
           break;
       }
@@ -72,14 +75,10 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, hasNext, hasPrevious, onNext, onPrevious, isFullscreen, enter, exit]);
+  }, [isOpen, hasNext, hasPrevious, onNext, onPrevious, isFullscreen, isSupported, enter, exit]);
 
-  // Auto-enter fullscreen on open
-  useEffect(() => {
-    if (isOpen && containerRef.current) {
-      enter(containerRef.current);
-    }
-  }, [isOpen, enter]);
+  // Don't auto-enter fullscreen - it doesn't work in iframes and causes errors
+  // The overlay mode works great without native fullscreen API
 
   const handleClose = useCallback(() => {
     if (isFullscreen) {
@@ -94,6 +93,16 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
       contentRef.current.scrollTop = 0;
     }
   }, [currentIndex]);
+
+  // Prevent body scroll when open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -115,7 +124,7 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
               size="icon"
               onClick={handleClose}
               className="shrink-0 min-h-[44px] min-w-[44px]"
-              aria-label="Close fullscreen"
+              aria-label="Close focus mode"
             >
               <X className="w-5 h-5" />
             </Button>
@@ -133,19 +142,22 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
             <span className="text-sm text-muted-foreground whitespace-nowrap">
               {currentIndex + 1} / {totalModules}
             </span>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => isFullscreen ? exit() : enter(containerRef.current)}
-              className="min-h-[44px] min-w-[44px]"
-              aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
-            >
-              {isFullscreen ? (
-                <Minimize2 className="w-5 h-5" />
-              ) : (
-                <Maximize2 className="w-5 h-5" />
-              )}
-            </Button>
+            {/* Only show fullscreen button if supported (not in iframe) */}
+            {isSupported && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => isFullscreen ? exit() : enter(containerRef.current)}
+                className="min-h-[44px] min-w-[44px]"
+                aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+              >
+                {isFullscreen ? (
+                  <Minimize2 className="w-5 h-5" />
+                ) : (
+                  <Maximize2 className="w-5 h-5" />
+                )}
+              </Button>
+            )}
           </div>
         </div>
 

@@ -2,7 +2,8 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 
 interface FullscreenAPI {
   isFullscreen: boolean;
-  enter: (element?: HTMLElement | null) => Promise<void>;
+  isSupported: boolean;
+  enter: (element?: HTMLElement | null) => Promise<boolean>;
   exit: () => Promise<void>;
   toggle: (element?: HTMLElement | null) => Promise<void>;
   containerRef: React.RefObject<HTMLDivElement>;
@@ -10,36 +11,77 @@ interface FullscreenAPI {
 
 export const useFullscreen = (): FullscreenAPI => {
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isSupported, setIsSupported] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const enter = useCallback(async (element?: HTMLElement | null) => {
+  // Check if fullscreen is supported (not in iframe, API available)
+  useEffect(() => {
+    const checkSupport = () => {
+      try {
+        // Check if we're in an iframe
+        const inIframe = window.self !== window.top;
+        
+        // Check if fullscreen API is available
+        const hasFullscreenAPI = !!(
+          document.documentElement.requestFullscreen ||
+          (document.documentElement as any).webkitRequestFullscreen ||
+          (document.documentElement as any).msRequestFullscreen
+        );
+        
+        // Fullscreen often doesn't work in iframes without allowfullscreen attribute
+        setIsSupported(hasFullscreenAPI && !inIframe);
+      } catch {
+        // If we can't access window.top, we're in a cross-origin iframe
+        setIsSupported(false);
+      }
+    };
+    
+    checkSupport();
+  }, []);
+
+  const enter = useCallback(async (element?: HTMLElement | null): Promise<boolean> => {
     const target = element || containerRef.current;
-    if (!target) return;
+    if (!target) {
+      console.warn('Fullscreen: No element provided');
+      return false;
+    }
+
+    if (!isSupported) {
+      console.warn('Fullscreen: Not supported in this context (likely iframe)');
+      return false;
+    }
 
     try {
       if (target.requestFullscreen) {
         await target.requestFullscreen();
+        return true;
       } else if ((target as any).webkitRequestFullscreen) {
         await (target as any).webkitRequestFullscreen();
+        return true;
       } else if ((target as any).msRequestFullscreen) {
         await (target as any).msRequestFullscreen();
+        return true;
       }
     } catch (error) {
-      console.warn('Fullscreen request failed:', error);
+      // Silently fail - fullscreen is not critical functionality
+      console.warn('Fullscreen request failed (this is normal in embedded contexts)');
     }
-  }, []);
+    return false;
+  }, [isSupported]);
 
   const exit = useCallback(async () => {
     try {
-      if (document.exitFullscreen) {
-        await document.exitFullscreen();
-      } else if ((document as any).webkitExitFullscreen) {
-        await (document as any).webkitExitFullscreen();
-      } else if ((document as any).msExitFullscreen) {
-        await (document as any).msExitFullscreen();
+      if (document.fullscreenElement) {
+        if (document.exitFullscreen) {
+          await document.exitFullscreen();
+        } else if ((document as any).webkitExitFullscreen) {
+          await (document as any).webkitExitFullscreen();
+        } else if ((document as any).msExitFullscreen) {
+          await (document as any).msExitFullscreen();
+        }
       }
     } catch (error) {
-      console.warn('Exit fullscreen failed:', error);
+      // Silently fail
     }
   }, []);
 
@@ -72,5 +114,5 @@ export const useFullscreen = (): FullscreenAPI => {
     };
   }, []);
 
-  return { isFullscreen, enter, exit, toggle, containerRef };
+  return { isFullscreen, isSupported, enter, exit, toggle, containerRef };
 };
