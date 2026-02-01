@@ -1,170 +1,149 @@
 
-# Plan: Fix Roadmap Layout, Focus Mode Swipe, and Reduce Platform Sounds
+# Plan: Fix Focus Mode Swipe Navigation
 
-## Overview
-This plan addresses 4 issues the user reported:
-1. Roadmap boxes are not identical sizes on desktop
-2. Boxes move/glitch after voting (layout shift)
-3. Focus mode exits when swiping left/right
-4. Too many sounds throughout the platform
+## Root Cause Analysis
 
----
+After auditing the code, I identified **three interconnected issues** preventing swipe navigation from working:
 
-## Issue 1: Non-Identical Roadmap Boxes
-
-**Problem**: Cards have varying heights because they contain dynamic content (description length, timer visibility, vote weight badges) that causes each card to be a different size.
-
-**Solution**: Add CSS to ensure all cards in a row have equal height and internal content sections have fixed/minimum heights.
-
-**Changes to `src/components/roadmap/RoadmapCard.tsx`**:
-- Add `h-full` class to the Card component to stretch to grid row height
-- Add `flex flex-col` to enable flexbox layout
-- Add `flex-1` to description area to push buttons to bottom
-- Ensure consistent spacing regardless of content presence
-
----
-
-## Issue 2: Layout Shift When Voting
-
-**Problem**: When voting, the vote counts change (e.g., "(0)" becomes "(1)") causing text width to change and the entire card to shift. The button states also change, causing layout jumps.
-
-**Solution**: Add fixed minimum widths and stabilize the voting UI:
-- Fix button minimum widths so they don't resize when vote counts change
-- Add fixed-width containers for vote count displays
-- Use `tabular-nums` for numbers to prevent width changes
-
-**Changes to `src/components/roadmap/RoadmapCard.tsx`**:
-- Add `tabular-nums` class to vote count numbers
-- Set minimum widths on vote buttons
-- Add `min-w-[XX]` to vote count display areas
-
----
-
-## Issue 3: Focus Mode Swipe Exits the Mode
-
-**Problem**: The swipe navigation in `FullscreenContentViewer.tsx` calls `onNext` and `onPrevious` which navigate between modules, but the swipe is being interpreted incorrectly or the navigation is closing the modal.
-
-**Root Cause**: Looking at the code, the swipe handlers are correctly mapped:
-- `onSwipeLeft` (swipe finger left) → `hasNext ? onNext : undefined`
-- `onSwipeRight` (swipe finger right) → `hasPrevious ? onPrevious : undefined`
-
-The issue is likely that when the user is on the first or last module, swipe handlers are `undefined`, and the swipe gesture may be bubbling up or causing unexpected behavior. Also, there's no feedback when swiping at boundaries.
-
-**Solution**:
-- Always provide swipe handlers (not `undefined`)
-- Add boundary feedback when user tries to swipe past first/last module
-- Prevent event propagation during swipes
-
-**Changes to `src/components/course/FullscreenContentViewer.tsx`**:
-- Add boundary handlers that show feedback instead of `undefined`
-- Add `toast` notification when user reaches the boundary
-- Use `stopPropagation` in swipe handling
-
----
-
-## Issue 4: Too Many Sounds Throughout the Platform
-
-**Problem**: The platform plays sounds for:
-- Navigation (every page change)
-- Pull-to-refresh
-- Menu open/close
-- Clicks
-- Points earned
-- Daily login
-- Quiz answers
-- Module/course completion
-
-This is too frequent and annoying.
-
-**Solution**: Keep only meaningful achievement sounds and remove UI interaction sounds:
-
-**Keep (achievement-based)**:
-- `pointsEarned` - rewards
-- `dailyLogin` - streak encouragement
-- `correctAnswer` / `wrongAnswer` - quiz feedback
-- `moduleComplete` / `courseComplete` - major milestones
-- `quizPass` - achievement
-- `badgeEarned` - achievement
-
-**Remove (UI interaction sounds)**:
-- `click` - too frequent
-- `hover` - unnecessary
-- `navigate` - every page change is annoying
-- `refresh` - too frequent
-- `menuOpen` / `menuClose` - too frequent
-- `success` / `error` - redundant with visual feedback
-
-**Changes**:
-
-1. **`src/components/Navigation.tsx`**: Remove `playClick`, `playMenuOpen`, `playMenuClose`, `playNavigate` calls
-
-2. **`src/components/Layout.tsx`**: Remove `playRefresh`, `playNavigate` calls
-
-3. **`src/hooks/useAchievementSounds.tsx`**: Keep the UI sound functions for future use but they won't be called
-
----
-
-## Technical Implementation Details
-
-### File: `src/components/roadmap/RoadmapCard.tsx`
-
-1. Update Card component classes:
+### Issue 1: CSS `touch-pan-y` Blocking Horizontal Gestures
+The content area in `FullscreenContentViewer.tsx` has `touch-pan-y` class:
 ```tsx
-<Card
-  className="group relative overflow-hidden border-border/50 bg-card/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-300 cursor-pointer h-full flex flex-col"
-  onClick={handleCardClick}
->
+className="flex-1 overflow-y-auto px-4 py-6 ... touch-pan-y"
 ```
 
-2. Update CardContent to use flex-grow:
+This CSS property tells the browser to handle vertical scrolling natively, but it can prevent JavaScript from receiving horizontal touch events entirely. The browser intercepts the gesture before our `onTouchMove` handler is called.
+
+### Issue 2: Overly Strict Swipe Detection Threshold
+The current logic in `useSwipeNavigation.tsx` requires:
+- `deltaX > 80px` (high threshold)
+- `deltaX > deltaY * 2` (horizontal must be twice vertical)
+
+Both conditions must be met during `onTouchMove` to set `isSwiping = true`. If the user swipes at even a slight angle, the swipe is ignored.
+
+### Issue 3: Early Termination in onTouchEnd
+If `isSwiping.current` is never set to `true` (due to issues 1 or 2), the `onTouchEnd` handler exits immediately:
 ```tsx
-<CardContent className="relative p-4 pt-2 space-y-3 flex-1 flex flex-col">
+const onTouchEnd = useCallback((e: React.TouchEvent) => {
+  if (!isSwiping.current) return; // Exits here - never fires callback
+  ...
 ```
 
-3. Add `tabular-nums` to vote counts:
+---
+
+## Solution
+
+### Fix 1: Replace `touch-pan-y` with `touch-action: auto`
+
+Remove the `touch-pan-y` class from the content div and instead let the swipe hook decide when to allow scrolling vs swiping. We'll use `touch-action: manipulation` which allows both scrolling and gestures.
+
+**File: `src/components/course/FullscreenContentViewer.tsx`**
 ```tsx
-<span className="font-medium tabular-nums">
+// Before (line 191)
+className="flex-1 overflow-y-auto px-4 py-6 md:px-8 lg:px-16 xl:px-24 touch-pan-y"
+
+// After
+className="flex-1 overflow-y-auto px-4 py-6 md:px-8 lg:px-16 xl:px-24"
+style={{ touchAction: 'manipulation' }}
 ```
 
-4. Set fixed minimum widths on buttons:
-```tsx
-className={`flex-1 min-h-[36px] min-w-[100px] text-xs...`}
-```
+### Fix 2: Rewrite Swipe Detection Logic
 
-### File: `src/components/course/FullscreenContentViewer.tsx`
+The current approach tries to detect swipe intent during `onTouchMove`, but this conflicts with scroll behavior. Instead:
 
-Add boundary handling for swipes:
+1. **Always track touch positions** during `onTouchStart` and `onTouchMove`
+2. **Determine swipe vs scroll on `onTouchEnd`** based on final delta values
+3. **Lower the threshold** to 50px (reasonable for mobile)
+4. **Relax the ratio requirement** to 1.5x instead of 2x
+
+**File: `src/hooks/useSwipeNavigation.tsx`**
+
 ```tsx
-const handleBoundarySwipe = (direction: 'left' | 'right') => {
-  toast.info(direction === 'left' ? "You're at the last module" : "You're at the first module");
+export const useSwipeNavigation = ({
+  onSwipeLeft,
+  onSwipeRight,
+  onSwipeUp,
+  onSwipeDown,
+  threshold = 50,
+  preventDefaultOnSwipe = false
+}: UseSwipeNavigationOptions): SwipeHandlers => {
+  const touchStartX = useRef(0);
+  const touchStartY = useRef(0);
+  const touchEndX = useRef(0);
+  const touchEndY = useRef(0);
+
+  const onTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+    // Initialize end positions to start positions
+    touchEndX.current = e.touches[0].clientX;
+    touchEndY.current = e.touches[0].clientY;
+  }, []);
+
+  const onTouchMove = useCallback((e: React.TouchEvent) => {
+    touchEndX.current = e.touches[0].clientX;
+    touchEndY.current = e.touches[0].clientY;
+  }, []);
+
+  const onTouchEnd = useCallback((e: React.TouchEvent) => {
+    const deltaX = touchStartX.current - touchEndX.current;
+    const deltaY = touchStartY.current - touchEndY.current;
+    const absDeltaX = Math.abs(deltaX);
+    const absDeltaY = Math.abs(deltaY);
+
+    // Check if this is a horizontal swipe:
+    // - Must exceed threshold
+    // - Horizontal movement must be at least 1.5x vertical (to distinguish from scrolling)
+    const isHorizontalSwipe = absDeltaX > threshold && absDeltaX > absDeltaY * 1.5;
+
+    if (isHorizontalSwipe) {
+      if (preventDefaultOnSwipe) {
+        e.preventDefault();
+      }
+      
+      if (deltaX > 0 && onSwipeLeft) {
+        onSwipeLeft(); // Swipe left = go to next
+      } else if (deltaX < 0 && onSwipeRight) {
+        onSwipeRight(); // Swipe right = go to previous
+      }
+    }
+    
+    // Vertical swipe handling (optional)
+    const isVerticalSwipe = absDeltaY > threshold && absDeltaY > absDeltaX * 1.5;
+    if (isVerticalSwipe) {
+      if (preventDefaultOnSwipe) {
+        e.preventDefault();
+      }
+      
+      if (deltaY > 0 && onSwipeUp) {
+        onSwipeUp();
+      } else if (deltaY < 0 && onSwipeDown) {
+        onSwipeDown();
+      }
+    }
+  }, [onSwipeLeft, onSwipeRight, onSwipeUp, onSwipeDown, threshold, preventDefaultOnSwipe]);
+
+  return { onTouchStart, onTouchMove, onTouchEnd };
 };
+```
 
+### Fix 3: Lower Threshold in FullscreenContentViewer
+
+**File: `src/components/course/FullscreenContentViewer.tsx`**
+```tsx
+// Before
 const swipeHandlers = useSwipeNavigation({
   onSwipeLeft: hasNext ? onNext : () => handleBoundarySwipe('left'),
   onSwipeRight: hasPrevious ? onPrevious : () => handleBoundarySwipe('right'),
-  threshold: 60
+  threshold: 80,
+  preventDefaultOnSwipe: true
 });
-```
 
-### File: `src/components/Navigation.tsx`
-
-Remove sound hooks and calls:
-```tsx
-// Remove this import usage
-const { playClick, playMenuOpen, playMenuClose, playNavigate } = useAchievementSounds();
-
-// Remove playNavigate() call from useEffect
-// Remove playMenuOpen() and playMenuClose() calls from handlers
-```
-
-### File: `src/components/Layout.tsx`
-
-Remove sound hooks and calls:
-```tsx
-// Remove this import usage
-const { playRefresh, playNavigate } = useAchievementSounds();
-
-// Remove playRefresh() call from handleRefresh
+// After
+const swipeHandlers = useSwipeNavigation({
+  onSwipeLeft: hasNext ? onNext : () => handleBoundarySwipe('left'),
+  onSwipeRight: hasPrevious ? onPrevious : () => handleBoundarySwipe('right'),
+  threshold: 50
+});
 ```
 
 ---
@@ -173,16 +152,26 @@ const { playRefresh, playNavigate } = useAchievementSounds();
 
 | File | Change |
 |------|--------|
-| `src/components/roadmap/RoadmapCard.tsx` | Add flex layout, consistent heights, stabilize vote counts |
-| `src/components/course/FullscreenContentViewer.tsx` | Add boundary feedback for swipes |
-| `src/components/Navigation.tsx` | Remove UI sound effects |
-| `src/components/Layout.tsx` | Remove UI sound effects |
+| `src/hooks/useSwipeNavigation.tsx` | Rewrite detection logic to evaluate swipe on touchEnd, not during touchMove. Lower ratio requirement from 2x to 1.5x |
+| `src/components/course/FullscreenContentViewer.tsx` | Remove `touch-pan-y` class, use `touchAction: manipulation`, lower threshold to 50px |
 
 ---
 
-## Expected Outcome
+## Why This Will Work
 
-1. **Roadmap**: All cards will be identical heights within each row
-2. **Voting**: No more layout shifts when votes are cast
-3. **Focus mode**: Swiping at boundaries shows feedback instead of exiting
-4. **Sounds**: Only achievement sounds remain (quiz, milestones, points)
+1. **No CSS conflict**: Removing `touch-pan-y` ensures JavaScript receives all touch events
+2. **Reliable detection**: Evaluating on `touchEnd` means we always have final delta values
+3. **Reasonable threshold**: 50px is comfortable for intentional swipes but not triggered accidentally
+4. **Clear horizontal intent**: 1.5x ratio distinguishes horizontal swipes from diagonal scrolling
+5. **Scrolling still works**: The content area still has `overflow-y-auto`, so vertical scrolling is unaffected
+
+---
+
+## Testing Recommendations
+
+After implementation:
+1. Open any course module
+2. Click "Focus Mode" to enter fullscreen reader
+3. Swipe left → should navigate to next module (or show "last module" toast)
+4. Swipe right → should navigate to previous module (or show "first module" toast)
+5. Scroll up/down → should scroll content normally without triggering navigation
