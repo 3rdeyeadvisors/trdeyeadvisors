@@ -70,8 +70,8 @@ export const FeatureSuggestionsList = ({
   return (
     <>
       <Card className="border-border/50">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-base md:text-lg flex items-center gap-2">
+        <CardHeader className="pb-3 text-center">
+          <CardTitle className="text-base md:text-lg flex flex-col items-center gap-2">
             <MessageSquare className="w-4 h-4 text-primary" />
             Recent Community Ideas
           </CardTitle>
@@ -88,25 +88,25 @@ export const FeatureSuggestionsList = ({
               <button
                 key={suggestion.id}
                 onClick={() => setSelectedSuggestion(suggestion)}
-                className="w-full text-left p-3 rounded-lg border border-border/50 bg-card/50 hover:bg-muted/50 hover:border-primary/30 transition-all group"
+                className="w-full p-4 rounded-lg border border-border/50 bg-card/50 hover:bg-muted/50 hover:border-primary/30 transition-all group"
               >
-                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 mb-1.5">
-                  <h4 className="font-medium text-sm line-clamp-1 group-hover:text-primary transition-colors flex-1 min-w-0">
-                    {suggestion.title}
-                  </h4>
-                  <Badge variant="outline" className={`shrink-0 text-[10px] sm:text-xs py-0 h-5 sm:h-auto self-start ${status.className}`}>
-                    <StatusIcon className="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-1" />
+                <div className="flex flex-col items-center gap-3 text-center">
+                  <Badge variant="outline" className={`text-xs py-0.5 ${status.className}`}>
+                    <StatusIcon className="w-3 h-3 mr-1" />
                     {status.label}
                   </Badge>
-                </div>
-                <p className="text-xs text-muted-foreground line-clamp-2 mb-2">
-                  {suggestion.description}
-                </p>
-                <div className="flex items-center justify-between text-xs text-muted-foreground/70">
-                  <span>by {suggestion.submitter_name}</span>
-                  <span className="flex items-center gap-1">
-                    Click to read more <ChevronRight className="w-3 h-3" />
-                  </span>
+                  <h4 className="font-medium text-sm break-words group-hover:text-primary transition-colors">
+                    {suggestion.title}
+                  </h4>
+                  <p className="text-xs text-muted-foreground line-clamp-2 break-words">
+                    {suggestion.description}
+                  </p>
+                  <div className="flex items-center justify-between w-full flex-wrap gap-2 text-xs text-muted-foreground/70 pt-1 border-t border-border/30">
+                    <span>by {suggestion.submitter_name}</span>
+                    <span className="flex items-center gap-1">
+                      Click to read more <ChevronRight className="w-3 h-3" />
+                    </span>
+                  </div>
                 </div>
               </button>
             );
