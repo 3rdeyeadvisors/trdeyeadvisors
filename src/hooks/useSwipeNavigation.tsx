@@ -57,9 +57,9 @@ export const useSwipeNavigation = ({
 
     // Check if this is a horizontal swipe:
     // - Must exceed threshold
-    // - Horizontal movement must be greater than vertical (to distinguish from scrolling)
-    // - Relaxed from 1.5x to 1x for better reliability on mobile
-    const isHorizontalSwipe = absDeltaX > threshold && absDeltaX > absDeltaY;
+    // - Horizontal movement must be significantly greater than vertical (to distinguish from diagonal scrolling)
+    // - Using a 1.2x ratio for better horizontal intent detection
+    const isHorizontalSwipe = absDeltaX > threshold && absDeltaX > (absDeltaY * 1.2);
 
     if (isHorizontalSwipe) {
       if (preventDefaultOnSwipe) {
@@ -71,6 +71,10 @@ export const useSwipeNavigation = ({
       } else if (deltaX < 0 && onSwipeRight) {
         onSwipeRight(); // Swipe right = go to previous
       }
+
+      // Reset after successful swipe to prevent double triggers
+      onTouchCancel();
+      return;
     }
     
     // Vertical swipe handling (optional)
@@ -86,7 +90,7 @@ export const useSwipeNavigation = ({
         onSwipeDown();
       }
     }
-  }, [onSwipeLeft, onSwipeRight, onSwipeUp, onSwipeDown, threshold, preventDefaultOnSwipe]);
+  }, [onSwipeLeft, onSwipeRight, onSwipeUp, onSwipeDown, threshold, preventDefaultOnSwipe, onTouchCancel]);
 
   return { onTouchStart, onTouchMove, onTouchEnd, onTouchCancel };
 };

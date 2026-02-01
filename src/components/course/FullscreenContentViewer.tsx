@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useRef } from 'react';
+import React, { useEffect, useCallback, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight, Maximize2, Minimize2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -37,8 +37,45 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
 }) => {
   const { isFullscreen, isSupported, enter, exit, containerRef } = useFullscreen();
   const contentRef = useRef<HTMLDivElement>(null);
+  const [showUI, setShowUI] = useState(true);
+  const uiTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const hasNext = currentIndex < totalModules - 1;
   const hasPrevious = currentIndex > 0;
+
+  const resetUITimer = useCallback(() => {
+    if (uiTimeoutRef.current) clearTimeout(uiTimeoutRef.current);
+    if (showUI) {
+      uiTimeoutRef.current = setTimeout(() => setShowUI(false), 4000);
+    }
+  }, [showUI]);
+
+  useEffect(() => {
+    if (showUI) {
+      resetUITimer();
+    }
+    return () => {
+      if (uiTimeoutRef.current) clearTimeout(uiTimeoutRef.current);
+    };
+  }, [showUI, resetUITimer]);
+
+  const toggleUI = useCallback((e: React.MouseEvent | React.TouchEvent) => {
+    // If we're clicking on an interactive element (button, link, iframe), don't toggle
+    const target = e.target as HTMLElement;
+    if (target.closest('button') || target.closest('a') || target.closest('iframe')) {
+      return;
+    }
+    setShowUI(prev => !prev);
+  }, []);
+
+  // Don't auto-enter fullscreen - it doesn't work in iframes and causes errors
+  // The overlay mode works great without native fullscreen API
+
+  const handleClose = useCallback(() => {
+    if (isFullscreen) {
+      exit();
+    }
+    onClose();
+  }, [isFullscreen, exit, onClose]);
 
   // Boundary handlers for swipe feedback
   const handleBoundarySwipe = useCallback((direction: 'left' | 'right') => {
@@ -85,17 +122,7 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, hasNext, hasPrevious, onNext, onPrevious, isFullscreen, isSupported, enter, exit]);
-
-  // Don't auto-enter fullscreen - it doesn't work in iframes and causes errors
-  // The overlay mode works great without native fullscreen API
-
-  const handleClose = useCallback(() => {
-    if (isFullscreen) {
-      exit();
-    }
-    onClose();
-  }, [isFullscreen, exit, onClose]);
+  }, [isOpen, hasNext, hasPrevious, onNext, onPrevious, isFullscreen, isSupported, enter, exit, containerRef, handleClose]);
 
   // Scroll to top when content changes
   useEffect(() => {
@@ -123,10 +150,42 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[9999] bg-background flex flex-col"
+        className="fixed inset-0 z-[9999] bg-background flex flex-col overflow-hidden"
+        onClick={toggleUI}
       >
+        {/* Subtle persistent exit button when UI is hidden */}
+        <AnimatePresence>
+          {!showUI && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 0.4, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              whileHover={{ opacity: 1, scale: 1.1 }}
+              className="fixed top-4 right-4 z-[10000]"
+            >
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleClose}
+                className="bg-background/20 backdrop-blur-md rounded-full w-10 h-10 border border-white/10"
+                aria-label="Exit focus mode"
+              >
+                <X className="w-5 h-5" />
+              </Button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-background/95 backdrop-blur-sm safe-area-inset-top">
+        <motion.div
+          initial={false}
+          animate={{
+            y: showUI ? 0 : -100,
+            opacity: showUI ? 1 : 0
+          }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+          className="flex items-center justify-between px-4 py-3 border-b border-border bg-background/95 backdrop-blur-sm safe-area-inset-top z-10"
+        >
           <div className="flex items-center gap-3 flex-1 min-w-0">
             <Button
               variant="ghost"
@@ -168,10 +227,18 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
               </Button>
             )}
           </div>
-        </div>
+        </motion.div>
 
         {/* Progress dots */}
-        <div className="flex justify-center gap-1.5 py-2 bg-background/80">
+        <motion.div
+          initial={false}
+          animate={{
+            opacity: showUI ? 1 : 0,
+            y: showUI ? 0 : -20
+          }}
+          transition={{ duration: 0.3 }}
+          className="flex justify-center gap-1.5 py-2 bg-background/80 z-10"
+        >
           {Array.from({ length: totalModules }).map((_, i) => (
             <div
               key={i}
@@ -185,14 +252,15 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
               )}
             />
           ))}
-        </div>
+        </motion.div>
 
         {/* Content - swipe handlers attached here */}
         <div
           ref={contentRef}
-          className="flex-1 overflow-y-auto px-4 py-6 md:px-8 lg:px-16 xl:px-24"
-          style={{ touchAction: 'pan-y' }}
+          className="flex-1 overflow-y-auto px-4 py-6 md:px-8 lg:px-16 xl:px-24 scroll-smooth"
+          style={{ touchAction: 'manipulation' }}
           {...swipeHandlers}
+          onScroll={resetUITimer}
         >
           <div className="max-w-4xl mx-auto">
             {type === 'video' && videoUrl && (
@@ -210,7 +278,15 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
         </div>
 
         {/* Navigation Footer */}
-        <div className="border-t border-border bg-background/95 backdrop-blur-sm px-4 py-3 safe-area-inset-bottom">
+        <motion.div
+          initial={false}
+          animate={{
+            y: showUI ? 0 : 100,
+            opacity: showUI ? 1 : 0
+          }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+          className="border-t border-border bg-background/95 backdrop-blur-sm px-4 py-3 safe-area-inset-bottom z-10"
+        >
           <div className="flex items-center justify-between max-w-4xl mx-auto">
             <Button
               variant="outline"
@@ -237,7 +313,7 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
               <ChevronRight className="w-5 h-5" />
             </Button>
           </div>
-        </div>
+        </motion.div>
 
         {/* Touch hint overlay - shows briefly on first open */}
         <motion.div
