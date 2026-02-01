@@ -340,18 +340,6 @@ export const EnhancedContentPlayer = ({
           </div>
           
           <div className="flex items-center justify-center md:justify-end gap-1.5 sm:gap-2">
-            {module.type === 'text' && module.content.text && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setIsFullscreenViewerOpen(true)}
-                className="text-muted-foreground hover:text-foreground p-1.5 sm:p-2 min-h-[36px] sm:min-h-[40px] gap-1.5"
-                title="Focus Mode - Fullscreen reading with swipe navigation"
-              >
-                <Maximize2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                <span className="hidden sm:inline text-xs">Focus</span>
-              </Button>
-            )}
             <Button
               variant="ghost"
               size="sm"
@@ -422,12 +410,23 @@ export const EnhancedContentPlayer = ({
         </TabsList>
 
         <TabsContent value="content" className="space-y-4 sm:space-y-6 w-full">
-          <Card className={`${fullscreen ? 'fixed inset-0 z-50' : ''} w-full`}>
+          <Card className={`${fullscreen ? 'fixed inset-0 z-50' : ''} w-full relative`}>
+            {/* Floating Focus Mode Button */}
+            {module.type === 'text' && module.content.text && (
+              <Button
+                onClick={() => setIsFullscreenViewerOpen(true)}
+                className="absolute top-3 right-3 z-10 bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg gap-2 px-4"
+                title="Focus Mode - Distraction-free reading with swipe navigation"
+              >
+                <Maximize2 className="w-4 h-4" />
+                <span className="font-medium">Focus Mode</span>
+              </Button>
+            )}
             <div className="p-3 sm:p-4 md:p-6">
               {module.type === 'text' && module.content.text && (
                 <div 
                   id="module-content"
-                  className="prose prose-sm md:prose-lg max-w-none font-consciousness overflow-y-auto max-h-[60vh] md:max-h-[calc(100vh-400px)] text-left mx-auto w-full break-words overflow-x-hidden overscroll-contain px-2 md:px-4"
+                  className="prose prose-sm md:prose-lg max-w-none font-consciousness overflow-y-auto max-h-[60vh] md:max-h-[calc(100vh-400px)] text-left mx-auto w-full break-words overflow-x-hidden overscroll-contain px-2 md:px-4 pt-8"
                   style={{ 
                     WebkitOverflowScrolling: 'touch',
                     touchAction: 'pan-y'
