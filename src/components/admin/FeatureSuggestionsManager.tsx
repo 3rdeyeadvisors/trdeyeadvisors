@@ -205,20 +205,22 @@ export const FeatureSuggestionsManager = () => {
                             <Eye className="w-4 h-4" />
                           </Button>
 
+                          {/* Promote - available for pending and approved */}
+                          {(suggestion.status === 'pending' || suggestion.status === 'approved') && (
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="text-primary hover:text-primary hover:bg-primary/10"
+                              onClick={() => setPromotingId(suggestion.id)}
+                              disabled={adminLoading}
+                              title="Promote to vote"
+                            >
+                              <ArrowUpRight className="w-4 h-4" />
+                            </Button>
+                          )}
+
                           {suggestion.status === 'pending' && (
                             <>
-                              {/* Promote */}
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="text-primary hover:text-primary hover:bg-primary/10"
-                                onClick={() => setPromotingId(suggestion.id)}
-                                disabled={adminLoading}
-                                title="Promote to vote"
-                              >
-                                <ArrowUpRight className="w-4 h-4" />
-                              </Button>
-
                               {/* Approve */}
                               <Button
                                 variant="ghost"
@@ -281,8 +283,9 @@ export const FeatureSuggestionsManager = () => {
                 </div>
               )}
               <DialogFooter>
-                {viewingSuggestion.status === 'pending' && (
-                  <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2">
+                  {/* Promote - available for pending and approved */}
+                  {(viewingSuggestion.status === 'pending' || viewingSuggestion.status === 'approved') && (
                     <Button
                       size="sm"
                       onClick={() => {
@@ -293,28 +296,33 @@ export const FeatureSuggestionsManager = () => {
                       <ArrowUpRight className="w-4 h-4 mr-1" />
                       Promote to Vote
                     </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleApprove(viewingSuggestion.id)}
-                      disabled={adminLoading}
-                    >
-                      <Check className="w-4 h-4 mr-1" />
-                      Approve
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        setViewingSuggestion(null);
-                        setRejectingId(viewingSuggestion.id);
-                      }}
-                    >
-                      <X className="w-4 h-4 mr-1" />
-                      Reject
-                    </Button>
-                  </div>
-                )}
+                  )}
+
+                  {viewingSuggestion.status === 'pending' && (
+                    <>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleApprove(viewingSuggestion.id)}
+                        disabled={adminLoading}
+                      >
+                        <Check className="w-4 h-4 mr-1" />
+                        Approve
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setViewingSuggestion(null);
+                          setRejectingId(viewingSuggestion.id);
+                        }}
+                      >
+                        <X className="w-4 h-4 mr-1" />
+                        Reject
+                      </Button>
+                    </>
+                  )}
+                </div>
               </DialogFooter>
             </>
           )}
