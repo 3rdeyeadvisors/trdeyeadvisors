@@ -11,6 +11,7 @@ import { useProgress } from "@/components/progress/ProgressProvider";
 import { QuizComponent } from "@/components/quiz/QuizComponent";
 import { ExpandableText } from "@/components/ui/expandable-text";
 import { FullscreenContentViewer } from "./FullscreenContentViewer";
+import { useAchievementSounds } from "@/hooks/useAchievementSounds";
 import { 
   BookOpen, 
   Clock, 
@@ -78,6 +79,7 @@ export const EnhancedContentPlayer = ({
 }: EnhancedContentPlayerProps) => {
   const { user } = useAuth();
   const { getCourseProgress, updateModuleProgress } = useProgress();
+  const { playModuleComplete, playPointsEarned } = useAchievementSounds();
   const [timeSpent, setTimeSpent] = useState(0);
   const [startTime] = useState(Date.now());
   const [isCompleted, setIsCompleted] = useState(false);
@@ -217,6 +219,9 @@ export const EnhancedContentPlayer = ({
       await updateModuleProgress(courseId, currentModuleIndex);
       setIsCompleted(true);
       onComplete();
+      
+      // Play module completion sound
+      playModuleComplete();
       
       toast({
         title: "Module Completed! 🎉",
