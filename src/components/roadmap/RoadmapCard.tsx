@@ -17,7 +17,6 @@ interface RoadmapCardProps {
   noVotes: number;
   netVotes: number;
   userVoteType: VoteType | null;
-  maxVotes: number;
   canVote: boolean;
   votingTier: 'founding' | 'annual' | 'none';
   voteWeight: number;
@@ -79,7 +78,6 @@ export const RoadmapCard = ({
   noVotes,
   netVotes,
   userVoteType,
-  maxVotes,
   canVote,
   votingTier,
   voteWeight,
@@ -91,7 +89,9 @@ export const RoadmapCard = ({
   const [dialogOpen, setDialogOpen] = useState(false);
   const statusInfo = statusConfig[status as keyof typeof statusConfig] || statusConfig.proposed;
   const totalVotes = yesVotes + noVotes;
-  const votePercentage = maxVotes > 0 ? (netVotes / maxVotes) * 100 : 0;
+  // Calculate sentiment as percentage of yes votes out of total votes
+  // If no votes yet, show neutral (50%)
+  const sentimentPercentage = totalVotes > 0 ? (yesVotes / totalVotes) * 100 : 50;
   const isCompleted = status === 'completed';
   
   const [timeRemaining, setTimeRemaining] = useState<TimeRemaining | null>(() => 
@@ -294,7 +294,7 @@ export const RoadmapCard = ({
                 </span>
               </span>
             </div>
-            <Progress value={Math.max(0, Math.min(100, 50 + votePercentage / 2))} className="h-1.5" />
+            <Progress value={sentimentPercentage} className="h-1.5" />
           </div>
 
           {/* Vote Action */}
@@ -372,7 +372,7 @@ export const RoadmapCard = ({
                   <span className="text-red-400">-{noVotes} no</span>
                 </span>
               </div>
-              <Progress value={Math.max(0, Math.min(100, 50 + votePercentage / 2))} className="h-2" />
+              <Progress value={sentimentPercentage} className="h-2" />
               <div className="flex items-center justify-center">
                 <span className={`text-lg font-bold ${netVotes >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
                   Net: {netVotes >= 0 ? '+' : ''}{netVotes}
