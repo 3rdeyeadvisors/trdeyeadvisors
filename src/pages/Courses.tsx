@@ -24,7 +24,12 @@ const Courses = () => {
   const { subscription } = useSubscription();
   const navigate = useNavigate();
 
-  const isAnnualSubscriber = subscription?.plan === 'annual' || subscription?.isAdmin;
+  const isPremiumMember = 
+    subscription?.plan === 'annual' || 
+    subscription?.plan === 'founding_33' ||
+    subscription?.isFounder ||
+    subscription?.isAdmin ||
+    subscription?.isGrandfathered;
 
   // Track presence
   usePresenceTracking({
@@ -166,6 +171,19 @@ const Courses = () => {
       icon: BookOpen,
       early_access_date: "2026-01-31",
       public_release_date: "2026-02-07"
+      difficulty: "Intermediate",
+      rating: 4.9,
+      students: 0,
+      modules: [
+        "What is Asset Tokenization? (Core Concepts and Key Terms)",
+        "Types of Real World Assets Being Tokenized (Treasuries, Real Estate, Commodities)",
+        "How RWA Tokenization Actually Works (Smart Contracts, SPVs, Oracles)",
+        "Evaluating RWA Investment Opportunities (Due Diligence and Risk Assessment)",
+        "The Future of Tokenization and Getting Started (Market Trends and Safe Practices)"
+      ],
+      icon: BookOpen,
+      early_access_date: "2026-01-31T00:00:00.000Z",
+      public_release_date: "2026-02-07T00:00:00.000Z"
     }
   ];
 
@@ -201,13 +219,14 @@ const Courses = () => {
           isEarlyAccess: true,
           isLocked: !isAnnualSubscriber,
           public_release_date: publicReleaseDate.toISOString()
+          isLocked: !isPremiumMember
         };
       }
       
       // Past public release date - available to all
       return { ...course, isEarlyAccess: false, isLocked: false };
     });
-  }, [isAnnualSubscriber]);
+  }, [isPremiumMember]);
 
   const filters = [
     { id: "all", label: "All Courses" },
@@ -346,10 +365,10 @@ const Courses = () => {
               Welcome back! Your progress is being tracked.
             </p>
           )}
-          {isAnnualSubscriber && (
+          {isPremiumMember && (
             <div className="flex items-center justify-center gap-2 mt-3 text-primary">
               <Star className="w-4 h-4" />
-              <span className="text-sm font-consciousness">Annual Member: {ANNUAL_BENEFITS.earlyAccessDays}-day early access to new courses</span>
+              <span className="text-sm font-consciousness">Premium Member: {ANNUAL_BENEFITS.earlyAccessDays}-day early access to new courses</span>
             </div>
           )}
         </div>

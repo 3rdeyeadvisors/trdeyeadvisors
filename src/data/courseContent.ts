@@ -7258,6 +7258,1583 @@ The RWA sector is growing fast, but it faces significant risks that every invest
 
 *Congratulations! You've completed the Tokenization course. You now have the knowledge to navigate this exciting new sector.*`
         }
+    difficulty: "Intermediate",
+    estimatedTime: "2.5 hours",
+    early_access_date: "2026-01-31T00:00:00.000Z",
+    public_release_date: "2026-02-07T00:00:00.000Z",
+    modules: [
+      {
+        id: "6-1",
+        title: "What is Asset Tokenization?",
+        type: "text",
+        duration: 25,
+        content: {
+          text: `# What is Asset Tokenization?
+
+Welcome to this community-requested course on **Real World Asset (RWA) Tokenization**. This course was developed based on voting through our Platform Roadmap, demonstrating the power of decentralized decision-making in action.
+
+## Understanding Tokenization
+
+**Tokenization** is the process of converting rights to an asset into a digital token on a blockchain. Think of it like turning a painting into puzzle pieces that anyone can own.
+
+### Simple Analogy
+
+Imagine you want to invest in a $10 million commercial building:
+
+**Traditional Way:**
+- Need $10 million (or at least a significant down payment)
+- Complex legal paperwork
+- Limited to accredited investors
+- Illiquid (hard to sell your share)
+
+**Tokenized Way:**
+- Building is divided into 10,000 tokens
+- Each token = $1,000 ownership stake
+- Buy as many or few tokens as you want
+- Trade tokens 24/7 on secondary markets
+
+[COMPONENT:KEY_TAKEAWAY]
+{
+  "title": "Core Concept",
+  "content": "Tokenization transforms illiquid, expensive assets into liquid, fractional investments accessible to anyone with an internet connection."
+}
+[/COMPONENT]
+
+## The $30+ Billion RWA Market
+
+The RWA tokenization sector has experienced explosive growth:
+
+- **Current Market Size**: Over $30 billion in tokenized assets
+- **Growth Rate**: 224% sector growth since 2024
+- **Major Players**: BlackRock, Ondo Finance, Centrifuge, Securitize
+- **Projection**: Boston Consulting Group estimates $16 trillion by 2030
+
+[COMPONENT:DID_YOU_KNOW]
+{
+  "fact": "BlackRock CEO Larry Fink called tokenization 'the next evolution of markets.' BlackRock's BUIDL fund became the largest tokenized treasury product within months of launch."
+}
+[/COMPONENT]
+
+## Key Terminology
+
+Before diving deeper, let's establish core vocabulary:
+
+### Security Token
+A digital token that represents ownership in a regulated security (like stocks or bonds). Must comply with securities laws.
+
+### Utility Token
+A token that provides access to a product or service. Does NOT represent ownership.
+
+### Fractionalization
+Dividing a single asset into smaller, tradeable pieces.
+
+### SPV (Special Purpose Vehicle)
+A legal entity created specifically to hold an asset being tokenized. Separates the asset from other business operations.
+
+### On-Chain Settlement
+The process of finalizing transactions directly on the blockchain, enabling instant and transparent transfers.
+
+### Proof of Reserves
+Cryptographic verification that the tokenized assets actually exist and are properly backed.
+
+## How Smart Contracts Enable Fractional Ownership
+
+Smart contracts automate the entire tokenization process:
+
+[COMPONENT:STEP_BLOCK]
+{
+  "title": "Smart Contract Automation",
+  "steps": [
+    "Asset is placed into custody and legally structured",
+    "Smart contract is deployed representing the asset",
+    "Tokens are minted according to ownership shares",
+    "Dividend distributions happen automatically to token holders",
+    "Transfer restrictions and compliance are enforced by code"
+  ]
+}
+[/COMPONENT]
+
+## Why Tokenization Matters for Financial Accessibility
+
+### Traditional Finance Barriers
+- High minimum investments ($10,000 - $1,000,000+)
+- Geographic restrictions
+- Accredited investor requirements
+- Limited trading hours
+- Slow settlement (T+2 or T+3 days)
+
+### DeFi Solutions
+- Low minimums (sometimes $1)
+- Global access with internet
+- Open to anyone
+- 24/7 trading
+- Near-instant settlement
+
+[COMPONENT:COMPARISON_TABLE]
+{
+  "title": "Traditional vs Tokenized Asset Investment",
+  "items": [
+    {
+      "traditional": "Minimum investment: $10,000 - $1,000,000+",
+      "defi": "Minimum investment: As low as $1 - $100"
+    },
+    {
+      "traditional": "Settlement time: 2-3 business days",
+      "defi": "Settlement time: Seconds to minutes"
+    },
+    {
+      "traditional": "Trading hours: Limited to market hours",
+      "defi": "Trading hours: 24/7/365"
+    },
+    {
+      "traditional": "Geographic restrictions apply",
+      "defi": "Accessible globally with internet"
+    }
+  ]
+}
+[/COMPONENT]
+
+## Real-World Example: Tokenizing a Building
+
+Let's walk through a concrete example:
+
+**The Asset**: A $10 million office building in Miami generating $800,000/year in rental income (8% yield)
+
+**Tokenization Process**:
+1. Building placed in an SPV (legal entity)
+2. 10,000 tokens created, each representing 0.01% ownership
+3. Each token priced at $1,000
+4. Rental income distributed monthly to token holders
+5. Tokens tradeable on compliant secondary markets
+
+**Investor Benefits**:
+- Invest $5,000 to own 5 tokens (0.05% of building)
+- Receive proportional rental income (~$40/month)
+- Sell tokens when you want liquidity
+- No property management hassles
+
+[COMPONENT:ALERT]
+{
+  "type": "warning",
+  "title": "Important Disclaimer",
+  "content": "This course is for educational purposes only and does not constitute financial, investment, or legal advice. RWA investments carry significant risks including potential loss of principal. Always conduct thorough due diligence and consult qualified professionals before investing."
+}
+[/COMPONENT]
+
+## Looking Ahead
+
+In the next module, we'll explore the different types of real-world assets being tokenized today, from U.S. Treasuries to real estate to commodities, and identify which asset classes have achieved the strongest product-market fit.
+
+*Module 2: Types of Real World Assets Being Tokenized*`,
+          quiz: {
+            id: "quiz-6-1",
+            title: "What is Asset Tokenization? - Knowledge Check",
+            description: "Test your understanding of tokenization fundamentals and key terminology.",
+            passingScore: 70,
+            timeLimit: 10,
+            maxAttempts: 3,
+            questions: [
+              {
+                id: "q6-1-1",
+                question: "What is tokenization in the context of real-world assets?",
+                type: "single",
+                options: [
+                  "Converting cryptocurrency to fiat currency",
+                  "Converting rights to an asset into a digital token on a blockchain",
+                  "Creating a new cryptocurrency",
+                  "Buying Bitcoin"
+                ],
+                correctAnswers: [1],
+                explanation: "Tokenization is the process of converting rights to an asset into a digital token on a blockchain, enabling fractional ownership and increased liquidity.",
+                points: 10
+              },
+              {
+                id: "q6-1-2",
+                question: "What is an SPV (Special Purpose Vehicle)?",
+                type: "single",
+                options: [
+                  "A type of cryptocurrency wallet",
+                  "A legal entity created specifically to hold an asset being tokenized",
+                  "A smart contract programming language",
+                  "A blockchain network"
+                ],
+                correctAnswers: [1],
+                explanation: "An SPV (Special Purpose Vehicle) is a legal entity created specifically to hold an asset being tokenized, separating it from other business operations for legal and regulatory clarity.",
+                points: 10
+              },
+              {
+                id: "q6-1-3",
+                question: "Which of the following are benefits of tokenized assets? (Select all that apply)",
+                type: "multiple",
+                options: [
+                  "Lower minimum investments",
+                  "24/7 trading availability",
+                  "Guaranteed returns",
+                  "Faster settlement times"
+                ],
+                correctAnswers: [0, 1, 3],
+                explanation: "Tokenized assets offer lower minimums, 24/7 trading, and faster settlement. However, NO investment guarantees returns - all investments carry risk.",
+                points: 15
+              },
+              {
+                id: "q6-1-4",
+                question: "What is the estimated current market size of tokenized real-world assets?",
+                type: "single",
+                options: [
+                  "$1 billion",
+                  "$10 billion",
+                  "$30+ billion",
+                  "$100 billion"
+                ],
+                correctAnswers: [2],
+                explanation: "The RWA tokenization market has grown to over $30 billion, with projections of $16 trillion by 2030 according to Boston Consulting Group.",
+                points: 10
+              },
+              {
+                id: "q6-1-5",
+                question: "True or False: A security token represents ownership in a regulated security and must comply with securities laws.",
+                type: "true-false",
+                options: ["True", "False"],
+                correctAnswers: [0],
+                explanation: "True. Security tokens represent ownership in regulated securities and must comply with applicable securities laws, unlike utility tokens which provide access to services.",
+                points: 10
+              }
+            ]
+          }
+        },
+        resources: [
+          {
+            title: "RWA Market Data",
+            url: "/analytics",
+            type: "link"
+          },
+          {
+            title: "Boston Consulting Group RWA Report",
+            url: "https://www.bcg.com/publications/2022/relevance-of-on-chain-asset-tokenization",
+            type: "link"
+          }
+        ]
+      },
+      {
+        id: "6-2",
+        title: "Types of Real World Assets Being Tokenized",
+        type: "text",
+        duration: 30,
+        content: {
+          text: `# Types of Real World Assets Being Tokenized
+
+The RWA tokenization landscape spans multiple asset classes, each with different risk profiles, yields, and market maturity. Understanding which assets have achieved product-market fit helps you identify the most established opportunities.
+
+## 1. U.S. Treasuries & Government Bonds
+
+**Market Leader**: This is the most successful RWA category with the strongest product-market fit.
+
+### Why Treasuries Dominate
+
+- **Safety**: Backed by U.S. government
+- **Yield**: Currently offering 4-5%+ returns
+- **Liquidity**: Massive underlying market
+- **Regulatory Clarity**: Well-understood legal framework
+
+### Leading Tokenized Treasury Products
+
+**BlackRock BUIDL**
+- Largest tokenized treasury fund
+- Backed by one of the world's biggest asset managers
+- Over $500 million in assets
+- Institutional-grade infrastructure
+
+**Ondo Finance (OUSG, USDY)**
+- OUSG: Tokenized U.S. Treasuries
+- USDY: Yield-bearing stablecoin backed by Treasuries
+- Accessible to DeFi users
+- Strong compliance framework
+
+**Franklin Templeton BENJI**
+- Major traditional asset manager
+- On-chain money market fund
+- Regulatory-compliant structure
+
+[COMPONENT:DID_YOU_KNOW]
+{
+  "fact": "BlackRock's BUIDL fund reached over $500 million in assets within months of launch, demonstrating massive institutional demand for tokenized treasuries."
+}
+[/COMPONENT]
+
+## 2. Private Credit & Lending
+
+Private credit tokenization brings institutional lending to the blockchain.
+
+### How It Works
+
+[COMPONENT:STEP_BLOCK]
+{
+  "title": "Private Credit Tokenization",
+  "steps": [
+    "Institutional borrower applies for credit",
+    "Credit analysis and risk assessment performed",
+    "Loan structured and placed in smart contract",
+    "Investors purchase tokens representing loan participation",
+    "Interest payments distributed automatically to token holders"
+  ]
+}
+[/COMPONENT]
+
+### Key Platforms
+
+**Centrifuge**
+- Pioneer in on-chain real-world credit
+- Partners with MakerDAO for liquidity
+- Finances invoices, real estate loans, and more
+- Transparent risk metrics on-chain
+
+**Maple Finance**
+- Institutional lending marketplace
+- Focus on crypto-native borrowers
+- Competitive yields for lenders
+- Rigorous borrower vetting
+
+**Goldfinch Protocol**
+- Lending to emerging markets
+- No collateral required from borrowers
+- Higher risk, higher potential returns
+
+## 3. Commodities
+
+Tokenized commodities bring physical assets to the blockchain.
+
+### Tokenized Gold
+
+**Paxos Gold (PAXG)**
+- Each token = 1 fine troy ounce of gold
+- Held in London Brink's vaults
+- Fully audited and regulated
+- Redeemable for physical gold
+
+**Matrixdock XAUm**
+- $45M+ market value
+- Gold-backed token
+- Transparent custody
+
+### Other Commodities
+
+- Silver tokenization emerging
+- Agricultural commodities in development
+- Energy credits being explored
+
+[COMPONENT:KEY_TAKEAWAY]
+{
+  "title": "Commodity Tokenization Benefits",
+  "content": "Tokenized commodities eliminate storage costs for investors, enable fractional ownership, and provide 24/7 liquidity for assets traditionally traded only during market hours."
+}
+[/COMPONENT]
+
+## 4. Real Estate
+
+Real estate tokenization enables fractional ownership of property.
+
+### Types of Tokenized Real Estate
+
+**Single Properties**
+- Individual buildings or units
+- Direct ownership through tokens
+- Rental income distributed to holders
+
+**Real Estate Funds**
+- Diversified property portfolios
+- Professional management
+- Lower individual property risk
+
+**REITs (Real Estate Investment Trusts)**
+- Tokenized versions of traditional REITs
+- Publicly traded real estate
+- More regulatory clarity
+
+### Leading Platforms
+
+**RealtyX**
+- Fractional real estate investment
+- Properties across multiple markets
+- Low minimum investments
+
+**Securitize**
+- Full-service tokenization platform
+- Regulatory-compliant structure
+- Institutional partnerships
+
+## 5. Equities & Funds
+
+Tokenized securities represent ownership in companies and investment funds.
+
+### Current Landscape
+
+**Ondo Global Markets**
+- Tokenized access to traditional equities
+- Expanding product range
+
+**Securitize MI4 Fund**
+- BlackRock-partnered investment product
+- Diversified portfolio exposure
+
+**Centrifuge JAAA**
+- Tokenized credit fund
+- Institutional-grade structure
+
+## Asset Class Comparison
+
+[COMPONENT:COMPARISON_TABLE]
+{
+  "title": "RWA Asset Classes Overview",
+  "items": [
+    {
+      "traditional": "Treasuries: Lower risk, 4-5% yield, highest liquidity",
+      "defi": "Best for: Conservative investors seeking stable yield"
+    },
+    {
+      "traditional": "Private Credit: Medium risk, 8-15% yield, lower liquidity",
+      "defi": "Best for: Yield seekers with higher risk tolerance"
+    },
+    {
+      "traditional": "Real Estate: Medium risk, 5-10% yield, variable liquidity",
+      "defi": "Best for: Diversification and tangible asset exposure"
+    },
+    {
+      "traditional": "Commodities: Price volatility, no yield, good liquidity",
+      "defi": "Best for: Inflation hedge and portfolio diversification"
+    }
+  ]
+}
+[/COMPONENT]
+
+## Market Maturity by Asset Class
+
+### Established (Product-Market Fit Achieved)
+- U.S. Treasuries
+- Government Bonds
+- Gold
+
+### Growing (Significant Traction)
+- Private Credit
+- Money Market Funds
+
+### Emerging (Early Stage)
+- Real Estate
+- Equities
+- Other Commodities
+
+[COMPONENT:ALERT]
+{
+  "type": "info",
+  "title": "Investment Consideration",
+  "content": "Start with more established asset classes like tokenized treasuries when beginning your RWA journey. These have the strongest track record, regulatory clarity, and institutional backing."
+}
+[/COMPONENT]
+
+## Looking Ahead
+
+In the next module, we'll dive into the technical mechanics of how RWA tokenization actually works, including smart contracts, legal structures, and the role of oracles in connecting real-world data to the blockchain.
+
+*Module 3: How RWA Tokenization Actually Works*`,
+          quiz: {
+            id: "quiz-6-2",
+            title: "Types of RWAs Being Tokenized - Knowledge Check",
+            description: "Test your understanding of different tokenized asset classes and their characteristics.",
+            passingScore: 70,
+            timeLimit: 10,
+            maxAttempts: 3,
+            questions: [
+              {
+                id: "q6-2-1",
+                question: "Which asset class has achieved the strongest product-market fit in RWA tokenization?",
+                type: "single",
+                options: [
+                  "Real Estate",
+                  "U.S. Treasuries and Government Bonds",
+                  "Commodities",
+                  "Private Credit"
+                ],
+                correctAnswers: [1],
+                explanation: "U.S. Treasuries and government bonds have achieved the strongest product-market fit due to their safety, regulatory clarity, and institutional backing (e.g., BlackRock BUIDL).",
+                points: 10
+              },
+              {
+                id: "q6-2-2",
+                question: "What does the Paxos Gold (PAXG) token represent?",
+                type: "single",
+                options: [
+                  "1 gram of gold",
+                  "1 fine troy ounce of gold",
+                  "A share in a gold mining company",
+                  "A gold futures contract"
+                ],
+                correctAnswers: [1],
+                explanation: "Each PAXG token represents 1 fine troy ounce of gold held in London Brink's vaults, fully audited and redeemable for physical gold.",
+                points: 10
+              },
+              {
+                id: "q6-2-3",
+                question: "Which of the following are benefits of tokenized treasuries? (Select all that apply)",
+                type: "multiple",
+                options: [
+                  "Backed by U.S. government",
+                  "Currently offering 4-5%+ yields",
+                  "Zero risk of any losses",
+                  "Well-understood legal framework"
+                ],
+                correctAnswers: [0, 1, 3],
+                explanation: "Tokenized treasuries offer government backing, competitive yields, and regulatory clarity. However, no investment is 'zero risk' - even government bonds carry interest rate and inflation risks.",
+                points: 15
+              },
+              {
+                id: "q6-2-4",
+                question: "What platform is known for pioneering on-chain real-world credit?",
+                type: "single",
+                options: [
+                  "Aave",
+                  "Centrifuge",
+                  "Uniswap",
+                  "Compound"
+                ],
+                correctAnswers: [1],
+                explanation: "Centrifuge is a pioneer in on-chain real-world credit, partnering with MakerDAO to finance invoices, real estate loans, and other real-world assets.",
+                points: 10
+              },
+              {
+                id: "q6-2-5",
+                question: "True or False: Real estate tokenization is currently more established than tokenized treasuries.",
+                type: "true-false",
+                options: ["True", "False"],
+                correctAnswers: [1],
+                explanation: "False. Tokenized treasuries are more established with stronger product-market fit. Real estate tokenization is still in the 'emerging' phase with growing adoption.",
+                points: 10
+              }
+            ]
+          }
+        },
+        resources: [
+          {
+            title: "Ondo Finance",
+            url: "https://ondo.finance",
+            type: "link"
+          },
+          {
+            title: "Centrifuge Protocol",
+            url: "https://centrifuge.io",
+            type: "link"
+          }
+        ]
+      },
+      {
+        id: "6-3",
+        title: "How RWA Tokenization Actually Works",
+        type: "text",
+        duration: 30,
+        content: {
+          text: `# How RWA Tokenization Actually Works
+
+Understanding the technical and legal mechanics of RWA tokenization helps you evaluate opportunities and identify potential risks. This module covers the end-to-end process of bringing real-world assets onto the blockchain.
+
+## The Tokenization Process
+
+[COMPONENT:STEP_BLOCK]
+{
+  "title": "Complete Tokenization Lifecycle",
+  "steps": [
+    "Asset Selection: Choose suitable asset for tokenization",
+    "Legal Structuring: Create SPV and establish legal ownership framework",
+    "Smart Contract Development: Deploy token contract with compliance rules",
+    "Token Issuance: Mint tokens representing asset ownership",
+    "Distribution: Sell tokens through compliant offering",
+    "Secondary Trading: Enable trading on approved markets",
+    "Ongoing Management: Handle distributions, reporting, and redemptions"
+  ]
+}
+[/COMPONENT]
+
+## Legal Structures Explained
+
+### What is an SPV?
+
+An **SPV (Special Purpose Vehicle)** is a separate legal entity created specifically to hold the tokenized asset.
+
+**Why Use an SPV?**
+- **Bankruptcy Protection**: Asset isolated from parent company risks
+- **Legal Clarity**: Clean ownership structure for token holders
+- **Regulatory Compliance**: Enables proper securities structuring
+- **Tax Efficiency**: Can optimize for different jurisdictions
+
+### Common SPV Structures
+
+**Delaware LLC**
+- Most common for U.S. tokenizations
+- Flexible legal structure
+- Well-understood by courts
+
+**Cayman Islands Entities**
+- Popular for international offerings
+- Tax-neutral jurisdiction
+- Investor-friendly regulations
+
+**Singapore Structures**
+- Growing in popularity
+- Clear crypto regulations
+- Asian market access
+
+[COMPONENT:KEY_TAKEAWAY]
+{
+  "title": "SPV Importance",
+  "content": "Always verify that a proper legal structure exists before investing in tokenized assets. The SPV protects your ownership rights and ensures the token has real legal backing."
+}
+[/COMPONENT]
+
+## Smart Contract Mechanics
+
+### Token Standards
+
+**ERC-20** (Basic Token)
+- Standard fungible token
+- All tokens identical
+- Widely supported
+
+**ERC-1400** (Security Token)
+- Purpose-built for securities
+- Transfer restrictions built-in
+- Compliance automation
+- Document attachments
+
+**ERC-3643** (T-REX)
+- Identity-verified transfers
+- Regulatory compliance
+- Permissioned trading
+
+### Compliance Automation
+
+Smart contracts can automatically enforce:
+
+- **Transfer Restrictions**: Only verified investors can receive tokens
+- **Holding Limits**: Maximum ownership per investor
+- **Lockup Periods**: Tokens can't be sold before certain dates
+- **Jurisdiction Checks**: Block transfers to restricted countries
+- **Accreditation Verification**: Ensure investor qualifications
+
+## Oracle Integration
+
+### What Are Oracles?
+
+Oracles are services that bring real-world data onto the blockchain. For RWAs, oracles provide:
+
+- **Price Feeds**: Current asset values
+- **NAV Updates**: Net Asset Value calculations
+- **Interest Rates**: For yield calculations
+- **Proof of Reserves**: Verification of backing assets
+
+### Chainlink: The Market Leader
+
+Chainlink provides most RWA oracle services:
+
+[COMPONENT:STEP_BLOCK]
+{
+  "title": "How Chainlink Proof of Reserves Works",
+  "steps": [
+    "Custodian holds real-world assets (gold, treasuries, etc.)",
+    "Chainlink node operators independently verify holdings",
+    "Data aggregated and published on-chain",
+    "Smart contracts check reserves before executing transactions",
+    "Any discrepancy triggers automatic alerts"
+  ]
+}
+[/COMPONENT]
+
+### NAV (Net Asset Value) Updates
+
+For tokenized funds, NAV updates tell you the current value of each token:
+
+- Traditional funds: NAV calculated once daily
+- Tokenized funds: Can update every block (seconds)
+- On-chain verification: Anyone can audit the calculation
+
+## Settlement and Redemption
+
+### Instant Settlement
+
+Unlike traditional securities (T+2 or T+3 days), tokenized assets can settle instantly:
+
+**Traditional Settlement**
+1. Trade executed
+2. 2-3 days clearing
+3. Ownership transferred
+
+**Tokenized Settlement**
+1. Trade executed
+2. Smart contract verifies conditions
+3. Ownership transferred immediately
+
+### Redemption Processes
+
+Different assets have different redemption mechanisms:
+
+**Tokenized Treasuries (e.g., BUIDL)**
+- Redeem tokens for USD
+- Usually 24-48 hour processing
+- Sent to verified bank account
+
+**Tokenized Gold (e.g., PAXG)**
+- Redeem for physical gold bars
+- Minimum typically 400+ ounces
+- Delivery to approved vaults
+
+**Real Estate Tokens**
+- Usually no direct redemption
+- Sell on secondary markets
+- Or hold until property sale
+
+## Major RWA Platforms Deep-Dive
+
+### Ondo Finance
+
+**Focus**: Treasury and bond tokenization
+
+**Products**:
+- OUSG (Tokenized Treasuries)
+- USDY (Yield-bearing stablecoin)
+- OMMF (Money Market Fund)
+
+**Key Features**:
+- Institutional partnerships
+- Regulatory compliance focus
+- DeFi integrations
+
+### Centrifuge
+
+**Focus**: Credit and invoice financing
+
+**How It Works**:
+1. Asset originators bring real-world credit
+2. Credit structured into pools
+3. Investors purchase pool tokens
+4. Loans paid back with interest
+
+**Key Features**:
+- Partner with MakerDAO
+- Transparent risk metrics
+- Diversified credit exposure
+
+### Maple Finance
+
+**Focus**: Institutional lending
+
+**Model**:
+- Pool delegates assess borrowers
+- Institutional-grade underwriting
+- Higher yields for lenders
+
+**Key Features**:
+- Focus on crypto-native borrowers
+- Professional risk management
+- Clear loan terms
+
+### Securitize
+
+**Focus**: Full-service tokenization platform
+
+**Services**:
+- End-to-end tokenization
+- Regulatory compliance
+- Transfer agent services
+- Secondary market infrastructure
+
+**Notable Partners**:
+- BlackRock
+- KKR
+- Hamilton Lane
+
+[COMPONENT:COMPARISON_TABLE]
+{
+  "title": "RWA Platform Comparison",
+  "items": [
+    {
+      "traditional": "Ondo: Treasury focus, high compliance, DeFi native",
+      "defi": "Best for: Stablecoin-like yields with real backing"
+    },
+    {
+      "traditional": "Centrifuge: Private credit, MakerDAO partner, diversified",
+      "defi": "Best for: Credit exposure with transparent risk"
+    },
+    {
+      "traditional": "Maple: Institutional lending, higher yields, curated borrowers",
+      "defi": "Best for: Experienced DeFi users seeking credit yields"
+    },
+    {
+      "traditional": "Securitize: Full platform, regulatory expertise, institutions",
+      "defi": "Best for: Institutional-grade tokenized securities"
+    }
+  ]
+}
+[/COMPONENT]
+
+[COMPONENT:ALERT]
+{
+  "type": "warning",
+  "title": "Technical Risk Awareness",
+  "content": "Smart contracts can have bugs. Oracles can provide incorrect data. Always verify that platforms have been audited and have track records before investing significant amounts."
+}
+[/COMPONENT]
+
+## Looking Ahead
+
+Now that you understand how RWA tokenization works technically and legally, the next module covers how to evaluate RWA investment opportunities, including due diligence frameworks and red flags to watch for.
+
+*Module 4: Evaluating RWA Investment Opportunities*`,
+          quiz: {
+            id: "quiz-6-3",
+            title: "How RWA Tokenization Works - Knowledge Check",
+            description: "Test your understanding of the technical mechanics behind RWA tokenization.",
+            passingScore: 70,
+            timeLimit: 10,
+            maxAttempts: 3,
+            questions: [
+              {
+                id: "q6-3-1",
+                question: "What is the primary purpose of an SPV in RWA tokenization?",
+                type: "single",
+                options: [
+                  "To mine cryptocurrency",
+                  "To isolate the asset and establish clean legal ownership for token holders",
+                  "To create the blockchain network",
+                  "To provide customer support"
+                ],
+                correctAnswers: [1],
+                explanation: "An SPV (Special Purpose Vehicle) isolates the tokenized asset, provides legal clarity for ownership, and protects token holders from parent company risks.",
+                points: 10
+              },
+              {
+                id: "q6-3-2",
+                question: "What do oracles provide in RWA tokenization?",
+                type: "single",
+                options: [
+                  "Legal advice for token issuers",
+                  "Real-world data like prices and proof of reserves on the blockchain",
+                  "Marketing services for tokenized assets",
+                  "Customer identity verification only"
+                ],
+                correctAnswers: [1],
+                explanation: "Oracles bring real-world data onto the blockchain, including price feeds, NAV updates, interest rates, and proof of reserves verification.",
+                points: 10
+              },
+              {
+                id: "q6-3-3",
+                question: "Which token standard was specifically designed for security tokens with compliance features?",
+                type: "single",
+                options: [
+                  "ERC-20",
+                  "ERC-721",
+                  "ERC-1400",
+                  "ERC-1155"
+                ],
+                correctAnswers: [2],
+                explanation: "ERC-1400 was designed specifically for security tokens, featuring built-in transfer restrictions, compliance automation, and document attachments.",
+                points: 10
+              },
+              {
+                id: "q6-3-4",
+                question: "Which of the following can smart contracts automatically enforce? (Select all that apply)",
+                type: "multiple",
+                options: [
+                  "Transfer restrictions to verified investors only",
+                  "Lockup periods before tokens can be sold",
+                  "Jurisdiction checks to block restricted countries",
+                  "Guaranteed positive returns for investors"
+                ],
+                correctAnswers: [0, 1, 2],
+                explanation: "Smart contracts can enforce transfer restrictions, lockups, and jurisdiction checks. However, no technology can guarantee positive returns.",
+                points: 15
+              },
+              {
+                id: "q6-3-5",
+                question: "True or False: Tokenized asset settlement typically takes 2-3 days, just like traditional securities.",
+                type: "true-false",
+                options: ["True", "False"],
+                correctAnswers: [1],
+                explanation: "False. Unlike traditional T+2 or T+3 settlement, tokenized assets can settle instantly as smart contracts verify conditions and transfer ownership immediately.",
+                points: 10
+              }
+            ]
+          }
+        },
+        resources: [
+          {
+            title: "Chainlink Proof of Reserves",
+            url: "https://chain.link/proof-of-reserve",
+            type: "link"
+          },
+          {
+            title: "Securitize Platform",
+            url: "https://securitize.io",
+            type: "link"
+          }
+        ]
+      },
+      {
+        id: "6-4",
+        title: "Evaluating RWA Investment Opportunities",
+        type: "text",
+        duration: 25,
+        content: {
+          text: `# Evaluating RWA Investment Opportunities
+
+Not all tokenized assets are created equal. This module provides a framework for evaluating RWA opportunities and identifying red flags before you invest.
+
+## Due Diligence Framework
+
+Before investing in any tokenized RWA, systematically evaluate these key areas:
+
+### 1. Verify the Underlying Asset Exists
+
+**Questions to Ask:**
+- Is there proof of reserves?
+- Who is the custodian?
+- Are independent audits available?
+- Can you verify holdings on-chain?
+
+**Green Flags:**
+✅ Regular third-party audits (Big 4 firms preferred)
+✅ On-chain proof of reserves via Chainlink
+✅ Reputable custodian (Brink's, State Street, etc.)
+✅ Transparent reporting dashboard
+
+### 2. Research the Issuing Entity
+
+**Questions to Ask:**
+- Who is behind this project?
+- What is their track record?
+- Are they properly licensed?
+- Do they have institutional backing?
+
+**Green Flags:**
+✅ Known, doxxed team with relevant experience
+✅ Proper regulatory licenses (SEC, MAS, etc.)
+✅ Institutional investors or partners
+✅ Operating history of 2+ years
+
+### 3. Understand the Legal Structure
+
+**Questions to Ask:**
+- What legal entity holds the asset?
+- In which jurisdiction is it registered?
+- What happens in bankruptcy?
+- What are your rights as a token holder?
+
+**Green Flags:**
+✅ Clear SPV structure explained
+✅ Reputable jurisdiction (Delaware, Singapore, etc.)
+✅ Legal opinion available
+✅ Token holder rights documented
+
+[COMPONENT:KEY_TAKEAWAY]
+{
+  "title": "Legal Structure Matters",
+  "content": "Without proper legal structure, your tokens may have no real claim to the underlying asset. Always verify that your token ownership is legally enforceable."
+}
+[/COMPONENT]
+
+### 4. Check Audit History and Security
+
+**Questions to Ask:**
+- Have the smart contracts been audited?
+- By which firms?
+- Were critical issues found and fixed?
+- Is there a bug bounty program?
+
+**Green Flags:**
+✅ Multiple audits from reputable firms (Trail of Bits, OpenZeppelin)
+✅ Audit reports publicly available
+✅ Active bug bounty program
+✅ No major hacks in history
+
+### 5. Analyze Fee Structure
+
+**Questions to Ask:**
+- What fees do you pay?
+- Are fees transparent?
+- How do fees compare to competitors?
+- Are there hidden costs?
+
+**Green Flags:**
+✅ All fees clearly documented
+✅ Competitive with similar products
+✅ No hidden redemption fees
+✅ Fee structure makes economic sense
+
+## Understanding Yield Sources
+
+Different RWAs generate yield through different mechanisms:
+
+### Treasury Yields
+- **Source**: Interest from U.S. government bonds
+- **Sustainability**: Highly sustainable (government-backed)
+- **Current Range**: 4-5%+
+- **Risk Level**: Low
+
+### Real Estate Income
+- **Source**: Rental payments from properties
+- **Sustainability**: Depends on occupancy and market
+- **Current Range**: 5-10%
+- **Risk Level**: Medium
+
+### Private Credit Interest
+- **Source**: Loan interest payments
+- **Sustainability**: Depends on borrower quality
+- **Current Range**: 8-15%
+- **Risk Level**: Medium-High
+
+### Commodity Appreciation
+- **Source**: Price changes (no yield)
+- **Sustainability**: Market-dependent
+- **Current Range**: Variable
+- **Risk Level**: Medium
+
+[COMPONENT:ALERT]
+{
+  "type": "warning",
+  "title": "Beware Unsustainable Yields",
+  "content": "If an RWA promises yields significantly higher than the underlying asset should generate, investigate carefully. Token emissions or unsustainable practices may be involved."
+}
+[/COMPONENT]
+
+## Risk Assessment
+
+### Counterparty Risk
+**Definition**: Risk that the entity managing the asset fails
+
+**Mitigation:**
+- Choose established, well-funded issuers
+- Verify proper insurance coverage
+- Understand bankruptcy procedures
+
+### Regulatory Risk
+**Definition**: Risk that regulations change unfavorably
+
+**Mitigation:**
+- Focus on compliant offerings
+- Diversify across jurisdictions
+- Monitor regulatory developments
+
+### Liquidity Risk
+**Definition**: Risk that you can't exit your position
+
+**Mitigation:**
+- Check daily trading volumes
+- Understand redemption terms
+- Don't over-allocate to illiquid assets
+
+### Smart Contract Risk
+**Definition**: Risk of bugs or vulnerabilities in code
+
+**Mitigation:**
+- Only use audited protocols
+- Check for historical exploits
+- Start with small amounts
+
+### Oracle Risk
+**Definition**: Risk of incorrect data feeds
+
+**Mitigation:**
+- Verify oracle providers
+- Understand data update frequency
+- Check for manipulation protections
+
+[COMPONENT:STEP_BLOCK]
+{
+  "title": "Risk Assessment Checklist",
+  "steps": [
+    "Identify all parties that could fail (issuer, custodian, oracle)",
+    "Research the regulatory status in your jurisdiction",
+    "Check liquidity depth and average daily volumes",
+    "Verify all smart contracts have been audited",
+    "Understand oracle dependencies and update mechanisms"
+  ]
+}
+[/COMPONENT]
+
+## Red Flags to Watch
+
+### 🚩 Immediate Warning Signs
+
+**No Proof of Reserves**
+- If you can't verify the asset exists, don't invest
+
+**Anonymous Team**
+- RWAs require legal accountability
+- Anonymous = no one to hold responsible
+
+**Unrealistic Yield Promises**
+- "50% APY on tokenized treasuries" = impossible
+- Real yields match underlying asset yields
+
+**No Audit or Legal Opinion**
+- Reputable projects invest in proper documentation
+- Missing audits suggest cutting corners
+
+**Unclear Redemption Process**
+- How do you get your money back?
+- If it's unclear, you may not be able to
+
+### 🚩 Yellow Flags (Investigate Further)
+
+- New platform with limited track record
+- Single point of failure in custody
+- Complex or unusual fee structures
+- Limited secondary market liquidity
+- Regulatory uncertainty in jurisdiction
+
+## Questions to Ask Before Investing
+
+[COMPONENT:KEY_TAKEAWAY]
+{
+  "title": "Pre-Investment Checklist",
+  "content": "1. Can I verify the asset exists and is properly held?\n2. Who exactly owns what if something goes wrong?\n3. How and when can I redeem my tokens?\n4. What are ALL the fees I'll pay?\n5. Has the smart contract been audited?\n6. What's the worst-case scenario and can I accept it?"
+}
+[/COMPONENT]
+
+## Looking Ahead
+
+Now that you can evaluate RWA opportunities, the final module covers market trends, institutional adoption, and how to safely get started with RWA investing.
+
+*Module 5: The Future of Tokenization and Getting Started*`,
+          quiz: {
+            id: "quiz-6-4",
+            title: "Evaluating RWA Opportunities - Knowledge Check",
+            description: "Test your understanding of due diligence and risk assessment for RWA investments.",
+            passingScore: 70,
+            timeLimit: 10,
+            maxAttempts: 3,
+            questions: [
+              {
+                id: "q6-4-1",
+                question: "What is the FIRST thing you should verify when evaluating an RWA investment?",
+                type: "single",
+                options: [
+                  "The potential returns",
+                  "That the underlying asset actually exists with proof of reserves",
+                  "The website design quality",
+                  "The number of Twitter followers"
+                ],
+                correctAnswers: [1],
+                explanation: "Verifying that the underlying asset exists through proof of reserves is the most fundamental step. Without this, you may be investing in nothing.",
+                points: 10
+              },
+              {
+                id: "q6-4-2",
+                question: "Which of the following are red flags when evaluating RWA investments? (Select all that apply)",
+                type: "multiple",
+                options: [
+                  "Anonymous team with no accountability",
+                  "Promises of 50% APY on tokenized treasuries",
+                  "Regular third-party audits by reputable firms",
+                  "No clear redemption process documented"
+                ],
+                correctAnswers: [0, 1, 3],
+                explanation: "Anonymous teams, unrealistic yields, and unclear redemption are all red flags. Third-party audits are actually a green flag indicating transparency.",
+                points: 15
+              },
+              {
+                id: "q6-4-3",
+                question: "What is counterparty risk in RWA investments?",
+                type: "single",
+                options: [
+                  "Risk that cryptocurrency prices fall",
+                  "Risk that the entity managing the asset fails",
+                  "Risk of smart contract bugs",
+                  "Risk of regulatory changes"
+                ],
+                correctAnswers: [1],
+                explanation: "Counterparty risk is the risk that the entity managing the asset (issuer, custodian, etc.) fails, potentially causing you to lose access to your investment.",
+                points: 10
+              },
+              {
+                id: "q6-4-4",
+                question: "What current yield range should you expect from tokenized U.S. Treasuries?",
+                type: "single",
+                options: [
+                  "0-2%",
+                  "4-5%+",
+                  "15-20%",
+                  "50%+"
+                ],
+                correctAnswers: [1],
+                explanation: "Tokenized treasuries currently offer 4-5%+ yields, matching actual U.S. Treasury rates. Significantly higher promised yields should be viewed with suspicion.",
+                points: 10
+              },
+              {
+                id: "q6-4-5",
+                question: "True or False: If a tokenized asset project doesn't have smart contract audits, it's still safe to invest large amounts.",
+                type: "true-false",
+                options: ["True", "False"],
+                correctAnswers: [1],
+                explanation: "False. Smart contract audits are crucial for identifying vulnerabilities. Investing in unaudited contracts is extremely risky.",
+                points: 10
+              }
+            ]
+          }
+        },
+        resources: [
+          {
+            title: "Trail of Bits Security Audits",
+            url: "https://www.trailofbits.com",
+            type: "link"
+          },
+          {
+            title: "OpenZeppelin Security",
+            url: "https://www.openzeppelin.com",
+            type: "link"
+          }
+        ]
+      },
+      {
+        id: "6-5",
+        title: "The Future of Tokenization and Getting Started",
+        type: "text",
+        duration: 25,
+        content: {
+          text: `# The Future of Tokenization and Getting Started
+
+This final module covers market trends, institutional adoption, regulatory developments, and practical steps to safely begin your RWA investment journey.
+
+## Market Size and Growth
+
+### Current State (2026)
+
+- **Total RWA Market**: $30+ billion in tokenized assets
+- **Leading Category**: Tokenized treasuries (60%+ of market)
+- **Growth Rate**: 224% sector growth since 2024
+- **Daily Volume**: Billions in on-chain RWA transactions
+
+### Growth Projections
+
+**Boston Consulting Group Estimate**: $16 trillion by 2030
+
+**Key Growth Drivers**:
+- Institutional adoption accelerating
+- Regulatory clarity improving
+- Technology infrastructure maturing
+- Yield-seeking in volatile markets
+
+[COMPONENT:DID_YOU_KNOW]
+{
+  "fact": "The RWA sector has grown over 224% since 2024, making it one of the fastest-growing segments in DeFi. Tokenized treasuries alone exceeded $500 million in BlackRock's BUIDL fund."
+}
+[/COMPONENT]
+
+## Institutional Adoption
+
+### Major Players Entering the Space
+
+**BlackRock**
+- Launched BUIDL (tokenized treasury fund)
+- $500M+ in assets within months
+- CEO Larry Fink: "Tokenization is the next evolution of markets"
+
+**Goldman Sachs**
+- Digital Assets Platform (GS DAP)
+- Focus on institutional tokenization
+- Multiple pilot projects completed
+
+**JPMorgan**
+- Onyx platform for blockchain banking
+- Tokenized repo transactions
+- Institutional blockchain network
+
+**Franklin Templeton**
+- BENJI tokenized money market fund
+- Early mover in regulated tokenization
+- Proven track record
+
+### Why Institutions Lead Adoption
+
+1. **Efficiency Gains**: Reduces back-office costs by 50%+
+2. **Faster Settlement**: Instant vs. T+2/T+3
+3. **24/7 Operations**: Global markets, always open
+4. **Transparency**: Real-time auditing and reporting
+5. **New Revenue**: Access to previously illiquid markets
+
+[COMPONENT:KEY_TAKEAWAY]
+{
+  "title": "Institutional Validation",
+  "content": "When BlackRock, Goldman Sachs, and JPMorgan all invest in RWA tokenization, it signals that this technology is here to stay. Institutional adoption brings credibility, liquidity, and regulatory engagement."
+}
+[/COMPONENT]
+
+## Regulatory Landscape
+
+### United States
+
+**SEC Approach**:
+- Security tokens subject to securities laws
+- Enforcement actions against non-compliant issuers
+- Regulatory sandbox discussions ongoing
+
+**Key Developments**:
+- Multiple tokenization-specific exemptions proposed
+- Growing clarity on compliant structures
+- State-level innovation (Wyoming, Texas)
+
+### European Union
+
+**MiCA (Markets in Crypto-Assets)**:
+- Comprehensive regulatory framework
+- Clear rules for tokenized securities
+- Takes effect 2024-2025
+
+**Impact**:
+- Legal certainty for EU operations
+- Passport for cross-border offerings
+- Higher compliance costs but clearer path
+
+### Singapore
+
+**MAS (Monetary Authority of Singapore)**:
+- Progressive, innovation-friendly approach
+- Project Guardian pilots with major banks
+- Clear licensing framework
+
+**Why Singapore Matters**:
+- Asia-Pacific gateway
+- Institutional hub for tokenization
+- Balance of innovation and protection
+
+### What Regulatory Clarity Means for Investors
+
+**Positive Effects**:
+- More institutional participation
+- Greater investor protection
+- Improved infrastructure
+- Higher liquidity
+
+**Considerations**:
+- Compliance may limit some offerings
+- KYC/AML requirements standard
+- Geographic restrictions possible
+
+## Challenges and Limitations
+
+### Current Limitations
+
+**Liquidity Fragmentation**
+- Many small markets instead of one large one
+- Can make exiting positions difficult
+- Improving as market matures
+
+**Regulatory Uncertainty**
+- Rules still evolving in many jurisdictions
+- Compliance costs can be high
+- Different rules in different countries
+
+**Technical Complexity**
+- Custody solutions still developing
+- Oracle reliability concerns
+- Smart contract risks remain
+
+**Education Gap**
+- Many investors don't understand RWAs
+- Advisors unfamiliar with technology
+- Slower mainstream adoption
+
+[COMPONENT:ALERT]
+{
+  "type": "info",
+  "title": "Market Maturity",
+  "content": "While challenges exist, the RWA market is rapidly maturing. Problems that seemed insurmountable 2 years ago are being solved. The trajectory is clearly positive for long-term adoption."
+}
+[/COMPONENT]
+
+## Getting Started Safely
+
+### Step-by-Step Approach
+
+[COMPONENT:STEP_BLOCK]
+{
+  "title": "Your RWA Investment Journey",
+  "steps": [
+    "Educate: Complete courses like this one before investing",
+    "Start Small: Begin with $100-500 in established products",
+    "Choose Safety: Start with tokenized treasuries (lowest risk)",
+    "Verify Everything: Check proof of reserves, audits, legal structure",
+    "Diversify Gradually: Only expand to other RWAs after gaining experience",
+    "Stay Updated: Follow regulatory developments in your jurisdiction"
+  ]
+}
+[/COMPONENT]
+
+### Recommended Starting Points
+
+**For Beginners (Lowest Risk)**:
+1. Tokenized treasuries (BUIDL, OUSG)
+2. Yield-bearing stablecoins (USDY)
+3. Regulated money market tokens
+
+**For Intermediate Users**:
+1. Private credit protocols (Centrifuge)
+2. Tokenized commodities (PAXG)
+3. Diversified RWA funds
+
+**For Experienced Users**:
+1. Individual real estate tokens
+2. Higher-yield credit pools
+3. Emerging market opportunities
+
+### Platform Recommendations
+
+**Most Established**:
+- Ondo Finance (treasuries)
+- Centrifuge (credit)
+- Paxos (gold)
+
+**Requirements Before Investing**:
+✅ KYC verification completed
+✅ Secure wallet setup
+✅ Understand redemption process
+✅ Reviewed all documentation
+
+## Course Summary
+
+### Key Takeaways from This Course
+
+**Module 1**: Tokenization converts real assets into tradeable digital tokens, enabling fractional ownership and increased accessibility.
+
+**Module 2**: Treasuries lead the RWA market; real estate, credit, and commodities are growing categories with different risk/reward profiles.
+
+**Module 3**: Legal structures (SPVs), smart contracts, and oracles work together to create secure tokenized assets.
+
+**Module 4**: Due diligence is essential - verify assets, research teams, check audits, and understand redemption before investing.
+
+**Module 5**: Institutional adoption validates RWA tokenization; start small with established products and expand gradually.
+
+[COMPONENT:KEY_TAKEAWAY]
+{
+  "title": "Final Course Summary",
+  "content": "RWA tokenization is transforming how we access investment opportunities. Start with education, proceed with caution, verify everything, and gradually build experience. The future of finance is being built on-chain."
+}
+[/COMPONENT]
+
+## Next Steps
+
+1. **Review**: Go back through any modules you need to solidify
+2. **Practice**: Explore RWA platforms without investing yet
+3. **Community**: Join our discussions to share learnings
+4. **Start Small**: When ready, make your first small investment
+
+[COMPONENT:ALERT]
+{
+  "type": "warning",
+  "title": "Final Disclaimer",
+  "content": "This course is for educational purposes only. RWA investments involve significant risks including potential loss of principal. Past performance does not guarantee future results. Always conduct your own research and consider consulting a qualified financial advisor before making investment decisions."
+}
+[/COMPONENT]
+
+## Congratulations!
+
+You've completed the **Tokenizing Real World Assets** course! This course was developed based on community voting through our Platform Roadmap, demonstrating the power of our community-driven approach.
+
+**Continue Learning:**
+- Explore our other DeFi courses
+- Join community discussions
+- Practice with small amounts first
+- Stay updated on RWA developments
+
+*Thank you for learning with 3rdeyeadvisors!*`,
+          quiz: {
+            id: "quiz-6-5",
+            title: "The Future of Tokenization - Knowledge Check",
+            description: "Test your understanding of market trends and safe practices for getting started with RWAs.",
+            passingScore: 70,
+            timeLimit: 10,
+            maxAttempts: 3,
+            questions: [
+              {
+                id: "q6-5-1",
+                question: "What is the projected RWA market size by 2030 according to Boston Consulting Group?",
+                type: "single",
+                options: [
+                  "$100 billion",
+                  "$1 trillion",
+                  "$16 trillion",
+                  "$100 trillion"
+                ],
+                correctAnswers: [2],
+                explanation: "Boston Consulting Group projects the RWA tokenization market will reach $16 trillion by 2030, representing massive growth from today's $30+ billion.",
+                points: 10
+              },
+              {
+                id: "q6-5-2",
+                question: "Which major asset manager launched the BUIDL tokenized treasury fund?",
+                type: "single",
+                options: [
+                  "Vanguard",
+                  "BlackRock",
+                  "Fidelity",
+                  "Charles Schwab"
+                ],
+                correctAnswers: [1],
+                explanation: "BlackRock launched BUIDL, which became the largest tokenized treasury fund with $500M+ in assets, signaling major institutional validation of RWA tokenization.",
+                points: 10
+              },
+              {
+                id: "q6-5-3",
+                question: "What type of RWA investment is recommended for beginners due to its lower risk profile?",
+                type: "single",
+                options: [
+                  "High-yield private credit pools",
+                  "Tokenized treasuries",
+                  "Emerging market real estate",
+                  "Leveraged commodity tokens"
+                ],
+                correctAnswers: [1],
+                explanation: "Tokenized treasuries (like BUIDL or OUSG) are recommended for beginners due to their government backing, regulatory clarity, and established track record.",
+                points: 10
+              },
+              {
+                id: "q6-5-4",
+                question: "Which of the following are reasons institutions are adopting tokenization? (Select all that apply)",
+                type: "multiple",
+                options: [
+                  "Faster settlement (instant vs T+2/T+3)",
+                  "Reduced back-office costs",
+                  "24/7 market operations",
+                  "Guaranteed investment returns"
+                ],
+                correctAnswers: [0, 1, 2],
+                explanation: "Institutions adopt tokenization for efficiency gains like faster settlement, cost reduction, and 24/7 operations. However, no investment technology guarantees returns.",
+                points: 15
+              },
+              {
+                id: "q6-5-5",
+                question: "True or False: This educational course constitutes financial advice and you should base all investment decisions solely on it.",
+                type: "true-false",
+                options: ["True", "False"],
+                correctAnswers: [1],
+                explanation: "False. This course is for educational purposes only and does not constitute financial advice. Always conduct your own research and consider consulting qualified professionals.",
+                points: 10
+              }
+            ]
+          }
+        },
+        resources: [
+          {
+            title: "3rdeyeadvisors Courses",
+            url: "/courses",
+            type: "link"
+          },
+          {
+            title: "Platform Roadmap",
+            url: "/roadmap",
+            type: "link"
+          },
+          {
+            title: "DeFi Analytics Dashboard",
+            url: "/analytics",
+            type: "link"
+          }
+        ]
       }
     ]
   }

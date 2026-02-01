@@ -39,7 +39,12 @@ const CourseDetail = () => {
   const { toast } = useToast();
   const isMobile = useIsMobile();
 
-  const isAnnualSubscriber = subscription?.plan === 'annual' || subscription?.isAdmin;
+  const isPremiumMember = 
+    subscription?.plan === 'annual' || 
+    subscription?.plan === 'founding_33' ||
+    subscription?.isFounder ||
+    subscription?.isAdmin ||
+    subscription?.isGrandfathered;
 
   const course = getCourseContent(parseInt(courseId || "0"));
   const progress = getCourseProgress(parseInt(courseId || "0"));
@@ -70,6 +75,11 @@ const CourseDetail = () => {
     
     return { isEarlyAccess: false, isLocked: false, releaseDate: null };
   }, [course, isAnnualSubscriber]);
+      return { isEarlyAccess: true, isLocked: !isPremiumMember };
+    }
+    
+    return { isEarlyAccess: false, isLocked: false };
+  }, [course, isPremiumMember]);
 
   // Track presence for admins
   usePresenceTracking({
