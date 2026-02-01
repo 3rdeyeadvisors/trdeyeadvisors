@@ -1,11 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Users, BookOpen, GraduationCap, TrendingUp, AlertTriangle } from 'lucide-react';
+import { Users, BookOpen, GraduationCap, TrendingUp, RefreshCw } from 'lucide-react';
 import { ParticipantTracker } from './ParticipantTracker';
 import { useAuth } from '@/components/auth/AuthProvider';
+import { Button } from '@/components/ui/button';
 
 interface ContentParticipation {
   contentId: string;
@@ -20,8 +21,10 @@ export const TutorialCourseParticipation = () => {
   const { user } = useAuth();
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [tutorials, setTutorials] = useState<ContentParticipation[]>([]);
   const [courses, setCourses] = useState<ContentParticipation[]>([]);
+  const [lastRefresh, setLastRefresh] = useState<Date | null>(null);
 
   // Tutorial definitions
   const tutorialDefinitions = [
@@ -38,11 +41,14 @@ export const TutorialCourseParticipation = () => {
     { id: 'dao-participation', title: 'DAO Participation & Governance', category: 'advanced' }
   ];
 
+  // All 6 courses - updated to match courseContent.ts
   const courseDefinitions = [
     { id: '1', title: 'DeFi Foundations' },
     { id: '2', title: 'Staying Safe in DeFi' },
     { id: '3', title: 'Earning with DeFi' },
-    { id: '4', title: 'Managing Your Own DeFi Portfolio' }
+    { id: '4', title: 'Managing Your Own DeFi Portfolio' },
+    { id: '5', title: 'Understanding DeFi Vaults' },
+    { id: '6', title: 'Tokenizing Real World Assets' }
   ];
 
   useEffect(() => {
@@ -52,6 +58,11 @@ export const TutorialCourseParticipation = () => {
   useEffect(() => {
     if (isAdmin) {
       fetchParticipationData();
+      // Auto-refresh every 15 seconds
+      const interval = setInterval(() => {
+        fetchParticipationData(true);
+      }, 15000);
+      return () => clearInterval(interval);
     }
   }, [isAdmin]);
 
@@ -69,7 +80,8 @@ export const TutorialCourseParticipation = () => {
     setLoading(false);
   };
 
-  const fetchParticipationData = async () => {
+  const fetchParticipationData = async (silent: boolean = false) => {
+    if (!silent) setRefreshing(true);
     try {
       // Fetch presence data for all content
       const thirtyMinutesAgo = new Date(Date.now() - 30 * 60 * 1000).toISOString();
@@ -123,9 +135,16 @@ export const TutorialCourseParticipation = () => {
 
       setTutorials(tutorialData);
       setCourses(courseData);
+      setLastRefresh(new Date());
     } catch (error) {
       console.error('Error fetching participation data:', error);
+    } finally {
+      setRefreshing(false);
     }
+  };
+
+  const handleManualRefresh = () => {
+    fetchParticipationData(false);
   };
 
   if (!isAdmin || loading) return null;
@@ -138,8 +157,25 @@ export const TutorialCourseParticipation = () => {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-foreground">Tutorial & Course Participation</h2>
-          <p className="text-muted-foreground">Real-time tracking of active users in tutorials and courses</p>
+          <p className="text-muted-foreground">
+            Real-time tracking of active users in tutorials and courses
+            {lastRefresh && (
+              <span className="ml-2 text-xs">
+                (Updated: {lastRefresh.toLocaleTimeString()})
+              </span>
+            )}
+          </p>
         </div>
+        <Button 
+          variant="outline" 
+          size="sm" 
+          onClick={handleManualRefresh}
+          disabled={refreshing}
+          className="gap-2"
+        >
+          <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
+          Refresh
+        </Button>
       </div>
 
       {/* Summary Cards */}
