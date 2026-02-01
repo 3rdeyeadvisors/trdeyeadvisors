@@ -284,7 +284,7 @@ const Roadmap = () => {
                 </p>
               </div>
 
-              <div className="grid gap-6 md:grid-cols-2">
+              <div className="grid gap-6 md:grid-cols-2 items-start">
                 {/* Submit Form */}
                 <FeatureSuggestionForm
                   canSubmit={canVote}
@@ -296,7 +296,7 @@ const Roadmap = () => {
                 <FeatureSuggestionsList
                   suggestions={suggestions}
                   loading={suggestionsLoading}
-                  maxItems={5}
+                  maxItems={20}
                 />
               </div>
             </div>

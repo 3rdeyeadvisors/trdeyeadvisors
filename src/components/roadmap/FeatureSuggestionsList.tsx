@@ -68,7 +68,7 @@ export const FeatureSuggestionsList = ({
   }
 
   return (
-    <>
+    <div>
       <Card className="border-border/50">
         <CardHeader className="pb-3 text-center">
           <CardTitle className="text-base md:text-lg flex flex-col items-center gap-2">
@@ -79,44 +79,48 @@ export const FeatureSuggestionsList = ({
             {suggestions.length} idea{suggestions.length !== 1 ? 's' : ''} submitted
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-2 pt-0">
-          {displayedSuggestions.map((suggestion) => {
-            const status = statusConfig[suggestion.status];
-            const StatusIcon = status.icon;
+        <CardContent className="pt-0 px-0">
+          <ScrollArea className="max-h-[500px] px-6">
+            <div className="space-y-2 pb-4">
+              {displayedSuggestions.map((suggestion) => {
+                const status = statusConfig[suggestion.status];
+                const StatusIcon = status.icon;
 
-            return (
-              <button
-                key={suggestion.id}
-                onClick={() => setSelectedSuggestion(suggestion)}
-                className="w-full p-4 rounded-lg border border-border/50 bg-card/50 hover:bg-muted/50 hover:border-primary/30 transition-all group"
-              >
-                <div className="flex flex-col items-center gap-3 text-center">
-                  <Badge variant="outline" className={`text-xs py-0.5 ${status.className}`}>
-                    <StatusIcon className="w-3 h-3 mr-1" />
-                    {status.label}
-                  </Badge>
-                  <h4 className="font-medium text-sm break-words group-hover:text-primary transition-colors">
-                    {suggestion.title}
-                  </h4>
-                  <p className="text-xs text-muted-foreground line-clamp-2 break-words">
-                    {suggestion.description}
-                  </p>
-                  <div className="flex items-center justify-between w-full flex-wrap gap-2 text-xs text-muted-foreground/70 pt-1 border-t border-border/30">
-                    <span>by {suggestion.submitter_name}</span>
-                    <span className="flex items-center gap-1">
-                      Click to read more <ChevronRight className="w-3 h-3" />
-                    </span>
-                  </div>
-                </div>
-              </button>
-            );
-          })}
+                return (
+                  <button
+                    key={suggestion.id}
+                    onClick={() => setSelectedSuggestion(suggestion)}
+                    className="w-full p-4 rounded-lg border border-border/50 bg-card/50 hover:bg-muted/50 hover:border-primary/30 transition-all group"
+                  >
+                    <div className="flex flex-col items-center gap-3 text-center">
+                      <Badge variant="outline" className={`text-xs py-0.5 ${status.className}`}>
+                        <StatusIcon className="w-3 h-3 mr-1" />
+                        {status.label}
+                      </Badge>
+                      <h4 className="font-medium text-sm break-words group-hover:text-primary transition-colors">
+                        {suggestion.title}
+                      </h4>
+                      <p className="text-xs text-muted-foreground line-clamp-2 break-words">
+                        {suggestion.description}
+                      </p>
+                      <div className="flex items-center justify-between w-full flex-wrap gap-2 text-xs text-muted-foreground/70 pt-1 border-t border-border/30">
+                        <span>by {suggestion.submitter_name}</span>
+                        <span className="flex items-center gap-1">
+                          Click to read more <ChevronRight className="w-3 h-3" />
+                        </span>
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
 
-          {suggestions.length > maxItems && (
-            <p className="text-xs text-center text-muted-foreground pt-2">
-              +{suggestions.length - maxItems} more ideas
-            </p>
-          )}
+              {suggestions.length > maxItems && (
+                <p className="text-xs text-center text-muted-foreground pt-2">
+                  +{suggestions.length - maxItems} more ideas
+                </p>
+              )}
+            </div>
+          </ScrollArea>
         </CardContent>
       </Card>
 
@@ -168,6 +172,6 @@ export const FeatureSuggestionsList = ({
           )}
         </DialogContent>
       </Dialog>
-    </>
+    </div>
   );
 };
