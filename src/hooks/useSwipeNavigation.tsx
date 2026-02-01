@@ -4,6 +4,7 @@ interface SwipeHandlers {
   onTouchStart: (e: React.TouchEvent) => void;
   onTouchMove: (e: React.TouchEvent) => void;
   onTouchEnd: (e: React.TouchEvent) => void;
+  onTouchCancel: () => void;
 }
 
 interface UseSwipeNavigationOptions {
@@ -41,6 +42,13 @@ export const useSwipeNavigation = ({
     touchEndY.current = e.touches[0].clientY;
   }, []);
 
+  const onTouchCancel = useCallback(() => {
+    touchStartX.current = 0;
+    touchStartY.current = 0;
+    touchEndX.current = 0;
+    touchEndY.current = 0;
+  }, []);
+
   const onTouchEnd = useCallback((e: React.TouchEvent) => {
     const deltaX = touchStartX.current - touchEndX.current;
     const deltaY = touchStartY.current - touchEndY.current;
@@ -49,8 +57,9 @@ export const useSwipeNavigation = ({
 
     // Check if this is a horizontal swipe:
     // - Must exceed threshold
-    // - Horizontal movement must be at least 1.5x vertical (to distinguish from scrolling)
-    const isHorizontalSwipe = absDeltaX > threshold && absDeltaX > absDeltaY * 1.5;
+    // - Horizontal movement must be greater than vertical (to distinguish from scrolling)
+    // - Relaxed from 1.5x to 1x for better reliability on mobile
+    const isHorizontalSwipe = absDeltaX > threshold && absDeltaX > absDeltaY;
 
     if (isHorizontalSwipe) {
       if (preventDefaultOnSwipe) {
@@ -65,7 +74,7 @@ export const useSwipeNavigation = ({
     }
     
     // Vertical swipe handling (optional)
-    const isVerticalSwipe = absDeltaY > threshold && absDeltaY > absDeltaX * 1.5;
+    const isVerticalSwipe = absDeltaY > threshold && absDeltaY > absDeltaX;
     if (isVerticalSwipe) {
       if (preventDefaultOnSwipe) {
         e.preventDefault();
@@ -79,5 +88,5 @@ export const useSwipeNavigation = ({
     }
   }, [onSwipeLeft, onSwipeRight, onSwipeUp, onSwipeDown, threshold, preventDefaultOnSwipe]);
 
-  return { onTouchStart, onTouchMove, onTouchEnd };
+  return { onTouchStart, onTouchMove, onTouchEnd, onTouchCancel };
 };

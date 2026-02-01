@@ -14,6 +14,7 @@ import { getCourseContent } from "@/data/courseContent";
 import { ArrowLeft, BookOpen, List, Play } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { DesktopOnlyNotice } from "@/components/DesktopOnlyNotice";
+import { OrientationSuggestion } from "@/components/course/OrientationSuggestion";
 
 const ModuleViewer = () => {
   const { courseId, moduleId } = useParams();
@@ -79,6 +80,7 @@ const ModuleViewer = () => {
 
   return (
     <div className="min-h-screen py-8 sm:py-12 md:py-20">
+      <OrientationSuggestion />
       <div className="w-full px-3 sm:px-4 md:px-6 text-center sm:text-left">
         {/* Desktop Only Notice for Mobile Users */}
         {isMobile && <DesktopOnlyNotice feature="interactive course content and community features" />}

@@ -255,7 +255,7 @@ const CourseDetail = () => {
           {isMobile && (
             <div className="text-center py-2.5 sm:py-3 px-3 sm:px-4 mb-3 sm:mb-4 bg-muted/30 rounded-lg border border-border mx-2 sm:mx-0">
               <p className="text-xs sm:text-sm text-muted-foreground break-words leading-relaxed">
-                Fully usable on mobile. For the best experience, we recommend using a desktop or laptop.
+                Fully usable on mobile. For the best experience, we recommend rotating your device to landscape or using a desktop.
               </p>
             </div>
           )}

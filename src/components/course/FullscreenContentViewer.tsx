@@ -18,6 +18,8 @@ interface FullscreenContentViewerProps {
   onNext: () => void;
   onPrevious: () => void;
   courseTitle?: string;
+  type?: 'text' | 'video' | 'interactive';
+  videoUrl?: string;
 }
 
 export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = ({
@@ -29,7 +31,9 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
   totalModules,
   onNext,
   onPrevious,
-  courseTitle
+  courseTitle,
+  type = 'text',
+  videoUrl
 }) => {
   const { isFullscreen, isSupported, enter, exit, containerRef } = useFullscreen();
   const contentRef = useRef<HTMLDivElement>(null);
@@ -187,10 +191,20 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
         <div
           ref={contentRef}
           className="flex-1 overflow-y-auto px-4 py-6 md:px-8 lg:px-16 xl:px-24"
-          style={{ touchAction: 'manipulation' }}
+          style={{ touchAction: 'pan-y' }}
           {...swipeHandlers}
         >
           <div className="max-w-4xl mx-auto">
+            {type === 'video' && videoUrl && (
+              <div className="aspect-video bg-black rounded-xl overflow-hidden mb-8 shadow-2xl border border-border">
+                <iframe
+                  src={videoUrl}
+                  className="w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            )}
             <EnhancedMarkdownRenderer content={content} />
           </div>
         </div>

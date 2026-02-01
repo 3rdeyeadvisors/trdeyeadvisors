@@ -18,9 +18,6 @@ export const useFullscreen = (): FullscreenAPI => {
   useEffect(() => {
     const checkSupport = () => {
       try {
-        // Check if we're in an iframe
-        const inIframe = window.self !== window.top;
-        
         // Check if fullscreen API is available
         const hasFullscreenAPI = !!(
           document.documentElement.requestFullscreen ||
@@ -28,8 +25,9 @@ export const useFullscreen = (): FullscreenAPI => {
           (document.documentElement as any).msRequestFullscreen
         );
         
-        // Fullscreen often doesn't work in iframes without allowfullscreen attribute
-        setIsSupported(hasFullscreenAPI && !inIframe);
+        // Allow attempting fullscreen regardless of iframe status
+        // The browser will handle if it's blocked by the iframe 'allow' attribute
+        setIsSupported(hasFullscreenAPI);
       } catch {
         // If we can't access window.top, we're in a cross-origin iframe
         setIsSupported(false);
