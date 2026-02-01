@@ -1,5 +1,6 @@
 import { useCallback, useRef, useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/components/auth/AuthProvider';
 
 // Pre-defined sound prompts for ElevenLabs
 const SOUND_PROMPTS: Record<string, string> = {
@@ -46,7 +47,12 @@ const setSoundEnabledStorage = (enabled: boolean) => {
 // Simple audio cache using data URIs
 const audioCache: Record<string, string> = {};
 
+// Track failed attempts to avoid spamming
+const failedAttempts: Record<string, number> = {};
+const MAX_RETRIES = 2;
+
 export const useAchievementSounds = () => {
+  const { user } = useAuth();
   const [soundEnabled, setSoundEnabled] = useState(getSoundEnabled);
   const [isLoading, setIsLoading] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -58,11 +64,21 @@ export const useAchievementSounds = () => {
     setSoundEnabledStorage(newValue);
   }, [soundEnabled]);
 
-  // Generate and cache a sound
+  // Generate and cache a sound - only for authenticated users
   const generateSound = useCallback(async (soundType: SoundType): Promise<string | null> => {
+    // Don't generate sounds for unauthenticated users
+    if (!user) {
+      return null;
+    }
+
     // Check cache first
     if (audioCache[soundType]) {
       return audioCache[soundType];
+    }
+
+    // Check if we've already failed too many times for this sound
+    if (failedAttempts[soundType] && failedAttempts[soundType] >= MAX_RETRIES) {
+      return null;
     }
 
     const prompt = SOUND_PROMPTS[soundType];
@@ -80,7 +96,12 @@ export const useAchievementSounds = () => {
       });
 
       if (error) {
-        console.error('Sound generation failed:', error.message);
+        // Track failed attempt
+        failedAttempts[soundType] = (failedAttempts[soundType] || 0) + 1;
+        // Only log first failure, not spam
+        if (failedAttempts[soundType] === 1) {
+          console.warn('Sound generation unavailable:', soundType);
+        }
         return null;
       }
 
@@ -93,12 +114,13 @@ export const useAchievementSounds = () => {
       
       return null;
     } catch (error) {
-      console.error('Error generating sound:', error);
+      // Track failed attempt
+      failedAttempts[soundType] = (failedAttempts[soundType] || 0) + 1;
       return null;
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [user]);
 
   // Play a sound
   const playSound = useCallback(async (soundType: SoundType) => {
@@ -252,19 +274,26 @@ export const useAchievementSounds = () => {
     }
   }, [soundEnabled]);
 
-  // Preload common sounds on mount
+  // Preload common sounds on mount - only for authenticated users
   useEffect(() => {
-    if (soundEnabled) {
-      // Preload in background
-      const preloadSounds = async () => {
-        const commonSounds: SoundType[] = ['correctAnswer', 'wrongAnswer', 'pointsEarned'];
-        for (const sound of commonSounds) {
-          await generateSound(sound);
-        }
-      };
-      preloadSounds().catch(console.error);
+    // Only preload sounds for authenticated users to avoid unnecessary API calls
+    if (soundEnabled && user) {
+      // Preload in background with delay to not block initial render
+      const preloadTimeout = setTimeout(() => {
+        const preloadSounds = async () => {
+          const commonSounds: SoundType[] = ['correctAnswer', 'wrongAnswer', 'pointsEarned'];
+          for (const sound of commonSounds) {
+            await generateSound(sound);
+          }
+        };
+        preloadSounds().catch(() => {
+          // Silently fail - fallback sounds will be used
+        });
+      }, 3000); // Delay preloading by 3 seconds
+      
+      return () => clearTimeout(preloadTimeout);
     }
-  }, [soundEnabled, generateSound]);
+  }, [soundEnabled, user, generateSound]);
 
   // Cleanup audio URLs on unmount
   useEffect(() => {
