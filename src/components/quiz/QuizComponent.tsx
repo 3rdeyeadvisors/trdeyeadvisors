@@ -127,6 +127,9 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
       ...prev,
       [questionId]: answer
     }));
+    
+    // Play a subtle sound when selecting an answer
+    playCorrectAnswer();
   };
 
   const handleNext = () => {
