@@ -10,6 +10,7 @@ import {
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/contexts/CartContext";
+import { useAchievementSounds } from "@/hooks/useAchievementSounds";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -26,12 +27,14 @@ const Navigation = () => {
   const location = useLocation();
   const { user, signOut } = useAuth();
   const { toast } = useToast();
+  const { playClick, playMenuOpen, playMenuClose, playNavigate } = useAchievementSounds();
 
-  // Close menu on route change
+  // Close menu on route change and play navigation sound
   useEffect(() => {
     setIsOpen(false);
     setExpandedSection(null);
-  }, [location.pathname]);
+    playNavigate();
+  }, [location.pathname, playNavigate]);
 
   // Prevent body scroll when menu is open
   useEffect(() => {
@@ -104,7 +107,23 @@ const Navigation = () => {
   };
 
   const toggleSection = (section: string) => {
-    setExpandedSection(expandedSection === section ? null : section);
+    const newExpanded = expandedSection === section ? null : section;
+    setExpandedSection(newExpanded);
+    if (newExpanded) {
+      playMenuOpen();
+    } else {
+      playMenuClose();
+    }
+  };
+
+  const toggleMenu = () => {
+    const newIsOpen = !isOpen;
+    setIsOpen(newIsOpen);
+    if (newIsOpen) {
+      playMenuOpen();
+    } else {
+      playMenuClose();
+    }
   };
 
   const isActive = (path: string) => location.pathname === path;
@@ -267,7 +286,7 @@ const Navigation = () => {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => setIsOpen(!isOpen)}
+              onClick={toggleMenu}
               aria-label="Toggle navigation menu"
             >
               {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
