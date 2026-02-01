@@ -133,7 +133,7 @@ export const RoadmapCard = ({
       return (
         <div className="flex items-center gap-1 text-emerald-400">
           <Check className="w-3.5 h-3.5" />
-          <span className="text-xs font-medium">Shipped</span>
+          <span className="text-xs font-medium">Completed</span>
         </div>
       );
     }
