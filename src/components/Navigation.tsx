@@ -10,7 +10,7 @@ import {
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/contexts/CartContext";
-import { useAchievementSounds } from "@/hooks/useAchievementSounds";
+
 import {
   NavigationMenu,
   NavigationMenuContent,
