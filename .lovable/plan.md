@@ -1,92 +1,97 @@
 
-# Fix Community Ideas Section Layout Issues
+
+# Fix Feature Suggestion Form Layout Issues
 
 ## Problem Analysis
 
-The "Recent Community Ideas" section on the `/roadmap` page has visual issues on certain devices:
+The "Submit Your Feature Idea" box on the `/roadmap` page has two issues:
 
-1. **Title and badge overlap**: The horizontal flex layout (`flex-col sm:flex-row`) causes the title and status badge to collide on mid-sized screens
-2. **Content not centered**: Headers and card content are left-aligned when they should be centered, per your design preferences
-3. **Tight spacing causes overlap**: Description text, submitter name, and "Click to read more" text compete for space
-4. **Inconsistent mobile behavior**: The layout breaks between mobile breakpoints
+1. **Overextended appearance**: The form content (inputs, buttons) is left-aligned while the header is centered, creating visual inconsistency
+2. **Content not centered**: The input labels, character counts, and action buttons don't follow the centered design pattern used in the header
+
+## Current Structure
+
+```text
+       [Icon]              <- centered
+  [Title + Description]    <- centered  
+     [Open Button]         <- centered
+------------------------
+[Title label] [count]      <- left-aligned (issue)
+[Input field............]
+[Desc label] [count]       <- left-aligned (issue)  
+[Textarea................]
+[Submit] [Cancel]          <- left-aligned (issue)
+```
 
 ## Solution
 
-Restructure the suggestion item cards to use a stacked (vertical) layout consistently, with proper centering and spacing to prevent overlap.
+Center the form content to match the header, while keeping form inputs full-width for usability.
 
 ## Files to Modify
 
 | File | Changes |
 |------|---------|
-| `src/components/roadmap/FeatureSuggestionsList.tsx` | Fix card layout, center content, add proper spacing |
+| `src/components/roadmap/FeatureSuggestionForm.tsx` | Center form content, center action buttons |
 
 ## Detailed Changes
 
-### 1. Center the Card Header
-Change the `CardTitle` from inline flex to centered text:
+### 1. Center the CardContent Container
+Add `text-center` and adjust the internal layout:
+
 ```text
-Before: flex items-center gap-2
-After:  flex flex-col items-center text-center gap-2
+Line 96: Add items-center to the CardContent
+CardContent className="space-y-4 pt-0" 
+  → CardContent className="space-y-4 pt-0 flex flex-col items-center"
 ```
 
-### 2. Restructure Suggestion Item Cards
-Replace the problematic horizontal flex layout with a cleaner stacked design:
+### 2. Constrain Form Width
+Add a max-width container for the form fields to prevent overextension:
 
-**Current structure (causes overlap):**
 ```text
-[Title -------- Badge]  <- fights for horizontal space
-[Description text....]
-[Submitter | Read more] <- squished together
+Wrap form inputs in a container with:
+- w-full max-w-md (limits width on larger screens)
+- space-y-4 (maintains vertical spacing)
 ```
 
-**Fixed structure (prevents overlap):**
+### 3. Center Input Labels and Character Counts
+The label/count rows (lines 99-104, 115-120):
+
 ```text
-       [Badge]           <- centered at top
-       [Title]           <- centered, with wrap
-  [Description text]     <- centered
-[Submitter] [Read more]  <- proper flex spacing
+Before: flex items-center justify-between
+After:  flex items-center justify-between w-full
 ```
 
-### 3. Specific CSS Changes
+### 4. Center Action Buttons
+Change action buttons layout (lines 133-154):
 
-For each suggestion card button:
-- Change from `flex flex-col sm:flex-row` to `flex flex-col items-center`
-- Add `text-center` to ensure text wraps properly
-- Increase vertical gap from `gap-2` to `gap-3`
-- Move badge above title for consistent visual hierarchy
-- Add `break-words` to prevent text overflow
-- Increase padding from `p-3` to `p-4` for breathing room
+```text
+Before: flex flex-col sm:flex-row items-stretch sm:items-center gap-2
+After:  flex flex-col sm:flex-row items-center justify-center gap-2
+```
 
-### 4. Footer Row Fix
-The submitter name and "Click to read more" row:
-- Keep as `flex items-center justify-between` but add `flex-wrap`
-- Add `gap-2` to prevent collision when wrapping
-- Ensure minimum width constraints don't cause horizontal scroll
+Also remove `w-full sm:w-auto` from buttons to let them size naturally when centered.
 
 ## Code Changes Summary
 
 ```text
-File: src/components/roadmap/FeatureSuggestionsList.tsx
+File: src/components/roadmap/FeatureSuggestionForm.tsx
 
-Line 73-76 (CardHeader):
-- Add text-center and items-center to center the header content
+Line 96 (CardContent):
+- Add flex flex-col items-center to center all form content
 
-Lines 88-111 (suggestion button):
-- Restructure to vertical stacked layout
-- Move badge to top, centered
-- Center title and description
-- Add proper spacing (gap-3 instead of gap-2)
-- Add text-center and break-words classes
-- Increase padding from p-3 to p-4
+Lines 97-131 (form inputs):
+- Wrap in a div with "w-full max-w-md space-y-4" to constrain width
 
-Lines 105-109 (footer row):
-- Add flex-wrap and gap-2 to prevent overlap
+Lines 133-154 (action buttons):
+- Change to "flex flex-col sm:flex-row items-center justify-center gap-2"
+- Update button widths to "sm:w-auto" (remove full-width on mobile for centering)
 ```
 
 ## Expected Result
 
 After these changes:
-- All content in the community ideas cards will be properly centered
-- No overlapping text on any screen size
-- Consistent visual hierarchy: Badge, Title, Description, Footer
-- Matches your preference for centered, compact layouts
+- Form content will be centered within the card, matching the header
+- Inputs will have a reasonable max-width preventing overextension
+- Action buttons will be centered beneath the form
+- Maintains the centered, compact design pattern used throughout the roadmap page
+
