@@ -93,11 +93,11 @@ export const FeatureSuggestionForm = ({
         </CollapsibleTrigger>
 
         <CollapsibleContent>
-          <CardContent className="space-y-4 pt-0 flex flex-col items-center">
-            <div className="w-full max-w-md space-y-4">
+          <CardContent className="pt-0 flex flex-col items-center justify-center">
+            <div className="w-full max-w-md space-y-4 text-center">
               {/* Title Input */}
               <div className="space-y-2">
-                <div className="flex items-center justify-between w-full">
+                <div className="flex items-center justify-between w-full text-left">
                   <label className="text-sm font-medium">Title</label>
                   <span className="text-xs text-muted-foreground">
                     {title.length}/{MAX_TITLE_LENGTH}
@@ -114,7 +114,7 @@ export const FeatureSuggestionForm = ({
 
               {/* Description Input */}
               <div className="space-y-2">
-                <div className="flex items-center justify-between w-full">
+                <div className="flex items-center justify-between w-full text-left">
                   <label className="text-sm font-medium">Description</label>
                   <span className="text-xs text-muted-foreground">
                     {description.length}/{MAX_DESCRIPTION_LENGTH}
