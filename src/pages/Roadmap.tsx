@@ -31,8 +31,7 @@ const Roadmap = () => {
     submitSuggestion,
   } = useFeatureSuggestions();
 
-  // Calculate max votes for progress bars (use net_votes)
-  const maxVotes = Math.max(...items.map((i) => Math.abs(i.net_votes)), 1);
+  // Group items by status
 
   // Group items by status
   const proposedItems = items.filter((i) => i.status === 'proposed' || !i.status);
@@ -179,7 +178,6 @@ const Roadmap = () => {
                           noVotes={item.no_votes}
                           netVotes={item.net_votes}
                           userVoteType={item.user_vote_type}
-                          maxVotes={maxVotes}
                           canVote={canVote}
                           votingTier={votingTier}
                           voteWeight={voteWeight}
@@ -218,7 +216,6 @@ const Roadmap = () => {
                           noVotes={item.no_votes}
                           netVotes={item.net_votes}
                           userVoteType={item.user_vote_type}
-                          maxVotes={maxVotes}
                           canVote={canVote}
                           votingTier={votingTier}
                           voteWeight={voteWeight}
@@ -257,7 +254,6 @@ const Roadmap = () => {
                           noVotes={item.no_votes}
                           netVotes={item.net_votes}
                           userVoteType={item.user_vote_type}
-                          maxVotes={maxVotes}
                           canVote={canVote}
                           votingTier={votingTier}
                           voteWeight={voteWeight}
