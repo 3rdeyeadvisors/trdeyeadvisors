@@ -10,7 +10,6 @@ import { FeatureSuggestion } from '@/hooks/useFeatureSuggestions';
 interface FeatureSuggestionsListProps {
   suggestions: FeatureSuggestion[];
   loading: boolean;
-  maxItems?: number;
 }
 
 const statusConfig = {
@@ -38,17 +37,14 @@ const statusConfig = {
 
 export const FeatureSuggestionsList = ({
   suggestions,
-  loading,
-  maxItems = 6
+  loading
 }: FeatureSuggestionsListProps) => {
   const [selectedSuggestion, setSelectedSuggestion] = useState<FeatureSuggestion | null>(null);
 
-  const displayedSuggestions = suggestions.slice(0, maxItems);
-
   if (loading) {
     return (
-      <Card className="border-border/50">
-        <CardContent className="flex items-center justify-center py-10 px-4">
+      <Card className="border-border/50 h-full">
+        <CardContent className="flex items-center justify-center py-10 px-4 h-full">
           <Loader2 className="w-6 h-6 animate-spin text-primary" />
         </CardContent>
       </Card>
@@ -57,8 +53,8 @@ export const FeatureSuggestionsList = ({
 
   if (suggestions.length === 0) {
     return (
-      <Card className="border-border/50">
-        <CardContent className="flex flex-col items-center justify-center py-10 px-4 text-center gap-2">
+      <Card className="border-border/50 h-full">
+        <CardContent className="flex flex-col items-center justify-center py-10 px-4 text-center gap-2 h-full">
           <MessageSquare className="w-10 h-10 text-muted-foreground/50" />
           <p className="text-sm font-medium text-muted-foreground">No community ideas yet</p>
           <p className="text-xs text-muted-foreground/70">Be the first to submit one!</p>
@@ -68,9 +64,9 @@ export const FeatureSuggestionsList = ({
   }
 
   return (
-    <div>
-      <Card className="border-border/50">
-        <CardHeader className="pb-3 text-center">
+    <div className="h-full">
+      <Card className="border-border/50 h-full flex flex-col">
+        <CardHeader className="pb-3 text-center flex-shrink-0">
           <CardTitle className="text-base md:text-lg flex flex-col items-center gap-2">
             <MessageSquare className="w-4 h-4 text-primary" />
             Recent Community Ideas
@@ -79,10 +75,10 @@ export const FeatureSuggestionsList = ({
             {suggestions.length} idea{suggestions.length !== 1 ? 's' : ''} submitted
           </CardDescription>
         </CardHeader>
-        <CardContent className="pt-0 px-0">
-          <ScrollArea className="max-h-[500px] px-6">
+        <CardContent className="pt-0 px-0 flex-1 min-h-0">
+          <ScrollArea className="h-full max-h-[600px] px-6">
             <div className="space-y-2 pb-4">
-              {displayedSuggestions.map((suggestion) => {
+              {suggestions.map((suggestion) => {
                 const status = statusConfig[suggestion.status];
                 const StatusIcon = status.icon;
 
@@ -113,12 +109,6 @@ export const FeatureSuggestionsList = ({
                   </button>
                 );
               })}
-
-              {suggestions.length > maxItems && (
-                <p className="text-xs text-center text-muted-foreground pt-2">
-                  +{suggestions.length - maxItems} more ideas
-                </p>
-              )}
             </div>
           </ScrollArea>
         </CardContent>
