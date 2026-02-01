@@ -45,7 +45,7 @@ const Courses = () => {
     {
       id: 1,
       title: "DeFi Foundations: Understanding the New Financial System",
-      description: "Understand why traditional finance fails you and how DeFi offers an alternative you control. No prior crypto knowledge required.",
+      description: "Learn why the traditional financial system leaves billions underserved and how decentralized finance offers a transparent alternative you control. Understand blockchain basics, explore key DeFi protocols like stablecoins and decentralized exchanges, and separate facts from hype. No prior crypto knowledge required to start your financial awakening journey.",
       category: "free",
       type: "course",
       duration: "5 modules",
@@ -62,13 +62,13 @@ const Courses = () => {
       icon: BookOpen,
       offers: [],
       hasCourseInstance: true,
-      early_access_date: null, // null = already public
+      early_access_date: null,
       public_release_date: null
     },
     {
       id: 2,
       title: "Staying Safe in DeFi: Wallets, Security, and Avoiding Scams",
-      description: "Protect your assets from scams, hacks, and human error with essential security practices every DeFi user needs.",
+      description: "Protect your digital assets from the scams, hacks, and costly mistakes that catch even experienced users off guard. Master wallet security fundamentals, learn to spot fake projects and phishing attacks, and build habits that safeguard your wealth. This course covers everything from seed phrase management to transaction verification.",
       category: "free",
       type: "course", 
       duration: "5 modules",
@@ -91,7 +91,7 @@ const Courses = () => {
     {
       id: 3,
       title: "Earning with DeFi: Staking, Yield Farming, and Liquidity Pools Made Simple",
-      description: "Learn sustainable strategies to grow your wealth without middlemen taking their cut. Understand the real risks and rewards.",
+      description: "Discover how to generate passive income through staking, yield farming, and liquidity provision without relying on traditional banks or brokers. Learn the mechanics behind APY calculations, understand impermanent loss, and identify sustainable yield opportunities versus unsustainable token emissions. Start with beginner-friendly platforms and grow your strategy.",
       category: "free",
       type: "course",
       duration: "5 modules",
@@ -112,7 +112,7 @@ const Courses = () => {
     {
       id: 4,
       title: "Managing Your Own DeFi Portfolio: From Beginner to Confident User",
-      description: "Build and maintain a portfolio that works toward your goals, not someone else's. Master the tools for independent wealth management.",
+      description: "Build and manage a DeFi portfolio aligned with your personal financial goals, risk tolerance, and time horizon. Learn portfolio tracking tools, develop rebalancing strategies, and understand when to take profits versus reinvest. This course transforms scattered holdings into a coherent investment approach you fully control.",
       category: "free",
       type: "course",
       duration: "5 modules",
@@ -133,7 +133,7 @@ const Courses = () => {
     {
       id: 5,
       title: "Understanding DeFi Vaults: Your Complete Guide to Managed Investing",
-      description: "Access managed investment strategies with the transparency and control traditional funds lack. Understand vault mechanics and risks.",
+      description: "Access professional-grade investment strategies through DeFi vaults while maintaining full custody of your assets. Understand how vaults automate complex strategies, evaluate vault protocols like Enzyme and Yearn, and learn the security considerations before depositing. Includes a step-by-step guide to accessing the 3EA Vault.",
       category: "free",
       type: "course",
       duration: "5 modules",

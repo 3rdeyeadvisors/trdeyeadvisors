@@ -207,6 +207,8 @@ const ModuleViewer = () => {
             hasPrevious={currentModuleIndex > 0}
             currentModuleIndex={currentModuleIndex}
             totalModules={course.modules.length}
+            courseTitle={course.title}
+            allModules={course.modules}
           />
         ) : (
           <Card className="p-6 bg-muted/30 border-border">

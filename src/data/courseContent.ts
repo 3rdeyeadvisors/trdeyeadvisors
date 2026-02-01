@@ -55,7 +55,7 @@ export const courseContent: CourseContentData[] = [
   {
     id: 1,
     title: "DeFi Foundations: Understanding the New Financial System",
-    description: "Complete beginner's guide from zero knowledge to confident understanding.",
+    description: "Learn why the traditional financial system leaves billions underserved and how decentralized finance offers a transparent alternative you control. Understand blockchain basics, explore key DeFi protocols like stablecoins and decentralized exchanges, and separate facts from hype. No prior crypto knowledge required to start your financial awakening journey.",
     category: "free",
     difficulty: "Beginner",
     estimatedTime: "2 hours",

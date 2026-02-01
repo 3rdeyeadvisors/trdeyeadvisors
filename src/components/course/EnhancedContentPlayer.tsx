@@ -10,6 +10,7 @@ import { useAuth } from "@/components/auth/AuthProvider";
 import { useProgress } from "@/components/progress/ProgressProvider";
 import { QuizComponent } from "@/components/quiz/QuizComponent";
 import { ExpandableText } from "@/components/ui/expandable-text";
+import { FullscreenContentViewer } from "./FullscreenContentViewer";
 import { 
   BookOpen, 
   Clock, 
@@ -27,6 +28,7 @@ import {
   Volume2,
   Settings,
   Maximize,
+  Maximize2,
   MessageSquare,
   Brain,
   Star,
@@ -47,6 +49,8 @@ interface EnhancedContentPlayerProps {
   hasPrevious?: boolean;
   currentModuleIndex: number;
   totalModules: number;
+  courseTitle?: string;
+  allModules?: ModuleContent[];
 }
 
 interface Quiz {
@@ -68,7 +72,9 @@ export const EnhancedContentPlayer = ({
   hasNext,
   hasPrevious,
   currentModuleIndex,
-  totalModules
+  totalModules,
+  courseTitle,
+  allModules
 }: EnhancedContentPlayerProps) => {
   const { user } = useAuth();
   const { getCourseProgress, updateModuleProgress } = useProgress();
@@ -84,6 +90,7 @@ export const EnhancedContentPlayer = ({
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const [volume, setVolume] = useState(80);
   const [fullscreen, setFullscreen] = useState(false);
+  const [isFullscreenViewerOpen, setIsFullscreenViewerOpen] = useState(false);
   const { toast } = useToast();
 
   // Check if module is already completed
@@ -295,6 +302,18 @@ export const EnhancedContentPlayer = ({
 
   return (
     <div className="w-full px-2 sm:px-4 md:px-6">
+      {/* Fullscreen Content Viewer */}
+      <FullscreenContentViewer
+        isOpen={isFullscreenViewerOpen}
+        onClose={() => setIsFullscreenViewerOpen(false)}
+        content={module.content.text || ''}
+        title={module.title}
+        currentIndex={currentModuleIndex}
+        totalModules={totalModules}
+        onNext={() => onNext?.()}
+        onPrevious={() => onPrevious?.()}
+        courseTitle={courseTitle}
+      />
       {/* Enhanced Module Header */}
       <div className="mb-3 sm:mb-4 md:mb-6 text-center">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2.5 sm:gap-3 mb-3 sm:mb-4">
@@ -321,6 +340,18 @@ export const EnhancedContentPlayer = ({
           </div>
           
           <div className="flex items-center justify-center md:justify-end gap-1.5 sm:gap-2">
+            {module.type === 'text' && module.content.text && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setIsFullscreenViewerOpen(true)}
+                className="text-muted-foreground hover:text-foreground p-1.5 sm:p-2 min-h-[36px] sm:min-h-[40px] gap-1.5"
+                title="Focus Mode - Fullscreen reading with swipe navigation"
+              >
+                <Maximize2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline text-xs">Focus</span>
+              </Button>
+            )}
             <Button
               variant="ghost"
               size="sm"
