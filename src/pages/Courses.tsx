@@ -158,19 +158,6 @@ const Courses = () => {
       category: "free",
       type: "course",
       duration: "5 modules",
-      difficulty: "Advanced",
-      rating: 4.9,
-      students: 256,
-      modules: [
-        "Introduction to Real World Assets (RWA)",
-        "The Legal and Regulatory Framework",
-        "Tokenization Mechanics and Platforms",
-        "Evaluating RWA Protocols (Ondo, Centrifuge, MakerDAO)",
-        "Risks and Future of On-Chain Assets"
-      ],
-      icon: BookOpen,
-      early_access_date: "2026-01-31",
-      public_release_date: "2026-02-07"
       difficulty: "Intermediate",
       rating: 4.9,
       students: 0,
@@ -212,14 +199,13 @@ const Courses = () => {
         };
       }
       
-      // In early access window (annual only)
+      // In early access window (premium members only)
       if (now >= earlyAccessDate && now < publicReleaseDate) {
         return {
           ...course,
           isEarlyAccess: true,
-          isLocked: !isAnnualSubscriber,
+          isLocked: !isPremiumMember,
           public_release_date: publicReleaseDate.toISOString()
-          isLocked: !isPremiumMember
         };
       }
       
