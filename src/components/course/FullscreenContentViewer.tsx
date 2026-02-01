@@ -41,13 +41,11 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
     toast.info(direction === 'left' ? "You're at the last module" : "You're at the first module");
   }, []);
 
-  // Swipe navigation - always provide handlers to prevent bubbling
-  // Using higher threshold to differentiate from scrolling
+  // Swipe navigation with lower threshold for reliable detection
   const swipeHandlers = useSwipeNavigation({
     onSwipeLeft: hasNext ? onNext : () => handleBoundarySwipe('left'),
     onSwipeRight: hasPrevious ? onPrevious : () => handleBoundarySwipe('right'),
-    threshold: 80,
-    preventDefaultOnSwipe: true
+    threshold: 50
   });
 
   // Keyboard navigation
@@ -188,7 +186,8 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
         {/* Content - swipe handlers attached here */}
         <div
           ref={contentRef}
-          className="flex-1 overflow-y-auto px-4 py-6 md:px-8 lg:px-16 xl:px-24 touch-pan-y"
+          className="flex-1 overflow-y-auto px-4 py-6 md:px-8 lg:px-16 xl:px-24"
+          style={{ touchAction: 'manipulation' }}
           {...swipeHandlers}
         >
           <div className="max-w-4xl mx-auto">
