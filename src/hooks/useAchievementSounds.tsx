@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 
 // Pre-defined sound prompts for ElevenLabs
 const SOUND_PROMPTS: Record<string, string> = {
+  // Achievement sounds
   correctAnswer: 'short positive chime, success notification, bright and cheerful',
   wrongAnswer: 'soft buzzer, gentle error sound, not harsh',
   moduleComplete: 'ascending notes melody, achievement unlock, triumphant short',
@@ -11,6 +12,15 @@ const SOUND_PROMPTS: Record<string, string> = {
   badgeEarned: 'achievement unlock sound, magical sparkle, level up',
   pointsEarned: 'coin collection sound, gem pickup, reward chime',
   dailyLogin: 'welcome chime, friendly notification, warm greeting sound',
+  // UI interaction sounds
+  click: 'soft click, ui tap, subtle button press',
+  hover: 'very soft whoosh, gentle hover sound, barely audible',
+  navigate: 'soft swoosh, page transition, smooth slide',
+  refresh: 'water droplet, refresh swoosh, clean reload sound',
+  menuOpen: 'soft pop, menu expand, subtle open',
+  menuClose: 'soft close, menu collapse, subtle close',
+  success: 'positive ding, task complete, satisfying',
+  error: 'gentle error tone, soft warning, attention needed',
 };
 
 type SoundType = keyof typeof SOUND_PROMPTS;
@@ -146,6 +156,7 @@ export const useAchievementSounds = () => {
           oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2); // G5
           break;
         case 'wrongAnswer':
+        case 'error':
           oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
           oscillator.frequency.setValueAtTime(150, audioContext.currentTime + 0.1);
           break;
@@ -170,6 +181,62 @@ export const useAchievementSounds = () => {
           oscillator.frequency.setValueAtTime(554.37, audioContext.currentTime + 0.15); // C#5
           oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.3); // E5
           break;
+        // UI sounds - shorter and subtler
+        case 'click':
+          oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+          gainNode.gain.setValueAtTime(0.15, audioContext.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.08);
+          oscillator.start(audioContext.currentTime);
+          oscillator.stop(audioContext.currentTime + 0.1);
+          return;
+        case 'hover':
+          oscillator.frequency.setValueAtTime(600, audioContext.currentTime);
+          gainNode.gain.setValueAtTime(0.05, audioContext.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.05);
+          oscillator.start(audioContext.currentTime);
+          oscillator.stop(audioContext.currentTime + 0.06);
+          return;
+        case 'navigate':
+          oscillator.frequency.setValueAtTime(400, audioContext.currentTime);
+          oscillator.frequency.setValueAtTime(600, audioContext.currentTime + 0.1);
+          gainNode.gain.setValueAtTime(0.12, audioContext.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
+          oscillator.start(audioContext.currentTime);
+          oscillator.stop(audioContext.currentTime + 0.18);
+          return;
+        case 'refresh':
+          oscillator.frequency.setValueAtTime(300, audioContext.currentTime);
+          oscillator.frequency.setValueAtTime(500, audioContext.currentTime + 0.1);
+          oscillator.frequency.setValueAtTime(700, audioContext.currentTime + 0.2);
+          gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+          oscillator.start(audioContext.currentTime);
+          oscillator.stop(audioContext.currentTime + 0.35);
+          return;
+        case 'menuOpen':
+          oscillator.frequency.setValueAtTime(400, audioContext.currentTime);
+          oscillator.frequency.setValueAtTime(600, audioContext.currentTime + 0.08);
+          gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.12);
+          oscillator.start(audioContext.currentTime);
+          oscillator.stop(audioContext.currentTime + 0.15);
+          return;
+        case 'menuClose':
+          oscillator.frequency.setValueAtTime(600, audioContext.currentTime);
+          oscillator.frequency.setValueAtTime(400, audioContext.currentTime + 0.08);
+          gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.12);
+          oscillator.start(audioContext.currentTime);
+          oscillator.stop(audioContext.currentTime + 0.15);
+          return;
+        case 'success':
+          oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime);
+          oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.1);
+          gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+          oscillator.start(audioContext.currentTime);
+          oscillator.stop(audioContext.currentTime + 0.25);
+          return;
         default:
           oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
       }
@@ -213,7 +280,7 @@ export const useAchievementSounds = () => {
     toggleSound,
     playSound,
     isLoading,
-    // Convenience methods
+    // Achievement sounds
     playCorrectAnswer: () => playSound('correctAnswer'),
     playWrongAnswer: () => playSound('wrongAnswer'),
     playModuleComplete: () => playSound('moduleComplete'),
@@ -222,5 +289,14 @@ export const useAchievementSounds = () => {
     playBadgeEarned: () => playSound('badgeEarned'),
     playPointsEarned: () => playSound('pointsEarned'),
     playDailyLogin: () => playSound('dailyLogin'),
+    // UI interaction sounds
+    playClick: () => playSound('click'),
+    playHover: () => playSound('hover'),
+    playNavigate: () => playSound('navigate'),
+    playRefresh: () => playSound('refresh'),
+    playMenuOpen: () => playSound('menuOpen'),
+    playMenuClose: () => playSound('menuClose'),
+    playSuccess: () => playSound('success'),
+    playError: () => playSound('error'),
   };
 };
