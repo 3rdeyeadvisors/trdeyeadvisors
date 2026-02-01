@@ -2032,15 +2032,7 @@ export type Database = {
           roadmap_item_id: string | null
           yes_votes: number | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "roadmap_votes_roadmap_item_id_fkey"
-            columns: ["roadmap_item_id"]
-            isOneToOne: false
-            referencedRelation: "roadmap_items"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
     }
     Functions: {
@@ -2102,6 +2094,14 @@ export type Database = {
           avatar_url: string
           display_name: string
           user_id: string
+        }[]
+      }
+      get_roadmap_vote_counts: {
+        Args: never
+        Returns: {
+          no_votes: number
+          roadmap_item_id: string
+          yes_votes: number
         }[]
       }
       get_total_courses_count: { Args: never; Returns: number }
