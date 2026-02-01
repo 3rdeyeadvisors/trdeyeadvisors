@@ -27,14 +27,12 @@ const Navigation = () => {
   const location = useLocation();
   const { user, signOut } = useAuth();
   const { toast } = useToast();
-  const { playClick, playMenuOpen, playMenuClose, playNavigate } = useAchievementSounds();
 
-  // Close menu on route change and play navigation sound
+  // Close menu on route change
   useEffect(() => {
     setIsOpen(false);
     setExpandedSection(null);
-    playNavigate();
-  }, [location.pathname, playNavigate]);
+  }, [location.pathname]);
 
   // Prevent body scroll when menu is open
   useEffect(() => {
@@ -107,23 +105,11 @@ const Navigation = () => {
   };
 
   const toggleSection = (section: string) => {
-    const newExpanded = expandedSection === section ? null : section;
-    setExpandedSection(newExpanded);
-    if (newExpanded) {
-      playMenuOpen();
-    } else {
-      playMenuClose();
-    }
+    setExpandedSection(expandedSection === section ? null : section);
   };
 
   const toggleMenu = () => {
-    const newIsOpen = !isOpen;
-    setIsOpen(newIsOpen);
-    if (newIsOpen) {
-      playMenuOpen();
-    } else {
-      playMenuClose();
-    }
+    setIsOpen(!isOpen);
   };
 
   const isActive = (path: string) => location.pathname === path;

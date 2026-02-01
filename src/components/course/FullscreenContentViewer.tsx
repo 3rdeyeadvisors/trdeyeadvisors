@@ -6,6 +6,7 @@ import { useFullscreen } from '@/hooks/useFullscreen';
 import { useSwipeNavigation } from '@/hooks/useSwipeNavigation';
 import { EnhancedMarkdownRenderer } from './EnhancedMarkdownRenderer';
 import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 interface FullscreenContentViewerProps {
   isOpen: boolean;
@@ -35,10 +36,15 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
   const hasNext = currentIndex < totalModules - 1;
   const hasPrevious = currentIndex > 0;
 
-  // Swipe navigation
+  // Boundary handlers for swipe feedback
+  const handleBoundarySwipe = useCallback((direction: 'left' | 'right') => {
+    toast.info(direction === 'left' ? "You're at the last module" : "You're at the first module");
+  }, []);
+
+  // Swipe navigation - always provide handlers to prevent bubbling
   const swipeHandlers = useSwipeNavigation({
-    onSwipeLeft: hasNext ? onNext : undefined,
-    onSwipeRight: hasPrevious ? onPrevious : undefined,
+    onSwipeLeft: hasNext ? onNext : () => handleBoundarySwipe('left'),
+    onSwipeRight: hasPrevious ? onPrevious : () => handleBoundarySwipe('right'),
     threshold: 60
   });
 
