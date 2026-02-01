@@ -36,7 +36,7 @@ const CourseDetail = () => {
   const { updateModuleProgress, getCourseProgress } = useProgress();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showEnhancedNav, setShowEnhancedNav] = useState(false);
-  const { toast: useToastNotification } = useToast();
+  const { toast } = useToast();
   const isMobile = useIsMobile();
 
   const isPremiumMember = 
@@ -50,9 +50,9 @@ const CourseDetail = () => {
   const progress = getCourseProgress(parseInt(courseId || "0"));
 
   // Check if course is in early access and user has access
-  const { isEarlyAccess, isLocked } = useMemo(() => {
+  const { isEarlyAccess, isLocked, releaseDate } = useMemo(() => {
     if (!course?.early_access_date) {
-      return { isEarlyAccess: false, isLocked: false };
+      return { isEarlyAccess: false, isLocked: false, releaseDate: null };
     }
     
     const now = new Date();
@@ -62,10 +62,19 @@ const CourseDetail = () => {
       : new Date(earlyAccessDate.getTime() + (ANNUAL_BENEFITS.earlyAccessDays * 24 * 60 * 60 * 1000));
     
     if (now < earlyAccessDate) {
-      return { isEarlyAccess: false, isLocked: true };
+      return { isEarlyAccess: false, isLocked: true, releaseDate: earlyAccessDate };
     }
     
     if (now >= earlyAccessDate && now < publicReleaseDate) {
+      return {
+        isEarlyAccess: true,
+        isLocked: !isAnnualSubscriber,
+        releaseDate: publicReleaseDate
+      };
+    }
+    
+    return { isEarlyAccess: false, isLocked: false, releaseDate: null };
+  }, [course, isAnnualSubscriber]);
       return { isEarlyAccess: true, isLocked: !isPremiumMember };
     }
     
@@ -84,11 +93,7 @@ const CourseDetail = () => {
     if (!course) {
       navigate("/courses");
     }
-    // Redirect if course is locked and user doesn't have access
-    if (isLocked) {
-      navigate("/subscription");
-    }
-  }, [course, navigate, isLocked]);
+  }, [course, navigate]);
 
   if (!course) {
     return null;
@@ -102,12 +107,12 @@ const CourseDetail = () => {
 
     try {
       await updateModuleProgress(course!.id, moduleIndex);
-      useToastNotification({
+      toast({
         title: "Progress Updated",
         description: "Module completion status has been saved.",
       });
     } catch (error) {
-      useToastNotification({
+      toast({
         title: "Error",
         description: "Failed to update progress. Please try again.",
         variant: "destructive",
@@ -190,17 +195,45 @@ const CourseDetail = () => {
             </div>
           </div>
 
-          {/* Start Learning Button - Available to all logged in users */}
+          {/* Start Learning Button - Handled with locking logic */}
           {user && (
-            <div className="mb-4 sm:mb-6 flex justify-center sm:justify-start px-2 sm:px-0">
+            <div className="mb-4 sm:mb-6 flex flex-col items-center sm:items-start gap-3 px-2 sm:px-0">
               <Button
-                onClick={() => navigate(`/courses/${courseId}/module/${course.modules[0]?.id}`)}
-                className="bg-primary hover:bg-primary/90 font-consciousness w-full sm:w-auto flex items-center justify-center min-h-[44px] text-sm sm:text-base"
+                onClick={() => {
+                  if (isLocked) {
+                    navigate("/subscription");
+                    return;
+                  }
+                  navigate(`/courses/${courseId}/module/${course.modules[0]?.id}`);
+                }}
+                className={`font-consciousness w-full sm:w-auto flex items-center justify-center min-h-[44px] text-sm sm:text-base ${
+                  isLocked
+                    ? "bg-muted text-muted-foreground hover:bg-muted/80"
+                    : "bg-primary hover:bg-primary/90 text-primary-foreground"
+                }`}
                 size="lg"
               >
-                <Play className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                <span className="break-words">{progress?.completion_percentage ? "Continue Learning" : "Start Learning"}</span>
+                {isLocked ? (
+                  <>
+                    <Lock className="w-4 h-4 mr-2" />
+                    <span>Locked (Annual Only)</span>
+                  </>
+                ) : (
+                  <>
+                    <Play className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                    <span className="break-words">{progress?.completion_percentage ? "Continue Learning" : "Start Learning"}</span>
+                  </>
+                )}
               </Button>
+
+              {isLocked && releaseDate && (
+                <div className="flex items-center gap-2 text-awareness text-sm font-consciousness animate-pulse">
+                  <Clock className="w-4 h-4" />
+                  <span>
+                    Public Release in {Math.ceil((releaseDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))} days
+                  </span>
+                </div>
+              )}
             </div>
           )}
 
@@ -318,11 +351,22 @@ const CourseDetail = () => {
                 <Card
                   key={index}
                   className={`p-6 transition-all duration-300 ${
-                    isCompleted 
-                      ? "bg-primary/5 border-primary/30 cursor-pointer" 
-                      : "bg-card/60 border-border hover:border-primary/40 cursor-pointer"
+                    isLocked
+                      ? "bg-muted/30 border-border opacity-70 cursor-not-allowed"
+                      : isCompleted
+                        ? "bg-primary/5 border-primary/30 cursor-pointer"
+                        : "bg-card/60 border-border hover:border-primary/40 cursor-pointer"
                   }`}
-                  onClick={() => navigate(`/courses/${courseId}/module/${module.id}`)}
+                  onClick={() => {
+                    if (isLocked) {
+                      toast({
+                        title: "Early Access Only",
+                        description: "Upgrade to Annual to unlock this content now, or wait for the public release.",
+                      });
+                      return;
+                    }
+                    navigate(`/courses/${courseId}/module/${module.id}`);
+                  }}
                 >
                   <div className="flex items-start gap-4">
                     <div className="flex items-center gap-3 min-w-0 flex-1">

@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ProgressBar } from '@/components/progress/ProgressBar';
 import { useAuth } from '@/components/auth/AuthProvider';
-import { LucideIcon, Star, Lock } from 'lucide-react';
+import { LucideIcon, Star, Lock, Clock } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface Course {
@@ -16,6 +16,7 @@ interface Course {
   icon: LucideIcon;
   isEarlyAccess?: boolean;
   isLocked?: boolean;
+  public_release_date?: string | null;
 }
 
 interface CourseCardProps {
@@ -41,6 +42,13 @@ export const CourseCard = ({ course, index, onStartCourse, onAuthRequired }: Cou
     if (course.isLocked) return "Upgrade to Annual";
     if (!user) return "Start Learning";
     return "Continue Learning";
+  };
+
+  const getDaysUntil = (dateString: string) => {
+    const date = new Date(dateString);
+    const diffTime = date.getTime() - new Date().getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays > 0 ? diffDays : 0;
   };
 
   return (
@@ -98,6 +106,12 @@ export const CourseCard = ({ course, index, onStartCourse, onAuthRequired }: Cou
         >
           {getButtonText()}
         </Button>
+        {course.isLocked && course.public_release_date && (
+          <div className="flex items-center justify-center gap-1.5 text-awareness text-[10px] sm:text-xs font-consciousness animate-pulse py-1">
+            <Clock className="w-3 h-3" />
+            <span>Public release in {getDaysUntil(course.public_release_date)} days</span>
+          </div>
+        )}
         {isMobile && (
           <p className="text-xs text-foreground/60 text-center">
             Fully usable on mobile. Best experience on desktop.
