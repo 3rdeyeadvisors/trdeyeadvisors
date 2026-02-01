@@ -93,8 +93,8 @@ export const FeatureSuggestionForm = ({
         </CollapsibleTrigger>
 
         <CollapsibleContent>
-          <CardContent className="pt-0 flex flex-col items-center justify-center">
-            <div className="w-full max-w-md space-y-4 text-center">
+          <CardContent className="pt-0 pb-6 flex flex-col items-center">
+            <div className="w-full max-w-md space-y-4 mx-auto">
               {/* Title Input */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between w-full text-left">
