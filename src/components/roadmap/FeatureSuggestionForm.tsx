@@ -93,64 +93,64 @@ export const FeatureSuggestionForm = ({
         </CollapsibleTrigger>
 
         <CollapsibleContent>
-          <CardContent className="space-y-4 pt-0">
-            {/* Title Input */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <label className="text-sm font-medium">Title</label>
-                <span className="text-xs text-muted-foreground">
-                  {title.length}/{MAX_TITLE_LENGTH}
-                </span>
+          <CardContent className="space-y-4 pt-0 flex flex-col items-center">
+            <div className="w-full max-w-md space-y-4">
+              {/* Title Input */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between w-full">
+                  <label className="text-sm font-medium">Title</label>
+                  <span className="text-xs text-muted-foreground">
+                    {title.length}/{MAX_TITLE_LENGTH}
+                  </span>
+                </div>
+                <Input
+                  placeholder="Brief feature title..."
+                  value={title}
+                  onChange={handleTitleChange}
+                  disabled={submitting}
+                  className="bg-background"
+                />
               </div>
-              <Input
-                placeholder="Brief feature title..."
-                value={title}
-                onChange={handleTitleChange}
-                disabled={submitting}
-                className="bg-background"
-              />
-            </div>
 
-            {/* Description Input */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <label className="text-sm font-medium">Description</label>
-                <span className="text-xs text-muted-foreground">
-                  {description.length}/{MAX_DESCRIPTION_LENGTH}
-                </span>
+              {/* Description Input */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between w-full">
+                  <label className="text-sm font-medium">Description</label>
+                  <span className="text-xs text-muted-foreground">
+                    {description.length}/{MAX_DESCRIPTION_LENGTH}
+                  </span>
+                </div>
+                <Textarea
+                  placeholder="Describe your feature idea in detail..."
+                  value={description}
+                  onChange={handleDescriptionChange}
+                  disabled={submitting}
+                  rows={4}
+                  className="bg-background resize-none"
+                />
               </div>
-              <Textarea
-                placeholder="Describe your feature idea in detail..."
-                value={description}
-                onChange={handleDescriptionChange}
-                disabled={submitting}
-                rows={4}
-                className="bg-background resize-none"
-              />
-            </div>
 
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 pt-2">
-              <Button
-                onClick={handleSubmit}
-                disabled={submitting || !title.trim() || !description.trim()}
-                className="w-full sm:w-auto"
-              >
-                {submitting ? (
-                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                ) : (
-                  <Send className="w-4 h-4 mr-2" />
-                )}
-                Submit Idea
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => setIsOpen(false)}
-                disabled={submitting}
-                className="w-full sm:w-auto"
-              >
-                Cancel
-              </Button>
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-2 pt-2">
+                <Button
+                  onClick={handleSubmit}
+                  disabled={submitting || !title.trim() || !description.trim()}
+                >
+                  {submitting ? (
+                    <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                  ) : (
+                    <Send className="w-4 h-4 mr-2" />
+                  )}
+                  Submit Idea
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => setIsOpen(false)}
+                  disabled={submitting}
+                >
+                  Cancel
+                </Button>
+              </div>
             </div>
           </CardContent>
         </CollapsibleContent>
