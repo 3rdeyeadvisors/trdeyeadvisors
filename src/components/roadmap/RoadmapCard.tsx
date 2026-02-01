@@ -131,7 +131,7 @@ export const RoadmapCard = ({
   const VotingButtons = ({ compact = false }: { compact?: boolean }) => {
     if (isCompleted) {
       return (
-        <div className="flex items-center gap-1 text-emerald-400">
+        <div className="flex items-center justify-center gap-1 text-emerald-400 min-h-[36px]">
           <Check className="w-3.5 h-3.5" />
           <span className="text-xs font-medium">Completed</span>
         </div>
@@ -140,7 +140,7 @@ export const RoadmapCard = ({
 
     if (!isVotingOpen) {
       return (
-        <div className="flex items-center gap-1 text-muted-foreground">
+        <div className="flex items-center justify-center gap-1 text-muted-foreground min-h-[36px]">
           <Clock className="w-3.5 h-3.5" />
           <span className="text-xs font-medium">Closed</span>
         </div>
@@ -269,19 +269,21 @@ export const RoadmapCard = ({
         </CardHeader>
 
         <CardContent className="relative p-4 pt-2 space-y-3 flex-1 flex flex-col">
-          {description && (
-            <div>
-              <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed line-clamp-2">
-                {description}
-              </p>
-              <span className="text-xs text-primary/70 hover:text-primary cursor-pointer mt-1 inline-block">
-                Click to read more
-              </span>
-            </div>
-          )}
+          <div className="flex-1">
+            {description && (
+              <>
+                <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed line-clamp-2">
+                  {description}
+                </p>
+                <span className="text-xs text-primary/70 hover:text-primary cursor-pointer mt-1 inline-block">
+                  Click to read more
+                </span>
+              </>
+            )}
+          </div>
 
           {/* Vote Progress */}
-          <div className="space-y-1.5 flex-1">
+          <div className="space-y-1.5">
             <div className="flex items-center justify-between text-xs">
               <span className="text-muted-foreground">Support</span>
               <span className="font-medium tabular-nums">
@@ -300,7 +302,7 @@ export const RoadmapCard = ({
           {/* Vote Action */}
           <div className="flex flex-col gap-2 pt-1">
             {/* Vote Weight Badge & User Vote Status */}
-            <div className="flex items-center justify-center gap-3 flex-wrap">
+            <div className="flex items-center justify-center gap-3 flex-wrap min-h-[20px]">
               <VoteWeightBadge />
               {userVoteType && (
                 <span className="text-xs text-muted-foreground">

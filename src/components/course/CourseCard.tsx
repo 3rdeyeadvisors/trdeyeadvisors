@@ -98,14 +98,6 @@ export const CourseCard = ({ course, index, onStartCourse, onAuthRequired }: Cou
       )}
       
       <div className="flex flex-col gap-3 mt-auto">
-        <Button 
-          variant={course.isLocked ? "outline" : "awareness"}
-          size="default"
-          className="font-consciousness w-full min-h-[48px]"
-          onClick={handleStartCourse}
-        >
-          {getButtonText()}
-        </Button>
         {course.isLocked && course.public_release_date && (
           <div className="flex items-center justify-center gap-1.5 text-awareness text-[10px] sm:text-xs font-consciousness animate-pulse py-1">
             <Clock className="w-3 h-3" />
@@ -117,6 +109,14 @@ export const CourseCard = ({ course, index, onStartCourse, onAuthRequired }: Cou
             Fully usable on mobile. Best experience on desktop.
           </p>
         )}
+        <Button
+          variant={course.isLocked ? "outline" : "awareness"}
+          size="default"
+          className="font-consciousness w-full min-h-[48px]"
+          onClick={handleStartCourse}
+        >
+          {getButtonText()}
+        </Button>
         <div className="text-center pt-1">
           <span className="text-xs text-foreground/60 font-system">
             {course.duration}
