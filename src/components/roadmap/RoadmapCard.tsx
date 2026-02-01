@@ -172,7 +172,7 @@ export const RoadmapCard = ({
             onVote('yes');
           }}
           disabled={isVoting}
-          className={`flex-1 min-h-[36px] text-xs ${
+          className={`flex-1 min-h-[36px] min-w-[100px] text-xs ${
             userVoteType === 'yes'
               ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
               : 'border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10'
@@ -183,7 +183,7 @@ export const RoadmapCard = ({
           ) : (
             <>
               <ThumbsUp className="w-3.5 h-3.5 mr-1" />
-              Yes {yesVotes > 0 && <span className="ml-1 opacity-75">({yesVotes})</span>}
+              Yes <span className="ml-1 opacity-75 tabular-nums">({yesVotes})</span>
             </>
           )}
         </Button>
@@ -195,7 +195,7 @@ export const RoadmapCard = ({
             onVote('no');
           }}
           disabled={isVoting}
-          className={`flex-1 min-h-[36px] text-xs ${
+          className={`flex-1 min-h-[36px] min-w-[100px] text-xs ${
             userVoteType === 'no'
               ? 'bg-red-600 hover:bg-red-700 text-white'
               : 'border-red-500/30 text-red-400 hover:bg-red-500/10'
@@ -206,7 +206,7 @@ export const RoadmapCard = ({
           ) : (
             <>
               <ThumbsDown className="w-3.5 h-3.5 mr-1" />
-              No {noVotes > 0 && <span className="ml-1 opacity-75">({noVotes})</span>}
+              No <span className="ml-1 opacity-75 tabular-nums">({noVotes})</span>
             </>
           )}
         </Button>
@@ -233,7 +233,7 @@ export const RoadmapCard = ({
   return (
     <>
       <Card
-        className="group relative overflow-hidden border-border/50 bg-card/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-300 cursor-pointer"
+        className="group relative overflow-hidden border-border/50 bg-card/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-300 cursor-pointer h-full flex flex-col"
         onClick={handleCardClick}
       >
         {/* Subtle gradient overlay */}
@@ -268,7 +268,7 @@ export const RoadmapCard = ({
           )}
         </CardHeader>
 
-        <CardContent className="relative p-4 pt-2 space-y-3">
+        <CardContent className="relative p-4 pt-2 space-y-3 flex-1 flex flex-col">
           {description && (
             <div>
               <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed line-clamp-2">
@@ -281,10 +281,10 @@ export const RoadmapCard = ({
           )}
 
           {/* Vote Progress */}
-          <div className="space-y-1.5">
+          <div className="space-y-1.5 flex-1">
             <div className="flex items-center justify-between text-xs">
               <span className="text-muted-foreground">Support</span>
-              <span className="font-medium">
+              <span className="font-medium tabular-nums">
                 <span className="text-emerald-400">+{yesVotes}</span>
                 <span className="text-muted-foreground mx-1">/</span>
                 <span className="text-red-400">-{noVotes}</span>

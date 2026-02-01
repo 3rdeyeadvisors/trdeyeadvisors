@@ -9,7 +9,6 @@ import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import { PullToRefreshIndicator } from "./ui/pull-to-refresh";
 import { useIsMobile } from "@/hooks/use-mobile";
 import useScrollToTop from "@/hooks/useScrollToTop";
-import { useAchievementSounds } from "@/hooks/useAchievementSounds";
 
 interface LayoutProps {
   children: ReactNode;
@@ -22,21 +21,16 @@ const Layout = ({ children }: LayoutProps) => {
   const location = useLocation();
   const queryClient = useQueryClient();
   const isMobile = useIsMobile();
-  const { playRefresh, playNavigate } = useAchievementSounds();
   
   // Scroll to top on route change
   useScrollToTop();
   
-  // Play navigation sound on route change
   const handleRefresh = useCallback(async () => {
-    // Play refresh sound when triggered
-    playRefresh();
-    
     // Invalidate all queries to refetch data
     await queryClient.invalidateQueries();
     // Small delay for visual feedback
     await new Promise(resolve => setTimeout(resolve, 500));
-  }, [queryClient, playRefresh]);
+  }, [queryClient]);
 
   const { isRefreshing, pullDistance, isTriggered } = usePullToRefresh({
     onRefresh: handleRefresh,
