@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Lightbulb, Send, Loader2, Lock, ArrowRight } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -51,8 +52,8 @@ export const FeatureSuggestionForm = ({
   // Non-premium users see upgrade CTA
   if (!canSubmit) {
     return (
-      <Card className="border-border/50 bg-card/50">
-        <CardContent className="flex flex-col items-center justify-center py-6 px-4 text-center">
+      <Card className="border-border/50 bg-card/50 h-full">
+        <CardContent className="flex flex-col items-center justify-center py-6 px-4 text-center h-full">
           <div className="w-10 h-10 rounded-full bg-muted/50 flex items-center justify-center mb-3">
             <Lock className="w-5 h-5 text-muted-foreground" />
           </div>
@@ -71,10 +72,17 @@ export const FeatureSuggestionForm = ({
   }
 
   return (
-    <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
-      <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-        <CollapsibleTrigger asChild>
-          <CardHeader className="cursor-pointer hover:bg-primary/5 transition-colors rounded-t-lg !flex !items-center !justify-center min-h-[180px] py-8">
+    <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent h-full flex flex-col">
+      <Collapsible
+        open={isOpen}
+        onOpenChange={setIsOpen}
+        className="flex-1 flex flex-col"
+      >
+        <CollapsibleTrigger asChild className={cn(
+          "cursor-pointer hover:bg-primary/5 transition-colors rounded-t-lg !flex !items-center !justify-center py-8",
+          !isOpen ? "flex-1" : "min-h-[180px]"
+        )}>
+          <CardHeader>
             <div className="flex flex-col items-center justify-center text-center gap-2 w-full">
               <div className="p-2.5 rounded-lg bg-primary/10">
                 <Lightbulb className="w-5 h-5 text-primary" />
