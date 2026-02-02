@@ -13,6 +13,7 @@ interface UseSwipeNavigationOptions {
   onSwipeUp?: () => void;
   onSwipeDown?: () => void;
   threshold?: number;
+  horizontalRatio?: number;
   preventDefaultOnSwipe?: boolean;
 }
 
@@ -22,6 +23,7 @@ export const useSwipeNavigation = ({
   onSwipeUp,
   onSwipeDown,
   threshold = 50,
+  horizontalRatio = 1.2,
   preventDefaultOnSwipe = false
 }: UseSwipeNavigationOptions): SwipeHandlers => {
   const touchStartX = useRef(0);
@@ -40,7 +42,20 @@ export const useSwipeNavigation = ({
   const onTouchMove = useCallback((e: React.TouchEvent) => {
     touchEndX.current = e.touches[0].clientX;
     touchEndY.current = e.touches[0].clientY;
-  }, []);
+
+    if (preventDefaultOnSwipe) {
+      const deltaX = Math.abs(touchStartX.current - touchEndX.current);
+      const deltaY = Math.abs(touchStartY.current - touchEndY.current);
+
+      // If we've moved enough to show intent, and it's mostly horizontal
+      // and we have horizontal handlers
+      if (deltaX > 10 && deltaX > deltaY * horizontalRatio && (onSwipeLeft || onSwipeRight)) {
+        if (e.cancelable) {
+          e.preventDefault();
+        }
+      }
+    }
+  }, [preventDefaultOnSwipe, horizontalRatio, onSwipeLeft, onSwipeRight]);
 
   const onTouchCancel = useCallback(() => {
     touchStartX.current = 0;
@@ -58,8 +73,7 @@ export const useSwipeNavigation = ({
     // Check if this is a horizontal swipe:
     // - Must exceed threshold
     // - Horizontal movement must be significantly greater than vertical (to distinguish from diagonal scrolling)
-    // - Using a 1.2x ratio for better horizontal intent detection
-    const isHorizontalSwipe = absDeltaX > threshold && absDeltaX > (absDeltaY * 1.2);
+    const isHorizontalSwipe = absDeltaX > threshold && absDeltaX > (absDeltaY * horizontalRatio);
 
     if (isHorizontalSwipe) {
       if (preventDefaultOnSwipe) {
@@ -90,7 +104,7 @@ export const useSwipeNavigation = ({
         onSwipeDown();
       }
     }
-  }, [onSwipeLeft, onSwipeRight, onSwipeUp, onSwipeDown, threshold, preventDefaultOnSwipe, onTouchCancel]);
+  }, [onSwipeLeft, onSwipeRight, onSwipeUp, onSwipeDown, threshold, horizontalRatio, preventDefaultOnSwipe, onTouchCancel]);
 
   return { onTouchStart, onTouchMove, onTouchEnd, onTouchCancel };
 };

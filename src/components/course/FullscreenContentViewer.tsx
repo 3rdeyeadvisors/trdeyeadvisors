@@ -58,7 +58,15 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
     };
   }, [showUI, resetUITimer]);
 
+  const swipeOccurredRef = useRef(false);
+
   const toggleUI = useCallback((e: React.MouseEvent | React.TouchEvent) => {
+    // If a swipe just happened, don't toggle UI
+    if (swipeOccurredRef.current) {
+      swipeOccurredRef.current = false;
+      return;
+    }
+
     // If we're clicking on an interactive element (button, link, iframe), don't toggle
     const target = e.target as HTMLElement;
     if (target.closest('button') || target.closest('a') || target.closest('iframe')) {
@@ -84,9 +92,18 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
 
   // Swipe navigation with lower threshold for reliable detection
   const swipeHandlers = useSwipeNavigation({
-    onSwipeLeft: hasNext ? onNext : () => handleBoundarySwipe('left'),
-    onSwipeRight: hasPrevious ? onPrevious : () => handleBoundarySwipe('right'),
-    threshold: 50
+    onSwipeLeft: () => {
+      swipeOccurredRef.current = true;
+      if (hasNext) onNext();
+      else handleBoundarySwipe('left');
+    },
+    onSwipeRight: () => {
+      swipeOccurredRef.current = true;
+      if (hasPrevious) onPrevious();
+      else handleBoundarySwipe('right');
+    },
+    threshold: 40,
+    preventDefaultOnSwipe: true
   });
 
   // Keyboard navigation
@@ -152,6 +169,7 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
         exit={{ opacity: 0 }}
         className="fixed inset-0 z-[9999] bg-background flex flex-col overflow-hidden"
         onClick={toggleUI}
+        {...swipeHandlers}
       >
         {/* Subtle persistent exit button when UI is hidden */}
         <AnimatePresence>
@@ -254,12 +272,11 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
           ))}
         </motion.div>
 
-        {/* Content - swipe handlers attached here */}
+        {/* Content - improved touch action */}
         <div
           ref={contentRef}
           className="flex-1 overflow-y-auto px-4 py-6 md:px-8 lg:px-16 xl:px-24 scroll-smooth"
-          style={{ touchAction: 'manipulation' }}
-          {...swipeHandlers}
+          style={{ touchAction: 'pan-y' }}
           onScroll={resetUITimer}
         >
           <div className="max-w-4xl mx-auto">
