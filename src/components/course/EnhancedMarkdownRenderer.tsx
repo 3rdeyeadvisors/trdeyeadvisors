@@ -55,7 +55,7 @@ export const EnhancedMarkdownRenderer = ({ content, heroImage }: EnhancedMarkdow
               
             case 'FLIP_CARDS':
               return (
-                <div key={index} className="my-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div key={index} className="my-6 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
                   {data.cards.map((card: { front: string; back: string }, cardIndex: number) => (
                     <FlipCard key={cardIndex} front={card.front} back={card.back} />
                   ))}
