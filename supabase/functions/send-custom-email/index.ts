@@ -21,9 +21,37 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    const supabaseAdmin = createClient(supabaseUrl, supabaseKey);
+
+    // Verify admin access
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      throw new Error('No authorization header');
+    }
+
+    const token = authHeader.replace('Bearer ', '');
+    const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
+
+    if (authError || !user) {
+      throw new Error('Unauthorized');
+    }
+
+    // Check if user is admin
+    const { data: roles, error: rolesError } = await supabaseAdmin
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', user.id)
+      .eq('role', 'admin');
+
+    if (rolesError || !roles || roles.length === 0) {
+      throw new Error('User is not an admin');
+    }
+
     const { recipients, subject, body }: CustomEmailRequest = await req.json();
 
-    console.log("Sending custom email to:", recipients.length, "recipients");
+    console.log(`Sending custom email from ${user.email} to:`, recipients.length, "recipients");
 
     if (!recipients || recipients.length === 0) {
       throw new Error("No recipients provided");
@@ -33,10 +61,7 @@ const handler = async (req: Request): Promise<Response> => {
       throw new Error("Subject and body are required");
     }
 
-    // Initialize Supabase client for logging
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    const supabase = supabaseAdmin;
 
     const results = [];
 

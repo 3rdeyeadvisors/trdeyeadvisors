@@ -17,9 +17,35 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    const supabaseAdmin = createClient(supabaseUrl, supabaseKey);
 
-    console.log("Fetching subscribers for raffle announcement...");
+    // Verify admin access
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      throw new Error('No authorization header');
+    }
+
+    const token = authHeader.replace('Bearer ', '');
+    const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
+
+    if (authError || !user) {
+      throw new Error('Unauthorized');
+    }
+
+    // Check if user is admin
+    const { data: roles, error: rolesError } = await supabaseAdmin
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', user.id)
+      .eq('role', 'admin');
+
+    if (rolesError || !roles || roles.length === 0) {
+      throw new Error('User is not an admin');
+    }
+
+    const supabase = supabaseAdmin;
+
+    console.log(`Fetching subscribers for raffle announcement triggered by ${user.email}...`);
 
     // Fetch all subscribers (exclude bot accounts)
     const { data: subscribers, error } = await supabase

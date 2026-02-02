@@ -15,9 +15,14 @@ serve(async (req) => {
   try {
     const PRINTIFY_API_KEY = Deno.env.get('PRINTIFY_API_KEY');
     const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
+    const WEBHOOK_SECRET = Deno.env.get('PRINTIFY_WEBHOOK_SECRET');
     
     if (!PRINTIFY_API_KEY) {
       throw new Error('PRINTIFY_API_KEY not configured');
+    }
+
+    if (!WEBHOOK_SECRET) {
+      console.warn('PRINTIFY_WEBHOOK_SECRET not configured. Webhooks will be registered without a secret.');
     }
 
     // Verify admin access
@@ -155,6 +160,7 @@ serve(async (req) => {
             body: JSON.stringify({
               topic,
               url: webhookUrl,
+              secret: WEBHOOK_SECRET,
             }),
           }
         );

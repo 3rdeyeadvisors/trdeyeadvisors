@@ -17,10 +17,36 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { raffle_id } = await req.json();
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    const supabaseAdmin = createClient(supabaseUrl, supabaseKey);
 
-    console.log("Selecting winner for raffle:", raffle_id);
+    // Verify admin access
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      throw new Error('No authorization header');
+    }
+
+    const token = authHeader.replace('Bearer ', '');
+    const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
+
+    if (authError || !user) {
+      throw new Error('Unauthorized');
+    }
+
+    // Check if user is admin
+    const { data: roles, error: rolesError } = await supabaseAdmin
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', user.id)
+      .eq('role', 'admin');
+
+    if (rolesError || !roles || roles.length === 0) {
+      throw new Error('User is not an admin');
+    }
+
+    const { raffle_id } = await req.json();
+    const supabase = supabaseAdmin;
+
+    console.log(`Selecting winner for raffle: ${raffle_id} triggered by ${user.email}`);
 
     // Get raffle details
     const { data: raffle, error: raffleError } = await supabase
