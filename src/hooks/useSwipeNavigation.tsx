@@ -22,8 +22,8 @@ export const useSwipeNavigation = ({
   onSwipeRight,
   onSwipeUp,
   onSwipeDown,
-  threshold = 50,
-  horizontalRatio = 1.2,
+  threshold = 30,
+  horizontalRatio = 1.1,
   preventDefaultOnSwipe = false
 }: UseSwipeNavigationOptions): SwipeHandlers => {
   const touchStartX = useRef(0);
