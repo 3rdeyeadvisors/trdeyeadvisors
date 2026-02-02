@@ -100,7 +100,8 @@ export const EnhancedContentPlayer = ({
   const swipeHandlers = useSwipeNavigation({
     onSwipeLeft: hasNext ? onNext : undefined,
     onSwipeRight: hasPrevious ? onPrevious : undefined,
-    threshold: 60
+    threshold: 50,
+    preventDefaultOnSwipe: true
   });
 
   // Check if module is already completed
@@ -427,6 +428,7 @@ export const EnhancedContentPlayer = ({
         <TabsContent value="content" className="space-y-4 sm:space-y-6 w-full">
           <Card
             className={`${fullscreen ? 'fixed inset-0 z-50' : ''} w-full relative`}
+            style={{ touchAction: 'pan-y' }}
             {...swipeHandlers}
           >
             {/* Floating Focus Mode Button - Now for both text and video */}
