@@ -195,30 +195,25 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
   }, [currentIndex]);
 
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    }
+    document.body.style.overflow = 'hidden';
     return () => {
       document.body.style.overflow = '';
     };
-  }, [isOpen]);
-
-  if (!isOpen) return null;
+  }, []);
 
   return (
-    <AnimatePresence>
-      <motion.div
-        ref={containerRef as React.RefObject<HTMLDivElement>}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[9999] bg-background overflow-hidden"
-        onClick={toggleUI}
-        onTouchStart={handleTouchStart}
-        onTouchMove={swipeHandlers.onTouchMove}
-        onTouchEnd={swipeHandlers.onTouchEnd}
-        onTouchCancel={swipeHandlers.onTouchCancel}
-      >
+    <motion.div
+      ref={containerRef as React.RefObject<HTMLDivElement>}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[9999] bg-background overflow-hidden"
+      onClick={toggleUI}
+      onTouchStart={handleTouchStart}
+      onTouchMove={swipeHandlers.onTouchMove}
+      onTouchEnd={swipeHandlers.onTouchEnd}
+      onTouchCancel={swipeHandlers.onTouchCancel}
+    >
         <AnimatePresence>
           {!showUI && (
             <motion.div
@@ -511,6 +506,5 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
           </div>
         </motion.div>
       </motion.div>
-    </AnimatePresence>
   );
 };

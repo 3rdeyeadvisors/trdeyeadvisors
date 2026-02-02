@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useProgress } from "@/components/progress/ProgressProvider";
 import { QuizComponent } from "@/components/quiz/QuizComponent";
+import { motion, AnimatePresence } from "framer-motion";
 import { ExpandableText } from "@/components/ui/expandable-text";
 import { FullscreenContentViewer } from "./FullscreenContentViewer";
 import { useAchievementSounds } from "@/hooks/useAchievementSounds";
@@ -29,7 +30,6 @@ import {
   RotateCcw,
   Volume2,
   Settings,
-  Maximize,
   Maximize2,
   MessageSquare,
   Brain,
@@ -92,7 +92,6 @@ export const EnhancedContentPlayer = ({
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const [volume, setVolume] = useState(80);
-  const [fullscreen, setFullscreen] = useState(false);
   const [isFullscreenViewerOpen, setIsFullscreenViewerOpen] = useState(false);
   const { toast } = useToast();
 
@@ -275,10 +274,6 @@ export const EnhancedContentPlayer = ({
     setPlaybackSpeed(speeds[nextIndex]);
   };
 
-  const toggleFullscreen = () => {
-    setFullscreen(!fullscreen);
-  };
-
   // Load saved notes
   useEffect(() => {
     const savedNotes = localStorage.getItem(`notes-${courseId}-${module.id}`);
@@ -317,22 +312,26 @@ export const EnhancedContentPlayer = ({
   return (
     <div className="w-full px-2 sm:px-4 md:px-6">
       {/* Fullscreen Content Viewer */}
-      <FullscreenContentViewer
-        isOpen={isFullscreenViewerOpen}
-        onClose={() => setIsFullscreenViewerOpen(false)}
-        content={module.content.text || ''}
-        type={module.type}
-        videoUrl={module.content.videoUrl}
-        title={module.title}
-        currentIndex={currentModuleIndex}
-        totalModules={totalModules}
-        onNext={() => onNext?.()}
-        onPrevious={() => onPrevious?.()}
-        courseTitle={courseTitle}
-        notes={notes}
-        onNotesChange={setNotes}
-        resources={module.resources}
-      />
+      <AnimatePresence>
+        {isFullscreenViewerOpen && (
+          <FullscreenContentViewer
+            isOpen={isFullscreenViewerOpen}
+            onClose={() => setIsFullscreenViewerOpen(false)}
+            content={module.content.text || ''}
+            type={module.type}
+            videoUrl={module.content.videoUrl}
+            title={module.title}
+            currentIndex={currentModuleIndex}
+            totalModules={totalModules}
+            onNext={() => onNext?.()}
+            onPrevious={() => onPrevious?.()}
+            courseTitle={courseTitle}
+            notes={notes}
+            onNotesChange={setNotes}
+            resources={module.resources}
+          />
+        )}
+      </AnimatePresence>
       {/* Enhanced Module Header */}
       <div className="mb-3 sm:mb-4 md:mb-6 text-center">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2.5 sm:gap-3 mb-3 sm:mb-4">
@@ -430,21 +429,20 @@ export const EnhancedContentPlayer = ({
 
         <TabsContent value="content" className="space-y-4 sm:space-y-6 w-full">
           <Card
-            className={`${fullscreen ? 'fixed inset-0 z-50' : ''} w-full relative`}
+            className="w-full relative overflow-hidden"
             style={{ touchAction: 'pan-y' }}
             {...swipeHandlers}
           >
-            {/* Floating Focus Mode Button - Now for both text and video */}
-            {(module.type === 'text' || module.type === 'video') && (
-              <Button
-                onClick={() => setIsFullscreenViewerOpen(true)}
-                className="absolute top-3 right-3 z-10 bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg gap-2 px-4"
-                title="Full Screen Mode - Immersive view with swipe navigation"
-              >
-                <Maximize2 className="w-4 h-4" />
-                <span className="font-medium">Full Screen</span>
-              </Button>
-            )}
+            {/* Floating Focus Mode Button - Now for all content types */}
+            <Button
+              onClick={() => setIsFullscreenViewerOpen(true)}
+              className="absolute top-3 right-3 z-10 bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg gap-2 px-4"
+              title="Full Screen Mode - Immersive view with swipe navigation"
+            >
+              <Maximize2 className="h-4 w-4" />
+              <span className="font-medium">Full Screen</span>
+            </Button>
+
             <div className="p-3 sm:p-4 md:p-6">
               {module.type === 'text' && module.content.text && (
                 <div 
@@ -464,49 +462,42 @@ export const EnhancedContentPlayer = ({
 
               {module.type === 'video' && module.content.videoUrl && (
                 <div className="space-y-4">
-                <div className="aspect-video bg-background rounded-lg flex items-center justify-center relative border border-border">
-                  <div className="text-foreground text-center">
-                      <div className="text-4xl mb-4">🎥</div>
-                      <p className="text-lg">Enhanced Video Player</p>
-                      <p className="text-sm opacity-75 mb-4">
-                        Interactive video with progress tracking
-                      </p>
-                      
-                      {/* Video Controls */}
-                      <div className="flex items-center justify-center gap-4 mt-4">
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          onClick={togglePlayback}
-                        >
-                          {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-                        </Button>
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          onClick={changePlaybackSpeed}
-                        >
-                          {playbackSpeed}x
-                        </Button>
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          onClick={toggleFullscreen}
-                        >
-                          <Maximize className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </div>
+                  <div className="aspect-video bg-black rounded-xl overflow-hidden shadow-2xl border border-border">
+                    <iframe
+                      src={module.content.videoUrl}
+                      className="w-full h-full"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
                   </div>
                   
-                  {/* Video Progress Bar */}
-                  <div className="space-y-2">
+                  {/* Video Progress Tracker (Simulated) */}
+                  <div className="space-y-2 bg-muted/30 p-4 rounded-lg">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-xs font-medium text-muted-foreground">Video Progress</span>
+                      <span className="text-xs font-medium text-muted-foreground">45% Complete</span>
+                    </div>
                     <Progress value={45} className="h-2" />
-                    <div className="flex justify-between text-sm text-muted-foreground">
+                    <div className="flex justify-between text-[10px] text-muted-foreground">
                       <span>05:23</span>
                       <span>12:45</span>
                     </div>
                   </div>
+                </div>
+              )}
+
+              {module.type === 'interactive' && (
+                <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
+                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                    <Brain className="w-8 h-8 text-primary" />
+                  </div>
+                  <h3 className="text-lg font-semibold mb-2">Interactive Content</h3>
+                  <p className="text-muted-foreground max-w-md mb-6">
+                    This module contains interactive elements. Switch to Full Screen mode for the best experience.
+                  </p>
+                  <Button onClick={() => setIsFullscreenViewerOpen(true)}>
+                    Enter Full Screen
+                  </Button>
                 </div>
               )}
             </div>
