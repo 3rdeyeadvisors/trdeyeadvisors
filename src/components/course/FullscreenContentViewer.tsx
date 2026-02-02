@@ -1,12 +1,35 @@
 import React, { useEffect, useCallback, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ChevronLeft, ChevronRight, Maximize2, Minimize2 } from 'lucide-react';
+import {
+  X,
+  ChevronLeft,
+  ChevronRight,
+  Maximize2,
+  Minimize2,
+  PanelRightClose,
+  PanelRightOpen,
+  MessageSquare,
+  FileText,
+  ExternalLink,
+  Download,
+  Save
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Textarea } from '@/components/ui/textarea';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Separator } from '@/components/ui/separator';
 import { useFullscreen } from '@/hooks/useFullscreen';
 import { useSwipeNavigation } from '@/hooks/useSwipeNavigation';
 import { EnhancedMarkdownRenderer } from './EnhancedMarkdownRenderer';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+
+interface Resource {
+  title: string;
+  url: string;
+  type: 'pdf' | 'link' | 'download';
+}
 
 interface FullscreenContentViewerProps {
   isOpen: boolean;
@@ -20,6 +43,9 @@ interface FullscreenContentViewerProps {
   courseTitle?: string;
   type?: 'text' | 'video' | 'interactive';
   videoUrl?: string;
+  notes?: string;
+  onNotesChange?: (notes: string) => void;
+  resources?: Resource[];
 }
 
 export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = ({
@@ -33,11 +59,15 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
   onPrevious,
   courseTitle,
   type = 'text',
-  videoUrl
+  videoUrl,
+  notes = "",
+  onNotesChange,
+  resources = []
 }) => {
   const { isFullscreen, isSupported, enter, exit, containerRef } = useFullscreen();
   const contentRef = useRef<HTMLDivElement>(null);
   const [showUI, setShowUI] = useState(true);
+  const [showSidebar, setShowSidebar] = useState(true);
   const uiTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const hasNext = currentIndex < totalModules - 1;
   const hasPrevious = currentIndex > 0;
@@ -225,9 +255,25 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
           </div>
           
           <div className="flex items-center gap-2 shrink-0">
-            <span className="text-sm text-muted-foreground whitespace-nowrap">
+            <span className="text-sm text-muted-foreground whitespace-nowrap mr-2">
               {currentIndex + 1} / {totalModules}
             </span>
+
+            {/* Sidebar toggle */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setShowSidebar(!showSidebar)}
+              className="hidden lg:flex min-h-[44px] min-w-[44px]"
+              aria-label={showSidebar ? "Hide sidebar" : "Show sidebar"}
+            >
+              {showSidebar ? (
+                <PanelRightClose className="w-5 h-5" />
+              ) : (
+                <PanelRightOpen className="w-5 h-5" />
+              )}
+            </Button>
+
             {/* Only show fullscreen button if supported (not in iframe) */}
             {isSupported && (
               <Button
@@ -272,26 +318,136 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
           ))}
         </motion.div>
 
-        {/* Content - improved touch action */}
-        <div
-          ref={contentRef}
-          className="flex-1 overflow-y-auto px-4 py-6 md:px-8 lg:px-16 xl:px-24 scroll-smooth"
-          style={{ touchAction: 'pan-y' }}
-          onScroll={resetUITimer}
-        >
-          <div className="max-w-4xl mx-auto">
-            {type === 'video' && videoUrl && (
-              <div className="aspect-video bg-black rounded-xl overflow-hidden mb-8 shadow-2xl border border-border">
-                <iframe
-                  src={videoUrl}
-                  className="w-full h-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
+        {/* Content - improved layout with sidebar */}
+        <div className="flex-1 flex overflow-hidden relative">
+          <div
+            ref={contentRef}
+            className={cn(
+              "flex-1 overflow-y-auto px-4 py-6 md:px-8 lg:px-12 scroll-smooth transition-all duration-300",
+              showSidebar ? "lg:mr-0" : ""
             )}
-            <EnhancedMarkdownRenderer content={content} />
+            style={{ touchAction: 'pan-y' }}
+            onScroll={resetUITimer}
+          >
+            <div className={cn(
+              "mx-auto transition-all duration-300",
+              showSidebar ? "max-w-4xl" : "max-w-6xl"
+            )}>
+              {type === 'video' && videoUrl && (
+                <div className="aspect-video bg-black rounded-xl overflow-hidden mb-8 shadow-2xl border border-border">
+                  <iframe
+                    src={videoUrl}
+                    className="w-full h-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                </div>
+              )}
+              <EnhancedMarkdownRenderer content={content} />
+            </div>
           </div>
+
+          {/* Sidebar for Notes and Resources on desktop */}
+          <AnimatePresence>
+            {showSidebar && (
+              <motion.aside
+                initial={{ x: 350, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: 350, opacity: 0 }}
+                transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                className="hidden lg:flex w-[350px] border-l border-border bg-background/50 backdrop-blur-md flex-col overflow-hidden"
+              >
+                <div className="p-4 border-b border-border flex items-center justify-between">
+                  <h2 className="font-consciousness font-semibold flex items-center gap-2">
+                    <Save className="w-4 h-4 text-primary" />
+                    Study Tools
+                  </h2>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setShowSidebar(false)}
+                    className="h-8 w-8"
+                  >
+                    <X className="w-4 h-4" />
+                  </Button>
+                </div>
+
+                <Tabs defaultValue="notes" className="flex-1 flex flex-col overflow-hidden">
+                  <div className="px-4 pt-2">
+                    <TabsList className="w-full grid grid-cols-2">
+                      <TabsTrigger value="notes" className="text-xs">
+                        <MessageSquare className="w-3.5 h-3.5 mr-1.5" />
+                        Notes
+                      </TabsTrigger>
+                      <TabsTrigger value="resources" className="text-xs">
+                        <FileText className="w-3.5 h-3.5 mr-1.5" />
+                        Resources
+                      </TabsTrigger>
+                    </TabsList>
+                  </div>
+
+                  <TabsContent value="notes" className="flex-1 overflow-hidden flex flex-col p-4 mt-0">
+                    <div className="flex-1 flex flex-col gap-3">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-sm font-medium">Your Notes</h3>
+                        <span className="text-[10px] text-muted-foreground italic">Auto-saving...</span>
+                      </div>
+                      <Textarea
+                        placeholder="Type your notes here as you learn..."
+                        value={notes}
+                        onChange={(e) => onNotesChange?.(e.target.value)}
+                        className="flex-1 min-h-[200px] resize-none bg-muted/30 focus-visible:ring-primary/30 border-muted"
+                      />
+                    </div>
+                  </TabsContent>
+
+                  <TabsContent value="resources" className="flex-1 overflow-hidden flex flex-col p-4 mt-0">
+                    <h3 className="text-sm font-medium mb-3">Module Resources</h3>
+                    <ScrollArea className="flex-1 pr-3">
+                      {resources && resources.length > 0 ? (
+                        <div className="space-y-3">
+                          {resources.map((resource, index) => (
+                            <div
+                              key={index}
+                              className="group p-3 rounded-lg border border-border bg-muted/20 hover:bg-muted/40 transition-all cursor-pointer"
+                              onClick={() => window.open(resource.url, '_blank')}
+                            >
+                              <div className="flex items-start gap-3">
+                                <div className="p-2 rounded-md bg-background border border-border text-primary group-hover:scale-110 transition-transform">
+                                  {resource.type === 'pdf' && <FileText className="w-4 h-4" />}
+                                  {resource.type === 'link' && <ExternalLink className="w-4 h-4" />}
+                                  {resource.type === 'download' && <Download className="w-4 h-4" />}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-xs font-medium leading-tight group-hover:text-primary transition-colors line-clamp-2">
+                                    {resource.title}
+                                  </p>
+                                  <p className="text-[10px] text-muted-foreground mt-1 capitalize">
+                                    {resource.type}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="text-center py-12 px-4 border-2 border-dashed border-muted rounded-xl">
+                          <FileText className="w-8 h-8 text-muted-foreground/30 mx-auto mb-2" />
+                          <p className="text-xs text-muted-foreground">No resources for this module</p>
+                        </div>
+                      )}
+                    </ScrollArea>
+                  </TabsContent>
+                </Tabs>
+
+                <div className="p-4 border-t border-border bg-muted/10">
+                  <p className="text-[10px] text-center text-muted-foreground">
+                    Notes are synced across your devices automatically
+                  </p>
+                </div>
+              </motion.aside>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* Navigation Footer */}

@@ -329,6 +329,9 @@ export const EnhancedContentPlayer = ({
         onNext={() => onNext?.()}
         onPrevious={() => onPrevious?.()}
         courseTitle={courseTitle}
+        notes={notes}
+        onNotesChange={setNotes}
+        resources={module.resources}
       />
       {/* Enhanced Module Header */}
       <div className="mb-3 sm:mb-4 md:mb-6 text-center">
