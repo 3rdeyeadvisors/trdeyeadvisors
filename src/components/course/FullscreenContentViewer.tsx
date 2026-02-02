@@ -71,6 +71,7 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
   const uiTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const hasNext = currentIndex < totalModules - 1;
   const hasPrevious = currentIndex > 0;
+  const lastScrollY = useRef(0);
 
   const resetUITimer = useCallback(() => {
     if (uiTimeoutRef.current) clearTimeout(uiTimeoutRef.current);
@@ -90,6 +91,24 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
 
   const swipeOccurredRef = useRef(false);
 
+  const handleScroll = useCallback(() => {
+    if (contentRef.current) {
+      const currentScrollY = contentRef.current.scrollTop;
+
+      // If we scroll down more than 10px, hide UI immediately
+      if (currentScrollY > lastScrollY.current + 10 && showUI) {
+        setShowUI(false);
+      }
+      // If we scroll up more than 10px, show UI
+      else if (currentScrollY < lastScrollY.current - 10 && !showUI) {
+        setShowUI(true);
+      }
+
+      lastScrollY.current = currentScrollY;
+    }
+    resetUITimer();
+  }, [showUI, resetUITimer]);
+
   const toggleUI = useCallback((e: React.MouseEvent | React.TouchEvent) => {
     // If a swipe just happened, don't toggle UI
     if (swipeOccurredRef.current) {
@@ -105,9 +124,6 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
     setShowUI(prev => !prev);
   }, []);
 
-  // Don't auto-enter fullscreen - it doesn't work in iframes and causes errors
-  // The overlay mode works great without native fullscreen API
-
   const handleClose = useCallback(() => {
     if (isFullscreen) {
       exit();
@@ -115,12 +131,10 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
     onClose();
   }, [isFullscreen, exit, onClose]);
 
-  // Boundary handlers for swipe feedback
   const handleBoundarySwipe = useCallback((direction: 'left' | 'right') => {
     toast.info(direction === 'left' ? "You're at the last module" : "You're at the first module");
   }, []);
 
-  // Swipe navigation with lower threshold for reliable detection
   const swipeHandlers = useSwipeNavigation({
     onSwipeLeft: () => {
       swipeOccurredRef.current = true;
@@ -132,11 +146,15 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
       if (hasPrevious) onPrevious();
       else handleBoundarySwipe('right');
     },
-    threshold: 40,
+    threshold: 30,
     preventDefaultOnSwipe: true
   });
 
-  // Keyboard navigation
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    swipeOccurredRef.current = false;
+    swipeHandlers.onTouchStart(e);
+  }, [swipeHandlers]);
+
   useEffect(() => {
     if (!isOpen) return;
 
@@ -155,7 +173,6 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
           break;
         case 'f':
         case 'F':
-          // Only try fullscreen if supported (not in iframe)
           if (isSupported) {
             if (!isFullscreen) {
               enter(containerRef.current);
@@ -171,14 +188,12 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, hasNext, hasPrevious, onNext, onPrevious, isFullscreen, isSupported, enter, exit, containerRef, handleClose]);
 
-  // Scroll to top when content changes
   useEffect(() => {
     if (contentRef.current) {
       contentRef.current.scrollTop = 0;
     }
   }, [currentIndex]);
 
-  // Prevent body scroll when open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -197,11 +212,13 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[9999] bg-background flex flex-col overflow-hidden"
+        className="fixed inset-0 z-[9999] bg-background overflow-hidden"
         onClick={toggleUI}
-        {...swipeHandlers}
+        onTouchStart={handleTouchStart}
+        onTouchMove={swipeHandlers.onTouchMove}
+        onTouchEnd={swipeHandlers.onTouchEnd}
+        onTouchCancel={swipeHandlers.onTouchCancel}
       >
-        {/* Subtle persistent exit button when UI is hidden */}
         <AnimatePresence>
           {!showUI && (
             <motion.div
@@ -224,113 +241,105 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
           )}
         </AnimatePresence>
 
-        {/* Header */}
+        {/* Header Overlay */}
         <motion.div
           initial={false}
           animate={{
-            y: showUI ? 0 : -100,
+            y: showUI ? 0 : -150,
             opacity: showUI ? 1 : 0
           }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="flex items-center justify-between px-4 py-3 border-b border-border bg-background/95 backdrop-blur-sm safe-area-inset-top z-10"
+          className="absolute top-0 left-0 right-0 z-50 flex flex-col"
         >
-          <div className="flex items-center gap-3 flex-1 min-w-0">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleClose}
-              className="shrink-0 min-h-[44px] min-w-[44px]"
-              aria-label="Close focus mode"
-            >
-              <X className="w-5 h-5" />
-            </Button>
-            <div className="min-w-0">
-              {courseTitle && (
-                <p className="text-xs text-muted-foreground truncate">{courseTitle}</p>
-              )}
-              <h1 className="text-sm font-semibold text-foreground truncate">
-                {title}
-              </h1>
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-2 shrink-0">
-            <span className="text-sm text-muted-foreground whitespace-nowrap mr-2">
-              {currentIndex + 1} / {totalModules}
-            </span>
-
-            {/* Sidebar toggle */}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setShowSidebar(!showSidebar)}
-              className="hidden lg:flex min-h-[44px] min-w-[44px]"
-              aria-label={showSidebar ? "Hide sidebar" : "Show sidebar"}
-            >
-              {showSidebar ? (
-                <PanelRightClose className="w-5 h-5" />
-              ) : (
-                <PanelRightOpen className="w-5 h-5" />
-              )}
-            </Button>
-
-            {/* Only show fullscreen button if supported (not in iframe) */}
-            {isSupported && (
+          <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-background/95 backdrop-blur-sm safe-area-inset-top">
+            <div className="flex items-center gap-3 flex-1 min-w-0">
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => isFullscreen ? exit() : enter(containerRef.current)}
-                className="min-h-[44px] min-w-[44px]"
-                aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+                onClick={handleClose}
+                className="shrink-0 min-h-[44px] min-w-[44px]"
+                aria-label="Close focus mode"
               >
-                {isFullscreen ? (
-                  <Minimize2 className="w-5 h-5" />
+                <X className="w-5 h-5" />
+              </Button>
+              <div className="min-w-0">
+                {courseTitle && (
+                  <p className="text-xs text-muted-foreground truncate">{courseTitle}</p>
+                )}
+                <h1 className="text-sm font-semibold text-foreground truncate">
+                  {title}
+                </h1>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="text-sm text-muted-foreground whitespace-nowrap mr-2">
+                {currentIndex + 1} / {totalModules}
+              </span>
+
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setShowSidebar(!showSidebar)}
+                className="hidden lg:flex min-h-[44px] min-w-[44px]"
+                aria-label={showSidebar ? "Hide sidebar" : "Show sidebar"}
+              >
+                {showSidebar ? (
+                  <PanelRightClose className="w-5 h-5" />
                 ) : (
-                  <Maximize2 className="w-5 h-5" />
+                  <PanelRightOpen className="w-5 h-5" />
                 )}
               </Button>
-            )}
+
+              {isSupported && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => isFullscreen ? exit() : enter(containerRef.current)}
+                  className="min-h-[44px] min-w-[44px]"
+                  aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+                >
+                  {isFullscreen ? (
+                    <Minimize2 className="w-5 h-5" />
+                  ) : (
+                    <Maximize2 className="w-5 h-5" />
+                  )}
+                </Button>
+              )}
+            </div>
+          </div>
+
+          {/* Progress dots */}
+          <div className="flex justify-center gap-1.5 py-2 bg-background/80 border-b border-border/10">
+            {Array.from({ length: totalModules }).map((_, i) => (
+              <div
+                key={i}
+                className={cn(
+                  "w-2 h-2 rounded-full transition-colors",
+                  i === currentIndex
+                    ? "bg-primary"
+                    : i < currentIndex
+                    ? "bg-primary/40"
+                    : "bg-muted"
+                )}
+              />
+            ))}
           </div>
         </motion.div>
 
-        {/* Progress dots */}
-        <motion.div
-          initial={false}
-          animate={{
-            opacity: showUI ? 1 : 0,
-            y: showUI ? 0 : -20
-          }}
-          transition={{ duration: 0.3 }}
-          className="flex justify-center gap-1.5 py-2 bg-background/80 z-10"
-        >
-          {Array.from({ length: totalModules }).map((_, i) => (
-            <div
-              key={i}
-              className={cn(
-                "w-2 h-2 rounded-full transition-colors",
-                i === currentIndex
-                  ? "bg-primary"
-                  : i < currentIndex
-                  ? "bg-primary/40"
-                  : "bg-muted"
-              )}
-            />
-          ))}
-        </motion.div>
-
-        {/* Content - improved layout with sidebar */}
-        <div className="flex-1 flex overflow-hidden relative">
+        {/* Content Area - Fills entire screen */}
+        <div className="absolute inset-0 flex overflow-hidden">
           <div
             ref={contentRef}
             className={cn(
-              "flex-1 overflow-y-auto px-4 py-6 md:px-8 lg:px-12 scroll-smooth transition-all duration-300",
+              "flex-1 overflow-y-auto px-4 scroll-smooth transition-all duration-300",
               showSidebar ? "lg:mr-0" : ""
             )}
             style={{ touchAction: 'pan-y' }}
-            onScroll={resetUITimer}
+            onScroll={handleScroll}
           >
             <div className={cn(
-              "mx-auto transition-all duration-300",
+              "mx-auto transition-all duration-300 pt-28 pb-32 md:px-8 lg:px-12",
               showSidebar ? "max-w-4xl" : "max-w-6xl"
             )}>
               {type === 'video' && videoUrl && (
@@ -347,7 +356,6 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
             </div>
           </div>
 
-          {/* Sidebar for Notes and Resources on desktop */}
           <AnimatePresence>
             {showSidebar && (
               <motion.aside
@@ -355,7 +363,7 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: 350, opacity: 0 }}
                 transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                className="hidden lg:flex w-[350px] border-l border-border bg-background/50 backdrop-blur-md flex-col overflow-hidden"
+                className="hidden lg:flex w-[350px] border-l border-border bg-background/50 backdrop-blur-md flex-col overflow-hidden pt-16"
               >
                 <div className="p-4 border-b border-border flex items-center justify-between">
                   <h2 className="font-consciousness font-semibold flex items-center gap-2">
@@ -450,15 +458,15 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
           </AnimatePresence>
         </div>
 
-        {/* Navigation Footer */}
+        {/* Navigation Footer Overlay */}
         <motion.div
           initial={false}
           animate={{
-            y: showUI ? 0 : 100,
+            y: showUI ? 0 : 150,
             opacity: showUI ? 1 : 0
           }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="border-t border-border bg-background/95 backdrop-blur-sm px-4 py-3 safe-area-inset-bottom z-10"
+          className="absolute bottom-0 left-0 right-0 border-t border-border bg-background/95 backdrop-blur-sm px-4 py-3 safe-area-inset-bottom z-50"
         >
           <div className="flex items-center justify-between max-w-4xl mx-auto">
             <Button
@@ -488,7 +496,7 @@ export const FullscreenContentViewer: React.FC<FullscreenContentViewerProps> = (
           </div>
         </motion.div>
 
-        {/* Touch hint overlay - shows briefly on first open */}
+        {/* Touch hint overlay */}
         <motion.div
           initial={{ opacity: 1 }}
           animate={{ opacity: 0 }}
