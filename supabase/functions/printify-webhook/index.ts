@@ -26,13 +26,58 @@ interface PrintifyWebhookPayload {
   };
 }
 
+const hexToUint8Array = (hex: string) => {
+  const bytes = new Uint8Array(hex.length / 2);
+  for (let i = 0; i < hex.length; i += 2) {
+    bytes[i / 2] = parseInt(hex.substring(i, i + 2), 16);
+  }
+  return bytes;
+};
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const payload: PrintifyWebhookPayload = await req.json();
+    const body = await req.text();
+    const signature = req.headers.get("X-Printify-Signature");
+    const secret = Deno.env.get("PRINTIFY_WEBHOOK_SECRET");
+
+    if (secret && signature) {
+      const encoder = new TextEncoder();
+      const key = await crypto.subtle.importKey(
+        "raw",
+        encoder.encode(secret),
+        { name: "HMAC", hash: "SHA-256" },
+        false,
+        ["verify"]
+      );
+
+      const verified = await crypto.subtle.verify(
+        "HMAC",
+        key,
+        hexToUint8Array(signature),
+        encoder.encode(body)
+      );
+
+      if (!verified) {
+        console.error("❌ Printify webhook signature verification failed");
+        return new Response(
+          JSON.stringify({ error: "Invalid signature" }),
+          { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+      console.log("✅ Printify webhook signature verified");
+    } else if (secret && !signature) {
+      console.error("❌ Printify webhook missing signature header");
+      return new Response(
+        JSON.stringify({ error: "Missing signature" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const payload: PrintifyWebhookPayload = JSON.parse(body);
     console.log("📦 Printify webhook received:", payload.type);
 
     const supabaseClient = createClient(

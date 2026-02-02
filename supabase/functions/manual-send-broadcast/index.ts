@@ -15,14 +15,40 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { broadcast_id, apology_message } = await req.json();
-    
-    const supabase = createClient(
+    const supabaseAdmin = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    console.log('Manual broadcast send for:', broadcast_id);
+    // Verify admin access
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      throw new Error('No authorization header');
+    }
+
+    const token = authHeader.replace('Bearer ', '');
+    const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
+
+    if (authError || !user) {
+      throw new Error('Unauthorized');
+    }
+
+    // Check if user is admin
+    const { data: roles, error: rolesError } = await supabaseAdmin
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', user.id)
+      .eq('role', 'admin');
+
+    if (rolesError || !roles || roles.length === 0) {
+      throw new Error('User is not an admin');
+    }
+
+    const { broadcast_id, apology_message } = await req.json();
+
+    const supabase = supabaseAdmin;
+
+    console.log(`Manual broadcast send for: ${broadcast_id} triggered by ${user.email}`);
 
     // Get broadcast
     const { data: broadcast, error: fetchError } = await supabase

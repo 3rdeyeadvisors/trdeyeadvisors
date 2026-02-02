@@ -40,15 +40,41 @@ serve(async (req) => {
     const resend = new Resend(resendApiKey);
     const stripe = new Stripe(stripeKey, { apiVersion: "2025-08-27.basil" });
 
-    const supabaseClient = createClient(
+    const supabaseAdmin = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
       { auth: { persistSession: false } }
     );
 
+    // Verify admin access
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      throw new Error('No authorization header');
+    }
+
+    const token = authHeader.replace('Bearer ', '');
+    const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
+
+    if (authError || !user) {
+      throw new Error('Unauthorized');
+    }
+
+    // Check if user is admin
+    const { data: roles, error: rolesError } = await supabaseAdmin
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', user.id)
+      .eq('role', 'admin');
+
+    if (rolesError || !roles || roles.length === 0) {
+      throw new Error('User is not an admin');
+    }
+
     const { course_id, course_title, course_description, early_access_date, public_release_date }: CourseAnnouncementRequest = await req.json();
 
-    logStep("Starting announcement", { course_id, course_title });
+    const supabaseClient = supabaseAdmin;
+
+    logStep(`Starting announcement by ${user.email}`, { course_id, course_title });
 
     // Get all premium subscribers (annual + founding members)
     const premiumEmails: { email: string; name: string; tier: 'founding' | 'annual' }[] = [];
