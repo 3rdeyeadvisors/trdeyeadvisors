@@ -14,27 +14,24 @@ export const useFullscreen = (): FullscreenAPI => {
   const [isSupported, setIsSupported] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Check if fullscreen is supported (not in iframe, API available)
+  // Check if fullscreen is supported
   useEffect(() => {
     const checkSupport = () => {
-      try {
-        // Check if fullscreen API is available
-        const hasFullscreenAPI = !!(
-          document.documentElement.requestFullscreen ||
-          (document.documentElement as any).webkitRequestFullscreen ||
-          (document.documentElement as any).msRequestFullscreen
-        );
-        
-        // Allow attempting fullscreen regardless of iframe status
-        // The browser will handle if it's blocked by the iframe 'allow' attribute
-        setIsSupported(hasFullscreenAPI);
-      } catch {
-        // If we can't access window.top, we're in a cross-origin iframe
-        setIsSupported(false);
-      }
+      // Check if fullscreen API is available and enabled
+      const isEnabled = !!(
+        document.fullscreenEnabled ||
+        (document as any).webkitFullscreenEnabled ||
+        (document as any).mozFullScreenEnabled ||
+        (document as any).msFullscreenEnabled
+      );
+
+      setIsSupported(isEnabled);
     };
     
     checkSupport();
+    // Re-check on focus as it might change
+    window.addEventListener('focus', checkSupport);
+    return () => window.removeEventListener('focus', checkSupport);
   }, []);
 
   const enter = useCallback(async (element?: HTMLElement | null): Promise<boolean> => {
@@ -56,6 +53,9 @@ export const useFullscreen = (): FullscreenAPI => {
       } else if ((target as any).webkitRequestFullscreen) {
         await (target as any).webkitRequestFullscreen();
         return true;
+      } else if ((target as any).mozRequestFullScreen) {
+        await (target as any).mozRequestFullScreen();
+        return true;
       } else if ((target as any).msRequestFullscreen) {
         await (target as any).msRequestFullscreen();
         return true;
@@ -69,11 +69,18 @@ export const useFullscreen = (): FullscreenAPI => {
 
   const exit = useCallback(async () => {
     try {
-      if (document.fullscreenElement) {
+      const fullscreenElement = document.fullscreenElement ||
+                                (document as any).webkitFullscreenElement ||
+                                (document as any).mozFullScreenElement ||
+                                (document as any).msFullscreenElement;
+
+      if (fullscreenElement) {
         if (document.exitFullscreen) {
           await document.exitFullscreen();
         } else if ((document as any).webkitExitFullscreen) {
           await (document as any).webkitExitFullscreen();
+        } else if ((document as any).mozCancelFullScreen) {
+          await (document as any).mozCancelFullScreen();
         } else if ((document as any).msExitFullscreen) {
           await (document as any).msExitFullscreen();
         }
@@ -96,6 +103,7 @@ export const useFullscreen = (): FullscreenAPI => {
       const isCurrentlyFullscreen = !!(
         document.fullscreenElement ||
         (document as any).webkitFullscreenElement ||
+        (document as any).mozFullScreenElement ||
         (document as any).msFullscreenElement
       );
       setIsFullscreen(isCurrentlyFullscreen);
@@ -103,12 +111,14 @@ export const useFullscreen = (): FullscreenAPI => {
 
     document.addEventListener('fullscreenchange', handleChange);
     document.addEventListener('webkitfullscreenchange', handleChange);
-    document.addEventListener('msfullscreenchange', handleChange);
+    document.addEventListener('mozfullscreenchange', handleChange);
+    document.addEventListener('MSFullscreenChange', handleChange);
 
     return () => {
       document.removeEventListener('fullscreenchange', handleChange);
       document.removeEventListener('webkitfullscreenchange', handleChange);
-      document.removeEventListener('msfullscreenchange', handleChange);
+      document.removeEventListener('mozfullscreenchange', handleChange);
+      document.removeEventListener('MSFullscreenChange', handleChange);
     };
   }, []);
 

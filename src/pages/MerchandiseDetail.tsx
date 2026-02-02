@@ -2,7 +2,8 @@ import { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, Check, ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
+import { ShoppingCart, Check, ArrowLeft, ChevronLeft, ChevronRight, X, Maximize2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "sonner";
@@ -24,6 +25,7 @@ export default function MerchandiseDetail() {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedVariant, setSelectedVariant] = useState<any>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [selectedColor, setSelectedColor] = useState('');
   const [selectedSize, setSelectedSize] = useState('');
 
@@ -244,6 +246,71 @@ export default function MerchandiseDetail() {
         type="product"
         image={productImages[0]?.src}
       />
+
+      <AnimatePresence>
+        {isLightboxOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] bg-background/95 backdrop-blur-md flex flex-col items-center justify-center p-4 md:p-8"
+            onClick={() => setIsLightboxOpen(false)}
+          >
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute top-4 right-4 z-[110] rounded-full"
+              onClick={() => setIsLightboxOpen(false)}
+            >
+              <X className="h-6 w-6" />
+            </Button>
+
+            <div className="relative w-full max-w-5xl aspect-square flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
+              <motion.img
+                key={currentImageIndex}
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                src={productImages[currentImageIndex]?.src || productImages[0]?.src}
+                alt={product.title}
+                className="max-w-full max-h-[85vh] object-contain shadow-2xl rounded-lg"
+              />
+
+              {productImages.length > 1 && (
+                <>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="absolute left-0 md:-left-16 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur rounded-full h-12 w-12"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      prevImage();
+                    }}
+                  >
+                    <ChevronLeft className="h-6 w-6" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="absolute right-0 md:-right-16 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur rounded-full h-12 w-12"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      nextImage();
+                    }}
+                  >
+                    <ChevronRight className="h-6 w-6" />
+                  </Button>
+                </>
+              )}
+            </div>
+
+            <p className="mt-6 text-foreground font-consciousness font-medium text-center">
+              {product.title} {productImages.length > 1 && `(${currentImageIndex + 1} / ${productImages.length})`}
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
       
       <div className="min-h-screen py-20 w-full overflow-x-hidden">
         <div className="container mx-auto px-4 w-full max-w-7xl">
@@ -261,15 +328,23 @@ export default function MerchandiseDetail() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-12 w-full">
             {/* Image Gallery */}
             <div className="space-y-4">
-              <Card className="overflow-hidden">
-                <div className="relative aspect-square bg-background">
+              <Card className="overflow-hidden relative group">
+                <div
+                  className="relative aspect-square bg-background cursor-zoom-in"
+                  onClick={() => setIsLightboxOpen(true)}
+                >
                   <img
                     src={productImages[currentImageIndex]?.src || productImages[0]?.src}
                     alt={product.title}
                     width={800}
                     height={800}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
+                  <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Button variant="secondary" size="icon" className="rounded-full shadow-lg">
+                      <Maximize2 className="h-4 w-4" />
+                    </Button>
+                  </div>
                   {productImages.length > 1 && (
                     <>
                       <Button
