@@ -18,7 +18,9 @@ interface ProgressContextType {
   courseProgress: Record<number, CourseProgress>;
   loading: boolean;
   updateModuleProgress: (courseId: number, moduleIndex: number) => Promise<void>;
+  startCourse: (courseId: number) => Promise<void>;
   getCourseProgress: (courseId: number) => CourseProgress | null;
+  isCourseCompleted: (courseId: number) => boolean;
   getCompletionBadge: (courseId: number) => string | null;
 }
 
@@ -78,6 +80,45 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
       console.error('Error loading progress:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const startCourse = async (courseId: number) => {
+    if (!user) return;
+
+    try {
+      const { data, error } = await supabase
+        .from('course_progress')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('course_id', courseId)
+        .maybeSingle();
+
+      if (error) throw error;
+
+      if (!data) {
+        const { data: newData, error: insertError } = await supabase
+          .from('course_progress')
+          .insert({
+            user_id: user.id,
+            course_id: courseId,
+            completed_modules: [],
+            completion_percentage: 0,
+            started_at: new Date().toISOString(),
+            last_accessed: new Date().toISOString(),
+          })
+          .select()
+          .single();
+
+        if (insertError) throw insertError;
+
+        setCourseProgress(prev => ({
+          ...prev,
+          [courseId]: newData
+        }));
+      }
+    } catch (error) {
+      console.error('[Progress] Error starting course:', error);
     }
   };
 
@@ -206,6 +247,10 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
     return courseProgress[courseId] || null;
   };
 
+  const isCourseCompleted = (courseId: number): boolean => {
+    return courseProgress[courseId]?.completion_percentage === 100;
+  };
+
   const getCompletionBadge = (courseId: number): string | null => {
     const progress = getCourseProgress(courseId);
     if (!progress) return null;
@@ -226,7 +271,9 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
     courseProgress,
     loading,
     updateModuleProgress,
+    startCourse,
     getCourseProgress,
+    isCourseCompleted,
     getCompletionBadge,
   };
 

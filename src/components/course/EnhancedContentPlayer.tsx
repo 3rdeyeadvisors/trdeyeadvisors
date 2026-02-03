@@ -255,12 +255,48 @@ export const EnhancedContentPlayer = ({
     });
   };
 
-  const saveNotes = () => {
+  const saveNotes = async () => {
     localStorage.setItem(`notes-${courseId}-${module.id}`, notes);
-    toast({
-      title: "Notes Saved",
-      description: "Your notes have been saved locally.",
-    });
+
+    if (user) {
+      try {
+        const { error } = await supabase
+          .from('user_presence')
+          .upsert({
+            user_id: user.id,
+            content_type: 'module',
+            content_id: module.id,
+            metadata: {
+              courseId,
+              notes,
+              moduleTitle: module.title,
+              lastUpdated: new Date().toISOString()
+            },
+            last_seen: new Date().toISOString(),
+          }, {
+            onConflict: 'user_id,content_type,content_id'
+          });
+
+        if (error) throw error;
+
+        toast({
+          title: "Notes Saved",
+          description: "Your notes have been saved to your profile.",
+        });
+      } catch (error) {
+        console.error('Error saving notes:', error);
+        toast({
+          title: "Notes Saved Locally",
+          description: "Could not sync with cloud, but saved on this device.",
+          variant: "destructive"
+        });
+      }
+    } else {
+      toast({
+        title: "Notes Saved Locally",
+        description: "Sign in to sync notes across devices.",
+      });
+    }
   };
 
   const togglePlayback = () => {
@@ -276,11 +312,39 @@ export const EnhancedContentPlayer = ({
 
   // Load saved notes
   useEffect(() => {
-    const savedNotes = localStorage.getItem(`notes-${courseId}-${module.id}`);
-    if (savedNotes) {
-      setNotes(savedNotes);
-    }
-  }, [courseId, module.id]);
+    const loadNotes = async () => {
+      // Try local storage first for immediate feedback
+      const localNotes = localStorage.getItem(`notes-${courseId}-${module.id}`);
+      if (localNotes) {
+        setNotes(localNotes);
+      }
+
+      // Then try Supabase
+      if (user) {
+        try {
+          const { data, error } = await supabase
+            .from('user_presence')
+            .select('metadata')
+            .eq('user_id', user.id)
+            .eq('content_type', 'module')
+            .eq('content_id', module.id)
+            .maybeSingle();
+
+          if (data?.metadata && typeof data.metadata === 'object' && 'notes' in data.metadata) {
+            const cloudNotes = (data.metadata as any).notes;
+            if (cloudNotes && cloudNotes !== localNotes) {
+              setNotes(cloudNotes);
+              localStorage.setItem(`notes-${courseId}-${module.id}`, cloudNotes);
+            }
+          }
+        } catch (error) {
+          console.error('Error loading notes from Supabase:', error);
+        }
+      }
+    };
+
+    loadNotes();
+  }, [courseId, module.id, user]);
 
   const getTypeIcon = (type: string) => {
     switch (type) {
@@ -618,7 +682,7 @@ export const EnhancedContentPlayer = ({
           <Button 
             onClick={handleComplete} 
             size="lg" 
-            className="bg-awareness hover:bg-awareness/90 text-foreground w-full flex items-center justify-center gap-2 min-h-[48px] font-medium shadow-lg hover:shadow-awareness/20 transition-all"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground w-full flex items-center justify-center gap-2 min-h-[48px] font-medium shadow-lg hover:shadow-primary/20 transition-all"
           >
             <CheckCircle className="w-5 h-5" />
             <span>Mark Module Complete</span>

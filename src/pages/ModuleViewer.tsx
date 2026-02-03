@@ -15,12 +15,13 @@ import { ArrowLeft, BookOpen, List, Play } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { DesktopOnlyNotice } from "@/components/DesktopOnlyNotice";
 import { OrientationSuggestion } from "@/components/course/OrientationSuggestion";
+import OrionChat from "@/components/orion/OrionChat";
 
 const ModuleViewer = () => {
   const { courseId, moduleId } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { getCourseProgress } = useProgress();
+  const { getCourseProgress, startCourse } = useProgress();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showModuleList, setShowModuleList] = useState(false);
   const isMobile = useIsMobile();
@@ -46,8 +47,10 @@ const ModuleViewer = () => {
   useEffect(() => {
     if (!course || currentModuleIndex === -1) {
       navigate("/courses");
+    } else if (user && course) {
+      startCourse(course.id);
     }
-  }, [course, currentModuleIndex, navigate]);
+  }, [course, currentModuleIndex, navigate, user, startCourse]);
 
   if (!course || currentModuleIndex === -1 || !currentModule) {
     return null;
@@ -244,6 +247,7 @@ const ModuleViewer = () => {
           onClose={() => setShowAuthModal(false)} 
         />
       </div>
+      {user && <OrionChat />}
     </div>
   );
 };

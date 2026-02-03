@@ -91,6 +91,22 @@ export const BADGE_DEFINITIONS: Record<string, BadgeDefinition> = {
     color: 'text-awareness',
     bgColor: 'bg-awareness/20',
   },
+  final_exam_master: {
+    type: 'final_exam_master',
+    name: 'Exam Master',
+    description: 'Passed a 33-question final exam',
+    icon: Award,
+    color: 'text-primary-glow',
+    bgColor: 'bg-primary/20',
+  },
+  course_mastery: {
+    type: 'course_mastery',
+    name: 'Course Mastery',
+    description: 'Got 100% on a final exam',
+    icon: Star,
+    color: 'text-yellow-400',
+    bgColor: 'bg-yellow-400/20',
+  },
 };
 
 export type BadgeType = keyof typeof BADGE_DEFINITIONS;
