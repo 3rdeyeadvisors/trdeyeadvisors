@@ -81,9 +81,9 @@ export const StepNavigation = ({
           {!isCurrentStepCompleted && (
             <Button
               onClick={onMarkComplete}
-              variant="secondary"
+              variant="default"
               disabled={!isAuthenticated}
-              className="w-full sm:w-auto bg-awareness/20 text-awareness hover:bg-awareness/30 border-awareness"
+              className="w-full sm:w-auto"
             >
               <CheckCircle className="w-4 h-4 mr-2" />
               Mark Complete

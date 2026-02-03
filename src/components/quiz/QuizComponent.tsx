@@ -248,6 +248,15 @@ export const QuizComponent = ({ courseId, moduleId, quiz, onComplete }: QuizComp
             // Award perfectionist badge
             await awardBadge('perfectionist');
           }
+
+          // Special logic for Final Exams (33 questions)
+          if (quiz.questions.length >= 33 && quiz.id.startsWith('exam-')) {
+            await awardBadge('final_exam_master');
+
+            if (finalScore === 100) {
+              await awardBadge('course_mastery');
+            }
+          }
         } catch (e) {
           // Could not award quiz points
         }

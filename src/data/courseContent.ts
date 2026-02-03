@@ -969,6 +969,64 @@ With proper education, security practices, and gradual exposure, DeFi can be a v
             type: "link"
           }
         ]
+      },
+      {
+        id: "5-exam",
+        title: "Course 5 Final Exam: Vault Mastery",
+        type: "interactive",
+        duration: 60,
+        content: {
+          text: `# Final Exam: Vault Mastery
+
+Prove your expertise in DeFi vaults and managed investing.
+
+### Exam Details:
+- **Questions**: 33
+- **Passing Score**: 80%
+- **Time Limit**: 60 minutes`,
+          quiz: {
+            id: "exam-5",
+            title: "Vault Mastery Final Exam",
+            passingScore: 80,
+            timeLimit: 60,
+            maxAttempts: 3,
+            questions: [
+              { id: "q5-e1", question: "What is a DeFi vault?", type: "single", options: ["A physical safe", "An automated investment smart contract", "A type of token", "A centralized exchange"], correctAnswers: [1], points: 3 },
+              { id: "q5-e2", question: "What are 'Vault Shares'?", type: "single", options: ["Stock in a company", "Tokens representing your portion of the vault's assets", "Reward tokens only", "A type of stablecoin"], correctAnswers: [1], points: 3 },
+              { id: "q5-e3", question: "True or False: Vaults automate complex strategies like compounding and rebalancing.", type: "true-false", options: ["True", "False"], correctAnswers: [0], points: 3 },
+              { id: "q5-e4", question: "Which fee is typically charged based on the profits earned by the vault?", type: "single", options: ["Management Fee", "Performance Fee", "Withdrawal Fee", "Deposit Fee"], correctAnswers: [1], points: 3 },
+              { id: "q5-e5", question: "What is 'TVL' in the context of a vault?", type: "single", options: ["Total Value Locked", "Token Volume Limit", "Total Variable Liquidity", "Transfer Value Log"], correctAnswers: [0], points: 3 },
+              { id: "q5-e6", question: "Which type of vault is designed to find the best yields across different protocols?", type: "single", options: ["Governance vault", "Yield Aggregator", "Leveraged vault", "NFT vault"], correctAnswers: [1], points: 3 },
+              { id: "q5-e7", question: "What is the benefit of 'Auto-Compounding'?", type: "single", options: ["It saves on gas fees and maximizes growth", "It makes the token price go up", "It reduces security risk", "It increases withdrawal fees"], correctAnswers: [0], points: 3 },
+              { id: "q5-e8", question: "True or False: All vaults have a 1-year lock-up period.", type: "true-false", options: ["True", "False"], correctAnswers: [1], points: 3 },
+              { id: "q5-e9", question: "Which firm is a well-known DeFi security auditor?", type: "single", options: ["Trail of Bits", "OpenZeppelin", "Quantstamp", "All of the above"], correctAnswers: [3], points: 3 },
+              { id: "q5-e10", question: "What is 'Smart Contract Risk'?", type: "single", options: ["The risk of the contract being too smart", "The risk of bugs or exploits in the vault code", "Market volatility", "Gas fee spikes"], correctAnswers: [1], points: 3 },
+              { id: "q5-e11", question: "What is a 'Strategist'?", type: "single", options: ["An AI bot", "The person or team that designs the vault's investment logic", "A regular user", "A tax accountant"], correctAnswers: [1], points: 3 },
+              { id: "q5-e12", question: "Which of these is a popular yield aggregator protocol?", type: "single", options: ["Yearn Finance", "Beefy Finance", "Badger DAO", "All of the above"], correctAnswers: [3], points: 3 },
+              { id: "q5-e13", question: "True or False: You should check if a vault is open-source before depositing.", type: "true-false", options: ["True", "False"], correctAnswers: [0], points: 3 },
+              { id: "q5-e14", question: "What is an 'Index Vault'?", type: "single", options: ["A vault for books", "A vault that holds a basket of different tokens", "A vault with only one token", "A vault for stablecoins only"], correctAnswers: [1], points: 3 },
+              { id: "q5-e15", question: "What does 'Harvesting' mean in a vault?", type: "single", options: ["Collecting rewards and reinvesting them", "Closing the vault", "Withdrawing all funds", "A type of hack"], correctAnswers: [0], points: 3 },
+              { id: "q5-e16", question: "Which of these is a sign of a sustainable APY?", type: "single", options: ["1,000,000% APY", "APY matching market lending/trading rates", "No explanation of where yield comes from", "Guaranteed 10% daily"], correctAnswers: [1], points: 3 },
+              { id: "q5-e17", question: "What is the 'Management Fee' used for?", type: "single", options: ["Paying for protocol maintenance and strategists", "Buying back tokens", "Paying gas fees for users", "Nothing, it's a scam"], correctAnswers: [0], points: 3 },
+              { id: "q5-e18", question: "True or False: High TVL always means a vault is 100% safe.", type: "true-false", options: ["True", "False"], correctAnswers: [1], points: 3 },
+              { id: "q5-e19", question: "What is 'Liquidity Risk'?", type: "single", options: ["Risk of too much water", "Risk of not being able to withdraw assets due to low pool liquidity", "Risk of price going up", "Risk of low gas fees"], correctAnswers: [1], points: 3 },
+              { id: "q5-e20", question: "Which vault would be best for someone who wants exposure to ETH yield?", type: "single", options: ["USDC vault", "ETH yield vault", "BTC vault", "Stablecoin vault"], correctAnswers: [1], points: 3 },
+              { id: "q5-e21", question: "What is a 'Stablecoin'?", type: "single", options: ["A volatile asset", "An asset pegged to a stable value like $1 USD", "A fast token", "A mining token"], correctAnswers: [1], points: 3 },
+              { id: "q5-e22", question: "True or False: 3EA offers a managed vault solution.", type: "true-false", options: ["True", "False"], correctAnswers: [0], points: 3 },
+              { id: "q5-e23", question: "What is the role of a 'Governance Token' in a vault protocol?", type: "single", options: ["Paying for gas", "Voting on protocol changes and strategies", "Mining", "Storing data"], correctAnswers: [1], points: 3 },
+              { id: "q5-e24", question: "What is 'Slippage'?", type: "single", options: ["A wallet error", "The difference between expected and actual price in a trade", "A type of vault", "A gas refund"], correctAnswers: [1], points: 3 },
+              { id: "q5-e25", question: "What should you do if a vault has no audit?", type: "single", options: ["Invest everything", "Approach with extreme caution or avoid", "Assume it's safe", "Tell all your friends to invest"], correctAnswers: [1], points: 3 },
+              { id: "q5-e26", question: "What is 'Backtesting'?", type: "single", options: ["Testing a strategy against historical data", "Testing a strategy in the future", "Not testing at all", "Testing with real money first"], correctAnswers: [0], points: 3 },
+              { id: "q5-e27", question: "Which of these is a 'Red Flag'?", type: "single", options: ["Transparent team", "Anonymous team with no track record", "Detailed documentation", "Active community"], correctAnswers: [1], points: 3 },
+              { id: "q5-e28", question: "True or False: Impermanent Loss can affect vaults that use liquidity pools.", type: "true-false", options: ["True", "False"], correctAnswers: [0], points: 3 },
+              { id: "q5-e29", question: "What is the 'Withdrawal Fee' designed to do?", type: "single", options: ["Prevent 'vampire attacks' and frequent hopping", "Make the team rich", "Pay for gas", "Discourage users from ever leaving"], correctAnswers: [0], points: 3 },
+              { id: "q5-e30", question: "What is 'APY'?", type: "single", options: ["Annual Percentage Yield", "Actual Profit Yearly", "Asset Price Yield", "Average Profit Yearly"], correctAnswers: [0], points: 3 },
+              { id: "q5-e31", question: "True or False: You can track vault performance on most DeFi dashboards.", type: "true-false", options: ["True", "False"], correctAnswers: [0], points: 3 },
+              { id: "q5-e32", question: "What is the main benefit of using a vault over manual management?", type: "single", options: ["Higher risk", "Automation, efficiency, and expert strategies", "It's free", "No gas fees ever"], correctAnswers: [1], points: 3 },
+              { id: "q5-e33", question: "What is the golden rule of DeFi investing?", type: "single", options: ["Follow the hype", "Only invest what you can afford to lose", "Never take profits", "Ignore security"], correctAnswers: [1], points: 4 }
+            ]
+          }
+        }
       }
     ]
   },
@@ -2376,7 +2434,78 @@ Emergencies in DeFi are often more recoverable than they initially appear. The k
 
 **Remember**: Every experienced DeFi user has made mistakes. The difference is they learned from them and improved their security practices. Your goal isn't to never make mistakes - it's to make smaller, recoverable ones and learn continuously.
 
-*Congratulations! You've completed the DeFi Security course. You now have the knowledge and tools to navigate DeFi safely and handle emergencies when they arise.*`
+*Congratulations! You've completed the DeFi Security course. You now have the knowledge and tools to navigate DeFi safely and handle emergencies when they arise.*`,
+          quiz: {
+            id: "quiz-2-6",
+            title: "Recovery & Emergencies - Knowledge Check",
+            passingScore: 70,
+            maxAttempts: 3,
+            questions: [
+              { id: "q2-6-1", question: "If your seed phrase is compromised, what is the FIRST thing you should do?", type: "single", options: ["Change your wallet password", "Create a new wallet and transfer all funds immediately", "Contact 'Metamask Support' on Twitter", "Wait to see if any funds are stolen"], correctAnswers: [1], points: 10 },
+              { id: "q2-6-2", question: "What can you do if a transaction is 'stuck' as pending?", type: "single", options: ["Nothing, just wait", "Speed it up by paying slightly more gas", "Delete your wallet", "Format your computer"], correctAnswers: [1], points: 10 },
+              { id: "q2-6-3", question: "True or False: Most minor mistakes in DeFi are recoverable if you act quickly.", type: "true-false", options: ["True", "False"], correctAnswers: [0], points: 10 }
+            ]
+          }
+        }
+      },
+      {
+        id: "2-exam",
+        title: "Course 2 Final Exam: DeFi Security Mastery",
+        type: "interactive",
+        duration: 60,
+        content: {
+          text: `# Final Exam: DeFi Security Mastery
+
+Test your knowledge on how to stay safe in the decentralized world.
+
+### Exam Details:
+- **Questions**: 33
+- **Passing Score**: 80% (27 correct answers)
+- **Time Limit**: 60 minutes
+- **Topics**: Wallet types, Seed phrases, Private keys, Scams, Best practices, Emergency response.`,
+          quiz: {
+            id: "exam-2",
+            title: "DeFi Security Final Exam",
+            description: "Final comprehensive exam for Course 2",
+            passingScore: 80,
+            timeLimit: 60,
+            maxAttempts: 3,
+            questions: [
+              { id: "q2-e1", question: "A physical device that stores private keys offline is called a...", type: "single", options: ["Hot Wallet", "Software Wallet", "Hardware Wallet", "Digital Safe"], correctAnswers: [2], points: 3 },
+              { id: "q2-e2", question: "Which of these is NOT a popular DeFi software wallet?", type: "single", options: ["MetaMask", "Trust Wallet", "Ledger", "Coinbase Wallet"], correctAnswers: [2], points: 3 },
+              { id: "q2-e3", question: "What is the primary benefit of a hardware wallet?", type: "single", options: ["It is free", "It keeps your private keys away from internet-connected devices", "It makes transactions faster", "It looks cool"], correctAnswers: [1], points: 3 },
+              { id: "q2-e4", question: "How many words are typically found in a standard BIP-39 recovery phrase?", type: "single", options: ["6 or 12", "12 or 24", "10 or 20", "Exactly 18"], correctAnswers: [1], points: 3 },
+              { id: "q2-e5", question: "If you lose your hardware wallet but still have your seed phrase, are your funds safe?", type: "single", options: ["No, they are gone", "Yes, you can restore them on a new device using the phrase", "Only if you have a backup of the device", "Only if you remember the password"], correctAnswers: [1], points: 3 },
+              { id: "q2-e6", question: "Who should you share your seed phrase with?", type: "single", options: ["Your best friend", "Wallet support staff", "Absolutely no one", "The bank"], correctAnswers: [2], points: 3 },
+              { id: "q2-e7", question: "A 'Rug Pull' typically involves which of the following?", type: "multiple", options: ["Anonymous developers", "Promises of extreme returns", "Liquidity being drained", "Official government backing"], correctAnswers: [0, 1, 2], points: 4 },
+              { id: "q2-e8", question: "What is a common sign of a phishing website?", type: "single", options: ["Misspelled domain name", "Proper grammar", "Fast loading times", "Active social media links"], correctAnswers: [0], points: 3 },
+              { id: "q2-e9", question: "True or False: You should always use a secondary 'burner' wallet for testing new and unproven protocols.", type: "true-false", options: ["True", "False"], correctAnswers: [0], points: 3 },
+              { id: "q2-e10", question: "Which tool allows you to revoke previous token permissions?", type: "single", options: ["Revoke.cash", "Etherscan", "MetaMask", "All of the above"], correctAnswers: [3], points: 3 },
+              { id: "q2-e11", question: "What does 2FA stand for?", type: "single", options: ["Two Factor Authentication", "To Fund All", "Token Filter Active", "Two Fold Asset"], correctAnswers: [0], points: 3 },
+              { id: "q2-e12", question: "Which type of 2FA is generally considered more secure for crypto?", type: "single", options: ["SMS/Text messages", "Authenticator App (e.g. Google Authenticator)", "Email only", "No 2FA is better"], correctAnswers: [1], points: 3 },
+              { id: "q2-e13", question: "Why is public WiFi dangerous for DeFi?", type: "single", options: ["It is too slow", "Attackers can intercept your data and potentially steal credentials", "It costs money", "It is illegal"], correctAnswers: [1], points: 3 },
+              { id: "q2-e14", question: "If you accidentally send tokens to the wrong address, what is usually the result?", type: "single", options: ["You can click 'undo'", "The tokens are lost unless the recipient sends them back", "The bank will reverse it", "The network automatically cancels it"], correctAnswers: [1], points: 3 },
+              { id: "q2-e15", question: "A 'honey pot' scam is a type of token that...", type: "single", options: ["Gives you free honey", "Allows you to buy but prevents you from selling", "Is endorsed by celebrities", "Is used for charity"], correctAnswers: [1], points: 3 },
+              { id: "q2-e16", question: "What should you check before signing a transaction in MetaMask?", type: "multiple", options: ["The contract address", "The amount of tokens being approved", "The gas fee", "The color of the button"], correctAnswers: [0, 1, 2], points: 4 },
+              { id: "q2-e17", question: "Where should you bookmark DeFi websites from?", type: "single", options: ["Google Search results", "Official project social media or CoinGecko/DeFiLlama", "Random Discord DMs", "Popup ads"], correctAnswers: [1], points: 3 },
+              { id: "q2-e18", question: "True or False: If a project has one security audit, it is 100% guaranteed to be safe.", type: "true-false", options: ["True", "False"], correctAnswers: [1], points: 3 },
+              { id: "q2-e19", question: "What is 'Social Engineering' in the context of scams?", type: "single", options: ["Building a social network", "Manipulating people into giving up confidential information", "Coding social media apps", "Improving society through engineering"], correctAnswers: [1], points: 3 },
+              { id: "q2-e20", question: "Which of these is a Level 3 (Critical) Emergency?", type: "single", options: ["Stuck transaction", "Compromised seed phrase", "High gas fees", "Accidentally connecting to Polygon"], correctAnswers: [1], points: 3 },
+              { id: "q2-e21", question: "How often should you review your wallet approvals?", type: "single", options: ["Never", "Once every 10 years", "Regularly (e.g. monthly)", "Every hour"], correctAnswers: [2], points: 3 },
+              { id: "q2-e22", question: "If a transaction is stuck, you can 'Speed Up' by...", type: "single", options: ["Clicking faster", "Increasing the gas price", "Restarting your computer", "Sending another transaction"], correctAnswers: [1], points: 3 },
+              { id: "q2-e23", question: "What is the result of 'Liquidation' in a lending protocol?", type: "single", options: ["Your tokens are turned into liquid", "Your collateral is sold to pay back your debt plus a penalty", "The protocol gives you a bonus", "Your interest rate becomes 0%"], correctAnswers: [1], points: 3 },
+              { id: "q2-e24", question: "True or False: You should store your seed phrase as a screenshot on your phone.", type: "true-false", options: ["True", "False"], correctAnswers: [1], points: 3 },
+              { id: "q2-e25", question: "What is an 'Air-Gapped' device?", type: "single", options: ["A device with a fan", "A device that has never been connected to the internet", "A device used for flying", "A type of cloud server"], correctAnswers: [1], points: 3 },
+              { id: "q2-e26", question: "Which of these is a reputable security audit firm?", type: "single", options: ["Trail of Bits", "OpenZeppelin", "Quantstamp", "All of the above"], correctAnswers: [3], points: 3 },
+              { id: "q2-e27", question: "A 'Malicious Contract' can...", type: "single", options: ["Help you earn more", "Drain your wallet if you approve its permissions", "Make your computer faster", "Automatically pay your taxes"], correctAnswers: [1], points: 3 },
+              { id: "q2-e28", question: "True or False: Most DeFi scams rely on FOMO (Fear of Missing Out).", type: "true-false", options: ["True", "False"], correctAnswers: [0], points: 3 },
+              { id: "q2-e29", question: "What should you do if you think your computer has malware?", type: "single", options: ["Keep using it for DeFi", "Use a different, clean device for all crypto activities", "Just change your wallpaper", "Post about it on Facebook"], correctAnswers: [1], points: 3 },
+              { id: "q2-e30", question: "Which extension helps simulate transactions before you sign them?", type: "single", options: ["Pocket Universe", "Fire", "MetaMask (builtin)", "All of the above"], correctAnswers: [3], points: 3 },
+              { id: "q2-e31", question: "What is 'User Error' in DeFi?", type: "single", options: ["A bug in the protocol", "A mistake made by the user, such as sending to the wrong address", "A power outage", "An internet outage"], correctAnswers: [1], points: 3 },
+              { id: "q2-e32", question: "True or False: You are completely responsible for your own security in DeFi.", type: "true-false", options: ["True", "False"], correctAnswers: [0], points: 3 },
+              { id: "q2-e33", question: "What is the best mindset for DeFi security?", type: "single", options: ["Carefree", "Paranoid and systematic", "Trusting", "Lazy"], correctAnswers: [1], points: 4 }
+            ]
+          }
         }
       }
       // More modules for this course...
@@ -3843,7 +3972,17 @@ The DeFi space can be overwhelming with hundreds of protocols. Here are the most
 
 Once you understand the basics deeply, you can gradually explore more complex strategies and higher-yield opportunities.
 
-*Congratulations! You've completed the DeFi Earning course. You now understand how to evaluate opportunities, assess risks, and choose appropriate platforms for your situation and experience level.*`
+*Congratulations! You've completed the DeFi Earning course. You now understand how to evaluate opportunities, assess risks, and choose appropriate platforms for your situation and experience level.*`,
+          quiz: {
+            id: "quiz-3-5",
+            title: "DeFi Platforms - Knowledge Check",
+            passingScore: 70,
+            maxAttempts: 3,
+            questions: [
+              { id: "q3-5-1", question: "Which platform is primarily known for lending and borrowing with a clean, simple interface?", type: "single", options: ["Uniswap", "Aave", "Curve", "Yearn"], correctAnswers: [1], points: 10 },
+              { id: "q3-5-2", question: "What is the primary benefit of using a Layer 2 solution like Polygon or Arbitrum?", type: "single", options: ["Higher risk", "Much lower gas fees", "Fewer tokens available", "More complex interface"], correctAnswers: [1], points: 10 }
+            ]
+          }
         },
         resources: [
           {
@@ -3862,6 +4001,64 @@ Once you understand the basics deeply, you can gradually explore more complex st
             type: "link"
           }
         ]
+      },
+      {
+        id: "3-exam",
+        title: "Course 3 Final Exam: DeFi Earning Mastery",
+        type: "interactive",
+        duration: 60,
+        content: {
+          text: `# Final Exam: DeFi Earning Mastery
+
+Prove your knowledge of staking, yield farming, and liquidity pools.
+
+### Exam Details:
+- **Questions**: 33
+- **Passing Score**: 80%
+- **Time Limit**: 60 minutes`,
+          quiz: {
+            id: "exam-3",
+            title: "DeFi Earning Final Exam",
+            passingScore: 80,
+            timeLimit: 60,
+            maxAttempts: 3,
+            questions: [
+              { id: "q3-e1", question: "What is the primary way you earn as a Liquidity Provider (LP)?", type: "single", options: ["Mining rewards", "Trading fees paid by users", "Governance votes", "Network inflation only"], correctAnswers: [1], points: 3 },
+              { id: "q3-e2", question: "What does 'Staking' help do for a blockchain?", type: "single", options: ["Speed up the internet", "Secure the network through validation", "Increase token supply", "Create new NFTs"], correctAnswers: [1], points: 3 },
+              { id: "q3-e3", question: "Which of these pairs would have the LOWEST risk of Impermanent Loss?", type: "single", options: ["ETH/USDC", "USDC/DAI", "ETH/BTC", "SOL/USDT"], correctAnswers: [1], points: 3 },
+              { id: "q3-e4", question: "What is the '24hr volume vs TVL' rule mentioned in the course?", type: "single", options: ["Volume should be zero", "Volume should be >= TVL for sustainable returns", "TVL should be 100x Volume", "Volume doesn't matter"], correctAnswers: [1], points: 4 },
+              { id: "q3-e5", question: "What is 'Yield Farming'?", type: "single", options: ["Buying land in the metaverse", "Maximizing returns by moving capital across protocols", "A type of hardware wallet", "Mining Bitcoin with solar power"], correctAnswers: [1], points: 3 },
+              { id: "q3-e6", question: "True or False: Staking is generally less time-intensive than active Yield Farming.", type: "true-false", options: ["True", "False"], correctAnswers: [0], points: 3 },
+              { id: "q3-e7", question: "What is an 'Audit' in DeFi?", type: "single", options: ["A tax return", "Security review of smart contract code by experts", "A marketing campaign", "A way to mint new tokens"], correctAnswers: [1], points: 3 },
+              { id: "q3-e8", question: "Which platform is a specialist in stablecoin swaps and pools?", type: "single", options: ["Uniswap", "Curve", "SushiSwap", "OpenSea"], correctAnswers: [1], points: 3 },
+              { id: "q3-e9", question: "What is a 'Layer 2' (L2)?", type: "single", options: ["A new type of token", "A secondary network built on top of a blockchain to reduce fees", "The second page of a website", "A hardware wallet backup"], correctAnswers: [1], points: 3 },
+              { id: "q3-e10", question: "What is 'Impermanent Loss'?", type: "single", options: ["Losing your seed phrase", "Value difference between holding tokens vs providing liquidity", "Paying too much in gas", "Sending tokens to the wrong address"], correctAnswers: [1], points: 3 },
+              { id: "q3-e11", question: "Which of these is a reputable L2 for Ethereum?", type: "single", options: ["Polygon", "Arbitrum", "Optimism", "All of the above"], correctAnswers: [3], points: 3 },
+              { id: "q3-e12", question: "What is 'Total Value Locked' (TVL)?", type: "single", options: ["Amount of money the bank has", "Total dollar value of assets deposited in a protocol", "The price of a token", "Number of users on a platform"], correctAnswers: [1], points: 3 },
+              { id: "q3-e13", question: "True or False: Aave is a decentralized lending and borrowing protocol.", type: "true-false", options: ["True", "False"], correctAnswers: [0], points: 3 },
+              { id: "q3-e14", question: "What is the risk of an 'Unaudited' protocol?", type: "single", options: ["Low returns", "Higher chance of bugs or exploits in the code", "Slower transactions", "High gas fees only"], correctAnswers: [1], points: 3 },
+              { id: "q3-e15", question: "What is 'Liquid Staking'?", type: "single", options: ["Staking while drinking water", "Staking that gives you a representative token to use elsewhere", "Staking for only 1 day", "A type of cold storage"], correctAnswers: [1], points: 3 },
+              { id: "q3-e16", question: "Which token is used to reward liquidity providers on SushiSwap?", type: "single", options: ["ETH", "SUSHI", "UNI", "AAVE"], correctAnswers: [1], points: 3 },
+              { id: "q3-e17", question: "What is 'Slippage'?", type: "single", options: ["A wallet error", "The difference between expected and executed price during a trade", "A type of hack", "Network downtime"], correctAnswers: [1], points: 3 },
+              { id: "q3-e18", question: "True or False: You can lose money in DeFi even if there is no hack.", type: "true-false", options: ["True", "False"], correctAnswers: [0], points: 3 },
+              { id: "q3-e19", question: "What is 'Compound' primarily used for?", type: "single", options: ["Trading NFTs", "Lending and borrowing assets", "Storing private keys", "Social media"], correctAnswers: [1], points: 3 },
+              { id: "q3-e20", question: "What is 'Concentrated Liquidity'?", type: "single", options: ["High density tokens", "Providing liquidity within a specific price range", "Lending to one person only", "Buying 100% of a token supply"], correctAnswers: [1], points: 3 },
+              { id: "q3-e21", question: "Which risk is associated with 'Stablecoin De-pegging'?", type: "single", options: ["Network congestion", "A stablecoin losing its 1:1 value with the USD", "High gas fees", "Wallet loss"], correctAnswers: [1], points: 3 },
+              { id: "q3-e22", question: "What is an 'AMM'?", type: "single", options: ["Automated Market Maker", "Advanced Mining Machine", "Asset Management Mode", "Automatic Money Mint"], correctAnswers: [0], points: 3 },
+              { id: "q3-e23", question: "What is the purpose of a 'Bridge'?", type: "single", options: ["Building infrastructure", "Moving assets between different blockchains", "Coding smart contracts", "Connecting to WiFi"], correctAnswers: [1], points: 3 },
+              { id: "q3-e24", question: "True or False: APR includes compounding, while APY does not.", type: "true-false", options: ["True", "False"], correctAnswers: [1], points: 3 },
+              { id: "q3-e25", question: "Which platform is an 'Aggregator' for yields?", type: "single", options: ["Uniswap", "Yearn Finance", "Aave", "Curve"], correctAnswers: [1], points: 3 },
+              { id: "q3-e26", question: "What should you check first when evaluating a new DeFi platform?", type: "single", options: ["The color of the logo", "Audit status and team reputation", "How many followers they have on Twitter only", "If it has a mobile app"], correctAnswers: [1], points: 3 },
+              { id: "q3-e27", question: "What is a 'Flash Loan'?", type: "single", options: ["A very fast bank loan", "An uncollateralized loan that must be repaid in the same transaction", "A loan with 0% interest", "A loan for 24 hours"], correctAnswers: [1], points: 3 },
+              { id: "q3-e28", question: "Which of these is a 'Red Flag' in DeFi?", type: "single", options: ["Open source code", "Guaranteed returns of 1% per day", "Multiple audits", "Active community"], correctAnswers: [1], points: 3 },
+              { id: "q3-e29", question: "What is 'Gas' on Ethereum?", type: "single", options: ["A type of fuel for cars", "The fee paid to process transactions on the network", "A reward for users", "A stablecoin"], correctAnswers: [1], points: 3 },
+              { id: "q3-e30", question: "True or False: You are 100% responsible for your funds in DeFi.", type: "true-false", options: ["True", "False"], correctAnswers: [0], points: 3 },
+              { id: "q3-e31", question: "What is 'Governance' in a protocol?", type: "single", options: ["Rules made by the government", "Token holders voting on changes to the protocol", "The team's private chat", "A type of tax"], correctAnswers: [1], points: 3 },
+              { id: "q3-e32", question: "What is 'MEV'?", type: "single", options: ["Maximum Extractable Value", "Mining Efficiency Variable", "Multiple Entry Vector", "Market Exchange Volume"], correctAnswers: [0], points: 3 },
+              { id: "q3-e33", question: "What is the best way to start in DeFi?", type: "single", options: ["Go all-in on a new token", "Start small with established protocols and learn", "Borrow as much as possible", "Ignore all security warnings"], correctAnswers: [1], points: 4 }
+            ]
+          }
+        }
       }
     ]
   },
@@ -5773,7 +5970,17 @@ The hardest part of DeFi isn't learning the technology or finding opportunities 
 
 **Remember**: Every expert was once a beginner. Your knowledge and skills will compound just like your investments if you stay curious and disciplined.
 
-*Congratulations! You've completed the DeFi Portfolio Management course. You now have the frameworks and mindset needed to build and manage a successful long-term DeFi portfolio.*`
+*Congratulations! You've completed the DeFi Portfolio Management course. You now have the frameworks and mindset needed to build and manage a successful long-term DeFi portfolio.*`,
+          quiz: {
+            id: "quiz-4-5",
+            title: "Risk Management - Knowledge Check",
+            passingScore: 70,
+            maxAttempts: 3,
+            questions: [
+              { id: "q4-5-1", question: "What is a 'Stop Loss' strategy in DeFi?", type: "single", options: ["Never selling", "Predetermined exit points to prevent further loss", "Buying more when price drops", "A type of insurance"], correctAnswers: [1], points: 10 },
+              { id: "q4-5-2", question: "True or False: Taking profits along the way is a key part of long-term success.", type: "true-false", options: ["True", "False"], correctAnswers: [0], points: 10 }
+            ]
+          }
         },
         resources: [
           {
@@ -5792,6 +5999,64 @@ The hardest part of DeFi isn't learning the technology or finding opportunities 
             type: "link"
           }
         ]
+      },
+      {
+        id: "4-exam",
+        title: "Course 4 Final Exam: Portfolio Mastery",
+        type: "interactive",
+        duration: 60,
+        content: {
+          text: `# Final Exam: Portfolio Mastery
+
+Demonstrate your ability to manage and grow a DeFi portfolio.
+
+### Exam Details:
+- **Questions**: 33
+- **Passing Score**: 80%
+- **Time Limit**: 60 minutes`,
+          quiz: {
+            id: "exam-4",
+            title: "Portfolio Mastery Final Exam",
+            passingScore: 80,
+            timeLimit: 60,
+            maxAttempts: 3,
+            questions: [
+              { id: "q4-e1", question: "What is the main purpose of the 'Core' in a Core-Satellite strategy?", type: "single", options: ["High risk betting", "Long-term, stable growth", "Daily trading", "NFT collection"], correctAnswers: [1], points: 3 },
+              { id: "q4-e2", question: "Which of these is a popular DeFi dashboard?", type: "single", options: ["Zapper", "DeBank", "Zerion", "All of the above"], correctAnswers: [3], points: 3 },
+              { id: "q4-e3", question: "What is 'Cost Basis'?", type: "single", options: ["Current market price", "The price you originally paid for an asset", "The highest price ever reached", "The price you want to sell at"], correctAnswers: [1], points: 3 },
+              { id: "q4-e4", question: "True or False: Diversification should include different blockchains, not just tokens on one chain.", type: "true-false", options: ["True", "False"], correctAnswers: [0], points: 3 },
+              { id: "q4-e5", question: "How often should you perform a 'Deep Audit' of your portfolio health?", type: "single", options: ["Every day", "Monthly or Quarterly", "Once a year", "Never"], correctAnswers: [1], points: 3 },
+              { id: "q4-e6", question: "What is 'Rebalancing'?", type: "single", options: ["Selling losers to buy more losers", "Adjusting weights to return to your target allocation", "Closing all positions", "Moving to a new wallet"], correctAnswers: [1], points: 3 },
+              { id: "q4-e7", question: "Which of these is a key metric to track for Lending positions?", type: "single", options: ["Health Factor / LTV", "Number of followers", "Logo design", "Token name"], correctAnswers: [0], points: 3 },
+              { id: "q4-e8", question: "True or False: You should use the same browser for DeFi and general web surfing.", type: "true-false", options: ["True", "False"], correctAnswers: [1], points: 3 },
+              { id: "q4-e9", question: "What is the benefit of a 'Watchlist'?", type: "single", options: ["Automatic trading", "Monitoring potential opportunities without investing yet", "Paying less gas", "Increasing your followers"], correctAnswers: [1], points: 3 },
+              { id: "q4-e10", question: "What is 'Yield Compounding'?", type: "single", options: ["Selling all rewards", "Reinvesting earned rewards to earn more rewards", "Losing money", "Paying taxes"], correctAnswers: [1], points: 3 },
+              { id: "q4-e11", question: "Which tool is best for checking your wallet's token approvals?", type: "single", options: ["Revoke.cash", "Etherscan", "MetaMask", "All of the above"], correctAnswers: [3], points: 3 },
+              { id: "q4-e12", question: "What is 'Emotional Trading'?", type: "single", options: ["Trading based on logic", "Making decisions based on fear or greed", "Using an AI assistant", "Trading with friends"], correctAnswers: [1], points: 3 },
+              { id: "q4-e13", question: "True or False: Stablecoins are 100% risk-free.", type: "true-false", options: ["True", "False"], correctAnswers: [1], points: 3 },
+              { id: "q4-e14", question: "What is a 'Satellite' position?", type: "single", options: ["Small, high-risk/high-reward position", "The main part of your portfolio", "A type of hardware wallet", "A token for space research"], correctAnswers: [0], points: 3 },
+              { id: "q4-e15", question: "Why is 'Liquidity' important when choosing a token?", type: "single", options: ["It makes the logo look better", "It ensures you can buy and sell without massive price impact", "It reduces gas fees", "It increases network security"], correctAnswers: [1], points: 3 },
+              { id: "q4-e16", question: "What is 'Staking'?", type: "single", options: ["Active trading", "Locking tokens to support a network and earn rewards", "Gambling", "Mining"], correctAnswers: [1], points: 3 },
+              { id: "q4-e17", question: "Which of these is a sign of a 'Rug Pull'?", type: "single", options: ["Audit by top firm", "Locked liquidity", "Developers suddenly draining the pool", "High trading volume"], correctAnswers: [2], points: 3 },
+              { id: "q4-e18", question: "What is the role of an 'Aggregator'?", type: "single", options: ["Find the best price across multiple DEXs", "Increase gas fees", "Store your private keys", "Mint new tokens"], correctAnswers: [0], points: 3 },
+              { id: "q4-e19", question: "True or False: You should keep a small amount of native tokens (like ETH) for gas fees.", type: "true-false", options: ["True", "False"], correctAnswers: [0], points: 3 },
+              { id: "q4-e20", question: "What is 'Impermenant Loss'?", type: "single", options: ["Losing your wallet", "Value difference in LP vs holding", "A tax penalty", "A gas refund"], correctAnswers: [1], points: 3 },
+              { id: "q4-e21", question: "How can you protect your portfolio from hacks?", type: "multiple", options: ["Use a hardware wallet", "Don't share seed phrases", "Revoke unnecessary approvals", "Use the same password everywhere"], correctAnswers: [0, 1, 2], points: 4 },
+              { id: "q4-e22", question: "What is 'DCA'?", type: "single", options: ["Dollar Cost Averaging", "Direct Crypto Access", "Daily Coin Allocation", "Digital Cash Account"], correctAnswers: [0], points: 3 },
+              { id: "q4-e23", question: "What is a 'Stablecoin De-peg'?", type: "single", options: ["A token getting listed on a new exchange", "A stablecoin losing its 1:1 value with its target (e.g. USD)", "Price going to $100", "A wallet update"], correctAnswers: [1], points: 3 },
+              { id: "q4-e24", question: "True or False: Taking profits is a sign of a weak investor.", type: "true-false", options: ["True", "False"], correctAnswers: [1], points: 3 },
+              { id: "q4-e25", question: "What is 'Governance'?", type: "single", options: ["The protocol's code", "Voting on protocol changes using tokens", "The project team", "A type of tax"], correctAnswers: [1], points: 3 },
+              { id: "q4-e26", question: "Which of these is a reputable DeFi audit firm?", type: "single", options: ["Trail of Bits", "OpenZeppelin", "Quantstamp", "All of the above"], correctAnswers: [3], points: 3 },
+              { id: "q4-e27", question: "What is the primary benefit of L2s?", type: "single", options: ["Higher fees", "Lower gas fees and faster transactions", "More complexity", "Less security"], correctAnswers: [1], points: 3 },
+              { id: "q4-e28", question: "True or False: You should track your crypto for tax purposes.", type: "true-false", options: ["True", "False"], correctAnswers: [0], points: 3 },
+              { id: "q4-e29", question: "What is 'TVL'?", type: "single", options: ["Total Value Locked", "Token Volume Limit", "Total Variable Liquidity", "Transfer Value Log"], correctAnswers: [0], points: 3 },
+              { id: "q4-e30", question: "What is a 'Burner Wallet'?", type: "single", options: ["Wallet for long-term storage", "Temporary wallet for risky interactions", "Wallet that was hacked", "A physical wallet"], correctAnswers: [1], points: 3 },
+              { id: "q4-e31", question: "What is 'Slippage'?", type: "single", options: ["Trading error", "Difference between expected and actual price", "Network downtime", "A type of scam"], correctAnswers: [1], points: 3 },
+              { id: "q4-e32", question: "True or False: In DeFi, you are your own bank.", type: "true-false", options: ["True", "False"], correctAnswers: [0], points: 3 },
+              { id: "q4-e33", question: "What is the most important rule of DeFi?", type: "single", options: ["Buy high, sell low", "Only invest what you can afford to lose", "Follow influencers", "Never use audits"], correctAnswers: [1], points: 4 }
+            ]
+          }
+        }
       }
     ]
   },
@@ -8715,6 +8980,64 @@ You've completed the **Tokenizing Real World Assets** course! This course was de
             type: "link"
           }
         ]
+      },
+      {
+        id: "6-exam",
+        title: "Course 6 Final Exam: RWA Mastery",
+        type: "interactive",
+        duration: 60,
+        content: {
+          text: `# Final Exam: RWA Mastery
+
+Prove your knowledge of Real World Asset tokenization and its impact on finance.
+
+### Exam Details:
+- **Questions**: 33
+- **Passing Score**: 80%
+- **Time Limit**: 60 minutes`,
+          quiz: {
+            id: "exam-6",
+            title: "RWA Mastery Final Exam",
+            passingScore: 80,
+            timeLimit: 60,
+            maxAttempts: 3,
+            questions: [
+              { id: "q6-e1", question: "What does 'RWA' stand for?", type: "single", options: ["Real World Assets", "Remote Wallet Access", "Retail Wholesale Account", "Rapid Wealth Allocation"], correctAnswers: [0], points: 3 },
+              { id: "q6-e2", question: "What is 'Tokenization'?", type: "single", options: ["Printing money", "Converting rights to an asset into a digital token on a blockchain", "Creating a new website", "Sending an email"], correctAnswers: [1], points: 3 },
+              { id: "q6-e3", question: "Which of these is a benefit of fractional ownership through RWA?", type: "single", options: ["Higher entry costs", "Increased accessibility to high-value assets", "Less transparency", "Slower transactions"], correctAnswers: [1], points: 3 },
+              { id: "q6-e4", question: "Which major asset manager launched the BUIDL fund?", type: "single", options: ["Vanguard", "BlackRock", "Fidelity", "State Street"], correctAnswers: [1], points: 3 },
+              { id: "q6-e5", question: "What is the primary asset class in BlackRock's BUIDL fund?", type: "single", options: ["Real Estate", "US Treasuries", "Gold", "Private Equity"], correctAnswers: [1], points: 3 },
+              { id: "q6-e6", question: "True or False: RWA tokenization can provide 24/7 liquidity for traditionally illiquid assets.", type: "true-false", options: ["True", "False"], correctAnswers: [0], points: 3 },
+              { id: "q6-e7", question: "Which category currently leads the RWA market by volume?", type: "single", options: ["Real Estate", "Tokenized Treasuries", "Commodities", "Art"], correctAnswers: [1], points: 3 },
+              { id: "q6-e8", question: "What is 'Off-chain' in the context of RWA?", type: "single", options: ["A type of blockchain", "The physical world where the actual asset exists", "A disconnected wallet", "A faster transaction"], correctAnswers: [1], points: 3 },
+              { id: "q6-e9", question: "What is the role of an 'Oracle' in RWA?", type: "single", options: ["Legal advisor", "System providing off-chain asset data to the blockchain", "A hardware wallet", "A type of DAO"], correctAnswers: [1], points: 3 },
+              { id: "q6-e10", question: "True or False: Tokenized assets can be used as collateral in DeFi protocols.", type: "true-false", options: ["True", "False"], correctAnswers: [0], points: 3 },
+              { id: "q6-e11", question: "What is 'Fractionalization'?", type: "single", options: ["Breaking an asset into smaller, affordable pieces", "Increasing the price of an asset", "Moving an asset to a different country", "Selling 100% of an asset"], correctAnswers: [0], points: 3 },
+              { id: "q6-e12", question: "Which of these is a benefit for institutions using RWA?", type: "single", options: ["Higher back-office costs", "Instant settlement vs T+2", "Less transparency", "Restricted market hours"], correctAnswers: [1], points: 3 },
+              { id: "q6-e13", question: "What is 'Provenance'?", type: "single", options: ["A type of token", "Record of ownership and origin of an asset", "A blockchain network", "A legal fee"], correctAnswers: [1], points: 3 },
+              { id: "q6-e14", question: "Which RWA category involves tokenizing physical properties?", type: "single", options: ["Private Credit", "Real Estate", "Treasuries", "Collectibles"], correctAnswers: [1], points: 3 },
+              { id: "q6-e15", question: "What is 'KYC'?", type: "single", options: ["Key Your Crypto", "Know Your Customer", "Keep Your Coin", "Knowledge Yield Curve"], correctAnswers: [1], points: 3 },
+              { id: "q6-e16", question: "True or False: Most regulated RWA protocols require KYC verification.", type: "true-false", options: ["True", "False"], correctAnswers: [0], points: 3 },
+              { id: "q6-e17", question: "What is 'Yield' in RWA?", type: "single", options: ["The price of the token", "Income generated by the underlying asset", "A type of hack", "Gas fees"], correctAnswers: [1], points: 3 },
+              { id: "q6-e18", question: "Which protocol is known for tokenized treasuries?", type: "single", options: ["Ondo Finance", "Uniswap", "Aave", "OpenSea"], correctAnswers: [0], points: 3 },
+              { id: "q6-e19", question: "What is a 'Security Token'?", type: "single", options: ["A token used for security audits", "A token representing an investment contract subject to securities laws", "A token for physical security", "A type of hardware wallet"], correctAnswers: [1], points: 3 },
+              { id: "q6-e20", question: "True or False: Tokenization removes the need for all legal documents.", type: "true-false", options: ["True", "False"], correctAnswers: [1], points: 3 },
+              { id: "q6-e21", question: "What is 'Market Transparency'?", type: "single", options: ["Hidden transactions", "Publicly verifiable ownership and transaction data", "Anonymous trading only", "Closed-door meetings"], correctAnswers: [1], points: 3 },
+              { id: "q6-e22", question: "Which of these is a risk in RWA tokenization?", type: "single", options: ["Increased liquidity", "Regulatory changes and legal uncertainty", "Lower entry costs", "Faster settlement"], correctAnswers: [1], points: 3 },
+              { id: "q6-e23", question: "What is 'Tokenized Gold'?", type: "single", options: ["Digital representation of physical gold held in a vault", "Fake gold", "Gold-colored tokens", "A type of Bitcoin"], correctAnswers: [0], points: 3 },
+              { id: "q6-e24", question: "True or False: The RWA market has grown significantly since 2024.", type: "true-false", options: ["True", "False"], correctAnswers: [0], points: 3 },
+              { id: "q6-e25", question: "What is the role of a 'Custodian' in RWA?", type: "single", options: ["Building the website", "Safekeeping the physical/off-chain assets", "Trading the tokens", "Marketing the project"], correctAnswers: [1], points: 3 },
+              { id: "q6-e26", question: "Which region has a clear regulatory framework called 'MiCA'?", type: "single", options: ["United States", "European Union", "Singapore", "Japan"], correctAnswers: [1], points: 3 },
+              { id: "q6-e27", question: "What is 'Programmability' in RWA?", type: "single", options: ["Writing a blog post", "Using smart contracts to automate actions like dividend distribution", "Watching TV", "Installing an app"], correctAnswers: [1], points: 3 },
+              { id: "q6-e28", question: "True or False: Institutions are using RWA to reduce back-office costs.", type: "true-false", options: ["True", "False"], correctAnswers: [0], points: 3 },
+              { id: "q6-e29", question: "What is 'Private Credit' in RWA?", type: "single", options: ["Credit card debt", "Tokenized loans to private companies", "Publicly traded bonds", "A type of hardware wallet"], correctAnswers: [1], points: 3 },
+              { id: "q6-e30", question: "Which asset is the most liquid RWA currently?", type: "single", options: ["Real Estate", "Tokenized Treasuries/Cash Equivalents", "Fine Art", "Agricultural land"], correctAnswers: [1], points: 3 },
+              { id: "q6-e31", question: "True or False: RWA tokenization is the bridge between TradFi and DeFi.", type: "true-false", options: ["True", "False"], correctAnswers: [0], points: 3 },
+              { id: "q6-e32", question: "What is the projected market size by 2030 (BCG)?", type: "single", options: ["$1 trillion", "$16 trillion", "$100 trillion", "$500 billion"], correctAnswers: [1], points: 3 },
+              { id: "q6-e33", question: "What should you do before investing in any RWA protocol?", type: "single", options: ["Follow the crowd", "DYOR (Do Your Own Research) and check audits/legal structure", "Ignore the news", "Invest based on logo design"], correctAnswers: [1], points: 4 }
+            ]
+          }
+        }
       }
     ]
   }

@@ -5,6 +5,7 @@ import { DidYouKnow } from './DidYouKnow';
 import { StepBlock } from './StepBlock';
 import { FlipCard } from './FlipCard';
 import { ComparisonTable } from './ComparisonTable';
+import { TermDefinition } from './TermDefinition';
 import { Card, CardContent } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { AlertTriangle, CheckCircle, Info } from 'lucide-react';
@@ -72,6 +73,15 @@ export const EnhancedMarkdownRenderer = ({ content, heroImage }: EnhancedMarkdow
                 </div>
               );
               
+            case 'DEFINITION':
+              return (
+                <TermDefinition
+                  key={index}
+                  term={data.term || data.word}
+                  definition={data.definition}
+                />
+              );
+
             case 'ALERT':
               const icons = {
                 warning: AlertTriangle,

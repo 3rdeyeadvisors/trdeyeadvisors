@@ -30,7 +30,9 @@ import {
   Loader2,
   ArrowLeft,
   Trash2,
-  AlertTriangle
+  AlertTriangle,
+  MessageSquare,
+  Clock
 } from "lucide-react";
 import {
   AlertDialog,
@@ -75,6 +77,7 @@ const Profile = () => {
   const targetUserId = viewUserId || user?.id;
   
   const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [courseNotes, setCourseNotes] = useState<any[]>([]);
   const [userStats, setUserStats] = useState<UserStats>({
     coursesEnrolled: 0,
     coursesCompleted: 0,
@@ -110,6 +113,7 @@ const Profile = () => {
       // Only load stats for own profile
       if (isOwnProfile && user) {
         loadUserStats();
+        loadCourseNotes();
       }
     }
   }, [targetUserId, user, isOwnProfile]);
@@ -172,6 +176,35 @@ const Profile = () => {
       });
     } catch (error) {
       console.error('Error creating profile:', error);
+    }
+  };
+
+  const loadCourseNotes = async () => {
+    if (!user) return;
+
+    try {
+      const { data, error } = await supabase
+        .from('user_presence')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('content_type', 'module');
+
+      if (error) throw error;
+
+      const notes = data
+        ?.filter(item => item.metadata && (item.metadata as any).notes)
+        .map(item => ({
+          moduleId: item.content_id,
+          moduleTitle: (item.metadata as any).moduleTitle || 'Unknown Module',
+          notes: (item.metadata as any).notes,
+          lastUpdated: (item.metadata as any).lastUpdated || item.updated_at || item.last_seen,
+          courseId: (item.metadata as any).courseId
+        }))
+        .sort((a, b) => new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime());
+
+      setCourseNotes(notes || []);
+    } catch (error) {
+      console.error('Error loading course notes:', error);
     }
   };
 
@@ -745,6 +778,52 @@ const Profile = () => {
                   <p className="text-muted-foreground">Complete courses and quizzes to unlock achievements!</p>
                 </div>
               )}
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Course Notes - only show for own profile */}
+        {isOwnProfile && courseNotes.length > 0 && (
+          <Card className="mb-8">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <MessageSquare className="w-5 h-5 text-primary" />
+                Course Notes
+              </CardTitle>
+              <CardDescription>
+                Your personal notes tracked during course modules
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {courseNotes.map((note, index) => (
+                  <div key={index} className="p-4 rounded-lg border border-border bg-muted/20">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-semibold text-foreground flex items-center gap-2">
+                        <BookOpen className="w-4 h-4 text-primary" />
+                        {note.moduleTitle}
+                      </h4>
+                      <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
+                        <Clock className="w-3 h-3" />
+                        {new Date(note.lastUpdated).toLocaleDateString()}
+                      </div>
+                    </div>
+                    <p className="text-sm text-foreground/80 whitespace-pre-wrap italic bg-background/50 p-3 rounded border border-border/50">
+                      "{note.notes}"
+                    </p>
+                    <div className="mt-3 flex justify-end">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-xs h-8"
+                        onClick={() => navigate(`/courses/${note.courseId}/module/${note.moduleId}`)}
+                      >
+                        Go to Module
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </CardContent>
           </Card>
         )}

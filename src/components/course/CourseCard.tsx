@@ -3,7 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ProgressBar } from '@/components/progress/ProgressBar';
 import { useAuth } from '@/components/auth/AuthProvider';
-import { LucideIcon, Star, Lock, Clock } from 'lucide-react';
+import { useProgress } from '@/components/progress/ProgressProvider';
+import { LucideIcon, Star, Lock, Clock, CheckCircle2 } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface Course {
@@ -28,7 +29,12 @@ interface CourseCardProps {
 
 export const CourseCard = ({ course, index, onStartCourse, onAuthRequired }: CourseCardProps) => {
   const { user } = useAuth();
+  const { courseProgress, getCourseProgress, isCourseCompleted } = useProgress();
   const isMobile = useIsMobile();
+
+  const userCourseProgress = user ? getCourseProgress(course.id) : null;
+  const isCompleted = user ? isCourseCompleted(course.id) : false;
+  const isStarted = !!userCourseProgress;
 
   const handleStartCourse = () => {
     if (course.isLocked) {
@@ -41,7 +47,9 @@ export const CourseCard = ({ course, index, onStartCourse, onAuthRequired }: Cou
   const getButtonText = () => {
     if (course.isLocked) return "Upgrade to Annual";
     if (!user) return "Start Learning";
-    return "Continue Learning";
+    if (isCompleted) return "Course Completed";
+    if (isStarted) return "Continue Learning";
+    return "Start Learning";
   };
 
   const getDaysUntil = (dateString: string) => {
@@ -110,11 +118,14 @@ export const CourseCard = ({ course, index, onStartCourse, onAuthRequired }: Cou
           </p>
         )}
         <Button
-          variant={course.isLocked ? "outline" : "awareness"}
+          variant={course.isLocked ? "outline" : isCompleted ? "outline" : "awareness"}
           size="default"
-          className="font-consciousness w-full min-h-[48px]"
+          className={`font-consciousness w-full min-h-[48px] ${
+            isCompleted ? 'border-primary text-primary hover:bg-primary/10' : ''
+          }`}
           onClick={handleStartCourse}
         >
+          {isCompleted && <CheckCircle2 className="w-4 h-4 mr-2" />}
           {getButtonText()}
         </Button>
         <div className="text-center pt-1">

@@ -5,7 +5,12 @@ const useScrollToTop = () => {
   const { pathname } = useLocation();
   
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
+    // Check if we are in a course module view - smooth scroll might be less jarring
+    const isModuleView = pathname.includes('/module/');
+    window.scrollTo({
+      top: 0,
+      behavior: isModuleView ? 'smooth' : 'instant'
+    });
   }, [pathname]);
 };
 

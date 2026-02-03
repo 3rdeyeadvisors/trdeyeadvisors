@@ -223,8 +223,8 @@ const LiquidityPoolBasicsTutorial = () => {
           {
             criterion: "24h Volume",
             importance: "High",
-            whatToLookFor: "Volume/TVL ratio > 0.5 is excellent",
-            redFlag: "Low volume = fees won't offset IL"
+            whatToLookFor: "CRITICAL: 24h Volume >= TVL. Ratio > 1.0 is ideal.",
+            redFlag: "Volume < TVL = Fees often won't offset Impermanent Loss"
           },
           {
             criterion: "APY/APR",
@@ -520,7 +520,7 @@ const LiquidityPoolBasicsTutorial = () => {
         setCompletedSteps([...completedSteps, currentStep]);
       }
       setCurrentStep(currentStep + 1);
-      window.scrollTo(0, 0);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -531,7 +531,7 @@ const LiquidityPoolBasicsTutorial = () => {
     }
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
-      window.scrollTo(0, 0);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
